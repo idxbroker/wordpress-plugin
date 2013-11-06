@@ -1,0 +1,438 @@
+@CHARSET "UTF-8";
+
+#idxPluginWrap {
+
+	font-family: Verdana, Helvetica, sans-serif;
+
+	width: 900px;
+
+}
+
+#idxPluginWrap h2, #idxPluginWrap h3 {
+
+	font-family: Arial, Helvetica, sans-serif;
+
+}
+
+#idxPluginWrap h2 {
+
+	margin-top :0px;
+
+}
+
+#idxPluginWrap .settings-error {
+
+	float:left;
+
+	width:90%;
+
+}
+
+#idxPluginWrap h3 {
+
+	border-bottom: 1px solid #ccc;
+
+	height: 19px;
+
+}
+
+#save_changes {
+
+	border-color:#4a649b !important; 
+
+	background-image: url(../images/button-grad.png) !important;
+
+}
+
+#logo {
+
+	background-image: url(../images/logo-wp.png);
+
+	background-repeat: no-repeat;
+
+	background-position: bottom;
+
+	width: 97px;
+
+	height: 40px;
+
+	float: right;
+
+	padding-top:5px;
+
+}
+
+#ptlogo {
+
+	background-image: url(../images/ptlogo-wp.png);
+
+	background-repeat: no-repeat;
+
+	background-position: bottom;
+
+	width: 43px;
+
+	height: 40px;
+
+	float: right;
+
+	padding-top:5px;
+
+}
+
+.helpIcon {
+
+	background-image: url(../images/questionMark_14.png);
+
+	width: 14px;
+
+	height: 14px;
+
+	display:inline-block;
+
+}
+
+.ajax {
+
+	background-image: url(../images/ajax-loader.gif);
+
+	width: 15px;
+
+	height: 15px;
+
+	display:inline-block;
+
+}
+
+.flft{
+
+	float:left;
+
+	padding: 3px 3px 3px 3px !important;
+
+}
+
+
+
+.flrt{
+
+	float:left;
+
+}
+
+#genSettings li {
+
+	height: 38px;
+
+}
+
+#widgSettings li {height:90px;
+
+}
+
+#sysSettings li {height:95px;
+
+}
+
+#genSettings li input {
+
+	float:;
+
+	vertical-align: middle;
+
+	width:300px;
+
+}
+
+.linkHeader {
+
+	font-weight:;
+
+	margin-bottom: 2px;
+
+	width:100%;
+
+}
+
+ul {
+
+	list-style:none;
+
+}
+
+.linkList li {
+
+	float: left;
+
+	height: 20px;
+
+	width: 270px;
+
+}
+
+.savedLinklist li {
+
+	float: left;
+
+	height: 20px;
+
+	width: 270px;
+
+}
+
+input#api_update, input#save_changes, a#api_update input#update_idxlinks a#update_idxlinks {
+
+	border-color:#4a649b !important; 
+
+	background-image: url(../images/button-grad.png) !important;
+
+}
+
+.linkLabel {
+
+	padding-left: 2px;
+
+}
+
+.status, .systemlink_status {
+
+	float: left;
+
+	color:#21759B;
+
+	font-weight: bold;
+
+	margin-top: 15px;
+
+}
+
+#save_changes {
+
+	float: left;
+
+	margin-top: 15px;
+
+}
+
+.saveFooter {
+
+	border-top: 1px solid #ccc;
+
+}
+
+.clear {
+
+	clear: both;
+
+}
+
+.idxUserlogin {
+
+	line-height:40px;
+
+}
+
+.dispNone {
+
+	display:none;
+
+}
+
+#idxPluginWrap .error {
+
+	display:none;
+
+	color: red;
+
+}
+
+
+
+.each_shortcode_row {
+
+	/*float:left;*/
+
+	padding:5px;
+
+}
+
+.each_shortcode_row span {
+
+	padding:5px;
+
+}
+
+.short_code_listing_heading {
+
+	font-weight: bold;
+
+	font-size: 13px;
+
+}
+
+/*Tinymce idx popup button styles */
+
+
+
+#button-dialog .input_text {
+
+	width:235px;
+
+	height:20px;
+
+	border: 1px solid #999;
+
+}
+
+#button-dialog .input_button {
+
+   background: none repeat scroll 0 0 transparent;
+
+    border: 1px solid #999999;
+
+    font-weight: bold;
+
+    height: 20px;
+
+    width: 110px;
+
+}
+
+
+
+#tabs_wrapper {
+
+    width: 222px;
+
+}
+
+#tabs_container {
+
+    border-bottom: 1px solid #ccc;
+
+    font-size: 19px;
+
+    font-weight: bold;
+
+}
+
+#tabs {
+
+    list-style: none;
+
+    padding: 5px 0 4px 0;
+
+    margin: 0 0 0 10px;
+
+    font: 0.75em arial;
+
+}
+
+#tabs li {
+
+    display: inline;
+
+}
+
+#tabs li a {
+
+    border: 1px solid #ccc;
+
+    padding: 4px 6px;
+
+    text-decoration: none;
+
+    background-color: #eeeeee;
+
+    border-bottom: none;
+
+    outline: none;
+
+    border-radius: 5px 5px 0 0;
+
+    -moz-border-radius: 5px 5px 0 0;
+
+    -webkit-border-top-left-radius: 5px;
+
+    -webkit-border-top-right-radius: 5px;
+
+}
+
+#tabs li a:hover {
+
+    background-color: #dddddd;
+
+    padding: 4px 6px;
+
+}
+
+#tabs li.active a {
+
+    border-bottom: 1px solid #fff;
+
+    background-color: #fff;
+
+    padding: 4px 6px 5px 6px;
+
+    border-bottom: none;
+
+}
+
+#tabs li.active a:hover {
+
+    background-color: #eeeeee;
+
+    padding: 4px 6px 5px 6px;
+
+    border-bottom: none;
+
+}
+
+ 
+
+#tabs li a.icon_accept {
+
+    background-position: 5px;
+
+    background-repeat: no-repeat;
+
+}
+
+ 
+
+#tabs_content_container {
+
+    background-color: #ffffff;
+
+    border: 1px solid #ccc;
+
+    border-top: none;
+
+    padding: 10px;
+
+    width: 97%;
+
+}
+
+.tab_content {
+
+    display: none;
+
+}
+
+.change_title {
+
+	float:left;
+
+	padding:5px;
+
+}
+
+/* End Tinymce idx popup button styles*/
+
+
+
+#tab1 div:nth-child(even), #tab2 div:nth-child(even), #tab3 div:nth-child(even) {background: #FFF;}
+
+#tab1 div:nth-child(odd), #tab2 div:nth-child(odd), #tab3 div:nth-child(odd) {background: #F1F1F1;}
+
