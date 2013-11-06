@@ -1,0 +1,118 @@
+@CHARSET "UTF-8";
+#idxPluginWrap {
+	font-family: Verdana, Helvetica, sans-serif;
+	width: 900px;
+}
+#idxPluginWrap h2, #idxPluginWrap h3 {
+	font-family: Arial, Helvetica, sans-serif;
+}
+#idxPluginWrap h2 {
+	margin-top :0px;
+}
+#idxPluginWrap .settings-error {
+	float:left;
+	width:100%;
+}
+#idxPluginWrap h3 {
+	border-bottom: 1px solid #ccc;
+	height: 19px;
+}
+#save_changes {
+	border-color:#4a649b !important; 
+	background-image: url(../images/button-grad.png) !important;
+}
+#logo {
+	background-image: url(../images/logo-wp.png);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	width: 137px;
+	height: 40px;
+	float: right;
+	padding-top:5px;
+}
+.helpIcon {
+	background-image: url(../images/questionMark_14.png);
+	width: 14px;
+	height: 14px;
+	display:inline-block;
+}
+.ajax {
+	background-image: url(../images/ajax-loader.gif);
+	width: 15px;
+	height: 15px;
+	display:inline-block;
+}
+.flft{
+	float:left;
+	padding: 3px 3px 3px 3px !important;
+}
+
+.flrt{
+	float:left;
+}
+#genSettings li {
+	height: 38px;
+}
+#widgSettings li {height:90px;
+}
+#sysSettings li {height:95px;
+}
+#genSettings li input {
+	float:;
+	vertical-align: middle;
+	width:300px;
+}
+.linkHeader {
+	font-weight:;
+	margin-bottom: 2px;
+	width:100%;
+}
+ul {
+	list-style:none;
+}
+ul.linkList {
+	height: 213px;
+}
+.linkList li {
+	float: left;
+	height: 20px;
+	width: 270px;
+}
+.savedLinklist li {
+	float: left;
+	height: 20px;
+	width: 270px;
+}
+input#api_update, input#save_changes, a#api_update input#update_idxlinks a#update_idxlinks {
+	border-color:#4a649b !important; 
+	background-image: url(../images/button-grad.png) !important;
+}
+.linkLabel {
+	padding-left: 2px;
+}
+.status, .systemlink_status {
+	float: left;
+	color:#21759B;
+	font-weight: bold;
+	margin-top: 15px;
+}
+#save_changes {
+	float: left;
+	margin-top: 15px;
+}
+.saveFooter {
+	border-top: 1px solid #ccc;
+}
+.clear {
+	clear: both;
+}
+.idxUserlogin {
+	line-height:40px;
+}
+.dispNone {
+	display:none;
+}
+#idxPluginWrap .error {
+	display:none;
+	color: red;
+}
