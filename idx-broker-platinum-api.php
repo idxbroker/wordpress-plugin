@@ -19,7 +19,7 @@ function idx_platinum_get_systemlinks () {
 		'outputtype' => 'json'  
 	);
 
-	$response = $request->request('http://api.idxsandbox.com/clients/systemlinks', array( 'sslverify' => false, 'headers' => $headers ));
+	$response = $request->request('https://api.idxbroker.com/clients/systemlinks', array( 'sslverify' => false, 'headers' => $headers ));
 	$response = (array)$response;
 
 	// did it error out?
@@ -63,7 +63,7 @@ function idx_platinum_get_savedlinks () {
 		'outputtype' => 'json'  
 	);
 
-	$response = $request->request('http://api.idxsandbox.com/clients/savedlinks', array( 'sslverify' => false, 'headers' => $headers ));
+	$response = $request->request('https://api.idxbroker.com/clients/savedlinks', array( 'sslverify' => false, 'headers' => $headers ));
 	$response = (array)$response;
 
 	// did it error out?
@@ -109,7 +109,7 @@ function idx_platinum_get_widgets () {
 		'outputtype' => 'json'  
 	);
 
-	$response = $request->request('http://api.idxsandbox.com/clients/widgetsrc', array( 'sslverify' => false, 'headers' => $headers ));
+	$response = $request->request('https://api.idxbroker.com/clients/widgetsrc', array( 'sslverify' => false, 'headers' => $headers ));
 	$response = (array)$response;
 
 	// did it error out?
