@@ -20,7 +20,8 @@ if (get_option('idx_broker_apikey')) {
  */
 function idx_platinum_get_systemlinks () { 
 	if(!get_option('idx_broker_apikey'))
-		return new WP_Error('idx_api_error', __('Error Generic: Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
+		return false;
+		//return new WP_Error('idx_api_error', __('Error Generic: Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
 
 	$request = new WP_Http;
 	$headers = array(
@@ -53,7 +54,8 @@ function idx_platinum_get_systemlinks () {
  */
 function idx_platinum_get_savedlinks () { 
 	if(!get_option('idx_broker_apikey'))
-		return new WP_Error('idx_api_error', __('Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
+		return false;
+		//return new WP_Error('idx_api_error', __('Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
 
 	$request = new WP_Http;
 	$headers = array(
@@ -86,7 +88,9 @@ function idx_platinum_get_savedlinks () {
  */
 function idx_platinum_get_widgets () { 
 	if(!get_option('idx_broker_apikey'))
-		return new WP_Error('idx_api_error', __('Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
+		return false;
+		
+		//return new WP_Error('idx_api_error', __('Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
 
 	$request = new WP_Http;
 	$headers = array(
