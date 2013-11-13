@@ -3,12 +3,12 @@
 Plugin Name: IDX Broker Platinum
 Plugin URI: http://www.idxbroker.com
 Description: Over 550 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.0.9
+Version: 1.1.0
 Author: IDX, Inc.
 Author URI: http://www.idxbroker.com/
 License: GPL
 */
-
+$pluginVersion = '1.1.0'; // update this var when the versioning increases.
 // Report all errors during development. Remember to hash out when sending to production. 
 
 error_reporting(E_ALL);
@@ -19,6 +19,7 @@ set_time_limit(0);
 // The function below adds a settings link to the plugin page. 
 $plugin = plugin_basename(__FILE__); 
 $api_error = false; 
+
 
 define('SHORTCODE_SYSTEM_LINK', 'idx-platinum-system-link');
 define('SHORTCODE_SAVED_LINK', 'idx-platinum-saved-link');
@@ -45,15 +46,17 @@ function idx_original_plugin_check() {
 	}
 }
 
-/**  Register Bings mapcontrol in case the user adds a map Widget to their site **/
+/**  Register Map Libraries in case the user adds a map Widget to their site **/
 function wp_api_script() {
-	//wp_register_script( 'custom-script', '//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0', __FILE__ ) ;
-	wp_register_script( 'custom-script', '//cdn.leafletjs.com/leaflet-0.6.4/leaflet.js', __FILE__ );
-	wp_enqueue_script( 'custom-script' );
+	wp_register_script( 'custom-scriptBing', '//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0', __FILE__ ) ;
+	wp_register_script( 'custom-scriptLeaf', '//cdn.leafletjs.com/leaflet-0.6.4/leaflet.js', __FILE__ );
 	wp_register_script( 'custom-scriptMQ', '//beta.mapquestapi.com/sdk/leaflet/v0.1/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
+	
+	wp_enqueue_script( 'custom-scriptBing' );
+	wp_enqueue_script( 'custom-scriptLeaf' );
 	wp_enqueue_script( 'custom-scriptMQ' );
-
 } // end wp_api_script fn
+
 add_action( 'wp_enqueue_scripts', 'wp_api_script' );
 
 /**
@@ -61,8 +64,8 @@ add_action( 'wp_enqueue_scripts', 'wp_api_script' );
  * @return [type] [description]
  */
 function idx_register_styles () {
-	wp_register_style('mqcss', '//cdn.leafletjs.com/leaflet-0.6.4/leaflet.css');
-	wp_enqueue_style('mqcss');
+	wp_register_style('cssMQ', '//cdn.leafletjs.com/leaflet-0.6.4/leaflet.css');
+	wp_enqueue_style('cssMQ');
 }
 add_action('wp_enqueue_scripts', 'idx_register_styles'); // calls the above function
 
@@ -85,7 +88,7 @@ function idx_activate() {
 
 //Adds a comment declaring the version of the IDX Broker plugin if it is activated.
 function idx_broker_activated() {
-	echo "\n<!-- IDX Broker Platinum WordPress Plugin v1.0.9 Activated -->\n\n";
+	echo "\n<!-- IDX Broker Platinum WordPress Plugin v{$pluginVersion} Activated -->\n\n";
 }
 
 function idx_broker_platinum_plugin_actlinks( $links ) { 
@@ -228,7 +231,6 @@ function idx_broker_platinum_options_init() {
 	wp_enqueue_script('idxjs', plugins_url('idx-broker-platinum/idxbroker.js'), 'jquery');
 	wp_enqueue_style('idxcss', plugins_url('idx-broker-platinum/css/idxbroker.css'));
 }
-
 /**
  * Function to updated the system links data in posts and postmeta table
  * @param object $systemlinks
@@ -339,7 +341,7 @@ Contact IDX Broker</a>
 					<label>Step 2: Add IDX Widgets</label>
 				</h3><ul id="widgSettings">
 				<li>
-				Widgets give you a way to add Quick Search, Featured Listings, Agents, and Custom Links to your WordPress pages. IDX Broker Platinum comes with a default set of Widgets. If you have created additional, custom Widgets, simply click the "Refresh Plugin Information" button in Step 1 and visit your <a href="widgets.php">Widgets Tab</a> in WordPress to drag-and-drop IDX Widgets into your sidebar.</li></ul>
+				Widgets give you a way to add Quick Search, Featured Listings, Agents, and Custom Links to your WordPress pages. IDX Broker Platinum comes with a default set of Widgets. If you have created additional, custom Widgets, simply click the "Refresh Plugin Options" button in Step 1 and visit your <a href="widgets.php">Widgets Tab</a> in WordPress to drag-and-drop IDX Widgets into your sidebar.</li></ul>
 				<h3>
 					<label>Step 3: Add IDX System Navigation Links</label>
 				</h3><ul id="widgSettings">
@@ -613,7 +615,6 @@ function update_systemlinks() {
 									'%s'
 							)
 					);
-
 					$post_id = $wpdb->insert_id;
 
 					// Insert into post meta
@@ -649,7 +650,6 @@ function update_systemlinks() {
 			}
 		}
 	}
-
 	$uids_to_delete = array_diff($my_links, $new_links);
 
 	if($uids_to_delete > 0)	{
@@ -839,7 +839,6 @@ function update_savedlinks() {
 			}
 		}
 	}
-
 	$uids_to_delete = array_diff($my_links, $new_links);
 
 	if($uids_to_delete > 0)	{
@@ -1016,7 +1015,6 @@ function idxplatinum_get_post_meta_by_key( $key ) {
  * @return void
  * 
  */
-
 function idxplatinum_update_pages($post_ID) {
 	global $wpdb;
 
@@ -1069,7 +1067,7 @@ function idxplatinum_plt_save_meta_box( $post_ID ) {
  */
 function idxplatinum_notice() {
 	global $current_screen;
-	echo '<div id="message" class="error"><p><strong>Note that your IDX Broker page links are not governed by WordPress Permalinks. To apply changes to your IDX Broker URLS, you must login to your IDX Broker Control Panel.</strong></p></div>';
+	echo '<div id="message" class="error"><p><strong>Note that your IDX Broker page links are not governed by WordPress Permalinks. To apply changes to your IDX Broker URLs, you must login to your IDX Broker Control Panel.</strong></p></div>';
 }
 
 /**
