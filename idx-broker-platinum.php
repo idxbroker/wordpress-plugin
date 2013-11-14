@@ -323,7 +323,7 @@ Contact IDX Broker</a>
 					<li>
 						<label for="idx_broker_apikey">Enter Your API Key: </label>
 						<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option('idx_broker_apikey'); ?>" />
-						<input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" style="width:153px;" />
+						<input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" style="width:165px;" />
 						<span class="refresh_status"></span> 	
 						<li class="error" id="idx_broker_apikey_error">
 						Please enter your API key to continue. 

@@ -1,5 +1,4 @@
 <?php
-
 // anytime this file is called, we reset the static wrapper cache as long as we have a valid API key, this is done in the background so returning a response isn't necessary
 if (get_option('idx_broker_apikey')) {
 	$request = new WP_Http;
@@ -9,7 +8,7 @@ if (get_option('idx_broker_apikey')) {
 		'outputtype' => 'json'  
 	);
 	$response = $request->request('https://api.idxbroker.com/clients/wrappercache', array('sslverify'=>false, 'headers' => $headers, 'method'=>'DELETE'));
-	$response = (array)$response;
+	//$response = (array)$response;
 }
 
 /**
@@ -137,8 +136,8 @@ function apiResponse ($response) {
 			case 409: 	$errMessage = 'Invalid request sent to IDX Broker API, please re-install the IDX Broker Platinum plugin'; break;
 			case 406: 	$errMessage = 'Access key is missing. To obtain an access key, please visit your IDX Broker Platinum Dashboard'; break;
 			case 412: 	$errMessage = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the IDX Broker Platinum Dashboard, or call 800-421-9668.'; break;
-			case 500: 	$errMessage = 'General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact 888-421-9668 if the problem persists.'; break;
-			case 503: 	$errMessage = 'IDX Broker API is currently undergoing maintenance. Please try again in a few moments or call 888-421-9668 if the problem persists.'; break;
+			case 500: 	$errMessage = 'General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact 800-421-9668 if the problem persists.'; break;
+			case 503: 	$errMessage = 'IDX Broker API is currently undergoing maintenance. Please try again in a few moments or call 800-421-9668 if the problem persists.'; break;
    		}
    	}
 	return array("code" => $responseCode, "error" => $errMessage);

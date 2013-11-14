@@ -1,10 +1,10 @@
 === IDX Broker Platinum Wordpress Plugin ===
 Author: IDX Broker
-Contributors: idxco
+Contributors: IDX, Inc
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin
-Tested up to: 3.6.1
-Stable tag: 1.0.9
+Tested up to: 3.8
+Stable tag: 1.1.0
 License: GPLv2 or later	 
 
 == Description ==
@@ -124,3 +124,7 @@ Remove Beta image from control panel. Remaining Beta text from readme.
 = 1.0.9 =
 
 Added helpful links to plugin. Fully tested to 3.6.1. Added Bing Map search library for users who add the map widget. 
+
+= 1.1.0 =
+
+Fixed small bugs with widget titles. Added MapQuest map search library. Small bug fixes to IDX Broker shortcodes.
