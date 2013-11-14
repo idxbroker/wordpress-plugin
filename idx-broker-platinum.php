@@ -8,7 +8,7 @@ Author: IDX, Inc.
 Author URI: http://www.idxbroker.com/
 License: GPL
 */
-$pluginVersion = '1.1.0'; // update this var when the versioning increases.
+
 // Report all errors during development. Remember to hash out when sending to production. 
 
 error_reporting(E_ALL);
@@ -88,7 +88,7 @@ function idx_activate() {
 
 //Adds a comment declaring the version of the IDX Broker plugin if it is activated.
 function idx_broker_activated() {
-	echo "\n<!-- IDX Broker Platinum WordPress Plugin v{$pluginVersion} Activated -->\n\n";
+	echo "\n<!-- IDX Broker Platinum WordPress Plugin v1.1.0 Activated -->\n\n";
 }
 
 function idx_broker_platinum_plugin_actlinks( $links ) { 
