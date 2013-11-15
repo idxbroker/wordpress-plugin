@@ -2,10 +2,11 @@
 Author: IDX Broker
 Contributors: IDX, Inc
 Author URL: http://www.idxbroker.com
-Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin
+Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor
 Tested up to: 3.8
 Stable tag: 1.1.0
-License: GPLv2 or later	 
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
@@ -93,38 +94,33 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 5. Email Update Signup Form.
 6. Adding Shortcodes.
 
-== Upgrade Notice ==
-
 == Changelog ==
 
-= 1.0.3 =
-
-Cleaned up various CSS issues and removed excess button options from spec. 
-
-= 1.0.4 =
-
-Additional CSS clean up; specific to certain installations/WP versions.  
-
-= 1.0.5 =
-
-Cleaned up naming convention inconsistencies.
-
-= 1.0.6 =
-
-Added shortcode functionality. The plugin now adds an IDX button to the Visual editor which allows you to add shortcodes for the various page links and widgets IDX Broker provides.
-
-= 1.0.7 =
-
-Added support for php start and stop tags. Some users migrating from the original IDX Broker may have used an older method of adding the dynamic wrapper tags to their theme that was dependant on our original plugin. This update prevents errors when those users disable our original plugin.
-
-= 1.0.8 =
-
-Remove Beta image from control panel. Remaining Beta text from readme. 
+= 1.1.0 =
+* Fixed small bugs with certain characters in widget titles causing an error within the plugin.
+* Added MapQuest map search library, clients now have the option between Bing or MapQuest for their map search widget.
+* Small bug fixes to IDX Broker shortcodes causing issues with multi-site installations.
+* More detailed responses from the IDX Broker API if an error occurs.
 
 = 1.0.9 =
+* Added helpful links to plugin. Fully tested to 3.6.1. Added Bing Map search library for users who add the map widget.
 
-Added helpful links to plugin. Fully tested to 3.6.1. Added Bing Map search library for users who add the map widget. 
+= 1.0.8 =
+* Remove Beta image from control panel. Remaining Beta text from readme.
 
-= 1.1.0 =
+= 1.0.7 =
+* Added support for php start and stop tags. Some users migrating from the original IDX Broker may have used an older method of adding the dynamic wrapper tags to their theme that was dependant on our original plugin. This update prevents errors when those users disable our original plugin.
 
-Fixed small bugs with widget titles. Added MapQuest map search library. Small bug fixes to IDX Broker shortcodes.
+= 1.0.6 =
+* Added shortcode functionality. The plugin now adds an IDX button to the Visual editor which allows you to add shortcodes for the various page links and widgets IDX Broker provides.
+
+= 1.0.5 =
+* Cleaned up naming convention inconsistencies.
+
+= 1.0.4 =
+* Additional CSS clean up; specific to certain installations/WP versions.
+
+= 1.0.3 =
+* Cleaned up various CSS issues and removed excess button options from spec.
+
+== Upgrade Notice ==
