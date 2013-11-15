@@ -7,7 +7,7 @@ if (get_option('idx_broker_apikey')) {
 		'accesskey' => get_option('idx_broker_apikey'),
 		'outputtype' => 'json'  
 	);
-	$response = $request->request('https://api.idxbroker.com/clients/wrappercache', array('sslverify'=>false, 'headers' => $headers, 'method'=>'DELETE'));
+	//$response = $request->request('https://api.idxbroker.com/clients/wrappercache', array('sslverify'=>false, 'headers' => $headers, 'method'=>'DELETE'));
 	//$response = (array)$response;
 }
 
