@@ -97,8 +97,10 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 == Changelog ==
 
 = 1.1.0 =
+* Fully tested to be compatible with WP v3.8.
 * Fixed small bugs with certain characters in widget titles causing an error within the plugin.
 * Added MapQuest map search library, clients now have the option between Bing or MapQuest for their map search widget.
+* Added ability to hide IDX Broker widget titles by using keyword '!%hide_title!%' as the widget title inside the WordPress dashboard. This functionality will be extended by adding additional keywords in future revisions.
 * Small bug fixes to IDX Broker shortcodes causing issues with multi-site installations.
 * More detailed responses from the IDX Broker API if an error occurs.
 
