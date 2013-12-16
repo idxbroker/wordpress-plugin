@@ -1,16 +1,4 @@
 <?php
-// anytime this file is called, we reset the static wrapper cache as long as we have a valid API key, this is done in the background so returning a response isn't necessary
-if (get_option('idx_broker_apikey')) {
-	$request = new WP_Http;
-	$headers = array(
-		'Content-Type' => 'application/x-www-form-urlencoded',
-		'accesskey' => get_option('idx_broker_apikey'),
-		'outputtype' => 'json'  
-	);
-	//$response = $request->request('https://api.idxbroker.com/clients/wrappercache', array('sslverify'=>false, 'headers' => $headers, 'method'=>'DELETE'));
-	//$response = (array)$response;
-}
-
 /**
  * 
  * Using our web services function, lets get the system links built in the middleware,
