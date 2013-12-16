@@ -55,7 +55,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 <h3>General Terms of Use</h3> 
 
-This IDX plugin is supported by MLS/IDX feeds. This means that your MLS governs the IDX results and details page display and disclaimers. IDX, Inc. manages all the necessary MLS paperwork. IDX Broker will automatically display the correct MLS/IDX disclaimers to ensure compliance with the MLS(s) & Board(s) that provides you with your IDX feed. 
+This IDX plugin is supported by MLS/IDX feeds. This means that your MLS governs the IDX results and details page display and disclaimers. IDX, LLC. manages all the necessary MLS paperwork. IDX Broker will automatically display the correct MLS/IDX disclaimers to ensure compliance with the MLS(s) & Board(s) that provides you with your IDX feed. 
 
 == Installation ==
 
@@ -77,7 +77,7 @@ Yes. IDX Broker Platinum manages your IDX feed by building forms, results, and p
 No. IDX Broker Platinum requires a month-to-month agreement only. There are three monthly account levels - Agent ($59.99+), Team ($69.99+), and Office($98.99+). 
 
 = What can I expect if I decide to get my IDX feed through IDX Broker Platinum? =
-When you sign up for a new account, IDX, Inc sends you any necessary MLS paperwork (if required). Once you have signed the necessary paperwork, you will need to fax that back to us and we will then forward your paperwork to the MLS for approval. Approval can take anywhere from 3-10 days. Once approved, we will activate your account, integrate your site's design into IDX pages, and send you IDX Broker login credentials so that you can add links and Widgets to your site or blog.  
+When you sign up for a new account, IDX, LLC sends you any necessary MLS paperwork (if required). Once you have signed the necessary paperwork, you will need to fax that back to us and we will then forward your paperwork to the MLS for approval. Approval can take anywhere from 3-10 days. Once approved, we will activate your account, integrate your site's design into IDX pages, and send you IDX Broker login credentials so that you can add links and Widgets to your site or blog.  
 
 = How many blogs/websites can I integrate with IDX Broker Platinum? =
 Features provided by this Plugin - Widgets, links, and custom links may be placed onto any WordPress website or blog, regardless of MLS approval status. The reason for this is because all Widgets, links, and custom links point back to the original IDX-approved website. Each IDX Broker account requires MLS approval of one site for IDX display. Your search results and details pages must match this approved site. 

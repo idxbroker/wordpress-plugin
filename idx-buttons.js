@@ -18,7 +18,7 @@
 		getInfo : function() {
 			return {
 				longname : 'IDX Shortcode',
-				author : 'IDX, Inc',
+				author : 'IDX, LLC',
 				version : tinymce.majorVersion + "." + tinymce.minorVersion
 			};
 		}
