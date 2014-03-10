@@ -50,8 +50,8 @@ function idx_original_plugin_check() {
 /**  Register Map Libraries in case the user adds a map Widget to their site **/
 function wp_api_script() {
 	wp_register_script( 'custom-scriptBing', '//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0', __FILE__ ) ;
-	wp_register_script( 'custom-scriptLeaf', '//cdn.leafletjs.com/leaflet-0.6.4/leaflet.js', __FILE__ );
-	wp_register_script( 'custom-scriptMQ', '//beta.mapquestapi.com/sdk/leaflet/v0.1/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
+	wp_register_script( 'custom-scriptLeaf', '//cdn.leafletjs.com/leaflet-0.7.2/leaflet.js', __FILE__ );
+	wp_register_script( 'custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
 	
 	wp_enqueue_script( 'custom-scriptBing' );
 	wp_enqueue_script( 'custom-scriptLeaf' );
@@ -65,7 +65,7 @@ add_action( 'wp_enqueue_scripts', 'wp_api_script' );
  * @return [type] [description]
  */
 function idx_register_styles () {
-	wp_register_style('cssMQ', '//cdn.leafletjs.com/leaflet-0.6.4/leaflet.css');
+	wp_register_style('cssMQ', '//cdn.leafletjs.com/leaflet-0.7.2/leaflet.css');
 	wp_enqueue_style('cssMQ');
 }
 add_action('wp_enqueue_scripts', 'idx_register_styles'); // calls the above function
