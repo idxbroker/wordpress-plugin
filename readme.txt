@@ -3,8 +3,8 @@ Author: IDX Broker
 Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor
-Tested up to: 3.8
-Stable tag: 1.1.1
+Tested up to: 4.0
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,9 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 6. Adding Shortcodes.
 
 == Changelog ==
+
+= 1.1.2 =
+* Fixed minor bug causing some Shortcodes to disappear
 
 = 1.1.1 =
 * Changed MapQuest API version to v1.0

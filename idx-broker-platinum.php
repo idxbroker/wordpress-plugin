@@ -3,7 +3,7 @@
 Plugin Name: IDX Broker Platinum
 Plugin URI: http://www.idxbroker.com
 Description: Over 550 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.1.1
+Version: 1.1.2
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -50,11 +50,13 @@ function idx_original_plugin_check() {
 /**  Register Map Libraries in case the user adds a map Widget to their site **/
 function wp_api_script() {
 	wp_register_script( 'custom-scriptBing', '//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0', __FILE__ ) ;
-	wp_register_script( 'custom-scriptLeaf', '//cdn.leafletjs.com/leaflet-0.7.2/leaflet.js', __FILE__ );
+	wp_register_script( 'custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__ );
+	//wp_register_script( 'custom-scriptLeafDraw', '//idxdyncdn.idxbroker.com/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', __FILE__ );
 	wp_register_script( 'custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
 	
 	wp_enqueue_script( 'custom-scriptBing' );
 	wp_enqueue_script( 'custom-scriptLeaf' );
+	//wp_enqueue_script( 'custom-scriptLeafDraw' );
 	wp_enqueue_script( 'custom-scriptMQ' );
 } // end wp_api_script fn
 
@@ -65,8 +67,11 @@ add_action( 'wp_enqueue_scripts', 'wp_api_script' );
  * @return [type] [description]
  */
 function idx_register_styles () {
-	wp_register_style('cssMQ', '//cdn.leafletjs.com/leaflet-0.7.2/leaflet.css');
-	wp_enqueue_style('cssMQ');
+	wp_register_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
+	//wp_register_style('cssLeafDraw', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.draw.css');
+	
+	wp_enqueue_style('cssLeaf');
+	//wp_enqueue_style('cssLeafDraw');
 }
 add_action('wp_enqueue_scripts', 'idx_register_styles'); // calls the above function
 
@@ -89,7 +94,7 @@ function idx_activate() {
 
 //Adds a comment declaring the version of the IDX Broker plugin if it is activated.
 function idx_broker_activated() {
-	echo "\n<!-- IDX Broker Platinum WordPress Plugin v1.1.1 Activated -->\n\n";
+	echo "\n<!-- IDX Broker Platinum WordPress Plugin v1.1.2 Activated -->\n\n";
 }
 
 function idx_broker_platinum_plugin_actlinks( $links ) { 
@@ -1164,8 +1169,13 @@ function show_saved_link($atts) {
  */
 function idx_get_link_by_uid($uid, $type = 0) {
 	if($type == 0) {
+		// if the cache has expired, send an API request to update them. Cache expires after 2 hours.
+		if (! get_transient('idx_systemlinks_cache') )
+			idx_platinum_get_systemlinks();
 		$idx_links = get_transient('idx_systemlinks_cache');
 	} elseif ($type == 1) {
+		if (! get_transient('idx_savedlink_cache') )
+			idx_platinum_get_savedlinks();
 		$idx_links = get_transient('idx_savedlink_cache');
 	}
 
@@ -1241,7 +1251,7 @@ function show_link_short_codes($link_type = 0) {
 		return false;
 	}
 
-	if(count($idx_links) > 0 AND is_array($idx_links)) {
+	if(count($idx_links) > 0 && is_array($idx_links)) {
 		foreach ($idx_links as $idx_link) {
 			if ($link_type === 0) {
 				$available_shortcodes .= get_system_link_html($idx_link);

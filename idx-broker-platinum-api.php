@@ -8,7 +8,6 @@
 function idx_platinum_get_systemlinks () { 
 	if(!get_option('idx_broker_apikey'))
 		return false;
-		//return new WP_Error('idx_api_error', __('Error Generic: Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
 
 	$request = new WP_Http;
 	$headers = array(
@@ -28,7 +27,7 @@ function idx_platinum_get_systemlinks () {
 	}
 	else {
 		$system_links = ($code == 200 && isset($response['body'])) ? json_decode($response['body']) : array();
-		set_transient('idx_systemlinks_cache', $system_links, 3600);
+		set_transient('idx_systemlinks_cache', $system_links, 7200);
 		return $system_links;		
 	}
 } // end system links API call fn
@@ -42,7 +41,6 @@ function idx_platinum_get_systemlinks () {
 function idx_platinum_get_savedlinks () { 
 	if(!get_option('idx_broker_apikey'))
 		return false;
-		//return new WP_Error('idx_api_error', __('Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
 
 	$request = new WP_Http;
 	$headers = array(
@@ -61,8 +59,9 @@ function idx_platinum_get_savedlinks () {
 		return new WP_Error("idx_api_error", __("Error {$code}: $error"));
 	}
 	else {
+		
 		$saved_links = ($code == 200 && isset($response['body'])) ? json_decode($response['body']) : array();
-		set_transient('idx_savedlink_cache', $saved_links, 3600);
+		set_transient('idx_savedlink_cache', $saved_links, 7200);
 		return $saved_links;		
 	}
 } // end saved links api call fn
@@ -76,8 +75,6 @@ function idx_platinum_get_savedlinks () {
 function idx_platinum_get_widgets () { 
 	if(!get_option('idx_broker_apikey'))
 		return false;
-		
-		//return new WP_Error('idx_api_error', __('Missing API Key, this is accessible from within the IDX Broker Platinum Dashboard'));
 
 	$request = new WP_Http;
 	$headers = array(
@@ -97,7 +94,7 @@ function idx_platinum_get_widgets () {
 	}
 	else {
 		$idx_widgets = ($code == 200 && isset($response['body'])) ? json_decode($response['body']) : array();
-		set_transient('idx_widget_cache', $idx_widgets, 3600);
+		set_transient('idx_widget_cache', $idx_widgets, 7200);
 		return $idx_widgets;		
 	}
 } // end get platinum widgets API call fn
