@@ -289,17 +289,20 @@ function idx_ajax_create_dynamic_page()
 
 	// get theme to check start/stop tag
 	$isThemeIncludeIdxTag = false;
-	$theme_name = get_current_theme();
-	$my_theme = wp_get_theme( $theme_name );
-	$files = scandir( get_template_directory() );
+	$template_root = get_theme_root().'/'.get_stylesheet();
+
+	$files = scandir( $template_root );
+
 	foreach ($files as $file) 
 	{
-		$path = get_template_directory() . '/' . $file;
+		$path = $template_root . '/' . $file;
 		if (is_file($path) && preg_match('/.*\.php/',$file))
 		{
-			$content = file_get_contents(get_template_directory() . '/' . $file);
+			$content = file_get_contents($template_root . '/' . $file);
 			if (preg_match('/<div[^>\n]+?id=[\'"]idxstart[\'"].*?(\/>|><\/div>)/i', $content))
 			{
+					// $isThemeIncludeIdxTag = true;
+					// break;
 				if(preg_match('/<div[^>\n]+?id=[\'"]idxstop[\'"].*?(\/>|><\/div>)/i',$content))
 				{
 					$isThemeIncludeIdxTag = true;
@@ -310,6 +313,7 @@ function idx_ajax_create_dynamic_page()
 	}
 	if ($isThemeIncludeIdxTag)
 		$post_content = '';
+
 	$post_title = $_POST['post_title'] ? $_POST['post_title'] : 'IDX Dynamic Wrapper Page';
 	$new_post = array(
 		'post_title' => $post_title,

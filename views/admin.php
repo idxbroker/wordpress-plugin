@@ -62,22 +62,24 @@
 					<label>Step 1: Get an API Key</label>
 					<a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/98/16/idx-broker-platinum-wordpress-plugin" class="helpIcon" target="_blank"></a>
 				</h3>
-				<p class="inlineBlock">
-					<label for="idx_broker_apikey">Enter Your API Key: </label>
-					<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option('idx_broker_apikey'); ?>" />
-					<input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" style="width:auto;" /> 	
-					<span class="refresh_status"></span> 
+				<div class="inlineBlock">
+					<div>
+						<label for="idx_broker_apikey">Enter Your API Key: </label>
+						<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option('idx_broker_apikey'); ?>" />
+						<input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" style="width:auto;" /> 	
+						<span class="refresh_status"></span> 
+					</div>
 					<p class="error hidden" id="idx_broker_apikey_error">
 						Please enter your API key to continue. 
 						<br>
 						If you do not have an IDX Broker Platinum account, please contact the IDX Broker team at 800-421-9668.
-						<?php 
-							if($api_error) { 
-								echo '<span class="error" style="display:block;">'.$api_error.'</span>';
-							}
-						?>
 					</p>
-				</p>
+					<?php 
+						if($api_error) { 
+							echo '<p class="error" style="display:block;">'.$api_error.'</p>';
+						}
+					?>
+				</div>
 				
 			</div>
 			<div id="widgSettings">
