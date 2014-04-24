@@ -338,7 +338,7 @@ function idx_ajax_delete_dynamic_page() {
 }
 
 
-add_filter( 'get_pages','idx_filter_pages');
+add_filter( 'get_pages','idx_pages_filter');
 function idx_pages_filter($pages) {
 	if (get_option('idx_broker_dynamic_wrapper_page_id')) {
 		$filtered_pages = array_filter($pages, idx_pages_check);	
