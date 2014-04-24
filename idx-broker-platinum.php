@@ -3,7 +3,7 @@
 Plugin Name: IDX Broker Platinum
 Plugin URI: http://www.idxbroker.com
 Description: Over 550 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.1.2
+Version: 1.1.3
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -19,14 +19,17 @@ set_time_limit(0);
 
 // The function below adds a settings link to the plugin page. 
 $plugin = plugin_basename(__FILE__); 
-$api_error = false; 
+$api_error = false;
 
 
 define('SHORTCODE_SYSTEM_LINK', 'idx-platinum-system-link');
 define('SHORTCODE_SAVED_LINK', 'idx-platinum-saved-link');
 define('SHORTCODE_WIDGET', 'idx-platinum-widget');
+define( 'IDX__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'IDX_WP_PLUGIN_VERSION', '1.1.3' );
 
 //Adds a comment declaring the version of the WordPress.
+add_action('wp_head', 'display_wpversion');
 function display_wpversion() {
 	echo "\n\n<!-- Wordpress Version ";
 	echo bloginfo('version');
@@ -34,6 +37,7 @@ function display_wpversion() {
 }
 
 //Adds legacy start and stop tag function only when original IDX plugin is not installed
+add_action('wp_head', 'idx_original_plugin_check');
 function idx_original_plugin_check() { 
 	if (function_exists('idx_start'))
 		echo '';
@@ -48,24 +52,23 @@ function idx_original_plugin_check() {
 }
 
 /**  Register Map Libraries in case the user adds a map Widget to their site **/
+add_action( 'wp_enqueue_scripts', 'wp_api_script' );
 function wp_api_script() {
 	wp_register_script( 'custom-scriptBing', '//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0', __FILE__ ) ;
 	wp_register_script( 'custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__ );
-	//wp_register_script( 'custom-scriptLeafDraw', '//idxdyncdn.idxbroker.com/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', __FILE__ );
 	wp_register_script( 'custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
 	
 	wp_enqueue_script( 'custom-scriptBing' );
 	wp_enqueue_script( 'custom-scriptLeaf' );
-	//wp_enqueue_script( 'custom-scriptLeafDraw' );
 	wp_enqueue_script( 'custom-scriptMQ' );
 } // end wp_api_script fn
 
-add_action( 'wp_enqueue_scripts', 'wp_api_script' );
 
 /**
  * Registers leaflet css
  * @return [type] [description]
  */
+add_action('wp_enqueue_scripts', 'idx_register_styles'); // calls the above function
 function idx_register_styles () {
 	wp_register_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
 	//wp_register_style('cssLeafDraw', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.draw.css');
@@ -73,9 +76,10 @@ function idx_register_styles () {
 	wp_enqueue_style('cssLeaf');
 	//wp_enqueue_style('cssLeafDraw');
 }
-add_action('wp_enqueue_scripts', 'idx_register_styles'); // calls the above function
+
 
 /** Function that is executed when plugin is activated. **/
+register_activation_hook( __FILE__, 'idx_activate' );
 function idx_activate() {
 	global $wpdb;
 	if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."posts_idx'") != $wpdb->prefix.'posts_idx') {
@@ -92,11 +96,32 @@ function idx_activate() {
 	} // end if
 } // end idx_activate fn
 
-//Adds a comment declaring the version of the IDX Broker plugin if it is activated.
-function idx_broker_activated() {
-	echo "\n<!-- IDX Broker Platinum WordPress Plugin v1.1.2 Activated -->\n\n";
+// ========================== Jira ==========================
+register_uninstall_hook(__FILE__, 'idx_uninstall');
+function idx_uninstall() {
+	$page_id = get_option('idx_broker_dynamic_wrapper_page_id');
+	if($page_id) {
+		wp_delete_post($page_id, true);
+		wp_trash_post($page_id);
+	}
 }
 
+// ========================== /Jira ==========================
+
+//Adds a comment declaring the version of the IDX Broker plugin if it is activated.
+add_action('wp_head', 'idx_broker_activated');
+function idx_broker_activated() {
+	echo "\n<!-- IDX Broker Platinum WordPress Plugin ". IDX_WP_PLUGIN_VERSION . " Activated -->\n\n";
+
+	echo "\n<!-- IDX Broker Platinum WordPress Plugin Wrapper Meta-->\n\n";
+	global $post;
+	if ($post->ID && $post->ID == get_option('idx_broker_dynamic_wrapper_page_id')) {
+		echo "<meta name='idx-robot'>\n";
+		echo "<meta name='robots' content='noindex,nofollow'>\n";
+	}
+}
+
+add_filter("plugin_action_links_$plugin", 'idx_broker_platinum_plugin_actlinks' );
 function idx_broker_platinum_plugin_actlinks( $links ) { 
 	// Add a link to this plugin's settings page
 	$settings_link = '<a href="options-general.php?page=idx-broker-platinum">Settings</a>'; 
@@ -104,13 +129,12 @@ function idx_broker_platinum_plugin_actlinks( $links ) {
 	return $links; 
 }
 
-add_action('wp_head', 'idx_original_plugin_check');
-add_action('wp_head', 'display_wpversion');
-add_action('wp_head', 'idx_broker_activated');
-add_action('admin_menu', 'idx_broker_platinum_menu');
+
+
+
 add_action('admin_menu', 'idx_broker_platinum_options_init' ); 
 
-add_filter("plugin_action_links_$plugin", 'idx_broker_platinum_plugin_actlinks' );
+
 
 add_action('wp_ajax_idx_refresh_api', 'idx_refreshapi' );
 add_action('wp_ajax_idx_update_links', 'idx_update_links' );
@@ -120,7 +144,7 @@ add_action('wp_ajax_idx_update_savedlinks', 'idx_update_savedlinks' );
 //Adding shortcodes
 
 add_shortcode('idx-platinum-link', 'show_link');
-add_shortcode('idx-platinum-system-link', 'show_system_link');
+
 add_shortcode('idx-platinum-saved-link', 'show_saved_link');
 add_shortcode('idx-platinum-widget', 'show_widget');
 
@@ -145,7 +169,7 @@ function idx_buttons() {
 	if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') )
 		return;
 	// Add only in Rich Editor mode
-	if ( get_user_option('rich_editing') == 'true') {
+	if ( get_user_option('rich_editing') == 'true' ) {
 		// filter the tinyMCE buttons and add our own
 		add_filter("mce_external_plugins", "add_idx_tinymce_plugin");
 		add_filter('mce_buttons', 'register_idx_buttons');
@@ -167,19 +191,20 @@ function add_idx_tinymce_plugin($plugin_array) {
  * @params void
  * @return Admin Menu 
  */
+add_action('admin_menu', 'idx_broker_platinum_menu');
 function idx_broker_platinum_menu() {
 	add_options_page('IDX Broker Platinum Plugin Options', 'IDX Broker Platinum', 'administrator', 'idx-broker-platinum', 'idx_broker_platinum_admin_page');	
 }
 
 //Include dependecy files for IDX plugin
-if (file_exists(dirname(__FILE__) . '/idx-broker-platinum-api.php')) {
-	include dirname(__FILE__) . '/idx-broker-platinum-api.php';
+if (file_exists(IDX__PLUGIN_DIR. '/idx-broker-platinum-api.php')) {
+	include IDX__PLUGIN_DIR . '/idx-broker-platinum-api.php';
 } else {
 	echo '<!-- Couldn\'t find the form template. //-->' . "\n";
 }
 
-if (file_exists(dirname(__FILE__) . '/idx-broker-widgets.php')) {
-	include dirname(__FILE__) . '/idx-broker-widgets.php';
+if (file_exists(IDX__PLUGIN_DIR . '/idx-broker-widgets.php')) {
+	include IDX__PLUGIN_DIR . '/idx-broker-widgets.php';
 } else {
 	echo '<!-- Couldn\'t find the form template. //-->' . "\n";
 }
@@ -197,6 +222,10 @@ function idx_broker_platinum_options_init() {
 	global $api_error;
 	//register our settings
 	register_setting( 'idx-platinum-settings-group', "idx_broker_apikey" );		
+	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_name" );		
+	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_id" );		
+	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_url" );
+
 	/*
 	 *	Since we have custom links that can be added and deleted inside
 	 *	the IDX Broker admin, we need to grab them and set up the options
@@ -234,9 +263,94 @@ function idx_broker_platinum_options_init() {
 			update_saved_page_links($savedlinks);
 		}
 	}	
-	wp_enqueue_script('idxjs', plugins_url('idx-broker-platinum/idxbroker.js'), 'jquery');
+}
+
+// ========================== Jira ==========================
+/**
+ *  Function to add javascript and css into idx setting page
+ *  @param string $page: the current page
+ */
+add_action( 'admin_enqueue_scripts', 'idx_inject_script_and_style' );
+function idx_inject_script_and_style($page)
+{
+	if( 'settings_page_idx-broker-platinum' != $page )
+		return;
+	wp_enqueue_script('idxjs', plugins_url('idx-broker-platinum/js/idxbroker.js'), 'jquery');
 	wp_enqueue_style('idxcss', plugins_url('idx-broker-platinum/css/idxbroker.css'));
 }
+
+
+add_action( 'wp_ajax_create_dynamic_page', 'idx_ajax_create_dynamic_page' );
+function idx_ajax_create_dynamic_page()
+{
+
+	// default page content
+	$post_content = '<div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div>';
+
+	// get theme to check start/stop tag
+	$isThemeIncludeIdxTag = false;
+	$theme_name = get_current_theme();
+	$my_theme = wp_get_theme( $theme_name );
+	$files = scandir( get_template_directory() );
+	foreach ($files as $file) 
+	{
+		$path = get_template_directory() . '/' . $file;
+		if (is_file($path) && preg_match('/.*\.php/',$file))
+		{
+			$content = file_get_contents(get_template_directory() . '/' . $file);
+			if (preg_match('/<div[^>\n]+?id=[\'"]idxstart[\'"].*?(\/>|><\/div>)/i', $content))
+			{
+				if(preg_match('/<div[^>\n]+?id=[\'"]idxstop[\'"].*?(\/>|><\/div>)/i',$content))
+				{
+					$isThemeIncludeIdxTag = true;
+					break;
+				}
+			}
+		}
+	}
+	if ($isThemeIncludeIdxTag)
+		$post_content = '';
+	$post_title = $_POST['post_title'] ? $_POST['post_title'] : 'IDX Dynamic Wrapper Page';
+	$new_post = array(
+		'post_title' => $post_title,
+		'post_name' => $post_title,
+		'post_content' => $post_content,
+		'post_type' => 'page',
+		'post_status' => 'publish'
+	);
+	if ($_POST['wrapper_page_id']) 
+	{
+		$new_post['ID'] = $_POST['wrapper_page_id'];
+	}
+	$wrapper_page_id = wp_insert_post($new_post);
+	// add_post_meta($wrapper_page_id, 'meta-robots', "'noindex','nofollow'") || update_post_meta($wrapper_page_id, 'meta-robots', "'noindex','nofollow'");
+	die(json_encode(array("wrapper_page_id"=>$wrapper_page_id))) ;
+}
+
+add_action( 'wp_ajax_delete_dynamic_page', 'idx_ajax_delete_dynamic_page' );
+function idx_ajax_delete_dynamic_page() {
+	if ($_POST['wrapper_page_id'])
+	{
+		wp_delete_post($_POST['wrapper_page_id'], true);
+		wp_trash_post($_POST['wrapper_page_id']);
+	}
+	die();
+}
+
+
+add_filter( 'get_pages','idx_filter_pages');
+function idx_pages_filter($pages) {
+	if (get_option('idx_broker_dynamic_wrapper_page_id')) {
+		$filtered_pages = array_filter($pages, idx_pages_check);	
+	}
+	return $filtered_pages;
+}
+function idx_pages_check($page) {
+	return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');
+};
+// ========================== /Jira ==========================
+
+
 /**
  * Function to updated the system links data in posts and postmeta table
  * @param object $systemlinks
@@ -282,195 +396,7 @@ function update_saved_page_links($savedlinks) {
  * @return void
 */
 function idx_broker_platinum_admin_page() {
-	global $api_error;
-	$search_item = array('_','-');
-	$display_class = '';	
-	$savedlinks = '';
-	$systemlinks = '';
-	$check_sys_option = '';
-	if (!current_user_can('manage_options'))  {
-		wp_die( __('You do not have sufficient permissions to access this page.') );
-	}
-
-	if(!$api_error) {
-		$systemlinks = idx_platinum_get_systemlinks();
-		if( is_wp_error($systemlinks) ) {
-			$api_error = $systemlinks->get_error_message();
-			$systemlinks = '';
-		}
-
-		$savedlinks = idx_platinum_get_savedlinks();
-
-		if( is_wp_error($savedlinks) ) {
-			$api_error = $savedlinks->get_error_message();
-			$savedlinks = '';
-		}
-	}
-	?>
-		<div id="idxPluginWrap" class="wrap">
-			<a href="http://www.idxbroker.com" target="_blank">
-				<div id="logo"></div>
-			</a>
-			<div style="display: table; width: 87%;">
-				<h2 class="flft">IDX Broker Platinum&reg; Plugin Settings</h2>
-<br clear="all"/>
-Useful Links:&nbsp; <a href="http://kb.idxbroker.com/Knowledgebase/List/Index/16/wordpress-integration" target="_blank">IDX Broker Platinum Knowledgebase</a>&nbsp;&nbsp;&nbsp;<a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">Login to Your Control Panel</a>&nbsp;&nbsp;&nbsp;<a href="mailto:help@idxbroker.com?Subject=Help me with WordPress" target="_blank">
-Contact IDX Broker</a>
-				<br clear="all"/>
-			</div>	
-			<h3 class="hndle">
-				<label>Step 1: Get an API Key</label>
-				<a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/98/16/idx-broker-platinum-wordpress-plugin" class="helpIcon" target="_blank"></a>
-			</h3>
-			<form method="post" action="options.php" id="idx_broker_options">
-				<?php wp_nonce_field('update-options'); ?>
-				<div id="blogUrl" style="display: none;" ajax="<?php bloginfo('wpurl'); ?>"></div>
-				<ul id="genSettings">
-					<li>
-						<label for="idx_broker_apikey">Enter Your API Key: </label>
-						<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option('idx_broker_apikey'); ?>" />
-						<input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" style="width:165px;" />
-						<span class="refresh_status"></span> 	
-						<li class="error" id="idx_broker_apikey_error">
-						Please enter your API key to continue. 
-						<br />
-						If you do not have an IDX Broker Platinum account, please contact the IDX Broker team at 800-421-9668.</label>
-					<?php 
-						if($api_error) { 
-							echo '<li class="error" style="display:block;">'.$api_error.'</li>';
-						}
-					?>
-					</li>
-					</li>
-				</ul>
-				<h3>
-					<label>Step 2: Add IDX Widgets</label>
-				</h3><ul id="widgSettings">
-				<li>
-				Widgets give you a way to add Quick Search, Featured Listings, Agents, and Custom Links to your WordPress pages. IDX Broker Platinum comes with a default set of Widgets. If you have created additional, custom Widgets, simply click the "Refresh Plugin Options" button in Step 1 and visit your <a href="widgets.php">Widgets Tab</a> in WordPress to drag-and-drop IDX Widgets into your sidebar.</li></ul>
-				<h3>
-					<label>Step 3: Add IDX System Navigation Links</label>
-				</h3><ul id="widgSettings">
-				  <li>Basic Search, Map Search, Advanced Search, Featured Listings, Roster Page links and any other search form thay you've created in IDX Broker Platinum can be easily added to your website navigation. All of your search links are hosted on a subdomain or <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/7/0/using-a-custom-subdomain">custom subdomain</a> that maintains the look and feel of your website. To add these to your website navigation, simply add them to a <a href="nav-menus.php">Custom Menu</a>, or reorder the display of these pages using your <a href="edit.php?post_type=page">Pages Tab</a> in WordPress. Note that each page is the equivalent of a link, and that you do not need to enter any information into the pages themselves to get them to display correctly. IDX Broker Platinum will do that for you. </li></ul>
-				<br class="clear" />
-				<?php 
-					if (empty($systemlinks)) {
-						$display_class = 'dispNone';
-  				?>
-					<div>
-						You do not have any system links because you may have entered an incorrect API key. Please review Step 1.</p>
-					</div>
-				<?php 
-					} else { 
-						$check_sys_option = (get_option('idx_systemlink_group') == 1)?'checked="checked"':'';
-				?>
-			<br />	Check the box next to the page link you wish to add to your navigation. To remove an IDX page, simply uncheck the box next to the page you wish to remove and click the "Update System Links" button.</p>
-				<ul class="linkList">	
-				<?php 
-				$my_system_links = get_my_system_links();
-					foreach($systemlinks as $system_link) {
-						if($system_link->systemresults != '1') {						
-						$std_check_options = (in_array($system_link->uid,$my_system_links))? 'checked = "checked"': '';
-				?>	
-						<li>
-							<input type="checkbox" name="idx_platinum_system_<?php echo $system_link->uid;?>" id="idx_platinum_system_<?php echo $system_link->uid;?>" <?php echo $std_check_options; ?> class="systemLink idx_platinum_sl" onclick="systemlink_check();" />
-							<input type="hidden" name="idx_platinum_system_<?php echo $system_link->uid;?>_url" value="<?php echo $system_link->url;?>" />
-							<input type="hidden" name="idx_platinum_system_<?php echo $system_link->uid;?>_name" value="<?php echo $system_link->name;?>" />
-							<label for="idx_platinum_system_<?php echo $system_link->uid;?>" class="linkLabel">- <?php echo str_replace($search_item, ' ', $system_link->name); ?></label>
-						</li>
-				<?php 	
-						}
-					}
-				}
-				?>
-                <br class="clear" />
-                <?php if(count($systemlinks) > 0):?>
-                <span>
-						<input type="checkbox" name="idx_systemlink_group" id="idx_systemlink_group" <?php echo $check_sys_option;?> />
-						<label for="idx_systemlink_group" class="link-label">- Add/Remove All Pages</label>
-					</span>
-				<?php endif;?>	
-                </ul>
-                <div class="linkHeader <?php echo $display_class; ?>">
-					<!-- Removed as per UI clean up - LW span style="margin-left:20px;">
-						<input type="submit" value="<? //php _e('Update System Links') ?>" name="update_systemlink" id="save_systemlinks" class="button-primary update_idxlinks" ajax="<? //php bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php" />
-					</span -->
-					<span class="system_status"></span>
-				</div>
-				  <h3>
-					<label>Step 4: Add Your Custom Links (Neighborhood, Custom Map Search, etc.)</label>
-              </h3>
-				<?php 
-					if (empty($savedlinks)) { 
-						$display_class = 'dispNone';
-					} else {
-						$display_class = '';
-					}
-					$check_saved_option = (get_option('idx_savedlink_group') == 1)?'checked="checked"':'';
-				?>
-				<?php
-				/**
-				 * We want the client the ability to place any custom built links in the system
-				 *	in the main navigation.  First lets grab them.
-				 * 
-				 * Ther are no custom links in the system, so just display some text and a link to the admin to
-				 *	add custom links.
-				 * 
-				 */
-  				if (empty($savedlinks)) {
-  				?>
-				<div>
-				<ul id="widgSettings">
-				  <li>You may create and save an unlimited number of Saved Links (e.g., neighborhood results, short sale results, etc). <br />
-					<br />
-					To create your saved links, <a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">login to IDX Broker Platinum</a> and go to <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links.</a> Once you have built and saved your saved links, revisit this page and hit the refresh button. Your new links will automatically appear below. Simply choose the custom links that you wish to display in your theme header navigation and IDX Broker Platinum will add those pages and link to the corresponding IDX results.</li></ul>
-				</div>
-			<?php 
-			} else {
-    	?>
-		<ul id="widgSettings">
-				  <li>Add custom neighborhood, subdivision, and other special links to your website. To create or edit saved links, login to IDX Broker and view the <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links</a> page. Once you've created links, open your IDX Broker Platinum Plugin settings page and click the Refresh Plugin Options to add your saved links to this list. Your new links will appear below. Click to add or remove any page links that you don't want to add.</li></ul>
-		<ul class="savedLinklist">
-		<?php
-			$my_saved_links = get_my_saved_links();
-			foreach ($savedlinks as $saved_link) {
-				//$checkOption = (get_option("idx_platinum_saved_".$link_name) == 'on')?'checked="checked"':'';
-				$checkOption = (in_array($saved_link->uid,$my_saved_links))? 'checked = "checked"': '';
-		?>
-			<li>
-							<input type="checkbox" name="idx_platinum_saved_<?php echo $saved_link->uid;?>" id="idx_platinum_saved_<?php echo $saved_link->uid;?>" <?php echo $checkOption; ?> class="savedLink idx_platinum_sdl" onclick="savedlink_check();" />
-							<input type="hidden" name="idx_platinum_saved_<?php echo $saved_link->uid;?>_url" value="<?php echo $saved_link->url;?>" />
-							<input type="hidden" name="idx_platinum_saved_<?php echo $saved_link->uid;?>_name" value="<?php echo $saved_link->linkName;?>" />
-							<label for="idx_platinum_saved_<?php echo $saved_link->uid;?>" style="padding-left: 2px;" class="linkLabel">- <?php echo str_replace($search_item, ' ', $saved_link->linkName); ?></label>
-			</li>  
-		<?php	
-			}	
-		}
-		?>
-			<br class="clear" />
-            <?php if(count($savedlinks) > 0):?>
-            <span>
-						<input type="checkbox" name="idx_savedlink_group" id="idx_savedlink_group" <?php echo $check_saved_option;?> />
-						<label for="idx_savedlink_group" class="linkLabel">- Add/Remove All Pages</label>
-					</span>
-			<?php endif;?>		
-					<div class="linkHeader <?php echo $display_class; ?>" style="border-bottom: none;">
-					<!-- span style="margin-left:15px;">
-						<input type="submit" value="<?//php _e('Update Saved Links') ?>" name="update_savedlink" id="save_savedlinks" class="button-primary update_idxlinks" ajax="<?//php bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php" />
-					</span -->
-					<span class="saved_status" style="border-bottom: none;"></span>
-				</div>
-        <br clear="all" />
-		<div class="saveFooter">
-			<input type="submit" value="<?php _e('Save Changes') ?>" id="save_changes" class="button-primary update_idxlinks" ajax="<?php bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php" />
-			<span class="status"></span>
-			<br class="clear" />
-			<input type="hidden" name="action_mode" id="action_mode" value="" />
-		</div>
-		<?php settings_fields( 'idx-platinum-settings-group' ); ?>
-		</form>
-	</div>
-	<?php   
+	include(IDX__PLUGIN_DIR . '/views/admin.php');
 }
 
 /**
@@ -919,6 +845,7 @@ function idxplatinum_filter_links_to_pages ($link, $post) {
  * @param void
  * @return void	
  */
+add_action( 'template_redirect', 'idxplatinum_redirect_links_to_pages');
 function idxplatinum_redirect_links_to_pages() {
 	if ( !is_single() && !is_page() )
 		return;
@@ -943,6 +870,7 @@ function idxplatinum_redirect_links_to_pages() {
  * @return array $pages	
  */
 function idxplatinum_page_links_to_highlight_tabs( $pages ) {
+	// remove wrapper page
 	$page_links_to_cache = idxplatinum_get_page_links_to_meta();
 	$page_links_to_target_cache = idxplatinum_get_page_links_to_targets();
 	if ( !$page_links_to_cache && !$page_links_to_target_cache )
@@ -1116,6 +1044,7 @@ function show_link($atts) {
  * @param array $atts
  * @return string|boolean
  */
+add_shortcode('idx-platinum-system-link', 'show_system_link');
 function show_system_link($atts) {
 	extract( shortcode_atts( array(
 			'id' => NULL,
@@ -1326,12 +1255,16 @@ function show_widget_shortcodes() {
 	echo $available_shortcodes;
 }
 
+
+
+
+add_action( 'save_post',         'idxplatinum_plt_save_meta_box'                );
+add_action( 'before_delete_post',      'idxplatinum_update_pages'           	);	
+add_action( 'init',              'permalink_update_warning'						);
+
 add_filter( 'wp_list_pages',     'idxplatinum_page_links_to_highlight_tabs', 9	);
-add_action( 'template_redirect', 'idxplatinum_redirect_links_to_pages'			);
+
+
 add_filter( 'page_link',         'idxplatinum_filter_links_to_pages', 20, 2 	);
 add_filter( 'post_link',         'idxplatinum_filter_links_to_pages', 20, 2 	);
-add_action( 'save_post',         'idxplatinum_plt_save_meta_box'                );
-add_action( 'before_delete_post',       'idxplatinum_update_pages'           	);	
-add_action( 'init',              'permalink_update_warning'						);
-register_activation_hook( __FILE__, 'idx_activate' );
 ?>
