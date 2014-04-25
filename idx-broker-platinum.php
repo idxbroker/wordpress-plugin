@@ -275,8 +275,8 @@ function idx_inject_script_and_style($page)
 {
 	if( 'settings_page_idx-broker-platinum' != $page )
 		return;
-	wp_enqueue_script('idxjs', plugins_url('idx-broker-platinum/js/idxbroker.js'), 'jquery');
-	wp_enqueue_style('idxcss', plugins_url('idx-broker-platinum/css/idxbroker.css'));
+	wp_enqueue_script('idxjs', plugins_url('js/idxbroker.js', __FILE__), 'jquery');
+	wp_enqueue_style('idxcss', plugins_url('css/idxbroker.css', __FILE__));
 }
 
 
