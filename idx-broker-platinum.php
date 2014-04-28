@@ -181,7 +181,7 @@ function idx_buttons() {
  * @param array $plugin_array
  */
 function add_idx_tinymce_plugin($plugin_array) {
-	$plugin_array['idx_button'] = WP_PLUGIN_URL . '/' . str_replace(basename( __FILE__), "" ,plugin_basename(__FILE__)) .  '/js/idx-buttons.js';
+	$plugin_array['idx_button'] = plugins_url('js/idx-buttons.js', __FILE__);
 	return $plugin_array;
 }
 
