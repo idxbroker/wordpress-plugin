@@ -181,7 +181,7 @@ function idx_buttons() {
  * @param array $plugin_array
  */
 function add_idx_tinymce_plugin($plugin_array) {
-	$plugin_array['idx_button'] = WP_PLUGIN_URL . '/' . str_replace(basename( __FILE__), "" ,plugin_basename(__FILE__)) .  '/idx-buttons.js';
+	$plugin_array['idx_button'] = WP_PLUGIN_URL . '/' . str_replace(basename( __FILE__), "" ,plugin_basename(__FILE__)) .  '/js/idx-buttons.js';
 	return $plugin_array;
 }
 
@@ -345,9 +345,11 @@ function idx_ajax_delete_dynamic_page() {
 add_filter( 'get_pages','idx_pages_filter');
 function idx_pages_filter($pages) {
 	if (get_option('idx_broker_dynamic_wrapper_page_id')) {
-		$filtered_pages = array_filter($pages, idx_pages_check);	
+		return array_filter($pages, idx_pages_check);	
+	} else {
+		return $pages;
 	}
-	return $filtered_pages;
+	
 }
 function idx_pages_check($page) {
 	return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');

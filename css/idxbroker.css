@@ -39,7 +39,9 @@
 	float: right;
 	padding-top:5px;
 }
-
+#idx_broker_options {
+	margin-top: 10px;
+}
 input#idx_broker_apikey {
 	width: 300px;
 }
@@ -71,7 +73,7 @@ input[type=text].error {
 #genSettings li {
 	height: 38px;
 }
-#widgSettings li {height:90px;
+.widgSettings li {height:90px;
 }
 #sysSettings li {height:95px;
 }
@@ -136,6 +138,9 @@ input#idx_broker_dynamic_wrapper_page {
 	width: 300px;
 }
 
+#dynamic_page_url {
+	margin-top: 20px;
+}
 
 .linkLabel {
 	padding-left: 2px;
@@ -246,7 +251,7 @@ input#idx_broker_dynamic_wrapper_page {
     border: 1px solid #ccc;mini
     border-top: none;
     padding: 10px;
-    width: 97%;
+    width: auto;
 }
 .tab_content {
     display: none;
