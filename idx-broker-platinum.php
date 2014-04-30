@@ -225,6 +225,7 @@ function idx_broker_platinum_options_init() {
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_name" );		
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_id" );		
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_url" );
+	register_setting( 'idx-platinum-settings-group', "idx_broker_admin_page_tab" );
 
 	/*
 	 *	Since we have custom links that can be added and deleted inside
