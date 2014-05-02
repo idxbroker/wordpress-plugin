@@ -237,7 +237,7 @@
 					<?php
 						}
 					?>
-					<a href="http://kb.idxbroker.com/Knowledgebase/Article/View/167/14/dynamic-wrapper-not-working" target="_blank"><img src="<?php echo plugins_url('../images/helpIcon.png', __FILE__); ?>" alt="help"></a>
+					<a href="http://kb.idxbroker.com/Knowledgebase/Article/View/189/0/automatically-create-dynamic-wrapper-page-in-wordpress" target="_blank"><img src="<?php echo plugins_url('../images/helpIcon.png', __FILE__); ?>" alt="help"></a>
 					<span class="wrapper_status"></span>
 					<p class="error hidden">Please enter a page title</p>
 					<div id="dynamic_page_url" style="display: none;">
