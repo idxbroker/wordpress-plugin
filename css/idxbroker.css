@@ -70,6 +70,28 @@ input[type=text].error {
 .flrt{
 	float:left;
 }
+
+.input-prepend {
+	display: inline-block;
+	border: 1px solid #CCB2B2;
+	border-radius: 2px;
+	background-color: #F5F5F5;
+}
+#protocol {
+	vertical-align: middle;
+	margin-left: 5px;
+}
+
+#page_link {
+	margin: 0;
+	height: 30px;
+	padding: 0 0 0 5px;
+	vertical-align: middle;
+	border-bottom: 0;
+	border-top: 0;
+	border-right: 0;	
+}
+
 #genSettings li {
 	height: 38px;
 }

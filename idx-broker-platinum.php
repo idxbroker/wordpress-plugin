@@ -225,6 +225,7 @@ function idx_broker_platinum_options_init() {
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_name" );		
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_id" );		
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_url" );
+	register_setting( 'idx-platinum-settings-group', "idx_broker_admin_page_tab" );
 
 	/*
 	 *	Since we have custom links that can be added and deleted inside
@@ -301,8 +302,6 @@ function idx_ajax_create_dynamic_page()
 			$content = file_get_contents($template_root . '/' . $file);
 			if (preg_match('/<div[^>\n]+?id=[\'"]idxstart[\'"].*?(\/>|><\/div>)/i', $content))
 			{
-					// $isThemeIncludeIdxTag = true;
-					// break;
 				if(preg_match('/<div[^>\n]+?id=[\'"]idxstop[\'"].*?(\/>|><\/div>)/i',$content))
 				{
 					$isThemeIncludeIdxTag = true;
@@ -313,7 +312,7 @@ function idx_ajax_create_dynamic_page()
 	}
 	if ($isThemeIncludeIdxTag)
 		$post_content = '';
-
+	$post_content .= '<style>.entry-title{display:none;}</style>';
 	$post_title = $_POST['post_title'] ? $_POST['post_title'] : 'IDX Dynamic Wrapper Page';
 	$new_post = array(
 		'post_title' => $post_title,

@@ -13,7 +13,6 @@
 				});
 			});
 			// Register buttons
-			console.log(url);
 			ed.addButton('idx_button', {title : 'IDX', cmd : 'mcebutton', image: url + '/../images/icon.png' });
 		},
 		getInfo : function() {
