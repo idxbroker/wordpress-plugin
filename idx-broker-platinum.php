@@ -96,7 +96,7 @@ function idx_activate() {
 	} // end if
 } // end idx_activate fn
 
-// ========================== Jira ==========================
+
 register_uninstall_hook(__FILE__, 'idx_uninstall');
 function idx_uninstall() {
 	$page_id = get_option('idx_broker_dynamic_wrapper_page_id');
@@ -106,7 +106,6 @@ function idx_uninstall() {
 	}
 }
 
-// ========================== /Jira ==========================
 
 //Adds a comment declaring the version of the IDX Broker plugin if it is activated.
 add_action('wp_head', 'idx_broker_activated');
@@ -130,10 +129,7 @@ function idx_broker_platinum_plugin_actlinks( $links ) {
 }
 
 
-
-
 add_action('admin_menu', 'idx_broker_platinum_options_init' ); 
-
 
 
 add_action('wp_ajax_idx_refresh_api', 'idx_refreshapi' );
@@ -266,7 +262,6 @@ function idx_broker_platinum_options_init() {
 	}	
 }
 
-// ========================== Jira ==========================
 /**
  *  Function to add javascript and css into idx setting page
  *  @param string $page: the current page
@@ -353,7 +348,6 @@ function idx_pages_filter($pages) {
 function idx_pages_check($page) {
 	return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');
 };
-// ========================== /Jira ==========================
 
 
 /**
