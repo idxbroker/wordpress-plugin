@@ -1,11 +1,11 @@
 <?php
 /**
- * 
+ *
  * Using our web services function, lets get the system links built in the middleware,
  * clean and prepare them, and return them in a new array for use.
- * 
+ *
  */
-function idx_platinum_get_systemlinks () { 
+function idx_platinum_get_systemlinks () {
 	if(!get_option('idx_broker_apikey'))
 		return false;
 
@@ -13,7 +13,7 @@ function idx_platinum_get_systemlinks () {
 	$headers = array(
 		'Content-Type' => 'application/x-www-form-urlencoded',
 		'accesskey' => get_option('idx_broker_apikey'),
-		'outputtype' => 'json'  
+		'outputtype' => 'json'
 	);
 
 	$response = $request->request('https://api.idxbroker.com/clients/systemlinks', array( 'sslverify' => false, 'headers' => $headers ));
@@ -28,17 +28,17 @@ function idx_platinum_get_systemlinks () {
 	else {
 		$system_links = ($code == 200 && isset($response['body'])) ? json_decode($response['body']) : array();
 		set_transient('idx_systemlinks_cache', $system_links, 7200);
-		return $system_links;		
+		return $system_links;
 	}
 } // end system links API call fn
 
 /**
- * 
+ *
  * Using our web services function, lets get saved links built in the middleware,
  * clean and prepare them, and return them in a new array for use.
- * 
+ *
  */
-function idx_platinum_get_savedlinks () { 
+function idx_platinum_get_savedlinks () {
 	if(!get_option('idx_broker_apikey'))
 		return false;
 
@@ -46,7 +46,7 @@ function idx_platinum_get_savedlinks () {
 	$headers = array(
 		'Content-Type' => 'application/x-www-form-urlencoded',
 		'accesskey' => get_option('idx_broker_apikey'),
-		'outputtype' => 'json'  
+		'outputtype' => 'json'
 	);
 
 	$response = $request->request('https://api.idxbroker.com/clients/savedlinks', array( 'sslverify' => false, 'headers' => $headers ));
@@ -59,20 +59,20 @@ function idx_platinum_get_savedlinks () {
 		return new WP_Error("idx_api_error", __("Error {$code}: $error"));
 	}
 	else {
-		
+
 		$saved_links = ($code == 200 && isset($response['body'])) ? json_decode($response['body']) : array();
 		set_transient('idx_savedlink_cache', $saved_links, 7200);
-		return $saved_links;		
+		return $saved_links;
 	}
 } // end saved links api call fn
 
 /**
- * 
+ *
  * Using our web services function, lets get the widget details built in the middleware,
  * clean and prepare them, and return them in a new array for use.
- * 
+ *
  */
-function idx_platinum_get_widgets () { 
+function idx_platinum_get_widgets () {
 	if(!get_option('idx_broker_apikey'))
 		return false;
 
@@ -80,7 +80,7 @@ function idx_platinum_get_widgets () {
 	$headers = array(
 		'Content-Type' => 'application/x-www-form-urlencoded',
 		'accesskey' => get_option('idx_broker_apikey'),
-		'outputtype' => 'json'  
+		'outputtype' => 'json'
 	);
 
 	$response = $request->request('https://api.idxbroker.com/clients/widgetsrc', array( 'sslverify' => false, 'headers' => $headers ));
@@ -95,7 +95,7 @@ function idx_platinum_get_widgets () {
 	else {
 		$idx_widgets = ($code == 200 && isset($response['body'])) ? json_decode($response['body']) : array();
 		set_transient('idx_widget_cache', $idx_widgets, 7200);
-		return $idx_widgets;		
+		return $idx_widgets;
 	}
 } // end get platinum widgets API call fn
 
@@ -109,7 +109,7 @@ function apiResponse ($response) {
 		return array("code" => "Generic", "error" => "Unable to complete API call.");
 	if (!function_exists('curl_init'))
 		return array("code" => "PHP", "error" => "The cURL extension for PHP is not enabled on your server.<br />Please contact your developer and/or hosting provider.");
-	
+
 	$responseCode = $response['response']['code'];
 	$errMessage = false;
    	if (is_numeric($responseCode)) {

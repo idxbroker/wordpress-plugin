@@ -10,15 +10,15 @@ Author URI: http://www.idxbroker.com/
 License: GPLv2 or later
 */
 
-// Report all errors during development. Remember to hash out when sending to production. 
+// Report all errors during development. Remember to hash out when sending to production.
 
 //error_reporting(E_ALL);
 
 //Prevent script timeout when API response is slow
 set_time_limit(0);
 
-// The function below adds a settings link to the plugin page. 
-$plugin = plugin_basename(__FILE__); 
+// The function below adds a settings link to the plugin page.
+$plugin = plugin_basename(__FILE__);
 $api_error = false;
 
 
@@ -38,7 +38,7 @@ function display_wpversion() {
 
 //Adds legacy start and stop tag function only when original IDX plugin is not installed
 add_action('wp_head', 'idx_original_plugin_check');
-function idx_original_plugin_check() { 
+function idx_original_plugin_check() {
 	if (function_exists('idx_start'))
 		echo '';
 	else {
@@ -57,7 +57,7 @@ function wp_api_script() {
 	wp_register_script( 'custom-scriptBing', '//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0', __FILE__ ) ;
 	wp_register_script( 'custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__ );
 	wp_register_script( 'custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
-	
+
 	wp_enqueue_script( 'custom-scriptBing' );
 	wp_enqueue_script( 'custom-scriptLeaf' );
 	wp_enqueue_script( 'custom-scriptMQ' );
@@ -72,7 +72,7 @@ add_action('wp_enqueue_scripts', 'idx_register_styles'); // calls the above func
 function idx_register_styles () {
 	wp_register_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
 	//wp_register_style('cssLeafDraw', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.draw.css');
-	
+
 	wp_enqueue_style('cssLeaf');
 	//wp_enqueue_style('cssLeafDraw');
 }
@@ -121,15 +121,15 @@ function idx_broker_activated() {
 }
 
 add_filter("plugin_action_links_$plugin", 'idx_broker_platinum_plugin_actlinks' );
-function idx_broker_platinum_plugin_actlinks( $links ) { 
+function idx_broker_platinum_plugin_actlinks( $links ) {
 	// Add a link to this plugin's settings page
-	$settings_link = '<a href="options-general.php?page=idx-broker-platinum">Settings</a>'; 
-	array_unshift( $links, $settings_link ); 
-	return $links; 
+	$settings_link = '<a href="options-general.php?page=idx-broker-platinum">Settings</a>';
+	array_unshift( $links, $settings_link );
+	return $links;
 }
 
 
-add_action('admin_menu', 'idx_broker_platinum_options_init' ); 
+add_action('admin_menu', 'idx_broker_platinum_options_init' );
 
 
 add_action('wp_ajax_idx_refresh_api', 'idx_refreshapi' );
@@ -183,13 +183,13 @@ function add_idx_tinymce_plugin($plugin_array) {
 
 /**
  * This adds the options page to the WP admin.
- * 
+ *
  * @params void
- * @return Admin Menu 
+ * @return Admin Menu
  */
 add_action('admin_menu', 'idx_broker_platinum_menu');
 function idx_broker_platinum_menu() {
-	add_options_page('IDX Broker Platinum Plugin Options', 'IDX Broker Platinum', 'administrator', 'idx-broker-platinum', 'idx_broker_platinum_admin_page');	
+	add_options_page('IDX Broker Platinum Plugin Options', 'IDX Broker Platinum', 'administrator', 'idx-broker-platinum', 'idx_broker_platinum_admin_page');
 }
 
 //Include dependecy files for IDX plugin
@@ -209,7 +209,7 @@ if (file_exists(IDX__PLUGIN_DIR . '/idx-broker-widgets.php')) {
 * This function runs on plugin activation.  It sets up all options that will need to be
 * saved that we know of on install, including cid, pass, domain, and main nav links from
 * the idx broker system.
-* 
+*
 * @params void
 * @return void
 */
@@ -217,9 +217,9 @@ if (file_exists(IDX__PLUGIN_DIR . '/idx-broker-widgets.php')) {
 function idx_broker_platinum_options_init() {
 	global $api_error;
 	//register our settings
-	register_setting( 'idx-platinum-settings-group', "idx_broker_apikey" );		
-	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_name" );		
-	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_id" );		
+	register_setting( 'idx-platinum-settings-group', "idx_broker_apikey" );
+	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_name" );
+	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_id" );
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_url" );
 	register_setting( 'idx-platinum-settings-group', "idx_broker_admin_page_tab" );
 
@@ -229,7 +229,7 @@ function idx_broker_platinum_options_init() {
 	 *	to control them here.  First let's grab them, if the API is not blank.
 	 */
 
-	if (get_option('idx_broker_apikey') != '') {	
+	if (get_option('idx_broker_apikey') != '') {
 		$system_links_cache = get_transient('idx_systemlinks_cache');
 		$saved_links_cache = get_transient('idx_savedlink_cache');
 		if($system_links_cache) {
@@ -259,7 +259,7 @@ function idx_broker_platinum_options_init() {
 			update_system_page_links($systemlinks);
 			update_saved_page_links($savedlinks);
 		}
-	}	
+	}
 }
 
 /**
@@ -289,7 +289,7 @@ function idx_ajax_create_dynamic_page()
 
 	$files = scandir( $template_root );
 
-	foreach ($files as $file) 
+	foreach ($files as $file)
 	{
 		$path = $template_root . '/' . $file;
 		if (is_file($path) && preg_match('/.*\.php/',$file))
@@ -316,7 +316,7 @@ function idx_ajax_create_dynamic_page()
 		'post_type' => 'page',
 		'post_status' => 'publish'
 	);
-	if ($_POST['wrapper_page_id']) 
+	if ($_POST['wrapper_page_id'])
 	{
 		$new_post['ID'] = $_POST['wrapper_page_id'];
 	}
@@ -339,11 +339,11 @@ function idx_ajax_delete_dynamic_page() {
 add_filter( 'get_pages','idx_pages_filter');
 function idx_pages_filter($pages) {
 	if (get_option('idx_broker_dynamic_wrapper_page_id')) {
-		return array_filter($pages, idx_pages_check);	
+		return array_filter($pages, idx_pages_check);
 	} else {
 		return $pages;
 	}
-	
+
 }
 function idx_pages_check($page) {
 	return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');
@@ -363,8 +363,8 @@ function update_system_page_links($systemlinks) {
 			$rows_updated = $wpdb->update($wpdb->postmeta, array('meta_value' => $systemlink->url), array('post_id' => $post_id));
 			$post_title = str_replace('_', ' ', $systemlink->name);
 			$post_name = str_replace('', '_', $systemlink->name);
-			$wpdb->update($wpdb->posts, array('post_title' => $post_title, 
-					'post_name' => $post_name), array('ID' => $post_id));			
+			$wpdb->update($wpdb->posts, array('post_title' => $post_title,
+					'post_name' => $post_name), array('ID' => $post_id));
 		}
 	}
 }
@@ -382,7 +382,7 @@ function update_saved_page_links($savedlinks) {
 			$wpdb->update($wpdb->postmeta, array('meta_value' => $savedlink->url), array('post_id' => $post_id));
 			$post_title = str_replace('_', ' ', $savedlink->linkName);
 			$post_name = str_replace('', '_', $savedlink->linkName);
-			$wpdb->update($wpdb->posts, array('post_title' => $post_title, 
+			$wpdb->update($wpdb->posts, array('post_title' => $post_title,
 					'post_name' => $post_name), array('ID' => $post_id));
 		}
 	}
@@ -390,7 +390,7 @@ function update_saved_page_links($savedlinks) {
 
 /**
  * This is tiggered and is run by idx_broker_menu, it's the actual IDX Broker Admin page and display.
- * 
+ *
  * @params void
  * @return void
 */
@@ -400,18 +400,18 @@ function idx_broker_platinum_admin_page() {
 
 /**
  * Function to delete existing cache. So API response in cache will be deleted
- * 
+ *
  * @param void
  * @return void
- * 
+ *
  */
 function idx_refreshapi() {
 	if(get_transient('idx_savedlink_cache')) {
 		delete_transient('idx_savedlink_cache');
 	}
 	if(get_transient('idx_widget_cache')) {
-		delete_transient('idx_widget_cache');	
-	}	
+		delete_transient('idx_widget_cache');
+	}
 	if(get_transient('idx_systemlinks_cache')) {
 		delete_transient('idx_systemlinks_cache');
 	}
@@ -420,10 +420,10 @@ function idx_refreshapi() {
 }
 
 /**
- * 
+ *
  * Function to update the links from IDX API
  * Based upon button click the respective sections of links saved to database and create pages
- * 
+ *
  * @param void
  * @return void
  */
@@ -446,9 +446,9 @@ function idx_update_links() {
 }
 
 /**
- * This function will allow users to create page using saved links and 
+ * This function will allow users to create page using saved links and
  * display in their main navigation.
- *  
+ *
  *  @params void
  * 	@return void
  */
@@ -458,22 +458,19 @@ function idx_update_systemlinks() {
 }
 
 /**
- * 
+ *
  * Function to update System links from IDX API
  * Based upon click, the links saved to database and create pages
- * 
+ *
  * @param void
  * @return void
  */
 function update_systemlinks() {
 	global $wpdb;
-	if($_REQUEST['save_action'] == 'systemlinks') {
-		$filter_condition = '';
-		if(isset($_REQUEST['idx_systemlink_group']) && $_REQUEST['idx_systemlink_group'] == 'on') {
-			update_option('idx_systemlink_group', 1);
-		} else {
-			update_option('idx_systemlink_group', 0);
-		}
+	if(isset($_REQUEST['idx_systemlink_group'])) {
+		update_option('idx_systemlink_group', 1);
+	} else {
+		update_option('idx_systemlink_group', 0);
 	}
 	if (!isset($wpdb->posts_idx)) {
 		$wpdb->posts_idx = $wpdb->prefix . 'posts_idx';
@@ -484,100 +481,98 @@ function update_systemlinks() {
 	unset($_REQUEST['idx_systemlink_group']);
 	unset($_REQUEST['idx_savedlink_group']);
 
-	foreach ($_REQUEST as $submitted_link_name => $submitted_link) {
+	foreach ($_REQUEST as $submitted_link_name => $url) {
 		//Checkbox is checked
-		if($submitted_link == 'on')	{
-			if (check_system_link($submitted_link_name)) {
-				$uid = str_replace('idx_platinum_system_', '', $submitted_link_name);
-				$post_title = str_replace('_', ' ', $_REQUEST[$submitted_link_name.'_name']);
-				$post_name = str_replace('', '_', $_REQUEST[$submitted_link_name.'_name']);
-				$new_links[] = $uid;
+		if (check_system_link($submitted_link_name)) {
+			$uid = str_replace('idx_platinum_system_', '', $submitted_link_name);
+			preg_match('/i\/.+/', $url, $matches);
+			$name = preg_replace('/.*\//', '', $matches[0]);
+			$new_links[] = $uid;
 
-				if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
-					$wpdb->update(
-							$wpdb->posts,
-							array(
-									'post_title' => $post_title,
-									'post_type' => 'page',
-									'post_name' => $post_name
-							),
-							array(
-									'ID' => $row['post_id']
-							),
-							array(
-									'%s',
-									'%s',
-									'%s'
-							),
-							array(
-									'%d'
-							)
-					);
-					$wpdb->update(
-							$wpdb->postmeta,
-							array(
-									'meta_key' => '_links_to',
-									'meta_value' => $_REQUEST[$submitted_link_name.'_url'],
-							),
-							array(
-									'post_id' => $row['post_id']
-							),
-							array(
-									'%s',
-									'%s'
-							),
-							array(
-									'%d'
-							)
-					);
-				}
-				else {
-					// Insert into post table
-					$wpdb->insert(
-							$wpdb->posts,
-							array(
-									'post_title' => $post_title,
-									'post_type' => 'page',
-									'post_name' => $post_name
-							),
-							array(
-									'%s',
-									'%s',
-									'%s'
-							)
-					);
-					$post_id = $wpdb->insert_id;
+			if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
+				$wpdb->update(
+						$wpdb->posts,
+						array(
+								'post_title' => $name,
+								'post_type' => 'page',
+								'post_name' => $name
+						),
+						array(
+								'ID' => $row['post_id']
+						),
+						array(
+								'%s',
+								'%s',
+								'%s'
+						),
+						array(
+								'%d'
+						)
+				);
+				$wpdb->update(
+						$wpdb->postmeta,
+						array(
+								'meta_key' => '_links_to',
+								'meta_value' => $url,
+						),
+						array(
+								'post_id' => $row['post_id']
+						),
+						array(
+								'%s',
+								'%s'
+						),
+						array(
+								'%d'
+						)
+				);
+			}
+			else {
+				// Insert into post table
+				$wpdb->insert(
+						$wpdb->posts,
+						array(
+								'post_title' => $name,
+								'post_type' => 'page',
+								'post_name' => $name
+						),
+						array(
+								'%s',
+								'%s',
+								'%s'
+						)
+				);
+				$post_id = $wpdb->insert_id;
 
-					// Insert into post meta
-					$wpdb->insert(
-							$wpdb->postmeta,
-							array(
-									'meta_key' => '_links_to',
-									'meta_value' => $_REQUEST[$submitted_link_name.'_url'],
-									'post_id' => $wpdb->insert_id
-							),
-							array(
-									'%s',
-									'%s',
-									'%d'
-							)
-					);
+				// Insert into post meta
+				$wpdb->insert(
+						$wpdb->postmeta,
+						array(
+								'meta_key' => '_links_to',
+								'meta_value' => $url,
+								'post_id' => $wpdb->insert_id
+						),
+						array(
+								'%s',
+								'%s',
+								'%d'
+						)
+				);
 
-					//Insert into mapping table
-					$wpdb->insert(
-							$wpdb->posts_idx,
-							array(
-									'post_id' => $post_id,
-									'uid' => $uid,
-									'link_type' => 0
-							),
-							array(
-									'%d',
-									'%s',
-									'%d'
-							)
-					);
-				}
+				//Insert into mapping table
+				$wpdb->insert(
+						$wpdb->posts_idx,
+						array(
+								'post_id' => $post_id,
+								'uid' => $uid,
+								'link_type' => 0
+						),
+						array(
+								'%d',
+								'%s',
+								'%d'
+						)
+				);
 			}
 		}
 	}
@@ -596,7 +591,17 @@ function check_system_link($link_name) {
 	if(strpos($link_name, 'idx_platinum_system') !== false) {
 		return true;
 	} else {
-		return false;	
+		return false;
+	}
+}
+
+
+function check_saved_link($link_name)
+{
+	if(strpos($link_name, 'idx_platinum_saved') !== false) {
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -610,7 +615,7 @@ function get_my_system_links() {
 
 /**
  * FUnction to delete pages by passing uid(from API).
- *  
+ *
  * @param string $uids
  * @param int $link_type type of link 0 for system and 1 for saved
  */
@@ -636,10 +641,10 @@ function delete_pages_byuid($uids,$link_type = 0) {
 }
 
 /**
- * 
+ *
  * Function to update Saved links from IDX API
  * Based upon click, the links saved to database and create pages
- * 
+ *
  * @param void
  * @return void
  */
@@ -649,22 +654,20 @@ function idx_update_savedlinks() {
 }
 
 /**
- * 
+ *
  * Function to update System links from IDX API
  * Based upon click, the links saved to database and create pages
- * 
+ *
  * @param void
  * @return void
  */
 function update_savedlinks() {
 	global $wpdb;
 
-	if($_REQUEST['save_action'] == 'savedlinks') {
-		if(isset($_REQUEST['idx_savedlink_group']) && $_REQUEST['idx_savedlink_group'] == 'on') {
-			update_option('idx_savedlink_group', 1);
-		} else {
-			update_option('idx_savedlink_group', 0);
-		}
+	if(isset($_REQUEST['idx_savedlink_group'])) {
+		update_option('idx_savedlink_group', 1);
+	} else {
+		update_option('idx_savedlink_group', 0);
 	}
 	if (!isset($wpdb->posts_idx)) {
 		$wpdb->posts_idx = $wpdb->prefix . 'posts_idx';
@@ -674,99 +677,98 @@ function update_savedlinks() {
 
 	unset($_REQUEST['idx_savedlink_group']);
 	unset($_REQUEST['idx_systemlink_group']);
-
-	foreach ($_REQUEST as $submitted_link_name => $submitted_link) {
+	$names = array();
+	foreach ($_REQUEST as $submitted_link_name => $url) {
 		//Checkbox is checked
-		if($submitted_link == 'on')	{
-			if (check_system_link($submitted_link_name) === false) {
-				$uid = str_replace('idx_platinum_saved_', '', $submitted_link_name);
-				$post_title = str_replace('_', ' ', $_REQUEST[$submitted_link_name.'_name']);
-				$post_name = str_replace('', '_', $_REQUEST[$submitted_link_name.'_name']);
-				$new_links[] = $uid;
-				if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
-					$wpdb->update(
-							$wpdb->posts,
-							array(
-									'post_title' => $post_title,
-									'post_type' => 'page',
-									'post_name' => $post_name
-							),
-							array(
-									'ID' => $row['post_id']
-							),
-							array(
-									'%s',
-									'%s',
-									'%s'
-							),
-							array(
-									'%d'
-							)
-					);
-					$wpdb->update(
-							$wpdb->postmeta,
-							array(
-									'meta_key' => '_links_to',
-									'meta_value' => $_REQUEST[$submitted_link_name.'_url'],
-							),
-							array(
-									'post_id' => $row['post_id']
-							),
-							array(
-									'%s',
-									'%s'
-							),
-							array(
-									'%d'
-							)
-					);
-				} else {
-					// Insert into post table
-					$wpdb->insert(
-							$wpdb->posts,
-							array(
-									'post_title' => $post_title,
-									'post_type' => 'page',
-									'post_name' => $post_name
-							),
-							array(
-									'%s',
-									'%s',
-									'%s'
-							)
-					);
-					$post_id = $wpdb->insert_id;
+		if (check_saved_link($submitted_link_name)) {
+			$uid = str_replace('idx_platinum_saved_', '', $submitted_link_name);
+			preg_match('/i\/.+/', $url, $matches);
+			$name = preg_replace('/.*\//', '', $matches[0]);
+			$names[] = $name;
+			$new_links[] = $uid;
+			if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
+				$wpdb->update(
+						$wpdb->posts,
+						array(
+								'post_title' => $name,
+								'post_type' => 'page',
+								'post_name' => $name
+						),
+						array(
+								'ID' => $row['post_id']
+						),
+						array(
+								'%s',
+								'%s',
+								'%s'
+						),
+						array(
+								'%d'
+						)
+				);
+				$wpdb->update(
+						$wpdb->postmeta,
+						array(
+								'meta_key' => '_links_to',
+								'meta_value' => $url,
+						),
+						array(
+								'post_id' => $row['post_id']
+						),
+						array(
+								'%s',
+								'%s'
+						),
+						array(
+								'%d'
+						)
+				);
+			} else {
+				// Insert into post table
+				$wpdb->insert(
+						$wpdb->posts,
+						array(
+								'post_title' => $name,
+								'post_type' => 'page',
+								'post_name' => $name
+						),
+						array(
+								'%s',
+								'%s',
+								'%s'
+						)
+				);
+				$post_id = $wpdb->insert_id;
 
-					// Insert into post meta
-					$wpdb->insert(
-							$wpdb->postmeta,
-							array(
-									'meta_key' => '_links_to',
-									'meta_value' => $_REQUEST[$submitted_link_name.'_url'],
-									'post_id' => $wpdb->insert_id
-							),
-							array(
-									'%s',
-									'%s',
-									'%d'
-							)
-					);
+				// Insert into post meta
+				$wpdb->insert(
+						$wpdb->postmeta,
+						array(
+								'meta_key' => '_links_to',
+								'meta_value' => $url,
+								'post_id' => $wpdb->insert_id
+						),
+						array(
+								'%s',
+								'%s',
+								'%d'
+						)
+				);
 
-					//Insert into mapping table
-					$wpdb->insert(
-							$wpdb->posts_idx,
-							array(
-									'post_id' => $post_id,
-									'uid' => $uid,
-									'link_type' => 1
-							),
-							array(
-									'%d',
-									'%s',
-									'%d'
-							)
-					);
-				}
+				//Insert into mapping table
+				$wpdb->insert(
+						$wpdb->posts_idx,
+						array(
+								'post_id' => $post_id,
+								'uid' => $uid,
+								'link_type' => 1
+						),
+						array(
+								'%d',
+								'%s',
+								'%d'
+						)
+				);
 			}
 		}
 	}
@@ -797,9 +799,9 @@ if ( !function_exists( 'esc_attr' ) ) {
 
 /**
  * Function to get meta data of created pages uisng IDX settings page
- *  
+ *
  * @params void
- * @return String Page/Post URL 
+ * @return String Page/Post URL
  */
 function idxplatinum_get_page_links_to_meta () {
 	global $wpdb, $page_links_to_cache, $blog_id;
@@ -822,10 +824,10 @@ function idxplatinum_get_page_links_to_meta () {
 
 /**
  * Function to override permalink tab in post/page section of Wordpress
- *  
+ *
  * @params string $link
  * @params object post details
- * @return string Page/Post URL 
+ * @return string Page/Post URL
  */
 function idxplatinum_filter_links_to_pages ($link, $post) {
 	$page_links_to_cache = idxplatinum_get_page_links_to_meta();
@@ -840,9 +842,9 @@ function idxplatinum_filter_links_to_pages ($link, $post) {
 
 /**
  * Function to redirect the page based upon _links_to_ attribute
- * 
+ *
  * @param void
- * @return void	
+ * @return void
  */
 add_action( 'template_redirect', 'idxplatinum_redirect_links_to_pages');
 function idxplatinum_redirect_links_to_pages() {
@@ -864,9 +866,9 @@ function idxplatinum_redirect_links_to_pages() {
 
 /**
  * Function to highlight the page links
- * 
+ *
  * @param array $pages
- * @return array $pages	
+ * @return array $pages
  */
 function idxplatinum_page_links_to_highlight_tabs( $pages ) {
 	// remove wrapper page
@@ -907,7 +909,7 @@ function idxplatinum_page_links_to_highlight_tabs( $pages ) {
 
 /**
  * Function to get page _link _to_ targets
- * 
+ *
  * @param void
  * @return string page meta value
  */
@@ -932,7 +934,7 @@ function idxplatinum_get_page_links_to_targets () {
 
 /**
  * Functiom to get post meta by key
- * 
+ *
  * @param string $key
  * @return string meta value
  */
@@ -943,15 +945,15 @@ function idxplatinum_get_post_meta_by_key( $key ) {
 
 /**
  * Function to delete saved IDX page IDs from option table
- * 
+ *
  * @param integer page_id
  * @return void
- * 
+ *
  */
 function idxplatinum_update_pages($post_ID) {
 	global $wpdb;
 
-	$wpdb->query("DELETE from ".$wpdb->prefix."posts_idx where post_id = $post_ID");		
+	$wpdb->query("DELETE from ".$wpdb->prefix."posts_idx where post_id = $post_ID");
 	delete_post_meta( $post_ID, '_links_to' );
 	delete_post_meta( $post_ID, '_links_to_target' );
 	delete_post_meta( $post_ID, '_links_to_type' );
@@ -959,7 +961,7 @@ function idxplatinum_update_pages($post_ID) {
 
 /**
  * Function to delete meta table if post/page is deleted by user
- * 
+ *
  * @param integer $post_ID
  * @return integer $post_ID
  */
@@ -993,10 +995,10 @@ function idxplatinum_plt_save_meta_box( $post_ID ) {
 
 /**
  * Function to display warning message in permalink page
- * 
+ *
  * @param void
  * @return void
- * 
+ *
  */
 function idxplatinum_notice() {
 	global $current_screen;
@@ -1005,7 +1007,7 @@ function idxplatinum_notice() {
 
 /**
  * Function to generate permalink warning message
- * 
+ *
  * @param void
  * @return void
  */
@@ -1018,7 +1020,7 @@ function permalink_update_warning () {
 /**
  * Function to show a idx link with shortcode of type:
  * [idx-platinum-link title="title here"]
- * 
+ *
  * @param array $atts
  * @return html code for showing the link/ bool false
  */
@@ -1039,7 +1041,7 @@ function show_link($atts) {
 /**
  * FUnction to show a idx system link with shortcode of type:
  * [idx-platinum-system-link title="title here"]
- * 
+ *
  * @param array $atts
  * @return string|boolean
  */
@@ -1048,7 +1050,7 @@ function show_system_link($atts) {
 	extract( shortcode_atts( array(
 			'id' => NULL,
 			'title' => NULL,
-	), $atts ) );	
+	), $atts ) );
 
 	if(!is_null($id)) {
 		$link = idx_get_link_by_uid($id, 0);
@@ -1060,7 +1062,7 @@ function show_system_link($atts) {
 		}
 	} else {
 		return false;
-	}	
+	}
 }
 
 /**
@@ -1086,7 +1088,7 @@ function show_saved_link($atts) {
 		}
 	} else {
 		return false;
-	}	
+	}
 }
 
 /**
@@ -1115,32 +1117,32 @@ function idx_get_link_by_uid($uid, $type = 0) {
 				$selected_link = $link;
 			}
 		}
-	} 
+	}
 	return $selected_link;
 }
 
 /**
  * Function to show a idx link with shortcode of type:
  * [idx-platinum-link title="widget title here"]
- * 
+ *
  * @param array $atts
  * @return html code for showing the widget/ bool false
  */
 function show_widget($atts) {
 	extract( shortcode_atts( array(
 			'id' => NULL
-	), $atts ) );	
+	), $atts ) );
 
 	if(!is_null($id)) {
 		return get_widget_by_uid($id);
 	} else {
 		return false;
-	}	
+	}
 }
 
 /**
  * Function to get the widget code by title
- * 
+ *
  * @param string $title
  * @return html code for showing the widget
  */
@@ -1258,7 +1260,7 @@ function show_widget_shortcodes() {
 
 
 add_action( 'save_post',         'idxplatinum_plt_save_meta_box'                );
-add_action( 'before_delete_post',      'idxplatinum_update_pages'           	);	
+add_action( 'before_delete_post',      'idxplatinum_update_pages'           	);
 add_action( 'init',              'permalink_update_warning'						);
 
 add_filter( 'wp_list_pages',     'idxplatinum_page_links_to_highlight_tabs', 9	);
