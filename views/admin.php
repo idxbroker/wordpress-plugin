@@ -178,7 +178,7 @@
 							$checkOption = (in_array($saved_link->uid,$my_saved_links))? 'checked = "checked"': '';
 				?>
 							<li>
-								<input type="checkbox" value="<?php echo $saved_link->url;?>" name="idx_platinum_saved_<?php echo $saved_link->uid;?>" id="idx_platinum_saved_<?php echo $saved_link->uid;?>" <?php echo $checkOption; ?> class="savedLink idx_platinum_sdl" onclick="savedlink_check();" />
+								<input type="checkbox" value="<?php echo $saved_link->url;?>" name="idx_platinum_saved_<?php echo $saved_link->uid;?>" id="idx_platinum_saved_<?php echo $saved_link->uid;?>" <?php echo $checkOption; ?> class="savedLink idx_platinum_sdl"/>
 								<label for="idx_platinum_saved_<?php echo $saved_link->uid;?>" style="padding-left: 2px;" class="linkLabel">- <?php echo str_replace($search_item, ' ', $saved_link->linkName); ?></label>
 							</li>
 				<?php

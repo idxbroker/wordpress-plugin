@@ -105,11 +105,10 @@ function idx_platinum_get_widgets () {
  * @return [array]           [keys: 'code' => response code, 'error' => false (default), or error message if one is found]
  */
 function apiResponse ($response) {
-	if (!is_array($response) || !$response)
+	if ( !$response || !is_array($response) || !isset($response['response']))
 		return array("code" => "Generic", "error" => "Unable to complete API call.");
 	if (!function_exists('curl_init'))
 		return array("code" => "PHP", "error" => "The cURL extension for PHP is not enabled on your server.<br />Please contact your developer and/or hosting provider.");
-
 	$responseCode = $response['response']['code'];
 	$errMessage = false;
    	if (is_numeric($responseCode)) {

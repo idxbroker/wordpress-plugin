@@ -415,7 +415,9 @@ function idx_refreshapi() {
 	if(get_transient('idx_systemlinks_cache')) {
 		delete_transient('idx_systemlinks_cache');
 	}
+	update_option('idx_broker_apikey',$_REQUEST['idx_broker_apikey']);
 	setcookie("api_refresh", 1, time()+20);
+	update_tab();
 	die();
 }
 
@@ -439,9 +441,9 @@ function idx_update_links() {
 	} else {
 		update_option('idx_systemlink_group', 0);
 	}
-
 	update_systemlinks();
 	update_savedlinks();
+	update_tab();
 	die();
 }
 
@@ -454,6 +456,7 @@ function idx_update_links() {
  */
 function idx_update_systemlinks() {
 	update_systemlinks();
+	update_tab();
 	die();
 }
 
@@ -481,11 +484,18 @@ function update_systemlinks() {
 	unset($_REQUEST['idx_systemlink_group']);
 	unset($_REQUEST['idx_savedlink_group']);
 
-	foreach ($_REQUEST as $submitted_link_name => $url) {
+	$systemLink = array();
+	$systemlinkStr = urldecode($_REQUEST['idx_system_links']);
+	$postVariables = preg_split('/&/', $systemlinkStr);
+	foreach ($postVariables as $link) {
+		list($key,$val) = preg_split('/=/',$link);
+		$systemlink[$key] = $val;
+	}
+	foreach ($systemLink as $submitted_link_name => $url) {
 		//Checkbox is checked
 		if (check_system_link($submitted_link_name)) {
 			$uid = str_replace('idx_platinum_system_', '', $submitted_link_name);
-			preg_match('/i\/.+/', $url, $matches);
+			preg_match('/.+\/.+/', $url, $matches);
 			$name = preg_replace('/.*\//', '', $matches[0]);
 			$new_links[] = $uid;
 
@@ -650,6 +660,7 @@ function delete_pages_byuid($uids,$link_type = 0) {
  */
 function idx_update_savedlinks() {
 	update_savedlinks();
+	update_tab();
 	die();
 }
 
@@ -678,7 +689,14 @@ function update_savedlinks() {
 	unset($_REQUEST['idx_savedlink_group']);
 	unset($_REQUEST['idx_systemlink_group']);
 	$names = array();
-	foreach ($_REQUEST as $submitted_link_name => $url) {
+	$saveLinks = array();
+	$saveLinksStr = urldecode($_REQUEST['idx_saved_links']);
+	$postVariables = preg_split('/&/', $saveLinksStr);
+	foreach ($postVariables as $link) {
+		list($key,$val) = preg_split('/=/',$link);
+		$saveLinks[$key] = $val;
+	}
+	foreach ($saveLinks as $submitted_link_name => $url) {
 		//Checkbox is checked
 		if (check_saved_link($submitted_link_name)) {
 			$uid = str_replace('idx_platinum_saved_', '', $submitted_link_name);
@@ -777,6 +795,13 @@ function update_savedlinks() {
 	if($uids_to_delete > 0)	{
 		delete_pages_byuid($uids_to_delete, 1);
 	}
+}
+
+
+function update_tab()
+{
+	if ($_REQUEST['idx_broker_admin_page_tab'])
+		update_option('idx_broker_admin_page_tab', $_REQUEST['idx_broker_admin_page_tab']);
 }
 
 /**
