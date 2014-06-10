@@ -321,8 +321,10 @@ function idx_ajax_create_dynamic_page()
 		$new_post['ID'] = $_POST['wrapper_page_id'];
 	}
 	$wrapper_page_id = wp_insert_post($new_post);
-	// add_post_meta($wrapper_page_id, 'meta-robots', "'noindex','nofollow'") || update_post_meta($wrapper_page_id, 'meta-robots', "'noindex','nofollow'");
-	die(json_encode(array("wrapper_page_id"=>$wrapper_page_id))) ;
+	update_option('idx_broker_dynamic_wrapper_page_name', $post_title);
+	update_option('idx_broker_dynamic_wrapper_page_id', $wrapper_page_id);
+	update_tab();
+	die(json_encode(array("wrapper_page_id"=>$wrapper_page_id, "wrapper_page_name" => $post_title))) ;
 }
 
 add_action( 'wp_ajax_delete_dynamic_page', 'idx_ajax_delete_dynamic_page' );
@@ -332,6 +334,7 @@ function idx_ajax_delete_dynamic_page() {
 		wp_delete_post($_POST['wrapper_page_id'], true);
 		wp_trash_post($_POST['wrapper_page_id']);
 	}
+	update_tab();
 	die();
 }
 
@@ -485,11 +488,14 @@ function update_systemlinks() {
 	unset($_REQUEST['idx_savedlink_group']);
 
 	$systemLink = array();
-	$systemlinkStr = urldecode($_REQUEST['idx_system_links']);
-	$postVariables = preg_split('/&/', $systemlinkStr);
-	foreach ($postVariables as $link) {
-		list($key,$val) = preg_split('/=/',$link);
-		$systemlink[$key] = $val;
+	$systemLinkStr = urldecode($_REQUEST['idx_system_links']);
+	if ($systemLinkStr != '')
+	{
+		$postVariables = preg_split('/&/', $systemLinkStr);
+		foreach ($postVariables as $link) {
+			list($key,$val) = preg_split('/=/',$link);
+			$systemLink[$key] = $val;
+		}
 	}
 	foreach ($systemLink as $submitted_link_name => $url) {
 		//Checkbox is checked
@@ -498,7 +504,6 @@ function update_systemlinks() {
 			preg_match('/.+\/.+/', $url, $matches);
 			$name = preg_replace('/.*\//', '', $matches[0]);
 			$new_links[] = $uid;
-
 			if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
 				$wpdb->update(
 						$wpdb->posts,
@@ -587,9 +592,8 @@ function update_systemlinks() {
 		}
 	}
 	$uids_to_delete = array_diff($my_links, $new_links);
-
 	if($uids_to_delete > 0)	{
-		delete_pages_byuid($uids_to_delete);
+		delete_pages_byuid($uids_to_delete, 0);
 	}
 }
 
@@ -688,13 +692,15 @@ function update_savedlinks() {
 
 	unset($_REQUEST['idx_savedlink_group']);
 	unset($_REQUEST['idx_systemlink_group']);
-	$names = array();
 	$saveLinks = array();
 	$saveLinksStr = urldecode($_REQUEST['idx_saved_links']);
-	$postVariables = preg_split('/&/', $saveLinksStr);
-	foreach ($postVariables as $link) {
-		list($key,$val) = preg_split('/=/',$link);
-		$saveLinks[$key] = $val;
+	if ($saveLinksStr != '')
+	{
+		$postVariables = preg_split('/&/', $saveLinksStr);
+		foreach ($postVariables as $link) {
+			list($key,$val) = preg_split('/=/',$link);
+			$saveLinks[$key] = $val;
+		}
 	}
 	foreach ($saveLinks as $submitted_link_name => $url) {
 		//Checkbox is checked
@@ -702,7 +708,6 @@ function update_savedlinks() {
 			$uid = str_replace('idx_platinum_saved_', '', $submitted_link_name);
 			preg_match('/i\/.+/', $url, $matches);
 			$name = preg_replace('/.*\//', '', $matches[0]);
-			$names[] = $name;
 			$new_links[] = $uid;
 			if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
 				$wpdb->update(
