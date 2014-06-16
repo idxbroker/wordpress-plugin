@@ -3,7 +3,7 @@
 Plugin Name: IDX Broker Platinum
 Plugin URI: http://www.idxbroker.com
 Description: Over 550 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.1.3
+Version: 1.1.4
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -26,7 +26,7 @@ define('SHORTCODE_SYSTEM_LINK', 'idx-platinum-system-link');
 define('SHORTCODE_SAVED_LINK', 'idx-platinum-saved-link');
 define('SHORTCODE_WIDGET', 'idx-platinum-widget');
 define( 'IDX__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'IDX_WP_PLUGIN_VERSION', '1.1.3' );
+define( 'IDX_WP_PLUGIN_VERSION', '1.1.4' );
 
 //Adds a comment declaring the version of the WordPress.
 add_action('wp_head', 'display_wpversion');
