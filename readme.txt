@@ -95,6 +95,7 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 6. Adding Shortcodes.
 
 == Changelog ==
+
 = 1.1.4 =
 * Fixed can't add tons of savelinks and systemlinks pages issue.
 
