@@ -9,14 +9,13 @@ function idx_platinum_get_systemlinks () {
 	if(!get_option('idx_broker_apikey'))
 		return false;
 
-	$request = new WP_Http;
 	$headers = array(
 		'Content-Type' => 'application/x-www-form-urlencoded',
 		'accesskey' => get_option('idx_broker_apikey'),
 		'outputtype' => 'json'
 	);
 
-	$response = $request->request('https://api.idxbroker.com/clients/systemlinks', array( 'sslverify' => false, 'headers' => $headers ));
+	$response = wp_remote_get('https://api.idxbroker.com/clients/systemlinks', array( 'timeout' => 120, 'sslverify' => false, 'headers' => $headers ));
 	$response = (array)$response;
 
 	extract(apiResponse($response)); // get code and error message if any, assigned to vars $code and $error
@@ -42,14 +41,13 @@ function idx_platinum_get_savedlinks () {
 	if(!get_option('idx_broker_apikey'))
 		return false;
 
-	$request = new WP_Http;
 	$headers = array(
 		'Content-Type' => 'application/x-www-form-urlencoded',
 		'accesskey' => get_option('idx_broker_apikey'),
 		'outputtype' => 'json'
 	);
 
-	$response = $request->request('https://api.idxbroker.com/clients/savedlinks', array( 'sslverify' => false, 'headers' => $headers ));
+	$response = wp_remote_get('https://api.idxbroker.com/clients/savedlinks', array( 'timeout' => 120, 'sslverify' => false, 'headers' => $headers ));
 	$response = (array)$response;
 
 	extract(apiResponse($response)); // get code and error message if any, assigned to vars $code and $error
