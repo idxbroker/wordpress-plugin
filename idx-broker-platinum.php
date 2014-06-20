@@ -693,7 +693,9 @@ function update_savedlinks() {
 	unset($_REQUEST['idx_savedlink_group']);
 	unset($_REQUEST['idx_systemlink_group']);
 	$saveLinks = array();
+	$saveLinksNames = array();
 	$saveLinksStr = urldecode($_REQUEST['idx_saved_links']);
+	$saveLinksNamesStr = urldecode($_REQUEST['idx_saved_links_names']);
 	if ($saveLinksStr != '')
 	{
 		$postVariables = preg_split('/&/', $saveLinksStr);
@@ -702,12 +704,20 @@ function update_savedlinks() {
 			$saveLinks[$key] = $val;
 		}
 	}
+	if ($saveLinksNamesStr != '')
+	{
+		$postVariables = preg_split('/&/', $saveLinksNamesStr);
+		foreach ($postVariables as $names) {
+			list($key,$val) = preg_split('/=/',$names);
+			$saveLinksNames[$key] = urldecode($val);
+		}
+	}
 	foreach ($saveLinks as $submitted_link_name => $url) {
 		//Checkbox is checked
 		if (check_saved_link($submitted_link_name)) {
 			$uid = str_replace('idx_platinum_saved_', '', $submitted_link_name);
 			preg_match('/i\/.+/', $url, $matches);
-			$name = preg_replace('/.*\//', '', $matches[0]);
+			$name = $saveLinksNames[$submitted_link_name . '_name'];
 			$new_links[] = $uid;
 			if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
 				$wpdb->update(

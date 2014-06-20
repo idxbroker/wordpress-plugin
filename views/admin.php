@@ -20,7 +20,7 @@
 
 		$savedlinks = get_transient('idx_savedlink_cache');
 		if (!$savedlinks)
-			idx_platinum_get_savedlinks();
+			$savedlinks = idx_platinum_get_savedlinks();
 
 		if( is_wp_error($savedlinks) ) {
 			$api_error = $savedlinks->get_error_message();
@@ -105,6 +105,7 @@
 					?>
 							<li>
 								<input type="checkbox" value="<?php echo $system_link->url;?>" name="idx_platinum_system_<?php echo $system_link->uid;?>" id="idx_platinum_system_<?php echo $system_link->uid;?>" <?php echo $std_check_options; ?> class="systemLink idx_platinum_sl" />
+								<input type="hidden" name="idx_platinum_system_<?php echo $system_link->uid;?>_name" value="<?php echo $system_link->name;?>" />
 								<label for="idx_platinum_system_<?php echo $system_link->uid;?>" class="linkLabel">- <?php echo str_replace($search_item, ' ', $system_link->name); ?></label>
 							</li>
 					<?php
@@ -179,7 +180,8 @@
 				?>
 							<li>
 								<input type="checkbox" value="<?php echo $saved_link->url;?>" name="idx_platinum_saved_<?php echo $saved_link->uid;?>" id="idx_platinum_saved_<?php echo $saved_link->uid;?>" <?php echo $checkOption; ?> class="savedLink idx_platinum_sdl"/>
-								<label for="idx_platinum_saved_<?php echo $saved_link->uid;?>" style="padding-left: 2px;" class="linkLabel">- <?php echo str_replace($search_item, ' ', $saved_link->linkName); ?></label>
+								<input type="hidden" name="idx_platinum_saved_<?php echo $saved_link->uid;?>_name" value="<?php echo $saved_link->linkTitle;?>" />
+								<label for="idx_platinum_saved_<?php echo $saved_link->uid;?>" style="padding-left: 2px;" class="linkLabel">- <?php echo str_replace($search_item, ' ', $saved_link->linkTitle); ?></label>
 							</li>
 				<?php
 						}
