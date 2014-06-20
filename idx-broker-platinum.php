@@ -488,7 +488,9 @@ function update_systemlinks() {
 	unset($_REQUEST['idx_savedlink_group']);
 
 	$systemLink = array();
+	$systemLinkNames = array();
 	$systemLinkStr = urldecode($_REQUEST['idx_system_links']);
+	$systemLinkNamesStr = urldecode($_REQUEST['idx_system_links_names']);
 	if ($systemLinkStr != '')
 	{
 		$postVariables = preg_split('/&/', $systemLinkStr);
@@ -497,12 +499,20 @@ function update_systemlinks() {
 			$systemLink[$key] = $val;
 		}
 	}
+	if ($systemLinkNamesStr != '')
+	{
+		$postVariables = preg_split('/&/', $systemLinkNamesStr);
+		foreach ($postVariables as $name) {
+			list($key,$val) = preg_split('/=/',$name);
+			$systemLinkNames[$key] = $val;
+		}
+	}	
 	foreach ($systemLink as $submitted_link_name => $url) {
 		//Checkbox is checked
 		if (check_system_link($submitted_link_name)) {
 			$uid = str_replace('idx_platinum_system_', '', $submitted_link_name);
 			preg_match('/.+\/.+/', $url, $matches);
-			$name = preg_replace('/.*\//', '', $matches[0]);
+			$name = $systemLinkNames[$submitted_link_name.'_name'];
 			$new_links[] = $uid;
 			if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
 				$wpdb->update(
