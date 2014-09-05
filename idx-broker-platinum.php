@@ -3,7 +3,7 @@
 Plugin Name: IDX Broker Platinum
 Plugin URI: http://www.idxbroker.com
 Description: Over 550 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.1.4
+Version: 1.1.5
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -26,7 +26,7 @@ define('SHORTCODE_SYSTEM_LINK', 'idx-platinum-system-link');
 define('SHORTCODE_SAVED_LINK', 'idx-platinum-saved-link');
 define('SHORTCODE_WIDGET', 'idx-platinum-widget');
 define( 'IDX__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'IDX_WP_PLUGIN_VERSION', '1.1.4' );
+define( 'IDX_WP_PLUGIN_VERSION', '1.1.5' );
 
 //Adds a comment declaring the version of the WordPress.
 add_action('wp_head', 'display_wpversion');
@@ -71,10 +71,7 @@ function wp_api_script() {
 add_action('wp_enqueue_scripts', 'idx_register_styles'); // calls the above function
 function idx_register_styles () {
 	wp_register_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
-	//wp_register_style('cssLeafDraw', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.draw.css');
-
 	wp_enqueue_style('cssLeaf');
-	//wp_enqueue_style('cssLeafDraw');
 }
 
 
@@ -114,7 +111,7 @@ function idx_broker_activated() {
 
 	echo "\n<!-- IDX Broker Platinum WordPress Plugin Wrapper Meta-->\n\n";
 	global $post;
-	if ($post->ID && $post->ID == get_option('idx_broker_dynamic_wrapper_page_id')) {
+	if ($post && $post->ID && $post->ID == get_option('idx_broker_dynamic_wrapper_page_id')) {
 		echo "<meta name='idx-robot'>\n";
 		echo "<meta name='robots' content='noindex,nofollow'>\n";
 	}
@@ -220,7 +217,6 @@ function idx_broker_platinum_options_init() {
 	register_setting( 'idx-platinum-settings-group', "idx_broker_apikey" );
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_name" );
 	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_id" );
-	register_setting( 'idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_url" );
 	register_setting( 'idx-platinum-settings-group', "idx_broker_admin_page_tab" );
 
 	/*
@@ -253,8 +249,7 @@ function idx_broker_platinum_options_init() {
 			}
 		}
 
-		$_COOKIE = false;
-		if($_COOKIE["api_refresh"] == 1)
+		if(isset($_COOKIE["api_refresh"]) && $_COOKIE["api_refresh"] == 1)
 		{
 			update_system_page_links($systemlinks);
 			update_saved_page_links($savedlinks);
@@ -340,17 +335,19 @@ function idx_ajax_delete_dynamic_page() {
 
 
 add_filter( 'get_pages','idx_pages_filter');
+
+
+
 function idx_pages_filter($pages) {
 	if (get_option('idx_broker_dynamic_wrapper_page_id')) {
-		return array_filter($pages, idx_pages_check);
+		return array_filter($pages, function($page) {
+			return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');
+		});
 	} else {
 		return $pages;
 	}
-
 }
-function idx_pages_check($page) {
-	return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');
-};
+
 
 
 /**
@@ -506,7 +503,7 @@ function update_systemlinks() {
 			list($key,$val) = preg_split('/=/',$name);
 			$systemLinkNames[$key] = $val;
 		}
-	}	
+	}
 	foreach ($systemLink as $submitted_link_name => $url) {
 		//Checkbox is checked
 		if (check_system_link($submitted_link_name)) {
@@ -1307,15 +1304,9 @@ function show_widget_shortcodes() {
 }
 
 
-
-
-add_action( 'save_post',         'idxplatinum_plt_save_meta_box'                );
-add_action( 'before_delete_post',      'idxplatinum_update_pages'           	);
-add_action( 'init',              'permalink_update_warning'						);
-
-add_filter( 'wp_list_pages',     'idxplatinum_page_links_to_highlight_tabs', 9	);
-
-
-add_filter( 'page_link',         'idxplatinum_filter_links_to_pages', 20, 2 	);
-add_filter( 'post_link',         'idxplatinum_filter_links_to_pages', 20, 2 	);
-?>
+add_action( 'save_post', 'idxplatinum_plt_save_meta_box');
+add_action( 'before_delete_post', 'idxplatinum_update_pages');
+add_action( 'init', 'permalink_update_warning');
+add_filter( 'wp_list_pages', 'idxplatinum_page_links_to_highlight_tabs', 9);
+add_filter( 'page_link', 'idxplatinum_filter_links_to_pages', 20, 2);
+add_filter( 'post_link', 'idxplatinum_filter_links_to_pages', 20, 2);
