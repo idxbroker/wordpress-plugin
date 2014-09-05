@@ -66,7 +66,7 @@
 		<input type="hidden" id="currentTab" name="idx_broker_admin_page_tab" value="<?php echo get_option('idx_broker_admin_page_tab');?>">
 			<ul id="tabs">
 				<li class="active"><a href="#integration">Integration</a></li>
-				<li><a href="#setting">Setting</a></li>
+				<li><a href="#settings">Settings</a></li>
 			</ul>
 		</div>
 		<div id="tabs_content_container">
@@ -84,17 +84,17 @@
 				  	<p>Basic Search, Map Search, Advanced Search, Featured Listings, Roster Page links and any other search form thay you've created in IDX Broker Platinum can be easily added to your website navigation. All of your search links are hosted on a subdomain or <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/7/0/using-a-custom-subdomain">custom subdomain</a> that maintains the look and feel of your website. To add these to your website navigation, simply add them to a <a href="nav-menus.php">Custom Menu</a>, or reorder the display of these pages using your <a href="edit.php?post_type=page">Pages Tab</a> in WordPress. Note that each page is the equivalent of a link, and that you do not need to enter any information into the pages themselves to get them to display correctly. IDX Broker Platinum will do that for you.</p>
 				</div>
 				<div>
-					<p>You do not have any system links because you may have entered an incorrect API key. Please review API key in the Setting tab.</p>
-					<p>Check the box next to the page link you wish to add to your navigation. To remove an IDX page, simply uncheck the box next to the page you wish to remove and click the "Update System Links" button.</p>
+					<?php if(empty($systemlinks)) : ?>
+						<p>You do not have any system links because you may have entered an incorrect API key. Please review API key in the Setting tab.</p>
+					<?php else : ?>
+						<p>Check the box next to the page link you wish to make available to add to your <a href="nav-menus.php">Custom Menu</a>. To remove an IDX page, simply uncheck the box next to the page you wish to remove and click the "Save Changes" button.</p>
+					<?php endif; ?>
 				</div>
 				<ul class="linkList">
 					<?php
-						if (empty($systemlinks))
-						{
+						if (empty($systemlinks)) {
 							$display_class = 'dispNone';
-						}
-						else
-						{
+						} else {
 							$check_sys_option = (get_option('idx_systemlink_group') == 1)?'checked="checked"':'';
 							$my_system_links = get_my_system_links();
 							foreach($systemlinks as $system_link)
@@ -199,7 +199,7 @@
 					<span class="saved_status" style="border-bottom: none;"></span>
 				</div>
 			</div>
-			<div id="setting" class="tab_content">
+			<div id="settings" class="tab_content">
 				<div id="genSettings">
 					<h3 class="hndle">
 						<label>Get an API Key</label>
