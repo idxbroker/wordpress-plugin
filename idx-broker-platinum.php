@@ -337,12 +337,13 @@ function idx_ajax_delete_dynamic_page() {
 add_filter( 'get_pages','idx_pages_filter');
 
 
+function idx_pages_check($page) {
+	return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');
+};
 
 function idx_pages_filter($pages) {
 	if (get_option('idx_broker_dynamic_wrapper_page_id')) {
-		return array_filter($pages, function($page) {
-			return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');
-		});
+		return array_filter($pages, "idx_pages_check");
 	} else {
 		return $pages;
 	}
