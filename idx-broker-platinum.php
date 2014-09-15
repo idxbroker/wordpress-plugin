@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: IDX Broker Platinum
+Plugin Name: IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 550 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
 Version: 1.1.5
@@ -107,9 +107,9 @@ function idx_uninstall() {
 //Adds a comment declaring the version of the IDX Broker plugin if it is activated.
 add_action('wp_head', 'idx_broker_activated');
 function idx_broker_activated() {
-	echo "\n<!-- IDX Broker Platinum WordPress Plugin ". IDX_WP_PLUGIN_VERSION . " Activated -->\n\n";
+	echo "\n<!-- IDX Broker WordPress Plugin ". IDX_WP_PLUGIN_VERSION . " Activated -->\n\n";
 
-	echo "\n<!-- IDX Broker Platinum WordPress Plugin Wrapper Meta-->\n\n";
+	echo "\n<!-- IDX Broker WordPress Plugin Wrapper Meta-->\n\n";
 	global $post;
 	if ($post && $post->ID && $post->ID == get_option('idx_broker_dynamic_wrapper_page_id')) {
 		echo "<meta name='idx-robot'>\n";
@@ -186,7 +186,7 @@ function add_idx_tinymce_plugin($plugin_array) {
  */
 add_action('admin_menu', 'idx_broker_platinum_menu');
 function idx_broker_platinum_menu() {
-	add_options_page('IDX Broker Platinum Plugin Options', 'IDX Broker Platinum', 'administrator', 'idx-broker-platinum', 'idx_broker_platinum_admin_page');
+	add_options_page('IDX Broker Plugin Options', 'IDX Broker', 'administrator', 'idx-broker-platinum', 'idx_broker_platinum_admin_page');
 }
 
 //Include dependecy files for IDX plugin
