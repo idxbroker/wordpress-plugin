@@ -9,7 +9,8 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
-<h3>IDX Broker Lite and Platinum Plugin</h3>
+<h4>IDX Broker Lite and Platinum Plugin</h4>
+
 <ul>
 <h4>Mobile Functionality That Your Clients Will Rave About!</h4>
 <li>Mobile-Friendly Layouts for the latest Mobile Responsive Themes. Don't have a Mobile Responsive theme? Choose from <a href="http://themes.agentevolution.com/shop/turn-key/">Turn Key</a>, or several other themes and theme providers that have created a very easy to use, out-of-the box Theme experience for you!</li>
