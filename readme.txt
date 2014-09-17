@@ -10,7 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-<h3>IDX Broker Plugin - Add IDX Broker Lite or Platinum to your WordPress Website!</h3>
+<h2>IDX Broker Plugin - Add IDX Broker Lite or Platinum to your WordPress Website!</h2>
 
 <ul>
 <h4>Mobile Functionality That Your Clients Will Rave About!</h4>
@@ -30,7 +30,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 <li><a href="http://www.idxbroker.com/features/layout-(template)-manager">Layout Selector</a>, with impressive new layouts that can be selected for each page type.</li>
 
-<h3>Simple, Yet Powerful Features.</h3>
+<h4>Simple, Yet Powerful Features.</h4>
 <li>Now you can use short codes to add IDX Page Links and Widgets to your WordPress Posts and Pages!</li>
 <li><a href="http://www.idxbroker.com/features/platinum/customizable-details-page-urls">Customizable property URLs!</a> Display the property address and much more in each and every listing URL. Experiment with different URL structures to deliver the most dynamic keyword-rich content for Search Engines.</li>
 
@@ -49,7 +49,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 <li>Plans start at $39.99 for IDX Broker Lite and $59.99 for IDX Broker Platinum. <a href="https://signup.idxbroker.com/">Order Now</a>, or <a href="http://www.idxbroker.com/idx_broker">View All Features Now.</a></li></ul>
 
 
-<h3>General Terms of Use</h3>
+<h4>General Terms of Use</h4>
 
 This IDX plugin is supported by MLS/IDX feeds. This means that your MLS governs the IDX results and details page display and disclaimers. IDX, LLC manages all the necessary MLS paperwork. IDX Broker will automatically display the correct MLS/IDX disclaimers to ensure compliance with the MLS(s) & Board(s) that provides you with your IDX feed.
 
