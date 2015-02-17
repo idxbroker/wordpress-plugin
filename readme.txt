@@ -13,7 +13,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 <ul>
 <h4>Mobile Functionality That Your Clients Will Rave About!</h4>
-<li>Mobile-Friendly Layouts for the latest Mobile Responsive Themes. Don't have a Mobile Responsive theme? Choose from <a href="http://themes.agentevolution.com/shop/turn-key/">Turn Key</a>, or several other themes and theme providers that have created a very easy to use, out-of-the box Theme experience for you!</li>
+<li>Mobile First Layouts for the latest <a href="http://www.idxbroker.com/wordpress-idx-themes">Mobile First IDX Themes.</a></li>
 <li>Email updates and property updates that link to mobile-friendly property detail pages - displayed on your custom subdomain.</li>
 <li>A "View Full Site" link on the footer of every mobile page, so people can choose to view non-mobile pages if that's what they want.</li>
 <li>Mobile lead capture that is integrated with your IDX Broker control panel. Mobile and non-mobile lead traffic statistics are all available in one place!</li>
