@@ -10,19 +10,13 @@
     }
 
     if(!$api_error) {
-        $systemlinks = get_transient('idx_systemlinks_cache');
-        if(!$systemlinks)
-            $systemlinks = idx_platinum_get_systemlinks();
+        $systemlinks = idx_api_get_systemlinks();
         if( is_wp_error($systemlinks) ) {
             $api_error = $systemlinks->get_error_message();
             $systemlinks = '';
         }
-
-        $savedlinks = get_transient('idx_savedlink_cache');
-        if (!$savedlinks)
-            $savedlinks = idx_platinum_get_savedlinks();
-
-        if( is_wp_error($savedlinks) ) {
+        $savedlinks = idx_api_get_savedlinks();
+        if(is_wp_error($savedlinks) ) {
             $api_error = $savedlinks->get_error_message();
             $savedlinks = '';
         }
@@ -49,11 +43,11 @@
         <div id="logo"></div>
     </a>
     <div style="display: table; width: 87%;">
-        <h2 class="flft">IDX Broker Platinum&reg; Plugin Settings</h2>
+        <h2 class="flft">IDX Broker&reg; Plugin Settings</h2>
         <br clear="all"/>
         <span class="label">Useful Links:</span>
         <ul class="usefulLinks">
-            <li><a href="http://kb.idxbroker.com/Knowledgebase/List/Index/16/wordpress-integration" target="_blank">IDX Broker Platinum Knowledgebase</a></li>
+            <li><a href="http://kb.idxbroker.com/Knowledgebase/List/Index/16/wordpress-integration" target="_blank">IDX Broker Knowledgebase</a></li>
             <li><a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">Login to Your Control Panel</a></li>
             <li><a href="mailto:help@idxbroker.com?Subject=Help me with WordPress" target="_blank">Contact IDX Broker</a></li>
         </ul>
@@ -75,13 +69,13 @@
                     <h3>
                         <label>Add IDX Widgets</label>
                     </h3>
-                    <p>Widgets give you a way to add Quick Search, Featured Listings, Agents, and Custom Links to your WordPress pages. IDX Broker Platinum comes with a default set of Widgets. If you have created additional, custom Widgets, simply click the "Refresh Plugin Options" button in Setting tab and visit your <a href="widgets.php">Widgets Tab</a> in WordPress to drag-and-drop IDX Widgets into your sidebar.</p>
+                    <p>Widgets give you a way to add Quick Search, Featured Listings, Agents, and Custom Links to your WordPress pages. IDX Broker comes with a default set of Widgets. If you have created additional, custom Widgets, simply click the "Refresh Plugin Options" button in Setting tab and visit your <a href="widgets.php">Widgets Tab</a> in WordPress to drag-and-drop IDX Widgets into your sidebar.</p>
                 </div>
                 <div class="widgSettings">
                     <h3>
                         <label>Add IDX System Navigation Links</label>
                     </h3>
-                    <p>Basic Search, Map Search, Advanced Search, Featured Listings, Roster Page links and any other search form thay you've created in IDX Broker Platinum can be easily added to your website navigation. All of your search links are hosted on a subdomain or <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/7/0/using-a-custom-subdomain">custom subdomain</a> that maintains the look and feel of your website. To add these to your website navigation, simply add them to a <a href="nav-menus.php">Custom Menu</a>, or reorder the display of these pages using your <a href="edit.php?post_type=page">Pages Tab</a> in WordPress. Note that each page is the equivalent of a link, and that you do not need to enter any information into the pages themselves to get them to display correctly. IDX Broker Platinum will do that for you.</p>
+                    <p>Basic Search, Map Search, Advanced Search, Featured Listings, Roster Page links and any other search form thay you've created in IDX Broker can be easily added to your website navigation. All of your search links are hosted on a subdomain or <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/7/0/using-a-custom-subdomain">custom subdomain</a> that maintains the look and feel of your website. To add these to your website navigation, simply add them to a <a href="nav-menus.php">Custom Menu</a>, or reorder the display of these pages using your <a href="edit.php?post_type=page">Pages Tab</a> in WordPress. Note that each page is the equivalent of a link, and that you do not need to enter any information into the pages themselves to get them to display correctly. IDX Broker will do that for you.</p>
                 </div>
                 <div>
                     <?php if(empty($systemlinks)) : ?>
@@ -157,7 +151,7 @@
                     <p>
                         You may create and save an unlimited number of Saved Links (e.g., neighborhood results, short sale results, etc).
                         <br><br>
-                        To create your saved links, <a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">login to IDX Broker Platinum</a> and go to <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links.</a> Once you have built and saved your saved links, revisit this page and hit the refresh button. Your new links will automatically appear below. Simply choose the custom links that you wish to display in your theme header navigation and IDX Broker Platinum will add those pages and link to the corresponding IDX results.
+                        To create your saved links, <a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">login to IDX Broker</a> and go to <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links.</a> Once you have built and saved your saved links, revisit this page and hit the refresh button. Your new links will automatically appear below. Simply choose the custom links that you wish to display in your theme header navigation and IDX Broker will add those pages and link to the corresponding IDX results.
                     </p>
                 </div>
                 <?php
@@ -169,7 +163,7 @@
                     <h3>
                         <label>Add Your Custom Links (Neighborhood, Custom Map Search, etc.)</label>
                     </h3>
-                    <p>Add custom neighborhood, subdivision, and other special links to your website. To create or edit saved links, login to IDX Broker and view the <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links</a> page. Once you've created links, open your IDX Broker Platinum Plugin settings page and click the Refresh Plugin Options to add your saved links to this list. Your new links will appear below. Click to add or remove any page links that you don't want to add.</p>
+                    <p>Add custom neighborhood, subdivision, and other special links to your website. To create or edit saved links, login to IDX Broker and view the <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links</a> page. Once you've created links, open your IDX Broker Plugin settings page and click the Refresh Plugin Options to add your saved links to this list. Your new links will appear below. Click to add or remove any page links that you don't want to add.</p>
                 </div>
                 <ul class="savedLinklist">
                 <?php
@@ -215,7 +209,7 @@
                         <p class="error hidden" id="idx_broker_apikey_error">
                             Please enter your API key to continue.
                             <br>
-                            If you do not have an IDX Broker Platinum account, please contact the IDX Broker team at 800-421-9668.
+                            If you do not have an IDX Broker account, please contact the IDX Broker team at 800-421-9668.
                         </p>
                         <?php
                             if($api_error) {

@@ -25,8 +25,10 @@ $api_error = false;
 define('SHORTCODE_SYSTEM_LINK', 'idx-platinum-system-link');
 define('SHORTCODE_SAVED_LINK', 'idx-platinum-saved-link');
 define('SHORTCODE_WIDGET', 'idx-platinum-widget');
-define( 'IDX__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'IDX_WP_PLUGIN_VERSION', '1.1.6' );
+define('IDX__PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('IDX_WP_PLUGIN_VERSION', '1.1.6');
+define('IDX_API_DEFAULT_VERSION', '1.2.0');
+define('IDX_API_URL', 'https://api.idxbroker.com/');
 
 //Adds a comment declaring the version of the WordPress.
 add_action('wp_head', 'display_wpversion');
@@ -39,9 +41,9 @@ function display_wpversion() {
 //Adds legacy start and stop tag function only when original IDX plugin is not installed
 add_action('wp_head', 'idx_original_plugin_check');
 function idx_original_plugin_check() {
-    if (function_exists('idx_start'))
+    if (function_exists('idx_start')) {
         echo '';
-    else {
+    } else {
         function idx_start() {
             return '<div id="idxStart" style="display: none;"></div>';
         }
@@ -101,6 +103,7 @@ function idx_uninstall() {
         wp_delete_post($page_id, true);
         wp_trash_post($page_id);
     }
+    idx_clean_transients();
 }
 
 
@@ -226,33 +229,26 @@ function idx_broker_platinum_options_init() {
      */
 
     if (get_option('idx_broker_apikey') != '') {
-        $system_links_cache = get_transient('idx_systemlinks_cache');
-        $saved_links_cache = get_transient('idx_savedlink_cache');
-        if($system_links_cache) {
-            $systemlinks = $system_links_cache;
-        } else {
-            $systemlinks = idx_platinum_get_systemlinks();
-            if( is_wp_error($systemlinks) ) {
-                $api_error = $systemlinks->get_error_message();
-                $systemlinks = '';
-            }
+        $systemlinks = idx_api_get_systemlinks();
+        if( is_wp_error($systemlinks) ) {
+            $api_error = $systemlinks->get_error_message();
+            $systemlinks = '';
         }
 
-        if($saved_links_cache) {
-            $savedlinks = $saved_links_cache;
-        } else {
-            $savedlinks = idx_platinum_get_savedlinks();
+        $savedlinks = idx_api_get_savedlinks();
 
-            if( is_wp_error($savedlinks) ) {
-                $api_error = $savedlinks->get_error_message();
-                $savedlinks = '';
-            }
+        if( is_wp_error($savedlinks) ) {
+            $api_error = $savedlinks->get_error_message();
+            $savedlinks = '';
         }
 
-        if(isset($_COOKIE["api_refresh"]) && $_COOKIE["api_refresh"] == 1)
-        {
-            update_system_page_links($systemlinks);
-            update_saved_page_links($savedlinks);
+        if(isset($_COOKIE["api_refresh"]) && $_COOKIE["api_refresh"] == 1) {
+            if (! empty($systemlinks)) {
+                update_system_page_links($systemlinks);
+            }
+            if (! empty($savedlinks)) {
+                update_saved_page_links($savedlinks);
+            }
         }
     }
 }
@@ -264,8 +260,9 @@ function idx_broker_platinum_options_init() {
 add_action( 'admin_enqueue_scripts', 'idx_inject_script_and_style' );
 function idx_inject_script_and_style($page)
 {
-    if( 'settings_page_idx-broker-platinum' != $page )
+    if( 'settings_page_idx-broker-platinum' != $page ) {
         return;
+    }
     wp_enqueue_script('idxjs', plugins_url('js/idxbroker.js', __FILE__), 'jquery');
     wp_enqueue_style('idxcss', plugins_url('css/idxbroker.css', __FILE__));
 }
@@ -333,9 +330,7 @@ function idx_ajax_delete_dynamic_page() {
     die();
 }
 
-
 add_filter( 'get_pages','idx_pages_filter');
-
 
 function idx_pages_check($page) {
     return $page->ID != get_option('idx_broker_dynamic_wrapper_page_id');
@@ -348,8 +343,6 @@ function idx_pages_filter($pages) {
         return $pages;
     }
 }
-
-
 
 /**
  * Function to updated the system links data in posts and postmeta table
@@ -406,20 +399,43 @@ function idx_broker_platinum_admin_page() {
  * @return void
  *
  */
-function idx_refreshapi() {
-    if(get_transient('idx_savedlink_cache')) {
-        delete_transient('idx_savedlink_cache');
-    }
-    if(get_transient('idx_widget_cache')) {
-        delete_transient('idx_widget_cache');
-    }
-    if(get_transient('idx_systemlinks_cache')) {
-        delete_transient('idx_systemlinks_cache');
-    }
+function idx_refreshapi()
+{
+    idx_clean_transients();
     update_option('idx_broker_apikey',$_REQUEST['idx_broker_apikey']);
     setcookie("api_refresh", 1, time()+20);
     update_tab();
     die();
+}
+/**
+ * Clean IDX cached data
+ *
+ * @param void
+ * @return void
+ */
+function idx_clean_transients()
+{
+    // clean old key before 1.1.6
+    if (get_transient('idx_savedlink_cache')) {
+        delete_transient('idx_savedlink_cache');
+    }
+    if (get_transient('idx_widget_cache')) {
+        delete_transient('idx_widget_cache');
+    }
+
+    if (get_transient('idx_savedlinks_cache')) {
+        delete_transient('idx_savedlinks_cache');
+    }
+
+    if (get_transient('idx_widgetsrc_cache')) {
+        delete_transient('idx_widgetsrc_cache');
+    }
+    if (get_transient('idx_systemlinks_cache')) {
+        delete_transient('idx_systemlinks_cache');
+    }
+    if (get_transient('idx_apiversion_cache')) {
+        delete_transient('idx_apiversion_cache');
+    }
 }
 
 /**
@@ -489,19 +505,17 @@ function update_systemlinks() {
     $systemLinkNames = array();
     $systemLinkStr = urldecode($_REQUEST['idx_system_links']);
     $systemLinkNamesStr = urldecode($_REQUEST['idx_system_links_names']);
-    if ($systemLinkStr != '')
-    {
-        $postVariables = preg_split('/&/', $systemLinkStr);
+    if ($systemLinkStr != '') {
+        $postVariables = explode('&', $systemLinkStr);
         foreach ($postVariables as $link) {
-            list($key,$val) = preg_split('/=/',$link);
+            list($key,$val) = explode('=',$link);
             $systemLink[$key] = $val;
         }
     }
-    if ($systemLinkNamesStr != '')
-    {
-        $postVariables = preg_split('/&/', $systemLinkNamesStr);
+    if ($systemLinkNamesStr != '') {
+        $postVariables = explode('&', $systemLinkNamesStr);
         foreach ($postVariables as $name) {
-            list($key,$val) = preg_split('/=/',$name);
+            list($key,$val) = explode('=',$name);
             $systemLinkNames[$key] = $val;
         }
     }
@@ -514,87 +528,87 @@ function update_systemlinks() {
             $new_links[] = $uid;
             if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
                 $wpdb->update(
-                        $wpdb->posts,
-                        array(
-                                'post_title' => $name,
-                                'post_type' => 'page',
-                                'post_name' => $name
-                        ),
-                        array(
-                                'ID' => $row['post_id']
-                        ),
-                        array(
-                                '%s',
-                                '%s',
-                                '%s'
-                        ),
-                        array(
-                                '%d'
-                        )
+                    $wpdb->posts,
+                    array(
+                        'post_title' => $name,
+                        'post_type' => 'page',
+                        'post_name' => $name
+                    ),
+                    array(
+                        'ID' => $row['post_id']
+                    ),
+                    array(
+                        '%s',
+                        '%s',
+                        '%s'
+                    ),
+                    array(
+                        '%d'
+                    )
                 );
                 $wpdb->update(
-                        $wpdb->postmeta,
-                        array(
-                                'meta_key' => '_links_to',
-                                'meta_value' => $url,
-                        ),
-                        array(
-                                'post_id' => $row['post_id']
-                        ),
-                        array(
-                                '%s',
-                                '%s'
-                        ),
-                        array(
-                                '%d'
-                        )
+                    $wpdb->postmeta,
+                    array(
+                        'meta_key' => '_links_to',
+                        'meta_value' => $url,
+                    ),
+                    array(
+                        'post_id' => $row['post_id']
+                    ),
+                    array(
+                        '%s',
+                        '%s'
+                    ),
+                    array(
+                        '%d'
+                    )
                 );
             }
             else {
                 // Insert into post table
                 $wpdb->insert(
-                        $wpdb->posts,
-                        array(
-                                'post_title' => $name,
-                                'post_type' => 'page',
-                                'post_name' => $name
-                        ),
-                        array(
-                                '%s',
-                                '%s',
-                                '%s'
-                        )
+                    $wpdb->posts,
+                    array(
+                        'post_title' => $name,
+                        'post_type' => 'page',
+                        'post_name' => $name
+                    ),
+                    array(
+                        '%s',
+                        '%s',
+                        '%s'
+                    )
                 );
                 $post_id = $wpdb->insert_id;
 
                 // Insert into post meta
                 $wpdb->insert(
-                        $wpdb->postmeta,
-                        array(
-                                'meta_key' => '_links_to',
-                                'meta_value' => $url,
-                                'post_id' => $wpdb->insert_id
-                        ),
-                        array(
-                                '%s',
-                                '%s',
-                                '%d'
-                        )
+                    $wpdb->postmeta,
+                    array(
+                        'meta_key' => '_links_to',
+                        'meta_value' => $url,
+                        'post_id' => $wpdb->insert_id
+                    ),
+                    array(
+                        '%s',
+                        '%s',
+                        '%d'
+                    )
                 );
 
                 //Insert into mapping table
                 $wpdb->insert(
-                        $wpdb->posts_idx,
-                        array(
-                                'post_id' => $post_id,
-                                'uid' => $uid,
-                                'link_type' => 0
-                        ),
-                        array(
-                                '%d',
-                                '%s',
-                                '%d'
-                        )
+                    $wpdb->posts_idx,
+                    array(
+                            'post_id' => $post_id,
+                            'uid' => $uid,
+                            'link_type' => 0
+                    ),
+                    array(
+                        '%d',
+                        '%s',
+                        '%d'
+                    )
                 );
             }
         }
@@ -706,17 +720,17 @@ function update_savedlinks() {
     $saveLinksNamesStr = urldecode($_REQUEST['idx_saved_links_names']);
     if ($saveLinksStr != '')
     {
-        $postVariables = preg_split('/&/', $saveLinksStr);
+        $postVariables = explode('&', $saveLinksStr);
         foreach ($postVariables as $link) {
-            list($key,$val) = preg_split('/=/',$link);
+            list($key,$val) = explode('=',$link);
             $saveLinks[$key] = $val;
         }
     }
     if ($saveLinksNamesStr != '')
     {
-        $postVariables = preg_split('/&/', $saveLinksNamesStr);
+        $postVariables = explode('/&/', $saveLinksNamesStr);
         foreach ($postVariables as $names) {
-            list($key,$val) = preg_split('/=/',$names);
+            list($key,$val) = explode('=',$names);
             $saveLinksNames[$key] = urldecode($val);
         }
     }
@@ -729,86 +743,86 @@ function update_savedlinks() {
             $new_links[] = $uid;
             if($row = $wpdb->get_row("SELECT id,post_id FROM ".$wpdb->prefix."posts_idx WHERE uid = '$uid' ", ARRAY_A) ) {
                 $wpdb->update(
-                        $wpdb->posts,
-                        array(
-                                'post_title' => $name,
-                                'post_type' => 'page',
-                                'post_name' => $name
-                        ),
-                        array(
-                                'ID' => $row['post_id']
-                        ),
-                        array(
-                                '%s',
-                                '%s',
-                                '%s'
-                        ),
-                        array(
-                                '%d'
-                        )
+                    $wpdb->posts,
+                    array(
+                        'post_title' => $name,
+                        'post_type' => 'page',
+                        'post_name' => $name
+                    ),
+                    array(
+                        'ID' => $row['post_id']
+                    ),
+                    array(
+                        '%s',
+                        '%s',
+                        '%s'
+                    ),
+                    array(
+                        '%d'
+                    )
                 );
                 $wpdb->update(
-                        $wpdb->postmeta,
-                        array(
-                                'meta_key' => '_links_to',
-                                'meta_value' => $url,
-                        ),
-                        array(
-                                'post_id' => $row['post_id']
-                        ),
-                        array(
-                                '%s',
-                                '%s'
-                        ),
-                        array(
-                                '%d'
-                        )
+                    $wpdb->postmeta,
+                    array(
+                        'meta_key' => '_links_to',
+                        'meta_value' => $url,
+                    ),
+                    array(
+                        'post_id' => $row['post_id']
+                    ),
+                    array(
+                        '%s',
+                        '%s'
+                    ),
+                    array(
+                        '%d'
+                    )
                 );
             } else {
                 // Insert into post table
                 $wpdb->insert(
-                        $wpdb->posts,
-                        array(
-                                'post_title' => $name,
-                                'post_type' => 'page',
-                                'post_name' => $name
-                        ),
-                        array(
-                                '%s',
-                                '%s',
-                                '%s'
-                        )
+                    $wpdb->posts,
+                    array(
+                        'post_title' => $name,
+                        'post_type' => 'page',
+                        'post_name' => $name
+                    ),
+                    array(
+                        '%s',
+                        '%s',
+                        '%s'
+                    )
                 );
                 $post_id = $wpdb->insert_id;
 
                 // Insert into post meta
                 $wpdb->insert(
-                        $wpdb->postmeta,
-                        array(
-                                'meta_key' => '_links_to',
-                                'meta_value' => $url,
-                                'post_id' => $wpdb->insert_id
-                        ),
-                        array(
-                                '%s',
-                                '%s',
-                                '%d'
-                        )
+                    $wpdb->postmeta,
+                    array(
+                        'meta_key' => '_links_to',
+                        'meta_value' => $url,
+                        'post_id' => $wpdb->insert_id
+                    ),
+                    array(
+                        '%s',
+                        '%s',
+                        '%d'
+                    )
                 );
 
                 //Insert into mapping table
                 $wpdb->insert(
-                        $wpdb->posts_idx,
-                        array(
-                                'post_id' => $post_id,
-                                'uid' => $uid,
-                                'link_type' => 1
-                        ),
-                        array(
-                                '%d',
-                                '%s',
-                                '%d'
-                        )
+                    $wpdb->posts_idx,
+                    array(
+                        'post_id' => $post_id,
+                        'uid' => $uid,
+                        'link_type' => 1
+                    ),
+                    array(
+                        '%d',
+                        '%s',
+                        '%d'
+                    )
                 );
             }
         }
@@ -823,8 +837,9 @@ function update_savedlinks() {
 
 function update_tab()
 {
-    if ($_REQUEST['idx_broker_admin_page_tab'])
+    if ($_REQUEST['idx_broker_admin_page_tab']) {
         update_option('idx_broker_admin_page_tab', $_REQUEST['idx_broker_admin_page_tab']);
+    }
 }
 
 /**
@@ -1149,12 +1164,13 @@ function idx_get_link_by_uid($uid, $type = 0) {
     if($type == 0) {
         // if the cache has expired, send an API request to update them. Cache expires after 2 hours.
         if (! get_transient('idx_systemlinks_cache') )
-            idx_platinum_get_systemlinks();
+            idx_api_get_systemlinks();
         $idx_links = get_transient('idx_systemlinks_cache');
     } elseif ($type == 1) {
-        if (! get_transient('idx_savedlink_cache') )
-            idx_platinum_get_savedlinks();
-        $idx_links = get_transient('idx_savedlink_cache');
+        if (get_transient('idx_savedlinks_cache')) {
+            delete_transient('idx_savedlinks_cache');
+        }
+        $idx_links = idx_api_get_savedlinks();
     }
 
     $selected_link = '';
@@ -1195,7 +1211,7 @@ function show_widget($atts) {
  * @return html code for showing the widget
  */
 function get_widget_by_uid($uid) {
-    $idx_widgets = get_transient('idx_widget_cache');
+    $idx_widgets = idx_api_get_widgetsrc();
     $idx_widget_code = null;
 
     if($idx_widgets) {
@@ -1221,10 +1237,10 @@ function show_link_short_codes($link_type = 0) {
 
     if($link_type === 0) {
         $short_code = SHORTCODE_SYSTEM_LINK;
-        $idx_links = get_transient('idx_systemlinks_cache');
+        $idx_links = idx_api_get_systemlinks();
     } elseif($link_type == 1) {
         $short_code = SHORTCODE_SAVED_LINK;
-        $idx_links = get_transient('idx_savedlink_cache');
+        $idx_links = idx_api_get_savedlinks();
     } else {
         return false;
     }
@@ -1287,7 +1303,7 @@ function get_saved_link_html($idx_link) {
  * Function to print the shortcodes of all the widgets
  */
 function show_widget_shortcodes() {
-    $idx_widgets = get_transient('idx_widget_cache');
+    $idx_widgets = get_transient('idx_widgetsrc_cache');
     $available_shortcodes = '';
 
     if($idx_widgets) {
@@ -1305,9 +1321,9 @@ function show_widget_shortcodes() {
 }
 
 
-add_action( 'save_post', 'idxplatinum_plt_save_meta_box');
-add_action( 'before_delete_post', 'idxplatinum_update_pages');
-add_action( 'init', 'permalink_update_warning');
-add_filter( 'wp_list_pages', 'idxplatinum_page_links_to_highlight_tabs', 9);
-add_filter( 'page_link', 'idxplatinum_filter_links_to_pages', 20, 2);
-add_filter( 'post_link', 'idxplatinum_filter_links_to_pages', 20, 2);
+add_action('save_post', 'idxplatinum_plt_save_meta_box');
+add_action('before_delete_post', 'idxplatinum_update_pages');
+add_action('init', 'permalink_update_warning');
+add_filter('wp_list_pages', 'idxplatinum_page_links_to_highlight_tabs', 9);
+add_filter('page_link', 'idxplatinum_filter_links_to_pages', 20, 2);
+add_filter('post_link', 'idxplatinum_filter_links_to_pages', 20, 2);
