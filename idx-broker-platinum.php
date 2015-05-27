@@ -728,7 +728,7 @@ function update_savedlinks() {
     }
     if ($saveLinksNamesStr != '')
     {
-        $postVariables = explode('/&/', $saveLinksNamesStr);
+        $postVariables = explode('&', $saveLinksNamesStr);
         foreach ($postVariables as $names) {
             list($key,$val) = explode('=',$names);
             $saveLinksNames[$key] = urldecode($val);
