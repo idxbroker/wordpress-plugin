@@ -374,7 +374,7 @@ function update_saved_page_links($savedlinks) {
         if($post_id) {
             //update the saved links
             $wpdb->update($wpdb->postmeta, array('meta_value' => $savedlink->url), array('post_id' => $post_id));
-            $post_title = str_replace('_', ' ', $savedlink->linkName);
+            $post_title = str_replace('_', ' ', $savedlink->linkTitle);
             $post_name = str_replace('', '_', $savedlink->linkName);
             $wpdb->update($wpdb->posts, array('post_title' => $post_title,
                     'post_name' => $post_name), array('ID' => $post_id));
