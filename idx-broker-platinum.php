@@ -3,7 +3,7 @@
 Plugin Name: IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.1.7
+Version: 1.2.0
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -26,7 +26,7 @@ define('SHORTCODE_SYSTEM_LINK', 'idx-platinum-system-link');
 define('SHORTCODE_SAVED_LINK', 'idx-platinum-saved-link');
 define('SHORTCODE_WIDGET', 'idx-platinum-widget');
 define('IDX__PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('IDX_WP_PLUGIN_VERSION', '1.1.7');
+define('IDX_WP_PLUGIN_VERSION', '1.2.0');
 define('IDX_API_DEFAULT_VERSION', '1.2.0');
 define('IDX_API_URL', 'https://api.idxbroker.com/');
 
@@ -78,7 +78,7 @@ function idx_register_styles () {
 
 
 /** Function that is executed when plugin is activated. **/
-register_activation_hook( __FILE__, 'idx_activate' );
+register_activation_hook( __FILE__, 'idx_activate');
 function idx_activate() {
     global $wpdb;
     if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."posts_idx'") != $wpdb->prefix.'posts_idx') {
@@ -93,6 +93,11 @@ function idx_activate() {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
     } // end if
+
+    if(! get_option('idx-results-url')){
+        add_option('idx-results-url');
+    }
+    include 'omnibar/idx-omnibar-get-locations.php';
 } // end idx_activate fn
 
 
@@ -405,6 +410,7 @@ function idx_refreshapi()
     update_option('idx_broker_apikey',$_REQUEST['idx_broker_apikey']);
     setcookie("api_refresh", 1, time()+20);
     update_tab();
+    include 'omnibar/idx-omnibar-get-locations.php';
     die();
 }
 /**
@@ -1327,3 +1333,9 @@ add_action('init', 'permalink_update_warning');
 add_filter('wp_list_pages', 'idxplatinum_page_links_to_highlight_tabs', 9);
 add_filter('page_link', 'idxplatinum_filter_links_to_pages', 20, 2);
 add_filter('post_link', 'idxplatinum_filter_links_to_pages', 20, 2);
+
+/**
+* Add Omnibar Search Widget:
+*/
+include 'omnibar/idx-omnibar-widget.php';
+
