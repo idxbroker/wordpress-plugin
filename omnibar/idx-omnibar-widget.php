@@ -16,7 +16,7 @@ function idx_omnibar_basic ($plugin_dir, $idxUrl){
   make_omnibar_script('/js/idx-omnibar.js', 'idx-omnibar'); 
   make_omnibar_script('/js/locationlist.json', 'idx-location-list'); 
 
-  return <<<"EOD"
+  return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-original-form">
       <input class="idx-omnibar-input" type="text" placeholder="City, Postal Code, Address, or Listing ID" onblur="if (this.value == '') {this.value = 'City, Postal Code, Address, or Listing ID';}" onfocus="if (this.value == 'City, Postal Code, Address, or Listing ID') {this.value = '';}"><button type="submit" value="Search"><i class="fa fa-search"></i><span>Search</span></button>
       <div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01"></div>
@@ -32,7 +32,7 @@ function idx_omnibar_extra ($plugin_dir, $idxUrl){
   make_omnibar_script('/js/idx-omnibar.js', 'idx-omnibar'); 
   make_omnibar_script('/js/locationlist.json', 'idx-location-list'); 
 
-  return <<<"EOD"
+  return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">
       <input class="idx-omnibar-input" type="text" placeholder="City, Postal Code, Address, or Listing ID" onblur="if (this.value == '') {this.value = 'City, Postal Code, Address, or Listing ID';}" onfocus="if (this.value == 'City, Postal Code, Address, or Listing ID') {this.value = '';}">
       <div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0" title="No commas or dollar signs are allowed."></div><div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01" title="Only numbers and decimals are allowed"></div>

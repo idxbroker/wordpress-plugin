@@ -110,3 +110,6 @@ div.awesomplete > ul > li {
 .widget div.awesomplete {
   padding: 0;
 }
+.idx-omnibar-form button {
+  display: inline-block;
+}

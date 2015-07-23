@@ -3,7 +3,7 @@ Author: IDX Broker
 Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
-Tested up to: 4.2.2
+Tested up to: 4.2.3
 Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -33,7 +33,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 <ul><li>Route leads via multiple <a href="http://www.idxbroker.com/features/round-robin-and-core-fields-lead-routing">Round Robins</a>, assign any custom link to an agent, build a <a href="http://www.idxbroker.com/features/feature-agent-listings-showcase">Showcase Widget</a> and create a unique <a href="http://www.idxbroker.com/features/agent-bio-page-wrapper">Bio Page Wrapper</a> for each agent!</li></ul>
 
 <h4>Affordable Pricing</h4>
-<ul><li>Plans start at $39.99 for IDX Broker Lite and $59.99 for IDX Broker Platinum. <a href="http://www.idxbroker.com/idx_broker">Click here to view all features now.</a></li></ul>
+<ul><li>Plans start at $39.99 for IDX Broker Lite and $59.99 for IDX Broker Platinum. <a 
+href="http://www.idxbroker.com/idx_broker">Click here to view all features now.</a></li></ul>
 
 <h4>General Terms of Use</h4>
 <ul><li>This IDX plugin is supported by MLS/IDX feeds. This means that your MLS governs the IDX results and details page display and disclaimers. IDX, LLC manages all the necessary MLS paperwork. The IDX Broker plugin will automatically display the correct MLS/IDX disclaimers to ensure compliance with the MLS(s) & Board(s) that provides you with your IDX feed.</li></ul>
