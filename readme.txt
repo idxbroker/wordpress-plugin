@@ -3,8 +3,8 @@ Author: IDX Broker
 Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
-Tested up to: 4.2.3
-Stable tag: 1.2.0
+Tested up to: 4.3.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,10 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 6. Adding Shortcodes.
 
 == Changelog ==
+
+= 1.2.1 =
+* Updated code for compatibility with WP4.3 release.
+* Improved acceptable Omnibar values.
 
 = 1.2.0 =
 * Added two types of Omnibar Widgets to the plugin under Appearance > Widgets and as shortcodes. To refresh the cities, counties, and zipcodes for this widget, hit the Refresh Plugin Options button under the Settings tab of the IDX Broker plugin. Cities, Counties, and Zipcodes are all active ones on the account.

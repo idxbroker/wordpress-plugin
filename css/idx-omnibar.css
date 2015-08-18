@@ -37,6 +37,9 @@ input[type=text].idx-omnibar-input {
   text-overflow: ellipsis;
   font-family: inherit;
 }
+div.awesomplete > ul {
+  z-index: 1000;
+}
 div.awesomplete li mark, div div.awesomplete li:hover mark, div div.awesomplete > ul > li[aria-selected="true"] mark {
   background: none;
   font-weight: bolder;
