@@ -114,6 +114,19 @@ function idx_broker_activated() {
     }
 }
 
+/* IDX Broker Plugin De-Activation */
+register_deactivation_hook( __FILE__, 'idxbroker_deactivation' );
+
+function idxbroker_deactivation() {
+
+		// Remove our Transients
+		idx_clean_transients();
+
+		// Flush Rewrites
+		flush_rewrite_rules();
+}
+
+
 add_filter("plugin_action_links_$plugin", 'idx_broker_platinum_plugin_actlinks' );
 function idx_broker_platinum_plugin_actlinks( $links ) {
     // Add a link to this plugin's settings page
