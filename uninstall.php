@@ -39,3 +39,5 @@ $page_id = get_option('idx_broker_dynamic_wrapper_page_id');
         wp_trash_post($page_id);
     }
 
+
+ flush_rewrite_rules();
