@@ -12,12 +12,22 @@ delete_option( 'idx-results-url' );
 delete_option( 'idx_savedlink_group' );
 delete_option( 'idx_systemlink_group' );
 
+
 // Delete our Transients
-idx_clean_transients();
+delete_transient('idx_savedlink_cache');
+delete_transient('idx_widget_cache');
+delete_transient('idx_savedlinks_cache');
+delete_transient('idx_widgetsrc_cache');
+delete_transient('idx_systemlinks_cache');
+delete_transient('idx_apiversion_cache');
+delete_transient('idx_cities/combinedActiveMLS_cache');
+delete_transient('idx_counties/combinedActiveMLS_cache');
+delete_transient('idx_zipcodes/combinedActiveMLS_cache');
+
 
 // Drop our Custom Tables
 global $wpdb;
-$wpdb->query( $wpdb->prepare('"DROP TABLE IF EXISTS '. $wpdb->prefix.'posts_idx'" ) );
+$wpdb->query( $wpdb->prepare("'DROP TABLE IF EXISTS'. $wpdb->prefix.'posts_idx'" ) );
 
 
 // Delete our Dynamic Wrapper Pages
