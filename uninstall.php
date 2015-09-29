@@ -27,7 +27,9 @@ delete_transient('idx_zipcodes/combinedActiveMLS_cache');
 
 // Drop our Custom Tables
 global $wpdb;
-$wpdb->query( $wpdb->prepare("'DROP TABLE IF EXISTS'. $wpdb->prefix.'posts_idx'" ) );
+
+$idx_posts_table = $wpdb->prefix."posts_idx";
+$wpdb->query("DROP TABLE IF EXISTS $idx_posts_table");
 
 
 // Delete our Dynamic Wrapper Pages
