@@ -101,17 +101,6 @@ function idx_activate() {
 } // end idx_activate fn
 
 
-register_uninstall_hook(__FILE__, 'idx_uninstall');
-function idx_uninstall() {
-    $page_id = get_option('idx_broker_dynamic_wrapper_page_id');
-    if($page_id) {
-        wp_delete_post($page_id, true);
-        wp_trash_post($page_id);
-    }
-    idx_clean_transients();
-}
-
-
 //Adds a comment declaring the version of the IDX Broker plugin if it is activated.
 add_action('wp_head', 'idx_broker_activated');
 function idx_broker_activated() {
