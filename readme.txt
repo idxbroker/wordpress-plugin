@@ -4,7 +4,7 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Tested up to: 4.3.0
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,7 +33,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 <ul><li>Route leads via multiple <a href="http://www.idxbroker.com/features/round-robin-and-core-fields-lead-routing">Round Robins</a>, assign any custom link to an agent, build a <a href="http://www.idxbroker.com/features/feature-agent-listings-showcase">Showcase Widget</a> and create a unique <a href="http://www.idxbroker.com/features/agent-bio-page-wrapper">Bio Page Wrapper</a> for each agent!</li></ul>
 
 <h4>Affordable Pricing</h4>
-<ul><li>Plans start at $39.99 for IDX Broker Lite and $59.99 for IDX Broker Platinum. <a 
+<ul><li>Plans start at $39.99 for IDX Broker Lite and $59.99 for IDX Broker Platinum. <a
 href="http://www.idxbroker.com/idx_broker">Click here to view all features now.</a></li></ul>
 
 <h4>General Terms of Use</h4>
@@ -78,6 +78,10 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 
 == Changelog ==
 
+= 1.2.2 =
+* Improved uninstall to remove any legacy data.
+* Improved css, and minified for performance.
+
 = 1.2.1 =
 * Updated code for compatibility with WP4.3 release.
 * Improved acceptable Omnibar values.
@@ -97,7 +101,7 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Update plugin settings labels.
 
 = 1.1.4 =
-* Fixed can't add tons of savelinks and systemlinks pages issue.
+* Fixed can't add tons of savedlinks and systemlinks pages issue.
 
 = 1.1.3 =
 * Added create dynamic wrapper page, clients can create a page for dynamic wrapper on the setting page.
@@ -122,10 +126,10 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Added helpful links to plugin. Fully tested to 3.6.1. Added Bing Map search library for users who add the map widget.
 
 = 1.0.8 =
-* Remove Beta image from control panel. Remaining Beta text from readme.
+* Remove Beta image from control panel. Remaining Beta text from read-me.
 
 = 1.0.7 =
-* Added support for php start and stop tags. Some users migrating from the original IDX Broker may have used an older method of adding the dynamic wrapper tags to their theme that was dependant on our original plugin. This update prevents errors when those users disable our original plugin.
+* Added support for php start and stop tags. Some users migrating from the original IDX Broker may have used an older method of adding the dynamic wrapper tags to their theme that was dependent on our original plugin. This update prevents errors when those users disable our original plugin.
 
 = 1.0.6 =
 * Added shortcode functionality. The plugin now adds an IDX button to the Visual editor which allows you to add shortcodes for the various page links and widgets IDX Broker provides.
