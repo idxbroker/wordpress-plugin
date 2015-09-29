@@ -3,18 +3,18 @@
 function make_omnibar_script($file, $handle){
   wp_register_script($handle, plugins_url($file, dirname(__FILE__)), '', null, 'all');
   wp_enqueue_script($handle);
-} 
+}
 function make_omnibar_style($file, $handle){
   wp_register_style($handle, plugins_url($file, dirname(__FILE__)), '', null, 'all');
   wp_enqueue_style($handle);
 }
 
 function idx_omnibar_basic ($plugin_dir, $idxUrl){
-  make_omnibar_style('/css/awesomplete.css','awesomplete');
-  make_omnibar_style('/css/idx-omnibar.css','idx-omnibar');
-  make_omnibar_script('/js/awesomplete.min.js', 'awesomplete'); 
-  make_omnibar_script('/js/idx-omnibar.js', 'idx-omnibar'); 
-  make_omnibar_script('/js/locationlist.json', 'idx-location-list'); 
+  make_omnibar_style('/assets/css/awesomplete.css','awesomplete');
+  make_omnibar_style('/assets/css/idx-omnibar.css','idx-omnibar');
+  make_omnibar_script('/js/awesomplete.min.js', 'awesomplete');
+  make_omnibar_script('/js/idx-omnibar.js', 'idx-omnibar');
+  make_omnibar_script('/js/locationlist.json', 'idx-location-list');
 
   return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-original-form">
@@ -23,14 +23,14 @@ function idx_omnibar_basic ($plugin_dir, $idxUrl){
     </form>
     <script>var idxUrl = '$idxUrl';</script>
 EOD;
-} 
+}
 
 function idx_omnibar_extra ($plugin_dir, $idxUrl){
-  make_omnibar_style('/css/awesomplete.css','awesomplete');
-  make_omnibar_style('/css/idx-omnibar.css','idx-omnibar');
-  make_omnibar_script('/js/awesomplete.min.js', 'awesomplete'); 
-  make_omnibar_script('/js/idx-omnibar.js', 'idx-omnibar'); 
-  make_omnibar_script('/js/locationlist.json', 'idx-location-list'); 
+  make_omnibar_style('/assets/css/awesomplete.css','awesomplete');
+  make_omnibar_style('/assets/css/idx-omnibar.css','idx-omnibar');
+  make_omnibar_script('/js/awesomplete.min.js', 'awesomplete');
+  make_omnibar_script('/js/idx-omnibar.js', 'idx-omnibar');
+  make_omnibar_script('/js/locationlist.json', 'idx-location-list');
 
   return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">
@@ -40,7 +40,7 @@ function idx_omnibar_extra ($plugin_dir, $idxUrl){
     </form>
     <script>var idxUrl = '$idxUrl';</script>
 EOD;
-} 
+}
 
 //Creates an omnibar widget
 class IDX_Omnibar_Widget extends WP_Widget
@@ -131,13 +131,13 @@ class IDX_Omnibar_Widget_Extra extends WP_Widget {
 function add_omnibar_shortcode(){
       $idxUrl = get_option('idx-results-url');
       $plugin_dir = plugins_url();
-      
+
       return idx_omnibar_basic($plugin_dir, $idxUrl);
 }
 function add_omnibar_extra_shortcode(){
       $idxUrl = get_option('idx-results-url');
       $plugin_dir = plugins_url();
-      
+
       return idx_omnibar_extra($plugin_dir, $idxUrl);
 }
 
