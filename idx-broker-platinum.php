@@ -271,7 +271,7 @@ function idx_inject_script_and_style($page)
         return;
     }
     wp_enqueue_script('idxjs', plugins_url('js/idxbroker.js', __FILE__), 'jquery');
-    wp_enqueue_style('idxcss', plugins_url('css/idxbroker.css', __FILE__));
+    wp_enqueue_style('idxcss', plugins_url('assets/css/idxbroker.css', __FILE__));
 }
 
 
