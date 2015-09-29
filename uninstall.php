@@ -17,7 +17,7 @@ idx_clean_transients();
 
 // Drop our Custom Tables
 global $wpdb;
-$wpdb->query( $wpdb->prepare( "DROP TABLE IF EXISTS $wpdb->prefix.'posts_idx'" ) );
+$wpdb->query( $wpdb->prepare('"DROP TABLE IF EXISTS '. $wpdb->prefix.'posts_idx'" ) );
 
 
 // Delete our Dynamic Wrapper Pages
