@@ -1,0 +1,264 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: IDX Broker\n"
+"POT-Creation-Date: 2015-10-06 11:36-0700\n"
+"PO-Revision-Date: 2015-10-06 11:36-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.5\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: idx-broker-platinum.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: button-popup.php:1
+msgid "Insert Shortcode"
+msgstr ""
+
+#: idx-broker-platinum-api.php:69
+msgid "Unable to complete API call."
+msgstr ""
+
+#: idx-broker-platinum-api.php:72
+msgid ""
+"The cURL extension for PHP is not enabled on your server.<br />Please "
+"contact your developer and/or hosting provider."
+msgstr ""
+
+#: idx-broker-platinum-api.php:78
+msgid ""
+"Access key is invalid or has been revoked, please ensure there are no spaces "
+"in your key.<br />If the problem persists, please reset your API key in the "
+"IDX Broker Platinum Dashboard or call 800-421-9668."
+msgstr ""
+
+#: idx-broker-platinum-api.php:80
+msgid ""
+"API call generated from WordPress is not using SSL (HTTPS) to communicate."
+"<br />Please contact your developer and/or hosting provider."
+msgstr ""
+
+#: idx-broker-platinum-api.php:82
+msgid ""
+"Invalid request sent to IDX Broker API, please re-install the IDX Broker "
+"Platinum plugin"
+msgstr ""
+
+#: idx-broker-platinum-api.php:83
+msgid ""
+"Access key is missing. To obtain an access key, please visit your IDX Broker "
+"Platinum Dashboard"
+msgstr ""
+
+#: idx-broker-platinum-api.php:84
+msgid ""
+"Your account has exceeded the hourly access limit for your API key.<br />You "
+"may either wait and try again later, reset your API key in the IDX Broker "
+"Platinum Dashboard, or call 800-421-9668."
+msgstr ""
+
+#: idx-broker-platinum-api.php:85
+msgid ""
+"General system error when attempting to communicate with the IDX Broker API, "
+"please try again in a few moments or contact 800-421-9668 if the problem "
+"persists."
+msgstr ""
+
+#: idx-broker-platinum-api.php:86
+msgid ""
+"IDX Broker API is currently undergoing maintenance. Please try again in a "
+"few moments or call 800-421-9668 if the problem persists."
+msgstr ""
+
+#: idx-broker-platinum.php:1091
+msgid ""
+"<div id=\"message\" class=\"error\"><p><strong>Note that your IDX Broker "
+"page links are not governed by WordPress Permalinks. To apply changes to "
+"your IDX Broker URLs, you must login to your IDX Broker Control Panel.</"
+"strong></p></div>"
+msgstr ""
+
+#: omnibar/idx-omnibar-get-locations.php:30
+msgid ""
+"<div class='error'><p>Invalid API Key. Please enter a valid API key in the "
+"IDX Broker Plugin Settings.</p></div>"
+msgstr ""
+
+#: views/admin.php:9
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: views/admin.php:46
+msgid "IDX Broker &reg; Plugin Settings"
+msgstr ""
+
+#: views/admin.php:48
+msgid "Useful Links:"
+msgstr ""
+
+#: views/admin.php:50
+msgid ""
+"<li><a href=\"http://support.idxbroker.com\" target=\"_blank\">IDX Broker "
+"Knowledgebase</a></li>"
+msgstr ""
+
+#: views/admin.php:51
+msgid ""
+"<li><a href=\"http://middleware.idxbroker.com/mgmt/login.php\" target="
+"\"_blank\">Login to Your Control Panel</a></li>"
+msgstr ""
+
+#: views/admin.php:52
+msgid ""
+"<li><a href=\"mailto:help@idxbroker.com?Subject=Help me with WordPress\" "
+"target=\"_blank\">Contact IDX Broker</a></li>"
+msgstr ""
+
+#: views/admin.php:70
+msgid "Add IDX Widgets"
+msgstr ""
+
+#: views/admin.php:72
+msgid ""
+"<p>Widgets give you a way to add Quick Search, Featured Listings, Agents, "
+"and Custom Links to your WordPress pages. IDX Broker comes with a default "
+"set of Widgets. If you have created additional, custom Widgets, simply click "
+"the \"Refresh Plugin Options\" button in Setting tab and visit your <a href="
+"\"widgets.php\">Widgets Tab</a> in WordPress to drag-and-drop IDX Widgets "
+"into your sidebar.</p>"
+msgstr ""
+
+#: views/admin.php:76
+msgid "Add IDX System Navigation Links"
+msgstr ""
+
+#: views/admin.php:78
+msgid ""
+"<p>Basic Search, Map Search, Advanced Search, Featured Listings, Roster Page "
+"links and any other search form thay you've created in IDX Broker can be "
+"easily added to your website navigation. All of your search links are hosted "
+"on a subdomain or <a href=\"http://kb.idxbroker.com/index.php?/Knowledgebase/"
+"Article/View/7/0/using-a-custom-subdomain\">custom subdomain</a> that "
+"maintains the look and feel of your website. To add these to your website "
+"navigation, simply add them to a <a href=\"nav-menus.php\">Custom Menu</a>, "
+"or reorder the display of these pages using your <a href=\"edit.php?"
+"post_type=page\">Pages Tab</a> in WordPress. Note that each page is the "
+"equivalent of a link, and that you do not need to enter any information into "
+"the pages themselves to get them to display correctly. IDX Broker will do "
+"that for you.</p>"
+msgstr ""
+
+#: views/admin.php:82
+msgid ""
+"<p>You do not have any system links because you may have entered an "
+"incorrect API key. Please review API key in the Setting tab.</p>"
+msgstr ""
+
+#: views/admin.php:84
+msgid ""
+"<p>Check the box next to the page link you wish to make available to add to "
+"your <a href=\"nav-menus.php\">Custom Menu</a>. To remove an IDX page, "
+"simply uncheck the box next to the page you wish to remove and click the "
+"\"Save Changes\" button.</p>"
+msgstr ""
+
+#: views/admin.php:117 views/admin.php:188
+msgid "- Add/Remove All Pages"
+msgstr ""
+
+#: views/admin.php:149 views/admin.php:163
+msgid "Add Your Custom Links (Neighborhood, Custom Map Search, etc.)"
+msgstr ""
+
+#: views/admin.php:151
+msgid ""
+" <p>You may create and save an unlimited number of Saved Links (e.g., "
+"neighborhood results, short sale results, etc).\n"
+"                        <br><br>\n"
+"                        To create your saved links, <a href=\"http://"
+"middleware.idxbroker.com/mgmt/login.php\" target=\"_blank\">login to IDX "
+"Broker</a> and go to <a href=\"http://middleware.idxbroker.com/mgmt/"
+"savedlinks.php\" target=\"_blank\">Saved Links.</a> Once you have built and "
+"saved your saved links, revisit this page and hit the refresh button. Your "
+"new links will automatically appear below. Simply choose the custom links "
+"that you wish to display in your theme header navigation and IDX Broker will "
+"add those pages and link to the corresponding IDX results.\n"
+"                    </p>"
+msgstr ""
+
+#: views/admin.php:165
+msgid ""
+"<p>Add custom neighborhood, subdivision, and other special links to your "
+"website. To create or edit saved links, login to IDX Broker and view the <a "
+"href=\"http://middleware.idxbroker.com/mgmt/savedlinks.php\" target=\"_blank"
+"\">Saved Links</a> page. Once you've created links, open your IDX Broker "
+"Plugin settings page and click the Refresh Plugin Options to add your saved "
+"links to this list. Your new links will appear below. Click to add or remove "
+"any page links that you don't want to add.</p>"
+msgstr ""
+
+#: views/admin.php:198
+msgid "Get an API Key"
+msgstr ""
+
+#: views/admin.php:203
+msgid "Enter Your API Key:"
+msgstr ""
+
+#: views/admin.php:209
+msgid "Please enter your API key to continue."
+msgstr ""
+
+#: views/admin.php:211
+msgid ""
+"If you do not have an IDX Broker account, please contact the IDX Broker team "
+"at 800-421-9668."
+msgstr ""
+
+#: views/admin.php:222
+msgid "Create a Dynamic Wrapper Page"
+msgstr ""
+
+#: views/admin.php:223
+msgid "Page Name:"
+msgstr ""
+
+#: views/admin.php:237
+msgid "Please enter a page title"
+msgstr ""
+
+#: views/admin.php:239
+msgid "Dynamic Page Link:"
+msgstr ""
+
+#: views/admin.php:250
+msgid "Save Changes"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+#. Author of the plugin/theme
+msgid "IDX Broker"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.idxbroker.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even "
+"better!"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.idxbroker.com/"
+msgstr ""
