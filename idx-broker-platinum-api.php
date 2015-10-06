@@ -66,24 +66,24 @@ function idx_api_get_apiversion()
 function apiResponse($response)
 {
     if (!$response || !is_array($response) || !isset($response['response'])) {
-        return array("code" => "Generic", "error" => "Unable to complete API call.");
+        return array("code" => "Generic", "error" => __("Unable to complete API call.", 'idxbroker'));
     }
     if (!function_exists('curl_init')) {
-        return array("code" => "PHP", "error" => "The cURL extension for PHP is not enabled on your server.<br />Please contact your developer and/or hosting provider.");
+        return array("code" => "PHP", "error" => __("The cURL extension for PHP is not enabled on your server.<br />Please contact your developer and/or hosting provider.", 'idxbroker'));
     }
     $responseCode = $response['response']['code'];
     $errMessage = false;
     if (is_numeric($responseCode)) {
         switch ($responseCode) {
-        case 401:   $errMessage = 'Access key is invalid or has been revoked, please ensure there are no spaces in your key.<br />If the problem persists, please reset your API key in the IDX Broker Platinum Dashboard or call 800-421-9668.'; break;
+        case 401:   $errMessage = __('Access key is invalid or has been revoked, please ensure there are no spaces in your key.<br />If the problem persists, please reset your API key in the IDX Broker Platinum Dashboard or call 800-421-9668.', 'idxbroker'); break;
         case 403:
-        case 403.4: $errMessage = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.<br />Please contact your developer and/or hosting provider.'; break;
+        case 403.4: $errMessage = __('API call generated from WordPress is not using SSL (HTTPS) to communicate.<br />Please contact your developer and/or hosting provider.', 'idxbroker'); break;
         case 405:
-        case 409:   $errMessage = 'Invalid request sent to IDX Broker API, please re-install the IDX Broker Platinum plugin'; break;
-        case 406:   $errMessage = 'Access key is missing. To obtain an access key, please visit your IDX Broker Platinum Dashboard'; break;
-        case 412:   $errMessage = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the IDX Broker Platinum Dashboard, or call 800-421-9668.'; break;
-        case 500:   $errMessage = 'General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact 800-421-9668 if the problem persists.'; break;
-        case 503:   $errMessage = 'IDX Broker API is currently undergoing maintenance. Please try again in a few moments or call 800-421-9668 if the problem persists.'; break;
+        case 409:   $errMessage = __('Invalid request sent to IDX Broker API, please re-install the IDX Broker Platinum plugin', 'idxbroker'); break;
+        case 406:   $errMessage = __('Access key is missing. To obtain an access key, please visit your IDX Broker Platinum Dashboard', 'idxbroker'); break;
+        case 412:   $errMessage = __('Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the IDX Broker Platinum Dashboard, or call 800-421-9668.', 'idxbroker'); break;
+        case 500:   $errMessage = __('General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact 800-421-9668 if the problem persists.', 'idxbroker'); break;
+        case 503:   $errMessage = __('IDX Broker API is currently undergoing maintenance. Please try again in a few moments or call 800-421-9668 if the problem persists.', 'idxbroker'); break;
         }
     }
     return array("code" => $responseCode, "error" => $errMessage);
