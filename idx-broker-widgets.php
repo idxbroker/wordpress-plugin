@@ -102,13 +102,13 @@ if (is_array($idxWidgets)) {
 		$widgetTitle = "IDX ". esc_html(str_replace($badChars, '', $widget->name)); // set widget title to "IDX [name]"
 
 		$widgetOps = "array('classname' => '{$widgetClass}',
-                        'description' => __('$widgetTitle', 'text domain'))"; // to be eval'd upon class creation below
+                        'description' => __('$widgetTitle', 'idxbroker'))"; // to be eval'd upon class creation below
 		// easiest manner to create a dynamically named class is to eval a string to do it for us.
 		// all the variables above are escaped properly to prevent any breakage from using the eval function
 		// upon creation of the new widget class, it will extend the IDX_Widget class created above, which extends WP_Widget
 		$eval = "class {$widgetClass} extends IDX_Widget {
             function __construct() {
-               WP_Widget::__construct('{$widgetID}', __('{$widgetTitle}', 'text domain'), $widgetOps);
+               parent::__construct('{$widgetID}', __('{$widgetTitle}', 'idxbroker'), $widgetOps);
                 \$this->widgetURL = '{$widget->url}';
                 \$this->widgetClass = '{$widgetClass}';
                 \$this->widgetID = '{$widgetID}';
