@@ -11,6 +11,8 @@ delete_option( 'idx_broker_admin_page_tab' );
 delete_option( 'idx-results-url' );
 delete_option( 'idx_savedlink_group' );
 delete_option( 'idx_systemlink_group' );
+delete_option( 'idx_broker_dynamic_wrapper_page_name' );
+delete_option( 'idx_broker_dynamic_wrapper_page_id' );
 
 
 // Delete our Transients
