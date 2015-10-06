@@ -6,7 +6,8 @@ Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got e
 Version: 1.2.2
 Author: IDX Broker
 Contributors: IDX, LLC
-textdomain: idxbroker
+Text Domain: idxbroker
+Domain Path: /languages/
 Author URI: http://www.idxbroker.com/
 License: GPLv2 or later
 */
