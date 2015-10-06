@@ -12,9 +12,9 @@ function make_omnibar_style($file, $handle){
 function idx_omnibar_basic ($plugin_dir, $idxUrl){
   make_omnibar_style('/assets/css/awesomplete.css','awesomplete');
   make_omnibar_style('/assets/css/idx-omnibar.css','idx-omnibar');
-  make_omnibar_script('/js/awesomplete.min.js', 'awesomplete');
-  make_omnibar_script('/js/idx-omnibar.js', 'idx-omnibar');
-  make_omnibar_script('/js/locationlist.json', 'idx-location-list');
+  make_omnibar_script('/assets/js/awesomplete.min.js', 'awesomplete');
+  make_omnibar_script('/assets/js/idx-omnibar.js', 'idx-omnibar');
+  make_omnibar_script('/assets/js/locationlist.json', 'idx-location-list');
 
   return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-original-form">

@@ -21,7 +21,7 @@ function get_base_url($array){
 
   //test to confirm API call worked properly before updating JSON file etc.
   if($systemLinksCall){
-    file_put_contents(dirname(dirname(__FILE__)) . '/js/locationlist.json', $locations);
+    file_put_contents(dirname(dirname(__FILE__)) . '/assets/js/locationlist.json', $locations);
 
     //update database with new results url
     update_option('idx-results-url', get_base_url($systemLinksCall));

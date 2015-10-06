@@ -188,7 +188,7 @@ function idx_buttons() {
  * @param array $plugin_array
  */
 function add_idx_tinymce_plugin($plugin_array) {
-    $plugin_array['idx_button'] = plugins_url('js/idx-buttons.min.js', __FILE__);
+    $plugin_array['idx_button'] = plugins_url('/assets/js/idx-buttons.min.js', __FILE__);
     return $plugin_array;
 }
 
@@ -274,7 +274,7 @@ function idx_inject_script_and_style($page)
     if( 'settings_page_idx-broker-platinum' != $page ) {
         return;
     }
-    wp_enqueue_script('idxjs', plugins_url('js/idxbroker.min.js', __FILE__), 'jquery');
+    wp_enqueue_script('idxjs', plugins_url('assets/js/idxbroker.min.js', __FILE__), 'jquery');
     wp_enqueue_style('idxcss', plugins_url('assets/css/idxbroker.css', __FILE__));
 }
 
