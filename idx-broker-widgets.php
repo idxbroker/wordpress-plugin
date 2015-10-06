@@ -10,9 +10,7 @@ class IDX_Widget extends WP_Widget {
 	public $widgetClass; // holds name of widget's class, ex: widget_596_12345
 	public $widgetURL; // URL location of widget's JS file in IDX MW
 	public $widgetID; // id of widget, ex: idx596_12345
-	function IDX_Widget () { // failed experiment
 
-	} // end IDX_Widget construct
 
 	function widget ($args, $instance) {
 		/**
