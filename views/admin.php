@@ -43,13 +43,13 @@
         <div id="logo"></div>
     </a>
     <div style="display: table; width: 87%;">
-        <h2 class="flft"><?php __('IDX Broker&reg; Plugin Settings', 'idxbroker'); ?></h2>
+        <h2 class="flft"><?php echo __('IDX Broker &reg; Plugin Settings', 'idxbroker'); ?></h2>
         <br clear="all"/>
-        <span class="label"><?php __('Useful Links:', 'idxbroker'); ?></span>
+        <span class="label"><?php echo __('Useful Links:', 'idxbroker'); ?></span>
         <ul class="usefulLinks">
-            <li><a href="http://kb.idxbroker.com/Knowledgebase/List/Index/16/wordpress-integration" target="_blank">IDX Broker Knowledgebase</a></li>
-            <li><a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">Login to Your Control Panel</a></li>
-            <li><a href="mailto:help@idxbroker.com?Subject=Help me with WordPress" target="_blank">Contact IDX Broker</a></li>
+           <?php echo __('<li><a href="http://support.idxbroker.com" target="_blank">IDX Broker Knowledgebase</a></li>','idxbroker'); ?>
+            <?php echo __('<li><a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">Login to Your Control Panel</a></li>','idxbroker'); ?>
+            <?php echo __('<li><a href="mailto:help@idxbroker.com?Subject=Help me with WordPress" target="_blank">Contact IDX Broker</a></li>','idxbroker'); ?>
         </ul>
         <br clear="all"/>
     </div>
@@ -67,21 +67,21 @@
             <div id="integration" class="tab_content" style="display: block;">
                 <div class="widgSettings">
                     <h3>
-                        <label>Add IDX Widgets</label>
+                        <label><?php echo __('Add IDX Widgets', 'idxbroker'); ?></label>
                     </h3>
-                    <p>Widgets give you a way to add Quick Search, Featured Listings, Agents, and Custom Links to your WordPress pages. IDX Broker comes with a default set of Widgets. If you have created additional, custom Widgets, simply click the "Refresh Plugin Options" button in Setting tab and visit your <a href="widgets.php">Widgets Tab</a> in WordPress to drag-and-drop IDX Widgets into your sidebar.</p>
+                    <?php echo __('<p>Widgets give you a way to add Quick Search, Featured Listings, Agents, and Custom Links to your WordPress pages. IDX Broker comes with a default set of Widgets. If you have created additional, custom Widgets, simply click the "Refresh Plugin Options" button in Setting tab and visit your <a href="widgets.php">Widgets Tab</a> in WordPress to drag-and-drop IDX Widgets into your sidebar.</p>', 'idxbroker'); ?>
                 </div>
                 <div class="widgSettings">
                     <h3>
-                        <label>Add IDX System Navigation Links</label>
+                        <label><?php echo __('Add IDX System Navigation Links', 'idxbroker'); ?></label>
                     </h3>
-                    <p>Basic Search, Map Search, Advanced Search, Featured Listings, Roster Page links and any other search form thay you've created in IDX Broker can be easily added to your website navigation. All of your search links are hosted on a subdomain or <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/7/0/using-a-custom-subdomain">custom subdomain</a> that maintains the look and feel of your website. To add these to your website navigation, simply add them to a <a href="nav-menus.php">Custom Menu</a>, or reorder the display of these pages using your <a href="edit.php?post_type=page">Pages Tab</a> in WordPress. Note that each page is the equivalent of a link, and that you do not need to enter any information into the pages themselves to get them to display correctly. IDX Broker will do that for you.</p>
+                    <?php echo __('<p>Basic Search, Map Search, Advanced Search, Featured Listings, Roster Page links and any other search form thay you\'ve created in IDX Broker can be easily added to your website navigation. All of your search links are hosted on a subdomain or <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/7/0/using-a-custom-subdomain">custom subdomain</a> that maintains the look and feel of your website. To add these to your website navigation, simply add them to a <a href="nav-menus.php">Custom Menu</a>, or reorder the display of these pages using your <a href="edit.php?post_type=page">Pages Tab</a> in WordPress. Note that each page is the equivalent of a link, and that you do not need to enter any information into the pages themselves to get them to display correctly. IDX Broker will do that for you.</p>', 'idxbroker'); ?>
                 </div>
                 <div>
                     <?php if(empty($systemlinks)) : ?>
-                        <p>You do not have any system links because you may have entered an incorrect API key. Please review API key in the Setting tab.</p>
+                       <?php echo __('<p>You do not have any system links because you may have entered an incorrect API key. Please review API key in the Setting tab.</p>', 'idxbroker'); ?>
                     <?php else : ?>
-                        <p>Check the box next to the page link you wish to make available to add to your <a href="nav-menus.php">Custom Menu</a>. To remove an IDX page, simply uncheck the box next to the page you wish to remove and click the "Save Changes" button.</p>
+                        <?php echo __('<p>Check the box next to the page link you wish to make available to add to your <a href="nav-menus.php">Custom Menu</a>. To remove an IDX page, simply uncheck the box next to the page you wish to remove and click the "Save Changes" button.</p>', 'idxbroker'); ?>
                     <?php endif; ?>
                 </div>
                 <ul class="linkList">
@@ -196,20 +196,20 @@
             <div id="settings" class="tab_content">
                 <div id="genSettings">
                     <h3 class="hndle">
-                        <label>Get an API Key</label>
+                        <label><?php echo __('Get an API Key', 'idxbroker'); ?></label>
                         <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/98/16/idx-broker-platinum-wordpress-plugin" class="helpIcon" target="_blank"></a>
                     </h3>
                     <div class="inlineBlock">
                         <div>
-                            <label for="idx_broker_apikey">Enter Your API Key: </label>
+                            <label for="idx_broker_apikey"><?php echo __('Enter Your API Key:', 'idxbroker'); ?> </label>
                             <input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option('idx_broker_apikey'); ?>" />
                             <input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" style="width:auto;" />
                             <span class="refresh_status"></span>
                         </div>
                         <p class="error hidden" id="idx_broker_apikey_error">
-                            Please enter your API key to continue.
+                            <?php echo __('Please enter your API key to continue.', 'idxbroker'); ?>
                             <br>
-                            If you do not have an IDX Broker account, please contact the IDX Broker team at 800-421-9668.
+                            <?php echo __('If you do not have an IDX Broker account, please contact the IDX Broker team at 800-421-9668.', 'idxbroker'); ?>
                         </p>
                         <?php
                             if($api_error) {
@@ -220,8 +220,8 @@
                 </div>
                 <!-- dynamic wrapper page -->
                 <div id="dynamic_page">
-                    <h3>Create a Dynamic Wrapper Page</h3>
-                    <label for="idx_broker_dynamic_wrapper_page">Page Name:</label>
+                    <h3><?php echo __('Create a Dynamic Wrapper Page', 'idxbroker'); ?></h3>
+                    <label for="idx_broker_dynamic_wrapper_page"><?php echo __('Page Name:', 'idxbroker'); ?></label>
                     <input name="idx_broker_dynamic_wrapper_page_name" type="text" id="idx_broker_dynamic_wrapper_page_name" value="<?php echo $post_title; ?>" />
                     <input name="idx_broker_dynamic_wrapper_page_id" type="hidden" id="idx_broker_dynamic_wrapper_page_id" value="<?php echo get_option('idx_broker_dynamic_wrapper_page_id'); ?>" />
                     <input type="button" class="button-primary" id="idx_broker_creaet_wrapper_page" value="<?php echo $post_title ? 'Update' : 'Create' ?>" />
@@ -235,9 +235,9 @@
                     ?>
                     <a href="http://kb.idxbroker.com/Knowledgebase/Article/View/189/0/automatically-create-dynamic-wrapper-page-in-wordpress" target="_blank"><img src="<?php echo plugins_url('../images/helpIcon.png', __FILE__); ?>" alt="help"></a>
                     <span class="wrapper_status"></span>
-                    <p class="error hidden">Please enter a page title</p>
+                    <p class="error hidden"><?php echo __('Please enter a page title', 'idxbroker'); ?></p>
                     <div id="dynamic_page_url" style="display: none;">
-                        <span class="label">Dynamic Page Link:</span>
+                        <span class="label"><?php echo __('Dynamic Page Link:', 'idxbroker'); ?></span>
                         <div class="input-prepend">
                             <span id="protocol" class="label"></span>
                             <input id="page_link" type="text" value="<?php echo $wrapper_page_url; ?>" readonly>
@@ -248,7 +248,7 @@
         </div>
 
     <div class="saveFooter">
-        <input type="submit" value="<?php esc_html_e('Save Changes') ?>" id="save_changes" class="button-primary update_idxlinks"  />
+        <input type="submit" value="<?php esc_html_e('Save Changes', 'idxbroker') ?>" id="save_changes" class="button-primary update_idxlinks"  />
         <span class="status"></span>
         <input type="hidden" name="action_mode" id="action_mode" value="" />
     </div>

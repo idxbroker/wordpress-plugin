@@ -1084,7 +1084,7 @@ function idxplatinum_plt_save_meta_box( $post_ID ) {
  */
 function idxplatinum_notice() {
     global $current_screen;
-    echo '<div id="message" class="error"><p><strong>Note that your IDX Broker page links are not governed by WordPress Permalinks. To apply changes to your IDX Broker URLs, you must login to your IDX Broker Control Panel.</strong></p></div>';
+    echo __('<div id="message" class="error"><p><strong>Note that your IDX Broker page links are not governed by WordPress Permalinks. To apply changes to your IDX Broker URLs, you must login to your IDX Broker Control Panel.</strong></p></div>', 'idxbroker');
 }
 
 /**

@@ -22,11 +22,11 @@ function get_base_url($array){
   //test to confirm API call worked properly before updating JSON file etc.
   if($systemLinksCall){
     file_put_contents(dirname(dirname(__FILE__)) . '/js/locationlist.json', $locations);
-    
+
     //update database with new results url
     update_option('idx-results-url', get_base_url($systemLinksCall));
     //If invalid API key, display error
   } else {
-    echo "<div class='error'><p>Invalid API Key. Please enter a valid API key in the IDX Broker Plugin Settings.</p></div>";
+    echo __("<div class='error'><p>Invalid API Key. Please enter a valid API key in the IDX Broker Plugin Settings.</p></div>", 'idxbroker');
   }
-  
+
