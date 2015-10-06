@@ -82,6 +82,9 @@ function idx_register_styles () {
 register_activation_hook( __FILE__, 'idx_activate');
 function idx_activate() {
     global $wpdb;
+
+    $charset_collate = $wpdb->get_charset_collate();
+
     if($wpdb->get_var("SHOW TABLES LIKE '".$wpdb->prefix."posts_idx'") != $wpdb->prefix.'posts_idx') {
         $sql = "CREATE TABLE " . $wpdb->prefix."posts_idx" . " (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -89,7 +92,7 @@ function idx_activate() {
                 `uid` varchar(255) NOT NULL,
                 `link_type` int(11) NOT NULL COMMENT '0 for system link and 1 for saved link',
                 PRIMARY KEY (`id`)
-                )";
+                ) $charset_collate;";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
