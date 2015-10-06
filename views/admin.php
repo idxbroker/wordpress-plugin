@@ -6,7 +6,7 @@
     $systemlinks = '';
     $check_sys_option = '';
     if (!current_user_can('manage_options'))  {
-        wp_die( __('You do not have sufficient permissions to access this page.') );
+        wp_die( __('You do not have sufficient permissions to access this page.', 'idxbroker') );
     }
 
     if(!$api_error) {
@@ -43,9 +43,9 @@
         <div id="logo"></div>
     </a>
     <div style="display: table; width: 87%;">
-        <h2 class="flft">IDX Broker&reg; Plugin Settings</h2>
+        <h2 class="flft"><?php __('IDX Broker&reg; Plugin Settings', 'idxbroker'); ?></h2>
         <br clear="all"/>
-        <span class="label">Useful Links:</span>
+        <span class="label"><?php __('Useful Links:', 'idxbroker'); ?></span>
         <ul class="usefulLinks">
             <li><a href="http://kb.idxbroker.com/Knowledgebase/List/Index/16/wordpress-integration" target="_blank">IDX Broker Knowledgebase</a></li>
             <li><a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">Login to Your Control Panel</a></li>
