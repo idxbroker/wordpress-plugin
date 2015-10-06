@@ -114,7 +114,7 @@
                 ?>
                     <span>
                         <input type="checkbox" value="idx_systemlink_group" name="idx_systemlink_group" id="idx_systemlink_group" <?php echo $check_sys_option;?> />
-                        <label for="idx_systemlink_group" class="link-label">- Add/Remove All Pages</label>
+                        <label for="idx_systemlink_group" class="link-label"><?php echo __('- Add/Remove All Pages', 'idxbroker'); ?></label>
                     </span>
                 <?php
                     }
@@ -146,13 +146,12 @@
                 ?>
                 <div class="widgSettings">
                     <h3>
-                        <label>Add Your Custom Links (Neighborhood, Custom Map Search, etc.)</label>
+                        <label><?php echo __('Add Your Custom Links (Neighborhood, Custom Map Search, etc.)', 'idxbroker'); ?></label>
                     </h3>
-                    <p>
-                        You may create and save an unlimited number of Saved Links (e.g., neighborhood results, short sale results, etc).
+                    <?php echo __(' <p>You may create and save an unlimited number of Saved Links (e.g., neighborhood results, short sale results, etc).
                         <br><br>
                         To create your saved links, <a href="http://middleware.idxbroker.com/mgmt/login.php" target="_blank">login to IDX Broker</a> and go to <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links.</a> Once you have built and saved your saved links, revisit this page and hit the refresh button. Your new links will automatically appear below. Simply choose the custom links that you wish to display in your theme header navigation and IDX Broker will add those pages and link to the corresponding IDX results.
-                    </p>
+                    </p>', 'idxbroker'); ?>
                 </div>
                 <?php
                     }
@@ -161,9 +160,9 @@
                 ?>
                 <div id="widgSettings">
                     <h3>
-                        <label>Add Your Custom Links (Neighborhood, Custom Map Search, etc.)</label>
+                        <label><?php echo __('Add Your Custom Links (Neighborhood, Custom Map Search, etc.)', 'idxbroker'); ?></label>
                     </h3>
-                    <p>Add custom neighborhood, subdivision, and other special links to your website. To create or edit saved links, login to IDX Broker and view the <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links</a> page. Once you've created links, open your IDX Broker Plugin settings page and click the Refresh Plugin Options to add your saved links to this list. Your new links will appear below. Click to add or remove any page links that you don't want to add.</p>
+                    <?php echo __('<p>Add custom neighborhood, subdivision, and other special links to your website. To create or edit saved links, login to IDX Broker and view the <a href="http://middleware.idxbroker.com/mgmt/savedlinks.php" target="_blank">Saved Links</a> page. Once you\'ve created links, open your IDX Broker Plugin settings page and click the Refresh Plugin Options to add your saved links to this list. Your new links will appear below. Click to add or remove any page links that you don\'t want to add.</p>', 'idxbroker'); ?>
                 </div>
                 <ul class="savedLinklist">
                 <?php
@@ -186,7 +185,7 @@
                 <?php if(count($savedlinks) > 0):?>
                 <span>
                     <input type="checkbox" value="idx_savedlink_group" name="idx_savedlink_group" id="idx_savedlink_group" <?php echo $check_saved_option;?> />
-                    <label for="idx_savedlink_group" class="linkLabel">- Add/Remove All Pages</label>
+                    <label for="idx_savedlink_group" class="linkLabel"><?php echo __('- Add/Remove All Pages', 'idxbroker'); ?></label>
                 </span>
                 <?php endif;?>
                 <div class="linkHeader <?php echo $display_class; ?>" style="border-bottom: none;">
