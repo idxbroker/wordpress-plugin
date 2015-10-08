@@ -4,7 +4,7 @@
 			// Register commands
 			ed.addCommand('mcebutton', function() {
 				ed.windowManager.open({
-					file : url + '/../button-popup.php', // file that contains HTML for our modal window
+					file : url + '/../../idx/views/button-popup.php', // file that contains HTML for our modal window
 					width : 620 + parseInt(ed.getLang('button.delta_width', 0)), // size of our window
 					height : 340 + parseInt(ed.getLang('button.delta_height', 0)), // size of our window
 					inline : 1
