@@ -16,6 +16,7 @@ class Initiate_Plugin
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
         add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
         add_action('wp_loaded', array($this, 'schedule_omnibar_update'));
+        add_action('wp_loaded', array($this, 'migrate_old_table'));
         add_action('idx_omnibar_get_locations', array($this, 'idx_omnibar_get_locations'));
 
         //Instantiate Classes
@@ -43,6 +44,14 @@ class Initiate_Plugin
         // The function below adds a settings link to the plugin page.
         $plugin = plugin_basename(__FILE__);
         $api_error = false;
+    }
+
+    public function migrate_old_table()
+    {
+        global $wpdb;
+        if ($wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "posts_idx';") !== null) {
+            new Migrate_Old_Table();
+        }
     }
 
     public function schedule_omnibar_update()

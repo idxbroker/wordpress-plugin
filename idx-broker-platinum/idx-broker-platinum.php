@@ -65,23 +65,12 @@ class Idx_Broker_Plugin
 
     public static function idx_activate()
     {
-        global $wpdb;
-        if ($wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "posts_idx'") != $wpdb->prefix . 'posts_idx') {
-            $sql = "CREATE TABLE " . $wpdb->prefix . "posts_idx" . " (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `post_id` int(11) NOT NULL,
-                    `uid` varchar(255) NOT NULL,
-                    `link_type` int(11) NOT NULL COMMENT '0 for system link and 1 for saved link',
-                    PRIMARY KEY (`id`)
-                    )";
-
-            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-            dbDelta($sql);
-        } // end if
-
         if (!get_option('idx-results-url')) {
             add_option('idx-results-url');
         }
+        //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
+
+        //flush_rewrite_rules();
     } // end idx_activate fn
 
     public static function idx_uninstall()

@@ -1,0 +1,3 @@
+[09-Oct-2015 21:22:46 UTC] PHP Notice:  Undefined offset: 371 in C:\Users\DanielS\Documents\References\Libraries\php\pear\PHP\CodeSniffer\Tokenizers\PHP.php on line 601
+[09-Oct-2015 21:23:00 UTC] PHP Parse error:  syntax error, unexpected end of file in - on line 61
+[09-Oct-2015 21:23:06 UTC] PHP Parse error:  syntax error, unexpected end of file in - on line 62

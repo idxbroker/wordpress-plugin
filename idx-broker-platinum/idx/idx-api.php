@@ -184,4 +184,157 @@ class Idx_Api
         }
     }
 
+    public function system_results_url()
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return false;
+        }
+
+        foreach ($links as $link) {
+            if ($link->systemresults) {
+                $results_url = $link->url;
+            }
+        }
+
+        // What if or can they have more than one system results page?
+        if (isset($results_url)) {
+            return $results_url;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the url of the link
+     *
+     * @param string $name name of the link to return the url of
+     * @return bool|string
+     */
+    public function system_link_url($name)
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return false;
+        }
+
+        foreach ($links as $link) {
+            if ($name == $link->name) {
+                return $link->url;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the url of the first system link found with
+     * a category of "details"
+     *
+     * @return bool|string link url if found else false
+     */
+    public function details_url()
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return false;
+        }
+
+        foreach ($links as $link) {
+            if ('details' == $link->category) {
+                return $link->url;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns an array of system link urls
+     *
+     * @return array
+     */
+    public function all_system_link_urls()
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return array();
+        }
+
+        $system_link_urls = array();
+
+        foreach ($links as $link) {
+            $system_link_urls[] = $link->url;
+        }
+
+        return $system_link_urls;
+    }
+
+    /**
+     * Returns an array of system link names
+     *
+     * @return array
+     */
+    public function all_system_link_names()
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return array();
+        }
+
+        $system_link_names = array();
+
+        foreach ($links as $link) {
+            $system_link_names[] = $link->name;
+        }
+
+        return $system_link_names;
+    }
+
+    public function all_saved_link_urls()
+    {
+
+        $links = $this->idx_api_get_savedlinks();
+
+        if (!$links) {
+            return array();
+        }
+
+        $system_link_urls = array();
+
+        foreach ($links as $link) {
+            $system_link_urls[] = $link->url;
+        }
+
+        return $system_link_urls;
+    }
+
+    public function all_saved_link_names()
+    {
+
+        $links = $this->idx_api_get_savedlinks();
+
+        if (!$links) {
+            return array();
+        }
+
+        $system_link_names = array();
+
+        foreach ($links as $link) {
+            $system_link_names[] = $link->name;
+        }
+
+        return $system_link_names;
+    }
+
 }
