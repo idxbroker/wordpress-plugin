@@ -3,7 +3,7 @@
 Plugin Name: IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.2.2
+Version: 1.3.0
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -24,8 +24,8 @@ class Idx_Broker_Plugin
     {
 
         if ($this->php_version_check()) {
-            require_once 'IDX' . DIRECTORY_SEPARATOR . 'autoloader.php';
-            new \IDX\Initiate_Plugin;
+            require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
+            new \IDX\Initiate_Plugin();
             /** Function that is executed when plugin is activated. **/
             register_activation_hook(__FILE__, array($this, 'idx_activate'));
             register_uninstall_hook(__FILE__, array('idx-broker-platinum', 'idx_uninstall'));

@@ -135,7 +135,7 @@ class Idx_Api
             if ($code == 401) {
                 delete_transient($cache_key);
             }
-            return new WP_Error("idx_api_error", __("Error {$code}: $error"));
+            return new \WP_Error("idx_api_error", __("Error {$code}: $error"));
         } else {
             $data = (array) json_decode((string) $response['body']);
             set_transient($cache_key, $data, $expiration);

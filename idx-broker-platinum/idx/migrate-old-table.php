@@ -11,7 +11,6 @@ class Migrate_Old_Table
             $this->migrate_old_pages($post_info);
         }
         $this->drop_old_table();
-
     }
 
     public function grab_post_ids()
@@ -27,6 +26,7 @@ class Migrate_Old_Table
 
     public function update_post_type($post_id, $link)
     {
+        $this->find_and_remove_duplicate_posts($link);
         global $wpdb;
         $wpdb->update(
             $wpdb->prefix . "posts",
@@ -38,6 +38,7 @@ class Migrate_Old_Table
                 'ID' => $post_id,
             )
         );
+
     }
 
     public function migrate_old_pages($post_info)
@@ -53,7 +54,34 @@ class Migrate_Old_Table
     public function drop_old_table()
     {
         global $wpdb;
-        $wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS " . $wpdb->prefix . "posts_idx"));
-        $wpdb->query($wpdb->prepare("DELETE FROM " . $wpdb->prefix . "postmeta WHERE meta_key = '_links_to'"));
+        $posts_idx = $wpdb->prefix . "posts_idx";
+        $postmeta = $wpdb->prefix . "postmeta";
+        $wpdb->query("DROP TABLE IF EXISTS $posts_idx");
+        $wpdb->delete($postmeta,
+            array(
+                'meta_key' => '_links_to',
+            )
+        );
+    }
+
+    public function remove_duplicate_posts($page_id)
+    {
+        wp_delete_post($page_id, true);
+        wp_trash_post($page_id);
+    }
+
+    public function find_and_remove_duplicate_posts($link)
+    {
+        $args = array(
+            'post_type' => 'idx_page',
+            'posts_per_page' => -1,
+        );
+        $posts_array = get_posts($args);
+        foreach ($posts_array as $post) {
+            if ($post->post_name === $link) {
+                $page_id = $post->ID;
+                $this->remove_duplicate_posts($page_id);
+            }
+        }
     }
 }

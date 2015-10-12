@@ -10,7 +10,7 @@ class Initiate_Plugin
         add_action('wp_head', array($this, 'display_wpversion'));
         add_action('wp_head', array($this, 'idx_broker_activated'));
         add_action('wp_enqueue_scripts', array($this, 'idx_register_styles'));
-        add_filter("plugin_action_links_" . plugin_basename(__FILE__) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
+        add_filter("plugin_action_links_" . plugin_basename(dirname(dirname(__FILE__))) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
         add_action('admin_menu', array($this, 'idx_broker_platinum_menu'));
         add_action('admin_enqueue_scripts', array($this, 'idx_inject_script_and_style'));
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
@@ -136,26 +136,8 @@ class Initiate_Plugin
 
         if (get_option('idx_broker_apikey') != '') {
             $systemlinks = $this->Idx_Api->idx_api_get_systemlinks();
-            $idx_pages = new Idx_Pages();
             if (is_wp_error($systemlinks)) {
                 $api_error = $systemlinks->get_error_message();
-                $systemlinks = '';
-            }
-
-            $savedlinks = $this->Idx_Api->idx_api_get_savedlinks();
-
-            if (is_wp_error($savedlinks)) {
-                $api_error = $savedlinks->get_error_message();
-                $savedlinks = '';
-            }
-
-            if (isset($_COOKIE["api_refresh"]) && $_COOKIE["api_refresh"] == 1) {
-                if (!empty($systemlinks)) {
-                    $idx_pages->update_system_page_links($systemlinks);
-                }
-                if (!empty($savedlinks)) {
-                    $idx_pages->update_saved_page_links($savedlinks);
-                }
             }
         }
     }
@@ -210,7 +192,7 @@ class Initiate_Plugin
  */
     public function idx_broker_platinum_admin_page()
     {
-        include plugin_dir_path(__FILE__) . 'IDX/views/admin.php';
+        include plugin_dir_path(__FILE__) . 'views/admin.php';
     }
 
     public static function update_tab()
