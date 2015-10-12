@@ -10,7 +10,7 @@ class Initiate_Plugin
         add_action('wp_head', array($this, 'display_wpversion'));
         add_action('wp_head', array($this, 'idx_broker_activated'));
         add_action('wp_enqueue_scripts', array($this, 'idx_register_styles'));
-        add_filter("plugin_action_links_" . plugin_basename(dirname(__FILE__)) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
+        add_filter("plugin_action_links_" . plugin_basename(__FILE__) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
         add_action('admin_menu', array($this, 'idx_broker_platinum_menu'));
         add_action('admin_enqueue_scripts', array($this, 'idx_inject_script_and_style'));
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
@@ -64,7 +64,7 @@ class Initiate_Plugin
 
     public function idx_omnibar_get_locations()
     {
-        new \IDX\Omnibar\Get_Locations;
+        new \IDX\Omnibar\Get_Locations();
     }
 
     //Adds a comment declaring the version of the WordPress.
