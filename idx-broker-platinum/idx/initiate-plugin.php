@@ -201,7 +201,7 @@ class Initiate_Plugin
  */
     public function idx_broker_platinum_admin_page()
     {
-        include plugin_dir_path(__FILE__) . 'IDX/views/admin.php';
+        include plugin_dir_path(__FILE__) . 'views/admin.php';
     }
 
     public static function update_tab()
