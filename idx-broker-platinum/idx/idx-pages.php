@@ -11,7 +11,7 @@ class Idx_Pages
         add_filter('post_link', array($this, 'idxplatinum_filter_links_to_pages'), 20, 2);
         add_filter('page_link', array($this, 'idxplatinum_filter_links_to_pages'), 20, 2);
         add_action('template_redirect', array($this, 'idxplatinum_redirect_links_to_pages'));
-        add_filter('wp_list_pages', array($this, 'idxplatinum_page_links_to_highlight_tabs', 9));
+        add_filter('wp_list_pages', array($this, 'idxplatinum_page_links_to_highlight_tabs'), 9);
         add_action('before_delete_post', array($this, 'idxplatinum_update_pages'));
         add_action('save_post', array($this, 'idxplatinum_plt_save_meta_box'));
         add_action('wp_ajax_idx_update_links', array($this, 'idx_update_links'));
