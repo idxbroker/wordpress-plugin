@@ -156,6 +156,7 @@ class Initiate_Plugin
         if ('toplevel_page_idx-broker' !== $page) {
             return;
         }
+        add_action('admin_notices', array($this, 'idx_instructions'));
         wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.js', __FILE__), 'jquery');
         wp_enqueue_style('idxcss', plugins_url('../assets/css/idx-broker.css', __FILE__));
     }
@@ -169,6 +170,15 @@ class Initiate_Plugin
     public function idx_broker_platinum_admin_page()
     {
         include plugin_dir_path(__FILE__) . 'views/admin.php';
+    }
+
+    public function idx_instructions()
+    {
+        echo '<div class="updated">';
+        echo '<p>';
+        echo 'Not sure how to integrate IDX content? See <a href="http://support.idxbroker.com/customer/portal/articles/1917460-wordpress-plugin">this knowledgebase article.</a>';
+        echo '</p>';
+        echo '</div>';
     }
 
     public static function update_tab()

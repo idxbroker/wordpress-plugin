@@ -33,7 +33,6 @@ if ($wrapper_page_id) {
 
 <div id="idxPluginWrap" class="wrap">
     <div>
-        <h2 class="flft">IDX Broker&reg; Plugin Settings</h2>
         <div class="useful-links">
             <ul class="usefulLinks">
                 <li><a href="http://support.idxbroker.com/customer/portal/articles/1917460-wordpress-plugin" target="_blank">IDX Knowledgebase</a></li>
@@ -43,6 +42,7 @@ if ($wrapper_page_id) {
         <a href="http://www.idxbroker.com" target="_blank" class="logo-link">
                 <div id="logo"></div>
         </a>
+        <h2 class="flft">IDX Broker&reg; Plugin Settings</h2>
     </div>
     <form method="post" action="options.php" id="idx_broker_options">
         <?php wp_nonce_field('update-options');?>
@@ -57,7 +57,7 @@ if ($wrapper_page_id) {
                         <div>
                             <label for="idx_broker_apikey">Enter Your API Key: </label>
                             <input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option('idx_broker_apikey');?>" />
-                            <input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" style="width:auto;" />
+                            <input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" />
                             <span class="refresh_status"></span>
                         </div>
                         <p class="error hidden" id="idx_broker_apikey_error">
@@ -83,7 +83,7 @@ if ($api_error) {
                     <?php
 if ($wrapper_page_id != '') {
     ?>
-                        <input type="button" class="button-primary" id="idx_broker_delete_wrapper_page" value="Delete" />
+                        <input type="button" class="button-secondary" id="idx_broker_delete_wrapper_page" value="Delete" />
                     <?php
 }
 ?>

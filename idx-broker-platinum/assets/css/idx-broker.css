@@ -16,6 +16,7 @@
 h2 {
     display: inline-block;
     vertical-align: top;
+    float: left;
 }
 .useful-links {
     display: inline-block;
@@ -171,4 +172,26 @@ label {
 }
 .change_title label {
     display: inline;
+}
+
+@media screen and (max-width: 800px) {
+    h2 {
+        float: none;
+        width: 100%;
+    }
+    label {
+        width: 100%;
+    }
+    .wp-core-ui button, .wp-core-ui .button-secondary {
+        vertical-align: baseline;
+    }
+
+}
+@media screen and (max-width: 400px) {
+    .wp-core-ui button, .wp-core-ui .button-primary, .wp-core-ui .button-secondary {
+        width: 100%;
+    }
+    input[type="text"] {
+        width: 100%;
+    }
 }
