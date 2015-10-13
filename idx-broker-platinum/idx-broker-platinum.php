@@ -69,8 +69,10 @@ class Idx_Broker_Plugin
             add_option('idx-results-url');
         }
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
+        $wrappers = new \IDX\Wrappers();
+        $wrappers->register_wrapper_post_type();
 
-        //flush_rewrite_rules();
+        flush_rewrite_rules();
     } // end idx_activate fn
 
     public static function idx_uninstall()

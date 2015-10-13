@@ -11,7 +11,7 @@ class Initiate_Plugin
         add_action('wp_head', array($this, 'idx_broker_activated'));
         add_action('wp_enqueue_scripts', array($this, 'idx_register_styles'));
         add_filter("plugin_action_links_" . plugin_basename(dirname(dirname(__FILE__))) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
-        add_action('admin_menu', array($this, 'idx_broker_platinum_menu'));
+        add_action('admin_menu', array($this, 'add_menu'));
         add_action('admin_enqueue_scripts', array($this, 'idx_inject_script_and_style'));
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
         add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
@@ -126,7 +126,6 @@ class Initiate_Plugin
         register_setting('idx-platinum-settings-group', "idx_broker_apikey");
         register_setting('idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_name");
         register_setting('idx-platinum-settings-group', "idx_broker_dynamic_wrapper_page_id");
-        register_setting('idx-platinum-settings-group', "idx_broker_admin_page_tab");
 
         /*
          *  Since we have custom links that can be added and deleted inside
@@ -166,9 +165,10 @@ class Initiate_Plugin
  * @return Admin Menu
  */
 
-    public function idx_broker_platinum_menu()
+    public function add_menu()
     {
-        add_options_page('IDX Broker Plugin Options', 'IDX Broker', 'administrator', 'idx-broker-platinum', array($this, 'idx_broker_platinum_admin_page'));
+        add_menu_page('IDX Broker Plugin Options', 'IDX Broker', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'dashicons-admin-home');
+        add_submenu_page('idx-broker', 'IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
     }
 
 /**
@@ -177,7 +177,7 @@ class Initiate_Plugin
  */
     public function idx_inject_script_and_style($page)
     {
-        if ('settings_page_idx-broker-platinum' != $page) {
+        if ('toplevel_page_idx-broker' !== $page) {
             return;
         }
         wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.js', __FILE__), 'jquery');

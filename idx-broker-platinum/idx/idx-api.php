@@ -108,7 +108,8 @@ class Idx_Api
         $apiversion = Initiate_Plugin::IDX_API_DEFAULT_VERSION,
         $level = 'clients',
         $params = array(),
-        $expiration = 7200
+        $expiration = 7200,
+        $request_type = 'get'
     ) {
         $cache_key = 'idx_' . $method . '_cache';
         if (($data = get_transient($cache_key))) {
@@ -126,6 +127,12 @@ class Idx_Api
         $params = array_merge(array('timeout' => 120, 'sslverify' => false, 'headers' => $headers), $params);
 
         $url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
+
+        if ($request_type === 'get') {
+            $response = wp_remote_get($url, $params);
+        } else {
+            $response = wp_safe_remote_post($url, $params);
+        }
 
         $response = wp_remote_get($url, $params);
         $response = (array) $response;
