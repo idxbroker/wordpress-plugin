@@ -1,41 +1,45 @@
 <?php
-    global $api_error;
-    $search_item = array('_','-');
-    $display_class = '';
-    $savedlinks = '';
-    $systemlinks = '';
-    $check_sys_option = '';
-    if (!current_user_can('manage_options'))  {
-        wp_die( __('You do not have sufficient permissions to access this page.') );
-    }
+namespace IDX;
 
-    if(!$api_error) {
-        $systemlinks = idx_api_get_systemlinks();
-        if( is_wp_error($systemlinks) ) {
-            $api_error = $systemlinks->get_error_message();
-            $systemlinks = '';
-        }
-        $savedlinks = idx_api_get_savedlinks();
-        if(is_wp_error($savedlinks) ) {
-            $api_error = $savedlinks->get_error_message();
-            $savedlinks = '';
-        }
+global $api_error;
+$search_item = array('_', '-');
+$display_class = '';
+$saved_links = '';
+$system_links = '';
+$check_sys_option = '';
+$idx_api = new Idx_Api;
+$idx_pages = new Idx_Pages();
+if (!current_user_can('manage_options')) {
+    wp_die(__('You do not have sufficient permissions to access this page.'));
+}
+
+if (!$api_error) {
+    $system_links = $idx_api->idx_api_get_systemlinks();
+    if (is_wp_error($system_links)) {
+        $api_error = $system_links->get_error_message();
+        $system_links = '';
     }
-    /**
-     * check wrapper page exist or not
-     */
-    $wrapper_page_id = get_option('idx_broker_dynamic_wrapper_page_id');
-    $post_title = '';
-    $wrapper_page_url = '';
-    if ($wrapper_page_id) {
-        if (!get_page_uri($wrapper_page_id)) {
-            update_option('idx_broker_dynamic_wrapper_page_id', '');
-            $wrapper_page_id = '';
-        } else {
-            $post_title = get_post($wrapper_page_id)->post_title;
-            $wrapper_page_url = get_page_link($wrapper_page_id);
-        }
+    $saved_links = $idx_api->idx_api_get_savedlinks();
+    if (is_wp_error($saved_links)) {
+        $api_error = $saved_links->get_error_message();
+        $saved_links = '';
     }
+}
+/**
+ * check wrapper page exist or not
+ */
+$wrapper_page_id = get_option('idx_broker_dynamic_wrapper_page_id');
+$post_title = '';
+$wrapper_page_url = '';
+if ($wrapper_page_id) {
+    if (!get_page_uri($wrapper_page_id)) {
+        update_option('idx_broker_dynamic_wrapper_page_id', '');
+        $wrapper_page_id = '';
+    } else {
+        $post_title = get_post($wrapper_page_id)->post_title;
+        $wrapper_page_url = get_page_link($wrapper_page_id);
+    }
+}
 ?>
 
 <div id="idxPluginWrap" class="wrap">
@@ -54,8 +58,8 @@
         <br clear="all"/>
     </div>
     <form method="post" action="options.php" id="idx_broker_options">
-        <?php wp_nonce_field('update-options'); ?>
-        <div id="blogUrl" style="display: none;" ajax="<?php bloginfo('wpurl'); ?>"></div>
+        <?php wp_nonce_field('update-options');?>
+        <div id="blogUrl" style="display: none;" ajax="<?php bloginfo('wpurl');?>"></div>
         <div id="tabs_container">
         <input type="hidden" id="currentTab" name="idx_broker_admin_page_tab" value="<?php echo get_option('idx_broker_admin_page_tab');?>">
             <ul id="tabs">
@@ -78,72 +82,67 @@
                     <p>Basic Search, Map Search, Advanced Search, Featured Listings, Roster Page links and any other search form thay you've created in IDX Broker can be easily added to your website navigation. All of your search links are hosted on a subdomain or <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/7/0/using-a-custom-subdomain">custom subdomain</a> that maintains the look and feel of your website. To add these to your website navigation, simply add them to a <a href="nav-menus.php">Custom Menu</a>, or reorder the display of these pages using your <a href="edit.php?post_type=page">Pages Tab</a> in WordPress. Note that each page is the equivalent of a link, and that you do not need to enter any information into the pages themselves to get them to display correctly. IDX Broker will do that for you.</p>
                 </div>
                 <div>
-                    <?php if(empty($systemlinks)) : ?>
+                    <?php if (empty($system_links)): ?>
                         <p>You do not have any system links because you may have entered an incorrect API key. Please review API key in the Setting tab.</p>
-                    <?php else : ?>
+                    <?php else: ?>
                         <p>Check the box next to the page link you wish to make available to add to your <a href="nav-menus.php">Custom Menu</a>. To remove an IDX page, simply uncheck the box next to the page you wish to remove and click the "Save Changes" button.</p>
-                    <?php endif; ?>
+                    <?php endif;?>
                 </div>
                 <ul class="linkList">
                     <?php
-                        if (empty($systemlinks)) {
-                            $display_class = 'dispNone';
-                        } else {
-                            $check_sys_option = (get_option('idx_systemlink_group') == 1)?'checked="checked"':'';
-                            $my_system_links = get_my_system_links();
-                            foreach($systemlinks as $system_link)
-                            {
-                                if($system_link->systemresults != '1')
-                                {
-                                    $std_check_options = (in_array($system_link->uid,$my_system_links))? 'checked = "checked"': '';
-                    ?>
+if (empty($system_links)) {
+    $display_class = 'dispNone';
+} else {
+    $check_sys_option = (get_option('idx_systemlink_group') == 1) ? 'checked="checked"' : '';
+    $my_system_links = $idx_pages->get_my_system_links();
+    foreach ($system_links as $system_link) {
+        if ($system_link->systemresults != '1') {
+            $std_check_options = (in_array($system_link->uid, $my_system_links)) ? 'checked = "checked"' : '';
+            ?>
                             <li>
-                                <input type="checkbox" value="<?php echo $system_link->url;?>" name="idx_platinum_system_<?php echo $system_link->uid;?>" id="idx_platinum_system_<?php echo $system_link->uid;?>" <?php echo $std_check_options; ?> class="systemLink idx_platinum_sl" />
+                                <input type="checkbox" value="<?php echo $system_link->url;?>" name="idx_platinum_system_<?php echo $system_link->uid;?>" id="idx_platinum_system_<?php echo $system_link->uid;?>" <?php echo $std_check_options;?> class="systemLink idx_platinum_sl" />
                                 <input type="hidden" name="idx_platinum_system_<?php echo $system_link->uid;?>_name" value="<?php echo $system_link->name;?>" />
-                                <label for="idx_platinum_system_<?php echo $system_link->uid;?>" class="linkLabel">- <?php echo str_replace($search_item, ' ', $system_link->name); ?></label>
+                                <label for="idx_platinum_system_<?php echo $system_link->uid;?>" class="linkLabel">- <?php echo str_replace($search_item, ' ', $system_link->name);?></label>
                             </li>
                     <?php
-                                }
-                            }
-                        }
-                    ?>
+}
+    }
+}
+?>
                 </ul>
                 <?php
-                    if(count($systemlinks) > 0)
-                    {
-                ?>
+if (count($system_links) > 0) {
+    ?>
                     <span>
                         <input type="checkbox" value="idx_systemlink_group" name="idx_systemlink_group" id="idx_systemlink_group" <?php echo $check_sys_option;?> />
                         <label for="idx_systemlink_group" class="link-label">- Add/Remove All Pages</label>
                     </span>
                 <?php
-                    }
-                ?>
-                <div class="linkHeader <?php echo $display_class; ?>">
+}
+?>
+                <div class="linkHeader <?php echo $display_class;?>">
                     <span class="system_status"></span>
                 </div>
 
                 <?php
-                    if (empty($savedlinks))
-                    {
-                        $display_class = 'dispNone';
-                    } else {
-                        $display_class = '';
-                    }
-                    $check_saved_option = (get_option('idx_savedlink_group') == 1)?' checked="checked"':'';
-                ?>
+if (empty($saved_links)) {
+    $display_class = 'dispNone';
+} else {
+    $display_class = '';
+}
+$check_saved_option = (get_option('idx_savedlink_group') == 1) ? ' checked="checked"' : '';
+?>
                 <?php
-                /**
-                 * We want the client the ability to place any custom built links in the system
-                 *  in the main navigation.  First lets grab them.
-                 *
-                 * Ther are no custom links in the system, so just display some text and a link to the admin to
-                 *  add custom links.
-                 *
-                 */
-                    if (empty($savedlinks))
-                    {
-                ?>
+/**
+ * We want the client the ability to place any custom built links in the system
+ *  in the main navigation.  First lets grab them.
+ *
+ * Ther are no custom links in the system, so just display some text and a link to the admin to
+ *  add custom links.
+ *
+ */
+if (empty($saved_links)) {
+    ?>
                 <div class="widgSettings">
                     <h3>
                         <label>Add Your Custom Links (Neighborhood, Custom Map Search, etc.)</label>
@@ -155,10 +154,8 @@
                     </p>
                 </div>
                 <?php
-                    }
-                    else
-                    {
-                ?>
+} else {
+    ?>
                 <div id="widgSettings">
                     <h3>
                         <label>Add Your Custom Links (Neighborhood, Custom Map Search, etc.)</label>
@@ -167,29 +164,28 @@
                 </div>
                 <ul class="savedLinklist">
                 <?php
-                        $my_saved_links = get_my_saved_links();
-                        foreach ($savedlinks as $saved_link)
-                        {
-                            $checkOption = (in_array($saved_link->uid,$my_saved_links))? 'checked = "checked"': '';
-                ?>
+$my_saved_links = $idx_pages->get_my_saved_links();
+    foreach ($saved_links as $saved_link) {
+        $checkOption = (in_array($saved_link->uid, $my_saved_links)) ? 'checked = "checked"' : '';
+        ?>
                             <li>
-                                <input type="checkbox" value="<?php echo $saved_link->url;?>" name="idx_platinum_saved_<?php echo $saved_link->uid;?>" id="idx_platinum_saved_<?php echo $saved_link->uid;?>" <?php echo $checkOption; ?> class="savedLink idx_platinum_sdl"/>
+                                <input type="checkbox" value="<?php echo $saved_link->url;?>" name="idx_platinum_saved_<?php echo $saved_link->uid;?>" id="idx_platinum_saved_<?php echo $saved_link->uid;?>" <?php echo $checkOption;?> class="savedLink idx_platinum_sdl"/>
                                 <input type="hidden" name="idx_platinum_saved_<?php echo $saved_link->uid;?>_name" value="<?php echo $saved_link->linkTitle;?>" />
-                                <label for="idx_platinum_saved_<?php echo $saved_link->uid;?>" style="padding-left: 2px;" class="linkLabel">- <?php echo str_replace($search_item, ' ', $saved_link->linkTitle); ?></label>
+                                <label for="idx_platinum_saved_<?php echo $saved_link->uid;?>" style="padding-left: 2px;" class="linkLabel">- <?php echo str_replace($search_item, ' ', $saved_link->linkTitle);?></label>
                             </li>
                 <?php
-                        }
-                    }
-                ?>
+}
+}
+?>
                 </ul>
 
-                <?php if(count($savedlinks) > 0):?>
+                <?php if (count($saved_links) > 0): ?>
                 <span>
                     <input type="checkbox" value="idx_savedlink_group" name="idx_savedlink_group" id="idx_savedlink_group" <?php echo $check_saved_option;?> />
                     <label for="idx_savedlink_group" class="linkLabel">- Add/Remove All Pages</label>
                 </span>
                 <?php endif;?>
-                <div class="linkHeader <?php echo $display_class; ?>" style="border-bottom: none;">
+                <div class="linkHeader <?php echo $display_class;?>" style="border-bottom: none;">
                     <span class="saved_status" style="border-bottom: none;"></span>
                 </div>
             </div>
@@ -202,7 +198,7 @@
                     <div class="inlineBlock">
                         <div>
                             <label for="idx_broker_apikey">Enter Your API Key: </label>
-                            <input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option('idx_broker_apikey'); ?>" />
+                            <input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option('idx_broker_apikey');?>" />
                             <input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" style="width:auto;" />
                             <span class="refresh_status"></span>
                         </div>
@@ -212,35 +208,34 @@
                             If you do not have an IDX Broker account, please contact the IDX Broker team at 800-421-9668.
                         </p>
                         <?php
-                            if($api_error) {
-                                echo '<p class="error" style="display:block;">'.$api_error.'</p>';
-                            }
-                        ?>
+if ($api_error) {
+    echo '<p class="error" style="display:block;">' . $api_error . '</p>';
+}
+?>
                     </div>
                 </div>
                 <!-- dynamic wrapper page -->
                 <div id="dynamic_page">
                     <h3>Create a Dynamic Wrapper Page</h3>
                     <label for="idx_broker_dynamic_wrapper_page">Page Name:</label>
-                    <input name="idx_broker_dynamic_wrapper_page_name" type="text" id="idx_broker_dynamic_wrapper_page_name" value="<?php echo $post_title; ?>" />
-                    <input name="idx_broker_dynamic_wrapper_page_id" type="hidden" id="idx_broker_dynamic_wrapper_page_id" value="<?php echo get_option('idx_broker_dynamic_wrapper_page_id'); ?>" />
-                    <input type="button" class="button-primary" id="idx_broker_creaet_wrapper_page" value="<?php echo $post_title ? 'Update' : 'Create' ?>" />
+                    <input name="idx_broker_dynamic_wrapper_page_name" type="text" id="idx_broker_dynamic_wrapper_page_name" value="<?php echo $post_title;?>" />
+                    <input name="idx_broker_dynamic_wrapper_page_id" type="hidden" id="idx_broker_dynamic_wrapper_page_id" value="<?php echo get_option('idx_broker_dynamic_wrapper_page_id');?>" />
+                    <input type="button" class="button-primary" id="idx_broker_creaet_wrapper_page" value="<?php echo $post_title ? 'Update' : 'Create'?>" />
                     <?php
-                        if ($wrapper_page_id != '')
-                        {
-                    ?>
+if ($wrapper_page_id != '') {
+    ?>
                         <input type="button" class="button-primary" id="idx_broker_delete_wrapper_page" value="Delete" />
                     <?php
-                        }
-                    ?>
-                    <a href="http://kb.idxbroker.com/Knowledgebase/Article/View/189/0/automatically-create-dynamic-wrapper-page-in-wordpress" target="_blank"><img src="<?php echo plugins_url('../images/helpIcon.png', __FILE__); ?>" alt="help"></a>
+}
+?>
+                    <a href="http://kb.idxbroker.com/Knowledgebase/Article/View/189/0/automatically-create-dynamic-wrapper-page-in-wordpress" target="_blank"><img src="<?php echo plugins_url('../../assets/images/helpIcon.png"', __FILE__);?>" alt="help"></a>
                     <span class="wrapper_status"></span>
                     <p class="error hidden">Please enter a page title</p>
                     <div id="dynamic_page_url" style="display: none;">
                         <span class="label">Dynamic Page Link:</span>
                         <div class="input-prepend">
                             <span id="protocol" class="label"></span>
-                            <input id="page_link" type="text" value="<?php echo $wrapper_page_url; ?>" readonly>
+                            <input id="page_link" type="text" value="<?php echo $wrapper_page_url;?>" readonly>
                         </div>
                     </div>
                 </div>
@@ -248,11 +243,11 @@
         </div>
 
     <div class="saveFooter">
-        <input type="submit" value="<?php esc_html_e('Save Changes') ?>" id="save_changes" class="button-primary update_idxlinks"  />
+        <input type="submit" value="<?php esc_html_e('Save Changes')?>" id="save_changes" class="button-primary update_idxlinks"  />
         <span class="status"></span>
         <input type="hidden" name="action_mode" id="action_mode" value="" />
     </div>
-    <?php settings_fields( 'idx-platinum-settings-group' ); ?>
+    <?php settings_fields('idx-platinum-settings-group');?>
     </form>
 
 </div>
