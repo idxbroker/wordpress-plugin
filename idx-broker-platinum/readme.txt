@@ -4,7 +4,7 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Tested up to: 4.3.1
-Stable tag: 1.2.2
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,12 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 6. Adding Shortcodes.
 
 == Changelog ==
+
+= 1.3.0 =
+* Simplified the Admin UI.
+* IDX Pages and Wrappers are now stored as custom post types no longer cluttering the Pages section of WordPress. You can still link to IDX pages as before through Appearance > Menus or via shortcodes.
+* Copying and Pasting the URL into Designs > Wrappers is no longer required for global wrappers. Creating a Global Wrapper page now automatically updates your IDX pages to use the new Global Wrapper Page via the API.
+* This plugin now has its own Top Menu. Say goodbye to searching for plugin preferences in the Settings Menu.
 
 = 1.2.2 =
 * Restructured code and made it more WP4.3 and PSR compliant.

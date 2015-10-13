@@ -12,13 +12,13 @@ License: GPLv2 or later
 
 // Report all errors during development. Remember to hash out when sending to production.
 
-//error_reporting(E_ALL);
+// error_reporting(E_ALL);
 
 new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
 {
     //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '1.2.2';
+    const IDX_WP_PLUGIN_VERSION = '1.3.0';
 
     public function __construct()
     {
@@ -28,6 +28,7 @@ class Idx_Broker_Plugin
             new \IDX\Initiate_Plugin();
             /** Function that is executed when plugin is activated. **/
             register_activation_hook(__FILE__, array($this, 'idx_activate'));
+            register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
             register_uninstall_hook(__FILE__, array('idx-broker-platinum', 'idx_uninstall'));
         }
     }
@@ -75,6 +76,13 @@ class Idx_Broker_Plugin
         flush_rewrite_rules();
     } // end idx_activate fn
 
+    //deactivate hook
+    public static function idx_deactivate()
+    {
+        //disable scheduled update for omnibar
+        wp_clear_scheduled_hook('idx_omnibar_get_locations');
+    }
+
     public static function idx_uninstall()
     {
         $page_id = get_option('idx_broker_dynamic_wrapper_page_id');
@@ -82,8 +90,6 @@ class Idx_Broker_Plugin
             wp_delete_post($page_id, true);
             wp_trash_post($page_id);
         }
-        //disable scheduled update for omnibar
-        wp_clear_scheduled_hook('idx_omnibar_get_locations');
         //clear transients made by the plugin
         \IDX\Idx_Api::idx_clean_transients();
     }

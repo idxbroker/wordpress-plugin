@@ -6,12 +6,11 @@ class Initiate_Plugin
     public function __construct()
     {
         $this->set_defaults();
-        add_action('wp_enqueue_scripts', array($this, 'wp_api_script'));
         add_action('wp_head', array($this, 'display_wpversion'));
         add_action('wp_head', array($this, 'idx_broker_activated'));
-        add_action('wp_enqueue_scripts', array($this, 'idx_register_styles'));
         add_filter("plugin_action_links_" . plugin_basename(dirname(dirname(__FILE__))) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
-        add_action('admin_menu', array($this, 'add_menu'));
+        //Setting the priority to 9 for admin_menu makes the Wrappers post type UI below the Settings link
+        add_action('admin_menu', array($this, 'add_menu'), 9);
         add_action('admin_enqueue_scripts', array($this, 'idx_inject_script_and_style'));
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
         add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
@@ -75,19 +74,6 @@ class Initiate_Plugin
         echo " -->";
     }
 
-/**  Register Map Libraries in case the user adds a map Widget to their site **/
-
-    public function wp_api_script()
-    {
-        wp_register_script('custom-scriptBing', '//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0', __FILE__);
-        wp_register_script('custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__);
-        wp_register_script('custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__);
-
-        wp_enqueue_script('custom-scriptBing');
-        wp_enqueue_script('custom-scriptLeaf');
-        wp_enqueue_script('custom-scriptMQ');
-    } // end wp_api_script fn
-
     //Adds a comment declaring the version of the IDX Broker plugin if it is activated.
     public function idx_broker_activated()
     {
@@ -99,16 +85,6 @@ class Initiate_Plugin
             echo "<meta name='idx-robot'>\n";
             echo "<meta name='robots' content='noindex,nofollow'>\n";
         }
-    }
-
-    /**
-     * Registers leaflet css
-     * @return [type] [description]
-     */
-    public function idx_register_styles()
-    {
-        wp_register_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
-        wp_enqueue_style('cssLeaf');
     }
 
     public function idx_broker_platinum_plugin_actlinks($links)
@@ -167,7 +143,7 @@ class Initiate_Plugin
 
     public function add_menu()
     {
-        add_menu_page('IDX Broker Plugin Options', 'IDX Broker', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'dashicons-admin-home');
+        add_menu_page('IDX Broker Plugin Options', 'IDX Broker', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'dashicons-admin-home', 55.572);
         add_submenu_page('idx-broker', 'IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
     }
 
