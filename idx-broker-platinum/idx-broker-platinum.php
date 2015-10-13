@@ -28,6 +28,7 @@ class Idx_Broker_Plugin
             new IDX\Initiate_Plugin();
             /** Function that is executed when plugin is activated. **/
             register_activation_hook(__FILE__, array($this, 'idx_activate'));
+            register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
             register_uninstall_hook(__FILE__, array('idx-broker-platinum', 'idx_uninstall'));
         }
     }
@@ -83,6 +84,13 @@ class Idx_Broker_Plugin
             add_option('idx-results-url');
         }
     } // end idx_activate fn
+
+    //deactivate hook
+    public static function idx_deactivate()
+    {
+        //disable scheduled update for omnibar
+        wp_clear_scheduled_hook('idx_omnibar_get_locations');
+    }
 
     public static function idx_uninstall()
     {
