@@ -25,7 +25,7 @@ class Idx_Broker_Plugin
 
         if ($this->php_version_check()) {
             require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
-            new \IDX\Initiate_Plugin();
+            new IDX\Initiate_Plugin();
             /** Function that is executed when plugin is activated. **/
             register_activation_hook(__FILE__, array($this, 'idx_activate'));
             register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
