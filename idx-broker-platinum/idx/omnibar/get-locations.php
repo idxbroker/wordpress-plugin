@@ -37,7 +37,7 @@ class Get_Locations
         $locations = 'idxOmnibar({' . $cities . $counties . $zipcodes . '})';
         //test to confirm API call worked properly before updating JSON file etc.
         if ($system_links_call) {
-            file_put_contents(dirname(dirname(__FILE__)) . '/assets/js/locationlist.json', $locations);
+            file_put_contents(dirname(dirname(dirname(__FILE__))) . '/assets/js/locationlist.json', $locations);
 
             //update database with new results url
             update_option('idx-results-url', $this->get_base_url($system_links_call));

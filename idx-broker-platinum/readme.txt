@@ -85,6 +85,9 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * This plugin now has its own Top Menu. Say goodbye to searching for plugin preferences in the Settings Menu.
 * The Admin page is now fully responsive allowing you easily to make WordPress changes from your mobile device.
 
+= 1.2.3 =
+* Fix bug with omnibar data not updating properly.
+
 = 1.2.2 =
 * Restructured code and made it more WP4.3 and PSR compliant.
 * Fixed bug with widgets not being cached properly.
@@ -154,3 +157,6 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Cleaned up various CSS issues and removed excess button options from spec.
 
 == Upgrade Notice ==
+
+= 1.2.3 =
+This version drops support for PHP 5.2 as it is deprecated and no longer receives security updates. Before updating, please contact your host to upgrade to the latest stable version of PHP (we recommend a minimum of 5.5 for security reasons): http://php.net/supported-versions.php

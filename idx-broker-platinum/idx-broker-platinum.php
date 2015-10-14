@@ -12,7 +12,7 @@ License: GPLv2 or later
 
 // Report all errors during development. Remember to hash out when sending to production.
 
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
