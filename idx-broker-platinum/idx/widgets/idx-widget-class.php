@@ -50,7 +50,7 @@ class Idx_Widget_Class extends \WP_Widget
         echo $before_widget;
         echo $before_title;
 
-        if ($instance['title'] == '!%hide_title!%') // if client puts in '!%hide_title!%' for widget title in WP front-end, will display no title
+        if ((!empty($instance['title'])) && $instance['title'] == '!%hide_title!%') // if client puts in '!%hide_title!%' for widget title in WP front-end, will display no title
         {
             echo '';
         } else if (!empty($instance['title'])) // else if WP title isn't empty, display that

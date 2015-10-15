@@ -77,11 +77,12 @@ class Initiate_Plugin
     //Adds a comment declaring the version of the IDX Broker plugin if it is activated.
     public function idx_broker_activated()
     {
-        echo "\n<!-- IDX Broker WordPress Plugin " . \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION . " Activated -->\n\n";
+        echo "\n<!-- IDX Broker WordPress Plugin " . \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION . " Activated -->\n";
 
-        echo "\n<!-- IDX Broker WordPress Plugin Wrapper Meta-->\n\n";
+        echo "<!-- IDX Broker WordPress Plugin Wrapper Meta-->\n\n";
         global $post;
-        if ($post && $post->ID && $post->ID == get_option('idx_broker_dynamic_wrapper_page_id')) {
+        //If wrapper, add noindex tag which is stripped out by our system
+        if ($post && $post->post_type === 'wrappers') {
             echo "<meta name='idx-robot'>\n";
             echo "<meta name='robots' content='noindex,nofollow'>\n";
         }
@@ -126,10 +127,9 @@ class Initiate_Plugin
  */
     public function idx_refreshapi()
     {
-        Idx_Api::idx_clean_transients();
+        $this->Idx_Api->idx_clean_transients();
         update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey']);
         setcookie("api_refresh", 1, time() + 20);
-        $this->update_tab();
         new Omnibar\Get_Locations();
         die();
     }
@@ -179,12 +179,5 @@ class Initiate_Plugin
         echo 'Not sure how to integrate IDX content? See <a href="http://support.idxbroker.com/customer/portal/articles/1917460-wordpress-plugin">this knowledgebase article.</a>';
         echo '</p>';
         echo '</div>';
-    }
-
-    public static function update_tab()
-    {
-        if ($_REQUEST['idx_broker_admin_page_tab']) {
-            update_option('idx_broker_admin_page_tab', $_REQUEST['idx_broker_admin_page_tab']);
-        }
     }
 }

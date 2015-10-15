@@ -6,7 +6,8 @@ class Idx_Pages
 
     public function __construct()
     {
-
+        // var_dump($this->get_existing_idx_page_urls());
+        // $this->delete_all_idx_pages();
         add_action('admin_init', array($this, 'create_idx_pages'), 10);
 
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
@@ -48,10 +49,9 @@ class Idx_Pages
         $existing_page_urls = $this->get_existing_idx_page_urls();
 
         foreach ($idx_links as $link) {
-
             if (!in_array($link->url, $existing_page_urls)) {
 
-                if ($link->name) {
+                if (!empty($link->name)) {
                     $name = $link->name;
                 } else if ($link->linkTitle) {
                     $name = $link->linkTitle;

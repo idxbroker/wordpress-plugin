@@ -189,6 +189,7 @@ class Idx_Api
         if (get_transient('idx_zipcodes/combinedActiveMLS_cache')) {
             delete_transient('idx_zipcodes/combinedActiveMLS_cache');
         }
+        $this->clear_wrapper_cache();
     }
 
     public function system_results_url()
@@ -342,6 +343,18 @@ class Idx_Api
         }
 
         return $system_link_names;
+    }
+
+    public function clear_wrapper_cache()
+    {
+        $this->idx_api(
+            'dynamicwrapperurl',
+            Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+            'clients',
+            array(),
+            7200,
+            'post'
+        );
     }
 
 }

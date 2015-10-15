@@ -21,7 +21,8 @@ class Wrappers
             'exclude_from_search' => true,
             'show_in_menu' => 'idx-broker',
             'show_in_nav_menus' => false,
-            'capability_type' => 'page',
+            'capability_type' => 'post',
+            'has_archive' => false,
         );
         register_post_type('wrappers', $args);
     }

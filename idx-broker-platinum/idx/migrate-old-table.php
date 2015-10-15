@@ -7,9 +7,10 @@ class Migrate_Old_Table
     public function __construct()
     {
         $post_info = $this->grab_post_ids();
-        if (!empty($post_info)) {
-            $this->migrate_old_pages($post_info);
+        if (empty($post_info)) {
+            return;
         }
+        $this->migrate_old_pages($post_info);
         $this->drop_old_table();
         $this->migrate_old_wrapper();
     }
@@ -29,22 +30,22 @@ class Migrate_Old_Table
     {
         if ($post_type === 'idx_page') {
             $this->find_and_remove_duplicate_posts($link);
+            global $wpdb;
+            $wpdb->update(
+                $wpdb->prefix . "posts",
+                array(
+                    'post_name' => $link,
+                ),
+                array(
+                    'ID' => $post_id,
+                )
+            );
         } else {
             $post = get_post($post_id);
             $link = $post->post_name;
         }
-        global $wpdb;
-        $wpdb->update(
-            $wpdb->prefix . "posts",
-            array(
-                'post_type' => $post_type,
-                'post_name' => $link,
-            ),
-            array(
-                'ID' => $post_id,
-            )
-        );
 
+        set_post_type($post_id, $post_type);
     }
 
     public function migrate_old_pages($post_info)
