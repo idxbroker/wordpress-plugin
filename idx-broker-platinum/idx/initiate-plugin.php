@@ -130,7 +130,7 @@ class Initiate_Plugin
         $this->Idx_Api->idx_clean_transients();
         update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey']);
         setcookie("api_refresh", 1, time() + 20);
-        new Omnibar\Get_Locations();
+        new \IDX\Omnibar\Get_Locations();
         die();
     }
 

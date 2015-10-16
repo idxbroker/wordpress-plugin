@@ -30,9 +30,33 @@ class Get_Locations
         $system_links_call = $idx_api->idx_api_get_systemlinks();
 
         //grab responses and add JSON object container for easier parsing later
-        $cities = '"cities" : ' . json_encode($idx_api->idx_api('cities/combinedActiveMLS'));
-        $counties = ', "counties" : ' . json_encode($idx_api->idx_api('counties/combinedActiveMLS'));
-        $zipcodes = ', "zipcodes" : ' . json_encode($idx_api->idx_api('zipcodes/combinedActiveMLS'));
+        $cities = '"cities" : ' . json_encode(
+            $idx_api->idx_api(
+                'cities/combinedActiveMLS',
+                \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+                'clients',
+                array(),
+                10
+            )
+        );
+        $counties = ', "counties" : ' . json_encode(
+            $idx_api->idx_api(
+                'counties/combinedActiveMLS',
+                \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+                'clients',
+                array(),
+                10
+            )
+        );
+        $zipcodes = ', "zipcodes" : ' . json_encode(
+            $idx_api->idx_api(
+                'zipcodes/combinedActiveMLS',
+                \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+                'clients',
+                array(),
+                10
+            )
+        );
         //location lists together
         $locations = 'idxOmnibar({' . $cities . $counties . $zipcodes . '})';
         //test to confirm API call worked properly before updating JSON file etc.

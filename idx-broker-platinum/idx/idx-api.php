@@ -179,16 +179,6 @@ class Idx_Api
         if (get_transient('idx_apiversion_cache')) {
             delete_transient('idx_apiversion_cache');
         }
-        //ccz transients from idx-omnibar-get-locations.php
-        if (get_transient('idx_cities/combinedActiveMLS_cache')) {
-            delete_transient('idx_cities/combinedActiveMLS_cache');
-        }
-        if (get_transient('idx_counties/combinedActiveMLS_cache')) {
-            delete_transient('idx_counties/combinedActiveMLS_cache');
-        }
-        if (get_transient('idx_zipcodes/combinedActiveMLS_cache')) {
-            delete_transient('idx_zipcodes/combinedActiveMLS_cache');
-        }
         $this->clear_wrapper_cache();
     }
 
