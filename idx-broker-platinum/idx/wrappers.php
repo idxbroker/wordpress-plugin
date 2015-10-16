@@ -24,14 +24,14 @@ class Wrappers
             'capability_type' => 'post',
             'has_archive' => false,
         );
-        register_post_type('wrappers', $args);
+        register_post_type('idx-wrapper', $args);
     }
 
 //check if theme includes idxstart and stop tags
     public function does_theme_include_idx_tag()
     {
         // default page content
-        $post_content = '<div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div><style>.entry-title{display:none;}.entry-meta{display: none;}</style>';
+        $post_content = '<div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div><style>.entry-title, .entry-meta, .adjacent-entry-pagination, .post-navigation {display: none;}</style>';
         // get theme to check start/stop tag
         $does_theme_include_idx_tag = false;
         $template_root = get_theme_root() . DIRECTORY_SEPARATOR . get_stylesheet();
@@ -57,7 +57,7 @@ class Wrappers
 
     public function idx_wrapper_content($content, $post)
     {
-        if ($post->post_type === 'wrappers') {
+        if ($post->post_type === 'idx-wrapper') {
             $content = $this->does_theme_include_idx_tag();
             return $content;
         }
@@ -74,7 +74,7 @@ class Wrappers
             'post_title' => $post_title,
             'post_name' => $post_title,
             'post_content' => $post_content,
-            'post_type' => 'wrappers',
+            'post_type' => 'idx-wrapper',
             'post_status' => 'publish',
         );
         if ($_POST['wrapper_page_id']) {

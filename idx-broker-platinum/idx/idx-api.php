@@ -156,28 +156,16 @@ class Idx_Api
      * @param void
      * @return void
      */
-    public static function idx_clean_transients()
+    public function idx_clean_transients()
     {
-        // clean old key before 1.1.6
-        if (get_transient('idx_savedlink_cache')) {
-            delete_transient('idx_savedlink_cache');
-        }
-        if (get_transient('idx_widget_cache')) {
-            delete_transient('idx_widget_cache');
-        }
-
         if (get_transient('idx_savedlinks_cache')) {
             delete_transient('idx_savedlinks_cache');
         }
-
         if (get_transient('idx_widgetsrc_cache')) {
             delete_transient('idx_widgetsrc_cache');
         }
         if (get_transient('idx_systemlinks_cache')) {
             delete_transient('idx_systemlinks_cache');
-        }
-        if (get_transient('idx_apiversion_cache')) {
-            delete_transient('idx_apiversion_cache');
         }
         $this->clear_wrapper_cache();
     }
@@ -342,7 +330,7 @@ class Idx_Api
             Initiate_Plugin::IDX_API_DEFAULT_VERSION,
             'clients',
             array(),
-            7200,
+            10,
             'post'
         );
     }

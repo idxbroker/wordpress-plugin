@@ -54,7 +54,6 @@ class Migrate_Old_Table
         $links = $post_info['links'];
         for ($i = 0; $i < count($post_ids); $i++) {
             $this->update_post_type($post_ids[$i], $links[$i], 'idx_page');
-            print_r($post_ids[$i]);
         }
     }
 

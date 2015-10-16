@@ -82,6 +82,7 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Simplified the Admin UI.
 * IDX Pages and Wrappers are now stored as custom post types no longer cluttering the Pages section of WordPress. You can still link to IDX pages as before through Appearance > Menus or via shortcodes.
 * Copying and Pasting the URL into Designs > Wrappers is no longer required for global wrappers. Creating a Global Wrapper page now automatically updates your IDX pages to use the new Global Wrapper Page via the API.
+* Map Search Widget scripts are now only loaded when a map search widget is on the page speeding up the rest of your website.
 * This plugin now has its own Top Menu. Say goodbye to searching for plugin preferences in the Settings Menu.
 * The Admin page is now fully responsive allowing you easily to make WordPress changes from your mobile device.
 

@@ -6,7 +6,6 @@ class Idx_Pages
 
     public function __construct()
     {
-        // var_dump($this->get_existing_idx_page_urls());
         // $this->delete_all_idx_pages();
         add_action('admin_init', array($this, 'create_idx_pages'), 10);
 
