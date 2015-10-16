@@ -91,7 +91,7 @@ class Initiate_Plugin
     public function idx_broker_platinum_plugin_actlinks($links)
     {
         // Add a link to this plugin's settings page
-        $settings_link = '<a href="options-general.php?page=idx-broker-platinum">Settings</a>';
+        $settings_link = '<a href="admin.php?page=idx-broker">Settings</a>';
         array_unshift($links, $settings_link);
         return $links;
     }
