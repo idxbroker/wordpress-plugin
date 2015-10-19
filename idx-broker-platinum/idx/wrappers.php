@@ -52,7 +52,7 @@ class Wrappers
         $wrapper_page_id = wp_insert_post($new_post);
         update_option('idx_broker_dynamic_wrapper_page_name', $post_title);
         update_option('idx_broker_dynamic_wrapper_page_id', $wrapper_page_id);
-        update_tab();
+        Initiate_Plugin::update_tab();
         die(json_encode(array("wrapper_page_id" => $wrapper_page_id, "wrapper_page_name" => $post_title)));
     }
 
@@ -62,8 +62,7 @@ class Wrappers
             wp_delete_post($_POST['wrapper_page_id'], true);
             wp_trash_post($_POST['wrapper_page_id']);
         }
-        update_tab();
+        Initiate_Plugin::update_tab();
         die();
     }
-
 }

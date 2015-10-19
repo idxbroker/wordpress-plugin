@@ -4,7 +4,7 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Tested up to: 4.3.1
-Stable tag: 1.2.2
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,13 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 
 == Changelog ==
 
+= 1.2.4 =
+* Fixed an issue with shortcodes and widgets not working properly for some users.
+* Added backwards compatability with legacy dynamic wrapper usage in themes.
+
+= 1.2.3 =
+* Fixed bug with omnibar data not updating properly.
+
 = 1.2.2 =
 * Restructured code and made it more WP4.3 and PSR compliant.
 * Fixed bug with widgets not being cached properly.
@@ -147,3 +154,6 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Cleaned up various CSS issues and removed excess button options from spec.
 
 == Upgrade Notice ==
+
+= 1.2.3 =
+This version drops support for PHP 5.2 as it is deprecated and no longer receives security updates. Before updating, please contact your host to upgrade to the latest stable version of PHP (we recommend a minimum of 5.5 for security reasons): http://php.net/supported-versions.php
