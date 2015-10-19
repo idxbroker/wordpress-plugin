@@ -6,6 +6,7 @@ class Initiate_Plugin
     public function __construct()
     {
         $this->set_defaults();
+        include 'backwards-compatibility.php';
         add_action('wp_head', array($this, 'display_wpversion'));
         add_action('wp_head', array($this, 'idx_broker_activated'));
         add_filter("plugin_action_links_" . plugin_basename(dirname(dirname(__FILE__))) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
