@@ -12,21 +12,10 @@ class Get_Locations
             $this->initiate_get_locations();
         }
     }
-    //Find Results URL
-    private function get_base_url($array)
-    {
-        foreach ((array) $array as $item) {
-            if (preg_match("/results/i", $item->url)) {
-                return ($item->url);
-            }
-        }
-    }
 
     private function initiate_get_locations()
     {
-
-        //get base Url for client's results page for use on omnibar.js front end
-        $idx_api = new \IDX\Idx_Api;
+        $idx_api = new \IDX\Idx_Api();
         $system_links_call = $idx_api->idx_api_get_systemlinks();
 
         //grab responses and add JSON object container for easier parsing later
@@ -64,7 +53,8 @@ class Get_Locations
             file_put_contents(dirname(dirname(dirname(__FILE__))) . '/assets/js/locationlist.json', $locations);
 
             //update database with new results url
-            update_option('idx-results-url', $this->get_base_url($system_links_call));
+            //get base Url for client's results page for use on omnibar.js front end
+            update_option('idx-results-url', $idx_api->system_results_url());
             //If invalid API key, display error
         } else {
             echo "<div class='error'><p>Invalid API Key. Please enter a valid API key in the IDX Broker Plugin Settings.</p></div>";

@@ -96,7 +96,7 @@ class Migrate_Old_Table
         $page_id = get_option('idx_broker_dynamic_wrapper_page_id');
         if (!empty($page_id)) {
             //update post type to wrappers
-            $this->update_post_type($page_id, null, 'wrappers');
+            $this->update_post_type($page_id, null, 'idx-wrapper');
 
             //update global wrapper
             $wrapper_page_url = get_permalink($page_id);

@@ -69,6 +69,8 @@ class Idx_Broker_Plugin
         if (!get_option('idx-results-url')) {
             add_option('idx-results-url');
         }
+        update_option('idx-broker-plugin-version', self::IDX_WP_PLUGIN_VERSION);
+
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
         $wrappers = new \IDX\Wrappers();
         $wrappers->register_wrapper_post_type();

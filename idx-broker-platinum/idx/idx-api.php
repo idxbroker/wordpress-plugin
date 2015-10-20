@@ -109,7 +109,7 @@ class Idx_Api
         $level = 'clients',
         $params = array(),
         $expiration = 7200,
-        $request_type = 'get'
+        $request_type = 'GET'
     ) {
         $cache_key = 'idx_' . $method . '_cache';
         if (($data = get_transient($cache_key))) {
@@ -125,16 +125,16 @@ class Idx_Api
         );
 
         $params = array_merge(array('timeout' => 120, 'sslverify' => false, 'headers' => $headers), $params);
-
         $url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
-        if ($request_type === 'get') {
+        if ($request_type === 'GET') {
             $response = wp_remote_get($url, $params);
-        } else {
+        } elseif ($request_type === 'POST') {
             $response = wp_safe_remote_post($url, $params);
+        } else {
+            $response = wp_remote_request($url, $params);
         }
 
-        $response = wp_remote_get($url, $params);
         $response = (array) $response;
 
         extract($this->apiResponse($response)); // get code and error message if any, assigned to vars $code and $error
@@ -326,12 +326,14 @@ class Idx_Api
     public function clear_wrapper_cache()
     {
         $this->idx_api(
-            'dynamicwrapperurl',
-            Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+            'wrappercache',
+            $this->idx_api_get_apiversion(),
             'clients',
-            array(),
+            array(
+                'method' => 'DELETE',
+            ),
             10,
-            'post'
+            'DELETE'
         );
     }
 

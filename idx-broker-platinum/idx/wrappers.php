@@ -85,7 +85,7 @@ class Wrappers
         update_option('idx_broker_dynamic_wrapper_page_id', $wrapper_page_id);
         $wrapper_page_url = get_permalink($wrapper_page_id);
         $idx_api = new Idx_Api();
-        $idx_api->idx_api("dynamicwrapperurl", $idx_api->idx_api_get_apiversion(), 'clients', array('body' => array('dynamicURL' => $wrapper_page_url)), 10, 'post');
+        $idx_api->idx_api("dynamicwrapperurl", $idx_api->idx_api_get_apiversion(), 'clients', array('body' => array('dynamicURL' => $wrapper_page_url)), 10, 'POST');
 
         die(json_encode(array("wrapper_page_id" => $wrapper_page_id, "wrapper_page_name" => $post_title)));
     }

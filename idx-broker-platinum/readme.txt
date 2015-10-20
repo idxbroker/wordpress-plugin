@@ -86,6 +86,10 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * This plugin now has its own Top Menu. Say goodbye to searching for plugin preferences in the Settings Menu.
 * The Admin page is now fully responsive allowing you easily to make WordPress changes from your mobile device.
 
+= 1.2.4 =
+* Fixed an issue with shortcodes and widgets not working properly for some users.
+* Added backwards compatability with legacy dynamic wrapper usage in themes.
+
 = 1.2.3 =
 * Fix bug with omnibar data not updating properly.
 

@@ -7,6 +7,7 @@ class Initiate_Plugin
     {
         $this->set_defaults();
         include 'backwards-compatibility.php';
+        add_action('init', array($this, 'update_triggered'));
         add_action('wp_head', array($this, 'display_wpversion'));
         add_action('wp_head', array($this, 'idx_broker_activated'));
         add_filter("plugin_action_links_" . plugin_basename(dirname(dirname(__FILE__))) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
@@ -51,6 +52,20 @@ class Initiate_Plugin
         global $wpdb;
         if ($wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "posts_idx';") !== null) {
             new Migrate_Old_Table();
+        }
+    }
+
+    public function plugin_updated()
+    {
+        if (get_option('idx-broker-plugin-version') < \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION) {
+            return true;
+        }
+    }
+
+    public function update_triggered()
+    {
+        if ($this->plugin_updated()) {
+            $this->idx_omnibar_get_locations();
         }
     }
 
