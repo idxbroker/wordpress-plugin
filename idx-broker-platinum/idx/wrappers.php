@@ -24,14 +24,17 @@ class Wrappers
             'show_in_nav_menus' => false,
             'capability_type' => 'post',
             'has_archive' => false,
+            'hierarchical' => false,
+            'rewrite' => array('pages' => false),
         );
         register_post_type('idx-wrapper', $args);
     }
 
     public function wrapper_styles()
     {
+        //Add styles hiding the post title and previous/next links via the stylesheet
         global $post;
-        if ($post->post_type === 'idx-wrapper') {
+        if ($post && $post->post_type === 'idx-wrapper') {
             wp_enqueue_style(
                 'idx-wrappers',
                 plugins_url(
