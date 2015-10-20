@@ -9,6 +9,7 @@ class Wrappers
         add_action('wp_ajax_delete_dynamic_page', array($this, 'idx_ajax_delete_dynamic_page'));
         add_action('init', array($this, 'register_wrapper_post_type'));
         add_filter('default_content', array($this, 'idx_wrapper_content'), 10, 2);
+        add_action('wp_enqueue_scripts', array($this, 'wrapper_styles'));
     }
 
     public function register_wrapper_post_type()
@@ -27,11 +28,25 @@ class Wrappers
         register_post_type('idx-wrapper', $args);
     }
 
+    public function wrapper_styles()
+    {
+        global $post;
+        if ($post->post_type === 'idx-wrapper') {
+            wp_enqueue_style(
+                'idx-wrappers',
+                plugins_url(
+                    '../assets/css/idx-wrappers.css',
+                    __FILE__
+                )
+            );
+        }
+    }
+
 //check if theme includes idxstart and stop tags
     public function does_theme_include_idx_tag()
     {
         // default page content
-        $post_content = '<div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div><style>.entry-title, .entry-meta, .adjacent-entry-pagination, .post-navigation, .breadcrumb {display: none;}</style>';
+        $post_content = '<div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div>';
         // get theme to check start/stop tag
         $does_theme_include_idx_tag = false;
         $template_root = get_theme_root() . DIRECTORY_SEPARATOR . get_stylesheet();
@@ -98,5 +113,4 @@ class Wrappers
         }
         die();
     }
-
 }
