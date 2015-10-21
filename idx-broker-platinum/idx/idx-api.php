@@ -353,7 +353,7 @@ class Idx_Api
         $system_link_names = array();
 
         foreach ($links as $link) {
-            $system_link_names[] = $link->name;
+            $system_link_names[] = $link->linkTitle;
         }
 
         return $system_link_names;

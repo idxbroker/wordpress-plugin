@@ -9,6 +9,8 @@ class Idx_Pages
         // $this->delete_all_idx_pages();
         add_action('admin_init', array($this, 'create_idx_pages'), 10);
 
+        add_action('admin_init', array($this, 'delete_idx_pages'));
+
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
 
         add_action('init', array($this, 'register_idx_page_type'));
@@ -99,20 +101,27 @@ class Idx_Pages
             return;
         }
 
+        $saved_link_urls = $this->idx_api->all_saved_link_urls();
+
+        $saved_link_names = $this->idx_api->all_saved_link_names();
+
         $system_link_urls = $this->idx_api->all_system_link_urls();
 
         $system_link_names = $this->idx_api->all_system_link_names();
 
-        if (empty($system_link_urls) || empty($system_link_names)) {
+        if (empty($system_link_urls) || empty($system_link_names) || empty($saved_link_urls) || empty($saved_link_names)) {
             return;
         }
+
+        $idx_urls = array_merge($saved_link_urls, $system_link_urls);
+        $idx_names = array_merge($saved_link_names, $system_link_names);
 
         foreach ($posts as $post) {
             // post_name oddly refers to permalink in the db
             // if an idx hosted page url or title has been changed,
             // delete the page from the wpdb
             // the updated page will be repopulated automatically
-            if (!in_array($post->post_name, $system_link_urls) || !in_array($post->post_title, $system_link_names)) {
+            if (!in_array($post->post_name, $idx_urls) || !in_array($post->post_title, $idx_names)) {
                 wp_delete_post($post->ID);
             }
         }

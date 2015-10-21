@@ -25,7 +25,8 @@ class Idx_Broker_Plugin
 
         if ($this->php_version_check()) {
             require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
-            new IDX\Initiate_Plugin();
+            //eval is used to prevent namespace errors in parsing with PHP < 5.3
+            eval('new IDX\Initiate_Plugin();');
             /** Function that is executed when plugin is activated. **/
             register_activation_hook(__FILE__, array($this, 'idx_activate'));
             register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
@@ -72,7 +73,7 @@ class Idx_Broker_Plugin
         update_option('idx-broker-plugin-version', self::IDX_WP_PLUGIN_VERSION);
 
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
-        $wrappers = new \IDX\Wrappers();
+        eval('$wrappers = new \IDX\Wrappers();');
         $wrappers->register_wrapper_post_type();
 
         flush_rewrite_rules();
@@ -93,8 +94,8 @@ class Idx_Broker_Plugin
             wp_trash_post($page_id);
         }
         //clear transients made by the plugin
-        \IDX\Idx_Api::idx_clean_transients();
-        $idx_pages = new \IDX\Idx_Pages();
+        eval('\IDX\Idx_Api::idx_clean_transients();');
+        eval('$idx_pages = new \IDX\Idx_Pages();');
         $idx_pages->delete_all_idx_pages();
     }
 
