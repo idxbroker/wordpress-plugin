@@ -57,7 +57,7 @@ class Initiate_Plugin
 
     public function plugin_updated()
     {
-        if (get_option('idx-broker-plugin-version') < \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION) {
+        if (!get_option('idx-broker-plugin-version') || get_option('idx-broker-plugin-version') < \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION) {
             return true;
         }
     }
@@ -65,6 +65,8 @@ class Initiate_Plugin
     public function update_triggered()
     {
         if ($this->plugin_updated()) {
+            //update db option and update omnibar data
+            update_option('idx-broker-plugin-version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
             $this->idx_omnibar_get_locations();
         }
     }

@@ -88,8 +88,6 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Map Search Widget scripts are now only loaded when a map search widget is on the page speeding up the rest of your website.
 * This plugin now has its own Top Menu. Say goodbye to searching for plugin preferences in the Settings Menu.
 * The Admin page is now fully responsive allowing you easily to make WordPress changes from your mobile device.
-
-= 1.2.4 =
 * Fixed an issue with shortcodes and widgets not working properly for some users.
 * Added backwards compatability with legacy dynamic wrapper usage in themes.
 
