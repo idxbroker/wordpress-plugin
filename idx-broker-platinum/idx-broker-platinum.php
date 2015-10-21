@@ -3,7 +3,7 @@
 Plugin Name: IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.3.0
+Version: 1.3.1
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -18,7 +18,7 @@ new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
 {
     //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '1.3.0';
+    const IDX_WP_PLUGIN_VERSION = '1.3.1';
 
     public function __construct()
     {
@@ -94,6 +94,8 @@ class Idx_Broker_Plugin
         }
         //clear transients made by the plugin
         \IDX\Idx_Api::idx_clean_transients();
+        $idx_pages = new \IDX\Idx_Pages();
+        $idx_pages->delete_all_idx_pages();
     }
 
 }
