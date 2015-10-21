@@ -98,7 +98,7 @@ class Initiate_Plugin
         echo "<!-- IDX Broker WordPress Plugin Wrapper Meta-->\n\n";
         global $post;
         //If wrapper, add noindex tag which is stripped out by our system
-        if ($post && $post->post_type === 'wrappers') {
+        if ($post && $post->post_type === 'idx-wrapper') {
             echo "<meta name='idx-robot'>\n";
             echo "<meta name='robots' content='noindex,nofollow'>\n";
         }
