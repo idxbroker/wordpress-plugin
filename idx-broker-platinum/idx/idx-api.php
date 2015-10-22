@@ -144,7 +144,6 @@ class Idx_Api
         if ($this->get_transient('idx_systemlinks_cache')) {
             $this->delete_transient('idx_systemlinks_cache');
         }
-        $this->clear_wrapper_cache();
     }
 
     /**
@@ -357,20 +356,6 @@ class Idx_Api
         }
 
         return $system_link_names;
-    }
-
-    public function clear_wrapper_cache()
-    {
-        $this->idx_api(
-            'wrappercache',
-            $this->idx_api_get_apiversion(),
-            'clients',
-            array(
-                'method' => 'DELETE',
-            ),
-            10,
-            'DELETE'
-        );
     }
 
 }

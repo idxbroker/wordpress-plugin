@@ -92,7 +92,7 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Added backwards compatability with legacy dynamic wrapper usage in themes.
 
 = 1.2.3 =
-* Fix bug with omnibar data not updating properly.
+* Fixed bug with omnibar data not updating properly.
 
 = 1.2.2 =
 * Restructured code and made it more WP4.3 and PSR compliant.
