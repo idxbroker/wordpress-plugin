@@ -95,6 +95,8 @@ class Idx_Broker_Plugin
         }
         //clear transients made by the plugin
         eval('\IDX\Idx_Api::idx_clean_transients();');
+        eval('$idx_pages = new \IDX\Idx_Pages();');
+        $idx_pages->delete_all_idx_pages();
     }
 
 }
