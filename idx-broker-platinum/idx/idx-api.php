@@ -196,7 +196,6 @@ class Idx_Api
         if (!get_option('idx_broker_apikey')) {
             return Initiate_Plugin::IDX_API_DEFAULT_VERSION;
         }
-
         $data = $this->idx_api('apiversion', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 86400);
         if (is_array($data) && !empty($data)) {
             return $data['version'];
@@ -356,6 +355,20 @@ class Idx_Api
         }
 
         return $system_link_names;
+    }
+
+    public function clear_wrapper_cache()
+    {
+        $this->idx_api(
+            'wrappercache',
+            $this->idx_api_get_apiversion(),
+            'clients',
+            array(
+                'method' => 'DELETE',
+            ),
+            10,
+            'DELETE'
+        );
     }
 
 }

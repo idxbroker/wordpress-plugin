@@ -10,6 +10,7 @@ class Idx_Pages
         add_action('admin_init', array($this, 'create_idx_pages'), 10);
 
         add_action('admin_init', array($this, 'delete_idx_pages'));
+        add_action('admin_init', array($this, 'show_idx_pages_metabox_by_default'));
 
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
 
@@ -185,5 +186,33 @@ class Idx_Pages
         }
 
         return $existing;
+    }
+
+    public function show_idx_pages_metabox_by_default()
+    {
+
+        $user = wp_get_current_user();
+
+        $user_first_login = get_user_meta($user->ID, 'idx_user_first_login', true);
+
+        // Only update the user meta on the first login (after IDX features have been enabled).
+        // This ensures that the user can hide the IDX Pages metabox again if they want
+        if (!empty($user_first_login)) {
+            return;
+        }
+
+        $hidden_metaboxes_on_nav_menus_page = (array) get_user_meta($user->ID, 'metaboxhidden_nav-menus', true);
+
+        foreach ($hidden_metaboxes_on_nav_menus_page as $key => $value) {
+
+            if ($value == 'add-idx_page') {
+                unset($hidden_metaboxes_on_nav_menus_page[$key]);
+            }
+        }
+
+        update_user_meta($user->ID, 'metaboxhidden_nav-menus', $hidden_metaboxes_on_nav_menus_page);
+
+        // add a meta field to keep track of the first login
+        update_user_meta($user->ID, 'idx_user_first_login', 'user_first_login_false');
     }
 }
