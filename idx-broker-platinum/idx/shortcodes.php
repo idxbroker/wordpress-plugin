@@ -154,17 +154,17 @@ class Shortcodes
     {
         if ($type == 0) {
             // if the cache has expired, send an API request to update them. Cache expires after 2 hours.
-            if (!get_transient('idx_systemlinks_cache')) {
+            if (!$this->idx_api->get_transient('idx_systemlinks_cache')) {
                 $this->idx_api->idx_api_get_systemlinks();
             }
 
-            $idx_links = get_transient('idx_systemlinks_cache');
+            $idx_links = $this->idx_api->get_transient('idx_systemlinks_cache');
         } elseif ($type == 1) {
             if (!get_transient('idx_savedlinks_cache')) {
                 $this->idx_api->idx_api_get_savedlinks();
             }
 
-            $idx_links = get_transient('idx_savedlinks_cache');
+            $idx_links = $this->idx_api->get_transient('idx_savedlinks_cache');
         }
 
         $selected_link = '';
@@ -259,7 +259,8 @@ class Shortcodes
  */
     public static function show_widget_shortcodes()
     {
-        $idx_widgets = get_transient('idx_widgetsrc_cache');
+        $idx_api = new Idx_Api();
+        $idx_widgets = $idx_api->get_transient('idx_widgetsrc_cache');
         $available_shortcodes = '';
 
         if ($idx_widgets) {
