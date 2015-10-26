@@ -3,7 +3,7 @@
 Plugin Name: IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 1.2.4
+Version: 1.3.0
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -12,21 +12,21 @@ License: GPLv2 or later
 
 // Report all errors during development. Remember to hash out when sending to production.
 
-//error_reporting(E_ALL);
+// error_reporting(E_ALL);
 
 new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
 {
     //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '1.2.4';
+    const IDX_WP_PLUGIN_VERSION = '1.3.0';
 
     public function __construct()
     {
 
         if ($this->php_version_check()) {
             require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
-            new IDX\Initiate_Plugin();
-            include 'idx' . DIRECTORY_SEPARATOR . 'backwards-compatibility.php';
+            //eval is used to prevent namespace errors in parsing with PHP < 5.3
+            eval('new IDX\Initiate_Plugin();');
             /** Function that is executed when plugin is activated. **/
             register_activation_hook(__FILE__, array($this, 'idx_activate'));
             register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
@@ -67,23 +67,16 @@ class Idx_Broker_Plugin
 
     public static function idx_activate()
     {
-        global $wpdb;
-        if ($wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "posts_idx'") != $wpdb->prefix . 'posts_idx') {
-            $sql = "CREATE TABLE " . $wpdb->prefix . "posts_idx" . " (
-                    `id` int(11) NOT NULL AUTO_INCREMENT,
-                    `post_id` int(11) NOT NULL,
-                    `uid` varchar(255) NOT NULL,
-                    `link_type` int(11) NOT NULL COMMENT '0 for system link and 1 for saved link',
-                    PRIMARY KEY (`id`)
-                    )";
-
-            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-            dbDelta($sql);
-        } // end if
-
         if (!get_option('idx-results-url')) {
             add_option('idx-results-url');
         }
+        update_option('idx-broker-plugin-version', self::IDX_WP_PLUGIN_VERSION);
+
+        //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
+        eval('$wrappers = new \IDX\Wrappers();');
+        $wrappers->register_wrapper_post_type();
+
+        flush_rewrite_rules();
     } // end idx_activate fn
 
     //deactivate hook
@@ -100,10 +93,8 @@ class Idx_Broker_Plugin
             wp_delete_post($page_id, true);
             wp_trash_post($page_id);
         }
-        //disable scheduled update for omnibar
-        wp_clear_scheduled_hook('idx_omnibar_get_locations');
         //clear transients made by the plugin
-        \IDX\Idx_Api::idx_clean_transients();
+        eval('\IDX\Idx_Api::idx_clean_transients();');
     }
 
 }

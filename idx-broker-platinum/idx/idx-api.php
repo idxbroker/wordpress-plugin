@@ -108,7 +108,8 @@ class Idx_Api
         $apiversion = Initiate_Plugin::IDX_API_DEFAULT_VERSION,
         $level = 'clients',
         $params = array(),
-        $expiration = 7200
+        $expiration = 7200,
+        $request_type = 'GET'
     ) {
         $cache_key = 'idx_' . $method . '_cache';
         if (($data = get_transient($cache_key))) {
@@ -124,10 +125,16 @@ class Idx_Api
         );
 
         $params = array_merge(array('timeout' => 120, 'sslverify' => false, 'headers' => $headers), $params);
-
         $url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
-        $response = wp_remote_get($url, $params);
+        if ($request_type === 'GET') {
+            $response = wp_remote_get($url, $params);
+        } elseif ($request_type === 'POST') {
+            $response = wp_safe_remote_post($url, $params);
+        } else {
+            $response = wp_remote_request($url, $params);
+        }
+
         $response = (array) $response;
 
         extract($this->apiResponse($response)); // get code and error message if any, assigned to vars $code and $error
@@ -149,39 +156,170 @@ class Idx_Api
      * @param void
      * @return void
      */
-    public static function idx_clean_transients()
+    public function idx_clean_transients()
     {
-        // clean old key before 1.1.6
-        if (get_transient('idx_savedlink_cache')) {
-            delete_transient('idx_savedlink_cache');
-        }
-        if (get_transient('idx_widget_cache')) {
-            delete_transient('idx_widget_cache');
-        }
-
         if (get_transient('idx_savedlinks_cache')) {
             delete_transient('idx_savedlinks_cache');
         }
-
         if (get_transient('idx_widgetsrc_cache')) {
             delete_transient('idx_widgetsrc_cache');
         }
         if (get_transient('idx_systemlinks_cache')) {
             delete_transient('idx_systemlinks_cache');
         }
-        if (get_transient('idx_apiversion_cache')) {
-            delete_transient('idx_apiversion_cache');
+    }
+
+    public function system_results_url()
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return false;
         }
-        //ccz transients from idx-omnibar-get-locations.php
-        if (get_transient('idx_cities/combinedActiveMLS_cache')) {
-            delete_transient('idx_cities/combinedActiveMLS_cache');
+
+        foreach ($links as $link) {
+            if ($link->systemresults) {
+                $results_url = $link->url;
+            }
         }
-        if (get_transient('idx_counties/combinedActiveMLS_cache')) {
-            delete_transient('idx_counties/combinedActiveMLS_cache');
+
+        // What if or can they have more than one system results page?
+        if (isset($results_url)) {
+            return $results_url;
         }
-        if (get_transient('idx_zipcodes/combinedActiveMLS_cache')) {
-            delete_transient('idx_zipcodes/combinedActiveMLS_cache');
+
+        return false;
+    }
+
+    /**
+     * Returns the url of the link
+     *
+     * @param string $name name of the link to return the url of
+     * @return bool|string
+     */
+    public function system_link_url($name)
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return false;
         }
+
+        foreach ($links as $link) {
+            if ($name == $link->name) {
+                return $link->url;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the url of the first system link found with
+     * a category of "details"
+     *
+     * @return bool|string link url if found else false
+     */
+    public function details_url()
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return false;
+        }
+
+        foreach ($links as $link) {
+            if ('details' == $link->category) {
+                return $link->url;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns an array of system link urls
+     *
+     * @return array
+     */
+    public function all_system_link_urls()
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return array();
+        }
+
+        $system_link_urls = array();
+
+        foreach ($links as $link) {
+            $system_link_urls[] = $link->url;
+        }
+
+        return $system_link_urls;
+    }
+
+    /**
+     * Returns an array of system link names
+     *
+     * @return array
+     */
+    public function all_system_link_names()
+    {
+
+        $links = $this->idx_api_get_systemlinks();
+
+        if (!$links) {
+            return array();
+        }
+
+        $system_link_names = array();
+
+        foreach ($links as $link) {
+            $system_link_names[] = $link->name;
+        }
+
+        return $system_link_names;
+    }
+
+    public function all_saved_link_urls()
+    {
+
+        $links = $this->idx_api_get_savedlinks();
+
+        if (!$links) {
+            return array();
+        }
+
+        $system_link_urls = array();
+
+        foreach ($links as $link) {
+            $system_link_urls[] = $link->url;
+        }
+
+        return $system_link_urls;
+    }
+
+    public function all_saved_link_names()
+    {
+
+        $links = $this->idx_api_get_savedlinks();
+
+        if (!$links) {
+            return array();
+        }
+
+        $system_link_names = array();
+
+        foreach ($links as $link) {
+            $system_link_names[] = $link->linkTitle;
+        }
+
+        return $system_link_names;
     }
 
 }

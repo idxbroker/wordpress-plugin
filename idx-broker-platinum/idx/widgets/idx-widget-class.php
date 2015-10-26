@@ -50,7 +50,7 @@ class Idx_Widget_Class extends \WP_Widget
         echo $before_widget;
         echo $before_title;
 
-        if ($instance['title'] == '!%hide_title!%') // if client puts in '!%hide_title!%' for widget title in WP front-end, will display no title
+        if ((!empty($instance['title'])) && $instance['title'] == '!%hide_title!%') // if client puts in '!%hide_title!%' for widget title in WP front-end, will display no title
         {
             echo '';
         } else if (!empty($instance['title'])) // else if WP title isn't empty, display that
@@ -61,9 +61,17 @@ class Idx_Widget_Class extends \WP_Widget
         }
         // if no WP title and not specifically set to 'none', display IDX Widget title which is in $args param
 
-        echo $after_title;
-        echo "<script src='{$this->widget_url}'></script>";
-        echo $after_widget;
+        //only load leaflet scripts and styles for map search widget. WP takes care of duplicates automatically
+        if (strpos($this->widget_url, 'mapwidgetjs.php')) {
+            wp_enqueue_script('custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__);
+            wp_enqueue_script('custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__);
+            wp_enqueue_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
+            echo $after_title . "<script src=\"{$this->widget_url}\" defer></script>" . $after_widget;
+        } else {
+            echo $after_title;
+            echo "<script src='{$this->widget_url}'></script>";
+            echo $after_widget;
+        }
 
     } // end widget function
 
