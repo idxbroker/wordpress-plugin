@@ -129,6 +129,9 @@ class Wrappers
     {
         $post_id = get_the_ID();
         $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page')[0];
+        if (!empty($saved_wrapper_page)) {
+            $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page')[0];
+        }
         if ($value === $saved_wrapper_page) {
             return 'selected';
         }
@@ -136,7 +139,7 @@ class Wrappers
 
     public function wrapper_page_dropdown($system_links, $saved_links)
     {
-        echo "<select name=\"idx-wrapper-page\">";
+        echo "<select name=\"idx-wrapper-page\" class=\"idx-wrapper-page\">";
         echo "<option value=\"none\" {$this->is_selected('none')}>None</option>";
         echo "<option value=\"global\" {$this->is_selected('global')}>Globally</option>";
         foreach ($system_links as $system_link) {
@@ -164,6 +167,9 @@ class Wrappers
         $saved_links = $idx_api->idx_api_get_savedlinks();
         wp_nonce_field('idx-wrapper-page', 'idx-wrapper-page-nonce');
         $this->wrapper_page_dropdown($system_links, $saved_links);
+        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
+        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
+        wp_enqueue_script('idx-wrapper', plugins_url('../assets/js/idx-wrappers.js', __FILE__));
 
     }
 
@@ -216,4 +222,3 @@ class Wrappers
         return true;
     }
 }
-// var_dump(get_post_meta(1500, 'idx-wrapper-page'));
