@@ -3,6 +3,12 @@ namespace IDX;
 
 class Idx_Api
 {
+    public function __construct()
+    {
+        $this->api_key = get_option('idx_broker_apikey');
+    }
+
+    public $api_key;
     /**
      * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
      * @param  [array] $response [response header from API call]
@@ -59,7 +65,7 @@ class Idx_Api
 
         $headers = array(
             'Content-Type' => 'application/x-www-form-urlencoded',
-            'accesskey' => get_option('idx_broker_apikey'),
+            'accesskey' => $this->api_key,
             'outputtype' => 'json',
             'apiversion' => $apiversion,
             'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
@@ -68,14 +74,11 @@ class Idx_Api
         $params = array_merge(array('timeout' => 120, 'sslverify' => false, 'headers' => $headers), $params);
         $url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
-        if ($request_type === 'GET') {
-            $response = wp_remote_get($url, $params);
-        } elseif ($request_type === 'POST') {
+        if ($request_type === 'POST') {
             $response = wp_safe_remote_post($url, $params);
         } else {
-            $response = wp_remote_request($url, $params);
+            $response = wp_remote_get($url, $params);
         }
-
         $response = (array) $response;
 
         extract($this->apiResponse($response)); // get code and error message if any, assigned to vars $code and $error
@@ -155,7 +158,7 @@ class Idx_Api
      */
     public function idx_api_get_systemlinks()
     {
-        if (!get_option('idx_broker_apikey')) {
+        if (!$this->api_key) {
             return array();
         }
         return $this->idx_api('systemlinks', $this->idx_api_get_apiversion());
@@ -169,7 +172,7 @@ class Idx_Api
      */
     public function idx_api_get_savedlinks()
     {
-        if (!get_option('idx_broker_apikey')) {
+        if (!$this->api_key) {
             return array();
         }
         return $this->idx_api('savedlinks', $this->idx_api_get_apiversion());
@@ -183,7 +186,7 @@ class Idx_Api
      */
     public function idx_api_get_widgetsrc()
     {
-        if (!get_option('idx_broker_apikey')) {
+        if (!$this->api_key) {
             return array();
         }
         return $this->idx_api('widgetsrc', $this->idx_api_get_apiversion());
@@ -194,7 +197,7 @@ class Idx_Api
      */
     public function idx_api_get_apiversion()
     {
-        if (!get_option('idx_broker_apikey')) {
+        if (!$this->api_key) {
             return Initiate_Plugin::IDX_API_DEFAULT_VERSION;
         }
 
@@ -399,16 +402,40 @@ class Idx_Api
 
     public function clear_wrapper_cache()
     {
-        $this->idx_api(
-            'wrappercache',
-            $this->idx_api_get_apiversion(),
-            'clients',
-            array(
-                'method' => 'DELETE',
-            ),
-            10,
-            'DELETE'
+        $idx_broker_key = $this->api_key;
+
+        // access URL and request method
+
+        $url = Initiate_Plugin::IDX_API_URL . '/clients/wrappercache';
+        $method = 'DELETE';
+
+        // headers (required and optional)
+        $headers = array(
+            'Content-Type: application/x-www-form-urlencoded',
+            'accesskey: ' . $idx_broker_key,
+            'outputtype: json',
         );
+
+        // set up cURL
+        $handle = curl_init();
+        curl_setopt($handle, CURLOPT_URL, $url);
+        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($handle, CURLOPT_CUSTOMREQUEST, $method);
+
+        // exec the cURL request and returned information. Store the returned HTTP code in $code for later reference
+        $response = curl_exec($handle);
+        $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+
+        if ($code == 204) {
+            $response = true;
+        } else {
+            $response = false;
+        }
+
+        return $response;
     }
 
 }
