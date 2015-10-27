@@ -144,6 +144,7 @@ class Idx_Api
         if ($this->get_transient('idx_systemlinks_cache')) {
             $this->delete_transient('idx_systemlinks_cache');
         }
+        $this->clear_wrapper_cache();
     }
 
     /**
@@ -196,6 +197,7 @@ class Idx_Api
         if (!get_option('idx_broker_apikey')) {
             return Initiate_Plugin::IDX_API_DEFAULT_VERSION;
         }
+
         $data = $this->idx_api('apiversion', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 86400);
         if (is_array($data) && !empty($data)) {
             return $data['version'];
@@ -355,6 +357,44 @@ class Idx_Api
         }
 
         return $system_link_names;
+    }
+
+    public function find_idx_page_type($idx_page)
+    {
+        //if it is a saved linke, return saved_link otherwise it is a system page
+        $saved_links = $this->idx_api_get_savedlinks();
+        foreach ($saved_links as $saved_link) {
+            $id = $saved_link->id;
+            if ($id === $idx_page) {
+                return 'saved_link';
+            }
+        }
+    }
+
+    public function set_wrapper($idx_page, $wrapper_url)
+    {
+        //if none, quit process
+        if ($idx_page === 'none') {
+            return;
+        } elseif ($idx_page === 'global') {
+            //set Global Wrapper:
+            $this->idx_api("dynamicwrapperurl", $this->idx_api_get_apiversion(), 'clients', array('body' => array('dynamicURL' => $wrapper_url)), 10, 'POST');
+        } else {
+            //find what IDX page type then set the page wrapper
+            $page_type = $this->find_idx_page_type($idx_page);
+            if ($page_type === 'saved_link') {
+                $params = array(
+                    'dynamicURL' => $wrapper_url,
+                    'savedLinkID' => $idx_page,
+                );
+            } else {
+                $params = array(
+                    'dynamicURL' => $wrapper_url,
+                    'pageID' => $idx_page,
+                );
+            }
+            $this->idx_api("dynamicwrapperurl", $this->idx_api_get_apiversion(), 'clients', array('body' => $params), 10, 'POST');
+        }
     }
 
     public function clear_wrapper_cache()
