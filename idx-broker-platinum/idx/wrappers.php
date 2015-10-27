@@ -106,6 +106,7 @@ class Wrappers
         $wrapper_page_url = get_permalink($wrapper_page_id);
         $idx_api = new Idx_Api();
         $idx_api->set_wrapper('global', $wrapper_page_url);
+        update_post_meta($wrapper_page_id, 'idx-wrapper-page', 'global');
 
         die(json_encode(array("wrapper_page_id" => $wrapper_page_id, "wrapper_page_name" => $post_title)));
     }
@@ -139,7 +140,7 @@ class Wrappers
 
     public function wrapper_page_dropdown($system_links, $saved_links)
     {
-        echo "<select name=\"idx-wrapper-page\" class=\"idx-wrapper-page\">";
+        echo "<select class=\"idx-wrapper-page\" name=\"idx-wrapper-page\" style=\"width: 100%;\">";
         echo "<option value=\"none\" {$this->is_selected('none')}>None</option>";
         echo "<option value=\"global\" {$this->is_selected('global')}>Globally</option>";
         foreach ($system_links as $system_link) {
@@ -193,7 +194,11 @@ class Wrappers
         $post_id = get_the_ID();
         $wrapper_page_url = get_permalink($post_id);
         //saved idx page ID
-        $meta_value = sanitize_text_field($_POST['idx-wrapper-page']);
+        if (empty($_POST)) {
+            return;
+        }
+        $meta_value = $_POST['idx-wrapper-page'];
+        $meta_value = sanitize_text_field($meta_value);
         $idx_api = new Idx_Api();
         if (!$this->verify_permissions()) {
             return $post_id;
