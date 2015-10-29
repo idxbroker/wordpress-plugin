@@ -89,7 +89,9 @@ class Idx_Api
             return new \WP_Error("idx_api_error", __("Error {$code}: $error"));
         } else {
             $data = (array) json_decode((string) $response['body']);
-            $this->set_transient($cache_key, $data, $expiration);
+            if ($request_type !== 'POST') {
+                $this->set_transient($cache_key, $data, $expiration);
+            }
             return $data;
         }
     }
