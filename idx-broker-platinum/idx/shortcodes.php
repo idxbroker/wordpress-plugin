@@ -160,7 +160,7 @@ class Shortcodes
 
             $idx_links = $this->idx_api->get_transient('idx_systemlinks_cache');
         } elseif ($type == 1) {
-            if (!get_transient('idx_savedlinks_cache')) {
+            if (!$this->idx_api->get_transient('idx_savedlinks_cache')) {
                 $this->idx_api->idx_api_get_savedlinks();
             }
 
