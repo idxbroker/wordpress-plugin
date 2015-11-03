@@ -23,7 +23,8 @@ class Initiate_Plugin
         //Instantiate Classes
         new Wrappers();
         new Idx_Pages();
-        new Shortcodes();
+        new Shortcodes\Register_Shortcodes();
+        new Shortcodes\Shortcode_Ui();
         new Widgets\Create_Widgets();
         new Omnibar\Create_Omnibar();
 
@@ -31,9 +32,6 @@ class Initiate_Plugin
 
     }
 
-    const SHORTCODE_SYSTEM_LINK = 'idx-platinum-system-link';
-    const SHORTCODE_SAVED_LINK = 'idx-platinum-saved-link';
-    const SHORTCODE_WIDGET = 'idx-platinum-widget';
     const IDX_API_DEFAULT_VERSION = '1.2.0';
     const IDX_API_URL = 'https://api.idxbroker.com/';
 

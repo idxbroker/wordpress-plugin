@@ -1,11 +1,11 @@
 <?php
-namespace IDX;
+namespace IDX\Shortcodes;
 
-class Shortcodes
+class Register_Shortcodes
 {
     public function __construct()
     {
-        $this->idx_api = new Idx_Api();
+        $this->idx_api = new \IDX\Idx_Api();
         add_action('init', array($this, 'idx_buttons'));
         //Adding shortcodes
         add_shortcode('idx-platinum-link', array($this, 'show_link'));
@@ -15,6 +15,10 @@ class Shortcodes
     }
 
     public $idx_api;
+
+    const SHORTCODE_SYSTEM_LINK = 'idx-platinum-system-link';
+    const SHORTCODE_SAVED_LINK = 'idx-platinum-saved-link';
+    const SHORTCODE_WIDGET = 'idx-platinum-widget';
     /**
      * registers the buttons for use
      * @param array $buttons
@@ -32,7 +36,7 @@ class Shortcodes
      */
     public function add_idx_tinymce_plugin($plugin_array)
     {
-        $plugin_array['idx_button'] = plugins_url('../assets/js/idx-buttons.js', __FILE__);
+        $plugin_array['idx_button'] = plugins_url('../assets/js/idx-buttons.js', dirname(__FILE__));
         return $plugin_array;
     }
 
@@ -68,7 +72,7 @@ class Shortcodes
         ), $atts));
 
         if (!is_null($id)) {
-            return Widgets\Create_Widgets::get_widget_by_uid($id);
+            return \IDX\Widgets\Create_Widgets::get_widget_by_uid($id);
         } else {
             return false;
         }
@@ -160,7 +164,7 @@ class Shortcodes
 
             $idx_links = $this->idx_api->get_transient('idx_systemlinks_cache');
         } elseif ($type == 1) {
-            if (!$this->idx_api->get_transient('idx_savedlinks_cache')) {
+            if (!get_transient('idx_savedlinks_cache')) {
                 $this->idx_api->idx_api_get_savedlinks();
             }
 
@@ -189,10 +193,10 @@ class Shortcodes
         $available_shortcodes = '';
 
         if ($link_type === 0) {
-            $short_code = Initiate_Plugin::SHORTCODE_SYSTEM_LINK;
+            $short_code = self::SHORTCODE_SYSTEM_LINK;
             $idx_links = $this->idx_api->idx_api_get_systemlinks();
         } elseif ($link_type == 1) {
-            $short_code = Initiate_Plugin::SHORTCODE_SAVED_LINK;
+            $short_code = self::SHORTCODE_SAVED_LINK;
             $idx_links = $this->idx_api->idx_api_get_savedlinks();
         } else {
             return false;
@@ -223,7 +227,7 @@ class Shortcodes
         $available_shortcodes = "";
 
         if ($idx_link->systemresults != 1) {
-            $link_short_code = '[' . Initiate_Plugin::SHORTCODE_SYSTEM_LINK . ' id ="' . $idx_link->uid . '" title ="' . $idx_link->name . '"]';
+            $link_short_code = '[' . self::SHORTCODE_SYSTEM_LINK . ' id ="' . $idx_link->uid . '" title ="' . $idx_link->name . '"]';
             $available_shortcodes .= '<div class="each_shortcode_row">';
             $available_shortcodes .= '<input type="hidden" id=\'' . $idx_link->uid . '\' value=\'' . $link_short_code . '\'>';
             $available_shortcodes .= '<span>' . $idx_link->name . '&nbsp;<a name="' . $idx_link->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $idx_link->uid . '\')" class="shortcode_link">insert</a>
@@ -242,7 +246,7 @@ class Shortcodes
     public static function get_saved_link_html($idx_link)
     {
         $available_shortcodes = "";
-        $link_short_code = '[' . Initiate_Plugin::SHORTCODE_SAVED_LINK . ' id ="' . $idx_link->uid . '" title ="' . $idx_link->linkTitle . '"]';
+        $link_short_code = '[' . self::SHORTCODE_SAVED_LINK . ' id ="' . $idx_link->uid . '" title ="' . $idx_link->linkTitle . '"]';
         $available_shortcodes .= '<div class="each_shortcode_row">';
         $available_shortcodes .= '<input type="hidden" id=\'' . $idx_link->uid . '\' value=\'' . $link_short_code . '\'>';
         $available_shortcodes .= '<span>' . $idx_link->linkTitle . '&nbsp;<a name="' . $idx_link->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $idx_link->uid . '\')" class="shortcode_link">insert</a>
@@ -259,13 +263,13 @@ class Shortcodes
  */
     public static function show_widget_shortcodes()
     {
-        $idx_api = new Idx_Api();
+        $idx_api = new \IDX\Idx_Api();
         $idx_widgets = $idx_api->get_transient('idx_widgetsrc_cache');
         $available_shortcodes = '';
 
         if ($idx_widgets) {
             foreach ($idx_widgets as $widget) {
-                $widget_shortcode = '[' . Initiate_Plugin::SHORTCODE_WIDGET . ' id ="' . $widget->uid . '"]';
+                $widget_shortcode = '[' . self::SHORTCODE_WIDGET . ' id ="' . $widget->uid . '"]';
                 $available_shortcodes .= '<div class="each_shortcode_row">';
                 $available_shortcodes .= '<input type="hidden" id=\'' . $widget->uid . '\' value=\'' . $widget_shortcode . '\'>';
                 $available_shortcodes .= '<span>' . $widget->name . '&nbsp;<a name="' . $widget->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $widget->uid . '\')">insert</a></span>';

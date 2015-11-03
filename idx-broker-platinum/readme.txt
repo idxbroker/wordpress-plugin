@@ -89,7 +89,6 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 * Map Search Widget scripts are now only loaded when a map search widget is on the page speeding up the rest of your website.
 * This plugin now has its own Top Menu. Say goodbye to searching for plugin preferences in the Settings Menu.
 * The Admin page is now fully responsive allowing you easily to make WordPress changes from your mobile device.
-* The Refresh Plugin Options button now also clears the Wrapper Cache. If your IDX Pages do not match your website after a change made within the last 3 hours, hitting this button should resolve the issue immediately. The wrapper cache updates automatically every few hours otherwise.
 
 = 1.2.4 =
 * Fixed bug where a Parse Error was displayed instead of a notification to upgrade the PHP version to higher than 5.2 when activating.
