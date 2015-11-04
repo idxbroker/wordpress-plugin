@@ -62,8 +62,17 @@ document.addEventListener('DOMContentLoaded', function(event){
 
     //get options for the shortcode type selected before insertion
     function getShortcodeData(event){
-        shortcodeType = event.target.parentNode.getAttribute('data-short-name');
-                // console.log(shortcodeType)
+        var nodeName = event.target.nodeName;
+        //prevent bug where clicking on the icon does not give correct shortname attribute
+        if(nodeName === 'I'){
+            shortcodeType = event.target.parentNode.parentNode.getAttribute('data-short-name');
+        } else{
+            shortcodeType = event.target.parentNode.getAttribute('data-short-name');
+        }
+        overView.style.display = 'none';
+        editOptions.style.display = 'block';
+        //Display Loading Icon while Options Load
+        editOptions.innerHTML = "<div class=\"idx-loader\"></div>";
         return jQuery.post(
             ajaxurl, {
                 'action': 'idx_shortcode_options',
@@ -73,8 +82,6 @@ document.addEventListener('DOMContentLoaded', function(event){
                 var select = editOptions.querySelector('select');
                 jQuery(select).select2();
                 insertButton.removeAttribute('disabled');
-                overView.style.display = 'none';
-                editOptions.style.display = 'block';
                 shortcodeDetailTitle(shortcodeType);
                 updateTitle();
                 jQuery(select).on('change', updateTitle);
