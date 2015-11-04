@@ -197,6 +197,9 @@ class Wrappers
         if (empty($_POST)) {
             return;
         }
+        if (empty($_POST['idx-wrapper-page'])) {
+            return;
+        }
         $meta_value = $_POST['idx-wrapper-page'];
         $meta_value = sanitize_text_field($meta_value);
         $idx_api = new Idx_Api();

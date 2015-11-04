@@ -6,7 +6,6 @@ class Register_Shortcodes
     public function __construct()
     {
         $this->idx_api = new \IDX\Idx_Api();
-        add_action('init', array($this, 'idx_buttons'));
         //Adding shortcodes
         add_shortcode('idx-platinum-link', array($this, 'show_link'));
         add_shortcode('idx-platinum-saved-link', array($this, 'show_saved_link'));
@@ -19,44 +18,6 @@ class Register_Shortcodes
     const SHORTCODE_SYSTEM_LINK = 'idx-platinum-system-link';
     const SHORTCODE_SAVED_LINK = 'idx-platinum-saved-link';
     const SHORTCODE_WIDGET = 'idx-platinum-widget';
-    /**
-     * registers the buttons for use
-     * @param array $buttons
-     */
-    public function register_idx_buttons($buttons)
-    {
-        // inserts a separator between existing buttons and our new one
-        array_push($buttons, "|", "idx_button");
-        return $buttons;
-    }
-
-    /**
-     * add the button to the tinyMCE bar
-     * @param array $plugin_array
-     */
-    public function add_idx_tinymce_plugin($plugin_array)
-    {
-        $plugin_array['idx_button'] = plugins_url('../assets/js/idx-buttons.js', dirname(__FILE__));
-        return $plugin_array;
-    }
-
-    /**
-     * filters the tinyMCE buttons and adds our custom buttons
-     */
-    public function idx_buttons()
-    {
-        // Don't bother doing this stuff if the current user lacks permissions
-        if (!current_user_can('edit_posts') && !current_user_can('edit_pages')) {
-            return;
-        }
-
-        // Add only in Rich Editor mode
-        if (get_user_option('rich_editing') == 'true') {
-            // filter the tinyMCE buttons and add our own
-            add_filter("mce_external_plugins", array($this, "add_idx_tinymce_plugin"));
-            add_filter('mce_buttons', array($this, 'register_idx_buttons'));
-        } // end if rich editing true
-    }
 
     /**
      * Function to show a idx link with shortcode of type:
@@ -181,104 +142,6 @@ class Register_Shortcodes
             }
         }
         return $selected_link;
-    }
-
-/**
- * Function to print the system/saved link shortcodes.
- *
- * @param int $link_type 0 for system link and 1 for saved link
- */
-    public function show_link_short_codes($link_type = 0)
-    {
-        $available_shortcodes = '';
-
-        if ($link_type === 0) {
-            $short_code = self::SHORTCODE_SYSTEM_LINK;
-            $idx_links = $this->idx_api->idx_api_get_systemlinks();
-        } elseif ($link_type == 1) {
-            $short_code = self::SHORTCODE_SAVED_LINK;
-            $idx_links = $this->idx_api->idx_api_get_savedlinks();
-        } else {
-            return false;
-        }
-
-        if (count($idx_links) > 0 && is_array($idx_links)) {
-            foreach ($idx_links as $idx_link) {
-                if ($link_type === 0) {
-                    $available_shortcodes .= $this->get_system_link_html($idx_link);
-                }
-                if ($link_type == 1) {
-                    $available_shortcodes .= $this->get_saved_link_html($idx_link);
-                }
-            }
-        } else {
-            $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.</div>';
-        }
-        echo $available_shortcodes;
-    }
-
-/**
- * Function to return the HTM for displaying each system link
- * @param object $idx_link
- * @return string
- */
-    public static function get_system_link_html($idx_link)
-    {
-        $available_shortcodes = "";
-
-        if ($idx_link->systemresults != 1) {
-            $link_short_code = '[' . self::SHORTCODE_SYSTEM_LINK . ' id ="' . $idx_link->uid . '" title ="' . $idx_link->name . '"]';
-            $available_shortcodes .= '<div class="each_shortcode_row">';
-            $available_shortcodes .= '<input type="hidden" id=\'' . $idx_link->uid . '\' value=\'' . $link_short_code . '\'>';
-            $available_shortcodes .= '<span>' . $idx_link->name . '&nbsp;<a name="' . $idx_link->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $idx_link->uid . '\')" class="shortcode_link">insert</a>
-        &nbsp;<a href="?uid=' . urlencode($idx_link->uid) . '&current_title=' . urlencode($idx_link->name) . '&short_code=' . urlencode($link_short_code) . '">change title</a>
-        </span>';
-            $available_shortcodes .= '</div>';
-        }
-        return $available_shortcodes;
-    }
-
-/**
- * Function to return the HTM for displaying each saved link
- * @param object $idx_link
- * @return string
- */
-    public static function get_saved_link_html($idx_link)
-    {
-        $available_shortcodes = "";
-        $link_short_code = '[' . self::SHORTCODE_SAVED_LINK . ' id ="' . $idx_link->uid . '" title ="' . $idx_link->linkTitle . '"]';
-        $available_shortcodes .= '<div class="each_shortcode_row">';
-        $available_shortcodes .= '<input type="hidden" id=\'' . $idx_link->uid . '\' value=\'' . $link_short_code . '\'>';
-        $available_shortcodes .= '<span>' . $idx_link->linkTitle . '&nbsp;<a name="' . $idx_link->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $idx_link->uid . '\')" class="shortcode_link">insert</a>
-    &nbsp;<a href="?uid=' . urlencode($idx_link->uid) . '&current_title=' . urlencode($idx_link->linkTitle) . '&short_code=' . urlencode($link_short_code) . '">change title</a>
-    </span>';
-
-        $available_shortcodes .= '</div>';
-
-        return $available_shortcodes;
-    }
-
-/**
- * Function to print the shortcodes of all the widgets
- */
-    public static function show_widget_shortcodes()
-    {
-        $idx_api = new \IDX\Idx_Api();
-        $idx_widgets = $idx_api->get_transient('idx_widgetsrc_cache');
-        $available_shortcodes = '';
-
-        if ($idx_widgets) {
-            foreach ($idx_widgets as $widget) {
-                $widget_shortcode = '[' . self::SHORTCODE_WIDGET . ' id ="' . $widget->uid . '"]';
-                $available_shortcodes .= '<div class="each_shortcode_row">';
-                $available_shortcodes .= '<input type="hidden" id=\'' . $widget->uid . '\' value=\'' . $widget_shortcode . '\'>';
-                $available_shortcodes .= '<span>' . $widget->name . '&nbsp;<a name="' . $widget->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $widget->uid . '\')">insert</a></span>';
-                $available_shortcodes .= '</div>';
-            }
-        } else {
-            $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.</div>';
-        }
-        echo $available_shortcodes;
     }
 
 }

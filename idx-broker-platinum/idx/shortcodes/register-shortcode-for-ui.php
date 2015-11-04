@@ -58,14 +58,15 @@ class Register_Shortcode_For_Ui
     public function show_link_short_codes($link_type = 0)
     {
         $available_shortcodes = '';
-        $available_shortcodes .= "<label for=\"title\">Title</label><input type=\"text\" name=\"title\" id=\"title\">";
 
         if ($link_type === 0) {
             $short_code = Register_Shortcodes::SHORTCODE_SYSTEM_LINK;
             $idx_links = $this->idx_api->idx_api_get_systemlinks();
+            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\"><label for=\"system-link\">Select a System Link</label><select id=\"idx-select-subtype\" style=\"width: 100%;\">";
         } elseif ($link_type == 1) {
             $short_code = Register_Shortcodes::SHORTCODE_SAVED_LINK;
             $idx_links = $this->idx_api->idx_api_get_savedlinks();
+            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\"><label for=\"saved-link\">Select a Saved Link</label><select id=\"idx-select-subtype\" style=\"width: 100%;\">";
         } else {
             return false;
         }
@@ -82,6 +83,8 @@ class Register_Shortcode_For_Ui
         } else {
             $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.</div>';
         }
+        $available_shortcodes .= "</select></div><div class=\"idx-modal-shortcode-field\"><label for=\"title\">Change the Title?</label><input type=\"text\" name=\"title\" id=\"title\"></div>";
+
         return $available_shortcodes;
     }
 
@@ -90,13 +93,9 @@ class Register_Shortcode_For_Ui
         $available_shortcodes = "";
 
         if ($idx_link->systemresults != 1) {
-            $link_short_code = '[' . Register_Shortcodes::SHORTCODE_SYSTEM_LINK . ' id ="' . $idx_link->uid . '" title ="' . $idx_link->name . '"]';
-            $available_shortcodes .= '<div class="each_shortcode_row">';
-            $available_shortcodes .= '<input type="hidden" id=\'' . $idx_link->uid . '\' value=\'' . $link_short_code . '\'>';
-            $available_shortcodes .= '<span>' . $idx_link->name . '&nbsp;<a name="' . $idx_link->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $idx_link->uid . '\')" class="shortcode_link">insert</a>
-        &nbsp;<a href="?uid=' . urlencode($idx_link->uid) . '&current_title=' . urlencode($idx_link->name) . '&short_code=' . urlencode($link_short_code) . '">change title</a>
-        </span>';
-            $available_shortcodes .= '</div>';
+            $link_short_code = Register_Shortcodes::SHORTCODE_SYSTEM_LINK;
+            $available_shortcodes .= "<option id=\"" . $idx_link->uid . "\" value=\"" . $link_short_code . "\">";
+            $available_shortcodes .= $idx_link->name . "</option>";
         }
         return $available_shortcodes;
     }
@@ -104,15 +103,9 @@ class Register_Shortcode_For_Ui
     public function get_saved_link_html($idx_link)
     {
         $available_shortcodes = "";
-        $link_short_code = '[' . Register_Shortcodes::SHORTCODE_SAVED_LINK . ' id ="' . $idx_link->uid . '" title ="' . $idx_link->linkTitle . '"]';
-        $available_shortcodes .= '<div class="each_shortcode_row">';
-        $available_shortcodes .= '<input type="hidden" id=\'' . $idx_link->uid . '\' value=\'' . $link_short_code . '\'>';
-        $available_shortcodes .= '<span>' . $idx_link->linkTitle . '&nbsp;<a name="' . $idx_link->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $idx_link->uid . '\')" class="shortcode_link">insert</a>
-    &nbsp;<a href="?uid=' . urlencode($idx_link->uid) . '&current_title=' . urlencode($idx_link->linkTitle) . '&short_code=' . urlencode($link_short_code) . '">change title</a>
-    </span>';
-
-        $available_shortcodes .= '</div>';
-
+        $link_short_code = Register_Shortcodes::SHORTCODE_SAVED_LINK;
+        $available_shortcodes .= "<option id=\"" . $idx_link->uid . "\" value=\"" . $link_short_code . "\">";
+        $available_shortcodes .= $idx_link->linkTitle . "</option>";
         return $available_shortcodes;
     }
 
@@ -122,14 +115,13 @@ class Register_Shortcode_For_Ui
         $available_shortcodes = '';
 
         if ($idx_widgets) {
-            $available_shortcodes .= "<label for=\"title\">Title</label><input type=\"text\" name=\"title\" id=\"title\">";
+            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\"><label for=\"widget\">Select a Widget</label><select id=\"idx-select-subtype\" style=\"width: 100%;\">";
             foreach ($idx_widgets as $widget) {
-                $widget_shortcode = '[' . Register_Shortcodes::SHORTCODE_WIDGET . ' id ="' . $widget->uid . '"]';
-                $available_shortcodes .= '<div class="each_shortcode_row">';
-                $available_shortcodes .= '<input type="hidden" id=\'' . $widget->uid . '\' value=\'' . $widget_shortcode . '\'>';
-                $available_shortcodes .= '<span>' . $widget->name . '&nbsp;<a name="' . $widget->uid . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $widget->uid . '\')">insert</a></span>';
-                $available_shortcodes .= '</div>';
+                $widget_shortcode = Register_Shortcodes::SHORTCODE_WIDGET;
+                $available_shortcodes .= "<option id=\"" . $widget->uid . "\" value=\"" . $widget_shortcode . "\">" . $widget->name . "</option>";
             }
+            $available_shortcodes .= "</select></div>";
+
         } else {
             $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.</div>';
         }

@@ -30,6 +30,7 @@
     box-shadow: 0 5px 15px rgba(0,0,0,.7);
     background: #fcfcfc;
     -webkit-font-smoothing: subpixel-antialiased;
+    overflow-x: hidden;
 }
 .idx-modal-inner-content {
     padding: 1rem;
@@ -49,7 +50,6 @@
     cursor: pointer;
 }
 .idx-modal-shortcode-edit {
-    padding: 1rem;
 }
 .idx-shortcode-name {
     text-align: center;
@@ -62,6 +62,13 @@
     margin: 0px;
     padding: 0;
     border-top: 1px solid #ddd;
+    width: 100%;
+    position: absolute;
+    bottom: 50px;
+}
+
+#idx-shortcode-modal .separator:first-of-type {
+    position: static;
 }
 
 #idx-shortcode-modal .button {
@@ -70,7 +77,50 @@
     float: left;
     margin-top: 1rem;
     margin-right: 1rem;
+    position: absolute;
+    bottom: .5rem;
+    right: 0;
+}
+#idx-shortcode-modal .button:active{
+    top: initial;
 }
 .idx-toolbar-primary {
     float: right;
+}
+
+.select2-container {
+    z-index: 1000000;
+}
+.idx-modal-shortcode-edit label {
+    display: block;
+}
+.idx-modal-shortcode-edit select, .idx-modal-shortcode-edit input {
+    display: block;
+    width: 100%;
+}
+.idx-modal-shortcode-field {
+    width: 50%;
+    max-width: 450px;
+    display: block;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+@media screen and (max-width: 950px) {
+    .idx-modal-shortcode-field {
+        width: 50%;
+        display: inline-block;
+
+    }
+}
+@media screen and (max-width: 700px) {
+    .idx-shortcode-type{
+        width: 100%;
+        margin: 1rem 0;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .idx-modal-shortcode-field {
+        width: 100%;
+    }
 }
