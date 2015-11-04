@@ -28,6 +28,7 @@ class Shortcode_Ui
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
         wp_enqueue_script('idx-shortcode', plugins_url('../assets/js/idx-shortcode.js', dirname(__FILE__)), array('jquery'));
         wp_enqueue_style('idx-shortcode', plugins_url('../assets/css/idx-shortcode.css', dirname(__FILE__)));
+        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
     }
 
     public function modal()
@@ -50,7 +51,7 @@ class Shortcode_Ui
         $shortcodes = $this->shortcodes_for_ui->get_shortcodes_for_ui();
         foreach ($shortcodes as $shortcode) {
             echo "<div class=\"idx-shortcode-type\" data-short-name=\"" . $shortcode['short_name'] . "\">";
-            echo "<img src=\"" . $shortcode['icon'] . "\">";
+            echo "<div class=\"idx-shortcode-type-icon\"><i class=\"" . $shortcode['icon'] . "\"></i></div>";
             echo "<div class=\"idx-shortcode-name\">" . $shortcode['name'] . "</div>";
             echo "</div>";
         }

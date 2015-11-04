@@ -10,22 +10,19 @@ document.addEventListener('DOMContentLoaded', function(event){
     var insertButton = el('.idx-toolbar-primary button')[0];
     var modalTitle = el('#idx-shortcode-modal h1')[0];
 
-
-
-
-
-
+    //helper function avoiding jQuery for speed
     function el(selector){
         return document.querySelectorAll(selector);
     }
 
+    //helper function for loops
     function forEach (array, callback, scope) {
       for (var i = 0; i < array.length; i++) {
         callback.call(scope, array[i], i);
       }
     };
 
-
+    //Open the Modal and perform necessary actions
     function openShortcodeModal(event) {
         event.preventDefault();
         modal.style.display = 'block';
@@ -36,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         insertButton.setAttribute('disabled', 'disabled');
     }
 
+    //Close the modal and perform reset actions in case they open it again
     function closeShortcodeModal(event) {
         event.preventDefault();
         modal.style.display = 'none';
@@ -57,13 +55,16 @@ document.addEventListener('DOMContentLoaded', function(event){
         insertButton.addEventListener('click', insertShortcode);
     }
 
+    //Initialize type buttons being clickable. When clicking them, it loads the options.
     function makeTypesSelectable(){
         forEach(el('.idx-shortcode-type'), function (value, index) {value.addEventListener('click', getShortcodeData);});
     }
 
+    //get options for the shortcode type selected before insertion
     function getShortcodeData(event){
         shortcodeType = event.target.parentNode.getAttribute('data-short-name');
-        jQuery.post(
+                // console.log(shortcodeType)
+        return jQuery.post(
             ajaxurl, {
                 'action': 'idx_shortcode_options',
                 'idx_shortcode_type' : shortcodeType
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function(event){
                 insertButton.removeAttribute('disabled');
                 overView.style.display = 'none';
                 editOptions.style.display = 'block';
+                shortcodeDetailTitle(shortcodeType);
                 updateTitle();
                 jQuery(select).on('change', updateTitle);
             }).fail(function(data){
@@ -81,10 +83,11 @@ document.addEventListener('DOMContentLoaded', function(event){
         });
     }
 
+    //Change Details Modal Title
     function shortcodeDetailTitle(shortcodeType){
-        if(shortcodeType === 'system_link'){
+        if(shortcodeType === 'system_links'){
                 modalTitle.innerHTML = 'IDX Shortcode Details - System Links';
-        } else if(shortcodeType === 'saved_link'){
+        } else if(shortcodeType === 'saved_links'){
                 modalTitle.innerHTML = 'IDX Shortcode Details - Saved Links';
         } else if(shortcodeType === 'widgets'){
                 modalTitle.innerHTML = 'IDX Shortcode Details - Widgets';
@@ -101,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         });
         }
     }
-
+    //Grab Elements and form the shortcode for insertion
     function formShortcode(){
         var subtype = el('#idx-select-subtype')[0];
         var shortcodeType = subtype.value;
@@ -112,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function(event){
         return shortcode;
     }
 
+    //Find if the user has entered a title. If not, use the default.
+    //If no title input (for example, widgets), return nothing
     function formTitle(selectedOption){
         var titleInput = el('.idx-modal-shortcode-edit #title')[0];
         if(typeof titleInput !== 'undefined' && titleInput.value !== ''){
@@ -127,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
     }
 
+    //Update the title field with the default title
     function updateTitle(){
         var titleInput = el('.idx-modal-shortcode-edit #title')[0];
         if(typeof titleInput !== 'undefined'){
@@ -134,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
     }
 
+    //Find the selected option from a select
     function findSelected(query){
         var selected = false;
         forEach(el(query), function(value){
@@ -144,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         return selected;
     }
 
+    //insert the shortcode in the editor and close the modal
     function insertShortcode(event){
         event.preventDefault();
         shortcode = formShortcode();
@@ -153,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
-
+    //Initialize the modal
     initializeModal();
 
 

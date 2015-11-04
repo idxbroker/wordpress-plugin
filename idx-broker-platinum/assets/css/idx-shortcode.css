@@ -43,6 +43,20 @@
     margin: 0;
 }
 
+.idx-shortcode-type-icon {
+    background: #EEE;
+    border: 1px solid #E0E0E0;
+    text-align: center;
+    font-size: 50pt;
+    padding: 4rem;
+}
+
+.idx-shortcode-type-icon .dashicons, .idx-shortcode-type-icon .dashicons-before:before{
+    font-size: inherit;
+    width: inherit;
+    height: inherit;
+}
+
 .idx-shortcode-type{
     width: 17rem;
     display: inline-block;
@@ -88,11 +102,12 @@
     float: right;
 }
 
-.select2-container {
+.select2-container--open {
     z-index: 1000000;
 }
 .idx-modal-shortcode-edit label {
     display: block;
+    margin-bottom: .3rem;
 }
 .idx-modal-shortcode-edit select, .idx-modal-shortcode-edit input {
     display: block;
@@ -105,6 +120,13 @@
     padding: 0.5rem;
     box-sizing: border-box;
 }
+
+@media screen and (max-width: 1003px) {
+    #idx-shortcode-modal .button, #idx-shortcode-modal .separator {
+        position: static;
+    }
+}
+
 @media screen and (max-width: 950px) {
     .idx-modal-shortcode-field {
         width: 50%;

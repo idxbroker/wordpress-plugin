@@ -15,15 +15,15 @@ class Register_Shortcode_For_Ui
     public function default_shortcodes()
     {
         return array(
-            'system_links' => array('name' => 'System Links', 'short_name' => 'system_links', 'icon' => null),
-            'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => null),
-            'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => null),
+            'system_links' => array('name' => 'System Links', 'short_name' => 'system_links', 'icon' => "fa fa-star"),
+            'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => "fa fa-floppy-o"),
+            'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => "fa fa-cog"),
             // for version 2.0
-            // 'IMPress Lead Login Widget' =>  array('title' => ''),
-            // 'IMPress Lead Signup Widget' =>  array('title' => ''),
-            // 'IMPress City Links' =>  array('title' => ''),
-            // 'IMPress Property Showcase' =>  array('title' => ''),
-            // 'IMPress Property Carousel' => array('title' => ''),
+            'impress_lead_login_widget' => array('name' => 'Impress Lead Login Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-users'),
+            'impress_lead_login_widget' => array('name' => 'IMPress Lead Signup Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-user-plus'),
+            'impress_city_links' => array('name' => 'IMPress City Links', 'short_name' => 'impress_city_links', 'icon' => 'fa fa-link'),
+            'impress_property_showcase' => array('name' => 'IMPress Property Showcase', 'short_name' => 'impress_property_showcase', 'icon' => 'fa fa-home'),
+            'impress_property_carousel' => array('name' => 'IMPress Property Carousel', 'short_name' => 'impress_property_carousel', 'icon' => 'dashicons dashicons-admin-multisite'),
         );
 
     }
