@@ -29,6 +29,10 @@ class Shortcode_Ui
         wp_enqueue_script('idx-shortcode', plugins_url('../assets/js/idx-shortcode.js', dirname(__FILE__)), array('jquery'));
         wp_enqueue_style('idx-shortcode', plugins_url('../assets/css/idx-shortcode.css', dirname(__FILE__)));
         wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+        //javascript for map search widget preview
+        wp_enqueue_script('custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__);
+        wp_enqueue_script('custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__);
+        wp_enqueue_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
     }
 
     public function modal()
