@@ -41,6 +41,8 @@ document.addEventListener('DOMContentLoaded', function(event){
         el('#wpbody')[0].style.zIndex = '160000';
         editTab.style.display = 'none';
         insertButton.setAttribute('disabled', 'disabled');
+        previewTabButton.addEventListener('click', openPreviewTab);
+        editTabButton.addEventListener('click', openEditTab);
     }
 
     //Close the modal and perform reset actions in case they open it again
@@ -57,6 +59,8 @@ document.addEventListener('DOMContentLoaded', function(event){
         previewTabButton.classList.remove('idx-active-tab');
         editTabButton.classList.add('idx-active-tab');
         modalTitle.innerHTML = 'Insert IDX Shortcode';
+        previewTabButton.removeEventListener('click', openPreviewTab);
+        editTabButton.removeEventListener('click', openEditTab);
     }
 
 
@@ -66,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function(event){
         overlay.addEventListener('click', closeShortcodeModal);
         close.addEventListener('click', closeShortcodeModal);
         makeTypesSelectable();
-        previewTabButton.addEventListener('click', openPreviewTab);
-        editTabButton.addEventListener('click', openEditTab);
         insertButton.addEventListener('click', insertShortcode);
     }
 
@@ -120,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         } else if(shortcodeType === 'omnibar'){
                 modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar';
         } else if(shortcodeType === 'omnibar_extra'){
-                modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar';
+                modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar With Extra Fields';
         } else {
             //for a custom third party title
             jQuery.post(
@@ -135,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
     }
 
-    function openPreviewTab(event){
+    function openPreviewTab(event, loadContent){
         event.preventDefault();
         var shortcode = formShortcode();
         var fields = el('.idx-modal-shortcode-field');
@@ -146,20 +148,28 @@ document.addEventListener('DOMContentLoaded', function(event){
         editTabButton.classList.remove('idx-active-tab');
         previewTabButton.classList.add('idx-active-tab');
 
-        jQuery.post(
+        //omnibar uses photo instead, so do not load content in that case
+        if(loadContent !== false){
+            jQuery.post(
             ajaxurl, {
                 'action': 'idx_shortcode_preview',
                 'idx_shortcode' : shortcode
             }).done(function(data){
+                //set the preview tab to active styling
                 el('.idx-modal-tabs a:nth-of-type(2)')[0].classList.add('idx-active-tab');
-                    previewTab.innerHTML = data;
-                    var scripts = previewTab.querySelectorAll('script');
-                    return evalScripts(scripts);
+                //fill the preview tab with shortcode data
+                previewTab.innerHTML = data;
+                //evaluate scripts that would not load otherwise
+                var scripts = previewTab.querySelectorAll('script');
+                return evalScripts(scripts);
             }).fail(function(data){
-                previewTab.innerHTML = 'Shortcode Details - ' + shortcodeType;
-        });
+                //if shortcode content fails, go back to the edit tab
+                openEditTab(event);
+            });
+        }
     }
 
+    //evaluate scripts - both external and inline
     function evalScripts(scripts){
         if(typeof scripts[0] === 'undefined'){
             return;
@@ -175,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         })
     }
 
+    //Go back to the edit tab after a preview of the shortcode
     function openEditTab(event){
         event.preventDefault();
         previewTab.style.display = 'none';
@@ -208,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function(event){
             if(!input){
                 return '';
             }
+            //the field name is under data-short-name
             field.name = input.getAttribute('data-short-name');
             field.value = input.value;
             if(field.name === 'title'){

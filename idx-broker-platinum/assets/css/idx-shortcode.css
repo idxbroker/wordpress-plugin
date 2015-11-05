@@ -1,3 +1,8 @@
+#idx-shortcode img {
+    padding: 0;
+    margin: -.3rem .2rem -.3rem 0;
+}
+
 #idx-overlay{
     display: none;
     position: fixed;
@@ -34,6 +39,10 @@
 }
 .idx-modal-inner-content {
     padding: 1rem 0;
+}
+
+.wp-core-ui .idx-modal-content .media-modal-close:focus {
+    box-shadow: none;
 }
 
 #idx-shortcode-modal h1 {
@@ -164,6 +173,11 @@
 .idx-modal-shortcode-preview {
     display: none;
 }
+
+.idx-modal-shortcode-preview img {
+    max-width: 100%;
+}
+
 .idx-modal-shortcode-field {
     width: 50%;
     max-width: 450px;
@@ -228,10 +242,14 @@
 
     }
 }
+@media screen and (max-width: 785px) {
+    #idx-shortcode {
+        padding: 0.35rem .5rem;
+    }
+}
 @media screen and (max-width: 700px) {
     .idx-shortcode-type{
-        width: 100%;
-        margin: 1rem 0;
+        width: 90%;
     }
 }
 

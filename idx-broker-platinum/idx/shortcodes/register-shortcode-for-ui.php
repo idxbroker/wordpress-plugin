@@ -20,7 +20,7 @@ class Register_Shortcode_For_Ui
             'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => 'fa fa-floppy-o'),
             'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => 'fa fa-cog'),
             'omnibar' => array('name' => 'IDX Omnibar', 'short_name' => 'omnibar', 'icon' => 'fa fa-cog'),
-            'omnibar_extra' => array('name' => 'IDX Omnibar with Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-cog'),
+            'omnibar_extra' => array('name' => 'IDX Omnibar With Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-cog'),
 
             // for version 2.0
             // 'impress_lead_login_widget' => array('name' => 'Impress Lead Login Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-users'),
@@ -147,10 +147,9 @@ class Register_Shortcode_For_Ui
     public function get_omnibar()
     {
         $html = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
-        $html .= "<link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css\">";
-        $html .= "<link href=\"" . plugins_url('../../assets/css/idx-omnibar.min.css', dirname(__FILE__)) . "\">";
+        $html .= "<link type=\"text/css\" href=\"" . plugins_url('/assets/css/idx-omnibar.min.css', dirname(dirname(__FILE__))) . "\">";
         $html .= "<script>";
-        $html .= "openPreviewTab(event)";
+        $html .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar.png', dirname(dirname(__FILE__))) . "\">';";
         $html .= "</script>";
         $html .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
         return $html;
@@ -159,10 +158,8 @@ class Register_Shortcode_For_Ui
     public function get_omnibar_extra()
     {
         $html = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
-        $html .= "<link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css\">";
-        $html .= "<link href=\"" . plugins_url('../../assets/css/idx-omnibar.min.css', dirname(__FILE__)) . "\">";
         $html .= "<script>";
-        $html .= "openPreviewTab(event)";
+        $html .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar-extra.png', dirname(dirname(__FILE__))) . "\">';";
         $html .= "</script>";
         $html .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar-extra\"></div>";
         return $html;
