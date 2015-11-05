@@ -44,7 +44,7 @@ href="http://www.idxbroker.com/idx_broker">Click here to view all features now.<
 1. Download and extract the IDX Broker plugin. You may also install directly by going to your WP-Admin page and then Plugins > Add New. Search for 'idx broker' under new plugins and click to install directly.
 2. Upload the uncompressed folder to your `/wp-content/plugins/` directory.
 3. Activate the plugin through the Plugins menu in WordPress.
-4. You will need to have an active IDX Broker account for the Plugin to work. If you have an account, simply go to the IDX Broker Plugin page within WordPress, enter the API key provided via your setup email, and click the 'Save Changes' button.
+4. Confirm you are using a version of PHP later than 5.2. You will also need to have an active IDX Broker account for the Plugin to work. If you have an account, simply go to the IDX Broker Plugin page within WordPress, enter the API key provided via your setup email, and click the 'Save Changes' button.
 5. Your plugin will now pull your IDX Broker account information into Wordpress.
 
 == Frequently Asked Questions ==
@@ -66,6 +66,9 @@ Features provided by this Plugin - Widgets, links, and custom links may be place
 
 = Does IDX Broker offer lead capture functionality? =
 Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manager page, a customizable sign up form, and provides you with 'teaser' registration options.
+
+= What are Other Requirements for this Plugin? =
+This plugin requires a PHP version higher than 5.2. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
 
 == Screenshots ==
 
@@ -93,7 +96,7 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Added backwards compatability with legacy dynamic wrapper usage in themes.
 
 = 1.2.3 =
-* Fix bug with omnibar data not updating properly.
+* Fixed bug with omnibar data not updating properly.
 
 = 1.2.2 =
 * Restructured code and made it more WP4.3 and PSR compliant.
@@ -165,5 +168,6 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 
 == Upgrade Notice ==
 
-= 1.2.3 =
-This version drops support for PHP 5.2 as it is deprecated and no longer receives security updates. Before updating, please contact your host to upgrade to the latest stable version of PHP (we recommend a minimum of 5.5 for security reasons): http://php.net/supported-versions.php
+= 1.3.0 =
+Version 1.2.2 and higher drop support for PHP 5.2 as it is deprecated and no longer receives security updates. Before updating, please contact your host to upgrade to the latest stable version of PHP (we recommend a minimum of 5.5 for security reasons): http://php.net/supported-versions.php
+See this article for more information: http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin

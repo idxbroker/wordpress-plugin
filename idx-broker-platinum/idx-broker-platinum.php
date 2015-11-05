@@ -12,7 +12,7 @@ License: GPLv2 or later
 
 // Report all errors during development. Remember to hash out when sending to production.
 
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
@@ -55,9 +55,12 @@ class Idx_Broker_Plugin
             For security reasons, please contact your host and upgrade to the
             latest stable version of PHP they offer. We recommend a minimum
             of PHP 5.5.<br>For more information on what versions of PHP are
-            supported with security updates, see their
+            supported with security updates, see <a
+            href=\"http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin\">
+            this knowledgebase article</a> and PHP.net's
             <a href=\"http://php.net/supported-versions.php\"
-            target=\"_blank\">supported versions page.</a></div><br></div>";
+            target=\"_blank\">supported versions page.</a>
+            </div><br></div>";
     }
 
     public static function idx_deactivate_plugin()

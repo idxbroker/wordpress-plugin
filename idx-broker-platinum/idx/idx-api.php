@@ -3,6 +3,12 @@ namespace IDX;
 
 class Idx_Api
 {
+    public function __construct()
+    {
+        $this->api_key = get_option('idx_broker_apikey');
+    }
+
+    public $api_key;
     /**
      * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
      * @param  [array] $response [response header from API call]
@@ -59,7 +65,7 @@ class Idx_Api
 
         $headers = array(
             'Content-Type' => 'application/x-www-form-urlencoded',
-            'accesskey' => get_option('idx_broker_apikey'),
+            'accesskey' => $this->api_key,
             'outputtype' => 'json',
             'apiversion' => $apiversion,
             'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
@@ -68,14 +74,11 @@ class Idx_Api
         $params = array_merge(array('timeout' => 120, 'sslverify' => false, 'headers' => $headers), $params);
         $url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
-        if ($request_type === 'GET') {
-            $response = wp_remote_get($url, $params);
-        } elseif ($request_type === 'POST') {
+        if ($request_type === 'POST') {
             $response = wp_safe_remote_post($url, $params);
         } else {
-            $response = wp_remote_request($url, $params);
+            $response = wp_remote_get($url, $params);
         }
-
         $response = (array) $response;
 
         extract($this->apiResponse($response)); // get code and error message if any, assigned to vars $code and $error
@@ -86,7 +89,9 @@ class Idx_Api
             return new \WP_Error("idx_api_error", __("Error {$code}: $error"));
         } else {
             $data = (array) json_decode((string) $response['body']);
-            $this->set_transient($cache_key, $data, $expiration);
+            if ($request_type !== 'POST') {
+                $this->set_transient($cache_key, $data, $expiration);
+            }
             return $data;
         }
     }
@@ -144,6 +149,7 @@ class Idx_Api
         if ($this->get_transient('idx_systemlinks_cache')) {
             $this->delete_transient('idx_systemlinks_cache');
         }
+        $this->clear_wrapper_cache();
     }
 
     /**
@@ -154,7 +160,7 @@ class Idx_Api
      */
     public function idx_api_get_systemlinks()
     {
-        if (!get_option('idx_broker_apikey')) {
+        if (empty($this->api_key)) {
             return array();
         }
         return $this->idx_api('systemlinks', $this->idx_api_get_apiversion());
@@ -168,7 +174,7 @@ class Idx_Api
      */
     public function idx_api_get_savedlinks()
     {
-        if (!get_option('idx_broker_apikey')) {
+        if (empty($this->api_key)) {
             return array();
         }
         return $this->idx_api('savedlinks', $this->idx_api_get_apiversion());
@@ -182,7 +188,7 @@ class Idx_Api
      */
     public function idx_api_get_widgetsrc()
     {
-        if (!get_option('idx_broker_apikey')) {
+        if (empty($this->api_key)) {
             return array();
         }
         return $this->idx_api('widgetsrc', $this->idx_api_get_apiversion());
@@ -193,9 +199,10 @@ class Idx_Api
      */
     public function idx_api_get_apiversion()
     {
-        if (!get_option('idx_broker_apikey')) {
+        if (empty($this->api_key)) {
             return Initiate_Plugin::IDX_API_DEFAULT_VERSION;
         }
+
         $data = $this->idx_api('apiversion', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 86400);
         if (is_array($data) && !empty($data)) {
             return $data['version'];
@@ -209,7 +216,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return false;
         }
 
@@ -238,7 +245,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return false;
         }
 
@@ -262,7 +269,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return false;
         }
 
@@ -285,7 +292,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return array();
         }
 
@@ -308,7 +315,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return array();
         }
 
@@ -326,7 +333,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_savedlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return array();
         }
 
@@ -344,7 +351,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_savedlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return array();
         }
 
@@ -357,18 +364,80 @@ class Idx_Api
         return $system_link_names;
     }
 
+    public function find_idx_page_type($idx_page)
+    {
+        //if it is a saved linke, return saved_link otherwise it is a system page
+        $saved_links = $this->idx_api_get_savedlinks();
+        foreach ($saved_links as $saved_link) {
+            $id = $saved_link->id;
+            if ($id === $idx_page) {
+                return 'saved_link';
+            }
+        }
+    }
+
+    public function set_wrapper($idx_page, $wrapper_url)
+    {
+        //if none, quit process
+        if ($idx_page === 'none') {
+            return;
+        } elseif ($idx_page === 'global') {
+            //set Global Wrapper:
+            $this->idx_api("dynamicwrapperurl", $this->idx_api_get_apiversion(), 'clients', array('body' => array('dynamicURL' => $wrapper_url)), 10, 'POST');
+        } else {
+            //find what IDX page type then set the page wrapper
+            $page_type = $this->find_idx_page_type($idx_page);
+            if ($page_type === 'saved_link') {
+                $params = array(
+                    'dynamicURL' => $wrapper_url,
+                    'savedLinkID' => $idx_page,
+                );
+            } else {
+                $params = array(
+                    'dynamicURL' => $wrapper_url,
+                    'pageID' => $idx_page,
+                );
+            }
+            $this->idx_api("dynamicwrapperurl", $this->idx_api_get_apiversion(), 'clients', array('body' => $params), 10, 'POST');
+        }
+    }
+
     public function clear_wrapper_cache()
     {
-        $this->idx_api(
-            'wrappercache',
-            $this->idx_api_get_apiversion(),
-            'clients',
-            array(
-                'method' => 'DELETE',
-            ),
-            10,
-            'DELETE'
+        $idx_broker_key = $this->api_key;
+
+        // access URL and request method
+
+        $url = Initiate_Plugin::IDX_API_URL . '/clients/wrappercache';
+        $method = 'DELETE';
+
+        // headers (required and optional)
+        $headers = array(
+            'Content-Type: application/x-www-form-urlencoded',
+            'accesskey: ' . $idx_broker_key,
+            'outputtype: json',
         );
+
+        // set up cURL
+        $handle = curl_init();
+        curl_setopt($handle, CURLOPT_URL, $url);
+        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($handle, CURLOPT_CUSTOMREQUEST, $method);
+
+        // exec the cURL request and returned information. Store the returned HTTP code in $code for later reference
+        $response = curl_exec($handle);
+        $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+
+        if ($code == 204) {
+            $response = true;
+        } else {
+            $response = false;
+        }
+
+        return $response;
     }
 
 }
