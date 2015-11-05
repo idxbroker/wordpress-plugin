@@ -45,7 +45,7 @@ class Shortcode_Ui
     {
         echo "<h1>Insert IDX Shortcode</h1>";
         echo "<div class=\"separator\"></div>";
-        echo "<div class=\"idx-modal-inner-content\">";
+        echo "<div class=\"idx-modal-inner-content\"><div class=\"idx-modal-tabs-router\"><div class=\"idx-modal-tabs\"><a class=\"idx-active-tab\" href=\"#\">Edit</a><a href=\"#\">Preview</a></div></div>";
         echo "<div class=\"idx-modal-inner-overview\">";
 
         $shortcodes = $this->shortcodes_for_ui->get_shortcodes_for_ui();
@@ -55,7 +55,7 @@ class Shortcode_Ui
             echo "<div class=\"idx-shortcode-name\">" . $shortcode['name'] . "</div>";
             echo "</div>";
         }
-        echo "</div><div class=\"idx-modal-shortcode-edit\"></div>";
+        echo "</div><div class=\"idx-modal-shortcode-edit\"></div><div class=\"idx-modal-shortcode-preview\"></div>";
         echo "</div><div class=\"separator\"></div>";
         echo "<div class=\"idx-toolbar-primary\"><button class=\"button button-primary\">Insert Shortcode</button></div>";
     }

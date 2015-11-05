@@ -33,7 +33,7 @@
     overflow-x: hidden;
 }
 .idx-modal-inner-content {
-    padding: 1rem;
+    padding: 1rem 0;
 }
 
 #idx-shortcode-modal h1 {
@@ -63,21 +63,67 @@
     margin: 1rem;
     cursor: pointer;
 }
-.idx-modal-shortcode-edit {
+.idx-modal-shortcode-edit, .idx-modal-shortcode-preview {
+    border-top: 1px solid #DDDDDD;
+    padding: 1rem;
 }
+
+.wp-media-buttons .idx-modal-shortcode-preview > a {
+    font-size: 1rem;
+    color: #00a0d2;
+}
+
+.idx-modal-tabs-router {
+    display: none;
+    width: 100%;
+    position: static;
+    margin-bottom: -5px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+    padding: 0 1rem;
+}
+
+.wp-media-buttons .idx-modal-tabs a {
+    position: relative;
+    float: left;
+    padding: 8px 10px 9px;
+    margin: 0;
+    height: 18px;
+    text-decoration: none;
+    line-height: 18px;
+    font-size: 14px;
+    border-bottom: none;
+    color: #21759b;
+    cursor: pointer;
+}
+
+.wp-media-buttons .idx-modal-tabs a:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.idx-modal-tabs a.idx-active-tab {
+    color: #32373c;
+    margin: -1px -1px 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-bottom: none;
+}
+
 .idx-shortcode-name {
     text-align: center;
     background: #fff;
     border: 1px solid #DDDDDD;
     padding: .5rem;
 }
+
 #idx-shortcode-modal .separator {
     height: 0;
     margin: 0px;
     padding: 0;
     border-top: 1px solid #ddd;
     width: 100%;
-    position: absolute;
+    /*position: absolute;*/
     bottom: 50px;
 }
 
@@ -89,12 +135,14 @@
     display: block;
     margin-left: 1rem;
     float: left;
-    margin-top: 1rem;
-    margin-right: 1rem;
-    position: absolute;
+    margin: .5rem;
+    /*position: absolute;*/
     bottom: .5rem;
     right: 0;
 }
+#idx-shortcode-modal .button, #idx-shortcode-modal .separator {
+        position: static;
+    }
 #idx-shortcode-modal .button:active{
     top: initial;
 }
@@ -112,6 +160,9 @@
 .idx-modal-shortcode-edit select, .idx-modal-shortcode-edit input {
     display: block;
     width: 100%;
+}
+.idx-modal-shortcode-preview {
+    display: none;
 }
 .idx-modal-shortcode-field {
     width: 50%;
@@ -167,9 +218,7 @@
 
 
 @media screen and (max-width: 1003px) {
-    #idx-shortcode-modal .button, #idx-shortcode-modal .separator {
-        position: static;
-    }
+
 }
 
 @media screen and (max-width: 950px) {

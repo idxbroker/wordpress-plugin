@@ -6,9 +6,14 @@ document.addEventListener('DOMContentLoaded', function(event){
     var overlay = el('#idx-overlay')[0];
     var innerContent = el('.idx-modal-inner-content')[0];
     var overView = el('.idx-modal-inner-overview')[0];
-    var editOptions = el('.idx-modal-shortcode-edit')[0];
+    var editTab = el('.idx-modal-shortcode-edit')[0];
     var insertButton = el('.idx-toolbar-primary button')[0];
     var modalTitle = el('#idx-shortcode-modal h1')[0];
+    var previewTab = el('.idx-modal-shortcode-preview')[0];
+    var editTabButton = el('.idx-modal-tabs a:nth-of-type(1)')[0];
+    var previewTabButton = el('.idx-modal-tabs a:nth-of-type(2)')[0];
+    var tabButtons = el('.idx-modal-tabs-router')[0];
+
 
     //helper function avoiding jQuery for speed
     function el(selector){
@@ -22,6 +27,11 @@ document.addEventListener('DOMContentLoaded', function(event){
       }
     };
 
+/*
+ * Modal UI and Initializing
+ *
+ */
+
     //Open the Modal and perform necessary actions
     function openShortcodeModal(event) {
         event.preventDefault();
@@ -29,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         overlay.style.display = 'block';
         el('body')[0].style.overflow = 'hidden';
         el('#wpbody')[0].style.zIndex = '160000';
-        editOptions.style.display = 'none';
+        editTab.style.display = 'none';
         insertButton.setAttribute('disabled', 'disabled');
     }
 
@@ -41,7 +51,11 @@ document.addEventListener('DOMContentLoaded', function(event){
         el('body')[0].style.overflow = 'initial';
         el('#wpbody')[0].style.zIndex = 'initial';
         overView.style.display = 'block';
-        editOptions.innerHTML = '';
+        editTab.innerHTML = '';
+        tabButtons.style.display = 'none';
+        previewTab.style.display = 'none';
+        previewTabButton.classList.remove('idx-active-tab');
+        editTabButton.classList.add('idx-active-tab');
         modalTitle.innerHTML = 'Insert IDX Shortcode';
     }
 
@@ -52,6 +66,8 @@ document.addEventListener('DOMContentLoaded', function(event){
         overlay.addEventListener('click', closeShortcodeModal);
         close.addEventListener('click', closeShortcodeModal);
         makeTypesSelectable();
+        previewTabButton.addEventListener('click', openPreviewTab);
+        editTabButton.addEventListener('click', openEditTab);
         insertButton.addEventListener('click', insertShortcode);
     }
 
@@ -70,21 +86,24 @@ document.addEventListener('DOMContentLoaded', function(event){
             shortcodeType = event.target.parentNode.getAttribute('data-short-name');
         }
         overView.style.display = 'none';
-        editOptions.style.display = 'block';
+        editTab.style.display = 'block';
         //Display Loading Icon while Options Load
-        editOptions.innerHTML = "<div class=\"idx-loader\"></div>";
+        editTab.innerHTML = "<div class=\"idx-loader\"></div>";
         return jQuery.post(
             ajaxurl, {
                 'action': 'idx_shortcode_options',
                 'idx_shortcode_type' : shortcodeType
             }).done(function(data){
-                editOptions.innerHTML = data;
-                var select = editOptions.querySelector('select');
+                editTab.innerHTML = data;
+                var select = editTab.querySelector('select');
                 jQuery(select).select2();
                 insertButton.removeAttribute('disabled');
                 shortcodeDetailTitle(shortcodeType);
                 updateTitle();
                 jQuery(select).on('change', updateTitle);
+                tabButtons.style.display = 'inline-block';
+                var scripts = editTab.querySelectorAll('script');
+                evalScripts(scripts);
             }).fail(function(data){
                 getShortcodeData(event);
         });
@@ -98,6 +117,10 @@ document.addEventListener('DOMContentLoaded', function(event){
                 modalTitle.innerHTML = 'IDX Shortcode Details - Saved Links';
         } else if(shortcodeType === 'widgets'){
                 modalTitle.innerHTML = 'IDX Shortcode Details - Widgets';
+        } else if(shortcodeType === 'omnibar'){
+                modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar';
+        } else if(shortcodeType === 'omnibar_extra'){
+                modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar';
         } else {
             //for a custom third party title
             jQuery.post(
@@ -111,32 +134,126 @@ document.addEventListener('DOMContentLoaded', function(event){
         });
         }
     }
+
+    function openPreviewTab(event){
+        event.preventDefault();
+        var shortcode = formShortcode();
+        var fields = el('.idx-modal-shortcode-field');
+        var shortcodeType = fields[0].getAttribute('data-shortcode');
+        editTab.style.display = 'none';
+        previewTab.style.display = 'block';
+        previewTab.innerHTML = '<div class=\"idx-loader\"></div>';
+        editTabButton.classList.remove('idx-active-tab');
+        previewTabButton.classList.add('idx-active-tab');
+
+        jQuery.post(
+            ajaxurl, {
+                'action': 'idx_shortcode_preview',
+                'idx_shortcode' : shortcode
+            }).done(function(data){
+                el('.idx-modal-tabs a:nth-of-type(2)')[0].classList.add('idx-active-tab');
+                    previewTab.innerHTML = data;
+                    var scripts = previewTab.querySelectorAll('script');
+                    return evalScripts(scripts);
+            }).fail(function(data){
+                previewTab.innerHTML = 'Shortcode Details - ' + shortcodeType;
+        });
+    }
+
+    function evalScripts(scripts){
+        if(typeof scripts[0] === 'undefined'){
+            return;
+        }
+        forEach(scripts, function(value){
+            //if external script, load it otherwise evaluate it
+            var src = value.getAttribute('src');
+            if(src !== null){
+                return jQuery.getScript(src);
+            } else {
+                eval(value.innerHTML);
+            }
+        })
+    }
+
+    function openEditTab(event){
+        event.preventDefault();
+        previewTab.style.display = 'none';
+        editTab.style.display = 'block';
+        previewTabButton.classList.remove('idx-active-tab');
+        editTabButton.classList.add('idx-active-tab');
+    }
+
+
+/*
+ * Forming and Inserting the Shortcode
+ *
+ */
+
     //Grab Elements and form the shortcode for insertion
     function formShortcode(){
-        var subtype = el('#idx-select-subtype')[0];
-        var shortcodeType = subtype.value;
-        var selected = findSelected('#idx-select-subtype option');
-        var id = "id=\"" + selected.getAttribute('id') + "\"";
-        var title = formTitle(selected);
-        var shortcode = '[' + shortcodeType + ' ' + id + ' ' + title + ']';
+        var fields = el('.idx-modal-shortcode-field');
+        var shortcodeType = fields[0].getAttribute('data-shortcode');
+        fieldList = getFieldNames(fields);
+        extraParameters = formExtraParameters(fieldList);
+        var shortcode = '[' + shortcodeType + extraParameters + ']';
         return shortcode;
     }
 
-    //Find if the user has entered a title. If not, use the default.
-    //If no title input (for example, widgets), return nothing
-    function formTitle(selectedOption){
-        var titleInput = el('.idx-modal-shortcode-edit #title')[0];
-        if(typeof titleInput !== 'undefined' && titleInput.value !== ''){
-            return 'title=\"' + titleInput.value + "\"";
-        } else if(typeof titleInput === 'undefined') {
-            return '';
-        } else {
-            var selected = findSelected('#idx-select-subtype option');
-            if(selected){
-                title = selected.innerHTML;
+    //Create an array of field names and values for forming the shortcode
+    function getFieldNames(fields){
+        var fieldList = [];
+        forEach(fields, function(value){
+            var input = getInput(value);
+            var field = {};
+            if(!input){
+                return '';
             }
-            return 'title=\"' + title + "\"";
+            field.name = input.getAttribute('data-short-name');
+            field.value = input.value;
+            if(field.name === 'title'){
+                field.value = formTitle(field.value);
+            }
+            fieldList.push(field);
+        });
+        return fieldList;
+    }
+
+    //Find if the user has entered a title. If not, use the default.
+    function formTitle(input){
+        if(typeof input !== 'undefined' && input !== ''){
+            return input;
+        } else {
+            var selected = el('#idx-select-subtype option')[0];
+            if(typeof selected !== 'undefined'){
+                title = findSelected('#idx-select-subtype option').innerHTML;
+            } else {
+                title = '';
+            }
+            return title;
         }
+    }
+    //Find the select or input within the field div and return it
+    function getInput(field){
+        var input = field.querySelectorAll('input')[0];
+        var select = field.querySelectorAll('select')[0];
+        if(typeof input !== 'undefined'){
+            return input;
+        } else if(typeof select !== 'undefined'){
+            return select;
+        }
+        return false;
+    }
+
+    //Use the getFieldNames object and create a string for the field names and values for shortcode forming
+    function formExtraParameters(fieldList){
+        if(fieldList === ''){
+            return '';
+        }
+        var extraParameters = ' ';
+        forEach(fieldList, function(value){
+            extraParameters += value.name + '="' + value.value + '" ';
+        });
+        return extraParameters;
     }
 
     //Update the title field with the default title

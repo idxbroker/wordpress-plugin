@@ -8,6 +8,7 @@ class Register_Shortcode_For_Ui
     {
         $this->idx_api = new \IDX\Idx_Api();
         add_action('wp_ajax_idx_shortcode_options', array($this, 'get_shortcode_options'));
+        add_action('wp_ajax_idx_shortcode_preview', array($this, 'shortcode_preview'));
     }
 
     public $idx_api;
@@ -15,9 +16,12 @@ class Register_Shortcode_For_Ui
     public function default_shortcodes()
     {
         return array(
-            'system_links' => array('name' => 'System Links', 'short_name' => 'system_links', 'icon' => "fa fa-star"),
-            'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => "fa fa-floppy-o"),
-            'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => "fa fa-cog"),
+            'system_links' => array('name' => 'System Links', 'short_name' => 'system_links', 'icon' => 'fa fa-star'),
+            'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => 'fa fa-floppy-o'),
+            'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => 'fa fa-cog'),
+            'omnibar' => array('name' => 'IDX Omnibar', 'short_name' => 'omnibar', 'icon' => 'fa fa-cog'),
+            'omnibar_extra' => array('name' => 'IDX Omnibar with Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-cog'),
+
             // for version 2.0
             // 'impress_lead_login_widget' => array('name' => 'Impress Lead Login Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-users'),
             // 'impress_lead_login_widget' => array('name' => 'IMPress Lead Signup Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-user-plus'),
@@ -37,9 +41,21 @@ class Register_Shortcode_For_Ui
             echo $this->show_link_short_codes(1);
         } elseif ($shortcode_type === 'widgets') {
             echo $this->get_widget_html();
+        } elseif ($shortcode_type === 'omnibar') {
+            echo $this->get_omnibar();
+        } elseif ($shortcode_type === 'omnibar_extra') {
+            echo $this->get_omnibar_extra();
         }
         //return html for the desired type for 3rd party plugins
         do_action('idx-get-shortcode-options');
+        wp_die();
+    }
+
+    public function shortcode_preview()
+    {
+        //output shortcode for shortcode preview
+        $shortcode = sanitize_text_field($_POST['idx_shortcode']);
+        echo do_shortcode(stripslashes($shortcode));
         wp_die();
     }
 
@@ -62,11 +78,11 @@ class Register_Shortcode_For_Ui
         if ($link_type === 0) {
             $short_code = Register_Shortcodes::SHORTCODE_SYSTEM_LINK;
             $idx_links = $this->idx_api->idx_api_get_systemlinks();
-            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\"><label for=\"system-link\">Select a System Link</label><select id=\"idx-select-subtype\" style=\"width: 100%;\">";
+            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $short_code . "\"><label for=\"system-link\">Select a System Link</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
         } elseif ($link_type == 1) {
             $short_code = Register_Shortcodes::SHORTCODE_SAVED_LINK;
             $idx_links = $this->idx_api->idx_api_get_savedlinks();
-            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\"><label for=\"saved-link\">Select a Saved Link</label><select id=\"idx-select-subtype\" style=\"width: 100%;\">";
+            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $short_code . "\"><label for=\"saved-link\">Select a Saved Link</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
         } else {
             return false;
         }
@@ -83,7 +99,7 @@ class Register_Shortcode_For_Ui
         } else {
             $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.</div>';
         }
-        $available_shortcodes .= "</select></div><div class=\"idx-modal-shortcode-field\"><label for=\"title\">Change the Title?</label><input type=\"text\" name=\"title\" id=\"title\"></div>";
+        $available_shortcodes .= "</select></div><div class=\"idx-modal-shortcode-field\"><label for=\"title\">Change the Title?</label><input type=\"text\" name=\"title\" id=\"title\" data-short-name=\"title\"></div>";
 
         return $available_shortcodes;
     }
@@ -94,7 +110,7 @@ class Register_Shortcode_For_Ui
 
         if ($idx_link->systemresults != 1) {
             $link_short_code = Register_Shortcodes::SHORTCODE_SYSTEM_LINK;
-            $available_shortcodes .= "<option id=\"" . $idx_link->uid . "\" value=\"" . $link_short_code . "\">";
+            $available_shortcodes .= "<option id=\"" . $link_short_code . "\" value=\"" . $idx_link->uid . "\">";
             $available_shortcodes .= $idx_link->name . "</option>";
         }
         return $available_shortcodes;
@@ -104,7 +120,7 @@ class Register_Shortcode_For_Ui
     {
         $available_shortcodes = "";
         $link_short_code = Register_Shortcodes::SHORTCODE_SAVED_LINK;
-        $available_shortcodes .= "<option id=\"" . $idx_link->uid . "\" value=\"" . $link_short_code . "\">";
+        $available_shortcodes .= "<option id=\"" . $link_short_code . "\" value=\"" . $idx_link->uid . "\">";
         $available_shortcodes .= $idx_link->linkTitle . "</option>";
         return $available_shortcodes;
     }
@@ -113,12 +129,12 @@ class Register_Shortcode_For_Ui
     {
         $idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
         $available_shortcodes = '';
+        $widget_shortcode = Register_Shortcodes::SHORTCODE_WIDGET;
 
         if ($idx_widgets) {
-            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\"><label for=\"widget\">Select a Widget</label><select id=\"idx-select-subtype\" style=\"width: 100%;\">";
+            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $widget_shortcode . "\"><label for=\"widget\">Select a Widget</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
             foreach ($idx_widgets as $widget) {
-                $widget_shortcode = Register_Shortcodes::SHORTCODE_WIDGET;
-                $available_shortcodes .= "<option id=\"" . $widget->uid . "\" value=\"" . $widget_shortcode . "\">" . $widget->name . "</option>";
+                $available_shortcodes .= "<option id=\"" . $widget_shortcode . "\" value=\"" . $widget->uid . "\">" . $widget->name . "</option>";
             }
             $available_shortcodes .= "</select></div>";
 
@@ -127,4 +143,29 @@ class Register_Shortcode_For_Ui
         }
         return $available_shortcodes;
     }
+
+    public function get_omnibar()
+    {
+        $html = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
+        $html .= "<link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css\">";
+        $html .= "<link href=\"" . plugins_url('../../assets/css/idx-omnibar.min.css', dirname(__FILE__)) . "\">";
+        $html .= "<script>";
+        $html .= "openPreviewTab(event)";
+        $html .= "</script>";
+        $html .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
+        return $html;
+    }
+
+    public function get_omnibar_extra()
+    {
+        $html = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
+        $html .= "<link href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css\">";
+        $html .= "<link href=\"" . plugins_url('../../assets/css/idx-omnibar.min.css', dirname(__FILE__)) . "\">";
+        $html .= "<script>";
+        $html .= "openPreviewTab(event)";
+        $html .= "</script>";
+        $html .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar-extra\"></div>";
+        return $html;
+    }
+
 }
