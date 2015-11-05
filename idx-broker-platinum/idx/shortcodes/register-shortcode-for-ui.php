@@ -35,6 +35,13 @@ class Register_Shortcode_For_Ui
     public function get_shortcode_options()
     {
         $shortcode_type = sanitize_text_field($_POST['idx_shortcode_type']);
+        $system_links_check = $this->idx_api->idx_api_get_systemlinks();
+
+        if (empty($system_links_check) || !empty($system_links_check->errors)) {
+            echo '<p class="error" style="display:block;">' . $system_links_check->get_error_message() . '</p>';
+            wp_die();
+        }
+
         if ($shortcode_type === 'system_links') {
             echo $this->show_link_short_codes(0);
         } elseif ($shortcode_type === 'saved_links') {

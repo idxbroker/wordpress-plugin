@@ -160,7 +160,7 @@ class Idx_Api
      */
     public function idx_api_get_systemlinks()
     {
-        if (!$this->api_key) {
+        if (empty($this->api_key)) {
             return array();
         }
         return $this->idx_api('systemlinks', $this->idx_api_get_apiversion());
@@ -174,7 +174,7 @@ class Idx_Api
      */
     public function idx_api_get_savedlinks()
     {
-        if (!$this->api_key) {
+        if (empty($this->api_key)) {
             return array();
         }
         return $this->idx_api('savedlinks', $this->idx_api_get_apiversion());
@@ -188,7 +188,7 @@ class Idx_Api
      */
     public function idx_api_get_widgetsrc()
     {
-        if (!$this->api_key) {
+        if (empty($this->api_key)) {
             return array();
         }
         return $this->idx_api('widgetsrc', $this->idx_api_get_apiversion());
@@ -199,7 +199,7 @@ class Idx_Api
      */
     public function idx_api_get_apiversion()
     {
-        if (!$this->api_key) {
+        if (empty($this->api_key)) {
             return Initiate_Plugin::IDX_API_DEFAULT_VERSION;
         }
 
@@ -216,7 +216,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return false;
         }
 
@@ -245,7 +245,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return false;
         }
 
@@ -269,7 +269,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return false;
         }
 
@@ -292,7 +292,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return array();
         }
 
@@ -315,7 +315,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_systemlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return array();
         }
 
@@ -333,7 +333,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_savedlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return array();
         }
 
@@ -351,7 +351,7 @@ class Idx_Api
 
         $links = $this->idx_api_get_savedlinks();
 
-        if (!$links) {
+        if (empty($links) || !empty($links->errors)) {
             return array();
         }
 
