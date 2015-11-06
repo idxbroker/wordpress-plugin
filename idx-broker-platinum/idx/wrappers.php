@@ -129,11 +129,11 @@ class Wrappers
     public function is_selected($value)
     {
         $post_id = get_the_ID();
-        $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page')[0];
+        $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page', true);
         if (!empty($saved_wrapper_page)) {
-            $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page')[0];
+            $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page', true);
         }
-        if ($value === $saved_wrapper_page) {
+        if (!empty($value) && $value === $saved_wrapper_page) {
             return 'selected';
         }
     }
