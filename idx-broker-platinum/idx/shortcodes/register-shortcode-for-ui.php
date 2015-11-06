@@ -19,8 +19,8 @@ class Register_Shortcode_For_Ui
             'system_links' => array('name' => 'System Links', 'short_name' => 'system_links', 'icon' => 'fa fa-star'),
             'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => 'fa fa-floppy-o'),
             'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => 'fa fa-cog'),
-            'omnibar' => array('name' => 'IDX Omnibar', 'short_name' => 'omnibar', 'icon' => 'fa fa-cog'),
-            'omnibar_extra' => array('name' => 'IDX Omnibar With Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-cog'),
+            'omnibar' => array('name' => 'IDX Omnibar', 'short_name' => 'omnibar', 'icon' => 'fa fa-search'),
+            'omnibar_extra' => array('name' => 'IDX Omnibar With Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-search-plus'),
 
             // for version 2.0
             // 'impress_lead_login_widget' => array('name' => 'Impress Lead Login Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-users'),
