@@ -159,7 +159,7 @@ class Initiate_Plugin
 
     public function add_menu()
     {
-        add_menu_page('IDX Broker Plugin Options', 'IDX Broker', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'dashicons-admin-home', 55.572);
+        add_menu_page('IDX Broker Plugin Options', 'IDX Broker', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), plugins_url('../assets/images/admin-menu-icon.png', __FILE__), 55.572);
         add_submenu_page('idx-broker', 'IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
     }
 
