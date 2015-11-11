@@ -154,7 +154,7 @@ class Register_Shortcode_For_Ui
     public function get_omnibar()
     {
         $html = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
-        $html .= "<link type=\"text/css\" href=\"" . plugins_url('/assets/css/idx-omnibar.min.css', dirname(dirname(__FILE__))) . "\">";
+        $html .= "<link type=\"text/css\" href=\"" . plugins_url('/assets/css/idx-omnibar.css', dirname(dirname(__FILE__))) . "\">";
         $html .= "<script>";
         $html .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar.png', dirname(dirname(__FILE__))) . "\">';";
         $html .= "</script>";

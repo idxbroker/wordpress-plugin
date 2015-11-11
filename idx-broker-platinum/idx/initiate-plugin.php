@@ -173,7 +173,7 @@ class Initiate_Plugin
             return;
         }
         add_action('admin_notices', array($this, 'idx_instructions'));
-        wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.js', __FILE__), 'jquery');
+        wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.min.js', __FILE__), 'jquery');
         wp_enqueue_style('idxcss', plugins_url('../assets/css/idx-broker.css', __FILE__));
     }
 
