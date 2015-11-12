@@ -56,10 +56,12 @@ class Idx_Api
         $level = 'clients',
         $params = array(),
         $expiration = 7200,
-        $request_type = 'GET'
+        $request_type = 'GET',
+        $json_decode_type = false
     ) {
         $cache_key = 'idx_' . $method . '_cache';
-        if (($data = $this->get_transient($cache_key))) {
+        if ($this->get_transient($cache_key) !== false) {
+            $data = $this->get_transient($cache_key);
             return $data;
         }
 
@@ -88,7 +90,7 @@ class Idx_Api
             }
             return new \WP_Error("idx_api_error", __("Error {$code}: $error"));
         } else {
-            $data = (array) json_decode((string) $response['body']);
+            $data = (array) json_decode((string) $response['body'], $json_decode_type);
             if ($request_type !== 'POST') {
                 $this->set_transient($cache_key, $data, $expiration);
             }
@@ -140,15 +142,19 @@ class Idx_Api
      */
     public function idx_clean_transients()
     {
-        if ($this->get_transient('idx_savedlinks_cache')) {
+        //get rid of all IDX Pages
+        // Idx_Pages::delete_all_idx_pages();
+
+        if ($this->get_transient('idx_savedlinks_cache') !== false) {
             $this->delete_transient('idx_savedlinks_cache');
         }
-        if ($this->get_transient('idx_widgetsrc_cache')) {
+        if ($this->get_transient('idx_widgetsrc_cache') !== false) {
             $this->delete_transient('idx_widgetsrc_cache');
         }
-        if ($this->get_transient('idx_systemlinks_cache')) {
+        if ($this->get_transient('idx_systemlinks_cache') !== false) {
             $this->delete_transient('idx_systemlinks_cache');
         }
+
         $this->clear_wrapper_cache();
     }
 
@@ -438,6 +444,165 @@ class Idx_Api
         }
 
         return $response;
+    }
+
+    public function saved_link_properties($saved_link_id)
+    {
+
+        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id, $this->idx_api_get_apiversion(), 'equity', array(), 7200, 'GET', true);
+
+        return $saved_link_properties;
+    }
+
+    public function client_properties($type)
+    {
+        $properties = $this->idx_api($type, $this->idx_api_get_apiversion(), 'clients', array(), 7200, 'GET', true);
+
+        return $properties;
+    }
+
+    /**
+     * Returns an array of city objects for the agents mls area
+     *
+     * @return array $default_cities
+     */
+    public function default_cities()
+    {
+
+        $default_cities = $this->idx_api('cities/combinedActiveMLS', $this->idx_api_get_apiversion(), 'clients');
+
+        return $default_cities;
+    }
+
+    /**
+     * Returns an array of city list ids
+     *
+     * @return array $list_ids
+     */
+    public function city_list_ids()
+    {
+
+        $list_ids = $this->idx_api('cities', $this->idx_api_get_apiversion(), 'clients');
+        return $list_ids;
+    }
+
+    /**
+     * Returns a list of cities
+     *
+     * @return array $city_list
+     */
+    public function city_list($list_id)
+    {
+
+        $city_list = $this->idx_api('cities/' . $list_id, $this->idx_api_get_apiversion(), clients);
+
+        return $city_list;
+    }
+
+    /**
+     * Returns the IDs and names for each of a client's city lists including MLS city lists
+     *
+     * @return array
+     */
+    public function city_list_names()
+    {
+
+        $city_list_names = $this->idx_api('citieslistname', $this->idx_api_get_apiversion(), 'clients');
+
+        return $city_list_names;
+    }
+
+    /**
+     * Returns an unordered list of city links
+     *
+     * @param int|string the id of the city list to pull cities from
+     * @param bool $columns if true adds column classes to the ul tags
+     * @param int $number_of_columns optional total number of columns to split the links into
+     */
+    public function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4)
+    {
+
+        $cities = $this->city_list($list_id);
+
+        if (!$cities) {
+            return false;
+        }
+
+        $column_class = '';
+
+        if (true == $columns) {
+
+            // Max of four columns
+            $number_columns = ($number_columns > 4) ? 4 : (int) $number_columns;
+
+            $number_links = count($cities);
+
+            $column_size = $number_links / $number_columns;
+
+            // if more columns than links make one column for every link
+            if ($column_size < 1) {
+                $number_columns = $number_links;
+            }
+
+            // round the column size up to a whole number
+            $column_size = ceil($column_size);
+
+            // column class
+            switch ($number_columns) {
+                case 0:
+                    $column_class = 'columns small-12 large-12';
+                    break;
+                case 1:
+                    $column_class = 'columns small-12 large-12';
+                    break;
+                case 2:
+                    $column_class = 'columns small-12 medium-6 large-6';
+                    break;
+                case 3:
+                    $column_class = 'columns small-12 medium-4 large-4';
+                    break;
+                case 4:
+                    $column_class = 'columns small-12 medium-3 large-3';
+                    break;
+            }
+        }
+
+        $output =
+        '<div class="city-list-links city-list-links-' . $list_id . ' row">' . "\n\t";
+
+        $output .= (true == $columns) ? '<ul class="' . $column_class . '">' : '<ul>';
+
+        $count = 0;
+
+        foreach ($cities as $city) {
+
+            $count++;
+
+            $href = $this->subdomain_url() . 'city-' . $idx_id . '-' . rawurlencode($city->name) . '-' . $city->id;
+
+            $output .= "\n\t\t" . '<li>' . "\n\t\t\t" . '<a href="' . $href . '">' . $city->name . '</a>' . "\n\t\t" . '</li>';
+
+            if (true == $columns && $count % $column_size == 0 && $count != 1 && $count != $number_links) {
+                $output .= "\n\t" . '</ul>' . "\n\t" . '<ul class="' . $column_class . '">';
+            }
+
+        }
+
+        $output .= "\n\t" . '</ul>' . "\n" . '</div><!-- .city-list-links -->';
+
+        return $output;
+    }
+
+    /**
+     * Returns the IDX IDs and names for all of the paper work approved MLSs
+     * on the client's account
+     */
+    public function approved_mls()
+    {
+
+        $this->idx_api('approvedmls', $this->idx_api_get_apiversion(), 'mls');
+
+        return $approved_mls;
     }
 
 }

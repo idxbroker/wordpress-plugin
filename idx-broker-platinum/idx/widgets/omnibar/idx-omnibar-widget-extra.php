@@ -1,5 +1,5 @@
 <?php
-namespace IDX\Omnibar;
+namespace IDX\Widgets\Omnibar;
 
 class IDX_Omnibar_Widget_Extra extends \WP_Widget
 {

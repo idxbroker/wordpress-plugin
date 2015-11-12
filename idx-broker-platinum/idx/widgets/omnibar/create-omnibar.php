@@ -1,5 +1,5 @@
 <?php
-namespace IDX\Omnibar;
+namespace IDX\Widgets\Omnibar;
 
 class Create_Omnibar
 {
@@ -13,12 +13,12 @@ class Create_Omnibar
     {
         //css and js have been minified and combined to help performance
         wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
-        wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/idx-omnibar.min.css', __FILE__));
-        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', __FILE__));
+        wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/idx-omnibar.min.css', dirname(__FILE__)));
+        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)));
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.json', __FILE__));
+        wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.json', dirname(__FILE__)));
 
         return <<<EOD
         <form class="idx-omnibar-form idx-omnibar-original-form">
@@ -32,12 +32,12 @@ EOD;
     {
         //css and js have been minified and combined to help performance
         wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
-        wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/idx-omnibar.min.css', __FILE__));
-        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', __FILE__));
+        wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/idx-omnibar.min.css', dirname(__FILE__)));
+        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)));
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.json', __FILE__));
+        wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.json', dirname(__FILE__)));
 
         return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">
@@ -84,8 +84,8 @@ EOD;
     public function register_widgets()
     {
         //Initialize Instances of Widget Classes
-        add_action('widgets_init', create_function('', 'return register_widget("\IDX\Omnibar\IDX_Omnibar_Widget");'));
-        add_action('widgets_init', create_function('', 'return register_widget("\IDX\Omnibar\IDX_Omnibar_Widget_Extra");'));
+        add_action('widgets_init', create_function('', 'return register_widget("\IDX\Widgets\Omnibar\IDX_Omnibar_Widget");'));
+        add_action('widgets_init', create_function('', 'return register_widget("\IDX\Widgets\Omnibar\IDX_Omnibar_Widget_Extra");'));
 
     }
 

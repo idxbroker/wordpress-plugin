@@ -51,7 +51,8 @@ class Wrappers
     public function does_theme_include_idx_tag()
     {
         // default page content
-        $post_content = '<div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div>';
+        //the empty div is for any content they add to the visual editor so it displays
+        $post_content = '<div></div><div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div>';
         // get theme to check start/stop tag
         $does_theme_include_idx_tag = false;
         $template_root = get_theme_root() . DIRECTORY_SEPARATOR . get_stylesheet();
@@ -184,7 +185,7 @@ class Wrappers
                 array($this, 'wrapper_page_ui'),
                 $post_type,
                 'side',
-                'high'
+                'low'
             );
         }
     }

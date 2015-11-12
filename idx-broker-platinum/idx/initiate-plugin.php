@@ -6,7 +6,8 @@ class Initiate_Plugin
     public function __construct()
     {
         $this->set_defaults();
-        include 'backwards-compatibility.php';
+        $this->Idx_Api = new Idx_Api();
+
         add_action('init', array($this, 'update_triggered'));
         add_action('wp_head', array($this, 'display_wpversion'));
         add_action('wp_head', array($this, 'idx_broker_activated'));
@@ -20,16 +21,16 @@ class Initiate_Plugin
         add_action('wp_loaded', array($this, 'migrate_old_table'));
         add_action('idx_omnibar_get_locations', array($this, 'idx_omnibar_get_locations'));
 
+        include 'backwards-compatibility.php';
+
         //Instantiate Classes
         new Wrappers();
         new Idx_Pages();
-        new Shortcodes\Register_Shortcodes();
+        new Shortcodes\Register_Idx_Shortcodes();
         new Shortcodes\Shortcode_Ui();
-        new Widgets\Create_Widgets();
-        new Omnibar\Create_Omnibar();
-
-        $this->Idx_Api = new Idx_Api();
-
+        new Widgets\Create_Idx_Widgets();
+        new Widgets\Create_Impress_Widgets();
+        new Widgets\Omnibar\Create_Omnibar();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.0';
@@ -79,7 +80,7 @@ class Initiate_Plugin
 
     public function idx_omnibar_get_locations()
     {
-        new \IDX\Omnibar\Get_Locations();
+        new \IDX\Widgets\Omnibar\Get_Locations();
     }
 
     //Adds a comment declaring the version of the WordPress.
@@ -146,7 +147,7 @@ class Initiate_Plugin
         $this->Idx_Api->idx_clean_transients();
         update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey']);
         setcookie("api_refresh", 1, time() + 20);
-        new \IDX\Omnibar\Get_Locations();
+        new \IDX\Widgets\Omnibar\Get_Locations();
         die();
     }
 

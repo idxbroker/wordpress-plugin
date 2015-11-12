@@ -47,27 +47,32 @@ document.addEventListener('DOMContentLoaded', function(event){
 
     //Close the modal and perform reset actions in case they open it again
     function closeShortcodeModal(event) {
-        event.preventDefault();
-        modal.style.display = 'none';
-        overlay.style.display = 'none';
-        el('body')[0].style.overflow = 'initial';
-        el('#wpbody')[0].style.zIndex = 'initial';
-        overView.style.display = 'block';
-        editTab.innerHTML = '';
-        tabButtons.style.display = 'none';
-        previewTab.style.display = 'none';
-        previewTabButton.classList.remove('idx-active-tab');
-        editTabButton.classList.add('idx-active-tab');
-        modalTitle.innerHTML = 'Insert IDX Shortcode';
-        previewTabButton.removeEventListener('click', openPreviewTab);
-        editTabButton.removeEventListener('click', openEditTab);
+        //only close the modal if the overlay, close, or insert buttons are clicked
+        if(event.target === modal || event.target === close || event.target === close.querySelector('span') || event.target === insertButton){
+            event.preventDefault();
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+            el('body')[0].style.overflow = 'initial';
+            el('#wpbody')[0].style.zIndex = 'initial';
+            overView.style.display = 'block';
+            editTab.innerHTML = '';
+            tabButtons.style.display = 'none';
+            previewTab.style.display = 'none';
+            previewTabButton.classList.remove('idx-active-tab');
+            editTabButton.classList.add('idx-active-tab');
+            modalTitle.innerHTML = 'Insert IDX Shortcode';
+            previewTabButton.removeEventListener('click', openPreviewTab);
+            editTabButton.removeEventListener('click', openEditTab);
+        }
     }
 
 
     //initialize button and modal functionality
     function initializeModal(){
         el('#idx-shortcode')[0].addEventListener('click', openShortcodeModal);
-        overlay.addEventListener('click', closeShortcodeModal);
+        modal.addEventListener('click', function(event){
+            closeShortcodeModal(event);
+        });
         close.addEventListener('click', closeShortcodeModal);
         makeTypesSelectable();
         insertButton.addEventListener('click', insertShortcode);

@@ -1,10 +1,10 @@
-﻿=== IDX Broker Wordpress Plugin ===
+﻿=== IMPress for IDX Broker WordPress Plugin ===
 Author: IDX Broker
 Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
-Tested up to: 4.3.1
-Stable tag: 1.3.0
+Tested up to: 4.4.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

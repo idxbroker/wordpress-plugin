@@ -83,18 +83,17 @@ class Register_Shortcode_For_Ui
         $available_shortcodes = '';
 
         if ($link_type === 0) {
-            $short_code = Register_Shortcodes::SHORTCODE_SYSTEM_LINK;
+            $short_code = Register_Idx_Shortcodes::SHORTCODE_SYSTEM_LINK;
             $idx_links = $this->idx_api->idx_api_get_systemlinks();
-            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $short_code . "\"><label for=\"system-link\">Select a System Link</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
         } elseif ($link_type == 1) {
-            $short_code = Register_Shortcodes::SHORTCODE_SAVED_LINK;
+            $short_code = Register_Idx_Shortcodes::SHORTCODE_SAVED_LINK;
             $idx_links = $this->idx_api->idx_api_get_savedlinks();
-            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $short_code . "\"><label for=\"saved-link\">Select a Saved Link</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
         } else {
             return false;
         }
 
         if (count($idx_links) > 0 && is_array($idx_links)) {
+            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $short_code . "\"><label for=\"saved-link\">Select a Link</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
             foreach ($idx_links as $idx_link) {
                 if ($link_type === 0) {
                     $available_shortcodes .= $this->get_system_link_html($idx_link);
@@ -103,10 +102,10 @@ class Register_Shortcode_For_Ui
                     $available_shortcodes .= $this->get_saved_link_html($idx_link);
                 }
             }
+            $available_shortcodes .= "</select></div><div class=\"idx-modal-shortcode-field\"><label for=\"title\">Change the Title?</label><input type=\"text\" name=\"title\" id=\"title\" data-short-name=\"title\"></div>";
         } else {
-            $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.</div>';
+            $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.<br>For instructions on creating Saved Links, see <a href="http://support.idxbroker.com/customer/portal/articles/1913083" target="_blank">this article</a> from our knowledgebase.</div>';
         }
-        $available_shortcodes .= "</select></div><div class=\"idx-modal-shortcode-field\"><label for=\"title\">Change the Title?</label><input type=\"text\" name=\"title\" id=\"title\" data-short-name=\"title\"></div>";
 
         return $available_shortcodes;
     }
@@ -116,7 +115,7 @@ class Register_Shortcode_For_Ui
         $available_shortcodes = "";
 
         if ($idx_link->systemresults != 1) {
-            $link_short_code = Register_Shortcodes::SHORTCODE_SYSTEM_LINK;
+            $link_short_code = Register_Idx_Shortcodes::SHORTCODE_SYSTEM_LINK;
             $available_shortcodes .= "<option id=\"" . $link_short_code . "\" value=\"" . $idx_link->uid . "\">";
             $available_shortcodes .= $idx_link->name . "</option>";
         }
@@ -126,7 +125,7 @@ class Register_Shortcode_For_Ui
     public function get_saved_link_html($idx_link)
     {
         $available_shortcodes = "";
-        $link_short_code = Register_Shortcodes::SHORTCODE_SAVED_LINK;
+        $link_short_code = Register_Idx_Shortcodes::SHORTCODE_SAVED_LINK;
         $available_shortcodes .= "<option id=\"" . $link_short_code . "\" value=\"" . $idx_link->uid . "\">";
         $available_shortcodes .= $idx_link->linkTitle . "</option>";
         return $available_shortcodes;
@@ -136,7 +135,7 @@ class Register_Shortcode_For_Ui
     {
         $idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
         $available_shortcodes = '';
-        $widget_shortcode = Register_Shortcodes::SHORTCODE_WIDGET;
+        $widget_shortcode = Register_Idx_Shortcodes::SHORTCODE_WIDGET;
 
         if ($idx_widgets) {
             $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $widget_shortcode . "\"><label for=\"widget\">Select a Widget</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";

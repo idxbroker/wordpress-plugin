@@ -148,7 +148,7 @@ class Idx_Pages
      *
      * @return void
      */
-    public function delete_all_idx_pages()
+    public static function delete_all_idx_pages()
     {
 
         $posts = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
