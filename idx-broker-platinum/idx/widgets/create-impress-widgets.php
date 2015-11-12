@@ -12,9 +12,8 @@ class Create_Impress_Widgets
         add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Showcase_Widget');});
         add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Carousel_Widget');});
         add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_City_Links_Widget');});
-        // register_widget('Equity_Lead_Login_Widget');
-        // register_widget('Equity_Lead_Signup_Widget');
-        // register_widget('Equity_Idx_Widget');
+        add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Lead_Login_Widget');});
+        add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');});
 
     }
 

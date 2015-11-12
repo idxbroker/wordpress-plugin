@@ -26,11 +26,12 @@ class Initiate_Plugin
         //Instantiate Classes
         new Wrappers();
         new Idx_Pages();
-        new Shortcodes\Register_Idx_Shortcodes();
-        new Shortcodes\Shortcode_Ui();
         new Widgets\Create_Idx_Widgets();
+        new Shortcodes\Register_Idx_Shortcodes();
         new Widgets\Create_Impress_Widgets();
+        new Shortcodes\Register_Impress_Shortcodes();
         new Widgets\Omnibar\Create_Omnibar();
+        new Shortcodes\Shortcode_Ui();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.0';

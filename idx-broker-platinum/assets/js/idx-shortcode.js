@@ -118,27 +118,35 @@ document.addEventListener('DOMContentLoaded', function(event){
 
     //Change Details Modal Title
     function shortcodeDetailTitle(shortcodeType){
-        if(shortcodeType === 'system_links'){
+        switch(shortcodeType){
+            case 'system_links':
                 modalTitle.innerHTML = 'IDX Shortcode Details - System Links';
-        } else if(shortcodeType === 'saved_links'){
+            case 'saved_links':
                 modalTitle.innerHTML = 'IDX Shortcode Details - Saved Links';
-        } else if(shortcodeType === 'widgets'){
+                break;
+            case 'widgets':
                 modalTitle.innerHTML = 'IDX Shortcode Details - Widgets';
-        } else if(shortcodeType === 'omnibar'){
-                modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar';
-        } else if(shortcodeType === 'omnibar_extra'){
-                modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar With Extra Fields';
-        } else {
-            //for a custom third party title
-            jQuery.post(
-            ajaxurl, {
-                'action': 'idx_shortcode_title',
-                'idx_shortcode_type' : shortcodeType
-            }).done(function(data){
-                modalTitle.innerHTML = data;
-            }).fail(function(data){
-                modalTitle.innerHTML = 'Shortcode Details - ' + shortcodeType;
-        });
+                break;
+            case 'omnibar':
+                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Omnibar';
+                break;
+            case 'omnibar_extra':
+                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Omnibar With Extra Fields';
+                break;
+            case 'impress_lead_login':
+                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Lead Login';
+                break;
+            default:
+                //for a custom third party title
+                jQuery.post(
+                ajaxurl, {
+                    'action': 'idx_shortcode_title',
+                    'idx_shortcode_type' : shortcodeType
+                }).done(function(data){
+                    modalTitle.innerHTML = data;
+                }).fail(function(data){
+                    modalTitle.innerHTML = 'Shortcode Details - ' + shortcodeType;
+                });
         }
     }
 
@@ -253,10 +261,13 @@ document.addEventListener('DOMContentLoaded', function(event){
     function getInput(field){
         var input = field.querySelectorAll('input')[0];
         var select = field.querySelectorAll('select')[0];
+        var textarea = field.querySelectorAll('textarea')[0];
         if(typeof input !== 'undefined'){
             return input;
         } else if(typeof select !== 'undefined'){
             return select;
+        } else if(typeof textarea !== 'undefined'){
+            return textarea;
         }
         return false;
     }

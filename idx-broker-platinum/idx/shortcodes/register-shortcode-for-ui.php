@@ -19,15 +19,13 @@ class Register_Shortcode_For_Ui
             'system_links' => array('name' => 'System Links', 'short_name' => 'system_links', 'icon' => 'fa fa-star'),
             'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => 'fa fa-floppy-o'),
             'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => 'fa fa-cog'),
-            'omnibar' => array('name' => 'IDX Omnibar', 'short_name' => 'omnibar', 'icon' => 'fa fa-search'),
-            'omnibar_extra' => array('name' => 'IDX Omnibar With Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-search-plus'),
-
-            // for version 2.0
-            // 'impress_lead_login_widget' => array('name' => 'Impress Lead Login Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-users'),
-            // 'impress_lead_login_widget' => array('name' => 'IMPress Lead Signup Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-user-plus'),
-            // 'impress_city_links' => array('name' => 'IMPress City Links', 'short_name' => 'impress_city_links', 'icon' => 'fa fa-link'),
-            // 'impress_property_showcase' => array('name' => 'IMPress Property Showcase', 'short_name' => 'impress_property_showcase', 'icon' => 'fa fa-home'),
-            // 'impress_property_carousel' => array('name' => 'IMPress Property Carousel', 'short_name' => 'impress_property_carousel', 'icon' => 'dashicons dashicons-admin-multisite'),
+            'omnibar' => array('name' => 'IMPress Omnibar Search', 'short_name' => 'omnibar', 'icon' => 'fa fa-search'),
+            'omnibar_extra' => array('name' => 'IMPress Omnibar with Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-search-plus'),
+            'impress_lead_login' => array('name' => 'Impress Lead Login Widget', 'short_name' => 'impress_lead_login', 'icon' => 'fa fa-users'),
+            'impress_lead_signup' => array('name' => 'IMPress Lead Signup Widget', 'short_name' => 'impress_lead_signup', 'icon' => 'fa fa-user-plus'),
+            'impress_city_links' => array('name' => 'IMPress City Links', 'short_name' => 'impress_city_links', 'icon' => 'fa fa-link'),
+            'impress_property_showcase' => array('name' => 'IMPress Property Showcase', 'short_name' => 'impress_property_showcase', 'icon' => 'fa fa-home'),
+            'impress_property_carousel' => array('name' => 'IMPress Property Carousel', 'short_name' => 'impress_property_carousel', 'icon' => 'dashicons dashicons-admin-multisite'),
         );
 
     }
@@ -42,16 +40,37 @@ class Register_Shortcode_For_Ui
             wp_die();
         }
 
-        if ($shortcode_type === 'system_links') {
-            echo $this->show_link_short_codes(0);
-        } elseif ($shortcode_type === 'saved_links') {
-            echo $this->show_link_short_codes(1);
-        } elseif ($shortcode_type === 'widgets') {
-            echo $this->get_widget_html();
-        } elseif ($shortcode_type === 'omnibar') {
-            echo $this->get_omnibar();
-        } elseif ($shortcode_type === 'omnibar_extra') {
-            echo $this->get_omnibar_extra();
+        switch ($shortcode_type) {
+            case "system_links":
+                echo $this->show_link_short_codes(0);
+                break;
+            case "saved_links":
+                echo $this->show_link_short_codes(1);
+                break;
+            case "widgets":
+                echo $this->get_widget_html();
+                break;
+            case "omnibar":
+                echo $this->get_omnibar();
+                break;
+            case "omnibar_extra":
+                echo $this->get_omnibar_extra();
+                break;
+            case "impress_lead_login":
+                echo $this->get_lead_login("impress_lead_login");
+                break;
+            case "impress_lead_signup":
+                echo $this->get_omnibar_extra("impress_lead_signup");
+                break;
+            case "impress_city_links":
+                echo $this->get_omnibar_extra("impress_city_links");
+                break;
+            case "impress_property_showcase":
+                echo $this->get_omnibar_extra("impress_property_showcase");
+                break;
+            case "impress_property_carousel":
+                echo $this->get_omnibar_extra("impress_property_carousel");
+                break;
         }
         //return html for the desired type for 3rd party plugins
         do_action('idx-get-shortcode-options');
@@ -169,6 +188,18 @@ class Register_Shortcode_For_Ui
         $html .= "</script>";
         $html .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar-extra\"></div>";
         return $html;
+    }
+
+    public function get_lead_login($shortcode)
+    {
+        $output = '';
+        $output .= '<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>';
+        $output .= "<script>";
+        $output .= "openPreviewTab(event);";
+        $output .= "</script>";
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\"></div>";
+
+        return $output;
     }
 
 }

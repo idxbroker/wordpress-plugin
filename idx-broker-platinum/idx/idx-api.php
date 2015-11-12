@@ -494,7 +494,7 @@ class Idx_Api
     public function city_list($list_id)
     {
 
-        $city_list = $this->idx_api('cities/' . $list_id, $this->idx_api_get_apiversion(), clients);
+        $city_list = $this->idx_api('cities/' . $list_id, $this->idx_api_get_apiversion(), 'clients');
 
         return $city_list;
     }
@@ -513,84 +513,17 @@ class Idx_Api
     }
 
     /**
-     * Returns an unordered list of city links
+     * Returns the subdomain url WITH trailing slash
      *
-     * @param int|string the id of the city list to pull cities from
-     * @param bool $columns if true adds column classes to the ul tags
-     * @param int $number_of_columns optional total number of columns to split the links into
+     * @return string $url
      */
-    public function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4)
+    public function subdomain_url()
     {
 
-        $cities = $this->city_list($list_id);
+        $url = $this->system_link_url('Sitemap');
+        $url = explode('sitemap', $url);
 
-        if (!$cities) {
-            return false;
-        }
-
-        $column_class = '';
-
-        if (true == $columns) {
-
-            // Max of four columns
-            $number_columns = ($number_columns > 4) ? 4 : (int) $number_columns;
-
-            $number_links = count($cities);
-
-            $column_size = $number_links / $number_columns;
-
-            // if more columns than links make one column for every link
-            if ($column_size < 1) {
-                $number_columns = $number_links;
-            }
-
-            // round the column size up to a whole number
-            $column_size = ceil($column_size);
-
-            // column class
-            switch ($number_columns) {
-                case 0:
-                    $column_class = 'columns small-12 large-12';
-                    break;
-                case 1:
-                    $column_class = 'columns small-12 large-12';
-                    break;
-                case 2:
-                    $column_class = 'columns small-12 medium-6 large-6';
-                    break;
-                case 3:
-                    $column_class = 'columns small-12 medium-4 large-4';
-                    break;
-                case 4:
-                    $column_class = 'columns small-12 medium-3 large-3';
-                    break;
-            }
-        }
-
-        $output =
-        '<div class="city-list-links city-list-links-' . $list_id . ' row">' . "\n\t";
-
-        $output .= (true == $columns) ? '<ul class="' . $column_class . '">' : '<ul>';
-
-        $count = 0;
-
-        foreach ($cities as $city) {
-
-            $count++;
-
-            $href = $this->subdomain_url() . 'city-' . $idx_id . '-' . rawurlencode($city->name) . '-' . $city->id;
-
-            $output .= "\n\t\t" . '<li>' . "\n\t\t\t" . '<a href="' . $href . '">' . $city->name . '</a>' . "\n\t\t" . '</li>';
-
-            if (true == $columns && $count % $column_size == 0 && $count != 1 && $count != $number_links) {
-                $output .= "\n\t" . '</ul>' . "\n\t" . '<ul class="' . $column_class . '">';
-            }
-
-        }
-
-        $output .= "\n\t" . '</ul>' . "\n" . '</div><!-- .city-list-links -->';
-
-        return $output;
+        return $url[0];
     }
 
     /**
@@ -600,9 +533,48 @@ class Idx_Api
     public function approved_mls()
     {
 
-        $this->idx_api('approvedmls', $this->idx_api_get_apiversion(), 'mls');
+        $approved_mls = $this->idx_api('approvedmls', $this->idx_api_get_apiversion(), 'mls');
 
         return $approved_mls;
+    }
+
+    /**
+     * Compares the price fields of two arrays
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    public function price_cmp($a, $b)
+    {
+
+        $a = $this->clean_price($a['listingPrice']);
+        $b = $this->clean_price($b['listingPrice']);
+
+        if ($a == $b) {
+            return 0;
+        }
+
+        return ($a < $b) ? -1 : 1;
+    }
+
+    /**
+     * Removes the "$" and "," from the price field
+     *
+     * @param string $price
+     * @return mixed $price the cleaned price
+     */
+    public function clean_price($price)
+    {
+
+        $patterns = array(
+            '/\$/',
+            '/,/',
+        );
+
+        $price = preg_replace($patterns, '', $price);
+
+        return $price;
     }
 
 }

@@ -63,7 +63,7 @@ class Impress_City_Links_Widget extends \WP_Widget
         if (empty($instance['mls'])) {
             echo 'Invalid MLS IDX ID. Email help@idxbroker.com to get your MLS IDX ID';
         } else {
-            echo $idx_api->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns']);
+            echo $this->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns']);
         }
 
         echo $after_widget;
@@ -183,5 +183,93 @@ class Impress_City_Links_Widget extends \WP_Widget
         foreach ($approved_mls as $mls) {
             echo '<option ', selected($instance['mls'], $mls->id, 0), ' value="', $mls->id, '">', $mls->name, '</option>';
         }
+    }
+
+    /**
+     * Returns an unordered list of city links
+     *
+     * @param int|string the id of the city list to pull cities from
+     * @param bool $columns if true adds column classes to the ul tags
+     * @param int $number_of_columns optional total number of columns to split the links into
+     */
+    public static function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4)
+    {
+        $idx_api = new \IDX\Idx_Api();
+        $cities = $idx_api->city_list($list_id);
+
+        if (!$cities) {
+            return false;
+        }
+
+        $column_class = '';
+
+        if (true == $columns) {
+
+            // Max of four columns
+            $number_columns = ($number_columns > 4) ? 4 : (int) $number_columns;
+
+            $number_links = count($cities);
+
+            $column_size = $number_links / $number_columns;
+
+            // if more columns than links make one column for every link
+            if ($column_size < 1) {
+                $number_columns = $number_links;
+            }
+
+            // round the column size up to a whole number
+            $column_size = ceil($column_size);
+
+            // column class
+            switch ($number_columns) {
+                case 0:
+                    $column_class = 'columns small-12 large-12';
+                    break;
+                case 1:
+                    $column_class = 'columns small-12 large-12';
+                    break;
+                case 2:
+                    $column_class = 'columns small-12 medium-6 large-6';
+                    break;
+                case 3:
+                    $column_class = 'columns small-12 medium-4 large-4';
+                    break;
+                case 4:
+                    $column_class = 'columns small-12 medium-3 large-3';
+                    break;
+            }
+        }
+
+        $output =
+        '<div class="city-list-links city-list-links-' . $list_id . ' row">' . "\n\t";
+
+        $output .= (true == $columns) ? '<ul class="' . $column_class . '">' : '<ul>';
+
+        $count = 0;
+
+        $cities_list = array();
+
+        foreach ($cities as $city) {
+
+            $count++;
+
+            $href = $idx_api->subdomain_url() . 'city-' . $idx_id . '-' . rawurlencode($city->name) . '-' . $city->id;
+
+            //do not add empty city names, ids, duplicates, or 'Other' cities
+            if (!empty($city->name) && !empty($city->id) && !in_array($city->id, $cities_list) && $city->name !== 'Other' && $city->name !== 'Out of State' && $city->name !== 'Out of Area') {
+                //avoid duplicates by keeping track of cities already used
+                array_push($cities_list, $city->id);
+                $output .= "\n\t\t" . '<li>' . "\n\t\t\t" . '<a href="' . $href . '">' . $city->name . '</a>' . "\n\t\t" . '</li>';
+            }
+
+            if (true == $columns && $count % $column_size == 0 && $count != 1 && $count != $number_links) {
+                $output .= "\n\t" . '</ul>' . "\n\t" . '<ul class="' . $column_class . '">';
+            }
+
+        }
+
+        $output .= "\n\t" . '</ul>' . "\n" . '</div><!-- .city-list-links -->';
+
+        return $output;
     }
 }

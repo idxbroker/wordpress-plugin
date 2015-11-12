@@ -33,7 +33,7 @@
     overflow-x: hidden;
     margin: 2rem auto;
     width: 80%;
-    max-width: 830px;
+    max-width: 833px;
     height: 90%;
 }
 .idx-modal-inner-content {
@@ -166,7 +166,7 @@
     position: absolute;
     bottom: 6.7%;
     width: 80%;
-    max-width: 830px;
+    max-width: 833px;
     background: #FCFCFC;
 }
 
@@ -252,8 +252,11 @@
 }
 
 
-@media screen and (max-width: 1003px) {
-
+@media screen and (max-width: 1040px) {
+    .idx-shortcode-type{
+        width: 46%;
+        margin: 2%;
+    }
 }
 
 @media screen and (max-width: 950px) {
@@ -271,6 +274,7 @@
 @media screen and (max-width: 700px) {
     .idx-shortcode-type{
         width: 90%;
+        margin: .5rem 5%;
     }
 }
 

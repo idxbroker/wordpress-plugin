@@ -1,17 +1,17 @@
 <?php
-namespace IDX\Widgets;
+namespace IDX\Shortcodes;
 
-class Create_Impress_Shortcodes
+class Register_Impress_Shortcodes
 {
 
     public function __construct()
     {
         $this->idx_api = new \IDX\Idx_Api();
-        add_shortcode('lead_login', array($this, 'lead_login_shortcode'));
-        add_shortcode('lead_signup', array($this, 'lead_signup_shortcode'));
-        add_shortcode('property_showcase', array($this, 'property_showcase_shortcode'));
-        add_shortcode('property_carousel', array($this, 'property_carousel_shortcode'));
-        add_shortcode('city_links', array($this, 'city_links_shortcode'));
+        add_shortcode('impress_lead_login', array($this, 'lead_login_shortcode'));
+        add_shortcode('impress_lead_signup', array($this, 'lead_signup_shortcode'));
+        add_shortcode('impress_property_showcase', array($this, 'property_showcase_shortcode'));
+        add_shortcode('impress_property_carousel', array($this, 'property_carousel_shortcode'));
+        add_shortcode('impress_city_links', array($this, 'city_links_shortcode'));
 
     }
 
@@ -27,7 +27,7 @@ class Create_Impress_Shortcodes
                 <input id="bb-IDX-widgetEmail" type="text" name="email" placeholder="Enter your email address">
                 <input id="bb-IDX-widgetPassword" type="hidden" name="password" value="">
                 <input id="bb-IDX-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
-            </form>', $idx_api->subdomain_url());
+            </form>', $this->idx_api->subdomain_url());
 
         return $widget;
     }
@@ -122,7 +122,7 @@ class Create_Impress_Shortcodes
         }
 
         // sort low to high
-        usort($properties, array($idx_api, 'price_cmp'));
+        usort($properties, array($this->idx_api, 'price_cmp'));
 
         if ('high-low' == $order) {
             $properties = array_reverse($properties);
@@ -150,8 +150,10 @@ class Create_Impress_Shortcodes
 
             $count++;
 
+            $prop = $this->set_missing_core_fields($prop);
+
             if (1 == $show_image) {
-                $output .= sprintf('<div class="showcase-property %15$s">
+                $output .= sprintf('<div class="showcase-property %12$s">
                         <a href="%3$s" class="showcase-photo">
                             <img src="%4$s" alt="%5$s" title="%5$s" />
                             <span class="price">%1$s</span>
@@ -164,31 +166,31 @@ class Create_Impress_Shortcodes
                                 <span class="state"> %11$s</span>
                             </p>
                         </a>
-                        <p class="beds-baths-sqft">
-                            <span class="beds">%12$s Beds</span>
-                            <span class="baths">%13$s Baths</span>
-                            <span class="sqft">%14$s Sq Ft</span>
-                        </p>
-                    </div>',
+
+                        ',
                     $prop['listingPrice'],
                     $prop['propStatus'],
-                    $idx_api->details_url() . '/' . $prop['detailsURL'],
+                    $this->idx_api->details_url() . '/' . $prop['detailsURL'],
                     $prop_image_url,
-                    $prop['remarksConcat'],
+                    htmlspecialchars($prop['remarksConcat']),
                     $prop['streetNumber'],
                     $prop['streetName'],
                     $prop['streetDirection'],
                     $prop['unitNumber'],
                     $prop['cityName'],
                     $prop['state'],
-                    $prop['bedrooms'],
-                    $prop['totalBaths'],
-                    $prop['sqFt'],
                     $column_class
                 );
+
+                $output .= '<p class="beds-baths-sqft">';
+                $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
+                $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
+                $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
+                $output .= "</p></a>";
+                $output .= "</div>";
             } else {
                 $output .= sprintf(
-                    '<li class="showcase-property-list %12$s">
+                    '<li class="showcase-property-list %9$s">
                         <a href="%2$s">
                             <p>
                                 <span class="price">%1$s</span>
@@ -196,28 +198,24 @@ class Create_Impress_Shortcodes
                                     <span class="street">%3$s %4$s %5$s %6$s</span>
                                     <span class="cityname">%7$s</span>,
                                     <span class="state"> %8$s</span>
-                                </span>
-                                <span class="beds-baths-sqft">
-                                    <span class="beds">%9$s Beds</span>
-                                    <span class="baths">%10$s Baths</span>
-                                    <span class="sqft">%11$s Sq Ft</span>
-                                </span>
-                            </p>
-                        </a>
-                    </li>',
+                                </span>',
                     $prop['listingPrice'],
-                    $idx_api->details_url() . '/' . $prop['detailsURL'],
+                    $this->idx_api->details_url() . '/' . $prop['detailsURL'],
                     $prop['streetNumber'],
                     $prop['streetName'],
                     $prop['streetDirection'],
                     $prop['unitNumber'],
                     $prop['cityName'],
                     $prop['state'],
-                    $prop['bedrooms'],
-                    $prop['totalBaths'],
-                    $prop['sqFt'],
                     $column_class
                 );
+
+                $output .= '<span class="beds-baths-sqft">';
+                $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
+                $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
+                $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
+                $output .= "</span></p></a>";
+                $output .= "</li>";
             }
 
             if (1 == $use_rows && $count != 1) {
@@ -241,6 +239,49 @@ class Create_Impress_Shortcodes
         }
 
         return $output;
+
+    }
+
+    //Hide fields that have no data to avoid fields such as 0 Baths from displaying
+    public function hide_empty_fields($field, $display_name, $value)
+    {
+        if ($value <= 0) {
+            return '';
+        } else {
+            return "<span class=\"$field\">$value $display_name</span> ";
+        }
+    }
+
+    public function set_missing_core_fields($prop)
+    {
+        $name_values = array(
+            'image',
+            'remarksConcat',
+            'detailsURL',
+            'streetNumber',
+            'streetName',
+            'streetDirection',
+            'unitNumber',
+            'cityName',
+            'state',
+        );
+        $number_values = array(
+            'listingPrice',
+            'bedrooms',
+            'totalBaths',
+            'sqFt',
+        );
+        foreach ($name_values as $field) {
+            if (empty($prop[$field])) {
+                $prop[$field] = '';
+            }
+        }
+        foreach ($number_values as $field) {
+            if (empty($prop[$field])) {
+                $prop[$field] = 0;
+            }
+        }
+        return $prop;
 
     }
 
@@ -340,6 +381,8 @@ class Create_Impress_Shortcodes
 
             $count++;
 
+            $prop = $this->set_missing_core_fields($prop);
+
             $output .= sprintf(
                 '<div class="carousel-property">
                     <a href="%2$s" class="carousel-photo">
@@ -352,27 +395,25 @@ class Create_Impress_Shortcodes
                             <span class="cityname">%9$s</span>,
                             <span class="state"> %10$s</span>
                         </p>
-                    </a>
-                    <p class="beds-baths-sqft">
-                        <span class="beds">%11$s Beds</span>
-                        <span class="baths">%12$s Baths</span>
-                        <span class="sqft">%13$s Sq Ft</span>
-                    </p>
-                </div>',
+                    </a>',
                 $prop['listingPrice'],
-                $idx_api->details_url() . '/' . $prop['detailsURL'],
+                $this->idx_api->details_url() . '/' . $prop['detailsURL'],
                 $prop_image_url,
-                $prop['remarksConcat'],
+                htmlspecialchars($prop['remarksConcat']),
                 $prop['streetNumber'],
                 $prop['streetName'],
                 $prop['streetDirection'],
                 $prop['unitNumber'],
                 $prop['cityName'],
-                $prop['state'],
-                $prop['bedrooms'],
-                $prop['totalBaths'],
-                $prop['sqFt']
+                $prop['state']
             );
+
+            $output .= '<p class="beds-baths-sqft">';
+            $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
+            $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
+            $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
+            $output .= "</p>";
+            $output .= "</div>";
         }
 
         $output .= '</div><!-- end .equity-listing-carousel -->';
@@ -390,7 +431,7 @@ class Create_Impress_Shortcodes
             'number_columns' => 4,
         ), $atts));
 
-        $city_links = $this->idx_api->city_list_links($city_list, $mls, $use_columns, $number_columns);
+        $city_links = \IDX\Widgets\Impress_City_Links_Widget::city_list_links($city_list, $mls, $use_columns, $number_columns);
 
         if (false == $city_links) {
             return 'City list ID or MLS ID not found';
@@ -640,4 +681,5 @@ class Create_Impress_Shortcodes
         <?php
 echo '</div>';
     }
+
 }
