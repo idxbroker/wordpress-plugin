@@ -119,17 +119,9 @@ class Register_Shortcodes
     {
         if ($type == 0) {
             // if the cache has expired, send an API request to update them. Cache expires after 2 hours.
-            if (!$this->idx_api->get_transient('idx_systemlinks_cache')) {
-                $this->idx_api->idx_api_get_systemlinks();
-            }
-
-            $idx_links = $this->idx_api->get_transient('idx_systemlinks_cache');
+            $idx_links = $this->idx_api->idx_api_get_systemlinks();
         } elseif ($type == 1) {
-            if (!get_transient('idx_savedlinks_cache')) {
-                $this->idx_api->idx_api_get_savedlinks();
-            }
-
-            $idx_links = $this->idx_api->get_transient('idx_savedlinks_cache');
+            $idx_links = $this->idx_api->idx_api_get_savedlinks();
         }
 
         $selected_link = '';
