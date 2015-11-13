@@ -1,7 +1,7 @@
 <?php
 namespace IDX;
 
-//Migrate Legacy Plugin Pages to New Custom Post Type
+//Migrate Legacy Plugin Pages from version <1.3
 class Migrate_Old_Table
 {
     public function __construct()

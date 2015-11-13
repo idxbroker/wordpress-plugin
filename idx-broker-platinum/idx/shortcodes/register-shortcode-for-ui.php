@@ -19,8 +19,8 @@ class Register_Shortcode_For_Ui
             'system_links' => array('name' => 'System Links', 'short_name' => 'system_links', 'icon' => 'fa fa-star'),
             'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => 'fa fa-floppy-o'),
             'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => 'fa fa-cog'),
-            'omnibar' => array('name' => 'IDX Omnibar', 'short_name' => 'omnibar', 'icon' => 'fa fa-cog'),
-            'omnibar_extra' => array('name' => 'IDX Omnibar With Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-cog'),
+            'omnibar' => array('name' => 'IDX Omnibar', 'short_name' => 'omnibar', 'icon' => 'fa fa-search'),
+            'omnibar_extra' => array('name' => 'IDX Omnibar With Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-search-plus'),
 
             // for version 2.0
             // 'impress_lead_login_widget' => array('name' => 'Impress Lead Login Widget', 'short_name' => 'impress_lead_login_widget', 'icon' => 'fa fa-users'),
@@ -85,16 +85,15 @@ class Register_Shortcode_For_Ui
         if ($link_type === 0) {
             $short_code = Register_Shortcodes::SHORTCODE_SYSTEM_LINK;
             $idx_links = $this->idx_api->idx_api_get_systemlinks();
-            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $short_code . "\"><label for=\"system-link\">Select a System Link</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
         } elseif ($link_type == 1) {
             $short_code = Register_Shortcodes::SHORTCODE_SAVED_LINK;
             $idx_links = $this->idx_api->idx_api_get_savedlinks();
-            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $short_code . "\"><label for=\"saved-link\">Select a Saved Link</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
         } else {
             return false;
         }
 
         if (count($idx_links) > 0 && is_array($idx_links)) {
+            $available_shortcodes .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"" . $short_code . "\"><label for=\"saved-link\">Select a Link</label><select id=\"idx-select-subtype\" data-short-name=\"id\" style=\"width: 100%;\">";
             foreach ($idx_links as $idx_link) {
                 if ($link_type === 0) {
                     $available_shortcodes .= $this->get_system_link_html($idx_link);
@@ -103,10 +102,10 @@ class Register_Shortcode_For_Ui
                     $available_shortcodes .= $this->get_saved_link_html($idx_link);
                 }
             }
+            $available_shortcodes .= "</select></div><div class=\"idx-modal-shortcode-field\"><label for=\"title\">Change the Title?</label><input type=\"text\" name=\"title\" id=\"title\" data-short-name=\"title\"></div>";
         } else {
-            $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.</div>';
+            $available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.<br>For instructions on creating Saved Links, see <a href="http://support.idxbroker.com/customer/portal/articles/1913083" target="_blank">this article</a> from our knowledgebase.</div>';
         }
-        $available_shortcodes .= "</select></div><div class=\"idx-modal-shortcode-field\"><label for=\"title\">Change the Title?</label><input type=\"text\" name=\"title\" id=\"title\" data-short-name=\"title\"></div>";
 
         return $available_shortcodes;
     }

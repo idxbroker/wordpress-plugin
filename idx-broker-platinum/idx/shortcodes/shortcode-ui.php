@@ -60,8 +60,8 @@ class Shortcode_Ui
             echo "</div>";
         }
         echo "</div><div class=\"idx-modal-shortcode-edit\"></div><div class=\"idx-modal-shortcode-preview\"></div>";
-        echo "</div><div class=\"separator\"></div>";
-        echo "<div class=\"idx-toolbar-primary\"><button class=\"button button-primary\">Insert Shortcode</button></div>";
+        echo "</div>";
+        echo "<div class=\"idx-toolbar-primary\"><div class=\"separator\"></div><button class=\"button button-primary\">Insert Shortcode</button></div>";
     }
 
     public function get_shortcodes_for_ui()

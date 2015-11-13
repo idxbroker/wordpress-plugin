@@ -17,18 +17,13 @@
 }
 #idx-shortcode-modal {
     position: fixed;
-    top: 30px;
-    left: 30px;
-    right: 30px;
-    bottom: 30px;
     z-index: 160000;
-}
-.idx-modal-content {
-    position: absolute;
+    width: 100%;
+    height: 100%;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+}
+.idx-modal-content {
     overflow: auto;
     min-height: 300px;
     -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.7);
@@ -36,9 +31,22 @@
     background: #fcfcfc;
     -webkit-font-smoothing: subpixel-antialiased;
     overflow-x: hidden;
+    margin: 2rem auto;
+    width: 80%;
+    max-width: 833px;
+    height: 90%;
 }
 .idx-modal-inner-content {
     padding: 1rem 0;
+    min-height: 172px;
+    max-height: 84.9%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.idx-modal-content .media-modal-close {
+    position: relative;
+    float: right;
 }
 
 .wp-core-ui .idx-modal-content .media-modal-close:focus {
@@ -67,7 +75,7 @@
 }
 
 .idx-shortcode-type{
-    width: 17rem;
+    width: 15rem;
     display: inline-block;
     margin: 1rem;
     cursor: pointer;
@@ -75,6 +83,12 @@
 .idx-modal-shortcode-edit, .idx-modal-shortcode-preview {
     border-top: 1px solid #DDDDDD;
     padding: 1rem;
+}
+
+.wp-media-buttons .idx-modal-shortcode-edit a {
+    color: #0073aa;
+    text-decoration: underline;
+    font: inherit;
 }
 
 .wp-media-buttons .idx-modal-shortcode-preview > a {
@@ -143,15 +157,22 @@
 #idx-shortcode-modal .button {
     display: block;
     margin-left: 1rem;
-    float: left;
+    float: right;
     margin: .5rem;
-    /*position: absolute;*/
-    bottom: .5rem;
-    right: 0;
 }
+
+.idx-toolbar-primary {
+    float: right;
+    position: absolute;
+    bottom: 6.7%;
+    width: 80%;
+    max-width: 833px;
+    background: #FCFCFC;
+}
+
 #idx-shortcode-modal .button, #idx-shortcode-modal .separator {
-        position: static;
-    }
+    position: static;
+}
 #idx-shortcode-modal .button:active{
     top: initial;
 }
@@ -201,7 +222,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(#00a0d2, #fff 60%);
+  background: linear-gradient(#00a0d2, #FCFCFC 60%);
   -webkit-animation: spin 1s infinite linear;
   animation: spin 1s infinite linear;
 }
@@ -213,7 +234,7 @@
   height: 95%;
   top: 2.5%;
   left: 2.5%;
-  background-color: #fff;
+  background-color: #FCFCFC;
   border-radius: 50%;
 }
 @-webkit-keyframes spin {
@@ -231,8 +252,11 @@
 }
 
 
-@media screen and (max-width: 1003px) {
-
+@media screen and (max-width: 1040px) {
+    .idx-shortcode-type{
+        width: 46%;
+        margin: 2%;
+    }
 }
 
 @media screen and (max-width: 950px) {
@@ -250,11 +274,47 @@
 @media screen and (max-width: 700px) {
     .idx-shortcode-type{
         width: 90%;
+        margin: .5rem 5%;
     }
 }
 
 @media screen and (max-width: 500px) {
     .idx-modal-shortcode-field {
         width: 100%;
+    }
+}
+/* Max Height*/
+@media screen and (max-height: 920px) {
+    .idx-toolbar-primary {
+        bottom: 5.7%;
+    }
+    .idx-modal-inner-content {
+        max-height: 78.9%;
+    }
+
+}
+@media screen and (max-height: 680px) {
+    .idx-toolbar-primary {
+        bottom: 5.7%;
+    }
+    .idx-modal-inner-content {
+        max-height: 69.9%;
+    }
+}
+@media screen and (max-height: 500px) {
+    .idx-toolbar-primary {
+        bottom: 3.7%;
+    }
+    .idx-modal-inner-content {
+        max-height: 57.9%;
+    }
+}
+@media screen and (max-height: 400px) {
+    .idx-toolbar-primary {
+        bottom: 0%;
+    }
+    .idx-modal-inner-content {
+        max-height: 100%;
+        margin-bottom: 2rem;
     }
 }

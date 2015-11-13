@@ -51,7 +51,8 @@ class Wrappers
     public function does_theme_include_idx_tag()
     {
         // default page content
-        $post_content = '<div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div>';
+        //the empty div is for any content they add to the visual editor so it displays
+        $post_content = '<div></div><div id="idxStart" style="display: none;"></div><div id="idxStop" style="display: none;"></div>';
         // get theme to check start/stop tag
         $does_theme_include_idx_tag = false;
         $template_root = get_theme_root() . DIRECTORY_SEPARATOR . get_stylesheet();
@@ -129,11 +130,11 @@ class Wrappers
     public function is_selected($value)
     {
         $post_id = get_the_ID();
-        $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page')[0];
+        $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page', true);
         if (!empty($saved_wrapper_page)) {
-            $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page')[0];
+            $saved_wrapper_page = get_post_meta($post_id, 'idx-wrapper-page', true);
         }
-        if ($value === $saved_wrapper_page) {
+        if (!empty($value) && $value === $saved_wrapper_page) {
             return 'selected';
         }
     }
