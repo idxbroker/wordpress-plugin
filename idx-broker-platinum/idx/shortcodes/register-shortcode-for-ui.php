@@ -60,16 +60,16 @@ class Register_Shortcode_For_Ui
                 echo $this->get_lead_login("impress_lead_login");
                 break;
             case "impress_lead_signup":
-                echo $this->get_omnibar_extra("impress_lead_signup");
+                echo $this->get_lead_signup("impress_lead_signup");
                 break;
             case "impress_city_links":
-                echo $this->get_omnibar_extra("impress_city_links");
+                echo $this->get_city_links("impress_city_links");
                 break;
             case "impress_property_showcase":
-                echo $this->get_omnibar_extra("impress_property_showcase");
+                echo $this->get_property_showcase("impress_property_showcase");
                 break;
             case "impress_property_carousel":
-                echo $this->get_omnibar_extra("impress_property_carousel");
+                echo $this->get_property_carousel("impress_property_carousel");
                 break;
         }
         //return html for the desired type for 3rd party plugins
@@ -198,6 +198,179 @@ class Register_Shortcode_For_Ui
         $output .= "openPreviewTab(event);";
         $output .= "</script>";
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\"></div>";
+
+        return $output;
+    }
+
+    public function get_lead_signup($shortcode)
+    {
+        $output = '';
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"idx-phone-number\">Show phone number field?</label>";
+        $output .= "<input type=\"checkbox\" id=\"idx-phone-number\" data-short-name=\"phone\">";
+        $output .= "</div>";
+
+        return $output;
+    }
+
+    public function get_city_links($shortcode)
+    {
+        $defaults = array(
+            'city_list' => 'combinedActiveMLS',
+            'mls' => '',
+            'use_columns' => 0,
+            'number_columns' => 4,
+        );
+
+        $approved_mls = \IDX\Widgets\Impress_City_Links_Widget::mls_options($defaults);
+        $city_list_options = \IDX\Widgets\Impress_City_Links_Widget::city_list_options($defaults);
+
+        $output = '';
+        // MLS
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"mls\">MLS to use for city links</label>";
+        $output .= "<select id=\"mls\" data-short-name=\"mls\">";
+        $output .= $approved_mls;
+        $output .= "</select>";
+        $output .= "</div>";
+
+        // City List
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"city-list\">Select a city list</label>";
+        $output .= "<select id=\"city-list\" data-short-name=\"city_list\">";
+        $output .= $city_list_options;
+        $output .= "</select>";
+        $output .= "</div>";
+
+        // Use Columns
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"use-columns\" data-short-name=\"use_columns\">";
+        $output .= "<label for\"use-columns\">Split links into columns?</label>";
+        $output .= "</div>";
+
+        // Number of Columns
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"number-columns\">Number of columns</label>";
+        $output .= "<select id=\"number-columns\" data-short-name=\"number_columns\">";
+        $output .= "<option value=\"2\">2</option>";
+        $output .= "<option value=\"3\">3</option>";
+        $output .= "<option value=\"4\" selected=\"selected\">4</option>";
+        $output .= "</select>";
+        $output .= "</div>";
+
+        $output .= "<p>Don't have any city lists? Go create some in your <a href=\"http://middleware.idxbroker.com/mgmt/citycountyziplists.php\">IDX dashboard.</a></p>";
+
+        return $output;
+    }
+
+    public function get_property_showcase($shortcode)
+    {
+        $defaults = array(
+            'max' => 4,
+            'use_rows' => 1,
+            'num_per_row' => 4,
+            'show_image' => 1,
+            'order' => 'high-low',
+            'property_type' => 'featured',
+            'saved_link_id' => '',
+        );
+
+        $output = '';
+        // Property type
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"property-type\">Properties to Display</label>";
+        $output .= "<select id=\"property-type\" data-short-name=\"property_type\">";
+        $output .= "<option value=\"featured\" selected=\"selected\">Featured</option>";
+        $output .= "<option value=\"soldpending\">Sold/Pending</option>";
+        $output .= "<option value=\"supplemental\">Supplemental</option>";
+        $output .= "<option value=\"historical\">Historical</option>";
+        $output .= "</select>";
+        $output .= "</div>";
+        // Images
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"show-image\" data-short-name=\"show_image\" checked>";
+        $output .= "<label for\"show-image\">Show image?</label>";
+        $output .= "</div>";
+        // Rows
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"use-rows\" data-short-name=\"use_rows\" checked>";
+        $output .= "<label for\"use-rows\">Use rows?</label>";
+        $output .= "</div>";
+        // Per row
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"property-type\">Listings per row</label>";
+        $output .= "<select id=\"property-type\" data-short-name=\"num_per_row\">";
+        $output .= "<option value=\"2\">2</option>";
+        $output .= "<option value=\"3\">3</option>";
+        $output .= "<option value=\"4\" selected=\"selected\">4</option>";
+        $output .= "</select>";
+        $output .= "</div>";
+        // Max Listings
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"max\">Max number of listings to show</label>";
+        $output .= "<input type=\"number\" id=\"max\" data-short-name=\"max\" value=\"4\">";
+        $output .= "</div>";
+        // Sort order
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"order\">Sort order</label>";
+        $output .= "<select id=\"order\" data-short-name=\"order\">";
+        $output .= "<option value=\"high-low\" selected=\"selected\">Highest to Lowest Price</option>";
+        $output .= "<option value=\"low-high\">Lowest to Highest Price</option>";
+        $output .= "</select>";
+        $output .= "</div>";
+
+        return $output;
+    }
+
+    public function get_property_carousel($shortcode)
+    {
+        $defaults = array(
+            'max' => 15,
+            'display' => 3,
+            'autoplay' => 1,
+            'order' => 'high-low',
+            'property_type' => 'featured',
+            'saved_link_id' => '',
+        );
+
+        $output = '';
+        // Property type
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"property-type\">Properties to Display</label>";
+        $output .= "<select id=\"property-type\" data-short-name=\"property_type\">";
+        $output .= "<option value=\"featured\" selected=\"selected\">Featured</option>";
+        $output .= "<option value=\"soldpending\">Sold/Pending</option>";
+        $output .= "<option value=\"supplemental\">Supplemental</option>";
+        $output .= "<option value=\"historical\">Historical</option>";
+        $output .= "</select>";
+        $output .= "</div>";
+        // Per row
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"display\">Listings to show without scrolling</label>";
+        $output .= "<input type=\"number\" id=\"display\" data-short-name=\"display\" value=\"3\">";
+        $output .= "</div>";
+        // Max Listings
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"max\">Max number of listings to show</label>";
+        $output .= "<input type=\"number\" id=\"max\" data-short-name=\"max\" value=\"15\">";
+        $output .= "</div>";
+        // Sort order
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"order\">Sort order</label>";
+        $output .= "<select id=\"order\" data-short-name=\"order\">";
+        $output .= "<option value=\"high-low\" selected=\"selected\">Highest to Lowest Price</option>";
+        $output .= "<option value=\"low-high\">Lowest to Highest Price</option>";
+        $output .= "</select>";
+        $output .= "</div>";
+        // Autoplay
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"autoplay\" data-short-name=\"autoplay\" checked>";
+        $output .= "<label for\"autoplay\">Autoplay?</label>";
+        $output .= "</div>";
+
+        // Styles and Scripts for Preview
+        $output .= "<style>" . file_get_contents(plugins_url('../assets/css/owl.carousel.css', dirname(__FILE__))) . "</style>";
+        $output .= "<script src=\"" . plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)) . "\"></script>";
 
         return $output;
     }

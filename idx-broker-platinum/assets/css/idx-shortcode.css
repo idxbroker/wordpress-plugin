@@ -187,10 +187,19 @@
     display: block;
     margin-bottom: .3rem;
 }
-.idx-modal-shortcode-edit select, .idx-modal-shortcode-edit input {
+.idx-modal-shortcode-edit select, .idx-modal-shortcode-edit input, .idx-modal-shortcode-edit textarea {
     display: block;
     width: 100%;
 }
+
+.idx-modal-shortcode-field.checkbox label, .idx-modal-shortcode-field.checkbox input {
+    display: inline-block;
+}
+
+.idx-modal-shortcode-edit input[type=checkbox] {
+    width: initial;
+}
+
 .idx-modal-shortcode-preview {
     display: none;
 }
@@ -293,20 +302,38 @@
     }
 
 }
-@media screen and (max-height: 680px) {
+@media screen and (max-height: 700px) {
     .idx-toolbar-primary {
         bottom: 5.7%;
     }
     .idx-modal-inner-content {
-        max-height: 69.9%;
+        max-height: 65%;
+    }
+}
+@media screen and (max-height: 650px) {
+    .idx-toolbar-primary {
+        bottom: 5.7%;
+    }
+    .idx-modal-inner-content {
+        max-height: 55%;
     }
 }
 @media screen and (max-height: 500px) {
+    #idx-shortcode-modal h1{
+        font-size: 20px;
+        line-height: 1.75em;
+    }
+    .idx-modal-content .media-modal-close{
+        width: 35px;
+        height: 40px;
+    }
+
     .idx-toolbar-primary {
         bottom: 3.7%;
     }
     .idx-modal-inner-content {
-        max-height: 57.9%;
+        max-height: 60.9%;
+        margin-top: .25rem;
     }
 }
 @media screen and (max-height: 400px) {

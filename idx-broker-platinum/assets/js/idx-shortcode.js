@@ -120,21 +120,33 @@ document.addEventListener('DOMContentLoaded', function(event){
     function shortcodeDetailTitle(shortcodeType){
         switch(shortcodeType){
             case 'system_links':
-                modalTitle.innerHTML = 'IDX Shortcode Details - System Links';
+                modalTitle.innerHTML = 'Shortcode Details - System Links';
             case 'saved_links':
-                modalTitle.innerHTML = 'IDX Shortcode Details - Saved Links';
+                modalTitle.innerHTML = 'Shortcode Details - Saved Links';
                 break;
             case 'widgets':
-                modalTitle.innerHTML = 'IDX Shortcode Details - Widgets';
+                modalTitle.innerHTML = 'Shortcode Details - Widgets';
                 break;
             case 'omnibar':
-                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Omnibar';
+                modalTitle.innerHTML = 'Shortcode Preview - IMPress Omnibar';
                 break;
             case 'omnibar_extra':
-                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Omnibar With Extra Fields';
+                modalTitle.innerHTML = 'Shortcode Preview - IMPress Omnibar With Extra Fields';
                 break;
             case 'impress_lead_login':
-                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Lead Login';
+                modalTitle.innerHTML = 'Shortcode Preview - IMPress Lead Login';
+                break;
+            case 'impress_lead_signup':
+                modalTitle.innerHTML = 'Shortcode Details - IMPress Lead Signup';
+                break;
+            case 'impress_city_links':
+                modalTitle.innerHTML = 'Shortcode Details - IMPress City Links';
+                break;
+            case 'impress_property_showcase':
+                modalTitle.innerHTML = 'Shortcode Details - IMPress Property Showcase';
+                break;
+            case 'impress_property_carousel':
+                modalTitle.innerHTML = 'Shortcode Details - IMPress Property Carousel';
                 break;
             default:
                 //for a custom third party title
@@ -262,6 +274,15 @@ document.addEventListener('DOMContentLoaded', function(event){
         var input = field.querySelectorAll('input')[0];
         var select = field.querySelectorAll('select')[0];
         var textarea = field.querySelectorAll('textarea')[0];
+        var checkbox = field.querySelectorAll('input[type=checkbox]')[0];
+        if(typeof checkbox !== 'undefined'){
+            if(checkbox.checked){
+                checkbox.value = 1;
+            } else{
+                checkbox.value = 0;
+            }
+            return checkbox;
+        }
         if(typeof input !== 'undefined'){
             return input;
         } else if(typeof select !== 'undefined'){

@@ -297,8 +297,8 @@ class Register_Impress_Shortcodes
             'saved_link_id' => '',
         ), $atts));
 
-        wp_enqueue_style('owl-css');
-        wp_enqueue_script('owl');
+        wp_enqueue_style('owl-css', plugins_url('../assets/css/owl.carousel.css', dirname(__FILE__)));
+        wp_enqueue_script('owl', plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)));
 
         $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-chevron-circle-left\"></i><span>Prev</span>', 'equity'));
         $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-chevron-circle-right\"></i><span>Next</span>', 'equity'));
