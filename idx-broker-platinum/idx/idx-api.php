@@ -59,7 +59,8 @@ class Idx_Api
         $request_type = 'GET'
     ) {
         $cache_key = 'idx_' . $method . '_cache';
-        if (($data = $this->get_transient($cache_key))) {
+        if ($this->get_transient($cache_key) !== false) {
+            $data = $this->get_transient($cache_key);
             return $data;
         }
 
@@ -140,15 +141,11 @@ class Idx_Api
      */
     public function idx_clean_transients()
     {
-        if ($this->get_transient('idx_savedlinks_cache')) {
-            $this->delete_transient('idx_savedlinks_cache');
-        }
-        if ($this->get_transient('idx_widgetsrc_cache')) {
-            $this->delete_transient('idx_widgetsrc_cache');
-        }
-        if ($this->get_transient('idx_systemlinks_cache')) {
-            $this->delete_transient('idx_systemlinks_cache');
-        }
+
+        $this->delete_transient('idx_savedlinks_cache');
+        $this->delete_transient('idx_widgetsrc_cache');
+        $this->delete_transient('idx_systemlinks_cache');
+
         $this->clear_wrapper_cache();
     }
 

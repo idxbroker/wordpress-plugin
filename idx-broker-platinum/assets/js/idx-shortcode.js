@@ -47,27 +47,32 @@ document.addEventListener('DOMContentLoaded', function(event){
 
     //Close the modal and perform reset actions in case they open it again
     function closeShortcodeModal(event) {
-        event.preventDefault();
-        modal.style.display = 'none';
-        overlay.style.display = 'none';
-        el('body')[0].style.overflow = 'initial';
-        el('#wpbody')[0].style.zIndex = 'initial';
-        overView.style.display = 'block';
-        editTab.innerHTML = '';
-        tabButtons.style.display = 'none';
-        previewTab.style.display = 'none';
-        previewTabButton.classList.remove('idx-active-tab');
-        editTabButton.classList.add('idx-active-tab');
-        modalTitle.innerHTML = 'Insert IDX Shortcode';
-        previewTabButton.removeEventListener('click', openPreviewTab);
-        editTabButton.removeEventListener('click', openEditTab);
+        //only close the modal if the overlay, close, or insert buttons are clicked
+        if(event.target === modal || event.target === close || event.target === close.querySelector('span') || event.target === insertButton){
+            event.preventDefault();
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+            el('body')[0].style.overflow = 'initial';
+            el('#wpbody')[0].style.zIndex = 'initial';
+            overView.style.display = 'block';
+            editTab.innerHTML = '';
+            tabButtons.style.display = 'none';
+            previewTab.style.display = 'none';
+            previewTabButton.classList.remove('idx-active-tab');
+            editTabButton.classList.add('idx-active-tab');
+            modalTitle.innerHTML = 'Insert IDX Shortcode';
+            previewTabButton.removeEventListener('click', openPreviewTab);
+            editTabButton.removeEventListener('click', openEditTab);
+        }
     }
 
 
     //initialize button and modal functionality
     function initializeModal(){
         el('#idx-shortcode')[0].addEventListener('click', openShortcodeModal);
-        overlay.addEventListener('click', closeShortcodeModal);
+        modal.addEventListener('click', function(event){
+            closeShortcodeModal(event);
+        });
         close.addEventListener('click', closeShortcodeModal);
         makeTypesSelectable();
         insertButton.addEventListener('click', insertShortcode);
@@ -113,27 +118,35 @@ document.addEventListener('DOMContentLoaded', function(event){
 
     //Change Details Modal Title
     function shortcodeDetailTitle(shortcodeType){
-        if(shortcodeType === 'system_links'){
+        switch(shortcodeType){
+            case 'system_links':
                 modalTitle.innerHTML = 'IDX Shortcode Details - System Links';
-        } else if(shortcodeType === 'saved_links'){
+            case 'saved_links':
                 modalTitle.innerHTML = 'IDX Shortcode Details - Saved Links';
-        } else if(shortcodeType === 'widgets'){
+                break;
+            case 'widgets':
                 modalTitle.innerHTML = 'IDX Shortcode Details - Widgets';
-        } else if(shortcodeType === 'omnibar'){
-                modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar';
-        } else if(shortcodeType === 'omnibar_extra'){
-                modalTitle.innerHTML = 'IDX Shortcode Preview - Omnibar With Extra Fields';
-        } else {
-            //for a custom third party title
-            jQuery.post(
-            ajaxurl, {
-                'action': 'idx_shortcode_title',
-                'idx_shortcode_type' : shortcodeType
-            }).done(function(data){
-                modalTitle.innerHTML = data;
-            }).fail(function(data){
-                modalTitle.innerHTML = 'Shortcode Details - ' + shortcodeType;
-        });
+                break;
+            case 'omnibar':
+                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Omnibar';
+                break;
+            case 'omnibar_extra':
+                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Omnibar With Extra Fields';
+                break;
+            case 'impress_lead_login':
+                modalTitle.innerHTML = 'IDX Shortcode Preview - IMPress Lead Login';
+                break;
+            default:
+                //for a custom third party title
+                jQuery.post(
+                ajaxurl, {
+                    'action': 'idx_shortcode_title',
+                    'idx_shortcode_type' : shortcodeType
+                }).done(function(data){
+                    modalTitle.innerHTML = data;
+                }).fail(function(data){
+                    modalTitle.innerHTML = 'Shortcode Details - ' + shortcodeType;
+                });
         }
     }
 
@@ -248,10 +261,13 @@ document.addEventListener('DOMContentLoaded', function(event){
     function getInput(field){
         var input = field.querySelectorAll('input')[0];
         var select = field.querySelectorAll('select')[0];
+        var textarea = field.querySelectorAll('textarea')[0];
         if(typeof input !== 'undefined'){
             return input;
         } else if(typeof select !== 'undefined'){
             return select;
+        } else if(typeof textarea !== 'undefined'){
+            return textarea;
         }
         return false;
     }
