@@ -7,7 +7,7 @@ class Shortcode_Ui
     public function __construct()
     {
         add_action('media_buttons_context', array($this, 'add_idx_button'));
-        add_action('wp_enqueue_media', array($this, 'enqueue_shortcode_js'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_shortcode_js'));
         $this->shortcodes_for_ui = new Register_Shortcode_For_Ui();
 
     }
@@ -22,8 +22,11 @@ class Shortcode_Ui
         return $context .= "<button id=\"idx-shortcode\" class=\"button thickbox\"><span><img src=\"$icon\"></span>Add IDX Shortcode</button>";
     }
 
-    public function enqueue_shortcode_js()
+    public function enqueue_shortcode_js($hook)
     {
+        if ('post.php' != $hook) {
+            return;
+        }
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
         wp_enqueue_script('idx-shortcode', plugins_url('../assets/js/idx-shortcode.js', dirname(__FILE__)), array('jquery'));
