@@ -12,6 +12,7 @@ class Create_Omnibar
     public function idx_omnibar_basic($plugin_dir, $idx_url)
     {
         //css and js have been minified and combined to help performance
+        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
         wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/idx-omnibar.min.css', __FILE__));
         wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', __FILE__));
         //inserts inline variable for the results page url
@@ -30,6 +31,7 @@ EOD;
     public function idx_omnibar_extra($plugin_dir, $idx_url)
     {
         //css and js have been minified and combined to help performance
+        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
         wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/idx-omnibar.min.css', __FILE__));
         wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', __FILE__));
         //inserts inline variable for the results page url
