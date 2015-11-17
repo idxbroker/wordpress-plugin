@@ -72,12 +72,11 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 == Screenshots ==
 
-1. Widget Builder.
-2. Dynamic Wrapper.
-3. Core Routing With Round Robin.
-4. Email Update Signup Form Wizard.
-5. Email Update Signup Form.
-6. Adding Shortcodes.
+1. Omnibar Search Widget.
+2. IDX Shortcode UI.
+3. Widget Customizer.
+4. Plugin Settings Page.
+5. Middleware API Key.
 
 == Changelog ==
 
