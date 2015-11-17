@@ -81,6 +81,11 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 == Changelog ==
 
+= 2.0.0 =
+* The IDX Broker plugin has been renamed as the IMPress plugin.
+* Five new WordPress native IMPress widgets and shortcodes have been added to the plugin: Lead Login and Signup Widgets, a City Links widget, and showcase and carousel widgets have been added. Take advantage of these new widgets to deliver the best experience for your website visitors.
+* Each of these widgets has customization options right within WordPress including the ability to disable styling for designers to gain more control of the appearance of these widgets.
+
 = 1.3.0 =
 * Improved compatability with WP caching plugins fixing a bug that caused an API overage.
 * Simplified the Admin UI.

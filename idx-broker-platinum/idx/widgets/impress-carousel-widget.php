@@ -42,16 +42,17 @@ class Impress_Carousel_Widget extends \WP_Widget
      */
     public function body($instance)
     {
-
+        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
         wp_enqueue_style('owl-css', plugins_url('../assets/css/owl.carousel.css', dirname(__FILE__)));
+        wp_enqueue_style('impress-widgets', plugins_url('../assets/css/impress-widgets.css', dirname(__FILE__)));
         wp_enqueue_script('owl', plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)));
 
         if (empty($instance)) {
             $instance = $this->defaults;
         }
 
-        $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-chevron-circle-left\"></i><span>Prev</span>', 'idxbroker'));
-        $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-chevron-circle-right\"></i><span>Next</span>', 'idxbroker'));
+        $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker'));
+        $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker'));
 
         if (($instance['properties']) == 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($instance['saved_link_id']);
@@ -139,16 +140,16 @@ class Impress_Carousel_Widget extends \WP_Widget
             $prop = $this->set_missing_core_fields($prop);
 
             $output .= sprintf(
-                '<div class="carousel-property">
-					<a href="%2$s" class="carousel-photo">
+                '<div class="impress-carousel-property">
+					<a href="%2$s" class="impress-carousel-photo">
 						<img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%4$s" />
-						<span class="price">%1$s</span>
+						<span class="impress-price">%1$s</span>
 					</a>
 					<a href="%2$s">
-						<p class="address">
-							<span class="street">%5$s %6$s %7$s %8$s</span>
-							<span class="cityname">%9$s</span>,
-							<span class="state"> %10$s</span>
+						<p class="impress-address">
+							<span class="impress-street">%5$s %6$s %7$s %8$s</span>
+							<span class="impress-cityname">%9$s</span>,
+							<span class="impress-state"> %10$s</span>
 						</p>
 					</a>',
                 $prop['listingPrice'],
@@ -163,7 +164,7 @@ class Impress_Carousel_Widget extends \WP_Widget
                 $prop['state']
             );
 
-            $output .= '<p class="beds-baths-sqft">';
+            $output .= '<p class="impress-beds-baths-sqft">';
             $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
             $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
             //remove decimals and add commas to SqFt value
@@ -184,7 +185,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         if ($value <= 0) {
             return '';
         } else {
-            return "<span class=\"$field\">$value $display_name</span> ";
+            return "<span class=\"impress-$field\">$value $display_name</span> ";
         }
     }
 

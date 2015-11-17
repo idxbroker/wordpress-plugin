@@ -45,6 +45,7 @@ class Impress_Showcase_Widget extends \WP_Widget
      */
     public function body($instance)
     {
+        wp_enqueue_style('impress-widgets', plugins_url('../assets/css/impress-widgets.css', dirname(__FILE__)));
 
         if (empty($instance)) {
             $instance = $this->defaults;
@@ -115,7 +116,7 @@ class Impress_Showcase_Widget extends \WP_Widget
             }
 
             if (1 == $instance['use_rows'] && $count == 0 && $max != '1') {
-                $output .= '<div class="row">';
+                $output .= '<div class="impress-row">';
             }
 
             $prop = $this->set_missing_core_fields($prop);
@@ -124,17 +125,17 @@ class Impress_Showcase_Widget extends \WP_Widget
 
             if (1 == $instance['show_image']) {
                 $output .= sprintf(
-                    '<div class="showcase-property %12$s">
-						<a href="%3$s" class="showcase-photo">
+                    '<div class="impress-showcase-property %12$s">
+						<a href="%3$s" class="impress-showcase-photo">
 							<img src="%4$s" alt="%5$s" title="%5$s" />
-							<span class="price">%1$s</span>
-							<span class="status">%2$s</span>
+							<span class="impress-price">%1$s</span>
+							<span class="impress-status">%2$s</span>
 						</a>
 						<a href="%3$s">
-							<p class="address">
-								<span class="street">%6$s %7$s %8$s %9$s</span>
-								<span class="cityname">%10$s</span>,
-								<span class="state"> %11$s</span>
+							<p class="impress-address">
+								<span class="impress-street">%6$s %7$s %8$s %9$s</span>
+								<span class="impress-cityname">%10$s</span>,
+								<span class="impress-state"> %11$s</span>
 							</p>
 						</a>',
                     $prop['listingPrice'],
@@ -151,7 +152,7 @@ class Impress_Showcase_Widget extends \WP_Widget
                     $column_class
                 );
 
-                $output .= '<p class="beds-baths-sqft">';
+                $output .= '<p class="impress-beds-baths-sqft">';
                 $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
                 $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
                 $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
@@ -159,14 +160,14 @@ class Impress_Showcase_Widget extends \WP_Widget
                 $output .= "</div>";
             } else {
                 $output .= sprintf(
-                    '<li class="showcase-property-list %8$s">
+                    '<li class="impress-showcase-property-list %8$s">
 						<a href="%2$s">
 							<p>
-								<span class="price">%1$s</span>
-								<span class="address">
-									<span class="street">%3$s %4$s %5$s %6$s</span>
-									<span class="cityname">%7$s</span>,
-									<span class="state"> %8$s</span>
+								<span class="impress-price">%1$s</span>
+								<span class="impress-address">
+									<span class="impress-street">%3$s %4$s %5$s %6$s</span>
+									<span class="impress-cityname">%7$s</span>,
+									<span class="impress-state"> %8$s</span>
 								</span>',
                     $prop['listingPrice'],
                     $this->idx_api->details_url() . '/' . $prop['detailsURL'],
@@ -179,7 +180,7 @@ class Impress_Showcase_Widget extends \WP_Widget
                     $column_class
                 );
 
-                $output .= '<p class="beds-baths-sqft">';
+                $output .= '<p class="impress-beds-baths-sqft">';
                 $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
                 $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
                 $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
