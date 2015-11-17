@@ -1,0 +1,245 @@
+/* =City Links
+------------------------------------------------------------------------- */
+.impress-city-links-widget ul {
+    margin: 0;
+}
+.impress-city-links-widget ul li {
+    list-style-type: none;
+}
+
+
+/* =Carousel
+------------------------------------------------------------------------- */
+.impress-carousel {
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+}
+.impress-carousel .owl-item .impress-carousel-property {
+    margin: 0 10px;
+    text-align: left;
+}
+.impress-carousel .owl-controls {
+    text-align: center;
+}
+.impress-carousel .owl-controls i {
+    font-size: 24px;
+    display: block;
+}
+.impress-carousel .owl-controls span {
+    text-transform: uppercase;
+    font-size: 12px;
+    display: none;
+}
+.impress-carousel .owl-controls .owl-prev, .impress-carousel .owl-controls .owl-next {
+    background: #f3f3f3;
+    color: #9a9a9a;
+    padding: 10px;
+    border-radius: 45px;
+    width: 45px;
+    height: 45px;
+    display: inline-block;
+    margin: 10px;
+}
+.impress-carousel .owl-controls .owl-prev {
+    /*float: left;*/
+}
+.impress-carousel .owl-controls .owl-next {
+    /*float: right;*/
+}
+.impress-carousel img {
+    position: relative;
+    display: block;
+    margin-bottom: 10px;
+}
+.impress-carousel span.impress-price {
+    font-size: 24px;
+    margin-bottom: 0.225rem;
+}
+.impress-carousel a {
+    text-decoration: none;
+    border-bottom: 0;
+}
+.impress-carousel p {
+    margin-bottom: 0;
+    margin: 5px 0 0 0;
+    font-size: 14px;
+}
+.impress-carousel span.impress-street {
+    display: block;
+}
+.impress-carousel .impress-beds-baths-sqft span {
+    margin: 0 10px 0 0;
+    font-size: 14px;
+}
+
+
+/* =Property Showcase
+------------------------------------------------------------------------- */
+.impress-showcase-property,
+.impress-showcase-property p {
+    text-align: left;
+    font-size: 14px;
+}
+.impress-showcase-property a {
+    text-decoration: none;
+}
+.impress-showcase-property .impress-showcase-photo {
+    position: relative;
+    display: block;
+    margin-bottom: 0.4rem;
+    border-bottom: 0;
+}
+.impress-showcase-property img {
+    border: 1px solid #ccc;
+}
+.impress-showcase-property span.impress-price {
+    font-size: 24px;
+    display: block;
+    text-decoration: none;
+}
+.impress-showcase-property span.impress-street {
+    display: block;
+}
+.impress-showcase-property span.impress-status {
+    display: none;
+}
+.impress-showcase-property .impress-address {
+    margin-bottom: 5px;
+}
+.impress-showcase-property .impress-beds-baths-sqft span {
+    margin: 0 5px;
+}
+.impress-property-showcase .column, .impress-property-showcase .columns {
+    position: relative;
+    padding-left: 0.8333333333rem;
+    padding-right: 0.8333333333rem;
+    float: left;
+}
+.impress-property-showcase .small-1 {
+    width: 8.3333333333%;
+}
+.impress-property-showcase .small-2 {
+    width: 16.6666666667%;
+}
+.impress-property-showcase .small-3 {
+    width: 25%;
+}
+.impress-property-showcase .small-4 {
+    width: 33.3333333333%;
+}
+.impress-property-showcase .small-5 {
+    width: 41.6666666667%;
+}
+.impress-property-showcase .small-6 {
+    width: 50%;
+}
+.impress-property-showcase .small-7 {
+    width: 58.3333333333%;
+}
+.impress-property-showcase .small-8 {
+    width: 66.6666666667%;
+}
+.impress-property-showcase .small-9 {
+    width: 75%;
+}
+.impress-property-showcase .small-10 {
+    width: 83.3333333333%;
+}
+.impress-property-showcase .small-11 {
+    width: 91.6666666667%;
+}
+.impress-property-showcase .small-12 {
+    width: 100%;
+}
+@media only screen and (min-width:64.063em) {
+    .impress-property-showcase .large-1 {
+        width: 8.3333333333%;
+    }
+    .impress-property-showcase .large-2 {
+        width: 16.6666666667%;
+    }
+    .impress-property-showcase .large-3 {
+        width: 25%;
+    }
+    .impress-property-showcase .large-4 {
+        width: 33.3333333333%;
+    }
+    .impress-property-showcase .large-5 {
+        width: 41.6666666667%;
+    }
+    .impress-property-showcase .large-6 {
+        width: 50%;
+    }
+    .impress-property-showcase .large-7 {
+        width: 58.3333333333%;
+    }
+    .impress-property-showcase .large-8 {
+        width: 66.6666666667%;
+    }
+    .impress-property-showcase .large-9 {
+        width: 75%;
+    }
+    .impress-property-showcase .large-10 {
+        width: 83.3333333333%;
+    }
+    .impress-property-showcase .large-11 {
+        width: 91.6666666667%;
+    }
+    .impress-property-showcase .large-12 {
+        width: 100%;
+    }
+}
+@media only screen and (min-width:40.063em) {
+        .impress-row {
+              width: 100%;
+              margin-left: auto;
+              margin-right: auto;
+              margin-top: 0;
+              margin-bottom: 0;
+              max-width: 1140px;
+        }
+        .impress-row:before, .impress-row:after {
+            content: " ";
+            display: table;
+        }
+        .impress-row:after {
+            clear: both;
+        }
+        .impress-property-showcase .medium-1 {
+            width: 8.3333333333%;
+        }
+        .impress-property-showcase .medium-2 {
+            width: 16.6666666667%;
+        }
+        .impress-property-showcase .medium-3 {
+            width: 25%;
+        }
+        .impress-property-showcase .medium-4 {
+            width: 33.3333333333%;
+        }
+        .impress-property-showcase .medium-5 {
+            width: 41.6666666667%;
+        }
+        .impress-property-showcase .medium-6 {
+            width: 50%;
+        }
+        .impress-property-showcase .medium-7 {
+            width: 58.3333333333%;
+        }
+        .impress-property-showcase .medium-8 {
+            width: 66.6666666667%;
+        }
+        .impress-property-showcase .medium-9 {
+            width: 75%;
+        }
+        .impress-property-showcase .medium-10 {
+            width: 83.3333333333%;
+        }
+        .impress-property-showcase .medium-11 {
+            width: 91.6666666667%;
+        }
+        .impress-property-showcase .medium-12 {
+            width: 100%;
+        }
+}

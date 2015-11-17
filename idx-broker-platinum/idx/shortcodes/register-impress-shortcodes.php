@@ -17,6 +17,11 @@ class Register_Impress_Shortcodes
 
     public $idx_api;
 
+    public function impress_widget_styles()
+    {
+        wp_enqueue_style('impress-widgets', plugins_url('../assets/css/impress-widgets.css', dirname(__FILE__)));
+    }
+
     public function lead_login_shortcode()
     {
         $widget = sprintf('
@@ -68,6 +73,7 @@ class Register_Impress_Shortcodes
 
     public function property_showcase_shortcode($atts = array())
     {
+        $this->impress_widget_styles();
 
         extract(shortcode_atts(array(
             'max' => 4,
@@ -141,7 +147,7 @@ class Register_Impress_Shortcodes
             }
 
             if (1 == $use_rows && $count == 0 && $max != '1') {
-                $output .= '<div class="shortcode property-showcase row">';
+                $output .= '<div class="shortcode impress-property-showcase impress-row">';
             }
 
             if (empty($prop['propStatus'])) {
@@ -153,17 +159,17 @@ class Register_Impress_Shortcodes
             $prop = $this->set_missing_core_fields($prop);
 
             if (1 == $show_image) {
-                $output .= sprintf('<div class="showcase-property %12$s">
-                        <a href="%3$s" class="showcase-photo">
+                $output .= sprintf('<div class="impress-showcase-property %12$s">
+                        <a href="%3$s" class="impress-showcase-photo">
                             <img src="%4$s" alt="%5$s" title="%5$s" />
-                            <span class="price">%1$s</span>
-                            <span class="status">%2$s</span>
+                            <span class="impress-price">%1$s</span>
+                            <span class="impress-status">%2$s</span>
                         </a>
                         <a href="%3$s">
-                            <p class="address">
-                                <span class="street">%6$s %7$s %8$s %9$s</span>
-                                <span class="cityname">%10$s</span>,
-                                <span class="state"> %11$s</span>
+                            <p class="impress-address">
+                                <span class="impress-street">%6$s %7$s %8$s %9$s</span>
+                                <span class="impress-cityname">%10$s</span>,
+                                <span class="impress-state"> %11$s</span>
                             </p>
                         </a>
 
@@ -190,14 +196,14 @@ class Register_Impress_Shortcodes
                 $output .= "</div>";
             } else {
                 $output .= sprintf(
-                    '<li class="showcase-property-list %9$s">
+                    '<li class="impress-showcase-property-list %9$s">
                         <a href="%2$s">
                             <p>
-                                <span class="price">%1$s</span>
-                                <span class="address">
-                                    <span class="street">%3$s %4$s %5$s %6$s</span>
-                                    <span class="cityname">%7$s</span>,
-                                    <span class="state"> %8$s</span>
+                                <span class="impress-price">%1$s</span>
+                                <span class="impress-address">
+                                    <span class="impress-street">%3$s %4$s %5$s %6$s</span>
+                                    <span class="impress-cityname">%7$s</span>,
+                                    <span class="impress-state"> %8$s</span>
                                 </span>',
                     $prop['listingPrice'],
                     $this->idx_api->details_url() . '/' . $prop['detailsURL'],
@@ -210,7 +216,7 @@ class Register_Impress_Shortcodes
                     $column_class
                 );
 
-                $output .= '<span class="beds-baths-sqft">';
+                $output .= '<span class="impress-beds-baths-sqft">';
                 $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
                 $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
                 $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
@@ -225,7 +231,7 @@ class Register_Impress_Shortcodes
                 // count is equal to the max number of listings to show OR
                 // count is equal to the total number of listings available
                 if ($count % $num_per_row == 0 || $count == $total || $count == $max) {
-                    $output .= '</div> <!-- .row -->';
+                    $output .= '</div> <!-- .impress-row -->';
                 }
 
                 // open a new row if..
@@ -233,7 +239,7 @@ class Register_Impress_Shortcodes
                 // count is not equal to max AND
                 // count is not equal to total
                 if ($count % $num_per_row == 0 && $count != $max && $count != $total) {
-                    $output .= '<div class="row shortcode property-showcase">';
+                    $output .= '<div class="impress-row shortcode impress-property-showcase">';
                 }
             }
         }
@@ -248,7 +254,7 @@ class Register_Impress_Shortcodes
         if ($value <= 0) {
             return '';
         } else {
-            return "<span class=\"$field\">$value $display_name</span> ";
+            return "<span class=\"impress-$field\">$value $display_name</span> ";
         }
     }
 
@@ -287,6 +293,8 @@ class Register_Impress_Shortcodes
 
     public function property_carousel_shortcode($atts = array())
     {
+        $this->impress_widget_styles();
+        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
 
         extract(shortcode_atts(array(
             'max' => 4,
@@ -300,8 +308,8 @@ class Register_Impress_Shortcodes
         wp_enqueue_style('owl-css', plugins_url('../assets/css/owl.carousel.css', dirname(__FILE__)));
         wp_enqueue_script('owl', plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)));
 
-        $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-chevron-circle-left\"></i><span>Prev</span>', 'equity'));
-        $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-chevron-circle-right\"></i><span>Next</span>', 'equity'));
+        $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker'));
+        $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker'));
 
         if (($property_type) == 'savedlink') {
             $properties = $this->idx_api->saved_link_properties($saved_link_id);
@@ -330,7 +338,7 @@ class Register_Impress_Shortcodes
             $output = '
             <script>
             jQuery(function( $ ){
-                jQuery(".equity-listing-carousel-' . $display . '").owlCarousel({
+                jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
                     singleItem: true,
                     ' . $autoplay_param . '
                     navigation: true,
@@ -347,7 +355,7 @@ class Register_Impress_Shortcodes
             $output = '
             <script>
             jQuery(function( $ ){
-                jQuery(".equity-listing-carousel-' . $display . '").owlCarousel({
+                jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
                     items: ' . $display . ',
                     ' . $autoplay_param . '
                     navigation: true,
@@ -364,12 +372,12 @@ class Register_Impress_Shortcodes
 
         $count = 0;
 
-        $output .= sprintf('<div class="equity-idx-carousel equity-listing-carousel-%s carousel-shortcode">', $display);
+        $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode">', $display);
 
         foreach ($properties as $prop) {
 
             if (!empty($max) && $count == $max) {
-                $output .= '</div><!-- end .equity-listing-carousel -->';
+                $output .= '</div><!-- end .impress-listing-carousel -->';
                 return $output;
             }
 
@@ -384,16 +392,16 @@ class Register_Impress_Shortcodes
             $prop = $this->set_missing_core_fields($prop);
 
             $output .= sprintf(
-                '<div class="carousel-property">
-                    <a href="%2$s" class="carousel-photo">
+                '<div class="impress-carousel-property">
+                    <a href="%2$s" class="impress-carousel-photo">
                         <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%4$s" />
-                        <span class="price">%1$s</span>
+                        <span class="impress-price">%1$s</span>
                     </a>
                     <a href="%2$s">
-                        <p class="address">
-                            <span class="street">%5$s %6$s %7$s %8$s</span>
-                            <span class="cityname">%9$s</span>,
-                            <span class="state"> %10$s</span>
+                        <p class="impress-address">
+                            <span class="impress-street">%5$s %6$s %7$s %8$s</span>
+                            <span class="impress-cityname">%9$s</span>,
+                            <span class="impress-state"> %10$s</span>
                         </p>
                     </a>',
                 $prop['listingPrice'],
@@ -408,7 +416,7 @@ class Register_Impress_Shortcodes
                 $prop['state']
             );
 
-            $output .= '<p class="beds-baths-sqft">';
+            $output .= '<p class="impress-beds-baths-sqft">';
             $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
             $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
             $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
@@ -416,13 +424,14 @@ class Register_Impress_Shortcodes
             $output .= "</div>";
         }
 
-        $output .= '</div><!-- end .equity-listing-carousel -->';
+        $output .= '</div><!-- end .impress-listing-carousel -->';
 
         return $output;
     }
 
     public function city_links_shortcode($atts = array())
     {
+        $this->impress_widget_styles();
 
         extract(shortcode_atts(array(
             'city_list' => 'combinedActiveMLS',
@@ -436,7 +445,7 @@ class Register_Impress_Shortcodes
         if (false == $city_links) {
             return 'City list ID or MLS ID not found';
         }
-        $city_links .= '<style>.city-list-links ul {margin-left: 0;}</style>';
+        $city_links .= '<style>.impress-city-list-links ul {margin-left: 0;}</style>';
         return $city_links;
     }
 
@@ -659,27 +668,6 @@ class Register_Impress_Shortcodes
                 )
             );
         }
-    }
-
-    //add_action('idx_shortcode_tab', 'equityidx_api_shortcode_tab');
-    public function equityidx_api_shortcode_tab()
-    {
-        echo '<li><a href="#tab4">Equity Widgets</a></li>';
-    }
-    //add_action('idx_shortcode_tab_content', 'equityidx_api_shortcode_tab_content');
-    public function equityidx_api_shortcode_tab_content()
-    {
-        echo '<div id="tab4" class="tab_content">';
-        ?>
-            <div class="each_shortcode_row">
-                <input type="hidden" id="lead_login" value="[lead_login]">
-                <span>Lead Login <a name="lead_login" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $idx_link->uid . '\')" class="shortcode_link">insert</a>
-                &nbsp;<a href="?uid=' . urlencode($idx_link->uid) . '&current_title=' . urlencode($idx_link->name) . '&short_code=' . urlencode($link_short_code) . '">change title</a>
-                </span>
-            </div>
-
-        <?php
-echo '</div>';
     }
 
 }

@@ -41,6 +41,8 @@ class Impress_City_Links_Widget extends \WP_Widget
      */
     public function widget($args, $instance)
     {
+        wp_enqueue_style('impress-widgets', plugins_url('../assets/css/impress-widgets.css', dirname(__FILE__)));
+
         extract($args);
         if (empty($instance)) {
             $instance = $this->defaults;
@@ -245,9 +247,9 @@ class Impress_City_Links_Widget extends \WP_Widget
         }
 
         $output =
-        '<div class="city-list-links city-list-links-' . $list_id . ' row">' . "\n\t";
+        '<div class="impress-city-list-links impress-city-list-links-' . $list_id . ' row">' . "\n\t";
 
-        $output .= (true == $columns) ? '<ul class="' . $column_class . '">' : '<ul>';
+        $output .= (true == $columns) ? '<ul class="impress-' . $column_class . '">' : '<ul>';
 
         $count = 0;
 
@@ -267,7 +269,7 @@ class Impress_City_Links_Widget extends \WP_Widget
             }
 
             if (true == $columns && $count % $column_size == 0 && $count != 1 && $count != $number_links) {
-                $output .= "\n\t" . '</ul>' . "\n\t" . '<ul class="' . $column_class . '">';
+                $output .= "\n\t" . '</ul>' . "\n\t" . '<ul class="impress-' . $column_class . '">';
             }
 
         }
