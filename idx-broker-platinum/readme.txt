@@ -1,10 +1,10 @@
-﻿=== IDX Broker Wordpress Plugin ===
+﻿=== IMPress for IDX Broker WordPress Plugin ===
 Author: IDX Broker
 Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
-Tested up to: 4.3.1
-Stable tag: 1.2.2
+Tested up to: 4.4.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,7 +44,7 @@ href="http://www.idxbroker.com/idx_broker">Click here to view all features now.<
 1. Download and extract the IDX Broker plugin. You may also install directly by going to your WP-Admin page and then Plugins > Add New. Search for 'idx broker' under new plugins and click to install directly.
 2. Upload the uncompressed folder to your `/wp-content/plugins/` directory.
 3. Activate the plugin through the Plugins menu in WordPress.
-4. You will need to have an active IDX Broker account for the Plugin to work. If you have an account, simply go to the IDX Broker Plugin page within WordPress, enter the API key provided via your setup email, and click the 'Save Changes' button.
+4. Confirm you are using a version of PHP later than 5.2. You will also need to have an active IDX Broker account for the Plugin to work. If you have an account, simply go to the IDX Broker Plugin page within WordPress, enter the API key provided via your setup email, and click the 'Save Changes' button.
 5. Your plugin will now pull your IDX Broker account information into Wordpress.
 
 == Frequently Asked Questions ==
@@ -67,6 +67,9 @@ Features provided by this Plugin - Widgets, links, and custom links may be place
 = Does IDX Broker offer lead capture functionality? =
 Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manager page, a customizable sign up form, and provides you with 'teaser' registration options.
 
+= What are Other Requirements for this Plugin? =
+This plugin requires a PHP version higher than 5.2. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
+
 == Screenshots ==
 
 1. Widget Builder.
@@ -77,6 +80,24 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 6. Adding Shortcodes.
 
 == Changelog ==
+
+= 1.3.0 =
+* Improved compatability with WP caching plugins fixing a bug that caused an API overage.
+* Simplified the Admin UI.
+* The IDX Shortcode UI has been redesigned and is now independent of the visual editor allowing shortcodes to be added in the text view of a page or post in addition to the visual view.
+* IDX Pages and Wrappers are now stored as custom post types no longer cluttering the Pages section of WordPress. You can still link to IDX pages as before through Appearance > Menus or via shortcodes.
+* Copying and Pasting the URL into Designs > Wrappers is no longer required for global wrappers. Creating a Global Wrapper page now automatically updates your IDX pages to use the new Global Wrapper Page via the API. Wrappers can also now be applied to a specific IDX page by editing a Wrapper and setting the Apply Wrapper to IDX Pages metabox before saving.
+* Map Search Widget scripts are now only loaded when a map search widget is on the page speeding up the rest of your website.
+* This plugin now has its own Top Menu. Say goodbye to searching for plugin preferences in the Settings Menu.
+* The Admin page is now fully responsive allowing you easily to make WordPress changes from your mobile device.
+
+= 1.2.4 =
+* Fixed bug where a Parse Error was displayed instead of a notification to upgrade the PHP version to higher than 5.2 when activating.
+* Fixed an issue with shortcodes and widgets not working properly for some users.
+* Added backwards compatability with legacy dynamic wrapper usage in themes.
+
+= 1.2.3 =
+* Fixed bug with omnibar data not updating properly.
 
 = 1.2.2 =
 * Restructured code and made it more WP4.3 and PSR compliant.
@@ -147,3 +168,7 @@ Yes. IDX Broker provides you with a sign up Widget, sign up links, a lead manage
 * Cleaned up various CSS issues and removed excess button options from spec.
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+Version 1.2.2 and higher drop support for PHP 5.2 as it is deprecated and no longer receives security updates. Before updating, please contact your host to upgrade to the latest stable version of PHP (we recommend a minimum of 5.5 for security reasons): http://php.net/supported-versions.php
+See this article for more information: http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin
