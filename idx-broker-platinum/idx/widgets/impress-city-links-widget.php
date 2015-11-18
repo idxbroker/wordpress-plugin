@@ -29,6 +29,7 @@ class Impress_City_Links_Widget extends \WP_Widget
         'mls' => '',
         'use_columns' => 0,
         'number_columns' => 4,
+        'styles' => 1,
     );
 
     /**
@@ -41,12 +42,16 @@ class Impress_City_Links_Widget extends \WP_Widget
      */
     public function widget($args, $instance)
     {
-        wp_enqueue_style('impress-widgets', plugins_url('../assets/css/impress-widgets.css', dirname(__FILE__)));
 
         extract($args);
         if (empty($instance)) {
             $instance = $this->defaults;
         }
+
+        if ($instance['styles']) {
+            wp_enqueue_style('impress-city-links', plugins_url('../assets/css/widgets/impress-city-links.css', dirname(__FILE__)));
+        }
+
         $title = $instance['title'];
 
         echo $before_widget;
@@ -65,7 +70,9 @@ class Impress_City_Links_Widget extends \WP_Widget
         if (empty($instance['mls'])) {
             echo 'Invalid MLS IDX ID. Email help@idxbroker.com to get your MLS IDX ID';
         } else {
+            echo "<div class=\"impress-city-links\">";
             echo $this->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns']);
+            echo "</div>";
         }
 
         echo $after_widget;
@@ -88,6 +95,7 @@ class Impress_City_Links_Widget extends \WP_Widget
         $instance['mls'] = strip_tags($new_instance['mls']);
         $instance['use_columns'] = (int) $new_instance['use_columns'];
         $instance['number_columns'] = (int) $new_instance['number_columns'];
+        $instance['styles'] = (int) $new_instance['styles'];
 
         return $instance;
     }
@@ -138,6 +146,10 @@ class Impress_City_Links_Widget extends \WP_Widget
 				<option <?php selected($instance['number_columns'], 4);?> value="4">4</option>
 			</select>
 		</p>
+		<p>
+            <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
 		<p>Don't have any city lists? Go create some in your <a href="http://middleware.idxbroker.com/mgmt/citycountyziplists.php">IDX dashboard.</a></p>
 		<?php
 }
@@ -247,7 +259,7 @@ class Impress_City_Links_Widget extends \WP_Widget
         }
 
         $output =
-        '<div class="impress-city-list-links impress-city-list-links-' . $list_id . ' row">' . "\n\t";
+        '<div class="impress-city-list-links impress-city-list-links-' . $list_id . ' impress-row">' . "\n\t";
 
         $output .= (true == $columns) ? '<ul class="impress-' . $column_class . '">' : '<ul>';
 

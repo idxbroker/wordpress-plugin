@@ -210,6 +210,44 @@ document.addEventListener('DOMContentLoaded', function(event){
         })
     }
 
+    function addStyleSheet(url, fieldId){
+        if(typeof fieldId !== 'undefined'){
+            if(editTab.querySelector(fieldId).value && editTab.querySelector(fieldId).value !== '0'){
+                return addStyleSheetElement(url, true);
+            }
+        } else {
+            return addStyleSheetElement(url);
+        }
+    }
+
+    function addStyleSheetElement(url, removable){
+            var styleSheet = document.createElement("link");
+                styleSheet.setAttribute("rel", "stylesheet");
+                styleSheet.setAttribute("type", "text/css");
+                styleSheet.setAttribute("href", url);
+                if(typeof removable !== 'undefined'){
+                    styleSheet.setAttribute("class", "preview-css");
+                }
+                return document.getElementsByTagName("head")[0].appendChild(styleSheet);
+    }
+
+    var styleSheetUrls = [];
+
+    function refreshStyles(fieldId){
+        if(typeof el('.preview-css')[0] !== 'undefined'){
+            forEach(el(".preview-css"), function(value, index){
+                styleSheetUrls.push(value.getAttribute('href'));
+                value.parentNode.removeChild(value);
+                return addStyleSheet(styleSheetUrls[index], fieldId);
+            });
+        } else{
+            forEach(styleSheetUrls, function(value, index){
+                addStyleSheet(styleSheetUrls[index], fieldId);
+            });
+        }
+
+    }
+
     //Go back to the edit tab after a preview of the shortcode
     function openEditTab(event){
         event.preventDefault();

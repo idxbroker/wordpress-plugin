@@ -233,7 +233,6 @@ class Register_Shortcode_For_Ui
         $output .= $approved_mls;
         $output .= "</select>";
         $output .= "</div>";
-
         // City List
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"city-list\">Select a city list</label>";
@@ -241,13 +240,11 @@ class Register_Shortcode_For_Ui
         $output .= $city_list_options;
         $output .= "</select>";
         $output .= "</div>";
-
         // Use Columns
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"use-columns\" data-short-name=\"use_columns\">";
         $output .= "<label for\"use-columns\">Split links into columns?</label>";
         $output .= "</div>";
-
         // Number of Columns
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"number-columns\">Number of columns</label>";
@@ -257,8 +254,20 @@ class Register_Shortcode_For_Ui
         $output .= "<option value=\"4\" selected=\"selected\">4</option>";
         $output .= "</select>";
         $output .= "</div>";
+        // Default Styles
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
+        $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
 
         $output .= "<p>Don't have any city lists? Go create some in your <a href=\"http://middleware.idxbroker.com/mgmt/citycountyziplists.php\">IDX dashboard.</a></p>";
+        // Styles and Scripts for Preview
+        $output .= "<script>(function(){";
+        //empty url array so styles can be disabled and enabled as expected
+        $output .= "styleSheetUrls = [];";
+        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-city-links.css', dirname(__FILE__)) . "\", \"#styles\");";
+        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
+        $output .= "})();</script>";
 
         return $output;
     }
@@ -318,6 +327,17 @@ class Register_Shortcode_For_Ui
         $output .= "<option value=\"low-high\">Lowest to Highest Price</option>";
         $output .= "</select>";
         $output .= "</div>";
+        // Default Styles
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
+        $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        // Styles and Scripts for Preview
+        $output .= "<script>(function(){";
+        $output .= "styleSheetUrls = [];";
+        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-showcase.css', dirname(__FILE__)) . "\", \"#styles\");";
+        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
+        $output .= "})();</script>";
 
         return $output;
     }
@@ -367,9 +387,19 @@ class Register_Shortcode_For_Ui
         $output .= "<input type=\"checkbox\" id=\"autoplay\" data-short-name=\"autoplay\" checked>";
         $output .= "<label for\"autoplay\">Autoplay?</label>";
         $output .= "</div>";
+        // Default Styles
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
+        $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
 
         // Styles and Scripts for Preview
-        $output .= "<style>" . file_get_contents(plugins_url('../assets/css/owl.carousel.css', dirname(__FILE__))) . "</style>";
+        $output .= "<script>(function(){";
+        $output .= "styleSheetUrls = [];";
+        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)) . "\");";
+        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)) . "\", \"#styles\");";
+        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
+        $output .= "})();</script>";
         $output .= "<script src=\"" . plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)) . "\"></script>";
 
         return $output;

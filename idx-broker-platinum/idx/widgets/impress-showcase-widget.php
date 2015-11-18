@@ -35,6 +35,7 @@ class Impress_Showcase_Widget extends \WP_Widget
         'order' => 'high-low',
         'geoip' => '',
         'geoip-location' => '',
+        'styles' => 1,
     );
 
     /**
@@ -45,10 +46,12 @@ class Impress_Showcase_Widget extends \WP_Widget
      */
     public function body($instance)
     {
-        wp_enqueue_style('impress-widgets', plugins_url('../assets/css/impress-widgets.css', dirname(__FILE__)));
-
         if (empty($instance)) {
             $instance = $this->defaults;
+        }
+
+        if ($instance['styles']) {
+            wp_enqueue_style('impress-showcase', plugins_url('../assets/css/widgets/impress-showcase.css', dirname(__FILE__)));
         }
 
         if (($instance['properties']) == 'savedlinks') {
@@ -395,6 +398,7 @@ class Impress_Showcase_Widget extends \WP_Widget
         $instance['use_rows'] = (bool) $new_instance['use_rows'];
         $instance['geoip'] = strip_tags($new_instance['geoip']);
         $instance['geoip-location'] = strip_tags($new_instance['geoip-location']);
+        $instance['styles'] = strip_tags($new_instance['styles']);
 
         return $instance;
     }
@@ -410,7 +414,7 @@ class Impress_Showcase_Widget extends \WP_Widget
 
         $idx_api = $this->idx_api;
 
-        $defaults = $instance = $this->defaults;
+        $defaults = $this->defaults;
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
@@ -469,6 +473,12 @@ class Impress_Showcase_Widget extends \WP_Widget
 				<option <?php selected($instance['order'], 'low-high');?> value="low-high"><?php echo 'Lowest to Highest Price';?></option>
 			</select>
 		</p>
+
+		 <p>
+            <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
+
 		<?php if (function_exists('turnkey_dashboard_setup')) {?>
 		<p>
 			<label for="<?php echo $this->get_field_id('geoip');?>"><?php echo 'Only show content for (optional):';?></label>

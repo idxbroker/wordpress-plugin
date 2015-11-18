@@ -65,7 +65,7 @@ class Idx_Widget_Class extends \WP_Widget
         if (strpos($this->widget_url, 'mapwidgetjs.php')) {
             wp_enqueue_script('custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__);
             wp_enqueue_script('custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__);
-            wp_enqueue_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
+            wp_enqueue_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet-1.000.css');
             echo $after_title . "<script src=\"{$this->widget_url}\" defer></script>" . $after_widget;
         } else {
             echo $after_title;

@@ -32,6 +32,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         'autoplay' => 1,
         'geoip' => '',
         'geoip-location' => '',
+        'styles' => 1,
     );
 
     /**
@@ -42,9 +43,7 @@ class Impress_Carousel_Widget extends \WP_Widget
      */
     public function body($instance)
     {
-        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
-        wp_enqueue_style('owl-css', plugins_url('../assets/css/owl.carousel.css', dirname(__FILE__)));
-        wp_enqueue_style('impress-widgets', plugins_url('../assets/css/impress-widgets.css', dirname(__FILE__)));
+        wp_enqueue_style('owl-css', plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)));
         wp_enqueue_script('owl', plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)));
 
         if (empty($instance)) {
@@ -53,6 +52,11 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker'));
         $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker'));
+
+        if ($instance['styles']) {
+            wp_enqueue_style('impress-carousel', plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)));
+            wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+        }
 
         if (($instance['properties']) == 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($instance['saved_link_id']);
@@ -338,7 +342,8 @@ class Impress_Carousel_Widget extends \WP_Widget
         $instance['max'] = (int) ($new_instance['max']);
         var_dump($instance['max']);
         $instance['order'] = strip_tags($new_instance['order']);
-        $instance['autoplay'] = $new_instance['autoplay'];
+        $instance['autoplay'] = strip_tags($new_instance['autoplay']);
+        $instance['styles'] = strip_tags($new_instance['styles']);
         $instance['geoip'] = strip_tags($new_instance['geoip']);
         $instance['geoip-location'] = strip_tags($new_instance['geoip-location']);
 
@@ -356,17 +361,7 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         $idx_api = $this->idx_api;
 
-        $defaults = array(
-            'title' => __('Properties', 'idxbroker'),
-            'properties' => 'featured',
-            'saved_link_id' => '',
-            'display' => 3,
-            'max' => 15,
-            'order' => 'high-low',
-            'autoplay' => 1,
-            'geoip' => '',
-            'geoip-location' => '',
-        );
+        $defaults = $this->defaults;
 
         $instance = wp_parse_args((array) $instance, $defaults);
 
@@ -416,6 +411,11 @@ class Impress_Carousel_Widget extends \WP_Widget
 			<label for="<?php echo $this->get_field_id('autoplay');?>"><?php _e('Autoplay?', 'idxbroker');?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id('autoplay');?>" name="<?php echo $this->get_field_name('autoplay')?>" value="1" <?php checked($instance['autoplay'], true);?>>
 		</p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
 
 		<?php if (function_exists('turnkey_dashboard_setup')) {?>
 		<p>

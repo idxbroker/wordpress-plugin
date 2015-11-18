@@ -17,11 +17,6 @@ class Register_Impress_Shortcodes
 
     public $idx_api;
 
-    public function impress_widget_styles()
-    {
-        wp_enqueue_style('impress-widgets', plugins_url('../assets/css/impress-widgets.css', dirname(__FILE__)));
-    }
-
     public function lead_login_shortcode()
     {
         $widget = sprintf('
@@ -73,8 +68,6 @@ class Register_Impress_Shortcodes
 
     public function property_showcase_shortcode($atts = array())
     {
-        $this->impress_widget_styles();
-
         extract(shortcode_atts(array(
             'max' => 4,
             'use_rows' => 1,
@@ -83,7 +76,12 @@ class Register_Impress_Shortcodes
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
+            'styles' => 1,
         ), $atts));
+
+        if (!empty($styles)) {
+            wp_enqueue_style('impress-showcase', plugins_url('../assets/widgets/css/impress-showcase.css', dirname(__FILE__)));
+        }
 
         if (($property_type) == 'savedlink') {
             $properties = $this->idx_api->saved_link_properties($saved_link_id);
@@ -293,7 +291,6 @@ class Register_Impress_Shortcodes
 
     public function property_carousel_shortcode($atts = array())
     {
-        $this->impress_widget_styles();
         wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
 
         extract(shortcode_atts(array(
@@ -303,10 +300,15 @@ class Register_Impress_Shortcodes
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
+            'styles' => 1,
         ), $atts));
 
-        wp_enqueue_style('owl-css', plugins_url('../assets/css/owl.carousel.css', dirname(__FILE__)));
+        wp_enqueue_style('owl-css', plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)));
         wp_enqueue_script('owl', plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)));
+
+        if ($styles) {
+            wp_enqueue_style('impress-carousel', plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)));
+        }
 
         $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker'));
         $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker'));
@@ -431,16 +433,21 @@ class Register_Impress_Shortcodes
 
     public function city_links_shortcode($atts = array())
     {
-        $this->impress_widget_styles();
-
         extract(shortcode_atts(array(
             'city_list' => 'combinedActiveMLS',
             'mls' => 'a000',
             'use_columns' => 1,
             'number_columns' => 4,
+            'styles' => 1,
         ), $atts));
 
-        $city_links = \IDX\Widgets\Impress_City_Links_Widget::city_list_links($city_list, $mls, $use_columns, $number_columns);
+        if (!empty($styles)) {
+            wp_enqueue_style('impress-city-links', plugins_url('../assets/css/widgets/impress-city-links.css', dirname(__FILE__)));
+        }
+
+        $city_links = "<div class=\"impress-city-links\">";
+        $city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links($city_list, $mls, $use_columns, $number_columns);
+        $city_links .= "</div>";
 
         if (false == $city_links) {
             return 'City list ID or MLS ID not found';
