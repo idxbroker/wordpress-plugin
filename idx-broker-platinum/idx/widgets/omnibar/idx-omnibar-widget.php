@@ -1,12 +1,12 @@
 <?php
-namespace IDX\Omnibar;
+namespace IDX\Widgets\Omnibar;
 
 class IDX_Omnibar_Widget extends \WP_Widget
 {
     public function __construct()
     {
         $widget_ops = array('classname' => 'IDX_Omnibar_Widget', 'description' => 'An Omnibar Search Widget for use with IDX WordPress Sites');
-        parent::__construct('IDX_Omnibar_Widget', 'IDX Omnibar Search Widget', $widget_ops);
+        parent::__construct('IDX_Omnibar_Widget', 'IMPress Omnibar Search', $widget_ops);
     }
 
     public function form($instance)
