@@ -20,6 +20,14 @@ class Help
     public $tabs = array(
         // The assoc key represents the ID
         // It is NOT allowed to contain spaces
+        'idx_api_key' => array(
+            'title' => 'API Key'
+            , 'content' => '
+                <strong>API Key</strong>
+                <br>The API key can be found in your <a href="https://middleware.idxbroker.com/mgmt/apikey.php" target="_blank">IDX Control Panel</a> under Home > API Control.
+                <br>For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control?b_id=10433" target="_blank">this article</a>.
+                ',
+        ),
         'idx_create_wrapper' => array(
             'title' => 'Create Wrapper'
             , 'content' => '
