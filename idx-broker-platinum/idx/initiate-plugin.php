@@ -32,6 +32,7 @@ class Initiate_Plugin
         new Shortcodes\Register_Impress_Shortcodes();
         new Widgets\Omnibar\Create_Omnibar();
         new Shortcodes\Shortcode_Ui();
+        new Help();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.0';
