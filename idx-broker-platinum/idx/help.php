@@ -26,6 +26,7 @@ class Help
                 <strong>Create Wrapper</strong> - Wrappers set the overall styling of your IDX Broker pages.
                 <br>&bull; Create new page wrappers by entering a unique page name and selecting Update.
                 <br>&bull; These pages are added to your Wrappers menu, not your WordPress pages.
+                <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank">this article</a>.
                 ',
         ),
         'idx_apply_wrapper' => array(
@@ -34,6 +35,7 @@ class Help
                 <strong>Apply Wrapper</strong> - You may create many wrappers and use different ones for each category or page.
                 <br>&bull; To apply a new wrapper within WordPress, edit the Wrapper page from the IDX Broker/Wrappers menu.
                 <br>&bull; In edit mode select where to apply the wrapper in the upper right of the screen.
+                <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank">this article</a>.
                 ',
         ),
         'idx_shortcodes' => array(
@@ -44,6 +46,7 @@ class Help
                 <br>&bull; System and Saved Links add an external link to IDX Broker pages
                 <br>&bull; Widgets add widget content into your page.
                 <br>&bull; Omnibar adds a property listing search bar to any of your pages
+                <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin" target="_blank">this article</a>.
                 ',
         ),
     );
