@@ -27,6 +27,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         'title' => 'Lead Sign Up',
         'custom_text' => '',
         'phone_number' => false,
+        'styles' => 1,
     );
 
     /**
@@ -45,6 +46,10 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             $instance = $this->defaults;
         }
 
+        if (!empty($instance['styles'])) {
+            wp_enqueue_style('impress-lead-signup', plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)));
+        }
+
         $title = $instance['title'];
         $custom_text = $instance['custom_text'];
 
@@ -59,24 +64,24 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         }
 
         ?>
-		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" method="post" target="" name="LeadSignup">
+		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="" name="LeadSignup">
 			<input type="hidden" name="action" value="addLead">
 			<input type="hidden" name="signupWidget" value="true">
 			<input type="hidden" name="contactType" value="direct">
 
-			<label id="bb-IDX-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName"><?php _e('First Name:', 'idxbroker');?></label>
-			<input id="bb-IDX-widgetfirstName" type="text" name="firstName" placeholder="First Name">
+			<label id="impress-widgetfirstName-label" class="ie-only" for="impress-widgetfirstName"><?php _e('First Name:', 'idxbroker');?></label>
+			<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name">
 
-			<label id="bb-IDX-widgetlastName-label" class="ie-only" for="IDX-widgetlastName"><?php _e('Last Name:', 'idxbroker');?></label>
-			<input id="bb-IDX-widgetlastName" type="text" name="lastName" placeholder="Last Name">
+			<label id="impress-widgetlastName-label" class="ie-only" for="impress-widgetlastName"><?php _e('Last Name:', 'idxbroker');?></label>
+			<input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name">
 
-			<label id="bb-IDX-widgetemail-label" class="ie-only" for="IDX-widgetemail"><?php _e('Email:', 'idxbroker');?></label>
-			<input id="bb-IDX-widgetemail" type="text" name="email" placeholder="Email">
+			<label id="impress-widgetemail-label" class="ie-only" for="impress-widgetemail"><?php _e('Email:', 'idxbroker');?></label>
+			<input id="impress-widgetemail" type="text" name="email" placeholder="Email">
 
 			<?php if ($instance['phone_number'] == true) {
             echo '
-				<label id="bb-IDX-widgetphone-label" class="ie-only" for="IDX-widgetphone">' . __('Phone:', 'idxbroker') . '</label>
-				<input id="bb-IDX-widgetphone" type="text" name="phone" placeholder="Phone">';
+				<label id="impress-widgetphone-label" class="ie-only" for="impress-widgetphone">' . __('Phone:', 'idxbroker') . '</label>
+				<input id="impress-widgetphone" type="text" name="phone" placeholder="Phone">';
         }?>
 
 			<input id="bb-IDX-widgetsubmit" type="submit" name="submit" value="Sign Up!">
@@ -101,6 +106,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         $instance['title'] = strip_tags($new_instance['title']);
         $instance['custom_text'] = htmlentities($new_instance['custom_text']);
         $instance['phone_number'] = $new_instance['phone_number'];
+        $instance['styles'] = (int) $new_instance['styles'];
 
         return $instance;
     }
@@ -133,6 +139,10 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 			<label for="<?php echo $this->get_field_id('phone_number');?>"><?php _e('Show phone number field?', 'idxbroker');?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id('phone_number');?>" name="<?php echo $this->get_field_name('phone_number')?>" value="1" <?php checked($instance['phone_number'], true);?>>
 		</p>
+        <p>
+            <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
 		<?php
 }
 }

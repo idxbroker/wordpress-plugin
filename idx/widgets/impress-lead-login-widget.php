@@ -25,6 +25,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
     public $defaults = array(
         'title' => 'Account Login',
         'custom_text' => '',
+        'styles' => 1,
     );
 
     /**
@@ -43,6 +44,10 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
             $instance = $this->defaults;
         }
 
+        if (!empty($instance['styles'])) {
+            wp_enqueue_style('impress-lead-login', plugins_url('../assets/css/widgets/impress-lead-login.css', dirname(__FILE__)));
+        }
+
         $title = $instance['title'];
         $custom_text = $instance['custom_text'];
 
@@ -57,13 +62,11 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         }
 
         ?>
-		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/userlogin.php" method="post" target="" name="leadLoginForm">
+		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/userlogin.php" class="impress-lead-login" method="post" target="" name="leadLoginForm">
 			<input type="hidden" name="action" value="login">
 			<input type="hidden" name="loginWidget" value="true">
-			<label for="bb-IDX-widgetEmail"><?php _e('Email Address:', 'idxbroker');?></label>
-			<input id="bb-IDX-widgetEmail" type="text" name="email" placeholder="Enter your email address">
-			<input id="bb-IDX-widgetPassword" type="hidden" name="password" value="">
-			<input id="bb-IDX-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
+			<label for="impress-widgetEmail"><?php _e('Email Address:', 'idxbroker');?></label>
+			<input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address"><input id="impress-widgetPassword" type="hidden" name="password" value=""><input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
 		</form>
 		<?php
 
@@ -84,6 +87,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         $instance = array();
         $instance['title'] = strip_tags($new_instance['title']);
         $instance['custom_text'] = htmlentities($new_instance['custom_text']);
+        $instance['styles'] = (int) $new_instance['styles'];
 
         return $instance;
     }
@@ -112,6 +116,12 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
 			<label for="<?php echo $this->get_field_id('custom_text')?>"><?php _e('Custom Text', 'idxbroker');?></label>
 			<textarea class="widefat" id="<?php echo $this->get_field_id('custom_text');?>" name="<?php echo $this->get_field_name('custom_text');?>" value="<?php esc_attr_e($instance['custom_text']);?>" rows="5"><?php esc_attr_e($instance['custom_text']);?></textarea>
 		</p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
+
 		<?php
 }
 }

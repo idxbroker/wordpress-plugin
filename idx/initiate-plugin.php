@@ -32,6 +32,7 @@ class Initiate_Plugin
         new Shortcodes\Register_Impress_Shortcodes();
         new Widgets\Omnibar\Create_Omnibar();
         new Shortcodes\Shortcode_Ui();
+        new Help();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.0';
@@ -174,7 +175,6 @@ class Initiate_Plugin
         if ('toplevel_page_idx-broker' !== $page) {
             return;
         }
-        add_action('admin_notices', array($this, 'idx_instructions'));
         wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.js', __FILE__), 'jquery');
         wp_enqueue_style('idxcss', plugins_url('../assets/css/idx-broker.css', __FILE__));
     }
@@ -190,12 +190,4 @@ class Initiate_Plugin
         include plugin_dir_path(__FILE__) . 'views/admin.php';
     }
 
-    public function idx_instructions()
-    {
-        echo '<div class="updated">';
-        echo '<p>';
-        echo 'Not sure how to integrate IDX content? See <a href="http://support.idxbroker.com/customer/portal/articles/1917460-wordpress-plugin">this knowledgebase article.</a>';
-        echo '</p>';
-        echo '</div>';
-    }
 }

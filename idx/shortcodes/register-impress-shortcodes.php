@@ -17,16 +17,22 @@ class Register_Impress_Shortcodes
 
     public $idx_api;
 
-    public function lead_login_shortcode()
+    public function lead_login_shortcode($atts)
     {
+        extract(shortcode_atts(array(
+            'styles' => 1,
+        ), $atts));
+
+        if (!empty($styles)) {
+            wp_enqueue_style('impress-lead-login', plugins_url('../assets/css/widgets/impress-lead-login.css', dirname(__FILE__)));
+        }
+
         $widget = sprintf('
-            <form action="%sajax/userlogin.php" method="post" target="" name="leadLoginForm">
+            <form action="%sajax/userlogin.php" class="impress-lead-login" method="post" target="" name="leadLoginForm">
                 <input type="hidden" name="action" value="login">
                 <input type="hidden" name="loginWidget" value="true">
-                <label for="bb-IDX-widgetEmail">Email Address:</label>
-                <input id="bb-IDX-widgetEmail" type="text" name="email" placeholder="Enter your email address">
-                <input id="bb-IDX-widgetPassword" type="hidden" name="password" value="">
-                <input id="bb-IDX-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
+                <label for="impress-widgetEmail">Email Address:</label>
+                <input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address"><input id="impress-widgetPassword" type="hidden" name="password" value=""><input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
             </form>', $this->idx_api->subdomain_url());
 
         return $widget;
@@ -37,30 +43,35 @@ class Register_Impress_Shortcodes
 
         extract(shortcode_atts(array(
             'phone' => 0,
+            'styles' => 1,
         ), $atts));
 
+        if (!empty($styles)) {
+            wp_enqueue_style('impress-lead-signup', plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)));
+        }
+
         $widget = sprintf('
-            <form action="%sajax/usersignup.php" method="post" target="" name="LeadSignup">
+            <form action="%sajax/usersignup.php" class="impress-lead-signup" method="post" target="" name="LeadSignup">
                 <input type="hidden" name="action" value="addLead">
                 <input type="hidden" name="signupWidget" value="true">
                 <input type="hidden" name="contactType" value="direct">
 
-                <label id="bb-IDX-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName">First Name:</label>
-                <input id="bb-IDX-widgetfirstName" type="text" name="firstName" placeholder="First Name">
+                <label id="impress-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName">First Name:</label>
+                <input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name">
 
-                <label id="bb-IDX-widgetlastName-label" class="ie-only" for="IDX-widgetlastName">Last Name:</label>
-                <input id="bb-IDX-widgetlastName" type="text" name="lastName" placeholder="Last Name">
+                <label id="impress-widgetlastName-label" class="ie-only" for="IDX-widgetlastName">Last Name:</label>
+                <input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name">
 
-                <label id="bb-IDX-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
-                <input id="bb-IDX-widgetemail" type="text" name="email" placeholder="Email">', $this->idx_api->subdomain_url());
+                <label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
+                <input id="impress-widgetemail" type="text" name="email" placeholder="Email">', $this->idx_api->subdomain_url());
 
         if ($phone) {
             $widget .= sprintf('
-            <label id="bb-IDX-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
-            <input id="bb-IDX-widgetphone" type="text" name="phone" placeholder="Phone">');
+            <label id="impress-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
+            <input id="impress-widgetphone" type="text" name="phone" placeholder="Phone">');
         }
 
-        $widget .= sprintf('<input id="bb-IDX-widgetsubmit" type="submit" name="submit" value="Sign Up!">
+        $widget .= sprintf('<input id="impress-widgetsubmit" type="submit" name="submit" value="Sign Up!">
             </form>');
 
         return $widget;

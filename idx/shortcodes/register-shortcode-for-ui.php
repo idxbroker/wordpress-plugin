@@ -21,7 +21,7 @@ class Register_Shortcode_For_Ui
             'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => 'fa fa-cog'),
             'omnibar' => array('name' => 'IMPress Omnibar Search', 'short_name' => 'omnibar', 'icon' => 'fa fa-search'),
             'omnibar_extra' => array('name' => 'IMPress Omnibar with Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-search-plus'),
-            'impress_lead_login' => array('name' => 'Impress Lead Login Widget', 'short_name' => 'impress_lead_login', 'icon' => 'fa fa-users'),
+            'impress_lead_login' => array('name' => 'IMPress Lead Login Widget', 'short_name' => 'impress_lead_login', 'icon' => 'fa fa-users'),
             'impress_lead_signup' => array('name' => 'IMPress Lead Signup Widget', 'short_name' => 'impress_lead_signup', 'icon' => 'fa fa-user-plus'),
             'impress_city_links' => array('name' => 'IMPress City Links', 'short_name' => 'impress_city_links', 'icon' => 'fa fa-link'),
             'impress_property_showcase' => array('name' => 'IMPress Property Showcase', 'short_name' => 'impress_property_showcase', 'icon' => 'fa fa-home'),
@@ -193,11 +193,19 @@ class Register_Shortcode_For_Ui
     public function get_lead_login($shortcode)
     {
         $output = '';
-        $output .= '<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>';
-        $output .= "<script>";
-        $output .= "openPreviewTab(event);";
-        $output .= "</script>";
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\"></div>";
+        // Default Styles
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
+        $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        // Styles and Scripts for Preview
+        $output .= "<script>(function(){";
+        //empty url array so styles can be disabled and enabled as expected
+        $output .= "styleSheetUrls = [];";
+        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-lead-login.css', dirname(__FILE__)) . "\", \"#styles\");";
+        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
+        $output .= "})();</script>";
 
         return $output;
     }
@@ -206,9 +214,21 @@ class Register_Shortcode_For_Ui
     {
         $output = '';
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-        $output .= "<label for\"idx-phone-number\">Show phone number field?</label>";
         $output .= "<input type=\"checkbox\" id=\"idx-phone-number\" data-short-name=\"phone\">";
+        $output .= "<label for\"idx-phone-number\">Show phone number field?</label>";
         $output .= "</div>";
+        // Default Styles
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
+        $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        // Styles and Scripts for Preview
+        $output .= "<script>(function(){";
+        //empty url array so styles can be disabled and enabled as expected
+        $output .= "styleSheetUrls = [];";
+        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)) . "\", \"#styles\");";
+        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
+        $output .= "})();</script>";
 
         return $output;
     }
@@ -220,6 +240,7 @@ class Register_Shortcode_For_Ui
             'mls' => '',
             'use_columns' => 0,
             'number_columns' => 4,
+            'styles' => 1,
         );
 
         $approved_mls = \IDX\Widgets\Impress_City_Links_Widget::mls_options($defaults);
@@ -282,6 +303,7 @@ class Register_Shortcode_For_Ui
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
+            'styles' => 1,
         );
 
         $output = '';
@@ -351,6 +373,7 @@ class Register_Shortcode_For_Ui
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
+            'styles' => 1,
         );
 
         $output = '';
