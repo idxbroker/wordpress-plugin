@@ -69,7 +69,7 @@ class Wrappers
                 }
             }
         }
-        if ($does_theme_include_idx_tag) {
+        if ($does_theme_include_idx_tag || function_exists('equity')) {
             $post_content = '';
         }
 
