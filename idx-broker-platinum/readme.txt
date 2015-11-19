@@ -4,7 +4,7 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Tested up to: 4.3.1
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,11 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 5. Middleware API Key.
 
 == Changelog ==
+
+= 1.3.1 =
+* Fixed an issue with duplicate start and stop tags for dynamic wrappers when Equity is installed.
+* Fixed a bug where errors were being reported.
+* Fixed an issue where the omnibar would not load or update on servers with strict restrictions.
 
 = 1.3.0 =
 * Improved compatability with WP caching plugins fixing a bug that caused an API overage.
