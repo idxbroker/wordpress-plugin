@@ -50,7 +50,7 @@ class Get_Locations
         $locations = 'idxOmnibar({' . $cities . $counties . $zipcodes . '})';
         //test to confirm API call worked properly before updating JSON file etc.
         if (!empty($system_links_call) && empty($system_links_call->errors)) {
-            file_put_contents(dirname(dirname(dirname(dirname(__FILE__)))) . '/assets/js/locationlist.json', $locations);
+            file_put_contents(dirname(dirname(dirname(dirname(__FILE__)))) . '/assets/js/locationlist.js', $locations);
 
             //update database with new results url
             //get base Url for client's results page for use on omnibar.js front end

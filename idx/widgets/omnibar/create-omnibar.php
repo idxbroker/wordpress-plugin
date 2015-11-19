@@ -18,7 +18,7 @@ class Create_Omnibar
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.json', dirname(__FILE__)));
+        wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.js', dirname(__FILE__)));
 
         return <<<EOD
         <form class="idx-omnibar-form idx-omnibar-original-form">
@@ -37,7 +37,7 @@ EOD;
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.json', dirname(__FILE__)));
+        wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.js', dirname(__FILE__)));
 
         return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">

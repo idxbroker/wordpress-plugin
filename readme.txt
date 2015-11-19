@@ -85,6 +85,10 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 * Five new WordPress native IMPress widgets and shortcodes have been added to the plugin: Lead Login and Signup Widgets, a City Links widget, and showcase and carousel widgets have been added. Take advantage of these new widgets to deliver the best experience for your website visitors.
 * Each of these widgets has customization options right within WordPress including the ability to disable styling for designers to gain more control of the appearance of these widgets.
 
+= 1.3.1 =
+* Fixed an issue with duplicate start and stop tags for dynamic wrappers when Equity is installed.
+* Fixed an issue where the omnibar would not load or update on servers with strict restrictions.
+
 = 1.3.0 =
 * Improved compatability with WP caching plugins fixing a bug that caused an API overage.
 * Simplified the Admin UI.
