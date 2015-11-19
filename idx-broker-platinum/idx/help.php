@@ -37,6 +37,15 @@ class Help
                 <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank">this article</a>.
                 ',
         ),
+        'idx_pages' => array(
+            'title' => 'IDX Pages'
+            , 'content' => '
+                <strong>IDX Pages</strong> - Integrating IDX Pages into your website.
+                <br>We recommend linking to IDX pages from your navigation by adding IDX Pages to your menus.
+                <br>You can add pages under the IDX Pages category under Appearance > Menus or Appearance > Customize > Menus.
+                <br>For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin" target="_blank">this article</a>.
+                ',
+        ),
         'idx_apply_wrapper' => array(
             'title' => 'Apply Wrapper'
             , 'content' => '
