@@ -10,10 +10,6 @@ class Migrate_Old_Table
         if (empty($post_info)) {
             return;
         }
-        //clear old api cache
-        $idx_api = new Idx_Api();
-        $idx_api->idx_clean_transients();
-        new Idx_Pages();
         $this->migrate_old_pages($post_info);
         $this->drop_old_table();
         $this->migrate_old_wrapper();

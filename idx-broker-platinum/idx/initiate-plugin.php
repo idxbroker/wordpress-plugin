@@ -17,7 +17,6 @@ class Initiate_Plugin
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
         add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
         add_action('wp_loaded', array($this, 'schedule_omnibar_update'));
-        add_action('wp_loaded', array($this, 'schedule_migrate_old_table'));
         add_action('idx_omnibar_get_locations', array($this, 'idx_omnibar_get_locations'));
         add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
 
@@ -58,7 +57,7 @@ class Initiate_Plugin
 
     public function migrate_old_table()
     {
-        new Migrate_Old_table();
+        new Migrate_Old_Table();
     }
 
     public function plugin_updated()
@@ -73,7 +72,11 @@ class Initiate_Plugin
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
             update_option('idx-broker-plugin-version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
+            //clear old api cache
+            $idx_api = new Idx_Api();
+            $idx_api->idx_clean_transients();
             $this->idx_omnibar_get_locations();
+            return add_action('wp_loaded', array($this, 'schedule_migrate_old_table'));
         }
     }
 
