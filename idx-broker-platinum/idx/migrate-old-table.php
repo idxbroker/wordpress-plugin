@@ -10,9 +10,14 @@ class Migrate_Old_Table
         if (empty($post_info)) {
             return;
         }
+        //clear old api cache
+        $idx_api = new Idx_Api();
+        $idx_api->idx_clean_transients();
+        new Idx_Pages();
         $this->migrate_old_pages($post_info);
         $this->drop_old_table();
         $this->migrate_old_wrapper();
+
     }
 
     public function grab_post_ids()
@@ -29,12 +34,12 @@ class Migrate_Old_Table
     public function update_post_type($post_id, $link, $post_type)
     {
         if ($post_type === 'idx_page') {
-            $this->find_and_remove_duplicate_posts($link);
             global $wpdb;
             $wpdb->update(
                 $wpdb->prefix . "posts",
                 array(
                     'post_name' => $link,
+                    'post_type' => 'idx_page',
                 ),
                 array(
                     'ID' => $post_id,
@@ -43,18 +48,31 @@ class Migrate_Old_Table
         } else {
             $post = get_post($post_id);
             $link = $post->post_name;
+            set_post_type($post_id, $post_type);
         }
-
-        set_post_type($post_id, $post_type);
     }
 
     public function migrate_old_pages($post_info)
     {
         $post_ids = $post_info['post_ids'];
         $links = $post_info['links'];
+        $args = array(
+            'post_type' => 'idx_page',
+            'posts_per_page' => -1,
+        );
+        $custom_posts_array = get_posts($args);
+        //delete duplicates first
+        foreach ($links as $link) {
+            $this->find_and_remove_duplicate_posts($link, $custom_posts_array);
+        }
+        echo 'duplicates deleted';
+        //update existing idx pages to custom post type
         for ($i = 0; $i < count($post_ids); $i++) {
             $this->update_post_type($post_ids[$i], $links[$i], 'idx_page');
         }
+
+        echo 'done';
+        die();
     }
 
     public function drop_old_table()
@@ -76,14 +94,9 @@ class Migrate_Old_Table
         wp_trash_post($page_id);
     }
 
-    public function find_and_remove_duplicate_posts($link)
+    public function find_and_remove_duplicate_posts($link, $custom_posts_array)
     {
-        $args = array(
-            'post_type' => 'idx_page',
-            'posts_per_page' => -1,
-        );
-        $posts_array = get_posts($args);
-        foreach ($posts_array as $post) {
+        foreach ($custom_posts_array as $post) {
             if ($post->post_name === $link) {
                 $page_id = $post->ID;
                 $this->remove_duplicate_posts($page_id);
