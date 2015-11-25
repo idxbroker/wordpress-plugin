@@ -7,12 +7,20 @@ class Help
     {
         add_action('load-post.php', array($this, 'add_pages_help_tabs'), 20);
         add_action('load-post-new.php', array($this, 'add_pages_help_tabs'), 20);
+        add_action('load-edit.php', array($this, 'add_wrappers_help'), 20);
         add_action('current_screen', array($this, 'settings_help'));
     }
 
     public function settings_help()
     {
         if (!empty($_GET['page']) && $_GET['page'] === 'idx-broker') {
+            $this->add_settings_help_tabs();
+        }
+    }
+
+    public function add_wrappers_help()
+    {
+        if (!empty($_GET['post_type']) && $_GET['post_type'] === 'idx-wrapper') {
             $this->add_settings_help_tabs();
         }
     }
@@ -24,8 +32,8 @@ class Help
             'title' => 'API Key'
             , 'content' => '
                 <strong>API Key</strong>
-                <br>The API key can be found in your <a href="https://middleware.idxbroker.com/mgmt/apikey.php" target="_blank">IDX Control Panel</a> under Home > API Control.
-                <br>For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control?b_id=10433" target="_blank">this article</a>.
+                <br>&bull; The API key can be found in your <a href="https://middleware.idxbroker.com/mgmt/apikey.php" target="_blank">IDX Control Panel</a> under Home > API Control.
+                <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control?b_id=10433" target="_blank">this article</a>.
                 ',
         ),
         'idx_create_wrapper' => array(
@@ -41,9 +49,9 @@ class Help
             'title' => 'IDX Pages'
             , 'content' => '
                 <strong>IDX Pages</strong> - Integrating IDX Pages into your website.
-                <br>We recommend linking to IDX pages from your navigation by adding IDX Pages to your menus.
-                <br>You can add pages under the IDX Pages category under Appearance > Menus or Appearance > Customize > Menus.
-                <br>For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin" target="_blank">this article</a>.
+                <br>&bull; We recommend linking to IDX pages from your navigation by adding IDX Pages to your menus.
+                <br>&bull; You can add pages under the IDX Pages category under Appearance > Menus or Appearance > Customize > Menus.
+                <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin" target="_blank">this article</a>.
                 ',
         ),
         'idx_apply_wrapper' => array(
