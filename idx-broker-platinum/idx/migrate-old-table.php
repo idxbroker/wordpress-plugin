@@ -112,5 +112,6 @@ class Migrate_Old_Table
             $idx_api = new Idx_Api();
             $idx_api->set_wrapper('global', $wrapper_page_url);
         }
+        flush_rewrite_rules();
     }
 }
