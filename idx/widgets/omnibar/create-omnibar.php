@@ -9,11 +9,13 @@ class Create_Omnibar
         $this->register_widgets();
     }
 
-    public function idx_omnibar_basic($plugin_dir, $idx_url)
+    public function idx_omnibar_basic($plugin_dir, $idx_url, $styles = 1)
     {
         //css and js have been minified and combined to help performance
         wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
-        wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
+        if (!empty($styles)) {
+            wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
+        }
         wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)));
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
@@ -28,11 +30,13 @@ class Create_Omnibar
 EOD;
     }
 
-    public function idx_omnibar_extra($plugin_dir, $idx_url)
+    public function idx_omnibar_extra($plugin_dir, $idx_url, $styles = 1)
     {
         //css and js have been minified and combined to help performance
         wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
-        wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
+        if (!empty($styles)) {
+            wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
+        }
         wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)));
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
@@ -53,7 +57,10 @@ EOD;
         $idx_url = get_option('idx-results-url');
         $plugin_dir = plugins_url();
 
-        return $this->idx_omnibar_basic($plugin_dir, $idx_url);
+        //hardcoded temporarily
+        $styles = 1;
+
+        return $this->idx_omnibar_basic($plugin_dir, $idx_url, $styles);
     }
 
     public function add_omnibar_extra_shortcode()

@@ -8,12 +8,22 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
         $widget_ops = array('classname' => 'IDX_Omnibar_Widget_Extra', 'description' => 'An Omnibar Search Widget with extra fields for use with IDX WordPress Sites');
         parent::__construct('IDX_Omnibar_Widget_Extra', 'IMPress Omnibar With Extra Fields', $widget_ops);
     }
+
+    public $defaults = array(
+        'title' => '',
+        'styles' => 1,
+    );
+
     public function form($instance)
     {
-        $instance = wp_parse_args((array) $instance, array('title' => ''));
+        $instance = wp_parse_args((array) $instance, $this->defaults);
         $title = $instance['title'];
         ?>
         <p><label for="<?php echo esc_attr($title);?>">Title: <input class="widefat" id="<?php echo $this->get_field_id('title');?>" name="<?php echo $this->get_field_name('title');?>" type="text" value="<?php echo esc_attr($title);?>" /></label></p>
+        <p>
+            <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
         <?php
 }
 
@@ -21,12 +31,17 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
     {
         $instance = $old_instance;
         $instance['title'] = $new_instance['title'];
+        $instance['styles'] = (int) $new_instance['styles'];
         return $instance;
     }
 
     public function widget($args, $instance)
     {
         extract($args, EXTR_SKIP);
+
+        if (empty($instance)) {
+            $instance = $this->defaults;
+        }
 
         echo $before_widget;
         $title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
@@ -42,7 +57,7 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
 
         // Widget HTML:
         $create_omnibar = new Create_Omnibar;
-        echo $create_omnibar->idx_omnibar_extra($plugin_dir, $idx_url);
+        echo $create_omnibar->idx_omnibar_extra($plugin_dir, $idx_url, $instance['styles']);
         echo $after_widget;
     }
 }
