@@ -61,14 +61,10 @@ class Migrate_Old_Table
         foreach ($links as $link) {
             $this->find_and_remove_duplicate_posts($link, $custom_posts_array);
         }
-        echo 'duplicates deleted';
         //update existing idx pages to custom post type
         for ($i = 0; $i < count($post_ids); $i++) {
             $this->update_post_type($post_ids[$i], $links[$i], 'idx_page');
         }
-
-        echo 'done';
-        die();
     }
 
     public function drop_old_table()
