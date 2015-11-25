@@ -133,7 +133,7 @@ div.awesomplete > ul > li {
     display: block;
 }
 
-.idx-omnibar-form.idx-omnibar-extra-form button {
+.idx-omnibar-form.idx-omnibar-extra-form button, .idx-omnibar-extra-button {
     width: 100%;
     margin-top: 1.5rem;
 }
@@ -147,4 +147,17 @@ div.awesomplete > ul > li {
 
 .idx-omnibar-form button {
     display: inline-block;
+}
+
+/* Shortcode Preview Fixes */
+div.idx-modal-shortcode-preview .idx-omnibar-input {
+    width: 60%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+div.idx-modal-shortcode-preview button {
+    width: 40%;
+}
+div.idx-modal-shortcode-preview .idx-omnibar-extra-input {
+    width: 100%;
 }

@@ -45,30 +45,35 @@ EOD;
 
         return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">
-      <input class="idx-omnibar-input" type="text" placeholder="City, Postal Code, Address, or Listing ID" onblur="if (this.value == '') {this.value = 'City, Postal Code, Address, or Listing ID';}" onfocus="if (this.value == 'City, Postal Code, Address, or Listing ID') {this.value = '';}">
+      <input class="idx-omnibar-input idx-omnibar-extra-input" type="text" placeholder="City, Postal Code, Address, or Listing ID" onblur="if (this.value == '') {this.value = 'City, Postal Code, Address, or Listing ID';}" onfocus="if (this.value == 'City, Postal Code, Address, or Listing ID') {this.value = '';}">
       <div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0" title="No commas or dollar signs are allowed."></div><div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01" title="Only numbers and decimals are allowed"></div>
-      <button type="submit" value="Search"><i class="fa fa-search"></i><span>Search</span></button>
+      <button class="idx-omnibar-extra-button" type="submit" value="Search"><i class="fa fa-search"></i><span>Search</span></button>
     </form>
 EOD;
     }
 
-    public function add_omnibar_shortcode()
+    public function add_omnibar_shortcode($atts)
     {
+        extract(shortcode_atts(array(
+            'styles' => 1,
+        ), $atts));
+
         $idx_url = get_option('idx-results-url');
         $plugin_dir = plugins_url();
-
-        //hardcoded temporarily
-        $styles = 1;
 
         return $this->idx_omnibar_basic($plugin_dir, $idx_url, $styles);
     }
 
-    public function add_omnibar_extra_shortcode()
+    public function add_omnibar_extra_shortcode($atts)
     {
+        extract(shortcode_atts(array(
+            'styles' => 1,
+        ), $atts));
+
         $idx_url = get_option('idx-results-url');
         $plugin_dir = plugins_url();
 
-        return $this->idx_omnibar_extra($plugin_dir, $idx_url);
+        return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles);
     }
 
     public static function show_omnibar_shortcodes($type, $name)

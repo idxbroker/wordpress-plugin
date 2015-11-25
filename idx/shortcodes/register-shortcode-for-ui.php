@@ -51,10 +51,10 @@ class Register_Shortcode_For_Ui
                 echo $this->get_widget_html();
                 break;
             case "omnibar":
-                echo $this->get_omnibar();
+                echo $this->get_omnibar("idx-omnibar");
                 break;
             case "omnibar_extra":
-                echo $this->get_omnibar_extra();
+                echo $this->get_omnibar_extra("idx-omnibar-extra");
                 break;
             case "impress_lead_login":
                 echo $this->get_lead_login("impress_lead_login");
@@ -169,25 +169,49 @@ class Register_Shortcode_For_Ui
         return $available_shortcodes;
     }
 
-    public function get_omnibar()
+    public function get_omnibar($shortcode)
     {
-        $html = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
-        $html .= "<link type=\"text/css\" href=\"" . plugins_url('/assets/css/idx-omnibar.min.css', dirname(dirname(__FILE__))) . "\">";
-        $html .= "<script>";
-        $html .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar.png', dirname(dirname(__FILE__))) . "\">';";
-        $html .= "</script>";
-        $html .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
-        return $html;
+        // $output = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
+        // $output .= "<link type=\"text/css\" href=\"" . plugins_url('/assets/css/idx-omnibar.min.css', dirname(dirname(__FILE__))) . "\">";
+        // $output .= "<script>";
+        // $output .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar.png', dirname(dirname(__FILE__))) . "\">';";
+        // $output .= "</script>";
+        // Default Styles
+        $output = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
+        $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
+        // Styles and Scripts for Preview
+        $output .= "<script>(function(){";
+        //empty url array so styles can be disabled and enabled as expected
+        $output .= "styleSheetUrls = [];";
+        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)) . "\", \"#styles\");";
+        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
+        $output .= "})();</script>";
+        return $output;
     }
 
-    public function get_omnibar_extra()
+    public function get_omnibar_extra($shortcode)
     {
-        $html = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
-        $html .= "<script>";
-        $html .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar-extra.png', dirname(dirname(__FILE__))) . "\">';";
-        $html .= "</script>";
-        $html .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar-extra\"></div>";
-        return $html;
+        // $output = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
+        // $output .= "<script>";
+        // $output .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar-extra.png', dirname(dirname(__FILE__))) . "\">';";
+        // $output .= "</script>";
+        // Default Styles
+        $output = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
+        $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar-extra\"></div>";
+        // Styles and Scripts for Preview
+        $output .= "<script>(function(){";
+        //empty url array so styles can be disabled and enabled as expected
+        $output .= "styleSheetUrls = [];";
+        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)) . "\", \"#styles\");";
+        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
+        $output .= "})();</script>";
+        return $output;
     }
 
     public function get_lead_login($shortcode)
