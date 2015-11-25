@@ -17,8 +17,8 @@ class Initiate_Plugin
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
         add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
         add_action('wp_loaded', array($this, 'schedule_omnibar_update'));
-        add_action('wp_loaded', array($this, 'migrate_old_table'));
         add_action('idx_omnibar_get_locations', array($this, 'idx_omnibar_get_locations'));
+        add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
 
         //Instantiate Classes
         new Wrappers();
@@ -45,12 +45,19 @@ class Initiate_Plugin
         $api_error = false;
     }
 
-    public function migrate_old_table()
+    public function schedule_migrate_old_table()
     {
         global $wpdb;
-        if ($wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "posts_idx';") !== null) {
-            new Migrate_Old_Table();
+        if ($wpdb->get_var("SELECT post_id FROM " . $wpdb->prefix . "postmeta WHERE meta_key = '_links_to'") !== null) {
+            if (!wp_get_schedule('idx_migrate_old_table')) {
+                wp_schedule_single_event(time(), 'idx_migrate_old_table');
+            }
         }
+    }
+
+    public function migrate_old_table()
+    {
+        new Migrate_Old_Table();
     }
 
     public function plugin_updated()
@@ -65,7 +72,11 @@ class Initiate_Plugin
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
             update_option('idx-broker-plugin-version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
+            //clear old api cache
+            $idx_api = new Idx_Api();
+            $idx_api->idx_clean_transients();
             $this->idx_omnibar_get_locations();
+            return add_action('wp_loaded', array($this, 'schedule_migrate_old_table'));
         }
     }
 
