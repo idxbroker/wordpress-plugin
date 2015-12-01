@@ -8,7 +8,9 @@ class Register_Impress_Shortcodes
     {
         $this->idx_api = new \IDX\Idx_Api();
         add_shortcode('impress_lead_login', array($this, 'lead_login_shortcode'));
-        add_shortcode('impress_lead_signup', array($this, 'lead_signup_shortcode'));
+        if ($this->idx_api->platinum_account_type()) {
+            add_shortcode('impress_lead_signup', array($this, 'lead_signup_shortcode'));
+        }
         add_shortcode('impress_property_showcase', array($this, 'property_showcase_shortcode'));
         add_shortcode('impress_property_carousel', array($this, 'property_carousel_shortcode'));
         add_shortcode('impress_city_links', array($this, 'city_links_shortcode'));
@@ -487,25 +489,27 @@ class Register_Impress_Shortcodes
             );
 
             //* Lead Signup
-            shortcode_ui_register_for_shortcode(
-                'lead_signup',
-                array(
-                    'label' => 'Lead Signup',
-                    'listItemImage' => 'dashicons-admin-users',
-                    'attrs' => array(
-                        array(
-                            'label' => 'Require Phone?',
-                            'attr' => 'phone',
-                            'type' => 'radio',
-                            'value' => 0,
-                            'options' => array(
-                                1 => 'Yes',
-                                0 => 'No',
+            if ($this->idx_api->platinum_account_type()) {
+                shortcode_ui_register_for_shortcode(
+                    'lead_signup',
+                    array(
+                        'label' => 'Lead Signup',
+                        'listItemImage' => 'dashicons-admin-users',
+                        'attrs' => array(
+                            array(
+                                'label' => 'Require Phone?',
+                                'attr' => 'phone',
+                                'type' => 'radio',
+                                'value' => 0,
+                                'options' => array(
+                                    1 => 'Yes',
+                                    0 => 'No',
+                                ),
                             ),
                         ),
-                    ),
-                )
-            );
+                    )
+                );
+            }
 
             //* Property Showcase
             //$saved_links = $this->idx_api->saved_links();

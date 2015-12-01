@@ -15,19 +15,23 @@ class Register_Shortcode_For_Ui
 
     public function default_shortcodes()
     {
-        return array(
+        $shortcode_types = array(
             'system_links' => array('name' => 'System Links', 'short_name' => 'system_links', 'icon' => 'fa fa-star'),
             'saved_links' => array('name' => 'Saved Links', 'short_name' => 'saved_links', 'icon' => 'fa fa-floppy-o'),
             'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => 'fa fa-cog'),
+            //omnibar extra included as option
             'omnibar' => array('name' => 'IMPress Omnibar Search', 'short_name' => 'omnibar', 'icon' => 'fa fa-search'),
-            'omnibar_extra' => array('name' => 'IMPress Omnibar with Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-search-plus'),
-            'impress_lead_login' => array('name' => 'IMPress Lead Login Widget', 'short_name' => 'impress_lead_login', 'icon' => 'fa fa-users'),
-            'impress_lead_signup' => array('name' => 'IMPress Lead Signup Widget', 'short_name' => 'impress_lead_signup', 'icon' => 'fa fa-user-plus'),
+            // 'omnibar_extra' => array('name' => 'IMPress Omnibar with Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-search-plus'),
             'impress_city_links' => array('name' => 'IMPress City Links', 'short_name' => 'impress_city_links', 'icon' => 'fa fa-link'),
             'impress_property_showcase' => array('name' => 'IMPress Property Showcase', 'short_name' => 'impress_property_showcase', 'icon' => 'fa fa-home'),
             'impress_property_carousel' => array('name' => 'IMPress Property Carousel', 'short_name' => 'impress_property_carousel', 'icon' => 'dashicons dashicons-admin-multisite'),
+            'impress_lead_login' => array('name' => 'IMPress Lead Login Widget', 'short_name' => 'impress_lead_login', 'icon' => 'fa fa-users'),
         );
-
+        //Only add lead signup shortcode if the account type is Platinum
+        if ($this->idx_api->platinum_account_type()) {
+            $shortcode_types['impress_lead_signup'] = array('name' => 'IMPress Lead Signup Widget', 'short_name' => 'impress_lead_signup', 'icon' => 'fa fa-user-plus');
+        }
+        return $shortcode_types;
     }
 
     public function get_shortcode_options()
@@ -178,32 +182,14 @@ class Register_Shortcode_For_Ui
         // $output .= "</script>";
         // Default Styles
         $output = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"extra\" data-short-name=\"extra\">";
+        $output .= "<label for\"extra\">Extra Fields?</label>";
+        $output .= "</div>";
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
-        // Styles and Scripts for Preview
-        $output .= "<script>(function(){";
-        //empty url array so styles can be disabled and enabled as expected
-        $output .= "styleSheetUrls = [];";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)) . "\", \"#styles\");";
-        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
-        $output .= "})();</script>";
-        return $output;
-    }
-
-    public function get_omnibar_extra($shortcode)
-    {
-        // $output = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
-        // $output .= "<script>";
-        // $output .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar-extra.png', dirname(dirname(__FILE__))) . "\">';";
-        // $output .= "</script>";
-        // Default Styles
-        $output = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
-        $output .= "<label for\"styles\">Default Styles?</label>";
-        $output .= "</div>";
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar-extra\"></div>";
         // Styles and Scripts for Preview
         $output .= "<script>(function(){";
         //empty url array so styles can be disabled and enabled as expected
