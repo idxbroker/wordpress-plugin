@@ -14,12 +14,14 @@ class Initiate_Plugin
         add_filter("plugin_action_links_" . plugin_basename(dirname(dirname(__FILE__))) . '/idx-broker-platinum.php', array($this, 'idx_broker_platinum_plugin_actlinks'));
         //Setting the priority to 9 for admin_menu makes the Wrappers post type UI below the Settings link
         add_action('admin_menu', array($this, 'add_menu'), 9);
+        add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
+        add_action('admin_bar_menu', array($this, 'add_admin_bar_menu'), 999.125);
         add_action('admin_enqueue_scripts', array($this, 'idx_inject_script_and_style'));
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
-        add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
+
         add_action('wp_loaded', array($this, 'schedule_omnibar_update'));
-        add_action('wp_loaded', array($this, 'migrate_old_table'));
         add_action('idx_omnibar_get_locations', array($this, 'idx_omnibar_get_locations'));
+        add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
 
         include 'backwards-compatibility.php';
 
@@ -48,12 +50,19 @@ class Initiate_Plugin
         $api_error = false;
     }
 
-    public function migrate_old_table()
+    public function schedule_migrate_old_table()
     {
         global $wpdb;
-        if ($wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "posts_idx';") !== null) {
-            new Migrate_Old_Table();
+        if ($wpdb->get_var("SELECT post_id FROM " . $wpdb->prefix . "postmeta WHERE meta_key = '_links_to'") !== null) {
+            if (!wp_get_schedule('idx_migrate_old_table')) {
+                wp_schedule_single_event(time(), 'idx_migrate_old_table');
+            }
         }
+    }
+
+    public function migrate_old_table()
+    {
+        new Migrate_Old_Table();
     }
 
     public function plugin_updated()
@@ -68,7 +77,11 @@ class Initiate_Plugin
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
             update_option('idx-broker-plugin-version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
+            //clear old api cache
+            $idx_api = new Idx_Api();
+            $idx_api->idx_clean_transients();
             $this->idx_omnibar_get_locations();
+            return add_action('wp_loaded', array($this, 'schedule_migrate_old_table'));
         }
     }
 
@@ -162,8 +175,62 @@ class Initiate_Plugin
 
     public function add_menu()
     {
-        add_menu_page('IDX Broker Plugin Options', 'IDX Broker', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'dashicons-admin-home', 55.572);
-        add_submenu_page('idx-broker', 'IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
+        add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'dashicons-admin-home', 55.572);
+        add_submenu_page('idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
+        $this->add_upgrade_center_link();
+    }
+
+/**
+ * This adds the idx menu items to the admin bar for quick access.
+ *
+ * @params void
+ * @return Admin Menu
+ */
+    public function add_admin_bar_menu($wp_admin_bar)
+    {
+        $args = array(
+            'id' => 'idx_admin_bar_menu',
+            'title' => '<span class="dashicons-before dashicons-admin-home impress-admin-bar-menu" style="vertical-align:bottom;margin-right:5px;top:5px;position:relative;"></span>IMPress',
+            'parent' => false,
+            'href' => admin_url('admin.php?page=idx-broker'),
+            'meta' => array('html' => '<style>.impress-admin-bar-menu{color: rgba(240,245,250,.6); #wp-admin-bar-idx_admin_bar_menu:hover { color: #00b9eb; }</style>'),
+        );
+        $wp_admin_bar->add_node($args);
+        $args = array(
+            'id' => 'idx_admin_bar_menu_item_1',
+            'title' => 'IDX Control Panel',
+            'parent' => 'idx_admin_bar_menu',
+            'href' => 'https://middleware.idxbroker.com/mgmt/login.php',
+            'meta' => array('target' => '_blank'),
+        );
+        $wp_admin_bar->add_node($args);
+        $args = array(
+            'id' => 'idx_admin_bar_menu_item_2',
+            'title' => 'Knowledgebase',
+            'parent' => 'idx_admin_bar_menu',
+            'href' => 'http://support.idxbroker.com',
+            'meta' => array('target' => '_blank'),
+        );
+        $wp_admin_bar->add_node($args);
+        $args = array(
+            'id' => 'idx_admin_bar_menu_item_3',
+            'title' => 'Initial Settings',
+            'parent' => 'idx_admin_bar_menu',
+            'href' => admin_url('admin.php?page=idx-broker'),
+        );
+        $wp_admin_bar->add_node($args);
+        $args = array(
+            'id' => 'idx_admin_bar_menu_item_4',
+            'title' => "Upgrade Available<i class=\"fa fa-arrow-up update-plugins\" style=\"padding: 0 5px 0 4px;font-weight: 100;margin-left:2.6px;font-family: FontAwesome;background-color: #d54e21;    border-radius: 10px; color: #fff;font-size: 9px; line-height: 17px;\"></i>",
+            'parent' => 'idx_admin_bar_menu',
+            'href' => 'https://middleware.idxbroker.com/mgmt/upgrade',
+            'meta' => array(
+                'target' => '_blank',
+            ),
+        );
+        if (!$this->Idx_Api->platinum_account_type()) {
+            $wp_admin_bar->add_node($args);
+        }
     }
 
 /**
@@ -190,4 +257,23 @@ class Initiate_Plugin
         include plugin_dir_path(__FILE__) . 'views/admin.php';
     }
 
+    /**
+     * As WP does not allow external links in the admin menu, this JavaScript adds a link manually.
+     *
+     * @params void
+     * @return void
+     */
+    public function add_upgrade_center_link()
+    {
+        //Only load if account is not Platinum level
+        if (!$this->Idx_Api->platinum_account_type()) {
+            wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+            $html = "<li><a href=\"https://middleware.idxbroker.com/mgmt/upgrade\" target=\"_blank\">Upgrade Available<i class=\"fa fa-arrow-up update-plugins\" style=\"padding: 0 5px 0 4px;font-weight: 100;margin: 0 0 0 2.6px;\"></i></a>";
+            echo <<<EOD
+            <script>window.addEventListener('DOMContentLoaded',function(){
+                document.querySelector('.wp-has-submenu.toplevel_page_idx-broker ul').innerHTML += '$html';
+            });</script>
+EOD;
+        }
+    }
 }
