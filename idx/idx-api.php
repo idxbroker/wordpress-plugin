@@ -142,18 +142,16 @@ class Idx_Api
      */
     public function idx_clean_transients()
     {
-        //get rid of all IDX Pages
-        // Idx_Pages::delete_all_idx_pages();
-
-        if ($this->get_transient('idx_savedlinks_cache') !== false) {
-            $this->delete_transient('idx_savedlinks_cache');
-        }
-        if ($this->get_transient('idx_widgetsrc_cache') !== false) {
-            $this->delete_transient('idx_widgetsrc_cache');
-        }
-        if ($this->get_transient('idx_systemlinks_cache') !== false) {
-            $this->delete_transient('idx_systemlinks_cache');
-        }
+        global $wpdb;
+        $wpdb->query(
+            $wpdb->prepare(
+                "
+                DELETE FROM $wpdb->options
+         WHERE option_name LIKE %s
+        ",
+                'idx_%_cache'
+            )
+        );
 
         $this->clear_wrapper_cache();
     }
