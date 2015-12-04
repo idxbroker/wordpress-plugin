@@ -149,7 +149,7 @@ class Idx_Api
                 DELETE FROM $wpdb->options
          WHERE option_name LIKE %s
         ",
-                'idx_%_cache'
+                '%idx_%_cache'
             )
         );
 
