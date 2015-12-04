@@ -221,7 +221,7 @@ class Initiate_Plugin
         $wp_admin_bar->add_node($args);
         $args = array(
             'id' => 'idx_admin_bar_menu_item_4',
-            'title' => "Upgrade Available<i class=\"fa fa-arrow-up update-plugins\" style=\"padding: 0 5px 0 4px;font-weight: 100;margin-left:2.6px;font-family: FontAwesome;background-color: #d54e21;    border-radius: 10px; color: #fff;font-size: 9px; line-height: 17px;\"></i>",
+            'title' => "Upgrade Account<i class=\"fa fa-arrow-up update-plugins\" style=\"padding: 0 5px 0 4px;font-weight: 100;margin-left:2.6px;font-family: FontAwesome;background-color: #d54e21;    border-radius: 10px; color: #fff;font-size: 9px; line-height: 17px;\"></i>",
             'parent' => 'idx_admin_bar_menu',
             'href' => 'https://middleware.idxbroker.com/mgmt/upgrade',
             'meta' => array(
@@ -268,7 +268,7 @@ class Initiate_Plugin
         //Only load if account is not Platinum level
         if (!$this->Idx_Api->platinum_account_type()) {
             wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
-            $html = "<li><a href=\"https://middleware.idxbroker.com/mgmt/upgrade\" target=\"_blank\">Upgrade Available<i class=\"fa fa-arrow-up update-plugins\" style=\"padding: 0 5px 0 4px;font-weight: 100;margin: 0 0 0 2.6px;\"></i></a>";
+            $html = "<li><a href=\"https://middleware.idxbroker.com/mgmt/upgrade\" target=\"_blank\">Upgrade Account<i class=\"fa fa-arrow-up update-plugins\" style=\"padding: 0 5px 0 4px;font-weight: 100;margin: 0 0 0 6px;vertical-align:bottom;\"></i></a>";
             echo <<<EOD
             <script>window.addEventListener('DOMContentLoaded',function(){
                 document.querySelector('.wp-has-submenu.toplevel_page_idx-broker ul').innerHTML += '$html';
