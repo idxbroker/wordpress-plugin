@@ -13,7 +13,10 @@ class Create_Impress_Widgets
         add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Carousel_Widget');});
         add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_City_Links_Widget');});
         add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Lead_Login_Widget');});
-        add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');});
+        //Only load lead signup widget for Platinum Accounts
+        if ($this->idx_api->platinum_account_type()) {
+            add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');});
+        }
 
     }
 
