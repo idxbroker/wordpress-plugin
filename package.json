@@ -1,0 +1,39 @@
+{
+  "name": "impress-for-idx-broker",
+  "version": "2.0.0",
+  "description": "IMPress for IDX Broker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idxbroker/wordpress-plugin.git"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "idx",
+    "idxbroker",
+    "impress",
+    "real estate"
+  ],
+  "author": "IDX Broker",
+  "license": "GPL-2.0+",
+  "bugs": {
+    "url": "https://github.com/idxbroker/wordpress-plugin/issues"
+  },
+  "homepage": "https://github.com/idxbroker/wordpress-plugin#readme",
+  "devDependencies": {
+    "glob": "^6.0.1",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.1",
+    "jshint": "^2.8.0",
+    "jshint-stylish": "^2.1.0"
+  }
+}
