@@ -23,7 +23,7 @@ class Shortcode_Ui
 
     public function enqueue_shortcode_js($hook)
     {
-        if ('post.php' != $hook) {
+        if ('post.php' != $hook && 'post-new.php' != $hook) {
             return;
         }
 
