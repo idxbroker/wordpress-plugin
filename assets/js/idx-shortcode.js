@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function(event){
             previewTabButton.removeEventListener('click', openPreviewTab);
             editTabButton.removeEventListener('click', openEditTab);
             backButton.removeEventListener('click', backToOverview);
-            removeWidgetPreviewEvent();
         }
     }
 
@@ -84,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function(event){
         editTabButton.classList.add('idx-active-tab');
         modalTitle.innerHTML = 'Insert IDX Shortcode';
         el('.idx-back-button')[0].style.display = 'none';
-        removeWidgetPreviewEvent();
     }
 
 
@@ -204,16 +202,6 @@ document.addEventListener('DOMContentLoaded', function(event){
                 el('.idx-modal-tabs a:nth-of-type(2)')[0].classList.add('idx-active-tab');
                 //fill the preview tab with shortcode data
                 previewTab.innerHTML = data;
-                if(shortcodeType === 'idx-platinum-widget'){
-                    previewTab.innerHTML += "<span class=\"empty-notice\">No Properties to Display</span>";
-                    previewTab.addEventListener('DOMSubtreeModified', function(event){
-                    //only remove message if div has no inner elements (properties)
-                    if(typeof el('.empty-notice')[0] !== 'undefined' && typeof el('.idx-modal-shortcode-preview div')[0] !== 'undefined' && el('.idx-modal-shortcode-preview div')[0].hasChildNodes()){
-                        event.target.removeEventListener(event.type, arguments.callee);
-                        previewTab.removeChild(el('.empty-notice')[0]);
-                    }
-                });
-                }
                 //evaluate scripts that would not load otherwise
                 var scripts = previewTab.querySelectorAll('script');
                 return evalScripts(scripts);
@@ -222,14 +210,6 @@ document.addEventListener('DOMContentLoaded', function(event){
                 openEditTab(event);
             });
         }
-    }
-
-    function removeWidgetPreviewEvent(){
-        previewTab.removeEventListener('DOMSubtreeModified', function(){
-            if(typeof el('.empty-notice')[0] !== 'undefined'){
-                previewTab.removeChild(el('.empty-notice')[0]);
-            }
-        });
     }
 
     //evaluate scripts - both external and inline
@@ -296,9 +276,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         editTab.style.display = 'block';
         previewTabButton.classList.remove('idx-active-tab');
         editTabButton.classList.add('idx-active-tab');
-        removeWidgetPreviewEvent();
     }
-
 
 /*
  * Forming and Inserting the Shortcode
