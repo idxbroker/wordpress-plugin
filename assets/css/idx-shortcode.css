@@ -161,6 +161,16 @@
     margin: .5rem;
 }
 
+.idx-modal-shortcode-preview .empty-notice {
+    visibility: hidden;
+    -webkit-animation-name: fadein;
+    -webkit-animation-duration: 150s;
+    -webkit-animation-delay: 2.5s;
+    animation-name: fadein;
+    animation-duration: 150s;
+    animation-delay: 2.5s;
+}
+
 .idx-toolbar-primary {
     float: right;
     position: absolute;
@@ -173,6 +183,15 @@
 #idx-shortcode-modal .button, #idx-shortcode-modal .separator {
     position: static;
 }
+
+.idx-back-button {
+    padding: 1rem 1rem 0;
+}
+
+.wp-media-buttons .idx-back-button a {
+    color: #21759b;
+}
+
 #idx-shortcode-modal .button:active{
     top: initial;
 }
@@ -215,6 +234,8 @@
     padding: 0.5rem;
     box-sizing: border-box;
 }
+
+
 
 .idx-loader {
   width: 50px;
@@ -344,4 +365,18 @@
         max-height: 100%;
         margin-bottom: 2rem;
     }
+}
+
+
+
+
+
+/* Animations */
+@-webkit-keyframes fadein {
+    0%   {visibility: hidden;}
+    100% {visibility: visible;}
+}
+@keyframes fadein {
+    0%   {visibility: hidden;}
+    100% {visibility: visible;}
 }

@@ -56,12 +56,17 @@ EOD;
     {
         extract(shortcode_atts(array(
             'styles' => 1,
+            'extra' => 0,
         ), $atts));
 
         $idx_url = get_option('idx-results-url');
         $plugin_dir = plugins_url();
 
-        return $this->idx_omnibar_basic($plugin_dir, $idx_url, $styles);
+        if (!empty($extra)) {
+            return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles);
+        } else {
+            return $this->idx_omnibar_basic($plugin_dir, $idx_url, $styles);
+        }
     }
 
     public function add_omnibar_extra_shortcode($atts)

@@ -97,8 +97,9 @@ class Idx_Broker_Plugin
             wp_trash_post($page_id);
         }
         //clear transients made by the plugin
-        eval('\IDX\Idx_Api::idx_clean_transients();');
+        eval('$idx_api = \IDX\Idx_Api;');
         eval('$idx_pages = new \IDX\Idx_Pages();');
+        $idx_api->idx_clean_transients();
         $idx_pages->delete_all_idx_pages();
     }
 

@@ -9,7 +9,6 @@ class Shortcode_Ui
         add_action('media_buttons_context', array($this, 'add_idx_button'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_shortcode_js'));
         $this->shortcodes_for_ui = new Register_Shortcode_For_Ui();
-
     }
 
     public $shortcodes_for_ui;
@@ -53,6 +52,7 @@ class Shortcode_Ui
     {
         echo "<h1>Insert IDX Shortcode</h1>";
         echo "<div class=\"separator\"></div>";
+        echo "<div class=\"idx-back-button\"><a href=\"#\">← Back to Overview</a></div>";
         echo "<div class=\"idx-modal-inner-content\"><div class=\"idx-modal-tabs-router\"><div class=\"idx-modal-tabs\"><a class=\"idx-active-tab\" href=\"#\">Edit</a><a href=\"#\">Preview</a></div></div>";
         echo "<div class=\"idx-modal-inner-overview\">";
 

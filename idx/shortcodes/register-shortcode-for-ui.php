@@ -182,32 +182,14 @@ class Register_Shortcode_For_Ui
         // $output .= "</script>";
         // Default Styles
         $output = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"extra\" data-short-name=\"extra\">";
+        $output .= "<label for\"extra\">Extra Fields?</label>";
+        $output .= "</div>";
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
-        // Styles and Scripts for Preview
-        $output .= "<script>(function(){";
-        //empty url array so styles can be disabled and enabled as expected
-        $output .= "styleSheetUrls = [];";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)) . "\", \"#styles\");";
-        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
-        $output .= "})();</script>";
-        return $output;
-    }
-
-    public function get_omnibar_extra($shortcode)
-    {
-        // $output = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
-        // $output .= "<script>";
-        // $output .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar-extra.png', dirname(dirname(__FILE__))) . "\">';";
-        // $output .= "</script>";
-        // Default Styles
-        $output = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-        $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
-        $output .= "<label for\"styles\">Default Styles?</label>";
-        $output .= "</div>";
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar-extra\"></div>";
         // Styles and Scripts for Preview
         $output .= "<script>(function(){";
         //empty url array so styles can be disabled and enabled as expected

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function(event){
     var editTab = el('.idx-modal-shortcode-edit')[0];
     var insertButton = el('.idx-toolbar-primary button')[0];
     var modalTitle = el('#idx-shortcode-modal h1')[0];
+    var backButton = el('.idx-back-button a')[0];
     var previewTab = el('.idx-modal-shortcode-preview')[0];
     var editTabButton = el('.idx-modal-tabs a:nth-of-type(1)')[0];
     var previewTabButton = el('.idx-modal-tabs a:nth-of-type(2)')[0];
@@ -43,6 +44,8 @@ document.addEventListener('DOMContentLoaded', function(event){
         insertButton.setAttribute('disabled', 'disabled');
         previewTabButton.addEventListener('click', openPreviewTab);
         editTabButton.addEventListener('click', openEditTab);
+        backButton.addEventListener('click', backToOverview);
+        el('.idx-back-button')[0].style.display = 'none';
     }
 
     //Close the modal and perform reset actions in case they open it again
@@ -63,7 +66,23 @@ document.addEventListener('DOMContentLoaded', function(event){
             modalTitle.innerHTML = 'Insert IDX Shortcode';
             previewTabButton.removeEventListener('click', openPreviewTab);
             editTabButton.removeEventListener('click', openEditTab);
+            backButton.removeEventListener('click', backToOverview);
         }
+    }
+
+    //Back button to get from Shortcode Details to the Overview
+    function backToOverview(event){
+        event.preventDefault();
+        overView.style.display = 'block';
+        editTab.innerHTML = '';
+        tabButtons.style.display = 'none';
+        previewTab.style.display = 'none';
+        editTab.style.display = 'none';
+        insertButton.setAttribute('disabled', 'disabled');
+        previewTabButton.classList.remove('idx-active-tab');
+        editTabButton.classList.add('idx-active-tab');
+        modalTitle.innerHTML = 'Insert IDX Shortcode';
+        el('.idx-back-button')[0].style.display = 'none';
     }
 
 
@@ -94,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
         overView.style.display = 'none';
         editTab.style.display = 'block';
+        el('.idx-back-button')[0].style.display = 'block';
         //Display Loading Icon while Options Load
         editTab.innerHTML = "<div class=\"idx-loader\"></div>";
         return jQuery.post(
@@ -128,13 +148,10 @@ document.addEventListener('DOMContentLoaded', function(event){
                 modalTitle.innerHTML = 'Shortcode Details - Widgets';
                 break;
             case 'omnibar':
-                modalTitle.innerHTML = 'Shortcode Preview - IMPress Omnibar';
-                break;
-            case 'omnibar_extra':
-                modalTitle.innerHTML = 'Shortcode Preview - IMPress Omnibar With Extra Fields';
+                modalTitle.innerHTML = 'Shortcode Details - IMPress Omnibar';
                 break;
             case 'impress_lead_login':
-                modalTitle.innerHTML = 'Shortcode Preview - IMPress Lead Login';
+                modalTitle.innerHTML = 'Shortcode Details - IMPress Lead Login';
                 break;
             case 'impress_lead_signup':
                 modalTitle.innerHTML = 'Shortcode Details - IMPress Lead Signup';
@@ -162,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
     }
 
+    //load shortcode html via ajax
     function openPreviewTab(event, loadContent){
         event.preventDefault();
         var shortcode = formShortcode();
@@ -210,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         })
     }
 
+    //Add a stylesheet for shortcodes to be styled properly
     function addStyleSheet(url, fieldId){
         if(typeof fieldId !== 'undefined'){
             if(editTab.querySelector(fieldId).value && editTab.querySelector(fieldId).value !== '0'){
@@ -220,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
     }
 
+    //Create a new stylesheet and make removable if options require it
     function addStyleSheetElement(url, removable){
             var styleSheet = document.createElement("link");
                 styleSheet.setAttribute("rel", "stylesheet");
@@ -231,8 +251,9 @@ document.addEventListener('DOMContentLoaded', function(event){
                 return document.getElementsByTagName("head")[0].appendChild(styleSheet);
     }
 
+    //Array of stylesheets
     var styleSheetUrls = [];
-
+    //Remove each old stylesheet and store in array (called from register-shortcode-for-ui.php)
     function refreshStyles(fieldId){
         if(typeof el('.preview-css')[0] !== 'undefined'){
             forEach(el(".preview-css"), function(value, index){
@@ -256,7 +277,6 @@ document.addEventListener('DOMContentLoaded', function(event){
         previewTabButton.classList.remove('idx-active-tab');
         editTabButton.classList.add('idx-active-tab');
     }
-
 
 /*
  * Forming and Inserting the Shortcode
