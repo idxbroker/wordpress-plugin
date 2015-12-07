@@ -1,6 +1,8 @@
-#idx-shortcode img {
-    padding: 0;
-    margin: -.3rem .2rem -.3rem 0;
+#idx-shortcode:before {
+    content: "\e900";
+    font-family: 'idx-dashicon';
+    margin-right: .3em;
+    font-size: .7rem;
 }
 
 #idx-overlay{
