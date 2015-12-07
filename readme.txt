@@ -86,6 +86,10 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 * Each of these widgets has customization options right within WordPress including the ability to disable styling for designers to gain more control of the appearance of these widgets.
 * Added composer, npm, and gulp support.
 
+= 1.3.2 =
+* Fixed an issue not allowing some clients updating from an earlier version of the plugin with many saved links.
+* Fixed an issue with unexpected results with IDX pages switching between older and newer versions of the plugin.
+
 = 1.3.1 =
 * Fixed an issue with duplicate start and stop tags for dynamic wrappers when Equity is installed.
 * Fixed a bug where errors were being reported.

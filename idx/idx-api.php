@@ -577,4 +577,13 @@ class Idx_Api
         return $price;
     }
 
+    public function platinum_account_type()
+    {
+        $account_type = $this->idx_api('accounttype', $this->idx_api_get_apiversion(), 'clients', array(), 60 * 60 * 24);
+        if ($account_type[0] === 'IDX Broker Platinum') {
+            return true;
+        }
+        return false;
+    }
+
 }
