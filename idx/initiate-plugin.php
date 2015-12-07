@@ -175,9 +175,10 @@ class Initiate_Plugin
 
     public function add_menu()
     {
-        add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'dashicons-admin-home', 55.572);
+        add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'none', 55.572);
         add_submenu_page('idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
         $this->add_upgrade_center_link();
+        wp_enqueue_style('idx-menus', plugins_url('../assets/css/idx-menus.css', __FILE__));
     }
 
 /**
@@ -190,10 +191,9 @@ class Initiate_Plugin
     {
         $args = array(
             'id' => 'idx_admin_bar_menu',
-            'title' => '<span class="dashicons-before dashicons-admin-home impress-admin-bar-menu" style="vertical-align:bottom;margin-right:5px;top:5px;position:relative;"></span>IMPress',
+            'title' => '<span class="ab-icon idx-admin-bar-menu-icon"></span>IMPress',
             'parent' => false,
             'href' => admin_url('admin.php?page=idx-broker'),
-            'meta' => array('html' => '<style>.impress-admin-bar-menu{color: rgba(240,245,250,.6); #wp-admin-bar-idx_admin_bar_menu:hover { color: #00b9eb; }</style>'),
         );
         $wp_admin_bar->add_node($args);
         $args = array(
@@ -221,7 +221,7 @@ class Initiate_Plugin
         $wp_admin_bar->add_node($args);
         $args = array(
             'id' => 'idx_admin_bar_menu_item_4',
-            'title' => "Upgrade Account<i class=\"fa fa-arrow-up update-plugins\" style=\"padding: 0 5px 0 4px;font-weight: 100;margin-left:2.6px;font-family: FontAwesome;background-color: #d54e21;    border-radius: 10px; color: #fff;font-size: 9px; line-height: 17px;\"></i>",
+            'title' => "Upgrade Account<i class=\"fa fa-arrow-up update-plugins\"></i>",
             'parent' => 'idx_admin_bar_menu',
             'href' => 'https://middleware.idxbroker.com/mgmt/upgrade',
             'meta' => array(
@@ -268,10 +268,10 @@ class Initiate_Plugin
         //Only load if account is not Platinum level
         if (!$this->Idx_Api->platinum_account_type()) {
             wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
-            $html = "<li><a href=\"https://middleware.idxbroker.com/mgmt/upgrade\" target=\"_blank\">Upgrade Account<i class=\"fa fa-arrow-up update-plugins\" style=\"padding: 0 5px 0 4px;font-weight: 100;margin: 0 0 0 2.6px;\"></i></a>";
+            $html = "<li><a href=\"https://middleware.idxbroker.com/mgmt/upgrade\" target=\"_blank\">Upgrade Account<i class=\"fa fa-arrow-up update-plugins\"></i></a>";
             echo <<<EOD
             <script>window.addEventListener('DOMContentLoaded',function(){
-                document.querySelector('.wp-has-submenu.toplevel_page_idx-broker ul').innerHTML += '$html';
+                document.querySelector('#toplevel_page_idx-broker ul').innerHTML += '$html';
             });</script>
 EOD;
         }
