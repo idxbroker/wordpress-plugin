@@ -93,7 +93,7 @@ class Register_Impress_Shortcodes
         ), $atts));
 
         if (!empty($styles)) {
-            wp_enqueue_style('impress-showcase', plugins_url('../assets/widgets/css/impress-showcase.css', dirname(__FILE__)));
+            wp_enqueue_style('impress-showcase', plugins_url('../assets/css/widgets/impress-showcase.css', dirname(__FILE__)));
         }
 
         if (($property_type) == 'savedlinks') {
