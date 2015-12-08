@@ -101,8 +101,8 @@ class Register_Impress_Shortcodes
         } else {
             $properties = $this->idx_api->client_properties($property_type);
         }
-
-        if (empty($properties)) {
+        //If no properties or an error, load message
+        if (empty($properties) || gettype($properties) === 'object') {
             return 'No properties found';
         }
 
@@ -331,8 +331,8 @@ class Register_Impress_Shortcodes
         } else {
             $properties = $this->idx_api->client_properties($property_type);
         }
-
-        if (empty($properties)) {
+        //If no properties or an error, load message
+        if (empty($properties) || gettype($properties) === 'object') {
             return 'No properties found';
         }
 

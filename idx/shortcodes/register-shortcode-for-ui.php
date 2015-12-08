@@ -21,7 +21,6 @@ class Register_Shortcode_For_Ui
             'widgets' => array('name' => 'IDX Widgets', 'short_name' => 'widgets', 'icon' => 'fa fa-cog'),
             //omnibar extra included as option
             'omnibar' => array('name' => 'IMPress Omnibar Search', 'short_name' => 'omnibar', 'icon' => 'fa fa-search'),
-            // 'omnibar_extra' => array('name' => 'IMPress Omnibar with Extra Fields', 'short_name' => 'omnibar_extra', 'icon' => 'fa fa-search-plus'),
             'impress_city_links' => array('name' => 'IMPress City Links', 'short_name' => 'impress_city_links', 'icon' => 'fa fa-link'),
             'impress_property_showcase' => array('name' => 'IMPress Property Showcase', 'short_name' => 'impress_property_showcase', 'icon' => 'fa fa-home'),
             'impress_property_carousel' => array('name' => 'IMPress Property Carousel', 'short_name' => 'impress_property_carousel', 'icon' => 'dashicons dashicons-admin-multisite'),
@@ -325,6 +324,17 @@ class Register_Shortcode_For_Ui
         $output .= "<option value=\"soldpending\">Sold/Pending</option>";
         $output .= "<option value=\"supplemental\">Supplemental</option>";
         $output .= "<option value=\"historical\">Historical</option>";
+        //Only allow Saved Links if Equity is active
+        if (function_exists('equity')) {
+            $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
+        }
+        $output .= "</select>";
+        $output .= "</div>";
+        //Saved Link ID
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
+        $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
+        $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
         $output .= "</select>";
         $output .= "</div>";
         // Images
@@ -395,6 +405,17 @@ class Register_Shortcode_For_Ui
         $output .= "<option value=\"soldpending\">Sold/Pending</option>";
         $output .= "<option value=\"supplemental\">Supplemental</option>";
         $output .= "<option value=\"historical\">Historical</option>";
+        //Only allow Saved Links if Equity is active
+        if (function_exists('equity')) {
+            $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
+        }
+        $output .= "</select>";
+        $output .= "</div>";
+        //Saved Link ID
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
+        $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
+        $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
         $output .= "</select>";
         $output .= "</div>";
         // Per row

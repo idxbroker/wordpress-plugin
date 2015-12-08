@@ -73,6 +73,18 @@ class Idx_Api
             'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
         );
 
+        if (function_exists('equity')) {
+            if ($level = 'equity') {
+                $equity_api_key = get_option('equity_api_key');
+                $domain = site_url();
+                $equity_headers = array(
+                    'equitykey' => $equity_api_key,
+                    'domain' => apply_filters('equity_idx_api_domain', $domain),
+                );
+                $headers = array_merge($headers, $equity_headers);
+            }
+        }
+
         $params = array_merge(array('timeout' => 120, 'sslverify' => false, 'headers' => $headers), $params);
         $url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
@@ -537,10 +549,10 @@ class Idx_Api
     }
 
     /**
-     * Compares the price fields of two arrays
+     * Compares the price fields of two objects
      *
-     * @param array $a
-     * @param array $b
+     * @param object $a
+     * @param object $b
      * @return int
      */
     public function price_cmp($a, $b)

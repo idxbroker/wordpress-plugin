@@ -171,7 +171,6 @@ class Initiate_Plugin
     {
         return wp_enqueue_style('idx-menus', plugins_url('/assets/css/idx-menus.css', dirname(__FILE__)));
     }
-
 /**
  * This adds the options page to the WP admin.
  *
@@ -183,7 +182,7 @@ class Initiate_Plugin
     {
         add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'none', 55.572);
         add_submenu_page('idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
-        $this->add_upgrade_center_link();
+        add_action('admin_footer', array($this, 'add_upgrade_center_link'));
     }
 
 /**
@@ -247,8 +246,8 @@ class Initiate_Plugin
         if ('toplevel_page_idx-broker' !== $page) {
             return;
         }
-        wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.js', __FILE__), 'jquery');
-        wp_enqueue_style('idxcss', plugins_url('../assets/css/idx-broker.css', __FILE__));
+        wp_enqueue_script('idxjs', plugins_url('/assets/js/idx-broker.js', dirname(__FILE__)), 'jquery');
+        wp_enqueue_style('idxcss', plugins_url('/assets/css/idx-broker.css', dirname(__FILE__)));
     }
 
 /**
