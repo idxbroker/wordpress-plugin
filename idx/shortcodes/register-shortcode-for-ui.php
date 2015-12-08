@@ -177,11 +177,6 @@ class Register_Shortcode_For_Ui
 
     public function get_omnibar($shortcode)
     {
-        // $output = "<style>.idx-modal-tabs a:nth-of-type(1){display: none;}</style>";
-        // $output .= "<link type=\"text/css\" href=\"" . plugins_url('/assets/css/idx-omnibar.min.css', dirname(dirname(__FILE__))) . "\">";
-        // $output .= "<script>";
-        // $output .= "openPreviewTab(event, false); previewTabButton.removeEventListener('click', openPreviewTab); previewTab.innerHTML = '<img src=\"" . plugins_url('/assets/images/omnibar.png', dirname(dirname(__FILE__))) . "\">';";
-        // $output .= "</script>";
         // Default Styles
         $output = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"extra\" data-short-name=\"extra\">";

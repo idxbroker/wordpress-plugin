@@ -100,6 +100,10 @@ class Idx_Api
             if ($code == 401) {
                 $this->delete_transient($cache_key);
             }
+            if ($level === 'equity' && $code == 401) {
+                $equity_401_message = 'Also confirm you are using the same domain as on your IDX Broker account.';
+                return new \WP_Error("idx_api_error", __("Error {$code}: $error $equity_401_message"));
+            }
             return new \WP_Error("idx_api_error", __("Error {$code}: $error"));
         } else {
             $data = (array) json_decode((string) $response['body'], $json_decode_type);
