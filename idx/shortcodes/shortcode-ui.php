@@ -15,10 +15,8 @@ class Shortcode_Ui
 
     public function add_idx_button($context)
     {
-        $icon = plugins_url('../assets/images/icon.png', dirname(__FILE__));
         $this->modal();
-
-        return $context .= "<button id=\"idx-shortcode\" class=\"button thickbox\"><span><img src=\"$icon\"></span>Add IDX Shortcode</button>";
+        return $context .= "<button id=\"idx-shortcode\" class=\"button thickbox\">Add IDX Shortcode</button>";
     }
 
     public function enqueue_shortcode_js($hook)
