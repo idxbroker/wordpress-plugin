@@ -37,9 +37,12 @@ class Register_Shortcode_For_Ui
     {
         $shortcode_type = sanitize_text_field($_POST['idx_shortcode_type']);
         $system_links_check = $this->idx_api->idx_api_get_systemlinks();
-
         if (empty($system_links_check) || !empty($system_links_check->errors)) {
-            echo '<p class="error" style="display:block;">' . $system_links_check->get_error_message() . '</p>';
+            if (empty($system_links_check)) {
+                echo '<p class="error" style="display:block;">No Links to Display</p>';
+            } else {
+                echo '<p class="error" style="display:block;">' . $system_links_check->get_error_message() . '</p>';
+            }
             wp_die();
         }
 

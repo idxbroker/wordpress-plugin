@@ -96,7 +96,7 @@ class Register_Impress_Shortcodes
             wp_enqueue_style('impress-showcase', plugins_url('../assets/widgets/css/impress-showcase.css', dirname(__FILE__)));
         }
 
-        if (($property_type) == 'savedlink') {
+        if (($property_type) == 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($saved_link_id);
         } else {
             $properties = $this->idx_api->client_properties($property_type);
@@ -151,7 +151,7 @@ class Register_Impress_Shortcodes
                 return $output;
             }
 
-            if (($property_type) == 'savedlink') {
+            if (($property_type) == 'savedlinks') {
                 $prop_image_url = (isset($prop['image']['1']['url'])) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
             } else {
                 $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
@@ -326,7 +326,7 @@ class Register_Impress_Shortcodes
         $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker'));
         $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker'));
 
-        if (($property_type) == 'savedlink') {
+        if (($property_type) === 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($saved_link_id);
         } else {
             $properties = $this->idx_api->client_properties($property_type);
@@ -335,7 +335,6 @@ class Register_Impress_Shortcodes
         if (empty($properties) || gettype($properties) === 'object') {
             return 'No properties found';
         }
-
         // sort low to high
         usort($properties, array($this->idx_api, 'price_cmp'));
 
@@ -396,7 +395,7 @@ class Register_Impress_Shortcodes
                 return $output;
             }
 
-            if (($property_type) == 'savedlink') {
+            if (($property_type) == 'savedlinks') {
                 $prop_image_url = (isset($prop['image']['1']['url'])) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
             } else {
                 $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
@@ -571,7 +570,7 @@ class Register_Impress_Shortcodes
                                 'soldpending' => 'Sold/Pending',
                                 'historical' => 'Historical',
                                 'supplemental' => 'Supplemental',
-                                'savedlink' => 'Saved Link',
+                                'savedlinks' => 'Saved Link',
                             ),
                         ),
                         array(
@@ -633,7 +632,7 @@ class Register_Impress_Shortcodes
                                 'soldpending' => 'Sold/Pending',
                                 'historical' => 'Historical',
                                 'supplemental' => 'Supplemental',
-                                'savedlink' => 'Saved Link',
+                                'savedlinks' => 'Saved Link',
                             ),
                         ),
                         array(

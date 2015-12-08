@@ -74,7 +74,7 @@ class Idx_Api
         );
 
         if (function_exists('equity')) {
-            if ($level = 'equity') {
+            if ($level === 'equity') {
                 $equity_api_key = get_option('equity_api_key');
                 $domain = site_url();
                 $equity_headers = array(
@@ -549,10 +549,10 @@ class Idx_Api
     }
 
     /**
-     * Compares the price fields of two objects
+     * Compares the price fields of two arrays
      *
-     * @param object $a
-     * @param object $b
+     * @param array $a
+     * @param array $b
      * @return int
      */
     public function price_cmp($a, $b)
