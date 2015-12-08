@@ -15,6 +15,7 @@ class Initiate_Plugin
         //Setting the priority to 9 for admin_menu makes the Wrappers post type UI below the Settings link
         add_action('admin_menu', array($this, 'add_menu'), 9);
         add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
+        add_action('admin_bar_init', array($this, 'load_admin_menu_styles'));
         add_action('admin_bar_menu', array($this, 'add_admin_bar_menu'), 999.125);
         add_action('admin_enqueue_scripts', array($this, 'idx_inject_script_and_style'));
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
@@ -166,6 +167,11 @@ class Initiate_Plugin
         die();
     }
 
+    public function load_admin_menu_styles()
+    {
+        return wp_enqueue_style('idx-menus', plugins_url('/assets/css/idx-menus.css', dirname(__FILE__)));
+    }
+
 /**
  * This adds the options page to the WP admin.
  *
@@ -178,7 +184,6 @@ class Initiate_Plugin
         add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'none', 55.572);
         add_submenu_page('idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
         $this->add_upgrade_center_link();
-        wp_enqueue_style('idx-menus', plugins_url('../assets/css/idx-menus.css', __FILE__));
     }
 
 /**
