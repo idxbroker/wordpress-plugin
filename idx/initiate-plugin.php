@@ -247,7 +247,7 @@ class Initiate_Plugin
         if ('toplevel_page_idx-broker' !== $page) {
             return;
         }
-        wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.js', __FILE__), 'jquery');
+        wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.min.js', __FILE__), 'jquery');
         wp_enqueue_style('idxcss', plugins_url('../assets/css/idx-broker.css', __FILE__));
     }
 
