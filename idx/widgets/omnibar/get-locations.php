@@ -39,7 +39,7 @@ class Get_Locations
         );
         $zipcodes = ', "zipcodes" : ' . json_encode(
             $idx_api->idx_api(
-                'zipcodes/combinedActiveMLS',
+                'postalcodes/combinedActiveMLS',
                 \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION,
                 'clients',
                 array(),
