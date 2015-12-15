@@ -183,6 +183,7 @@ class Initiate_Plugin
     {
         add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'none', 55.572);
         add_submenu_page('idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
+        add_submenu_page('idx-broker', 'Omnibar Settings', 'Omnibar Settings', 'administrator', 'idx-omnibar-settings', array($this, 'idx_omnibar_settings_interface'));
         $this->add_upgrade_center_link();
     }
 
@@ -260,6 +261,11 @@ class Initiate_Plugin
     public function idx_broker_platinum_admin_page()
     {
         include plugin_dir_path(__FILE__) . 'views/admin.php';
+    }
+
+    public function idx_omnibar_settings_interface()
+    {
+        new \IDX\Views\Omnibar_Settings();
     }
 
     /**
