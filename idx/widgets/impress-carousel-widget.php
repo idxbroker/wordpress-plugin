@@ -63,8 +63,8 @@ class Impress_Carousel_Widget extends \WP_Widget
         } else {
             $properties = $this->idx_api->client_properties($instance['properties']);
         }
-
-        if (empty($properties)) {
+        //If no properties or an error, load message
+        if (empty($properties) || gettype($properties) === 'object') {
             return 'No properties found';
         }
 
@@ -78,40 +78,39 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         if ($display === 1) {
             echo '
-			<script>
-			jQuery(function( $ ){
-				$(".impress-listing-carousel-' . $display . '").owlCarousel({
-					singleItem: true,
-					' . $autoplay . '
-					navigation: true,
-					navigationText: ["' . $prev_link . '", "' . $next_link . '"],
-					pagination: false,
-					lazyLoad: true,
-					addClassActive: true,
-					itemsScaleUp: true
-				});
-			});
-			</script>
-			';
+            <script>
+            jQuery(function( $ ){
+                $(".impress-listing-carousel-' . $display . '").owlCarousel({
+                    singleItem: true,
+                    ' . $autoplay . '
+                    navigation: true,
+                    navigationText: ["' . $prev_link . '", "' . $next_link . '"],
+                    pagination: false,
+                    lazyLoad: true,
+                    addClassActive: true,
+                    itemsScaleUp: true
+                });
+            });
+            </script>
+            ';
         } else {
             echo '
-			<script>
-			jQuery(function( $ ){
-				$(".impress-listing-carousel-' . $display . '").owlCarousel({
-					items: ' . $display . ',
-					' . $autoplay . '
-					navigation: true,
-					navigationText: ["' . $prev_link . '", "' . $next_link . '"],
-					pagination: false,
-					lazyLoad: true,
-					addClassActive: true,
-					itemsScaleUp: true
-				});
-			});
-			</script>
-			';
+            <script>
+            jQuery(function( $ ){
+                $(".impress-listing-carousel-' . $display . '").owlCarousel({
+                    items: ' . $display . ',
+                    ' . $autoplay . '
+                    navigation: true,
+                    navigationText: ["' . $prev_link . '", "' . $next_link . '"],
+                    pagination: false,
+                    lazyLoad: true,
+                    addClassActive: true,
+                    itemsScaleUp: true
+                });
+            });
+            </script>
+            ';
         }
-
         // sort low to high
         usort($properties, array($this, 'price_cmp'));
 
@@ -145,17 +144,17 @@ class Impress_Carousel_Widget extends \WP_Widget
 
             $output .= sprintf(
                 '<div class="impress-carousel-property">
-					<a href="%2$s" class="impress-carousel-photo">
-						<img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%4$s" />
-						<span class="impress-price">%1$s</span>
-					</a>
-					<a href="%2$s">
-						<p class="impress-address">
-							<span class="impress-street">%5$s %6$s %7$s %8$s</span>
-							<span class="impress-cityname">%9$s</span>,
-							<span class="impress-state"> %10$s</span>
-						</p>
-					</a>',
+                    <a href="%2$s" class="impress-carousel-photo">
+                        <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%4$s" />
+                        <span class="impress-price">%1$s</span>
+                    </a>
+                    <a href="%2$s">
+                        <p class="impress-address">
+                            <span class="impress-street">%5$s %6$s %7$s %8$s</span>
+                            <span class="impress-cityname">%9$s</span>,
+                            <span class="impress-state"> %10$s</span>
+                        </p>
+                    </a>',
                 $prop['listingPrice'],
                 $this->idx_api->details_url() . '/' . $prop['detailsURL'],
                 $prop_image_url,
@@ -272,23 +271,25 @@ class Impress_Carousel_Widget extends \WP_Widget
      *
      * @param var $instance
      */
-    public function saved_link_options($instance)
+    public static function saved_link_options($instance, $idx_api)
     {
-
-        $saved_links = $this->idx_api->idx_api_get_savedlinks();
+        $saved_links = $idx_api->idx_api_get_savedlinks();
 
         if (!is_array($saved_links)) {
             return;
         }
+
+        $output = '';
 
         foreach ($saved_links as $saved_link) {
 
             // display the link name if no link title has been assigned
             $link_text = empty($saved_link->linkTitle) ? $saved_link->linkName : $saved_link->linkTitle;
 
-            echo '<option ', selected($instance['saved_link_id'], $saved_link->id, 0), ' value="', $saved_link->id, '">', $link_text, '</option>';
+            $output .= '<option ' . selected($instance['saved_link_id'], $saved_link->id, 0) . ' value="' . $saved_link->id . '">' . $link_text . '</option>';
 
         }
+        return $output;
     }
 
     /**
@@ -340,7 +341,6 @@ class Impress_Carousel_Widget extends \WP_Widget
         $instance['saved_link_id'] = (int) ($new_instance['saved_link_id']);
         $instance['display'] = (int) ($new_instance['display']);
         $instance['max'] = (int) ($new_instance['max']);
-        var_dump($instance['max']);
         $instance['order'] = strip_tags($new_instance['order']);
         $instance['autoplay'] = strip_tags($new_instance['autoplay']);
         $instance['styles'] = strip_tags($new_instance['styles']);
@@ -366,73 +366,78 @@ class Impress_Carousel_Widget extends \WP_Widget
         $instance = wp_parse_args((array) $instance, $defaults);
 
         ?>
-		<p>
-			<label for="<?php echo $this->get_field_id('title');?>"><?php _e('Title:');?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title');?>" name="<?php echo $this->get_field_name('title');?>" type="text" value="<?php esc_attr_e($instance['title']);?>" />
-		</p>
+        <p>
+            <label for="<?php echo $this->get_field_id('title');?>"><?php _e('Title:');?></label>
+            <input class="widefat" id="<?php echo $this->get_field_id('title');?>" name="<?php echo $this->get_field_name('title');?>" type="text" value="<?php esc_attr_e($instance['title']);?>" />
+        </p>
 
-		<p>
-			<label for="<?php echo $this->get_field_id('properties');?>"><?php _e('Properties to Display:', 'idxbroker');?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id('properties');?>" name="<?php echo $this->get_field_name('properties')?>">
-				<option <?php selected($instance['properties'], 'featured');?> value="featured"><?php _e('Featured', 'idxbroker');?></option>
-				<option <?php selected($instance['properties'], 'soldpending');?> value="soldpending"><?php _e('Sold/Pending', 'idxbroker');?></option>
-				<option <?php selected($instance['properties'], 'supplemental');?> value="supplemental"><?php _e('Supplemental', 'idxbroker');?></option>
-				<option <?php selected($instance['properties'], 'historical');?> value="historical"><?php _e('Historical', 'idxbroker');?></option>
-				<!-- <option <?php selected($instance['properties'], 'savedlinks');?> value="savedlinks"><?php _e('Use Saved Link', 'idxbroker');?></option> -->
-			</select>
-		</p>
+        <p>
+            <label for="<?php echo $this->get_field_id('properties');?>"><?php _e('Properties to Display:', 'idxbroker');?></label>
+            <select class="widefat" id="<?php echo $this->get_field_id('properties');?>" name="<?php echo $this->get_field_name('properties')?>">
+                <option <?php selected($instance['properties'], 'featured');?> value="featured"><?php _e('Featured', 'idxbroker');?></option>
+                <option <?php selected($instance['properties'], 'soldpending');?> value="soldpending"><?php _e('Sold/Pending', 'idxbroker');?></option>
+                <option <?php selected($instance['properties'], 'supplemental');?> value="supplemental"><?php _e('Supplemental', 'idxbroker');?></option>
+                <option <?php selected($instance['properties'], 'historical');?> value="historical"><?php _e('Historical', 'idxbroker');?></option>
+                <?php //Only allow Saved Links if Equity is active ?>
+                <?php if (function_exists('equity')) {?>
+                <option <?php selected($instance['properties'], 'savedlinks');?> value="savedlinks"><?php _e('Use Saved Link', 'idxbroker');?></option>
+                <?php }?>
+            </select>
+        </p>
 
-		<!-- <p>
-			<label for="<?php echo $this->get_field_id('saved_link_id');?>">Choose a saved link (if selected above):</label>
-			<select class="widefat" id="<?php echo $this->get_field_id('saved_link_id');?>" name="<?php echo $this->get_field_name('saved_link_id')?>">
-				<?php $this->saved_link_options($instance);?>
-			</select>
-		</p> -->
+        <?php if (function_exists('equity')) {?>
+         <p>
+            <label for="<?php echo $this->get_field_id('saved_link_id');?>">Choose a saved link (if selected above):</label>
+            <select class="widefat" id="<?php echo $this->get_field_id('saved_link_id');?>" name="<?php echo $this->get_field_name('saved_link_id')?>">
+                <?=$this->saved_link_options($instance, $this->idx_api);?>
+            </select>
+        </p>
+        <?php }?>
 
-		<p>
-			<label for="<?php echo $this->get_field_id('display');?>"><?php _e('Listings to show without scrolling:', 'idxbroker');?></label>
-			<input class="widefat" type="number" id="<?php echo $this->get_field_id('display');?>" name="<?php echo $this->get_field_name('display')?>" value="<?php esc_attr_e($instance['display']);?>" size="3">
-		</p>
+        <p>
+            <label for="<?php echo $this->get_field_id('display');?>"><?php _e('Listings to show without scrolling:', 'idxbroker');?></label>
+            <input class="widefat" type="number" id="<?php echo $this->get_field_id('display');?>" name="<?php echo $this->get_field_name('display')?>" value="<?php esc_attr_e($instance['display']);?>" size="3">
+        </p>
 
-		<p>
-			<label for="<?php echo $this->get_field_id('max');?>"><?php _e('Max number of listings to show:');?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('max');?>" name="<?php echo $this->get_field_name('max');?>" type="number" value="<?php esc_attr_e($instance['max']);?>" />
-		</p>
+        <p>
+            <label for="<?php echo $this->get_field_id('max');?>"><?php _e('Max number of listings to show:');?></label>
+            <input class="widefat" id="<?php echo $this->get_field_id('max');?>" name="<?php echo $this->get_field_name('max');?>" type="number" value="<?php esc_attr_e($instance['max']);?>" />
+        </p>
 
-		<p>
-			<label for="<?php echo $this->get_field_id('order');?>"><?php _e('Sort order:', 'idxbroker');?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id('order');?>" name="<?php echo $this->get_field_name('order')?>">
-				<option <?php selected($instance['order'], 'high-low');?> value="high-low"><?php _e('Highest to Lowest Price', 'idxbroker');?></option>
-				<option <?php selected($instance['order'], 'low-high');?> value="low-high"><?php _e('Lowest to Highest Price', 'idxbroker');?></option>
-			</select>
-		</p>
+        <p>
+            <label for="<?php echo $this->get_field_id('order');?>"><?php _e('Sort order:', 'idxbroker');?></label>
+            <select class="widefat" id="<?php echo $this->get_field_id('order');?>" name="<?php echo $this->get_field_name('order')?>">
+                <option <?php selected($instance['order'], 'high-low');?> value="high-low"><?php _e('Highest to Lowest Price', 'idxbroker');?></option>
+                <option <?php selected($instance['order'], 'low-high');?> value="low-high"><?php _e('Lowest to Highest Price', 'idxbroker');?></option>
+            </select>
+        </p>
 
-		<p>
-			<label for="<?php echo $this->get_field_id('autoplay');?>"><?php _e('Autoplay?', 'idxbroker');?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id('autoplay');?>" name="<?php echo $this->get_field_name('autoplay')?>" value="1" <?php checked($instance['autoplay'], true);?>>
-		</p>
+        <p>
+            <label for="<?php echo $this->get_field_id('autoplay');?>"><?php _e('Autoplay?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('autoplay');?>" name="<?php echo $this->get_field_name('autoplay')?>" value="1" <?php checked($instance['autoplay'], true);?>>
+        </p>
 
         <p>
             <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
         </p>
 
-		<?php if (function_exists('turnkey_dashboard_setup')) {?>
-		<p>
-			<label for="<?php echo $this->get_field_id('geoip');?>"><?php _e('Only show content for (optional):', 'idxbroker');?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id('geoip');?>" name="<?php echo $this->get_field_name('geoip')?>">
-				<option <?php selected($instance['geoip'], '');?> value=""><?php _e('All', 'idxbroker');?></option>
-				<option <?php selected($instance['geoip'], 'region');?> value="region"><?php _e('State', 'idxbroker');?></option>
-				<option <?php selected($instance['geoip'], 'city');?> value="city"><?php _e('City', 'idxbroker');?></option>
-				<option <?php selected($instance['geoip'], 'postalcode');?> value="postalcode"><?php _e('Postal Code', 'idxbroker');?></option>
-			</select>
-		</p>
+        <?php if (function_exists('turnkey_dashboard_setup')) {?>
+        <p>
+            <label for="<?php echo $this->get_field_id('geoip');?>"><?php _e('Only show content for (optional):', 'idxbroker');?></label>
+            <select class="widefat" id="<?php echo $this->get_field_id('geoip');?>" name="<?php echo $this->get_field_name('geoip')?>">
+                <option <?php selected($instance['geoip'], '');?> value=""><?php _e('All', 'idxbroker');?></option>
+                <option <?php selected($instance['geoip'], 'region');?> value="region"><?php _e('State', 'idxbroker');?></option>
+                <option <?php selected($instance['geoip'], 'city');?> value="city"><?php _e('City', 'idxbroker');?></option>
+                <option <?php selected($instance['geoip'], 'postalcode');?> value="postalcode"><?php _e('Postal Code', 'idxbroker');?></option>
+            </select>
+        </p>
 
-		<p>
-			<label for="<?php echo $this->get_field_id('geoip-location');?>"><?php _e('Enter location to show for: <br /><em> Values can be comma separated.<br />For State, use 2 letter abbreviation.</em>');?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('geoip-location');?>" name="<?php echo $this->get_field_name('geoip-location');?>" type="text" value="<?php esc_attr_e($instance['geoip-location']);?>" />
-		</p>
+        <p>
+            <label for="<?php echo $this->get_field_id('geoip-location');?>"><?php _e('Enter location to show for: <br /><em> Values can be comma separated.<br />For State, use 2 letter abbreviation.</em>');?></label>
+            <input class="widefat" id="<?php echo $this->get_field_id('geoip-location');?>" name="<?php echo $this->get_field_name('geoip-location');?>" type="text" value="<?php esc_attr_e($instance['geoip-location']);?>" />
+        </p>
 
-		<?php }
+        <?php }
     }
 }

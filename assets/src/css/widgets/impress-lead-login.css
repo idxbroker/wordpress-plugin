@@ -1,0 +1,13 @@
+.impress-lead-login {
+    box-sizing: border-box;
+    width: 100%;
+}
+#impress-widgetEmail {
+    width: 60%;
+}
+#impress-widgetLeadLoginSubmit {
+    width: 39%;
+}
+.impress-lead-login label, .idx-modal-shortcode-preview label {
+    display: block;
+}
