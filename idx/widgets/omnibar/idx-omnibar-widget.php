@@ -49,6 +49,9 @@ class IDX_Omnibar_Widget extends \WP_Widget
         if (empty($instance)) {
             $instance = $this->defaults;
         }
+        if (!isset($instance['styles'])) {
+            $instance['styles'] = $this->defaults['styles'];
+        }
 
         echo $before_widget;
         $title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);

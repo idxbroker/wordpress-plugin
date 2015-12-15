@@ -60,7 +60,7 @@ class Impress_Showcase_Widget extends \WP_Widget
             $properties = $this->idx_api->client_properties($instance['properties']);
         }
 
-        if (empty($properties)) {
+        if (empty($properties) || gettype($properties) === 'object') {
             return 'No properties found';
         }
 
@@ -431,16 +431,22 @@ class Impress_Showcase_Widget extends \WP_Widget
 				<option <?php selected($instance['properties'], 'soldpending');?> value="soldpending"><?php echo 'Sold/Pending';?></option>
 				<option <?php selected($instance['properties'], 'supplemental');?> value="supplemental"><?php echo 'Supplemental';?></option>
 				<option <?php selected($instance['properties'], 'historical');?> value="historical"><?php echo 'Historical';?></option>
-				<!-- <option <?php selected($instance['properties'], 'savedlinks');?> value="savedlinks"><?php echo 'Use Saved Link';?></option> -->
+                <?php //Only allow Saved Links if Equity is active ?>
+                <?php if (function_exists('equity')) {?>
+				<option <?php selected($instance['properties'], 'savedlinks');?> value="savedlinks"><?php echo 'Use Saved Link';?></option>
+                <?php }?>
 			</select>
 		</p>
-
-		<!-- <p>
+        <?php //Only allow Saved Links if Equity is active ?>
+        <?php if (function_exists('equity')) {?>
+		<p>
 			<label for="<?php echo $this->get_field_id('saved_link_id');?>">Choose a saved link (if selected above):</label>
 			<select class="widefat" id="<?php echo $this->get_field_id('saved_link_id');?>" name="<?php echo $this->get_field_name('saved_link_id')?>">
 				<?php $this->saved_link_options($instance);?>
 			</select>
-		</p> -->
+		</p>
+        <?php }?>
+
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked($instance['show_image'], 1);?> id="<?php echo $this->get_field_id('show_image');?>" name="<?php echo $this->get_field_name('show_image');?>" value="1" />
