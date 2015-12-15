@@ -39,7 +39,7 @@ class Initiate_Plugin
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.0';
-    const IDX_API_URL = 'https://api.idxbroker.com/';
+    const IDX_API_URL = 'https://api.idxstaging.com/';
 
     private function set_defaults()
     {
@@ -246,7 +246,7 @@ class Initiate_Plugin
         if ('toplevel_page_idx-broker' !== $page) {
             return;
         }
-        wp_enqueue_script('idxjs', plugins_url('/assets/js/idx-broker.js', dirname(__FILE__)), 'jquery');
+        wp_enqueue_script('idxjs', plugins_url('/assets/js/idx-broker.min.js', dirname(__FILE__)), 'jquery');
         wp_enqueue_style('idxcss', plugins_url('/assets/css/idx-broker.css', dirname(__FILE__)));
     }
 
