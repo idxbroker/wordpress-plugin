@@ -54,6 +54,15 @@ class Help
                 <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin" target="_blank">this article</a>.
                 ',
         ),
+        'idx_widgets' => array(
+            'title' => 'Adding Widgets'
+            , 'content' => '
+                <strong>Adding Widgets</strong> - Adding Widgets into your website.
+                <br>&bull; You can add Widgets to widget areas of your website using the Customizer under Appearance > Customize > Widgets.
+                <br>&bull; You can also add them under Appearance > Widgets.
+                <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin" target="_blank">this article</a>.
+                ',
+        ),
         'idx_apply_wrapper' => array(
             'title' => 'Apply Wrapper'
             , 'content' => '
