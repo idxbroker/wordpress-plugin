@@ -13,7 +13,7 @@ class Help
 
     public function settings_help()
     {
-        if (!empty($_GET['page']) && $_GET['page'] === 'idx-broker') {
+        if (!empty($_GET['page']) && ($_GET['page'] === 'idx-broker' || $_GET['page'] === 'idx-omnibar-settings')) {
             $this->add_settings_help_tabs();
         }
     }

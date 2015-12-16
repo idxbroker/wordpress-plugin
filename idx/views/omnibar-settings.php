@@ -23,7 +23,7 @@ class Omnibar_Settings
     {
         //register omnibar settings script
         wp_register_script('idx-omnibar-settings', plugins_url('/assets/js/idx-omnibar-settings.min.js', dirname(dirname(__FILE__))), 'jquery');
-
+        wp_enqueue_style('idx-omnibar-settings', plugins_url('/assets/css/idx-omnibar-settings.css', dirname(dirname(__FILE__))));
         if ($this->idx_api->get_transient('idx_approvedmls_cache') !== false) {
             $this->idx_preload_omnibar_settings_view();
         } else {
@@ -72,13 +72,7 @@ class Omnibar_Settings
                 <div class="inside">
                     <form>
                         <div id="omnibar-ccz">
-                            <h2>
-                                <span>Omnibar Search Widget Settings
-                                    <a href="http://support.idxbroker.com/customer/portal/articles/2081878-widget---wordpress-omnibar-search" target="_blank">
-                                        <img class="help-icon" src="<?=plugins_url('../images/helpIcon.svg', __FILE__)?>" alt="help">
-                                    </a>
-                                </span>
-                            </h2>
+                            <h2>IMPressOmnibar Search Widget Settings</h2>
                             <a href="http://www.idxbroker.com" target="_blank" class="logo-link">
                                 <div id="logo"></div>
                             </a>
@@ -123,7 +117,7 @@ class Omnibar_Settings
         }
         echo "</select></div><div class=\"zipcode-list select-div\"><label>Postal Code List:</label><select name=\"zipcode-list\">";
         //Zipcodes
-        foreach ($omnibar_counties as $lists => $list) {
+        foreach ($omnibar_zipcodes as $lists => $list) {
             foreach ($list as $list_option => $list_option_value) {
                 if ($list_option === 'id') {
                     $id = $list_option_value;
