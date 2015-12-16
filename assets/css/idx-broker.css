@@ -187,6 +187,9 @@ label {
         float: none;
         width: 100%;
     }
+    .logo-link {
+        margin: 0;
+    }
     label {
         width: 100%;
     }

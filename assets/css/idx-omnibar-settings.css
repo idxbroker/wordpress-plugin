@@ -65,10 +65,22 @@ label {
     border-color: #dd3d36;
 }
 
+.mls-specific-pt h4 {
+    margin-left: 1rem;
+}
+
+.mls-specific-pt .select-div > label {
+    margin-left: 1rem;
+    width: 18.5%;
+}
+
 @media screen and (max-width: 800px) {
     h2 {
         float: none;
         width: 100%;
+    }
+    .logo-link {
+        margin: 0;
     }
     label {
         width: 100%;
@@ -76,7 +88,19 @@ label {
     .wp-core-ui button, .wp-core-ui .button-secondary {
         vertical-align: baseline;
     }
+    .select2-container--default {
+        max-width: 100%;
+    }
 
+}
+@media screen and (max-width: 550px) {
+    .select-div label, .mls-specific-pt .select-div > label {
+        display: block;
+        width: 100%;
+    }
+    .mls-specific-pt select {
+        margin-left: 1rem;
+    }
 }
 @media screen and (max-width: 400px) {
     .wp-core-ui button, .wp-core-ui .button-primary, .wp-core-ui .button-secondary {

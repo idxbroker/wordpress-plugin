@@ -13,7 +13,6 @@ class Omnibar_Settings
         add_action('wp_ajax_idx_preload_omnibar_settings_view', array($this, 'idx_preload_omnibar_settings_view'));
         add_action('wp_ajax_idx_update_omnibar_current_ccz', array($this, 'idx_update_omnibar_current_ccz'));
         add_action('wp_ajax_idx_update_omnibar_custom_fields', array($this, 'idx_update_omnibar_custom_fields'));
-
     }
 
     public $idx_api;
@@ -72,10 +71,10 @@ class Omnibar_Settings
                 <div class="inside">
                     <form>
                         <div id="omnibar-ccz">
-                            <h2>IMPressOmnibar Search Widget Settings</h2>
                             <a href="http://www.idxbroker.com" target="_blank" class="logo-link">
                                 <div id="logo"></div>
                             </a>
+                            <h2>IMPress Omnibar Search Widget Settings</h2>
                             <h3>City, County, and Postal Code Lists</h3>
                             <div class="help-text">
                                 Choose which custom City, County, or Postal Code lists to use for the Omnibar. Only locations in these lists will return results.
@@ -136,10 +135,10 @@ class Omnibar_Settings
 
         //Default property type for each MLS
         echo "<h3>Property Type</h3><div class=\"idx-property-types\">";
-        echo "<div class=\"help-text\">Choose the property type for Omnibar searches.</div>";
+        echo "<div class=\"help-text\">Choose the property type for default and custom fields Omnibar searches.</div>";
         ?>
         <div class="select-div">
-            <label for="basic">Not Custom Field Searches:</label><select class="omnibar-mlsPtID" name="basic">
+            <label for="basic">Default Property Type:</label><select class="omnibar-mlsPtID" name="basic">
                 <option value="sfr">Single Family Residential</option>
                 <option value="com">Commercial</option>
                 <option value="ld">Lots and Land</option>
@@ -147,8 +146,9 @@ class Omnibar_Settings
                 <option value="rnt">Rentals</option>
             </select>
         </div>
-
-        <?php
+        <div class="mls-specific-pt">
+            <h4>MLS Specific Property Type (For Custom Fields Searches)</h4>
+            <?php
 
         foreach ($all_mls_fields[1] as $mls) {
             $mls_name = $mls['mls_name'];
@@ -163,6 +163,8 @@ class Omnibar_Settings
             }
             echo "</select></div>";
         }
+
+        echo "</div>";
 
         //echo them as one select
         echo "<h3>Custom Fields</h3>";

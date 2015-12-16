@@ -10,6 +10,9 @@ class Get_Locations
             return;
         } else {
             $this->idx_api = new \IDX\Idx_Api();
+            if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
+                return;
+            }
             $this->initiate_get_locations();
         }
     }
