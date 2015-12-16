@@ -36,6 +36,7 @@ class Initiate_Plugin
         new Widgets\Omnibar\Create_Omnibar();
         new Shortcodes\Shortcode_Ui();
         new Help();
+        new \IDX\Views\Omnibar_Settings();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.0';
@@ -226,6 +227,13 @@ class Initiate_Plugin
         $wp_admin_bar->add_node($args);
         $args = array(
             'id' => 'idx_admin_bar_menu_item_4',
+            'title' => 'Omnibar Settings',
+            'parent' => 'idx_admin_bar_menu',
+            'href' => admin_url('admin.php?page=idx-omnibar-settings'),
+        );
+        $wp_admin_bar->add_node($args);
+        $args = array(
+            'id' => 'idx_admin_bar_menu_item_5',
             'title' => "Upgrade Account<i class=\"fa fa-arrow-up update-plugins\"></i>",
             'parent' => 'idx_admin_bar_menu',
             'href' => 'https://middleware.idxbroker.com/mgmt/upgrade',
@@ -264,7 +272,9 @@ class Initiate_Plugin
 
     public function idx_omnibar_settings_interface()
     {
-        new \IDX\Views\Omnibar_Settings();
+        $omnibar_settings = new \IDX\Views\Omnibar_Settings();
+        //preload current cczs for omnibar settings
+        $omnibar_settings->idx_omnibar_settings_interface();
     }
 
     /**

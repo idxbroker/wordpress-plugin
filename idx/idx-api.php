@@ -527,6 +527,32 @@ class Idx_Api
     }
 
     /**
+     * Returns the IDs and names for each of a client's county lists including MLS county lists
+     *
+     * @return array
+     */
+    public function county_list_names()
+    {
+
+        $county_list_names = $this->idx_api('countieslistname', $this->idx_api_get_apiversion(), 'clients');
+
+        return $county_list_names;
+    }
+
+    /**
+     * Returns the IDs and names for each of a client's postalcodes lists including MLS postalcodes lists
+     *
+     * @return array
+     */
+    public function postalcode_list_names()
+    {
+
+        $postalcodes_list_names = $this->idx_api('postalcodeslistname', $this->idx_api_get_apiversion(), 'clients');
+
+        return $postalcodes_list_names;
+    }
+
+    /**
      * Returns the subdomain url WITH trailing slash
      *
      * @return string $url
@@ -547,7 +573,24 @@ class Idx_Api
     public function approved_mls()
     {
 
-        $approved_mls = $this->idx_api('approvedmls', $this->idx_api_get_apiversion(), 'mls');
+        $approved_mls = $this->idx_api('approvedmls', $this->idx_api_get_apiversion(), 'mls', array(), 60 * 60 * 24);
+
+        return $approved_mls;
+    }
+
+    /**
+     * Returns search field names for an MLS
+     */
+    public function searchfields($idxID)
+    {
+        $approved_mls = $this->idx_api("searchfields/$idxID", $this->idx_api_get_apiversion(), 'mls', array());
+
+        return $approved_mls;
+    }
+
+    public function searchfieldvalues($idxID, $fieldName, $mlsPtID)
+    {
+        $approved_mls = $this->idx_api("searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$fieldName", $this->idx_api_get_apiversion(), 'mls', array());
 
         return $approved_mls;
     }
