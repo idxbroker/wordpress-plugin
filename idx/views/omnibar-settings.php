@@ -137,6 +137,19 @@ class Omnibar_Settings
         //Default property type for each MLS
         echo "<h3>Property Type</h3><div class=\"idx-property-types\">";
         echo "<div class=\"help-text\">Choose the property type for Omnibar searches.</div>";
+        ?>
+        <div class="select-div">
+            <label for="basic">Not Custom Field Searches:</label><select class="omnibar-mlsPtID" name="basic">
+                <option value="sfr">Single Family Residential</option>
+                <option value="com">Commercial</option>
+                <option value="ld">Lots and Land</option>
+                <option value="mfr">Multifamily Residential</option>
+                <option value="rnt">Rentals</option>
+            </select>
+        </div>
+
+        <?php
+
         foreach ($all_mls_fields[1] as $mls) {
             $mls_name = $mls['mls_name'];
             $idxID = $mls['idxID'];

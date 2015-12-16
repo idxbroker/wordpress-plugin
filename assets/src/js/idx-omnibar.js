@@ -10,6 +10,7 @@
 			* Autocomplete
 			*/
 			var cczList = [];
+			var basicPtID = mlsPtIDs[0].mlsPtID;
 
 			//helper function for finding Object properties number
 			Object.size = function(obj) {
@@ -414,15 +415,15 @@
 					switch(listType){
 						case 'cities':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?ccz=city&city[]=' + list[i].id + '&widgetReferer=true');
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=city&city[]=' + list[i].id + '&widgetReferer=true');
 							break;
 						case 'counties':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?ccz=county&county[]=' + list[i].id + '&widgetReferer=true');
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=county&county[]=' + list[i].id + '&widgetReferer=true');
 							break;
 						case 'zipcodes':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?ccz=zipcode&zipcode[]=' + list[i].id + '&widgetReferer=true');
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=zipcode&zipcode[]=' + list[i].id + '&widgetReferer=true');
 							break;
 					}
 				} else if (foundResult === false && i == list.length - 1) {
@@ -435,8 +436,8 @@
 				for(var i = 1; i < jsonData.length; i++){
 					var idxID = Object.keys(jsonData[i])[0];
 					var fieldNumber = eval('Object.size(jsonData[i].' + idxID + ')');
-					//check for mlsPtID
-					for(var j = 0; j < mlsPtIDs.length; j++){
+					//check for mlsPtID (skip 0 index as it is for basic searches)
+					for(var j = 1; j < mlsPtIDs.length; j++){
 						keyIdxID = mlsPtIDs[j].idxID;
 						keyMlsPtID = mlsPtIDs[j].mlsPtID;
 						//if mlsPtIDs global object property matches idxID, use that property type
@@ -476,7 +477,7 @@
 				var hasSpaces = /\s/g.test(input.value);
 				if (!input.value) {
 					//nothing in input
-					goToResultsPage(input, idxUrl, '?widgetReferer=true');
+					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&widgetReferer=true');
 				} else if(hasSpaces === false && parseInt(input.value) !== isNaN) {
 					//MLS Number/ListingID
 					var listingID = true;
@@ -486,13 +487,13 @@
 					var addressSplit = input.value.split(' ');
 					//if first entry is number, search for street number otherwise search for street name
 					if(Number(addressSplit[0]) > 0){
-						goToResultsPage(input, idxUrl, '?a_streetNumber=' + addressSplit[0] + '&aw_streetName=' + addressSplit[1] + '&widgetReferer=true');
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&a_streetNumber=' + addressSplit[0] + '&aw_streetName=' + addressSplit[1] + '&widgetReferer=true');
 					} else if(input.value === idxOmnibarPlaceholder){
 						//prevent placeholder from interfering with results URL
-						goToResultsPage(input, idxUrl, '?widgetReferer=true');
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&widgetReferer=true');
 					} else {
 						//search by just street name (without state or city if comma is used)
-						goToResultsPage(input, idxUrl, '?aw_streetName=' + input.value.split(', ')[0] + '&widgetReferer=true');
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&aw_streetName=' + input.value.split(', ')[0] + '&widgetReferer=true');
 					}
 				}
 			};
