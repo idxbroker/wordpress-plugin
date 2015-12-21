@@ -28,9 +28,10 @@ class Idx_Pages
             'label' => 'IDX Pages',
             'labels' => array('singular_name' => 'IDX Page'),
             'public' => true,
-            'show_ui' => false,
+            'show_in_menu' => 'idx-broker',
             'show_in_nav_menus' => true,
             'rewrite' => false,
+            'supports' => array('excerpt', 'thumbnail'),
         );
 
         register_post_type('idx_page', $args);
