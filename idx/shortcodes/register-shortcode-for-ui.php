@@ -291,7 +291,7 @@ class Register_Shortcode_For_Ui
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
 
-        $output .= "<p>Don't have any city lists? Go create some in your <a href=\"http://middleware.idxbroker.com/mgmt/citycountyziplists.php\">IDX dashboard.</a></p>";
+        $output .= "<p>Don't have any city lists? Go create some in your <a href=\"http://middleware.idxbroker.com/mgmt/citycountyziplists.php\" target=\"_blank\">IDX dashboard.</a></p>";
         // Styles and Scripts for Preview
         $output .= "<script>(function(){";
         //empty url array so styles can be disabled and enabled as expected
