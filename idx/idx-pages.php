@@ -190,9 +190,13 @@ class Idx_Pages
     //Keep post name (the idx url) from having slashes stripped out on save in UI
     public function save_idx_page($post_id)
     {
+        $post = get_post($post_id);
+        if ($post->post_type !== 'idx_page') {
+            return;
+        }
 
         remove_action('save_post', array($this, 'save_idx_page'), 1);
-        $post = get_post($post_id);
+
         $update_to_post = array(
             'ID' => $post_id,
             'post_name' => $post->guid,
