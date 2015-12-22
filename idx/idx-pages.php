@@ -20,7 +20,7 @@ class Idx_Pages
 
         $this->idx_api = new Idx_Api();
     }
-//
+
     public $idx_api;
 
     public function register_idx_page_type()
@@ -191,19 +191,20 @@ class Idx_Pages
     public function save_idx_page($post_id)
     {
         $post = get_post($post_id);
+        //only affect idx_page post type
         if ($post->post_type !== 'idx_page') {
             return;
         }
-
+        //prevent infinite loop
         remove_action('save_post', array($this, 'save_idx_page'), 1);
-
+        //force post_name to not lose slashes
         $update_to_post = array(
             'ID' => $post_id,
             'post_name' => $post->guid,
         );
 
         add_filter('sanitize_title', array($this, 'sanitize_title_filter'), 10, 2);
-
+        //manually save post
         wp_update_post($update_to_post);
 
     }
