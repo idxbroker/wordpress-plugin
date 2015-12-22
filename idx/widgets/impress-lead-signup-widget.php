@@ -144,5 +144,6 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
         </p>
 		<?php
-}
+
+    }
 }

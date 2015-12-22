@@ -15,26 +15,84 @@ class Idx_Pages
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
 
         add_action('init', array($this, 'register_idx_page_type'));
+        add_action('admin_init', array($this, 'manage_idx_page_capabilities'));
+        add_action('save_post', array($this, 'save_idx_page'), 1);
 
         $this->idx_api = new Idx_Api();
     }
-
+//
     public $idx_api;
 
     public function register_idx_page_type()
     {
-        //register IDX Pages Post Type
+
+        //post_type labels
+        $labels = array(
+            'name' => 'IDX Pages',
+            'singular_name' => 'IDX Page',
+            'add_new' => 'Add IDX Page',
+            'add_new_item' => 'Add New IDX Page',
+            'edit_item' => 'Edit IDX Page',
+            'new_item' => 'New IDX Page',
+            'view_item' => 'View IDX Page',
+            'search_items' => 'Search IDX Pages',
+            'not_found' => 'No idx_pages found',
+            'not_found_in_trash' => 'No idx_pages found in Trash',
+            'parent_item_colon' => '',
+            'parent' => 'Parent IDX Page',
+        );
+
+        //disable ability to add new or delete IDX Pages
+        $capabilities = array(
+            'publish_posts' => false,
+            'edit_posts' => 'edit_idx_pages',
+            'edit_others_posts' => 'edit_others_idx_pages',
+            'delete_posts' => false,
+            'delete_others_posts' => false,
+            'read_private_posts' => 'read_private_idx_pages',
+            'edit_post' => 'edit_idx_page',
+            'delete_post' => false,
+            'read_post' => 'read_idx_pages',
+            'create_posts' => false,
+        );
+
         $args = array(
             'label' => 'IDX Pages',
-            'labels' => array('singular_name' => 'IDX Page'),
+            'labels' => $labels,
             'public' => true,
             'show_in_menu' => 'idx-broker',
             'show_in_nav_menus' => true,
             'rewrite' => false,
+            'capabilities' => $capabilities,
+            'capability_type' => array('idx_page', 'idx_pages'),
             'supports' => array('excerpt', 'thumbnail'),
         );
-
+        //register IDX Pages Post Type
         register_post_type('idx_page', $args);
+
+    }
+
+    public function manage_idx_page_capabilities()
+    {
+        // gets the role to add capabilities to
+        $admin = get_role('administrator');
+        $editor = get_role('editor');
+        // replicate all the remapped capabilites from the custom post type
+        $caps = array(
+            'edit_idx_page',
+            'edit_idx_pages',
+            'edit_others_idx_pages',
+            'publish_idx_pages',
+            'read_idx_pages',
+        );
+        // give all the capabilities to the administrator
+        foreach ($caps as $cap) {
+            $admin->add_cap($cap);
+        }
+        // limited the capabilities to the editor or a custom role
+        $editor->add_cap('edit_idx_page');
+        $editor->add_cap('edit_idx_pages');
+        $editor->add_cap('read_idx_pages');
     }
 
     public function create_idx_pages()
@@ -127,6 +185,23 @@ class Idx_Pages
                 wp_delete_post($post->ID);
             }
         }
+    }
+
+    //Keep post name (the idx url) from having slashes stripped out on save in UI
+    public function save_idx_page($post_id)
+    {
+
+        remove_action('save_post', array($this, 'save_idx_page'), 1);
+        $post = get_post($post_id);
+        $update_to_post = array(
+            'ID' => $post_id,
+            'post_name' => $post->guid,
+        );
+
+        add_filter('sanitize_title', array($this, 'sanitize_title_filter'), 10, 2);
+
+        wp_update_post($update_to_post);
+
     }
 
     /**
