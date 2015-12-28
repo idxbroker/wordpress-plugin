@@ -194,6 +194,9 @@ class Initiate_Plugin
  */
     public function add_admin_bar_menu($wp_admin_bar)
     {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
         $args = array(
             'id' => 'idx_admin_bar_menu',
             'title' => '<span class="ab-icon idx-admin-bar-menu-icon"></span>IMPress',
