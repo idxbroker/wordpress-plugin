@@ -38,7 +38,7 @@ class Initiate_Plugin
         new Help();
     }
 
-    const IDX_API_DEFAULT_VERSION = '1.2.0';
+    const IDX_API_DEFAULT_VERSION = '1.2.2';
     const IDX_API_URL = 'https://api.idxstaging.com/';
 
     private function set_defaults()
