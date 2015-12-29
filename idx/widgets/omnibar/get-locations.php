@@ -116,6 +116,7 @@ class Get_Locations
     private function initiate_get_locations()
     {
         $cczs = $this->get_cczs();
+
         //location lists together
         $locations = 'idxOmnibar( [{"core" : {' . $cczs . '} }' . $this->get_additional_fields() . ']);';
 
