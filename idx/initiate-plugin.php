@@ -6,7 +6,7 @@ class Initiate_Plugin
     public function __construct()
     {
         $this->set_defaults();
-        $this->Idx_Api = new Idx_Api();
+        $this->idx_api = new Idx_Api();
 
         add_action('init', array($this, 'update_triggered'));
         add_action('wp_head', array($this, 'display_wpversion'));
@@ -36,6 +36,7 @@ class Initiate_Plugin
         new Widgets\Omnibar\Create_Omnibar();
         new Shortcodes\Shortcode_Ui();
         new Help();
+        new \IDX\Views\Omnibar_Settings();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.2';
@@ -144,7 +145,7 @@ class Initiate_Plugin
          */
 
         if (get_option('idx_broker_apikey') != '') {
-            $systemlinks = $this->Idx_Api->idx_api_get_systemlinks();
+            $systemlinks = $this->idx_api->idx_api_get_systemlinks();
             if (is_wp_error($systemlinks)) {
                 $api_error = $systemlinks->get_error_message();
             }
@@ -160,7 +161,7 @@ class Initiate_Plugin
  */
     public function idx_refreshapi()
     {
-        $this->Idx_Api->idx_clean_transients();
+        $this->idx_api->idx_clean_transients();
         update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey']);
         setcookie("api_refresh", 1, time() + 20);
         new \IDX\Widgets\Omnibar\Get_Locations();
@@ -171,7 +172,6 @@ class Initiate_Plugin
     {
         return wp_enqueue_style('idx-menus', plugins_url('/assets/css/idx-menus.css', dirname(__FILE__)));
     }
-
 /**
  * This adds the options page to the WP admin.
  *
@@ -183,7 +183,11 @@ class Initiate_Plugin
     {
         add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'none', 55.572);
         add_submenu_page('idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
-        $this->add_upgrade_center_link();
+        //Only add Omnibar page if no errors in API
+        if (!isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
+            add_submenu_page('idx-broker', 'Omnibar Settings', 'Omnibar Settings', 'administrator', 'idx-omnibar-settings', array($this, 'idx_omnibar_settings_interface'));
+        }
+        add_action('admin_footer', array($this, 'add_upgrade_center_link'));
     }
 
 /**
@@ -226,6 +230,16 @@ class Initiate_Plugin
         $wp_admin_bar->add_node($args);
         $args = array(
             'id' => 'idx_admin_bar_menu_item_4',
+            'title' => 'Omnibar Settings',
+            'parent' => 'idx_admin_bar_menu',
+            'href' => admin_url('admin.php?page=idx-omnibar-settings'),
+        );
+        //Only add Omnibar page if no errors in API
+        if (!isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
+            $wp_admin_bar->add_node($args);
+        }
+        $args = array(
+            'id' => 'idx_admin_bar_menu_item_5',
             'title' => "Upgrade Account<i class=\"fa fa-arrow-up update-plugins\"></i>",
             'parent' => 'idx_admin_bar_menu',
             'href' => 'https://middleware.idxbroker.com/mgmt/upgrade',
@@ -233,7 +247,7 @@ class Initiate_Plugin
                 'target' => '_blank',
             ),
         );
-        if (!$this->Idx_Api->platinum_account_type()) {
+        if (!$this->idx_api->platinum_account_type()) {
             $wp_admin_bar->add_node($args);
         }
     }
@@ -247,8 +261,8 @@ class Initiate_Plugin
         if ('toplevel_page_idx-broker' !== $page) {
             return;
         }
-        wp_enqueue_script('idxjs', plugins_url('../assets/js/idx-broker.js', __FILE__), 'jquery');
-        wp_enqueue_style('idxcss', plugins_url('../assets/css/idx-broker.css', __FILE__));
+        wp_enqueue_script('idxjs', plugins_url('/assets/js/idx-broker.min.js', dirname(__FILE__)), 'jquery');
+        wp_enqueue_style('idxcss', plugins_url('/assets/css/idx-broker.css', dirname(__FILE__)));
     }
 
 /**
@@ -262,6 +276,13 @@ class Initiate_Plugin
         include plugin_dir_path(__FILE__) . 'views/admin.php';
     }
 
+    public function idx_omnibar_settings_interface()
+    {
+        $omnibar_settings = new \IDX\Views\Omnibar_Settings();
+        //preload current cczs for omnibar settings
+        $omnibar_settings->idx_omnibar_settings_interface();
+    }
+
     /**
      * As WP does not allow external links in the admin menu, this JavaScript adds a link manually.
      *
@@ -271,7 +292,7 @@ class Initiate_Plugin
     public function add_upgrade_center_link()
     {
         //Only load if account is not Platinum level
-        if (!$this->Idx_Api->platinum_account_type()) {
+        if (!$this->idx_api->platinum_account_type()) {
             wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
             $html = "<li><a href=\"https://middleware.idxbroker.com/mgmt/upgrade\" target=\"_blank\">Upgrade Account<i class=\"fa fa-arrow-up update-plugins\"></i></a>";
             echo <<<EOD

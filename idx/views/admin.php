@@ -43,7 +43,7 @@ if ($wrapper_page_id) {
         <div id="blogUrl" style="display: none;" ajax="<?php bloginfo('wpurl');?>"></div>
                 <div id="genSettings">
                     <h3 class="hndle">
-                        <label>Get an API Key<a href="https://middleware.idxbroker.com/mgmt/apikey.php" target="_blank"><img class="help-icon" src="<?php echo plugins_url('../../assets/images/helpIcon.svg', __FILE__);?>" alt="help"></a></label>
+                        Get an API Key<a href="https://middleware.idxbroker.com/mgmt/apikey.php" target="_blank"><img class="help-icon" src="<?php echo plugins_url('../../assets/images/helpIcon.svg', __FILE__);?>" alt="help"></a>
                         <a href="http://kb.idxbroker.com/index.php?/Knowledgebase/Article/View/98/16/idx-broker-platinum-wordpress-plugin" class="helpIcon" target="_blank"></a>
                     </h3>
                     <div class="inlineBlock">

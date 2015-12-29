@@ -73,6 +73,18 @@ class Idx_Api
             'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
         );
 
+        if (function_exists('equity')) {
+            if ($level === 'equity') {
+                $equity_api_key = get_option('equity_api_key');
+                $domain = site_url();
+                $equity_headers = array(
+                    'equitykey' => $equity_api_key,
+                    'domain' => apply_filters('equity_idx_api_domain', $domain),
+                );
+                $headers = array_merge($headers, $equity_headers);
+            }
+        }
+
         $params = array_merge(array('timeout' => 120, 'sslverify' => false, 'headers' => $headers), $params);
         $url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
@@ -87,6 +99,10 @@ class Idx_Api
         if (isset($error) && $error !== false) {
             if ($code == 401) {
                 $this->delete_transient($cache_key);
+            }
+            if ($level === 'equity' && $code == 401) {
+                $equity_401_message = 'Also confirm you are using the same domain as on your IDX Broker account.';
+                return new \WP_Error("idx_api_error", __("Error {$code}: $error $equity_401_message"));
             }
             return new \WP_Error("idx_api_error", __("Error {$code}: $error"));
         } else {
@@ -511,6 +527,32 @@ class Idx_Api
     }
 
     /**
+     * Returns the IDs and names for each of a client's county lists including MLS county lists
+     *
+     * @return array
+     */
+    public function county_list_names()
+    {
+
+        $county_list_names = $this->idx_api('countieslistname', $this->idx_api_get_apiversion(), 'clients');
+
+        return $county_list_names;
+    }
+
+    /**
+     * Returns the IDs and names for each of a client's postalcodes lists including MLS postalcodes lists
+     *
+     * @return array
+     */
+    public function postalcode_list_names()
+    {
+
+        $postalcodes_list_names = $this->idx_api('postalcodeslistname', $this->idx_api_get_apiversion(), 'clients');
+
+        return $postalcodes_list_names;
+    }
+
+    /**
      * Returns the subdomain url WITH trailing slash
      *
      * @return string $url
@@ -531,7 +573,24 @@ class Idx_Api
     public function approved_mls()
     {
 
-        $approved_mls = $this->idx_api('approvedmls', $this->idx_api_get_apiversion(), 'mls');
+        $approved_mls = $this->idx_api('approvedmls', $this->idx_api_get_apiversion(), 'mls', array(), 60 * 60 * 24);
+
+        return $approved_mls;
+    }
+
+    /**
+     * Returns search field names for an MLS
+     */
+    public function searchfields($idxID)
+    {
+        $approved_mls = $this->idx_api("searchfields/$idxID", $this->idx_api_get_apiversion(), 'mls', array());
+
+        return $approved_mls;
+    }
+
+    public function searchfieldvalues($idxID, $fieldName, $mlsPtID)
+    {
+        $approved_mls = $this->idx_api("searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$fieldName", $this->idx_api_get_apiversion(), 'mls', array());
 
         return $approved_mls;
     }
@@ -578,7 +637,7 @@ class Idx_Api
     public function platinum_account_type()
     {
         $account_type = $this->idx_api('accounttype', $this->idx_api_get_apiversion(), 'clients', array(), 60 * 60 * 24);
-        if ($account_type[0] === 'IDX Broker Platinum') {
+        if (gettype($account_type) !== 'object' && $account_type[0] === 'IDX Broker Platinum') {
             return true;
         }
         return false;

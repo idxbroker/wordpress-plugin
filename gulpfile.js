@@ -13,7 +13,7 @@ var gulp = require('gulp'),
 
 gulp.task('jshint', function(){
 
-    return gulp.src('./src/js/*.js')
+    return gulp.src('./assets/src/js/*.js')
         .pipe ( jshint( ) )
         .pipe ( jshint.reporter( stylish ) )
         .pipe ( jshint.reporter( 'fail' ) );
@@ -21,7 +21,7 @@ gulp.task('jshint', function(){
 
 gulp.task('js', function() {
 
-    glob('./src/js/*.js', function(err, files) {
+    glob('./assets/src/js/*.js', function(err, files) {
         if (err) done(err);
 
         var tasks = files.map(function(entry) {
@@ -49,7 +49,7 @@ gulp.task('readme', function() {
 })
 
 gulp.task('watch', function() {
-    gulp.watch('src/js/*.js', ['jshint', 'js']);
+    gulp.watch('./assets/src/js/*.js', ['jshint', 'js']);
 })
 
 gulp.task('default', ['jshint', 'js'], function() {});
