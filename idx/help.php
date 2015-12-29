@@ -20,7 +20,7 @@ class Help
 
     public function add_wrappers_help()
     {
-        if (!empty($_GET['post_type']) && $_GET['post_type'] === 'idx-wrapper') {
+        if (!empty($_GET['post_type']) && ($_GET['post_type'] === 'idx-wrapper' || $_GET['post_type'] === 'idx_page')) {
             $this->add_settings_help_tabs();
         }
     }

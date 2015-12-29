@@ -150,7 +150,7 @@ class Impress_City_Links_Widget extends \WP_Widget
             <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
         </p>
-		<p>Don't have any city lists? Go create some in your <a href="http://middleware.idxbroker.com/mgmt/citycountyziplists.php">IDX dashboard.</a></p>
+		<p>Don't have any city lists? Go create some in your <a href="http://middleware.idxbroker.com/mgmt/citycountyziplists.php" target="_blank">IDX dashboard.</a></p>
 		<?php
 }
 

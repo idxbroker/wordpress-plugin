@@ -23,8 +23,7 @@ class Initiate_Plugin
         add_action('wp_loaded', array($this, 'schedule_omnibar_update'));
         add_action('idx_omnibar_get_locations', array($this, 'idx_omnibar_get_locations'));
         add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
-
-        include 'backwards-compatibility.php';
+        add_action('wp_loaded', array($this, 'backwards_compatibility'));
 
         //Instantiate Classes
         new Wrappers();
@@ -198,6 +197,9 @@ class Initiate_Plugin
  */
     public function add_admin_bar_menu($wp_admin_bar)
     {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
         $args = array(
             'id' => 'idx_admin_bar_menu',
             'title' => '<span class="ab-icon idx-admin-bar-menu-icon"></span>IMPress',
@@ -263,6 +265,11 @@ class Initiate_Plugin
         }
         wp_enqueue_script('idxjs', plugins_url('/assets/js/idx-broker.min.js', dirname(__FILE__)), 'jquery');
         wp_enqueue_style('idxcss', plugins_url('/assets/css/idx-broker.css', dirname(__FILE__)));
+    }
+
+    public function backwards_compatibility()
+    {
+        include 'backwards-compatibility.php';
     }
 
 /**

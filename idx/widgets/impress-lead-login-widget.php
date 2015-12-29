@@ -123,5 +123,6 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         </p>
 
 		<?php
-}
+
+    }
 }
