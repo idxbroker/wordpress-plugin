@@ -1,15 +1,7 @@
 <?php
 namespace IDX;
 
-/**
- * An example of a project-specific implementation.
- *
- *
- *      new \Foo\Bar\Baz\Qux;
- *
- * @param string $class The fully-qualified class name.
- * @return void
- */
+//Class Autoloader for PSR-2 Compliance
 spl_autoload_register(function ($class) {
 
     // project-specific namespace prefix

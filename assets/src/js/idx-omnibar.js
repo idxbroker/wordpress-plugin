@@ -1,21 +1,45 @@
+// Awesomplete - Lea Verou - MIT license
+!function(){function t(t,e){for(var i in t){var n=t[i],s=this.input.getAttribute("data-"+i.toLowerCase());this[i]="number"==typeof n?parseInt(s):n===!1?null!==s:n instanceof Function?null:s,this[i]||0===this[i]||(this[i]=i in e?e[i]:n)}}function e(t,e){return"string"==typeof t?(e||document).querySelector(t):t||null}function i(t,e){return r.call((e||document).querySelectorAll(t))}function n(){i("input.awesomplete").forEach(function(t){new Awesomplete(t)})}var s=function(i,n){var r=this;this.input=e(i),this.input.setAttribute("autocomplete","off"),this.input.setAttribute("aria-autocomplete","list"),n=n||{},t.call(this,{minChars:2,maxItems:10,autoFirst:!1,filter:s.FILTER_CONTAINS,sort:s.SORT_BYLENGTH,item:function(t,i){return e.create("li",{innerHTML:t.replace(RegExp(e.regExpEscape(i.trim()),"gi"),"<mark>$&</mark>"),"aria-selected":"false"})},replace:function(t){this.input.value=t}},n),this.index=-1,this.container=i.parentNode.className.search(/awesomplete/)<0?e.create("div",{className:"awesomplete",around:i}):i.parentNode,this.ul=e.create("ul",{hidden:"",inside:this.container}),this.status=e.create("span",{className:"visually-hidden",role:"status","aria-live":"assertive","aria-relevant":"additions",inside:this.container}),e.bind(this.input,{input:this.evaluate.bind(this),blur:this.close.bind(this),keydown:function(t){var e=t.keyCode;r.opened&&(13===e&&r.selected?(t.preventDefault(),r.select()):27===e?r.close():(38===e||40===e)&&(t.preventDefault(),r[38===e?"previous":"next"]()))}}),e.bind(this.input.form,{submit:this.close.bind(this)}),e.bind(this.ul,{mousedown:function(t){var e=t.target;if(e!==this){for(;e&&!/li/i.test(e.nodeName);)e=e.parentNode;e&&r.select(e)}}}),this.input.hasAttribute("list")?(this.list="#"+i.getAttribute("list"),i.removeAttribute("list")):this.list=this.input.getAttribute("data-list")||n.list||[],s.all.push(this)};s.prototype={set list(t){Array.isArray(t)?this._list=t:"string"==typeof t&&t.indexOf(",")>-1?this._list=t.split(/\s*,\s*/):(t=e(t),t&&t.children&&(this._list=r.apply(t.children).map(function(t){return t.textContent.trim()}))),document.activeElement===this.input&&this.evaluate()},get selected(){return this.index>-1},get opened(){return this.ul&&null==this.ul.getAttribute("hidden")},close:function(){this.ul.setAttribute("hidden",""),this.index=-1,e.fire(this.input,"awesomplete-close")},open:function(){this.ul.removeAttribute("hidden"),this.autoFirst&&-1===this.index&&this.goto(0),e.fire(this.input,"awesomplete-open")},next:function(){var t=this.ul.children.length;this.goto(this.index<t-1?this.index+1:-1)},previous:function(){var t=this.ul.children.length;this.goto(this.selected?this.index-1:t-1)},"goto":function(t){var i=this.ul.children;this.selected&&i[this.index].setAttribute("aria-selected","false"),this.index=t,t>-1&&i.length>0&&(i[t].setAttribute("aria-selected","true"),this.status.textContent=i[t].textContent),e.fire(this.input,"awesomplete-highlight")},select:function(t){if(t=t||this.ul.children[this.index]){var i;e.fire(this.input,"awesomplete-select",{text:t.textContent,preventDefault:function(){i=!0}}),i||(this.replace(t.textContent),this.close(),e.fire(this.input,"awesomplete-selectcomplete"))}},evaluate:function(){var t=this,e=this.input.value;e.length>=this.minChars&&this._list.length>0?(this.index=-1,this.ul.innerHTML="",this._list.filter(function(i){return t.filter(i,e)}).sort(this.sort).every(function(i,n){return t.ul.appendChild(t.item(i,e)),n<t.maxItems-1}),0===this.ul.children.length?this.close():this.open()):this.close()}},s.all=[],s.FILTER_CONTAINS=function(t,i){return RegExp(e.regExpEscape(i.trim()),"i").test(t)},s.FILTER_STARTSWITH=function(t,i){return RegExp("^"+e.regExpEscape(i.trim()),"i").test(t)},s.SORT_BYLENGTH=function(t,e){return t.length!==e.length?t.length-e.length:e>t?-1:1};var r=Array.prototype.slice;return e.create=function(t,i){var n=document.createElement(t);for(var s in i){var r=i[s];if("inside"===s)e(r).appendChild(n);else if("around"===s){var o=e(r);o.parentNode.insertBefore(n,o),n.appendChild(o)}else s in n?n[s]=r:n.setAttribute(s,r)}return n},e.bind=function(t,e){if(t)for(var i in e){var n=e[i];i.split(/\s+/).forEach(function(e){t.addEventListener(e,n)})}},e.fire=function(t,e,i){var n=document.createEvent("HTMLEvents");n.initEvent(e,!0,!0);for(var s in i)n[s]=i[s];t.dispatchEvent(n)},e.regExpEscape=function(t){return t.replace(/[-\\^$*+?.()|[\]{}]/g,"\\$&")},"undefined"!=typeof Document&&("loading"!==document.readyState?n():document.addEventListener("DOMContentLoaded",n)),s.$=e,s.$$=i,"undefined"!=typeof self&&(self.Awesomplete=s),"object"==typeof exports&&(module.exports=s),s}();
+
+
+		//Omnibar:
 		var idxOmnibar = function(jsonData){
 			//prevent script from running twice or erroring if no omnibar
-		if(document.querySelector('.idx-omnibar-input') && !document.querySelector('.awesomplete')){
+		if(document.querySelector('.idx-omnibar-input') && !document.querySelector('.awesomplete ul')){
 			/*
 			* Autocomplete
 			*/
-
 			var cczList = [];
+			var basicPtID = mlsPtIDs[0].mlsPtID;
 
+			//helper function for finding Object properties number
+			Object.size = function(obj) {
+			    var size = 0, key;
+			    for (key in obj) {
+			        if (obj.hasOwnProperty(key)) size++;
+			    }
+			    return size;
+			};
 			//helper function runs function for each item in DOM array
 			var forEach = function (array, callback, scope) {
 			  for (var i = 0; i < array.length; i++) {
 			    callback.call(scope, i, array[i]);
 			  }
 			};
-
+			//check field shortname against longname in customFieldsKey object
+			var checkFieldName = function(fieldName){
+								var displayName = '';
+								for(var i = 0; i < Object.size(customFieldsKey); i++){
+									var systemName = Object.keys(customFieldsKey)[i];
+									var longName = eval('customFieldsKey["' + systemName + '"]');
+									if(fieldName === systemName){
+										displayName = longName;
+									}
+								}
+								return displayName;
+			};
 			//helper function for grabbing the name of each item in JSON creating new array
-			var createArrays = function(array, newArray, type){
+			var createArrays = function(array, newArray, type, fieldName){
 				//if zip, do not append state abbreviations
 				if(type === 'zip'){
 					array.forEach(function(item){
@@ -24,27 +48,49 @@
 							newArray.push(item.name);
 						}
 					});
+					//if county, append County and State
 				} else if(type ==='county') {
 					array.forEach(function(item){
 						if(item.name !== '' && item.name !== 'Other' && item.name !== 'Other State'){
 							newArray.push(item.name + ' County, ' + item.stateAbrv);
 						}
 					});
-				} else {
+					//if city, append State
+				} else if(type === 'city'){
 					array.forEach(function(item){
 						if(item.name !== '' && item.name !== 'Other' && item.name !== 'Other State'){
 							newArray.push(item.name + ', ' + item.stateAbrv);
+						}
+					});
+				} else {
+					array.forEach(function(item){
+						if(item !== '' && item !== 'Other'){
+							newArray.push(item + ' ' + checkFieldName(fieldName));
 						}
 					});
 				}
 				return newArray;
 			};
 
+			var addAdvancedFields = function(newArray){
+				for(var i = 1; i < jsonData.length; i++){
+					var idxID = Object.keys(jsonData[i])[0];
+					var fieldNumber = eval('Object.size(jsonData[i].' + idxID + ')');
+					for(var j = 0; j < fieldNumber; j++){
+						var fieldName = eval('Object.keys(jsonData[i].' + idxID + '[j])')[0];
+						var fieldValues = eval('jsonData[i].' + idxID + '[j].' + fieldName);
+						createArrays(fieldValues, newArray, 'custom', fieldName);
+					}
+				}
+				return cczList;
+			}
+
+
 			//dependent upon createArrays. Creates cczList array
 			var buildLocationList = function (data){
-				return createArrays(data.zipcodes, createArrays(data.counties, createArrays(data.cities, cczList), 'county'), 'zip');
+				return addAdvancedFields(createArrays(data[0].core.zipcodes, createArrays(data[0].core.counties, createArrays(data[0].core.cities, cczList, 'city'), 'county'), 'zip'));
 			};
-
+			//remove duplicate entries
 			var removeDuplicates = function(data) {
 					var seen = {};
 					var out = [];
@@ -369,15 +415,15 @@
 					switch(listType){
 						case 'cities':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?ccz=city&city[]=' + list[i].id);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=city&city[]=' + list[i].id + '&widgetReferer=true');
 							break;
 						case 'counties':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?ccz=county&county[]=' + list[i].id);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=county&county[]=' + list[i].id + '&widgetReferer=true');
 							break;
 						case 'zipcodes':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?ccz=zipcode&zipcode[]=' + list[i].id);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=zipcode&zipcode[]=' + list[i].id + '&widgetReferer=true');
 							break;
 					}
 				} else if (foundResult === false && i == list.length - 1) {
@@ -385,39 +431,80 @@
 				}
 			}
 		};
+		//check input against advanced fields
+			var advancedList = function(input){
+				for(var i = 1; i < jsonData.length; i++){
+					var idxID = Object.keys(jsonData[i])[0];
+					var fieldNumber = eval('Object.size(jsonData[i].' + idxID + ')');
+					//check for mlsPtID (skip 0 index as it is for basic searches)
+					for(var j = 1; j < mlsPtIDs.length; j++){
+						keyIdxID = mlsPtIDs[j].idxID;
+						keyMlsPtID = mlsPtIDs[j].mlsPtID;
+						//if mlsPtIDs global object property matches idxID, use that property type
+						if(keyIdxID === idxID){
+							var mlsPtID = keyMlsPtID;
+						}
+					}
+					//if no default pt, default to 1
+					if(typeof mlsPtID === 'undefined'){
+						var mlsPtID = 1;
+					}
+
+					for(var j = 0; j < fieldNumber; j++){
+						var fieldName = eval('Object.keys(jsonData[i].' + idxID + '[j])')[0];
+						var fieldValues = eval('jsonData[i].' + idxID + '[j].' + fieldName);
+
+						forEach(fieldValues, function(index, value){
+							if(input.value !== '' && (input.value.toLowerCase() === value.toLowerCase() || input.value.toLowerCase() === (value + ' ' + checkFieldName(fieldName)).toLowerCase())){
+								foundResult = true;
+								return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&widgetReferer=true');
+							}
+						})
+						if(foundResult){
+							return;
+						}
+
+					}
+
+				}
+				if(foundResult === false){
+					return notOnList(input);
+				}
+			}
 
 		//callback for checkAgainstList function. Inherits global idxUrl variable from widget HTML script
 		var notOnList = function (input) {
 				var hasSpaces = /\s/g.test(input.value);
 				if (!input.value) {
 					//nothing in input
-					goToResultsPage(input, idxUrl, '?pt=all');
+					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&widgetReferer=true');
 				} else if(hasSpaces === false && parseInt(input.value) !== isNaN) {
 					//MLS Number/ListingID
 					var listingID = true;
-					goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID);
+					goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID + '&widgetReferer=true');
 				} else {
 					//address (split into number and street)
 					var addressSplit = input.value.split(' ');
 					//if first entry is number, search for street number otherwise search for street name
 					if(Number(addressSplit[0]) > 0){
-						goToResultsPage(input, idxUrl, '?a_streetNumber=' + addressSplit[0] + '&aw_streetName=' + addressSplit[1]);
-					} else if(addressSplit[0] === 'City,'){
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&a_streetNumber=' + addressSplit[0] + '&aw_streetName=' + addressSplit[1] + '&widgetReferer=true');
+					} else if(input.value === idxOmnibarPlaceholder){
 						//prevent placeholder from interfering with results URL
-						goToResultsPage(input, idxUrl, '?pt=all');
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&widgetReferer=true');
 					} else {
 						//search by just street name (without state or city if comma is used)
-						goToResultsPage(input, idxUrl, '?aw_streetName=' + input.value.split(', ')[0]);
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&aw_streetName=' + input.value.split(', ')[0] + '&widgetReferer=true');
 					}
 				}
 			};
 
+
 			var runSearch = function(event) {
 				event.preventDefault();
 				var input = event.target.querySelector('.idx-omnibar-input');
-				checkAgainstList(input, jsonData.cities, 'cities', checkAgainstList(input, jsonData.counties, 'counties', checkAgainstList(input, jsonData.zipcodes, 'zipcodes')));
+				checkAgainstList(input, jsonData[0].core.cities, 'cities', checkAgainstList(input, jsonData[0].core.counties, 'counties', checkAgainstList(input, jsonData[0].core.zipcodes, 'zipcodes')));
 				if(foundResult === false){
-					notOnList(input);
+					advancedList(input);
 				}
 			};
 

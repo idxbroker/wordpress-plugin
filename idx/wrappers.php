@@ -171,7 +171,7 @@ class Wrappers
         $this->wrapper_page_dropdown($system_links, $saved_links);
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
-        wp_enqueue_script('idx-wrapper', plugins_url('../assets/js/idx-wrappers.js', __FILE__));
+        wp_enqueue_script('idx-wrapper', plugins_url('../assets/js/idx-wrappers.min.js', __FILE__));
 
     }
 
