@@ -183,7 +183,7 @@ class Idx_Api
         if (empty($this->api_key)) {
             return array();
         }
-        return $this->idx_api('systemlinks', $this->idx_api_get_apiversion());
+        return $this->idx_api('systemlinks');
     }
 
     /**
@@ -197,7 +197,7 @@ class Idx_Api
         if (empty($this->api_key)) {
             return array();
         }
-        return $this->idx_api('savedlinks', $this->idx_api_get_apiversion());
+        return $this->idx_api('savedlinks');
     }
 
     /**
@@ -211,7 +211,7 @@ class Idx_Api
         if (empty($this->api_key)) {
             return array();
         }
-        return $this->idx_api('widgetsrc', $this->idx_api_get_apiversion());
+        return $this->idx_api('widgetsrc');
     }
 
     /**
@@ -403,7 +403,7 @@ class Idx_Api
             return;
         } elseif ($idx_page === 'global') {
             //set Global Wrapper:
-            $this->idx_api("dynamicwrapperurl", $this->idx_api_get_apiversion(), 'clients', array('body' => array('dynamicURL' => $wrapper_url)), 10, 'POST');
+            $this->idx_api("dynamicwrapperurl", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array('body' => array('dynamicURL' => $wrapper_url)), 10, 'POST');
         } else {
             //find what IDX page type then set the page wrapper
             $page_type = $this->find_idx_page_type($idx_page);
@@ -418,7 +418,7 @@ class Idx_Api
                     'pageID' => $idx_page,
                 );
             }
-            $this->idx_api("dynamicwrapperurl", $this->idx_api_get_apiversion(), 'clients', array('body' => $params), 10, 'POST');
+            $this->idx_api("dynamicwrapperurl", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array('body' => $params), 10, 'POST');
         }
     }
 
@@ -463,14 +463,14 @@ class Idx_Api
     public function saved_link_properties($saved_link_id)
     {
 
-        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id, $this->idx_api_get_apiversion(), 'equity', array(), 7200, 'GET', true);
+        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 7200, 'GET', true);
 
         return $saved_link_properties;
     }
 
     public function client_properties($type)
     {
-        $properties = $this->idx_api($type, $this->idx_api_get_apiversion(), 'clients', array(), 7200, 'GET', true);
+        $properties = $this->idx_api($type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
 
         return $properties;
     }
@@ -483,7 +483,7 @@ class Idx_Api
     public function default_cities()
     {
 
-        $default_cities = $this->idx_api('cities/combinedActiveMLS', $this->idx_api_get_apiversion(), 'clients');
+        $default_cities = $this->idx_api('cities/combinedActiveMLS', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients');
 
         return $default_cities;
     }
@@ -496,7 +496,7 @@ class Idx_Api
     public function city_list_ids()
     {
 
-        $list_ids = $this->idx_api('cities', $this->idx_api_get_apiversion(), 'clients');
+        $list_ids = $this->idx_api('cities', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients');
         return $list_ids;
     }
 
@@ -508,7 +508,7 @@ class Idx_Api
     public function city_list($list_id)
     {
 
-        $city_list = $this->idx_api('cities/' . $list_id, $this->idx_api_get_apiversion(), 'clients');
+        $city_list = $this->idx_api('cities/' . $list_id, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients');
 
         return $city_list;
     }
@@ -521,7 +521,7 @@ class Idx_Api
     public function city_list_names()
     {
 
-        $city_list_names = $this->idx_api('citieslistname', $this->idx_api_get_apiversion(), 'clients');
+        $city_list_names = $this->idx_api('citieslistname', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients');
 
         return $city_list_names;
     }
@@ -534,7 +534,7 @@ class Idx_Api
     public function county_list_names()
     {
 
-        $county_list_names = $this->idx_api('countieslistname', $this->idx_api_get_apiversion(), 'clients');
+        $county_list_names = $this->idx_api('countieslistname', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients');
 
         return $county_list_names;
     }
@@ -547,7 +547,7 @@ class Idx_Api
     public function postalcode_list_names()
     {
 
-        $postalcodes_list_names = $this->idx_api('postalcodeslistname', $this->idx_api_get_apiversion(), 'clients');
+        $postalcodes_list_names = $this->idx_api('postalcodeslistname', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients');
 
         return $postalcodes_list_names;
     }
@@ -573,7 +573,7 @@ class Idx_Api
     public function approved_mls()
     {
 
-        $approved_mls = $this->idx_api('approvedmls', $this->idx_api_get_apiversion(), 'mls', array(), 60 * 60 * 24);
+        $approved_mls = $this->idx_api('approvedmls', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24);
 
         return $approved_mls;
     }
@@ -583,14 +583,14 @@ class Idx_Api
      */
     public function searchfields($idxID)
     {
-        $approved_mls = $this->idx_api("searchfields/$idxID", $this->idx_api_get_apiversion(), 'mls', array());
+        $approved_mls = $this->idx_api("searchfields/$idxID", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array());
 
         return $approved_mls;
     }
 
     public function searchfieldvalues($idxID, $fieldName, $mlsPtID)
     {
-        $approved_mls = $this->idx_api("searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$fieldName", $this->idx_api_get_apiversion(), 'mls', array());
+        $approved_mls = $this->idx_api("searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$fieldName", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array());
 
         return $approved_mls;
     }
@@ -636,7 +636,7 @@ class Idx_Api
 
     public function platinum_account_type()
     {
-        $account_type = $this->idx_api('accounttype', $this->idx_api_get_apiversion(), 'clients', array(), 60 * 60 * 24);
+        $account_type = $this->idx_api('accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24);
         if (gettype($account_type) !== 'object' && $account_type[0] === 'IDX Broker Platinum') {
             return true;
         }

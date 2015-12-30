@@ -34,6 +34,7 @@ class Get_Locations
         }
         return $idxIDs;
     }
+
     //used in get_additional_fields function
     public function fields_in_idxID($idxIDMatch, $fields)
     {
@@ -56,6 +57,7 @@ class Get_Locations
         }
         return $output;
     }
+
     //used to retrieve all fields and create JSON objects by each idxID for each field
     public function get_additional_fields()
     {
@@ -71,13 +73,14 @@ class Get_Locations
         }
         return $output;
     }
+
     //for display on the front end.
     public function create_custom_fields_key()
     {
         $custom_fields_key = array();
         $fields = get_option('idx-omnibar-custom-fields');
         if (empty($fields)) {
-            return;
+            return 'var customFieldsKey = {}; ';
         }
         foreach ($fields as $field) {
             $name = $field['value'];
@@ -87,6 +90,7 @@ class Get_Locations
         }
         return 'var customFieldsKey = ' . json_encode($custom_fields_key) . '; ';
     }
+
     public function get_cczs()
     {
         //Get correct CCZ List set in admin
