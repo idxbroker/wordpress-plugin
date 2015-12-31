@@ -28,6 +28,12 @@ class Help
     public $tabs = array(
         // The assoc key represents the ID
         // It is NOT allowed to contain spaces
+        'idx_walkthrough_video' => array(
+            'title' => 'Walkthrough',
+            'content' => '
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/TEtqmnthsBE?list=PLjUedMdGsXxWVYxKIpJ8P5veq0_8JdZrK" frameborder="0" allowfullscreen></iframe>
+            ',
+        ),
         'idx_api_key' => array(
             'title' => 'API Key'
             , 'content' => '
@@ -37,27 +43,36 @@ class Help
                 ',
         ),
         'idx_create_wrapper' => array(
-            'title' => 'Create Wrapper'
+            'title' => 'Creating the Wrapper'
             , 'content' => '
-                <strong>Create Wrapper</strong> - Wrappers set the overall styling of your IDX Broker pages.
+                <strong>Creating the Wrapper</strong> - Wrappers set the overall styling of your IDX Broker pages.
                 <br>&bull; Create new page wrappers by entering a unique page name and selecting Update.
                 <br>&bull; These pages are added to your Wrappers menu, not your WordPress pages.
                 <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank">this article</a>.
                 ',
         ),
         'idx_pages' => array(
-            'title' => 'IDX Pages'
+            'title' => 'Integrating IDX Pages'
             , 'content' => '
-                <strong>IDX Pages</strong> - Integrating IDX Pages into your website.
+                <strong>Integrating IDX Pages</strong> - Integrating IDX Pages into your website.
                 <br>&bull; We recommend linking to IDX pages from your navigation by adding IDX Pages to your menus.
                 <br>&bull; You can add pages under the IDX Pages category under Appearance > Menus or Appearance > Customize > Menus.
                 <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin" target="_blank">this article</a>.
                 ',
         ),
-        'idx_apply_wrapper' => array(
-            'title' => 'Apply Wrapper'
+        'idx_widgets' => array(
+            'title' => 'Adding Widgets'
             , 'content' => '
-                <strong>Apply Wrapper</strong> - You may create many wrappers and use different ones for each category or page.
+                <strong>Adding Widgets</strong> - Adding Widgets into your website.
+                <br>&bull; You can add Widgets to widget areas of your website using the Customizer under Appearance > Customize > Widgets.
+                <br>&bull; You can also add them under Appearance > Widgets.
+                <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin" target="_blank">this article</a>.
+                ',
+        ),
+        'idx_apply_wrapper' => array(
+            'title' => 'Applying Additional Wrappers'
+            , 'content' => '
+                <strong>Applying Additional Wrappers</strong> - You may create many wrappers and use different ones for each category or page.
                 <br>&bull; To apply a new wrapper within WordPress, edit the Wrapper page from the IDX Broker/Wrappers menu.
                 <br>&bull; In edit mode select where to apply the wrapper in the upper right of the screen.
                 <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank">this article</a>.
@@ -66,7 +81,7 @@ class Help
         'idx_shortcodes' => array(
             'title' => 'IDX Shortcodes'
             , 'content' => '
-                <strong>Insert Shortcode</strong> - Insert IDX Broker content in any page or post.
+                <strong>IDX Shortcodes</strong> - Insert IDX Broker content in any page or post.
                 <br>&bull; Select the Insert IDX Shortcode button
                 <br>&bull; System and Saved Links add an external link to IDX Broker pages
                 <br>&bull; Widgets add widget content into your page.
