@@ -141,19 +141,24 @@ class Help
         );
     }
 
+    public function impress_settings_page()
+    {
+        if ((!empty($_GET['page']) &&
+            ($_GET['page'] === 'idx-broker' ||
+                $_GET['page'] === 'idx-omnibar-settings')
+        ) ||
+            (!empty($_GET['post_type']) &&
+                ($_GET['post_type'] === 'idx-wrapper' ||
+                    $_GET['post_type'] === 'idx_page'
+                ))) {
+            return true;
+        }
+    }
+
     public function glow()
     {
         //Make Help Button Glow for IMPress pages
-        if (!get_option('idx_disable_glow') &&
-            (
-                (!empty($_GET['page']) &&
-                    ($_GET['page'] === 'idx-broker' ||
-                        $_GET['page'] === 'idx-omnibar-settings')
-                ) ||
-                (!empty($_GET['post_type']) &&
-                    ($_GET['post_type'] === 'idx-wrapper' ||
-                        $_GET['post_type'] === 'idx_page'
-                    )))) {
+        if (!get_option('idx_disable_glow') && $this->impress_settings_page()) {
 
             wp_enqueue_script('idxhelpglow', plugins_url('/assets/js/idx-help-menu.min.js', dirname(__FILE__)), 'jquery');
         }
