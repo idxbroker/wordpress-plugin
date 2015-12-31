@@ -9,12 +9,14 @@ class Help
         add_action('load-post-new.php', array($this, 'add_pages_help_tabs'), 20);
         add_action('load-edit.php', array($this, 'add_wrappers_help'), 20);
         add_action('current_screen', array($this, 'settings_help'));
+        //Glow Help Button
         add_action('admin_enqueue_scripts', array($this, 'glow'));
         add_action('wp_ajax_idx_disable_glow', array($this, 'disable_glow'));
     }
 
     public function settings_help()
     {
+        //Display Help on Settings Pages
         if (!empty($_GET['page']) && ($_GET['page'] === 'idx-broker' || $_GET['page'] === 'idx-omnibar-settings')) {
             $this->add_settings_help_tabs();
         }
@@ -22,6 +24,7 @@ class Help
 
     public function add_wrappers_help()
     {
+        //Display Help on Post Type UIs
         if (!empty($_GET['post_type']) && ($_GET['post_type'] === 'idx-wrapper' || $_GET['post_type'] === 'idx_page')) {
             $this->add_settings_help_tabs();
         }
@@ -140,11 +143,23 @@ class Help
 
     public function glow()
     {
-        if (!get_option('idx_disable_glow')) {
+        //Make Help Button Glow for IMPress pages
+        if (!get_option('idx_disable_glow') &&
+            (
+                (!empty($_GET['page']) &&
+                    ($_GET['page'] === 'idx-broker' ||
+                        $_GET['page'] === 'idx-omnibar-settings')
+                ) ||
+                (!empty($_GET['post_type']) &&
+                    ($_GET['post_type'] === 'idx-wrapper' ||
+                        $_GET['post_type'] === 'idx_page'
+                    )))) {
+
             wp_enqueue_script('idxhelpglow', plugins_url('/assets/js/idx-help-menu.min.js', dirname(__FILE__)), 'jquery');
         }
     }
 
+    //Disable the help button glowing via AJAX
     public function disable_glow()
     {
         update_option('idx_disable_glow', '1');
