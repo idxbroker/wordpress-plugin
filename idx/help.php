@@ -28,6 +28,12 @@ class Help
     public $tabs = array(
         // The assoc key represents the ID
         // It is NOT allowed to contain spaces
+        'idx_walkthrough_video' => array(
+            'title' => 'Walkthrough',
+            'content' => '
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/TEtqmnthsBE?list=PLjUedMdGsXxWVYxKIpJ8P5veq0_8JdZrK" frameborder="0" allowfullscreen></iframe>
+            ',
+        ),
         'idx_api_key' => array(
             'title' => 'API Key'
             , 'content' => '
