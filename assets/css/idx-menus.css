@@ -36,4 +36,34 @@
     margin: 0 0 0 6px;
     vertical-align:bottom;
 }
+/*help button glow*/
+@-webkit-keyframes glowing {
+  0% {-webkit-box-shadow: 0 0 3px #004A7F; }
+  50% {-webkit-box-shadow: 0 0 10px #0094FF; }
+  100% {-webkit-box-shadow: 0 0 3px #004A7F; }
+}
 
+@-moz-keyframes glowing {
+  0% {-moz-box-shadow: 0 0 3px #004A7F; }
+  50% {-moz-box-shadow: 0 0 10px #0094FF; }
+  100% {-moz-box-shadow: 0 0 3px #004A7F; }
+}
+
+@-o-keyframes glowing {
+  0% {box-shadow: 0 0 3px #004A7F; }
+  50% {box-shadow: 0 0 10px #0094FF; }
+  100% {box-shadow: 0 0 3px #004A7F; }
+}
+
+@keyframes glowing {
+  0% {box-shadow: 0 0 3px #004A7F; }
+  50% {box-shadow: 0 0 10px #0094FF; }
+  100% {box-shadow: 0 0 3px #004A7F; }
+}
+
+#contextual-help-link.glow {
+  -webkit-animation: glowing 1500ms infinite;
+  -moz-animation: glowing 1500ms infinite;
+  -o-animation: glowing 1500ms infinite;
+  animation: glowing 1500ms infinite;
+}

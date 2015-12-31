@@ -9,6 +9,8 @@ class Help
         add_action('load-post-new.php', array($this, 'add_pages_help_tabs'), 20);
         add_action('load-edit.php', array($this, 'add_wrappers_help'), 20);
         add_action('current_screen', array($this, 'settings_help'));
+        add_action('admin_enqueue_scripts', array($this, 'glow'));
+        add_action('wp_ajax_idx_disable_glow', array($this, 'disable_glow'));
     }
 
     public function settings_help()
@@ -134,5 +136,18 @@ class Help
                 'idxbroker'
             )
         );
+    }
+
+    public function glow()
+    {
+        if (!get_option('idx_disable_glow')) {
+            wp_enqueue_script('idxhelpglow', plugins_url('/assets/js/idx-help-menu.min.js', dirname(__FILE__)), 'jquery');
+        }
+    }
+
+    public function disable_glow()
+    {
+        update_option('idx_disable_glow', '1');
+        wp_die();
     }
 }
