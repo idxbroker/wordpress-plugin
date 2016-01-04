@@ -72,8 +72,10 @@ EOD;
         //if no default pts have been set, add dummy values to prevent js errors
         if (empty($mlsPtIDs)) {
             $mlsPtIDs = array(
-                'idxID' => '',
-                'mlsPtID' => 1,
+                array(
+                    'idxID' => '',
+                    'mlsPtID' => 1,
+                ),
             );
         }
         return $mlsPtIDs;

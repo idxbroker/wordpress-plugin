@@ -14,10 +14,12 @@ window.addEventListener('DOMContentLoaded', function(){
     });
 
     var saveButton = document.querySelectorAll('#save_changes')[0];
+    var ajax_load = "<span class='ajax'></span>";
 
     if(typeof saveButton !== 'undefined'){
         saveButton.addEventListener('click', function(event){
         event.preventDefault();
+        jQuery('.status').fadeIn('fast').html(ajax_load + 'Saving Settings...');
         updateOmnibarCurrentCcz();
         });
     }
