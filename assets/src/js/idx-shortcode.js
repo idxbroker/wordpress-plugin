@@ -1,6 +1,10 @@
 
 document.addEventListener('DOMContentLoaded', function(event){
 
+    if(typeof el('#idx-shortcode')[0] === 'undefined'){
+        return;
+    }
+
     var modal = el('#idx-shortcode-modal')[0];
     var close = modal.querySelector('.media-modal-close');
     var overlay = el('#idx-overlay')[0];
@@ -141,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         switch(shortcodeType){
             case 'system_links':
                 modalTitle.innerHTML = 'Shortcode Details - System Links';
+                break;
             case 'saved_links':
                 modalTitle.innerHTML = 'Shortcode Details - Saved Links';
                 break;
@@ -390,14 +395,8 @@ document.addEventListener('DOMContentLoaded', function(event){
         closeShortcodeModal(event);
     }
 
-
-
     //Initialize the modal
     initializeModal();
-
-
-
-
 
 });
 
