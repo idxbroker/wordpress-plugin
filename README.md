@@ -82,23 +82,18 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 ## Screenshots ##
 
 ###1. Omnibar Search Widget.
-###
 ![Alt text](screenshot-1.png?raw=true "Omnibar Search Widget")
 
 ###2. IDX Shortcode UI.
-###
 ![Alt text](screenshot-2.jpg?raw=true "IDX Shortcode UI")
 
 ###3. Widget Customizer.
-###
 ![Alt text](screenshot-3.jpg?raw=true " Widget Customizer")
 
 ###4. Plugin Settings Page.
-###
 ![Alt text](screenshot-4.jpg?raw=true "Plugin Settings Page")
 
 ###5. Middleware API Key.
-###
 ![Alt text](screenshot-5.png?raw=true "Middleware API Key")
 
 
