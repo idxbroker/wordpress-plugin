@@ -1,8 +1,10 @@
 # IMPress for IDX Broker WordPress Plugin #
-Author: IDX Broker
+**Author:** IDX Broker
+
 **Contributors:** idxco
 
-Author URL: http://www.idxbroker.com
+**Author URL:** http://www.idxbroker.com
+
 **Tags:** IDX, MLS, multiple listing service, idx broker, idx broker platinum, IDX plugin, idx wordpress, idx wordpress plugin, idxbroker, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 
 
@@ -81,23 +83,23 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 ###1. Omnibar Search Widget.
 ###
-[missing image]
+![Alt text](screenshot-1.png?raw=true "Omnibar Search Widget")
 
 ###2. IDX Shortcode UI.
 ###
-[missing image]
+![Alt text](screenshot-2.png?raw=true "IDX Shortcode UI")
 
 ###3. Widget Customizer.
 ###
-[missing image]
+![Alt text](screenshot-3.png?raw=true " Widget Customizer")
 
 ###4. Plugin Settings Page.
 ###
-[missing image]
+![Alt text](screenshot-4.png?raw=true "Plugin Settings Page")
 
 ###5. Middleware API Key.
 ###
-[missing image]
+![Alt text](screenshot-5.png?raw=true "Middleware API Key")
 
 
 ## Changelog ##
