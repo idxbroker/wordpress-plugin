@@ -1,4 +1,5 @@
 # IMPress for IDX Broker WordPress Plugin #
+
 **Author:** IDX Broker
 
 **Contributors:** idxco
