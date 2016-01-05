@@ -87,15 +87,15 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 ###2. IDX Shortcode UI.
 ###
-![Alt text](screenshot-2.png?raw=true "IDX Shortcode UI")
+![Alt text](screenshot-2.jpg?raw=true "IDX Shortcode UI")
 
 ###3. Widget Customizer.
 ###
-![Alt text](screenshot-3.png?raw=true " Widget Customizer")
+![Alt text](screenshot-3.jpg?raw=true " Widget Customizer")
 
 ###4. Plugin Settings Page.
 ###
-![Alt text](screenshot-4.png?raw=true "Plugin Settings Page")
+![Alt text](screenshot-4.jpg?raw=true "Plugin Settings Page")
 
 ###5. Middleware API Key.
 ###
