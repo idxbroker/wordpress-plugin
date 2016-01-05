@@ -56,7 +56,7 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
         $plugin_dir = plugins_url();
 
         //grab url from database set from get-locations.php
-        $idx_url = get_option('idx-results-url');
+        $idx_url = get_option('idx_results_url');
 
         // Widget HTML:
         $create_omnibar = new Create_Omnibar;

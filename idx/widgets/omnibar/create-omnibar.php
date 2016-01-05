@@ -12,7 +12,7 @@ class Create_Omnibar
     public function idx_omnibar_basic($plugin_dir, $idx_url, $styles = 1)
     {
         $mlsPtIDs = $this->idx_omnibar_default_property_types();
-        $placeholder = get_option('idx-omnibar-placeholder');
+        $placeholder = get_option('idx_omnibar_placeholder');
         if (empty($placeholder)) {
             $placeholder = 'City, Postal Code, Address, or Listing ID';
         }
@@ -40,7 +40,7 @@ EOD;
     public function idx_omnibar_extra($plugin_dir, $idx_url, $styles = 1)
     {
         $mlsPtIDs = $this->idx_omnibar_default_property_types();
-        $placeholder = get_option('idx-omnibar-placeholder');
+        $placeholder = get_option('idx_omnibar_placeholder');
         if (empty($placeholder)) {
             $placeholder = 'City, Postal Code, Address, or Listing ID';
         }
@@ -68,7 +68,7 @@ EOD;
 
     public function idx_omnibar_default_property_types()
     {
-        $mlsPtIDs = get_option('idx-default-property-types');
+        $mlsPtIDs = get_option('idx_default_property_types');
         //if no default pts have been set, add dummy values to prevent js errors
         if (empty($mlsPtIDs)) {
             $mlsPtIDs = array(
@@ -88,7 +88,7 @@ EOD;
             'extra' => 0,
         ), $atts));
 
-        $idx_url = get_option('idx-results-url');
+        $idx_url = get_option('idx_results_url');
         $plugin_dir = plugins_url();
 
         if (!empty($extra)) {
@@ -104,7 +104,7 @@ EOD;
             'styles' => 1,
         ), $atts));
 
-        $idx_url = get_option('idx-results-url');
+        $idx_url = get_option('idx_results_url');
         $plugin_dir = plugins_url();
 
         return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles);

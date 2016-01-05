@@ -70,10 +70,10 @@ class Idx_Broker_Plugin
 
     public static function idx_activate()
     {
-        if (!get_option('idx-results-url')) {
-            add_option('idx-results-url');
+        if (!get_option('idx_results_url')) {
+            add_option('idx_results_url');
         }
-        update_option('idx-broker-plugin-version', self::IDX_WP_PLUGIN_VERSION);
+        update_option('idx_plugin_version', self::IDX_WP_PLUGIN_VERSION);
 
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
         eval('$wrappers = new \IDX\Wrappers();');

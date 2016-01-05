@@ -39,7 +39,7 @@ class Initiate_Plugin
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.2';
-    const IDX_API_URL = 'https://api.idxsandbox.com/';
+    const IDX_API_URL = 'https://api.idxbroker.com/';
 
     private function set_defaults()
     {
@@ -68,7 +68,7 @@ class Initiate_Plugin
 
     public function plugin_updated()
     {
-        if (!get_option('idx-broker-plugin-version') || get_option('idx-broker-plugin-version') < \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION) {
+        if (!get_option('idx_plugin_version') || get_option('idx_plugin_version') < \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION) {
             return true;
         }
     }
@@ -77,7 +77,7 @@ class Initiate_Plugin
     {
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
-            update_option('idx-broker-plugin-version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
+            update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
             //clear old api cache
             $idx_api = new Idx_Api();
             $idx_api->idx_clean_transients();

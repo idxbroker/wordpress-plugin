@@ -61,7 +61,7 @@ class Get_Locations
     //used to retrieve all fields and create JSON objects by each idxID for each field
     public function get_additional_fields()
     {
-        $fields = get_option('idx-omnibar-custom-fields');
+        $fields = get_option('idx_omnibar_custom_fields');
         if (empty($fields)) {
             return;
         }
@@ -78,7 +78,7 @@ class Get_Locations
     public function create_custom_fields_key()
     {
         $custom_fields_key = array();
-        $fields = get_option('idx-omnibar-custom-fields');
+        $fields = get_option('idx_omnibar_custom_fields');
         if (empty($fields)) {
             return 'var customFieldsKey = {}; ';
         }
@@ -94,26 +94,26 @@ class Get_Locations
     public function get_cczs()
     {
         //Get correct CCZ List set in admin
-        $omnibar_city = get_option('idx-omnibar-current-city-list');
-        $omnibar_county = get_option('idx-omnibar-current-county-list');
-        $omnibar_zipcode = get_option('idx-omnibar-current-zipcode-list');
+        $omnibar_city = get_option('idx_omnibar_current_city_list');
+        $omnibar_county = get_option('idx_omnibar_current_county_list');
+        $omnibar_zipcode = get_option('idx_omnibar_current_zipcode_list');
         //If none is set yet, use cobinedActiveMLS
-        if (!isset($omnibar_city)) {
+        if (empty($omnibar_city)) {
             $omnibar_city = 'combinedActiveMLS';
-            update_option('idx-omnibar-current-city-list', 'combinedActiveMLS');
+            update_option('idx_omnibar_current_city_list', 'combinedActiveMLS');
         }
-        if (!isset($omnibar_county)) {
+        if (empty($omnibar_county)) {
             $omnibar_county = 'combinedActiveMLS';
-            update_option('idx-omnibar-current-county-list', 'combinedActiveMLS');
+            update_option('idx_omnibar_current_county_list', 'combinedActiveMLS');
         }
-        if (!isset($omnibar_zipcode)) {
+        if (empty($omnibar_zipcode)) {
             $omnibar_zipcode = 'combinedActiveMLS';
-            update_option('idx-omnibar-current-zipcode-list', 'combinedActiveMLS');
+            update_option('idx_omnibar_current_zipcode_list', 'combinedActiveMLS');
         }
         //grab responses for CCZs and add JSON object container for front end JavaScript
-        $cities = '"cities" : ' . json_encode($this->idx_api->idx_api("cities/$omnibar_city", $this->idx_api->idx_api_get_apiversion()));
-        $counties = ', "counties" : ' . json_encode($this->idx_api->idx_api("counties/$omnibar_county", $this->idx_api->idx_api_get_apiversion()));
-        $zipcodes = ', "zipcodes" : ' . json_encode($this->idx_api->idx_api("zipcodes/$omnibar_zipcode", $this->idx_api->idx_api_get_apiversion()));
+        $cities = '"cities" : ' . json_encode($this->idx_api->idx_api("cities/$omnibar_city"));
+        $counties = ', "counties" : ' . json_encode($this->idx_api->idx_api("counties/$omnibar_county"));
+        $zipcodes = ', "zipcodes" : ' . json_encode($this->idx_api->idx_api("postalcodes/$omnibar_zipcode"));
         return $cities . $counties . $zipcodes;
     }
 
@@ -138,11 +138,11 @@ class Get_Locations
 
             //update database with new results url
             //get base Url for client's results page for use on omnibar.js front end
-            update_option('idx-results-url', $this->idx_api->system_results_url());
+            update_option('idx_results_url', $this->idx_api->system_results_url());
             //Update city lists
-            update_option('idx-omnibar-city-lists', $city_lists);
-            update_option('idx-omnibar-county-lists', $county_lists);
-            update_option('idx-omnibar-zipcode-lists', $zipcode_lists);
+            update_option('idx_omnibar_city_lists', $city_lists);
+            update_option('idx_omnibar_county_lists', $county_lists);
+            update_option('idx_omnibar_zipcode_lists', $zipcode_lists);
 
             //If invalid API key, display error
         } else {

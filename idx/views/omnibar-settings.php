@@ -96,7 +96,7 @@ class Omnibar_Settings
                 }
             }
             //create options for each list and select currently saved option in select by default
-            $saved_list = $this->idx_saved_or_default_list(get_option('idx-omnibar-current-city-list'));
+            $saved_list = $this->idx_saved_or_default_list(get_option('idx_omnibar_current_city_list'));
             echo "<option value=\"$id\"" . selected($id, $saved_list) . ">$name</option>";
         }
         echo "</select></div><div class=\"county-list select-div\"><label>County List:</label><select name=\"county-list\">";
@@ -111,7 +111,7 @@ class Omnibar_Settings
                 }
             }
             //create options for each list and select currently saved option in select by default
-            $saved_list = $this->idx_saved_or_default_list(get_option('idx-omnibar-current-county-list'));
+            $saved_list = $this->idx_saved_or_default_list(get_option('idx_omnibar_current_county_list'));
             echo "<option value=\"$id\"" . selected($id, $saved_list) . ">$name</option>";
         }
         echo "</select></div><div class=\"zipcode-list select-div\"><label>Postal Code List:</label><select name=\"zipcode-list\">";
@@ -126,7 +126,7 @@ class Omnibar_Settings
                 }
             }
             //create options for each list and select currently saved option in select by default
-            $saved_list = $this->idx_saved_or_default_list(get_option('idx-omnibar-current-zipcode-list'));
+            $saved_list = $this->idx_saved_or_default_list(get_option('idx_omnibar_current_zipcode_list'));
             echo "<option value=\"$id\"" . selected($id, $saved_list) . ">$name</option>";
         }
         echo "</select></div></div>";
@@ -159,7 +159,7 @@ class Omnibar_Settings
             foreach ($property_types as $property_type) {
                 $mlsPtID = $property_type->mlsPtID;
                 $mlsPropertyType = $property_type->mlsPropertyType;
-                echo "<option value=\"$mlsPtID\"" . selected($mlsPtID, $this->idx_in_saved_array($mlsPtID, get_option('idx-default-property-types'), $idxID)) . ">$mlsPropertyType</option>";
+                echo "<option value=\"$mlsPtID\"" . selected($mlsPtID, $this->idx_in_saved_array($mlsPtID, get_option('idx_default_property_types'), $idxID)) . ">$mlsPropertyType</option>";
             }
             echo "</select></div>";
         }
@@ -183,7 +183,7 @@ class Omnibar_Settings
                 $mlsPtID = $field->mlsPtID;
                 if (!in_array($value, $unique_values, true) && $name !== '') {
                     array_push($unique_values, $value);
-                    echo "<option value=\"$value\"" . selected($value, $this->idx_in_saved_array($value, get_option('idx-omnibar-custom-fields'), $idxID)) . " data-mlsPtID=\"$mlsPtID\">$name</option>";
+                    echo "<option value=\"$value\"" . selected($value, $this->idx_in_saved_array($value, get_option('idx_omnibar_custom_fields'), $idxID)) . " data-mlsPtID=\"$mlsPtID\">$name</option>";
                 }
 
             }
@@ -191,7 +191,7 @@ class Omnibar_Settings
         }
         echo "</select>";
 
-        $placeholder = get_option('idx-omnibar-placeholder');
+        $placeholder = get_option('idx_omnibar_placeholder');
         if (empty($placeholder)) {
             $placeholder = "City, Postal Code, Address, or Listing ID";
         }
@@ -267,9 +267,9 @@ EOT;
         $city_list = htmlspecialchars($_POST['city-list']);
         $county_list = htmlspecialchars($_POST['county-list']);
         $zipcode_list = htmlspecialchars($_POST['zipcode-list']);
-        update_option('idx-omnibar-current-city-list', $city_list);
-        update_option('idx-omnibar-current-county-list', $county_list);
-        update_option('idx-omnibar-current-zipcode-list', $zipcode_list);
+        update_option('idx_omnibar_current_city_list', $city_list);
+        update_option('idx_omnibar_current_county_list', $county_list);
+        update_option('idx_omnibar_current_zipcode_list', $zipcode_list);
         return wp_die();
     }
 
@@ -281,9 +281,9 @@ EOT;
         } else {
             $fields = array();
         }
-        update_option('idx-omnibar-custom-fields', $fields);
-        update_option('idx-default-property-types', $_POST['mlsPtIDs']);
-        update_option('idx-omnibar-placeholder', htmlspecialchars($_POST['placeholder']));
+        update_option('idx_omnibar_custom_fields', $fields);
+        update_option('idx_default_property_types', $_POST['mlsPtIDs']);
+        update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']));
         new \IDX\Widgets\Omnibar\Get_Locations();
         return wp_die();
     }
