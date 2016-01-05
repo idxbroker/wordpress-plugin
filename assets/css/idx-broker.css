@@ -1,0 +1,208 @@
+#logo {
+    background-image: url(../images/logo-wp.png);
+    background-repeat: no-repeat;
+    background-position: bottom;
+    width: 97px;
+    height: 40px;
+    float: right;
+    padding-top:5px;
+}
+.logo-link{
+    display: inline-block;
+    margin-left: 3rem;
+}
+
+h2 {
+    display: inline-block;
+    vertical-align: top;
+    float: left;
+}
+.useful-links {
+    display: inline-block;
+}
+.help-icon {
+    margin-left: .3rem;
+}
+.help-text{
+    margin: 0 0 1rem;
+    font-style: italic;
+}
+label {
+    width: 15%;
+    display: inline-block;
+}
+.select-div label {
+    width: 20%;
+}
+.select-div select {
+    width: 300px;
+}
+
+.select-div {
+    margin: .5rem 0;
+}
+.omnibar-additional-custom-field {
+    max-width: 640px;
+    width: 100%;
+}
+.omnibar-placeholder {
+    width: 355px;
+}
+
+.saveFooter {
+    margin-top: 1rem;
+}
+.ajax{
+    background-image:url(../images/ajax-loader.gif);width:15px;height:15px;margin-left:5px;display:inline-block
+}
+/*
+*Shortcodes Button Styles
+*/
+.each_shortcode_row span {
+    padding: 5px
+}
+
+.short_code_listing_heading {
+    font-weight: bold;
+    font-size: 13px
+}
+
+#button-dialog .input_text {
+    width: 235px;
+    height: 20px;
+    border: 1px solid #999
+}
+
+#button-dialog .input_button {
+    background: none repeat scroll 0 0 transparent;
+    border: 1px solid #999;
+    font-weight: bold;
+    height: 20px;
+    width: 110px
+}
+
+#tabs_wrapper {
+    width: 222px
+}
+
+#tabs_container {
+    border-bottom: 1px solid #ccc;
+    font-size: 19px;
+    font-weight: bold
+}
+
+#tabs {
+    list-style: none;
+    padding: 5px 0 4px 0;
+    margin: 0 0 0 10px;
+    font: .75em arial
+}
+
+#tabs li {
+    display: inline
+}
+
+#tabs li a {
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+    text-decoration: none;
+    background-color: #eee;
+    border-bottom: none;
+    outline: none;
+    border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px
+}
+
+#tabs li a:hover {
+    background-color: #ddd;
+    padding: 4px 6px
+}
+
+#tabs li.active a {
+    border-bottom: 1px solid #fff;
+    background-color: #fff;
+    padding: 4px 6px 5px 6px;
+    border-bottom: none
+}
+
+#tabs li.active a:hover {
+    background-color: #eee;
+    padding: 4px 6px 5px 6px;
+    border-bottom: none
+}
+
+#tabs li a.icon_accept {
+    background-position: 5px;
+    background-repeat: no-repeat
+}
+
+#tabs_content_container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    mini border-top: none;
+    padding: 10px;
+    width: auto
+}
+
+.tab_content {
+    display: none
+}
+
+.change_title {
+    float: left;
+    padding: 5px
+}
+
+#tab1 div:nth-child(even),
+#tab2 div:nth-child(even),
+#tab3 div:nth-child(even) {
+    background: #fff
+}
+
+#tab1 div:nth-child(odd),
+#tab2 div:nth-child(odd),
+#tab3 div:nth-child(odd) {
+    background: #f1f1f1
+}
+.each_shortcode_row {
+    padding: .5rem 0;
+}
+.change_title label {
+    display: inline;
+}
+.error{
+    background: #fff;
+    border-left: 4px solid #fff;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    margin: 5px 15px 2px;
+    padding: 1rem;
+    border-color: #dd3d36;
+}
+
+@media screen and (max-width: 800px) {
+    h2 {
+        float: none;
+        width: 100%;
+    }
+    .logo-link {
+        margin: 0;
+    }
+    label {
+        width: 100%;
+    }
+    .wp-core-ui button, .wp-core-ui .button-secondary {
+        vertical-align: baseline;
+    }
+
+}
+@media screen and (max-width: 400px) {
+    .wp-core-ui button, .wp-core-ui .button-primary, .wp-core-ui .button-secondary {
+        width: 100%;
+    }
+    input[type="text"] {
+        width: 100%;
+    }
+}
