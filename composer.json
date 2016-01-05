@@ -14,5 +14,8 @@
             "name": "IDX Broker",
             "email": "info@idxbroker.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "wpreadme2markdown/wpreadme2markdown": "*"
+    }
 }
