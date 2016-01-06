@@ -3,6 +3,6 @@
 .DS_Store?
 .Trashes
 node_modules
-vendor/
+vendor
 composer.lock
 *.swp
