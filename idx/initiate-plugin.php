@@ -183,9 +183,8 @@ class Initiate_Plugin
         add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'none', 55.572);
         add_submenu_page('idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
         //Only add Omnibar page if no errors in API
-        $api_errors = $this->idx_api->idx_api_get_systemlinks()->errors;
-        $api_systemlinks = $this->idx_api->idx_api_get_systemlinks();
-        if (!isset($api_errors) && !empty($api_systemlinks)) {
+        $systemlinks = $this->idx_api->idx_api_get_systemlinks();
+        if (!is_object($systemlinks) && !empty($systemlinks)) {
             add_submenu_page('idx-broker', 'Omnibar Settings', 'Omnibar Settings', 'administrator', 'idx-omnibar-settings', array($this, 'idx_omnibar_settings_interface'));
         }
         add_action('admin_footer', array($this, 'add_upgrade_center_link'));
@@ -239,10 +238,8 @@ class Initiate_Plugin
             'href' => admin_url('admin.php?page=idx-omnibar-settings'),
         );
         //Only add Omnibar page if no errors in API
-        $api_errors = $this->idx_api->idx_api_get_systemlinks()->errors;
-        $api_systemlinks = $this->idx_api->idx_api_get_systemlinks();
-        if (!isset($api_errors) &&
-            !empty($api_systemlinks)) {
+        $systemlinks = $this->idx_api->idx_api_get_systemlinks();
+        if (!is_object($systemlinks) && !empty($systemlinks)) {
             $wp_admin_bar->add_node($args);
         }
         $args = array(
