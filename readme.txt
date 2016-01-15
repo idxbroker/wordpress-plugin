@@ -20,7 +20,7 @@ Add widgets previously only available in the Equity framework - lead login, sign
 <h4>Conventiently Add Shortcodes</h4>
 An overhauled user experience makes this plugin easy to use. Easily add new widgets to pages and posts with built-in shortcodes.
 
-<h4>Imprt Your Listings with IMPress Lstings</h4>
+<h4>Import Your Listings with IMPress Lstings</h4>
 Combine this plugin with <a href= "https://wordpress.org/plugins/wp-listings/">IMPress Listings</a> to import all your IDX properties into WordPress without wasting time on tedious data entry. You no longer have to manually enter your properties! Have them updated as the MLS changes.
 
 An overhauled user experience makes this plugin easy to use. Easily add new widgets to pages and posts with built-in shortcodes.
