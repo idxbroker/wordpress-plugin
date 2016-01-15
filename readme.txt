@@ -4,8 +4,8 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 3.7
-Tested up to: 4.4
-Stable tag: 2.0.0
+Tested up to: 4.4.1
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,8 +102,10 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 == Changelog ==
 
-= 2.0 =
+= 2.0.1 =
+* Fixed a minor issue where a notice was displaying for users with error reporting enabled.
 
+= 2.0.0 =
 * The IDX Broker plugin has been renamed as the IMPress plugin.
 * Five new WordPress native IMPress widgets and shortcodes have been added to the plugin: lead login and signup widgets, a city links widget, and showcase and carousel widgets have been added. Take advantage of these new widgets to deliver the best experience for your website visitors.
 * Each of these widgets has customization options right within WordPress including the ability to disable styling. Designers can use this to gain more control of the appearance of these widgets.
