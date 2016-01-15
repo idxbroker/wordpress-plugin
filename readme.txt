@@ -15,21 +15,21 @@ IMPress for IDX Broker is part of the IMPress family of plugins. Your IDX Broker
 <h3>IMPress for IDX Broker</h3>
 
 <h4>Native WordPress Widgets</h4>
-Add widgets previously only available in the Equity framework - lead login, signup, city links , and showcase, and carousel widgets. Take advantage of these new widgets to deliver the best experience and style them to match the design of your site.
+Add widgets previously only available in the Equity framework - lead login, signup, city links, showcase, and carousel widgets. Take advantage of these new widgets to deliver the best experience, and style them to match the design of your site.
 
 <h4>Conventiently Add Shortcodes</h4>
 An overhauled user experience makes this plugin easy to use. Easily add new widgets to pages and posts with built-in shortcodes.
 
-<h4>Import Your Listings with IMPress Lstings</h4>
-Combine this plugin with <a href= "https://wordpress.org/plugins/wp-listings/">IMPress Listings</a> to import all your IDX properties into WordPress without wasting time on tedious data entry. You no longer have to manually enter your properties! Have them updated as the MLS changes.
+<h4>Import Your Listings with IMPress Listings</h4>
+Combine this plugin with <a href="https://wordpress.org/plugins/wp-listings/">IMPress Listings</a> to import all your IDX properties into WordPress without wasting time on tedious data entry. You no longer have to manually enter your properties! Have them updated as the MLS changes.
 
 An overhauled user experience makes this plugin easy to use. Easily add new widgets to pages and posts with built-in shortcodes.
 
 <h4>Capture and Convert Your Leads</h4>
 Use our powerful lead capture tools to generate new leads. Go beyond and customize your lead capture settings with IDX Broker Platinum.
 
-<h4>New Omni-Search Widget</h4>
-This new widget allows you to add an "Omni-Search" bar to your home page. Visitors can then search by city, county, postal code, address, or listing ID. No other IDX solution offers this many options in an omni-search bar for your home page.
+<h4>New Omnibar Search Widget</h4>
+This new widget allows you to add an Omnibar Search Widget to your home page. Visitors can then search by city, county, postal code, address, or listing ID. Custom Fields such as School or Subdivision can also be added. No other IDX solution offers this many options in a search widget for your home page.
 
 <h4>Cloud Hosted, Never Framed</h4>
 The IMPress for IDX Broker plugin links to pages on your site including your IDX Broker custom subdomain. This allows multiple unique URL results for each specific search engine query, leading to the best possible SEO results and more traffic from search engines. Don't be fooled by the scare tactics used by those who suggest that IDX pages must always appear on your root WordPress domain.
