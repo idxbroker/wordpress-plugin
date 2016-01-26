@@ -26,6 +26,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         'title' => 'Account Login',
         'custom_text' => '',
         'styles' => 1,
+        'new_window' => 0,
     );
 
     /**
@@ -48,6 +49,12 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
             wp_enqueue_style('impress-lead-login', plugins_url('../assets/css/widgets/impress-lead-login.css', dirname(__FILE__)));
         }
 
+        if (!isset($instance['new_window'])) {
+            $instance['new_window'] = 0;
+        }
+
+        $target = $this->target($instance['new_window']);
+
         $title = $instance['title'];
         $custom_text = $instance['custom_text'];
 
@@ -62,7 +69,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         }
 
         ?>
-		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/userlogin.php" class="impress-lead-login" method="post" target="" name="leadLoginForm">
+		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/userlogin.php" class="impress-lead-login" method="post" target="<?php echo $target?>" name="leadLoginForm">
 			<input type="hidden" name="action" value="login">
 			<input type="hidden" name="loginWidget" value="true">
 			<label for="impress-widgetEmail"><?php _e('Email Address:', 'idxbroker');?></label>
@@ -71,6 +78,16 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
 		<?php
 
         echo $after_widget;
+    }
+
+    public function target($new_window)
+    {
+        if (!empty($new_window)) {
+            //if enabled, open links in new tab/window
+            return '_blank';
+        } else {
+            return '_self';
+        }
     }
 
     /**
@@ -88,6 +105,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         $instance['title'] = strip_tags($new_instance['title']);
         $instance['custom_text'] = htmlentities($new_instance['custom_text']);
         $instance['styles'] = (int) $new_instance['styles'];
+        $instance['new_window'] = strip_tags($new_instance['new_window']);
 
         return $instance;
     }
@@ -120,6 +138,11 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         <p>
             <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open in a New Window?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
 
 		<?php

@@ -30,6 +30,7 @@ class Impress_City_Links_Widget extends \WP_Widget
         'use_columns' => 0,
         'number_columns' => 4,
         'styles' => 1,
+        'new_window' => 0,
     );
 
     /**
@@ -52,6 +53,12 @@ class Impress_City_Links_Widget extends \WP_Widget
             wp_enqueue_style('impress-city-links', plugins_url('../assets/css/widgets/impress-city-links.css', dirname(__FILE__)));
         }
 
+        if (!isset($instance['new_window'])) {
+            $instance['new_window'] = 0;
+        }
+
+        $target = $this->target($instance['new_window']);
+
         $title = $instance['title'];
 
         echo $before_widget;
@@ -71,7 +78,7 @@ class Impress_City_Links_Widget extends \WP_Widget
             echo 'Invalid MLS IDX ID. Email help@idxbroker.com to get your MLS IDX ID';
         } else {
             echo "<div class=\"impress-city-links\">";
-            echo $this->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns']);
+            echo $this->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns'], $target);
             echo "</div>";
         }
 
@@ -96,6 +103,7 @@ class Impress_City_Links_Widget extends \WP_Widget
         $instance['use_columns'] = (int) $new_instance['use_columns'];
         $instance['number_columns'] = (int) $new_instance['number_columns'];
         $instance['styles'] = (int) $new_instance['styles'];
+        $instance['new_window'] = (int) $new_instance['new_window'];
 
         return $instance;
     }
@@ -150,6 +158,11 @@ class Impress_City_Links_Widget extends \WP_Widget
             <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
         </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open Links in a New Window?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
+        </p>
 		<p>Don't have any city lists? Go create some in your <a href="http://middleware.idxbroker.com/mgmt/citycountyziplists.php" target="_blank">IDX dashboard.</a></p>
 		<?php
 }
@@ -203,6 +216,16 @@ class Impress_City_Links_Widget extends \WP_Widget
         return $output;
     }
 
+    public function target($new_window)
+    {
+        if (!empty($new_window)) {
+            //if enabled, open links in new tab/window
+            return '_blank';
+        } else {
+            return '_self';
+        }
+    }
+
     /**
      * Returns an unordered list of city links
      *
@@ -210,7 +233,7 @@ class Impress_City_Links_Widget extends \WP_Widget
      * @param bool $columns if true adds column classes to the ul tags
      * @param int $number_of_columns optional total number of columns to split the links into
      */
-    public static function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4)
+    public static function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4, $target)
     {
         $idx_api = new \IDX\Idx_Api();
         $cities = $idx_api->city_list($list_id);
@@ -277,7 +300,18 @@ class Impress_City_Links_Widget extends \WP_Widget
             if (!empty($city->name) && !empty($city->id) && !in_array($city->id, $cities_list) && $city->name !== 'Other' && $city->name !== 'Out of State' && $city->name !== 'Out of Area') {
                 //avoid duplicates by keeping track of cities already used
                 array_push($cities_list, $city->id);
-                $output .= "\n\t\t" . '<li>' . "\n\t\t\t" . '<a href="' . $href . '">' . $city->name . '</a>' . "\n\t\t" . '</li>';
+                $output .= "\n\t\t" .
+                '<li>' .
+                "\n\t\t\t" .
+                '<a href="' .
+                $href .
+                '" target="' .
+                $target .
+                '">' .
+                $city->name .
+                '</a>' .
+                "\n\t\t" .
+                '</li>';
             }
 
             if (true == $columns && $count % $column_size == 0 && $count != 1 && $count != $number_links) {
