@@ -39,7 +39,7 @@ class Idx_Broker_Plugin
      */
     public function php_version_check()
     {
-        if (phpversion() < 5.3) {
+        if (PHP_VERSION < 5.3) {
             add_action('admin_init', array($this, 'idx_deactivate_plugin'));
             add_action('admin_notices', array($this, 'incompatible_message'));
             return false;
