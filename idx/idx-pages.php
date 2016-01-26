@@ -299,6 +299,16 @@ class Idx_Pages
         update_user_meta($user->ID, 'idx_user_first_login', 'user_first_login_false');
     }
 
+    public function display_wrapper_dropdown()
+    {
+        //only show dropdown if Platinum account or not saved link
+        //(Lite does not support saved link wrappers)
+        if ($this->idx_api->platinum_account_type() ||
+            !$this->is_saved_link(get_the_ID())) {
+            return true;
+        }
+    }
+
     public function wrapper_page_dropdown()
     {
         $post_id = get_the_ID();
@@ -321,7 +331,8 @@ class Idx_Pages
         echo '</select>';
     }
 
-    //dynamic wrapper requires the pageID, not the UID, so we must strip out the account number from the UID
+    //dynamic wrapper requires the pageID, not the UID,
+    //so we must strip out the account number from the UID
     public function convert_uid_to_id($uid)
     {
         return substr($uid, strpos($uid, '-') + 1);
@@ -362,10 +373,22 @@ class Idx_Pages
         }
     }
 
+    public function is_saved_link($post_id)
+    {
+        $post = get_post($post_id);
+        $url = $post->post_name;
+        $saved_links = $this->idx_api->idx_api_get_savedlinks();
+        foreach ($saved_links as $link) {
+            if ($link->url === $url) {
+                return true;
+            }
+        }
+    }
+
     public function add_meta_box($post_type)
     {
         $post_types = array('idx_page'); //limit meta box to certain post types
-        if (in_array($post_type, $post_types)) {
+        if (in_array($post_type, $post_types) && $this->display_wrapper_dropdown()) {
             add_meta_box(
                 'set_wrapper_page',
                 'Apply Page Wrapper',
