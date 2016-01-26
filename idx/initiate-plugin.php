@@ -17,6 +17,7 @@ class Initiate_Plugin
         add_action('admin_menu', array($this, 'idx_broker_platinum_options_init'));
         add_action('admin_bar_init', array($this, 'load_admin_menu_styles'));
         add_action('admin_bar_menu', array($this, 'add_admin_bar_menu'), 999.125);
+        add_action('admin_init', array($this, 'disable_original_plugin'));
         add_action('admin_enqueue_scripts', array($this, 'idx_inject_script_and_style'));
         add_action('wp_ajax_idx_refresh_api', array($this, 'idx_refreshapi'));
 
@@ -271,7 +272,16 @@ class Initiate_Plugin
 
     public function backwards_compatibility()
     {
+        //add legacy idx-start functions for older themes
         include 'backwards-compatibility.php';
+    }
+
+    public function disable_original_plugin()
+    {
+        //disable IDX Original Plugin if enabled
+        if (is_plugin_active('idx-broker-wordpress-plugin/idx_broker.php')) {
+            deactivate_plugins('idx-broker-wordpress-plugin/idx_broker.php');
+        }
     }
 
 /**
