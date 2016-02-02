@@ -5,9 +5,11 @@ class Blacklist {
     public function __construct(){
         //convert visitor IP to long format to match API response
         $this->visitor = ip2long($_SERVER['REMOTE_ADDR']);
+        //for testing blacklist functionality:
+        // $this->visitor = "1572208640";
         $this->idx_api = new Idx_Api();
         //load function after Equity is loaded
-        add_action('wp_loaded', array($this, 'pass_or_fail'));
+        add_action('init', array($this, 'pass_or_fail'));
     }
 
     //visitor IP address
@@ -33,6 +35,7 @@ class Blacklist {
         //redirect blocked IPs
         if($this->in_blacklist($this->visitor)){
             header("Location: http://middleware.idxbroker.com/docs/403.php");
+            exit;
         }
     }
 }
