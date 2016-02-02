@@ -3,10 +3,11 @@ namespace IDX;
 
 class Blacklist {
     public function __construct(){
+        //convert visitor IP to long format to match API response
         $this->visitor = ip2long($_SERVER['REMOTE_ADDR']);
         $this->idx_api = new Idx_Api();
+        //load function after Equity is loaded
         add_action('wp_loaded', array($this, 'pass_or_fail'));
-
     }
 
     //visitor IP address
@@ -25,6 +26,10 @@ class Blacklist {
     }
 
     public function pass_or_fail(){
+        //only blacklist if Equity is being used
+        if(!function_exists('equity')){
+            return;
+        }
         //redirect blocked IPs
         if($this->in_blacklist($this->visitor)){
             header("Location: http://middleware.idxbroker.com/docs/403.php");
