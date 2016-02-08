@@ -12,7 +12,10 @@ class Wrappers
         add_action('wp_enqueue_scripts', array($this, 'wrapper_styles'));
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
         add_action('save_post', array($this, 'set_wrapper_page'));
+        $this->idx_api = new Idx_Api();
     }
+
+    public $idx_api;
 
     public function register_wrapper_post_type()
     {
@@ -105,8 +108,7 @@ class Wrappers
         update_option('idx_broker_dynamic_wrapper_page_name', $post_title);
         update_option('idx_broker_dynamic_wrapper_page_id', $wrapper_page_id);
         $wrapper_page_url = get_permalink($wrapper_page_id);
-        $idx_api = new Idx_Api();
-        $idx_api->set_wrapper('global', $wrapper_page_url);
+        $this->idx_api->set_wrapper('global', $wrapper_page_url);
         update_post_meta($wrapper_page_id, 'idx-wrapper-page', 'global');
 
         die(json_encode(array("wrapper_page_id" => $wrapper_page_id, "wrapper_page_name" => $post_title)));
@@ -150,11 +152,14 @@ class Wrappers
             $id = $this->convert_uid_to_id($uid);
             echo "<option value=\"$id\" {$this->is_selected($id)}>$name</option>";
         }
-        foreach ($saved_links as $saved_link) {
-            $id = $saved_link->id;
-            $name = $saved_link->linkTitle;
-            echo "<option value=\"$id\" {$this->is_selected($id)}>$name</option>";
+        if ($this->idx_api->platinum_account_type()) {
+            foreach ($saved_links as $saved_link) {
+                $id = $saved_link->id;
+                $name = $saved_link->linkTitle;
+                echo "<option value=\"$id\" {$this->is_selected($id)}>$name</option>";
+            }
         }
+
         echo '</select>';
     }
 
@@ -164,9 +169,8 @@ class Wrappers
         // This UI should display the current page set
         // when saving a post, save the meta of which page is set
 
-        $idx_api = new Idx_Api();
-        $system_links = $idx_api->idx_api_get_systemlinks();
-        $saved_links = $idx_api->idx_api_get_savedlinks();
+        $system_links = $this->idx_api->idx_api_get_systemlinks();
+        $saved_links = $this->idx_api->idx_api_get_savedlinks();
         wp_nonce_field('idx-wrapper-page', 'idx-wrapper-page-nonce');
         $this->wrapper_page_dropdown($system_links, $saved_links);
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
@@ -203,13 +207,12 @@ class Wrappers
         }
         $meta_value = $_POST['idx-wrapper-page'];
         $meta_value = sanitize_text_field($meta_value);
-        $idx_api = new Idx_Api();
         if (!$this->verify_permissions()) {
             return $post_id;
         }
 
         //logic for what type of idx page is in Idx_Api class
-        $idx_api->set_wrapper($meta_value, $wrapper_page_url);
+        $this->idx_api->set_wrapper($meta_value, $wrapper_page_url);
         update_post_meta($post_id, 'idx-wrapper-page', $meta_value);
     }
 
