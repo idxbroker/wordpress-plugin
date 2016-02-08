@@ -28,6 +28,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         'custom_text' => '',
         'phone_number' => false,
         'styles' => 1,
+        'new_window' => 0,
     );
 
     /**
@@ -50,6 +51,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             wp_enqueue_style('impress-lead-signup', plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)));
         }
 
+        if (!isset($instance['new_window'])) {
+            $instance['new_window'] = 0;
+        }
+
+        $target = $this->target($instance['new_window']);
+
         $title = $instance['title'];
         $custom_text = $instance['custom_text'];
 
@@ -64,7 +71,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         }
 
         ?>
-		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="" name="LeadSignup">
+		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="<?php echo $target?>" name="LeadSignup">
 			<input type="hidden" name="action" value="addLead">
 			<input type="hidden" name="signupWidget" value="true">
 			<input type="hidden" name="contactType" value="direct">
@@ -91,6 +98,16 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         echo $after_widget;
     }
 
+    public function target($new_window)
+    {
+        if (!empty($new_window)) {
+            //if enabled, open links in new tab/window
+            return '_blank';
+        } else {
+            return '_self';
+        }
+    }
+
     /**
      * Sanitize widget form values as they are saved.
      *
@@ -107,6 +124,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         $instance['custom_text'] = htmlentities($new_instance['custom_text']);
         $instance['phone_number'] = $new_instance['phone_number'];
         $instance['styles'] = (int) $new_instance['styles'];
+        $instance['new_window'] = strip_tags($new_instance['new_window']);
 
         return $instance;
     }
@@ -142,6 +160,11 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         <p>
             <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open in a New Window?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
 		<?php
 
