@@ -1,4 +1,4 @@
-# IMPress for IDX Broker Wordpress Plugin #
+# IMPress for IDX Broker #
 
 **Author:** IDX, LLC
 

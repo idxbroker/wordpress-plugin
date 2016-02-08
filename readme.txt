@@ -1,4 +1,4 @@
-=== IMPress for IDX Broker Wordpress Plugin ===
+=== IMPress for IDX Broker ===
 Author: IDX, LLC
 Contributors: idxco
 Author URL: http://www.idxbroker.com
