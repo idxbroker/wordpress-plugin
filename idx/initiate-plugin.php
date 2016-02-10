@@ -42,6 +42,7 @@ class Initiate_Plugin
 
     public function instantiate_classes()
     {
+        $this->app->make('\IDX\Wrappers');
         $this->app->make('\IDX\Idx_Pages');
         $this->app->make('\IDX\Widgets\Create_Idx_Widgets');
         $this->app->make('\IDX\Shortcodes\Register_Idx_Shortcodes');
