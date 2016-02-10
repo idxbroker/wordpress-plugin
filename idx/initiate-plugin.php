@@ -37,6 +37,7 @@ class Initiate_Plugin
         new Shortcodes\Shortcode_Ui();
         new Help();
         new \IDX\Views\Omnibar_Settings();
+        new Review_Prompt();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.2';
@@ -79,6 +80,8 @@ class Initiate_Plugin
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
             update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
+            //set to prompt for review in one week
+            IDX\Review_Prompt::set_timestamp();
             //clear old api cache
             $idx_api = new Idx_Api();
             $idx_api->idx_clean_transients();
