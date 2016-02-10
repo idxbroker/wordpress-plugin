@@ -3,6 +3,7 @@
 .DS_Store?
 .Trashes
 node_modules
-vendor
+vendor/*
+!vendor/illuminate
 composer.lock
 *.swp
