@@ -24,6 +24,7 @@ class Create_Impress_Widgets
     public $idx_api;
     public $app;
 
+    //use our own register function to allow dependency injection via the IoC container
     public function register_widget($widget_name)
     {
         global $wp_widget_factory;
