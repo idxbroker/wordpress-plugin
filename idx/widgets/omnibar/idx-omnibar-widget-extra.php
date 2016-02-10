@@ -3,8 +3,10 @@ namespace IDX\Widgets\Omnibar;
 
 class IDX_Omnibar_Widget_Extra extends \WP_Widget
 {
-    public function __construct()
+    public function __construct(Create_Omnibar $create_omnibar)
     {
+        $this->create_omnibar = $create_omnibar;
+
         $widget_ops = array('classname' => 'IDX_Omnibar_Widget_Extra', 'description' => 'An Omnibar Search Widget with extra fields for use with IDX WordPress Sites');
         parent::__construct('IDX_Omnibar_Widget_Extra', 'IMPress Omnibar With Extra Fields', $widget_ops);
     }
@@ -59,8 +61,7 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
         $idx_url = get_option('idx_results_url');
 
         // Widget HTML:
-        $create_omnibar = new Create_Omnibar;
-        echo $create_omnibar->idx_omnibar_extra($plugin_dir, $idx_url, $instance['styles']);
+        echo $this->create_omnibar->idx_omnibar_extra($plugin_dir, $idx_url, $instance['styles']);
         echo $after_widget;
     }
 }

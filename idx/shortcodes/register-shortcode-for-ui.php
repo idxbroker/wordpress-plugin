@@ -4,9 +4,9 @@ namespace IDX\Shortcodes;
 class Register_Shortcode_For_Ui
 {
 
-    public function __construct()
+    public function __construct(\IDX\Idx_Api $idx_api)
     {
-        $this->idx_api = new \IDX\Idx_Api();
+        $this->idx_api = $idx_api;
         add_action('wp_ajax_idx_shortcode_options', array($this, 'get_shortcode_options'));
         add_action('wp_ajax_idx_shortcode_preview', array($this, 'shortcode_preview'));
     }
