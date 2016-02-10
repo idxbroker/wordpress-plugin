@@ -37,10 +37,11 @@ class Initiate_Plugin
         new Shortcodes\Shortcode_Ui();
         new Help();
         new \IDX\Views\Omnibar_Settings();
+        new Blacklist();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.2';
-    const IDX_API_URL = 'https://api.idxbroker.com/';
+    const IDX_API_URL = 'https://api.idxstaging.com';
 
     private function set_defaults()
     {
