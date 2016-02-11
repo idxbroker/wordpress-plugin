@@ -38,10 +38,11 @@ class Initiate_Plugin
         new Help();
         new \IDX\Views\Omnibar_Settings();
         new Review_Prompt();
+        new Blacklist();
     }
 
     const IDX_API_DEFAULT_VERSION = '1.2.2';
-    const IDX_API_URL = 'https://api.idxbroker.com/';
+    const IDX_API_URL = 'https://api.idxstaging.com';
 
     private function set_defaults()
     {
