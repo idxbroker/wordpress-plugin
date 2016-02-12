@@ -7,7 +7,7 @@ class Initiate_Plugin
     {
         //Use Laravel's IoC Container for Class Instantiation
         $this->app = new \Illuminate\Container\Container();
-        new IoC($this->app);
+        new Ioc($this->app);
 
         $this->set_defaults();
 
