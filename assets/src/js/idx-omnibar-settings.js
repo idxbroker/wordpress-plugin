@@ -106,15 +106,17 @@ window.addEventListener('DOMContentLoaded', function(){
 
     function removeErrors()
     {
+        document.querySelectorAll('.select2-container--default')[0].classList.remove('warning');
         errorMessage.style.display = 'none';
         errorMessage.querySelector('p').innerHTML = '';
     }
 
     function customFieldError(optionName)
     {
-        var message = optionName + ' is not a Custom Field in the selected property type for this MLS. Please choose a different Custom Field from within the selected MLS Specific Property Type.<br>';
+        var message = optionName + ' is not in the selected property type. Please choose a Custom Field within the selected MLS Specific Property Type.<br>';
         errorMessage.querySelector('p').insertAdjacentHTML('beforeend', message);
         errorMessage.style.display = 'block';
+        document.querySelectorAll('.select2-container--default')[0].classList.add('warning')
     }
 
     function updateOmnibarCurrentCcz(){

@@ -82,6 +82,10 @@ label {
     display: none;
 }
 
+.select2.warning {
+    border: 1px solid #DC3232;
+}
+
 @media screen and (max-width: 800px) {
     h2 {
         float: none;
