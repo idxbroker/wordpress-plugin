@@ -74,6 +74,14 @@ label {
     width: 18.5%;
 }
 
+.select2-results__option[aria-disabled="true"] {
+    display: none;
+}
+
+.customFieldError {
+    display: none;
+}
+
 @media screen and (max-width: 800px) {
     h2 {
         float: none;

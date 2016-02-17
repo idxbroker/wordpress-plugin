@@ -97,7 +97,7 @@ class Omnibar_Settings
             }
             //create options for each list and select currently saved option in select by default
             $saved_list = $this->idx_saved_or_default_list(get_option('idx_omnibar_current_city_list'));
-            echo "<option value=\"$id\"" . selected($id, $saved_list) . ">$name</option>";
+            echo "<option value=\"$id\"" . selected($id, $saved_list, false) . ">$name</option>";
         }
         echo "</select></div><div class=\"county-list select-div\"><label>County List:</label><select name=\"county-list\">";
         //Counties
@@ -112,7 +112,7 @@ class Omnibar_Settings
             }
             //create options for each list and select currently saved option in select by default
             $saved_list = $this->idx_saved_or_default_list(get_option('idx_omnibar_current_county_list'));
-            echo "<option value=\"$id\"" . selected($id, $saved_list) . ">$name</option>";
+            echo "<option value=\"$id\"" . selected($id, $saved_list, false) . ">$name</option>";
         }
         echo "</select></div><div class=\"zipcode-list select-div\"><label>Postal Code List:</label><select name=\"zipcode-list\">";
         //Zipcodes
@@ -127,29 +127,35 @@ class Omnibar_Settings
             }
             //create options for each list and select currently saved option in select by default
             $saved_list = $this->idx_saved_or_default_list(get_option('idx_omnibar_current_zipcode_list'));
-            echo "<option value=\"$id\"" . selected($id, $saved_list) . ">$name</option>";
+            echo "<option value=\"$id\"" . selected($id, $saved_list, false) . ">$name</option>";
         }
         echo "</select></div></div>";
         //Advanced Fields:
         $all_mls_fields = $this->idx_omnibar_advanced_fields();
 
         //Default property type for each MLS
+        $default_property_type = get_option('idx_default_property_types');
         echo "<h3>Property Type</h3><div class=\"idx-property-types\">";
         echo "<div class=\"help-text\">Choose the property type for default and custom fields Omnibar searches.</div>";
         ?>
+
         <div class="select-div">
             <label for="basic">Default Property Type:</label><select class="omnibar-mlsPtID" name="basic">
-                <option value="sfr">Single Family Residential</option>
-                <option value="com">Commercial</option>
-                <option value="ld">Lots and Land</option>
-                <option value="mfr">Multifamily Residential</option>
-                <option value="rnt">Rentals</option>
+            <option <?php selected('all', $this->idx_in_saved_array('all', $default_property_type, 'basic')) ?> value="all">All Property Types</option>
+        
+                <option <?php selected('sfr', $this->idx_in_saved_array('sfr', $default_property_type, 'basic')) ?> value="sfr">Single Family Residential</option>
+                <option <?php selected('com', $this->idx_in_saved_array('com', $default_property_type, 'basic')) ?> value="com">Commercial</option>
+                <option <?php selected('ld', $this->idx_in_saved_array('ld', $default_property_type, 'basic')) ?> value="ld">Lots and Land</option>
+                <option <?php selected('mfr', $this->idx_in_saved_array('mfr', $default_property_type, 'basic')) ?> value="mfr">Multifamily Residential</option>
+                <option <?php selected('rnt', $this->idx_in_saved_array('rnt', $default_property_type, 'basic')) ?> value="rnt">Rentals</option>
             </select>
         </div>
+
         <div class="mls-specific-pt">
             <h4>MLS Specific Property Type (For Custom Fields Searches)</h4>
-            <?php
-
+        <?php
+        // store array of property type names, idxIDs, and  mlsPtIDs
+        $mls_pt_key = array();
         foreach ($all_mls_fields[1] as $mls) {
             $mls_name = $mls['mls_name'];
             $idxID = $mls['idxID'];
@@ -159,7 +165,9 @@ class Omnibar_Settings
             foreach ($property_types as $property_type) {
                 $mlsPtID = $property_type->mlsPtID;
                 $mlsPropertyType = $property_type->mlsPropertyType;
-                echo "<option value=\"$mlsPtID\"" . selected($mlsPtID, $this->idx_in_saved_array($mlsPtID, get_option('idx_default_property_types'), $idxID)) . ">$mlsPropertyType</option>";
+                // for finding property type name for custom fields
+                array_push($mls_pt_key, array('idxID' => $idxID, 'mlsPtID' => $mlsPtID, 'mlsPropertyType' => $mlsPropertyType));
+                echo "<option value=\"$mlsPtID\"" . selected($mlsPtID, $this->idx_in_saved_array($mlsPtID, get_option('idx_default_property_types'), $idxID, $mlsPtID), false) . ">$mlsPropertyType</option>";
             }
             echo "</select></div>";
         }
@@ -169,26 +177,11 @@ class Omnibar_Settings
         //echo them as one select
         echo "<h3>Custom Fields</h3>";
         echo "<div class=\"help-text\">By default the omnibar searches by City, County, Postal Code, Address, or Listing ID. Add up to 10 custom fields to be used as well.<div><i>Examples: High School, Area, Subdivision</i></div></div>";
+        echo "<div class=\"customFieldError error\"><p></p></div>";
         echo "<select class=\"omnibar-additional-custom-field select2\" name=\"omnibar-additional-custom-field\" multiple=\"multiple\">";
-        foreach ($all_mls_fields[0] as $mls) {
-            $mls_name = $mls['mls_name'];
-            $idxID = $mls['idxID'];
-            echo "<optgroup label=\"$mls_name\" class=\"$idxID\">";
-            $fields = json_decode($mls['field_names']);
-            //make sure field names only appear once per MLS
-            $unique_values = array();
-            foreach ($fields as $field) {
-                $name = $field->displayName;
-                $value = $field->name;
-                $mlsPtID = $field->mlsPtID;
-                if (!in_array($value, $unique_values, true) && $name !== '') {
-                    array_push($unique_values, $value);
-                    echo "<option value=\"$value\"" . selected($value, $this->idx_in_saved_array($value, get_option('idx_omnibar_custom_fields'), $idxID)) . " data-mlsPtID=\"$mlsPtID\">$name</option>";
-                }
+        
+        echo $this->get_all_custom_fields($all_mls_fields[0], $mls_pt_key);
 
-            }
-            echo "</optgroup>";
-        }
         echo "</select>";
 
         $placeholder = get_option('idx_omnibar_placeholder');
@@ -213,17 +206,32 @@ EOT;
 
     }
 
-    public function idx_in_saved_array($name, $array, $idxID)
+    // find the display name of the mls property type
+    public function find_property_type($idxID, $mlsPtID, $mls_pt_key)
+    {
+        foreach($mls_pt_key as $mls_pt){
+            if($mls_pt['idxID'] === $idxID && $mls_pt['mlsPtID'] === $mlsPtID){
+                return $mls_pt['mlsPropertyType'];
+            }
+        }
+    }
+
+    public function idx_in_saved_array($name, $array, $idxID, $mlsPtID = null)
     {
         if (empty($array)) {
             return false;
         }
         foreach ($array as $field) {
-            if (in_array($name, $field) && in_array($idxID, $field)) {
+            //for when mlsptid is irrelevant, do not throw errors
+            if($mlsPtID === null){
+                $mlsPtID = $idxID;
+            } 
+            if (in_array($name, $field) && in_array($idxID, $field) && in_array($mlsPtID, $field)) {
                 return $name;
             }
         }
     }
+
     public function idx_saved_or_default_list($list_name)
     {
         if (empty($list_name)) {
@@ -258,6 +266,46 @@ EOT;
         return array(array_unique($all_mls_fields, SORT_REGULAR), $all_mlsPtIDs);
     }
 
+    public function get_all_custom_fields($mls_fields, $mls_pt_key)
+    {
+        $output = '';
+        $mls_list = $this->idx_api->approved_mls();
+        foreach($mls_list as $mls){
+            $idxID = $mls->id;
+            if($idxID !== 'basic'){
+                $output .= $this->get_custom_fields($idxID, $mls_fields, $mls_pt_key);
+            }
+        }
+        return $output;
+    }
+
+    public function get_custom_fields($idxID, $mls_fields, $mls_pt_key)
+    {
+        $output = '';
+        foreach ($mls_fields as $mls) {
+            $mls_name = $mls['mls_name'];
+            if($idxID === $mls['idxID']){
+
+                $output .= "<optgroup label=\"$mls_name\" class=\"$idxID\">";
+                $fields = json_decode($mls['field_names']);
+                //make sure field names only appear once per MLS
+                foreach ($fields as $field) {
+                    $name = $field->displayName;
+                    $value = $field->name;
+                    $mlsPtID = $field->mlsPtID;
+                    //find property type name
+                    $mls_property_type = $this->find_property_type($idxID, $mlsPtID, $mls_pt_key);
+                    if ($name !== '') {
+                        $output .= "<option value=\"$value\"" . selected($value, $this->idx_in_saved_array($value, get_option('idx_omnibar_custom_fields'), $idxID, $mlsPtID), false) . 
+                            " data-mlsPtID=\"$mlsPtID\" title=\"$name ($mls_name - $mls_property_type) \">$name</option>";
+                    }
+
+                }
+                $output .= "</optgroup>";
+            }
+        }
+        return $output;
+    }
     /** Update Saved CCZ Lists for Omnibar when Admin form is saved
      * @param void
      */
