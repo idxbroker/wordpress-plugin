@@ -272,8 +272,8 @@ class Register_Shortcode_For_Ui
             'new_window' => 0,
         );
 
-        $approved_mls = \IDX\Widgets\Impress_City_Links_Widget::mls_options($defaults);
-        $city_list_options = \IDX\Widgets\Impress_City_Links_Widget::city_list_options($defaults);
+        $approved_mls = \IDX\Widgets\Impress_City_Links_Widget::mls_options($defaults, $this->idx_api);
+        $city_list_options = \IDX\Widgets\Impress_City_Links_Widget::city_list_options($defaults, $this->idx_api);
 
         $output = '';
         // MLS
