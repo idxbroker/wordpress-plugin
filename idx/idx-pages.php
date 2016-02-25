@@ -10,12 +10,12 @@ class Idx_Pages
         // $this->delete_all_idx_pages();
 
         add_action('admin_init', array($this, 'show_idx_pages_metabox_by_default'));
-
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
         add_filter('cron_schedules', array($this, 'add_fifteen_minutes_schedule'));
 
-        //register hook for WP Cron to use
-        add_action('idx-update-idx-pages', array($this, 'update_idx_pages'));
+        //register hooks for WP Cron to use to update IDX Pages
+        add_action('idx_create_idx_pages', array($this, 'create_idx_pages'));
+        add_action('idx_delete_idx_pages', array($this, 'delete_idx_pages'));
 
         add_action('init', array($this, 'register_idx_page_type'));
         add_action('admin_init', array($this, 'manage_idx_page_capabilities'));
@@ -42,24 +42,22 @@ class Idx_Pages
    public static function schedule_idx_page_update($single = false)
    {
        if ($single) {
-           return wp_schedule_single_event(time(), 'idx-update-idx-pages');
+           wp_schedule_single_event(time(), 'idx_create_idx_pages');
+           return wp_schedule_single_event(time(), 'idx_delete_idx_pages');
        }
-       if (!wp_next_scheduled('idx-update-idx-pages')) {
-           wp_schedule_event(time(), 'fifteenminutes', 'idx-update-idx-pages');
+       if (!wp_next_scheduled('idx_create_idx_pages')) {
+           wp_schedule_event(time(), 'fifteenminutes', 'idx_create_idx_pages');
+       }
+       if(!wp_next_scheduled('idx_delete_idx_pages')) {
+           wp_schedule_event(time(), 'fifteenminutes', 'idx_delete_idx_pages');
        }
    }
 
     //to be called on plugin deactivation
     public static function unschedule_idx_page_update()
     {
-        wp_clear_scheduled_hook('idx-update-idx-pages');
-    }
-
-    //creates new idx pages not yet included and deletes irrelevant ones
-    public function update_idx_pages()
-    {
-        $this->create_idx_pages();
-        $this->delete_idx_pages();
+        wp_clear_scheduled_hook('idx_create_idx_pages');
+        wp_clear_scheduled_hook('idx_delete_idx_pages');
     }
 
     public function register_idx_page_type()
@@ -75,8 +73,8 @@ class Idx_Pages
             'new_item' => 'New IDX Page',
             'view_item' => 'View IDX Page',
             'search_items' => 'Search IDX Pages',
-            'not_found' => 'No idx_pages found',
-            'not_found_in_trash' => 'No idx_pages found in Trash',
+            'not_found' => 'No IDX Pages found',
+            'not_found_in_trash' => 'No IDX Pages found in Trash',
             'parent_item_colon' => '',
             'parent' => 'Parent IDX Page',
         );
