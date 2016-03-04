@@ -94,7 +94,7 @@ class Initiate_Plugin
             //update db option and update omnibar data
             update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION); 
             //set to prompt for review in one week
-            IDX\Review_Prompt::set_timestamp();
+            \IDX\Review_Prompt::set_timestamp();
             //clear old api cache
             $this->idx_api->idx_clean_transients();
             $this->idx_omnibar_get_locations();
