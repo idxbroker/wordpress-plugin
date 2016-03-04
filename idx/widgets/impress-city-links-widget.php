@@ -78,7 +78,7 @@ class Impress_City_Links_Widget extends \WP_Widget
             echo 'Invalid MLS IDX ID. Email help@idxbroker.com to get your MLS IDX ID';
         } else {
             echo "<div class=\"impress-city-links\">";
-            echo $this->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns'], $target);
+            echo $this->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns'], $target, $this->idx_api);
             echo "</div>";
         }
 
@@ -133,13 +133,13 @@ class Impress_City_Links_Widget extends \WP_Widget
 		<p>
 			<label for="<?php echo $this->get_field_id('mls');?>">MLS to use for the city links: *required*</label>
 			<select class="widefat" id="<?php echo $this->get_field_id('mls');?>" name="<?php echo $this->get_field_name('mls');?>">
-				<?php echo $this->mls_options($instance);?>
+				<?php echo $this->mls_options($instance, $this->idx_api);?>
 			</select>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id('city_list');?>">Select a city list:</label>
 			<select class="widefat" id="<?php echo $this->get_field_id('city_list');?>" name="<?php echo $this->get_field_name('city_list')?>">
-				<?php echo $this->city_list_options($instance);?>
+				<?php echo $this->city_list_options($instance, $this->idx_api);?>
 			</select>
 		</p>
 		<p>

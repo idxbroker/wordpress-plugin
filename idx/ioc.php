@@ -55,9 +55,13 @@ class Ioc
 
             return new Widgets\Impress_Lead_Login_Widget($this->idx_api());
         });
+        $app->bind('\IDX\Widgets\Impress_Lead_Signup_Widget', function ($app) {
+
+            return new Widgets\Impress_Lead_Signup_Widget($this->idx_api());
+        });
         $app->bind('\IDX\Widgets\Impress_Showcase_Widget', function ($app) {
 
-            return new Widgets\Impress_Lead_Login_Widget($this->idx_api());
+            return new Widgets\Impress_Showcase_Widget($this->idx_api());
         });
         $app->bind('\IDX\Widgets\IDX_Omnibar_Widget', function ($app) {
 
