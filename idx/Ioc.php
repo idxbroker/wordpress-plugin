@@ -87,16 +87,19 @@ class Ioc
             return new Shortcodes\Register_Shortcode_For_Ui($this->idx_api());
         });
         $app->bind('\IDX\Help', function ($app) {
-
             return new Help;
         });
         $app->bind('\IDX\Views\Omnibar_Settings', function ($app) {
-
             return new Views\Omnibar_Settings($this->idx_api());
         });
         $app->bind('\IDX\Migrate_Old_Table', function ($app) {
-
             return new Migrate_Old_Table($this->idx_api());
+        });
+        $app->bind('\IDX\Review_Prompt', function ($app) {
+            return new Review_Prompt();
+        });
+        $app->bind('\IDX\Blacklist', function ($app) {
+            return new Blacklist();
         });
     }
 }

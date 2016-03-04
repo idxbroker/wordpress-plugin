@@ -40,7 +40,7 @@ class Idx_Broker_Plugin
      */
     public function php_version_check()
     {
-        if (phpversion() < 5.3) {
+        if (PHP_VERSION < 5.3) {
             add_action('admin_init', array($this, 'idx_deactivate_plugin'));
             add_action('admin_notices', array($this, 'incompatible_message'));
             return false;
@@ -75,6 +75,10 @@ class Idx_Broker_Plugin
             add_option('idx_results_url');
         }
         update_option('idx_plugin_version', self::IDX_WP_PLUGIN_VERSION);
+
+        //set timestamp to one week from activation to prompt user for plugin review
+        eval('IDX\Review_Prompt::set_timestamp();');
+
 
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
         eval('$idx_api = new \IDX\Idx_Api();');

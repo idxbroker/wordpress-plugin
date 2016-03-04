@@ -356,13 +356,17 @@ class Register_Shortcode_For_Ui
         }
         $output .= "</select>";
         $output .= "</div>";
-        //Saved Link ID
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-        $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
-        $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
-        $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
-        $output .= "</select>";
-        $output .= "</div>";
+        //Saved Link ID (only show for equity users)
+        if (function_exists('equity')) {
+            $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+            $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
+            $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
+            $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
+            $output .= "</select>";
+            $output .= "</div>";
+            //endif
+        }
+
         // Images
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"show-image\" data-short-name=\"show_image\" checked>";
@@ -444,13 +448,16 @@ class Register_Shortcode_For_Ui
         }
         $output .= "</select>";
         $output .= "</div>";
-        //Saved Link ID
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-        $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
-        $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
-        $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
-        $output .= "</select>";
-        $output .= "</div>";
+        //Saved Link ID (only for equity users)
+        if (function_exists('equity')) {
+            $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+            $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
+            $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
+            $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
+            $output .= "</select>";
+            $output .= "</div>";
+            //endif
+        }
         // Per row
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"display\">Listings to show without scrolling</label>";
