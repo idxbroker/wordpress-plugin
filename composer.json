@@ -6,7 +6,8 @@
     "type": "wordpress-plugin",
     "require": {
         "php": ">=5.3.2",
-        "composer/installers": "~1.0"
+        "composer/installers": "~1.0",
+        "illuminate/container": "4.2.1"
     },
     "license": "GPLv2 or later",
     "authors": [
@@ -15,6 +16,9 @@
             "email": "info@idxbroker.com"
         }
     ],
+    "autoload": {
+        "psr-4": {"IDX\\": "idx/"}
+    },
     "require-dev": {
         "wpreadme2markdown/wpreadme2markdown": "*"
     }

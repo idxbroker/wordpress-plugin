@@ -4,23 +4,35 @@ namespace IDX\Widgets;
 class Create_Impress_Widgets
 {
 
-    public function __construct()
+    public function __construct(\IDX\Idx_Api $idx_api, $app)
     {
-        $this->idx_api = new \IDX\Idx_Api();
+        $this->idx_api = $idx_api;
+        $this->app = $app;
 
         // register_widget('Equity_Quicksearch_Widget');
-        add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Showcase_Widget');});
-        add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Carousel_Widget');});
-        add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_City_Links_Widget');});
-        add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Lead_Login_Widget');});
+        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_Showcase_Widget');});
+        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_Carousel_Widget');});
+        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_City_Links_Widget');});
+        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_Lead_Login_Widget');});
         //Only load lead signup widget for Platinum Accounts
         if ($this->idx_api->platinum_account_type()) {
-            add_action('widgets_init', function () {register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');});
+            add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');});
         }
 
     }
 
     public $idx_api;
+    public $app;
+
+    //use our own register function to allow dependency injection via the IoC container
+    public function register_widget($widget_name)
+    {
+        global $wp_widget_factory;
+
+        $widget_class = $this->app->make($widget_name);
+
+        $wp_widget_factory->widgets[$widget_name] = $widget_class;
+    }
 
     public function lead_login_shortcode()
     {

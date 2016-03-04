@@ -4,7 +4,7 @@ namespace IDX;
 class Idx_Pages
 {
 
-    public function __construct()
+    public function __construct(Idx_Api $idx_api)
     {
         // $this->delete_all_idx_pages();
         add_action('admin_init', array($this, 'create_idx_pages'), 10);
@@ -18,7 +18,7 @@ class Idx_Pages
         add_action('admin_init', array($this, 'manage_idx_page_capabilities'));
         add_action('save_post', array($this, 'save_idx_page'), 1);
 
-        $this->idx_api = new Idx_Api();
+        $this->idx_api = $idx_api;
     }
 
     public $idx_api;
