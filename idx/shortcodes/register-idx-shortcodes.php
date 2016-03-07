@@ -144,7 +144,7 @@ class Register_Idx_Shortcodes
 
     public function no_index_tags()
     {
-        $output = "<meta name=\"idx-robot\">\r\n";
+        $output = "\r\n<meta name=\"idx-robot\">\r\n";
         $output .= "<meta name=\"robots\" content=\"noindex,nofollow\">\r\n";
         return $output;
     }
