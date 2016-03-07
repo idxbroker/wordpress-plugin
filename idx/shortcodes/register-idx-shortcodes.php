@@ -11,6 +11,7 @@ class Register_Idx_Shortcodes
         add_shortcode('idx-platinum-saved-link', array($this, 'show_saved_link'));
         add_shortcode('idx-platinum-system-link', array($this, 'show_system_link'));
         add_shortcode('idx-platinum-widget', array($this, 'show_widget'));
+        add_shortcode('idx-wrapper-tags', array($this, 'wrapper_tags'));
     }
 
     public $idx_api;
@@ -134,6 +135,23 @@ class Register_Idx_Shortcodes
             }
         }
         return $selected_link;
+    }
+
+    public function wrapper_tags()
+    {
+        return $this->no_index_tags() . $this->idx_start_and_stop_tags();
+    }
+
+    public function no_index_tags()
+    {
+        $output = "<meta name=\"idx-robot\">\r\n";
+        $output .= "<meta name=\"robots\" content=\"noindex,nofollow\">\r\n";
+        return $output;
+    }
+
+    public function idx_start_and_stop_tags()
+    {
+        return "\r\n<div id=\"idxStart\"></div>\r\n<div id=\"idxStop\"></div>\r\n";
     }
 
 }
