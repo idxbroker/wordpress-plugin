@@ -139,18 +139,6 @@ class Register_Idx_Shortcodes
 
     public function wrapper_tags()
     {
-        return $this->no_index_tags() . $this->idx_start_and_stop_tags();
-    }
-
-    public function no_index_tags()
-    {
-        $output = "\r\n<meta name=\"idx-robot\">\r\n";
-        $output .= "<meta name=\"robots\" content=\"noindex,nofollow\">\r\n";
-        return $output;
-    }
-
-    public function idx_start_and_stop_tags()
-    {
         return "\r\n<div id=\"idxStart\"></div>\r\n<div id=\"idxStop\"></div>\r\n";
     }
 
