@@ -25,7 +25,8 @@ class Idx_Broker_Plugin
 
         if ($this->php_version_check()) {
             require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
-            require_once 'vendor' . DIRECTORY_SEPARATOR . 'illuminate/container/Illuminate/Container/Container.php';
+            require_once 'vendor' . DIRECTORY_SEPARATOR . 'netrivet/container/src/ContainerInterface.php';
+            require_once 'vendor' . DIRECTORY_SEPARATOR . 'netrivet/container/src/Container.php';
             //eval is used to prevent namespace errors in parsing with PHP < 5.3
             eval('new IDX\Initiate_Plugin();');
             /** Function that is executed when plugin is activated. **/
