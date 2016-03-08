@@ -152,7 +152,7 @@ class Impress_Carousel_Widget extends \WP_Widget
             $output .= sprintf(
                 '<div class="impress-carousel-property">
                     <a href="%2$s" class="impress-carousel-photo" target="%11$s">
-                        <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%4$s" />
+                        <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
                     <a href="%2$s" target="%11$s">

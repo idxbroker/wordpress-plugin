@@ -137,7 +137,7 @@ class Impress_Showcase_Widget extends \WP_Widget
                 $output .= sprintf(
                     '<div class="impress-showcase-property %12$s">
 						<a href="%3$s" class="impress-showcase-photo" target="%13$s">
-							<img src="%4$s" alt="%5$s" title="%5$s" />
+							<img src="%4$s" alt="%5$s" title="%6$s %7$s %8$s %9$s %10$s, %11$s" />
 							<span class="impress-price">%1$s</span>
 							<span class="impress-status">%2$s</span>
 						</a>
