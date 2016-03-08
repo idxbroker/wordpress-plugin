@@ -11,6 +11,7 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
 
     public $defaults = array(
         'title' => '',
+        'min_price' => 0,
         'styles' => 1,
     );
 
@@ -31,6 +32,7 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
     {
         $instance = $old_instance;
         $instance['title'] = $new_instance['title'];
+        $instance['min_price'] = $new_instance['min_price'];
         $instance['styles'] = (int) $new_instance['styles'];
         return $instance;
     }
@@ -44,6 +46,9 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
         }
         if (!isset($instance['styles'])) {
             $instance['styles'] = $this->defaults['styles'];
+        }
+        if(!isset($instance['min_price'])){
+            $instance['min_price'] = $this->defaults['min_price'];
         }
 
         echo $before_widget;
@@ -60,7 +65,7 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
 
         // Widget HTML:
         $create_omnibar = new Create_Omnibar;
-        echo $create_omnibar->idx_omnibar_extra($plugin_dir, $idx_url, $instance['styles']);
+        echo $create_omnibar->idx_omnibar_extra($plugin_dir, $idx_url, $instance['styles'], $instance['min_price']);
         echo $after_widget;
     }
 }
