@@ -6,7 +6,8 @@ class Initiate_Plugin
     public function __construct()
     {
         //Use Laravel's IoC Container for Class Instantiation
-        $this->app = new \Illuminate\Container\Container();
+
+        $this->app = new \NetRivet\Container\Container();
         new Ioc($this->app);
 
         $this->set_defaults();
