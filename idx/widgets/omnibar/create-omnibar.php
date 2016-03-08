@@ -71,9 +71,9 @@ EOD;
     public function price_field($min_price)
     {
         if(empty($min_price)){
-            $price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container" style="display: none;"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
+            $price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
         } else {
-            $price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-price-min-container" style="display: none;"><label>Price Min</label><input class="idx-omnibar-min-price" type="number" min="0"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
+            $price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-min-price-container"><label>Price Min</label><input class="idx-omnibar-min-price" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-max-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
         }
 
         return $price_field;

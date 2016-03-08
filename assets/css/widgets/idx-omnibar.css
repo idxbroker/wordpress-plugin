@@ -122,6 +122,14 @@ div.awesomplete > ul > li {
     width: 100%;
 }
 
+.idx-omnibar-extra.idx-omnibar-price-container.idx-omnibar-min-price-container, .idx-omnibar-extra.idx-omnibar-price-container.idx-omnibar-max-price-container {
+    width: 47%;
+}
+
+.idx-omnibar-extra.idx-omnibar-price-container.idx-omnibar-max-price-container {
+    float: right;
+}
+
 .idx-omnibar-extra.idx-omnibar-bed-container {
     float: left;
 }

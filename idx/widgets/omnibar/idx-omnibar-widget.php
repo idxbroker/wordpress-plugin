@@ -32,7 +32,7 @@ class IDX_Omnibar_Widget extends \WP_Widget
             <input type="checkbox" id="<?php echo $this->get_field_id('extra');?>" name="<?php echo $this->get_field_name('extra')?>" value="1" <?php checked($instance['extra'], true);?>>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('min_price');?>"><?php _e('Minimum Price Extra Field?', 'idxbroker');?></label>
+            <label for="<?php echo $this->get_field_id('min_price');?>"><?php _e('Show Min Price Extra Field?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('min_price');?>" name="<?php echo $this->get_field_name('min_price')?>" value="1" <?php checked($instance['min_price'], true);?>>
         </p>
     <?php
