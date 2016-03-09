@@ -143,9 +143,11 @@ EOD;
 
     public function register_widgets()
     {
+        //for PHP5.3 compatibility
+        $scope = $this;
         //Initialize Instances of Widget Classes
-        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget');});
-        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget_Extra');});
+        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget');});
+        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget_Extra');});
 
 
     }

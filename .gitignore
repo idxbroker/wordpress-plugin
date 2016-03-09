@@ -4,6 +4,6 @@
 .Trashes
 node_modules
 vendor/*
-!vendor/illuminate
+!vendor/netrivet
 composer.lock
 *.swp

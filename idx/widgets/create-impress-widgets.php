@@ -9,14 +9,15 @@ class Create_Impress_Widgets
         $this->idx_api = $idx_api;
         $this->app = $app;
 
-        // register_widget('Equity_Quicksearch_Widget');
-        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_Showcase_Widget');});
-        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_Carousel_Widget');});
-        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_City_Links_Widget');});
-        add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_Lead_Login_Widget');});
+        //for PHP5.3 not allowing $this in anonymous functions
+        $scope = $this;
+        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_Showcase_Widget');});
+        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_Carousel_Widget');});
+        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_City_Links_Widget');});
+        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_Lead_Login_Widget');});
         //Only load lead signup widget for Platinum Accounts
         if ($this->idx_api->platinum_account_type()) {
-            add_action('widgets_init', function () {$this->register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');});
+            add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');});
         }
 
     }
