@@ -186,7 +186,11 @@ class Register_Shortcode_For_Ui
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"min_price\" data-short-name=\"min_price\">";
+        $output .= "<label for\"min_price\">Show Min Price Extra Field?</label>";
+        $output .= "</div>";
+$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
         // Styles and Scripts for Preview
         $output .= "<script>(function(){";
         //empty url array so styles can be disabled and enabled as expected
