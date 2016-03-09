@@ -6,7 +6,7 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
     public function __construct()
     {
         $widget_ops = array('classname' => 'IDX_Omnibar_Widget_Extra', 'description' => 'An Omnibar Search Widget with extra fields for use with IDX WordPress Sites');
-        parent::__construct('IDX_Omnibar_Widget_Extra', 'IMPress Omnibar With Extra Fields', $widget_ops);
+        parent::__construct('IDX_Omnibar_Widget_Extra', 'Deprecated IMPress Omnibar With Extra Fields (Do Not Use)', $widget_ops);
     }
 
     public $defaults = array(
