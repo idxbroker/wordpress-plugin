@@ -67,3 +67,21 @@
   -o-animation: glowing 1500ms infinite;
   animation: glowing 1500ms infinite;
 }
+
+/*
+ * review prompt
+ */
+.idx_review_prompt {
+    position: relative;
+}
+.idx_review_prompt.updated p {
+    margin-right: 2rem;
+}
+div.idx_review_prompt.updated a {
+    text-decoration: none;
+    display: inline-block;
+}
+/* yoast uses important tag, so we have to */
+.idx_review_prompt .button-primary {
+    color: #fff !important;
+}

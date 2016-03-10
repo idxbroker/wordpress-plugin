@@ -6,10 +6,10 @@ class Impress_Carousel_Widget extends \WP_Widget
     /**
      * Register widget with WordPress.
      */
-    public function __construct()
+    public function __construct(\IDX\Idx_Api $idx_api)
     {
 
-        $this->idx_api = new \IDX\Idx_Api();
+        $this->idx_api = $idx_api;
 
         parent::__construct(
             'impress_carousel', // Base ID
@@ -33,6 +33,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         'geoip' => '',
         'geoip-location' => '',
         'styles' => 1,
+        'new_window' => 0,
     );
 
     /**
@@ -75,6 +76,12 @@ class Impress_Carousel_Widget extends \WP_Widget
         }
 
         $display = $instance['display'];
+
+        if (!isset($instance['new_window'])) {
+            $instance['new_window'] = 0;
+        }
+
+        $target = $this->target($instance['new_window']);
 
         if ($display === 1) {
             echo '
@@ -144,11 +151,11 @@ class Impress_Carousel_Widget extends \WP_Widget
 
             $output .= sprintf(
                 '<div class="impress-carousel-property">
-                    <a href="%2$s" class="impress-carousel-photo">
+                    <a href="%2$s" class="impress-carousel-photo" target="%11$s">
                         <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%4$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
-                    <a href="%2$s">
+                    <a href="%2$s" target="%11$s">
                         <p class="impress-address">
                             <span class="impress-street">%5$s %6$s %7$s %8$s</span>
                             <span class="impress-cityname">%9$s</span>,
@@ -164,7 +171,8 @@ class Impress_Carousel_Widget extends \WP_Widget
                 $prop['streetDirection'],
                 $prop['unitNumber'],
                 $prop['cityName'],
-                $prop['state']
+                $prop['state'],
+                $target
             );
 
             $output .= '<p class="impress-beds-baths-sqft">';
@@ -189,6 +197,16 @@ class Impress_Carousel_Widget extends \WP_Widget
             return '';
         } else {
             return "<span class=\"impress-$field\">$value $display_name</span> ";
+        }
+    }
+
+    public function target($new_window)
+    {
+        if (!empty($new_window)) {
+            //if enabled, open links in new tab/window
+            return '_blank';
+        } else {
+            return '_self';
         }
     }
 
@@ -344,6 +362,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         $instance['order'] = strip_tags($new_instance['order']);
         $instance['autoplay'] = strip_tags($new_instance['autoplay']);
         $instance['styles'] = strip_tags($new_instance['styles']);
+        $instance['new_window'] = strip_tags($new_instance['new_window']);
         $instance['geoip'] = strip_tags($new_instance['geoip']);
         $instance['geoip-location'] = strip_tags($new_instance['geoip-location']);
 
@@ -420,6 +439,11 @@ class Impress_Carousel_Widget extends \WP_Widget
         <p>
             <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open Listings in a New Window?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
 
         <?php if (function_exists('turnkey_dashboard_setup')) {?>

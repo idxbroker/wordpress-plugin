@@ -4,9 +4,9 @@ namespace IDX\Shortcodes;
 class Register_Shortcode_For_Ui
 {
 
-    public function __construct()
+    public function __construct(\IDX\Idx_Api $idx_api)
     {
-        $this->idx_api = new \IDX\Idx_Api();
+        $this->idx_api = $idx_api;
         add_action('wp_ajax_idx_shortcode_options', array($this, 'get_shortcode_options'));
         add_action('wp_ajax_idx_shortcode_preview', array($this, 'shortcode_preview'));
     }
@@ -199,12 +199,22 @@ class Register_Shortcode_For_Ui
 
     public function get_lead_login($shortcode)
     {
+        $defaults = array(
+            'styles' => 1,
+            'new_window' => 0,
+        );
+
         $output = '';
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\"></div>";
         // Default Styles
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        //New Window
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
+        $output .= "<label for\"new_window\">Open in a New Window?</label>";
         $output .= "</div>";
         // Styles and Scripts for Preview
         $output .= "<script>(function(){";
@@ -219,6 +229,12 @@ class Register_Shortcode_For_Ui
 
     public function get_lead_signup($shortcode)
     {
+        $defaults = array(
+            'phone' => 0,
+            'styles' => 1,
+            'new_window' => 0,
+        );
+
         $output = '';
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"idx-phone-number\" data-short-name=\"phone\">";
@@ -228,6 +244,11 @@ class Register_Shortcode_For_Ui
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        //New Window
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
+        $output .= "<label for\"new_window\">Open in a New Window?</label>";
         $output .= "</div>";
         // Styles and Scripts for Preview
         $output .= "<script>(function(){";
@@ -248,10 +269,11 @@ class Register_Shortcode_For_Ui
             'use_columns' => 0,
             'number_columns' => 4,
             'styles' => 1,
+            'new_window' => 0,
         );
 
-        $approved_mls = \IDX\Widgets\Impress_City_Links_Widget::mls_options($defaults);
-        $city_list_options = \IDX\Widgets\Impress_City_Links_Widget::city_list_options($defaults);
+        $approved_mls = \IDX\Widgets\Impress_City_Links_Widget::mls_options($defaults, $this->idx_api);
+        $city_list_options = \IDX\Widgets\Impress_City_Links_Widget::city_list_options($defaults, $this->idx_api);
 
         $output = '';
         // MLS
@@ -287,6 +309,11 @@ class Register_Shortcode_For_Ui
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
+        //New Window
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
+        $output .= "<label for\"new_window\">Open Links in a New Window?</label>";
+        $output .= "</div>";
 
         $output .= "<p>Don't have any city lists? Go create some in your <a href=\"http://middleware.idxbroker.com/mgmt/citycountyziplists.php\" target=\"_blank\">IDX dashboard.</a></p>";
         // Styles and Scripts for Preview
@@ -311,6 +338,7 @@ class Register_Shortcode_For_Ui
             'property_type' => 'featured',
             'saved_link_id' => '',
             'styles' => 1,
+            'new_window' => 0,
         );
 
         $output = '';
@@ -328,13 +356,17 @@ class Register_Shortcode_For_Ui
         }
         $output .= "</select>";
         $output .= "</div>";
-        //Saved Link ID
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-        $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
-        $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
-        $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
-        $output .= "</select>";
-        $output .= "</div>";
+        //Saved Link ID (only show for equity users)
+        if (function_exists('equity')) {
+            $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+            $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
+            $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
+            $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
+            $output .= "</select>";
+            $output .= "</div>";
+            //endif
+        }
+
         // Images
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"show-image\" data-short-name=\"show_image\" checked>";
@@ -372,6 +404,12 @@ class Register_Shortcode_For_Ui
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
+        //New Window
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
+        $output .= "<label for\"new_window\">Open Listings in a New Window?</label>";
+        $output .= "</div>";
+
         // Styles and Scripts for Preview
         $output .= "<script>(function(){";
         $output .= "styleSheetUrls = [];";
@@ -392,6 +430,7 @@ class Register_Shortcode_For_Ui
             'property_type' => 'featured',
             'saved_link_id' => '',
             'styles' => 1,
+            'new_window' => 0,
         );
 
         $output = '';
@@ -409,13 +448,16 @@ class Register_Shortcode_For_Ui
         }
         $output .= "</select>";
         $output .= "</div>";
-        //Saved Link ID
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-        $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
-        $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
-        $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
-        $output .= "</select>";
-        $output .= "</div>";
+        //Saved Link ID (only for equity users)
+        if (function_exists('equity')) {
+            $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+            $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
+            $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
+            $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
+            $output .= "</select>";
+            $output .= "</div>";
+            //endif
+        }
         // Per row
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"display\">Listings to show without scrolling</label>";
@@ -443,6 +485,11 @@ class Register_Shortcode_For_Ui
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        //New Window
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
+        $output .= "<label for\"new_window\">Open Listings in a New Window?</label>";
         $output .= "</div>";
 
         // Styles and Scripts for Preview

@@ -237,7 +237,11 @@
     padding: 0.5rem;
     box-sizing: border-box;
 }
+/* select2 on shortcode ui */
+span.select2.select2-container.select2-container--default.select2-container--below {
+        max-width: 100%;
 
+}
 
 
 .idx-loader {

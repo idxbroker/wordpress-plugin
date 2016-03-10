@@ -4,9 +4,9 @@ namespace IDX\Shortcodes;
 class Register_Impress_Shortcodes
 {
 
-    public function __construct()
+    public function __construct(\IDX\Idx_Api $idx_api)
     {
-        $this->idx_api = new \IDX\Idx_Api();
+        $this->idx_api = $idx_api;
         add_shortcode('impress_lead_login', array($this, 'lead_login_shortcode'));
         if ($this->idx_api->platinum_account_type()) {
             add_shortcode('impress_lead_signup', array($this, 'lead_signup_shortcode'));
@@ -23,19 +23,26 @@ class Register_Impress_Shortcodes
     {
         extract(shortcode_atts(array(
             'styles' => 1,
+            'new_window' => 0,
         ), $atts));
 
         if (!empty($styles)) {
             wp_enqueue_style('impress-lead-login', plugins_url('../assets/css/widgets/impress-lead-login.css', dirname(__FILE__)));
         }
 
+        if (!isset($new_window)) {
+            $new_window = 0;
+        }
+
+        $target = $this->target($new_window);
+
         $widget = sprintf('
-            <form action="%sajax/userlogin.php" class="impress-lead-login" method="post" target="" name="leadLoginForm">
+            <form action="%1$sajax/userlogin.php" class="impress-lead-login" method="post" target="%2$s" name="leadLoginForm">
                 <input type="hidden" name="action" value="login">
                 <input type="hidden" name="loginWidget" value="true">
                 <label for="impress-widgetEmail">Email Address:</label>
                 <input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address"><input id="impress-widgetPassword" type="hidden" name="password" value=""><input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
-            </form>', $this->idx_api->subdomain_url());
+            </form>', $this->idx_api->subdomain_url(), $target);
 
         return $widget;
     }
@@ -46,14 +53,21 @@ class Register_Impress_Shortcodes
         extract(shortcode_atts(array(
             'phone' => 0,
             'styles' => 1,
+            'new_window' => 0,
         ), $atts));
 
         if (!empty($styles)) {
             wp_enqueue_style('impress-lead-signup', plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)));
         }
 
+        if (!isset($new_window)) {
+            $new_window = 0;
+        }
+
+        $target = $this->target($new_window);
+
         $widget = sprintf('
-            <form action="%sajax/usersignup.php" class="impress-lead-signup" method="post" target="" name="LeadSignup">
+            <form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup">
                 <input type="hidden" name="action" value="addLead">
                 <input type="hidden" name="signupWidget" value="true">
                 <input type="hidden" name="contactType" value="direct">
@@ -65,7 +79,7 @@ class Register_Impress_Shortcodes
                 <input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name">
 
                 <label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
-                <input id="impress-widgetemail" type="text" name="email" placeholder="Email">', $this->idx_api->subdomain_url());
+                <input id="impress-widgetemail" type="text" name="email" placeholder="Email">', $this->idx_api->subdomain_url(), $target);
 
         if ($phone) {
             $widget .= sprintf('
@@ -90,6 +104,7 @@ class Register_Impress_Shortcodes
             'property_type' => 'featured',
             'saved_link_id' => '',
             'styles' => 1,
+            'new_window' => 0,
         ), $atts));
 
         if (!empty($styles)) {
@@ -114,7 +129,6 @@ class Register_Impress_Shortcodes
         $column_class = '';
 
         if (1 == $use_rows) {
-
             // Max of four columns
             $number_columns = ($num_per_row > 4) ? 4 : (int) $num_per_row;
 
@@ -137,6 +151,12 @@ class Register_Impress_Shortcodes
                     break;
             }
         }
+
+        if (!isset($new_window)) {
+            $new_window = 0;
+        }
+
+        $target = $this->target($new_window);
 
         // sort low to high
         usort($properties, array($this->idx_api, 'price_cmp'));
@@ -171,12 +191,12 @@ class Register_Impress_Shortcodes
 
             if (1 == $show_image) {
                 $output .= sprintf('<div class="impress-showcase-property %12$s">
-                        <a href="%3$s" class="impress-showcase-photo">
+                        <a href="%3$s" class="impress-showcase-photo" target="%13$s">
                             <img src="%4$s" alt="%5$s" title="%5$s" />
                             <span class="impress-price">%1$s</span>
                             <span class="impress-status">%2$s</span>
                         </a>
-                        <a href="%3$s">
+                        <a href="%3$s" target="%13$s">
                             <p class="impress-address">
                                 <span class="impress-street">%6$s %7$s %8$s %9$s</span>
                                 <span class="impress-cityname">%10$s</span>,
@@ -196,7 +216,8 @@ class Register_Impress_Shortcodes
                     $prop['unitNumber'],
                     $prop['cityName'],
                     $prop['state'],
-                    $column_class
+                    $column_class,
+                    $target
                 );
 
                 $output .= '<p class="beds-baths-sqft">';
@@ -208,7 +229,7 @@ class Register_Impress_Shortcodes
             } else {
                 $output .= sprintf(
                     '<li class="impress-showcase-property-list %9$s">
-                        <a href="%2$s">
+                        <a href="%2$s" target="%10$s">
                             <p>
                                 <span class="impress-price">%1$s</span>
                                 <span class="impress-address">
@@ -224,7 +245,8 @@ class Register_Impress_Shortcodes
                     $prop['unitNumber'],
                     $prop['cityName'],
                     $prop['state'],
-                    $column_class
+                    $column_class,
+                    $target
                 );
 
                 $output .= '<span class="impress-beds-baths-sqft">';
@@ -302,6 +324,16 @@ class Register_Impress_Shortcodes
 
     }
 
+    public function target($new_window)
+    {
+        if (!empty($new_window)) {
+            //if enabled, open links in new tab/window
+            return '_blank';
+        } else {
+            return '_self';
+        }
+    }
+
     public function property_carousel_shortcode($atts = array())
     {
         wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
@@ -314,6 +346,7 @@ class Register_Impress_Shortcodes
             'property_type' => 'featured',
             'saved_link_id' => '',
             'styles' => 1,
+            'new_window' => 0,
         ), $atts));
 
         wp_enqueue_style('owl-css', plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)));
@@ -322,6 +355,12 @@ class Register_Impress_Shortcodes
         if ($styles) {
             wp_enqueue_style('impress-carousel', plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)));
         }
+
+        if (!isset($new_window)) {
+            $new_window = 0;
+        }
+
+        $target = $this->target($new_window);
 
         $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker'));
         $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker'));
@@ -407,11 +446,11 @@ class Register_Impress_Shortcodes
 
             $output .= sprintf(
                 '<div class="impress-carousel-property">
-                    <a href="%2$s" class="impress-carousel-photo">
+                    <a href="%2$s" class="impress-carousel-photo" target="%11$s">
                         <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%4$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
-                    <a href="%2$s">
+                    <a href="%2$s" target="%11$s">
                         <p class="impress-address">
                             <span class="impress-street">%5$s %6$s %7$s %8$s</span>
                             <span class="impress-cityname">%9$s</span>,
@@ -427,7 +466,8 @@ class Register_Impress_Shortcodes
                 $prop['streetDirection'],
                 $prop['unitNumber'],
                 $prop['cityName'],
-                $prop['state']
+                $prop['state'],
+                $target
             );
 
             $output .= '<p class="impress-beds-baths-sqft">';
@@ -451,14 +491,21 @@ class Register_Impress_Shortcodes
             'use_columns' => 1,
             'number_columns' => 4,
             'styles' => 1,
+            'new_window' => 0,
         ), $atts));
 
         if (!empty($styles)) {
             wp_enqueue_style('impress-city-links', plugins_url('../assets/css/widgets/impress-city-links.css', dirname(__FILE__)));
         }
 
+        if (!isset($new_window)) {
+            $new_window = 0;
+        }
+
+        $target = $this->target($new_window);
+
         $city_links = "<div class=\"impress-city-links\">";
-        $city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links($city_list, $mls, $use_columns, $number_columns);
+        $city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links($city_list, $mls, $use_columns, $number_columns, $target, $this->idx_api);
         $city_links .= "</div>";
 
         if (false == $city_links) {

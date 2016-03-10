@@ -1,11 +1,11 @@
-=== IMPress for IDX Broker Wordpress Plugin ===
+=== IMPress for IDX Broker ===
 Author: IDX, LLC
 Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 3.7
-Tested up to: 4.4.1
-Stable tag: 2.0.1
+Tested up to: 4.4.2
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,14 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 5. Middleware API Key.
 
 == Changelog ==
+
+= 2.0.2 =
+* Fixed an issue where a saved links field was incorrectly displaying on Carousel and Showcase shortcodes for Lite accounts (This only works for Platinum accounts).
+* Fixed a similar issue where saved links were displaying a UI to apply page level wrappers to them for Lite accounts.
+* Incorporated an IoC Container into the plugin for a cleaner coding structure.
+* Equity accounts now have ip blacklisting protection against scrapers stealing website content.
+* Added option to open several IMPress widgets and shortcodes in a new window.
+* Disable the IDX Broker Origin plugin if active to prevent conflicts.
 
 = 2.0.1 =
 * Fixed a minor issue where a notice was displaying for users with error reporting enabled.
