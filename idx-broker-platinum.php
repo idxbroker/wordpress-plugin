@@ -78,7 +78,7 @@ class Idx_Broker_Plugin
         update_option('idx_plugin_version', self::IDX_WP_PLUGIN_VERSION);
 
         //set timestamp to one week from activation to prompt user for plugin review
-        eval('IDX\Review_Prompt::set_timestamp();');
+        // eval('IDX\Review_Prompt::set_timestamp();');
 
 
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
