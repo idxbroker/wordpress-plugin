@@ -17,6 +17,8 @@ class Idx_Pages
         add_action('init', array($this, 'register_idx_page_type'));
         add_action('admin_init', array($this, 'manage_idx_page_capabilities'));
         add_action('save_post', array($this, 'save_idx_page'), 1);
+        add_action('save_post', array($this, 'set_wrapper_page'));
+        add_action('add_meta_boxes', array($this, 'add_meta_box'));
 
         $this->idx_api = $idx_api;
     }
@@ -295,5 +297,156 @@ class Idx_Pages
 
         // add a meta field to keep track of the first login
         update_user_meta($user->ID, 'idx_user_first_login', 'user_first_login_false');
+    }
+
+    public function display_wrapper_dropdown()
+    {
+        //only show dropdown if Platinum account or not saved link
+        //(Lite does not support saved link wrappers)
+        if ($this->idx_api->platinum_account_type() ||
+            !$this->is_saved_link(get_the_ID())) {
+            return true;
+        }
+    }
+
+    public function wrapper_page_dropdown()
+    {
+        $post_id = get_the_ID();
+        echo "<select class=\"idx-wrapper-page\" name=\"idx-wrapper-page\" style=\"width: 100%;\">";
+        echo "<option value=\"none\"" .
+        selected('none', get_post_meta($post_id, 'idx-wrapper-page', true)) .
+        ">None</option>";
+        $args = array(
+            'numberposts' => -1,
+            'post_type' => 'idx-wrapper',
+        );
+        $wrappers = get_posts($args);
+        foreach ($wrappers as $wrapper) {
+            $id = $wrapper->ID;
+            $name = $wrapper->post_title;
+            echo "<option value=\"$id\"" .
+            selected($id, get_post_meta($post_id, 'idx-wrapper-page', true)) .
+            ">$name</option>";
+        }
+        echo '</select>';
+    }
+
+    //dynamic wrapper requires the pageID, not the UID,
+    //so we must strip out the account number from the UID
+    public function convert_uid_to_id($uid)
+    {
+        return substr($uid, strpos($uid, '-') + 1);
+    }
+
+    public function wrapper_page_ui()
+    {
+        // add metabox interface when editing an IDX page (with none as an option)
+        // This UI should display the current wrapper set
+        // when saving a post, save the meta of which wrapper is set
+        wp_nonce_field('idx-wrapper-page', 'idx-wrapper-page-nonce');
+        $this->wrapper_page_dropdown();
+        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
+        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
+        wp_enqueue_script('idx-wrapper', plugins_url('../assets/js/idx-wrappers.min.js', __FILE__));
+    }
+
+    public function find_idx_url($post_id)
+    {
+        $post = get_post($post_id);
+        $url = $post->post_name;
+        $system_links = $this->idx_api->idx_api_get_systemlinks();
+        $saved_links = $this->idx_api->idx_api_get_savedlinks();
+        foreach ($system_links as $link) {
+            if ($link->url === $url) {
+                $uid = $link->uid;
+                $name = $link->name;
+                $id = $this->convert_uid_to_id($uid);
+                return $id;
+            }
+        }
+        foreach ($saved_links as $link) {
+            if ($link->url === $url) {
+                $id = $link->id;
+                $name = $link->linkTitle;
+                return $id;
+            }
+        }
+    }
+
+    public function is_saved_link($post_id)
+    {
+        $post = get_post($post_id);
+        $url = $post->post_name;
+        $saved_links = $this->idx_api->idx_api_get_savedlinks();
+        foreach ($saved_links as $link) {
+            if ($link->url === $url) {
+                return true;
+            }
+        }
+    }
+
+    public function add_meta_box($post_type)
+    {
+        $post_types = array('idx_page'); //limit meta box to certain post types
+        if (in_array($post_type, $post_types) && $this->display_wrapper_dropdown()) {
+            add_meta_box(
+                'set_wrapper_page',
+                'Apply Page Wrapper',
+                array($this, 'wrapper_page_ui'),
+                $post_type,
+                'side',
+                'low'
+            );
+        }
+    }
+
+    public function set_wrapper_page($post_id)
+    {
+        //saved idx page ID
+        if (empty($_POST)) {
+            return;
+        }
+        if (empty($_POST['idx-wrapper-page'])) {
+            return;
+        }
+        if (!$this->verify_permissions()) {
+            return $post_id;
+        }
+
+        $meta_value = $_POST['idx-wrapper-page'];
+        $meta_value = sanitize_text_field($meta_value);
+        //Find the IDX Page ID by matching URLs
+        $idx_page_id = $this->find_idx_url($post_id);
+
+        //do not update wrapper if wrapper is none
+        if ($meta_value === 'none') {
+            return;
+        } elseif ($meta_value === 'global') {
+            $this->idx_api->set_wrapper($idx_page_id, '');
+        }
+
+        $wrapper_page_url = get_permalink($meta_value);
+
+        //logic for what type of idx page is in Idx_Api class
+        $this->idx_api->set_wrapper($idx_page_id, $wrapper_page_url);
+        update_post_meta($post_id, 'idx-wrapper-page', $meta_value);
+    }
+
+    public function verify_permissions()
+    {
+        // Check if our nonce is set.
+        if (!isset($_POST['idx-wrapper-page-nonce'])) {
+            return false;
+        }
+        $nonce = $_POST['idx-wrapper-page-nonce'];
+        if (!wp_verify_nonce($nonce, 'idx-wrapper-page')) {
+            return false;
+        }
+        // If this is an autosave, our form has not been submitted,
+        //     so we don't want to do anything.
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return false;
+        }
+        return true;
     }
 }
