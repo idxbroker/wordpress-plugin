@@ -55,6 +55,7 @@ class Initiate_Plugin
         $this->app->make('\IDX\Views\Omnibar_Settings');
         $this->app->make('\IDX\Review_Prompt');
         $this->app->make('\IDX\Blacklist');
+        $this->app->make('\IDX\Dashboard_Widget');
     }
 
     private function set_defaults()

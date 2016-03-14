@@ -107,5 +107,8 @@ class Ioc
         $app->bind('\IDX\Blacklist', function ($app) {
             return new Blacklist();
         });
+        $app->bind('\IDX\Dashboard_Widget', function ($app) {
+            return new Dashboard_Widget();
+        });
     }
 }
