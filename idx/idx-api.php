@@ -649,4 +649,20 @@ class Idx_Api
 
         return $blacklist;
     }
+
+    public function get_leads($timeframe = null)
+    {
+        if(! empty($timeframe)){
+            $leads = $this->idx_api('lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array('interval' => $timeframe));
+        } else {
+            $leads = $this->idx_api('lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
+        }
+        return $leads;
+    }
+    
+    public function get_featured_listings($listing_type = 'featured')
+    {
+        $listings = $this->idx_api($listing_type);
+        return $listings;
+    }
 }
