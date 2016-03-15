@@ -186,6 +186,7 @@ class Initiate_Plugin
 
     public function load_admin_menu_styles()
     {
+        wp_enqueue_style('properticons', 'https://s3.amazonaws.com/properticons/css/properticons.css');
         return wp_enqueue_style('idx-menus', plugins_url('/assets/css/idx-menus.css', dirname(__FILE__)));
     }
 /**
@@ -220,7 +221,7 @@ class Initiate_Plugin
         }
         $args = array(
             'id' => 'idx_admin_bar_menu',
-            'title' => '<span class="ab-icon idx-admin-bar-menu-icon"></span>IMPress',
+            'title' => '<span class="ab-icon properticons-logo-idx"></span>IMPress',
             'parent' => false,
             'href' => admin_url('admin.php?page=idx-broker'),
         );

@@ -1,11 +1,12 @@
 #idx-shortcode:before {
-    content: "\e900";
-    font-family: 'idx-dashicon';
-    margin-right: .3em;
-    font-size: .7rem;
+    content: '\e021';
+    font-family: 'properticons';
+    margin-right: 0.3rem;
+    margin-top: -.45rem;
+    font-size: 3rem;
     color: #82878c;
+    float: left;
 }
-
 #idx-overlay{
     display: none;
     position: fixed;
