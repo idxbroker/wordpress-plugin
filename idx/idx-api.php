@@ -653,7 +653,7 @@ class Idx_Api
     public function get_leads($timeframe = null)
     {
         if(! empty($timeframe)){
-            $leads = $this->idx_api('lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array('interval' => $timeframe));
+            $leads = $this->idx_api("lead?interval=$timeframe", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
         } else {
             $leads = $this->idx_api('lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
         }
