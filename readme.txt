@@ -17,7 +17,7 @@ IMPress for IDX Broker is part of the IMPress family of plugins. Your IDX Broker
 <h4>Native WordPress Widgets</h4>
 Add widgets previously only available in the Equity framework - lead login, signup, city links, showcase, and carousel widgets. Take advantage of these new widgets to deliver the best experience, and style them to match the design of your site.
 
-<h4>Conventiently Add Shortcodes</h4>
+<h4>Conveniently Add Shortcodes</h4>
 An overhauled user experience makes this plugin easy to use. Easily add new widgets to pages and posts with built-in shortcodes.
 
 <h4>Import Your Listings with IMPress Listings</h4>
