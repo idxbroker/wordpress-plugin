@@ -10,6 +10,8 @@ class Dashboard_Widget {
         add_action('wp_dashboard_setup', array($this, 'add_dashboard_widget'));
         $this->idx_api = $idx_api;
         add_action('wp_ajax_idx_dashboard_leads', array($this, 'leads_overview'));
+        add_action('wp_ajax_idx_dashboard_listings', array($this, 'listings_overview'));
+       
     }
 
     public $idx_api;
@@ -25,7 +27,6 @@ class Dashboard_Widget {
 
     public function compile_dashboard_widget()
     {
-        wp_register_script('idx-dashboard-widget', plugins_url('/assets/js/idx-dashboard-widget.min.js', dirname(__FILE__)));
         echo $this->dashboard_widget_html();
         $this->load_scripts();
     }
@@ -67,8 +68,10 @@ class Dashboard_Widget {
         try {
             $listings = json_encode($this->listings_json($timeframe, 'day'));
             echo $listings;
+            wp_die();
         } catch (Exception $error){
             echo $error->getMessage();
+            wp_die();
         }
     }
 
@@ -80,8 +83,9 @@ class Dashboard_Widget {
 
     public function load_scripts()
     {
+        wp_enqueue_style('idx-dashboard-widget', plugins_url('/assets/css/idx-dashboard-widget.css', dirname(__FILE__)));
         wp_enqueue_script('google-charts', 'https://www.gstatic.com/charts/loader.js');
-        wp_enqueue_script('idx-dashboard-widget');
+        wp_enqueue_script('idx-dashboard-widget', plugins_url('/assets/js/idx-dashboard-widget.min.js', dirname(__FILE__)));
     }
 
     public function leads_json($timeframe, $interval)
@@ -103,9 +107,28 @@ class Dashboard_Widget {
         return $data;
     }
 
+    public function listings_json($timeframe, $interval)
+    {
+        $active = $this->get_listings_number($this->idx_api->get_featured_listings(), 'active');
+        $featured_pending = $this->get_listings_number($this->idx_api->get_featured_listings(), 'pending');
+        $pending = $this->get_listings_number($this->idx_api->get_featured_listings('soldpending'), 'pending');
+        $sold = $this->get_listings_number($this->idx_api->get_featured_listings('soldpending'), 'sold');
+         
+        return compact('active', 'featured_pending', 'pending', 'sold');
+    }
+
+    public function side_json()
+    {
+        //order newest first
+        $leads = array_slice(array_reverse($this->idx_api->get_leads()), 0, 5);
+        $listings = array_slice($this->idx_api->get_featured_listings(), 0, 5);
+    }
+
     public function leads_month_interval($interval_data, $min_max)
     {
         $data = array();
+        $unique_months = array();
+        //headers for chart
         $data[] = array(
             'Month', 
             'Registrations'
@@ -114,24 +137,29 @@ class Dashboard_Widget {
         $max = $min_max['max'];
 
         //create year then iterate over
+        //note that this is not necessarily a true 12 month year
         $year = $this->create_year($min, $max);
+
         //if lead capture month matches month of year, add to array
-        foreach($interval_data as $data_month){
-            foreach($year as $month){
+        foreach($year as $month){
+            foreach($interval_data as $data_month){
                 $date = $month['date'];
                 $data_timestamp = $data_month['timestamp'];
                 $timestamp = $month['timestamp'];
-                if(date('m-y', $data_timestamp) === $date){
+                if(date('M Y', $data_timestamp) === $date){
+                    $unique_months[$date] = $date;
                     $data[] = array(
                         $date, 
                         $data_month['value']
                     ); 
-                } else {
-                    $data[] = array(
-                        $date, 
-                        0
-                    );
                 }
+            }
+            //if no lead was captured for the month, set month to 0
+            if(! isset($unique_months[$date])){
+                $data[] = array(
+                    $date,
+                    0
+                );
             }
         }
         return $data;
@@ -176,7 +204,7 @@ class Dashboard_Widget {
         $year_array = array();
         $month_timestamp = $min;
         for($i = 0; $i < 6; $i++){
-            $date = date('m-y', $month_timestamp);
+            $date = date('M Y', $month_timestamp);
             $carbon_object = Carbon::createFromTimestamp($month_timestamp);
             $carbon_object->month += 1;
             $next_month = $carbon_object->timestamp;
@@ -188,6 +216,7 @@ class Dashboard_Widget {
             //move to next day
             $month_timestamp = $next_month;
         }
+
         return $year_array; 
     }
 
@@ -210,8 +239,9 @@ class Dashboard_Widget {
 
     public function get_interval_data($timeframe, $interval)
     {
-        $leads_array;
-        $api_data = $this->idx_api->get_leads($timeframe);
+        $leads_array = array();
+        $min_max = $this->min_max_intervals($interval);
+        $api_data = $this->idx_api->get_leads(); 
 
         if(empty($api_data)){
             throw new Exception('No Leads Returned');
@@ -219,13 +249,18 @@ class Dashboard_Widget {
 
         foreach($api_data as $api_data_lead){
             //convert date to Carbon instance for easy parsing
-            $subscribe_date = Carbon::parse($api_data_lead->subscribeDate);
+            $subscribe_date = Carbon::parse($api_data_lead->subscribeDate)->timestamp;
+            //if the subscribe date is before the min date, skip
+            if($subscribe_date < $min_max['min']){
+                continue;
+            }
+            //add entry with timestamp to leads_array
             $leads_array[] = array(
-                'timestamp' => $subscribe_date->timestamp
+                'timestamp' => $subscribe_date
             );
         }
-        $min_max = $this->min_max_intervals($interval);
-        $interval_data = $this->interval_data($min_max['min'], $min_max['max'], $leads_array, $interval);
+
+        $interval_data = $this->interval_data($leads_array, $interval);
 
         return compact('min_max', 'interval_data');
 
@@ -244,8 +279,8 @@ class Dashboard_Widget {
         return compact('min', 'max');
     }
 
-    //feed in week or month. Example: 3, 7, $data, 'month'
-    public function interval_data($min, $max, $data, $interval)
+    //feed in week or month. Example: $data, 'month'
+    public function interval_data($data, $interval)
     {
         $interval_data = array();
         foreach($data as $datum){
@@ -262,17 +297,18 @@ class Dashboard_Widget {
         return $interval_data;
     }
 
-    public function listings_json()
-    {
-        $output = $this->idx_api->get_featured_listings();
-        return $output;
-    }
+    
 
-    public function side_json()
+    public function get_listings_number($listings, $status)
     {
-        $leads = $this->idx_api->get_leads();
-        //order newest first
-        return array_reverse($leads);
+        $count = 0;
+        foreach($listings as $listing){
+            $listingStatus = $listings->propStatus;
+            if($listingStatus === $status){
+                $count++;
+            }
+        }
+        return $count;
     }
 
     public function hours_before_now($timeframe)

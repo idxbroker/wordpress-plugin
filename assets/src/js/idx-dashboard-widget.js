@@ -15,7 +15,11 @@ function leadsChart(){
             'action': 'idx_dashboard_leads',
             'timeframe' : getTimeframe()
     }).done(function(jsonData){
-
+        
+        //handle error
+        if(jsonData === 'No Leads Returned'){
+            document.querySelector('.leads-overview').innerHTML = jsonData;
+        }
         var data = google.visualization.arrayToDataTable(JSON.parse(jsonData));
 
         var options = {
@@ -41,6 +45,7 @@ function getLeads(){
 function initialLoad(){
     //load Leads Chart
     google.charts.load('current', {'packages':['corechart']});
+    listenToButtons();
     //load chart on page load
     getLeads();
 }

@@ -1,0 +1,8 @@
+#idx_dashboard_widget .widget-header * {
+    display: inline-block;
+    margin: 0 0.25rem;
+}
+
+#idx_dashboard_widget > div {
+    display: inline-block;
+}
