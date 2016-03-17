@@ -9,6 +9,7 @@ class Dashboard_Widget {
     {
         add_action('wp_dashboard_setup', array($this, 'add_dashboard_widget'));
         $this->idx_api = $idx_api;
+        add_action('wp_ajax_idx_dashboard_leads', array($this, 'leads_overview'));
     }
 
     public $idx_api;
@@ -31,32 +32,44 @@ class Dashboard_Widget {
 
     public function dashboard_widget_html()
     {
-        $output = '';
-        $output .= $this->leads_overview(168, 'week') . $this->listings_overview() . $this->side_overview();
-        $output .= '';
+        $output = '<div class="widget-header">';
+        $output .= '<button class="leads">Lead Overview</button>';
+        $output .= '<button class="listings">Listing Overview</button>';
+        $output .= '<div class="timeframe">';
+        $output .= '<label>Month</label>';
+        $output .= '<input id="timeframe-switch" type="checkbox">';
+        $output .= '<label>Day</label>';
+        $output .= '</div></div>';
+        $output .= '<div class="leads-overview"></div>';
+        $output .= '<div class="listings-overview"></div>';
+        $output .= '<div class="side-overview"></div>';
         return $output;
     }
 
-    public function leads_overview($timeframe, $interval)
+    public function leads_overview()
     {
-        $output = '<div class="leads-overview">';
-        wp_localize_script('idx-dashboard-widget', 'leadsData', $this->leads_json($timeframe, 'day'));
-        $output .= '</div>';
-        return $output;
+        $interval = sanitize_text_field($_POST['timeframe']);
+        //maximum API allows:
+        $timeframe = 144;
+
+        try {
+            $leads = json_encode($this->leads_json($timeframe, $interval));
+            echo $leads;
+            wp_die();
+        } catch (Exception $error){
+            echo $error->getMessage();
+            wp_die();
+        }
     }
 
     public function listings_overview()
     {
-        $output = '<div class="listings-overview">';
         try {
-            $listings_json = $this->listings_json();
+            $listings = json_encode($this->listings_json($timeframe, 'day'));
+            echo $listings;
         } catch (Exception $error){
-            return 'No Leads Returned';
+            echo $error->getMessage();
         }
-
-        wp_localize_script('idx-dashboard-widget', 'listingsData', $this->listings_json());
-        $output .= '</div>';
-        return $output;
     }
 
     public function side_overview()
@@ -71,18 +84,18 @@ class Dashboard_Widget {
         wp_enqueue_script('idx-dashboard-widget');
     }
 
-    public function leads_json($timeframe = null, $interval = 'month')
+    public function leads_json($timeframe, $interval)
     {
         try {
             $interval_array = $this->get_interval_data($timeframe, $interval);
-        } catch(Exception $error) {
-            return;
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage());
         }
         $interval_data = $interval_array['interval_data'];
         $min_max = $interval_array['min_max'];
     
         if($interval === 'month'){
-            $data = $this->leads_month_interval($interval_data);
+            $data = $this->leads_month_interval($interval_data, $min_max);
         } elseif($interval === 'day'){
             $data = $this->leads_day_interval($interval_data, $min_max);
         }
@@ -90,26 +103,35 @@ class Dashboard_Widget {
         return $data;
     }
 
-    public function leads_month_interval($interval_data)
+    public function leads_month_interval($interval_data, $min_max)
     {
         $data = array();
         $data[] = array(
             'Month', 
             'Registrations'
         );
-        for($i = 1; $i <= 12; ++$i){
-            //hardcode day and year as they are irrelevant
-            $month_name = jdmonthname(gregoriantojd($i,1,2017), 0);
-            if(isset($interval_data[$i])){
-                $data[] = array(
-                    $month_name, 
-                    $interval_data[$i]['value']
-                ); 
-            } else {
-                $data[] = array(
-                    $month_name, 
-                    0
-                );
+        $min = $min_max['min'];
+        $max = $min_max['max'];
+
+        //create year then iterate over
+        $year = $this->create_year($min, $max);
+        //if lead capture month matches month of year, add to array
+        foreach($interval_data as $data_month){
+            foreach($year as $month){
+                $date = $month['date'];
+                $data_timestamp = $data_month['timestamp'];
+                $timestamp = $month['timestamp'];
+                if(date('m-y', $data_timestamp) === $date){
+                    $data[] = array(
+                        $date, 
+                        $data_month['value']
+                    ); 
+                } else {
+                    $data[] = array(
+                        $date, 
+                        0
+                    );
+                }
             }
         }
         return $data;
@@ -147,6 +169,26 @@ class Dashboard_Widget {
             }
         }
         return $data;
+    }
+
+    public function create_year($min, $max)
+    {
+        $year_array = array();
+        $month_timestamp = $min;
+        for($i = 0; $i < 6; $i++){
+            $date = date('m-y', $month_timestamp);
+            $carbon_object = Carbon::createFromTimestamp($month_timestamp);
+            $carbon_object->month += 1;
+            $next_month = $carbon_object->timestamp;
+            $year_array[] = array(
+                'date' => $date,
+                'value' => 0,
+                'timestamp' => $month_timestamp
+            );
+            //move to next day
+            $month_timestamp = $next_month;
+        }
+        return $year_array; 
     }
 
     public function create_week($min, $max)
@@ -192,10 +234,10 @@ class Dashboard_Widget {
     public function min_max_intervals($interval)
     {
         if($interval === 'month'){
-            $min = Carbon::parse('7 months ago')->timestamp;
+            $min = Carbon::parse('5 months ago')->timestamp;
             $max = Carbon::now()->timestamp;
         } elseif($interval === 'day'){
-            $min = Carbon::parse('7 days ago')->timestamp;
+            $min = Carbon::parse('6 days ago')->timestamp;
             $max = Carbon::now()->timestamp;
         }
 
