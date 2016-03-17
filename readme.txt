@@ -109,6 +109,8 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 * A Shortcode has been added to make regular WP pages a wrapper for incompatible plugins.
 * Wrappers are now more compatible with other plugins.
 * The Omnibar Settings page has been updated for a better UX.
+* A wrapper can now be applied to a specific IDX Page when editing IDX Pages.
+* A new Dashboard widget has been added for a convenient overview of Leads and Listings.
 
 = 2.0.2 =
 * Fixed an issue where a saved links field was incorrectly displaying on Carousel and Showcase shortcodes for Lite accounts (This only works for Platinum accounts).
