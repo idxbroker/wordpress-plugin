@@ -34,13 +34,20 @@ class Dashboard_Widget {
     public function dashboard_widget_html()
     {
         $output = '<div class="widget-header">';
-        $output .= '<button class="leads">Lead Overview</button>';
-        $output .= '<button class="listings">Listing Overview</button>';
+        $output .= '<button class="button leads" disabled="disabled">Lead Overview</button>';
+        $output .= '<button class="button button-primary listings">Listing Overview</button>';
         $output .= '<div class="timeframe">';
-        $output .= '<label>Month</label>';
-        $output .= '<input id="timeframe-switch" type="checkbox">';
         $output .= '<label>Day</label>';
+        $output .= '<div class="onoffswitch">';
+        $output .= '<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="timeframeswitch">';
+        $output .= '<label class="onoffswitch-label" for="timeframeswitch">';
+        $output .= '<span class="onoffswitch-inner"></span>';
+        $output .= '<span class="onoffswitch-switch"></span>';
+        $output .= '</label>';
+        $output .= '</div>';
+        $output .= '<label>Month</label>';
         $output .= '</div></div>';
+        $output .= '<div class="idx-loader"></div>';
         $output .= '<div class="leads-overview"></div>';
         $output .= '<div class="listings-overview"></div>';
         $output .= '<div class="side-overview"></div>';

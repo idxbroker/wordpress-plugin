@@ -8,3 +8,4 @@ vendor/*
 !vendor/nesbot
 composer.lock
 *.swp
+*.swo
