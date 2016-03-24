@@ -53,7 +53,7 @@ class Initiate_Plugin
         $this->app->make('\IDX\Shortcodes\Shortcode_Ui');
         $this->app->make('\IDX\Help');
         $this->app->make('\IDX\Views\Omnibar_Settings');
-        $this->app->make('\IDX\Review_Prompt');
+        //$this->app->make('\IDX\Review_Prompt');
         $this->app->make('\IDX\Blacklist');
     }
 
@@ -93,7 +93,7 @@ class Initiate_Plugin
     {
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
-            update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION); 
+            update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
             //set to prompt for review in one week
             \IDX\Review_Prompt::set_timestamp();
             //clear old api cache
