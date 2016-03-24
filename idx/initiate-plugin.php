@@ -53,7 +53,7 @@ class Initiate_Plugin
         $this->app->make('\IDX\Shortcodes\Shortcode_Ui');
         $this->app->make('\IDX\Help');
         $this->app->make('\IDX\Views\Omnibar_Settings');
-        //$this->app->make('\IDX\Review_Prompt');
+        $this->app->make('\IDX\Review_Prompt');
         $this->app->make('\IDX\Blacklist');
     }
 
