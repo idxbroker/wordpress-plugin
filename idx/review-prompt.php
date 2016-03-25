@@ -54,6 +54,9 @@ class Review_Prompt
 
     public function dismiss_prompt()
     {
+        if (!get_option('idx_dismiss_review_prompt')) {
+            add_option('idx_dismiss_review_prompt');
+        }
         update_option('idx_dismiss_review_prompt', true);
         wp_die();
     }
