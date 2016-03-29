@@ -18,11 +18,7 @@ class Dashboard_Widget {
 
     public function add_dashboard_widget()
     {
-        wp_add_dashboard_widget(
-            'idx_dashboard_widget',
-            'IMPress for IDX',
-            array($this, 'compile_dashboard_widget')
-        );
+        add_meta_box( 'idx_dashboard_widget', 'IMPress for IDX Broker', array($this, 'compile_dashboard_widget'), 'dashboard', 'normal', 'high'  );
     }
 
     public function compile_dashboard_widget()
@@ -50,7 +46,7 @@ class Dashboard_Widget {
         $output .= '<div class="idx-loader"></div>';
         $output .= '<div class="leads-overview"></div>';
         $output .= '<div class="listings-overview"></div>';
-        $output .= '<div class="side-overview"></div>';
+        $output .= '<div class="side-overview">' . $this->side_overview() . '</div>';
         return $output;
     }
 
@@ -85,7 +81,20 @@ class Dashboard_Widget {
 
     public function side_overview()
     {
-        $output = '';
+        try {
+            $leads = $this->new_leads();
+        } catch (Exception $error){
+            $leads = $error->getMessage();
+        }
+        try {
+            $listings = $this->popular_listings();
+        } catch (Exception $error){
+            $listings = $error->getMessage();
+        }
+        $output = '<div class="new-leads"><p>New Leads</p>';
+        $output .= '<ul>' . $leads . '</ul></div>';
+        $output .= '<div class="popular-listings"><p>Popular Listings</p>';
+        $output .= '<ul>' . $listings . '</ul></div>';
         return $output;
     }
 
@@ -94,6 +103,7 @@ class Dashboard_Widget {
         wp_enqueue_style('idx-dashboard-widget', plugins_url('/assets/css/idx-dashboard-widget.css', dirname(__FILE__)));
         wp_enqueue_script('google-charts', 'https://www.gstatic.com/charts/loader.js');
         wp_enqueue_script('idx-dashboard-widget', plugins_url('/assets/js/idx-dashboard-widget.min.js', dirname(__FILE__)));
+        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
     }
 
     public function leads_json($timeframe, $interval)
@@ -131,11 +141,58 @@ class Dashboard_Widget {
         return $listings;
     }
 
-    public function side_json()
+    public function new_leads()
     {
         //order newest first
-        $leads = array_slice(array_reverse($this->idx_api->get_leads()), 0, 5);
-        $listings = array_slice($this->idx_api->get_featured_listings(), 0, 5);
+        $leads_array = array_slice(array_reverse($this->idx_api->get_leads()), 0, 5);
+        //handle empty leads and listing arrays
+        if(empty($leads_array)){
+            throw new Exception('No Leads Returned');
+        }
+
+        $leads = '';
+
+        //prepare leads for display
+        foreach($leads_array as $lead){
+            $leads .= '<li><p class="lead-name">';
+            $leads .= $lead->firstName . ' ' . $lead->lastName[0] . '.</p>';
+            $leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fa fa-envelope-o"></i></li>';
+        }
+
+        return $leads;
+    }
+
+    public function popular_listings()
+    {
+        $listings_array = $this->sort_listings_by_views($this->idx_api->get_featured_listings());
+        //only display 5 in order of most views first
+        $listings_array = array_slice(array_reverse($listings_array), 0, 5);
+        if(empty($listings_array)){
+            throw new Exception('No Listings Returned');
+        }
+        $listings = '';
+         
+        //prepare listings for display
+        foreach($listings_array as $listing){
+            $listings .= '<li><p class="listing-address">' . $listing->address . '</p>';
+            $listings .= '<p class="listing-views">' . $listing->viewCount . ' Views</p><i class="fa fa-external-link"></i></li>';
+        }
+
+        return $listings;
+    }
+
+    public function sort_listings_by_views($listings)
+    {
+        usort($listings, function($a, $b)
+        {
+            if((int) $a->viewCount === (int) $b->viewCount){
+                return 0;
+            }
+
+            return ((int) $a->viewCount < (int) $b->viewCount) ? -1 : 1;
+        });
+
+        return $listings;
     }
 
     public function leads_month_interval($interval_data, $min_max)
