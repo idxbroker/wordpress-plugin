@@ -57,7 +57,6 @@ class Dashboard_Widget {
     public function leads_overview()
     {
         $interval = sanitize_text_field($_POST['timeframe']);
-        //maximum API allows:
         $timeframe = 144;
 
         try {
@@ -72,8 +71,10 @@ class Dashboard_Widget {
 
     public function listings_overview()
     {
+        $interval = sanitize_text_field($_POST['timeframe']);
+
         try {
-            $listings = json_encode($this->listings_json($timeframe, 'day'));
+            $listings = json_encode($this->listings_json($interval));
             echo $listings;
             wp_die();
         } catch (Exception $error){
@@ -114,14 +115,20 @@ class Dashboard_Widget {
         return $data;
     }
 
-    public function listings_json($timeframe, $interval)
+    public function listings_json($interval)
     {
-        $active = $this->get_listings_number($this->idx_api->get_featured_listings(), 'active');
-        $featured_pending = $this->get_listings_number($this->idx_api->get_featured_listings(), 'pending');
-        $pending = $this->get_listings_number($this->idx_api->get_featured_listings('soldpending'), 'pending');
-        $sold = $this->get_listings_number($this->idx_api->get_featured_listings('soldpending'), 'sold');
-         
-        return compact('active', 'featured_pending', 'pending', 'sold');
+        $data = array();
+        if($interval === 'day'){
+            //return one week of data
+            $timeframe = 24 * 7;
+
+        } else {
+            //return one month of data 
+            $timeframe = 24 * 30;
+        }
+
+        $listings = $this->all_listings_numbers($timeframe); 
+        return $listings;
     }
 
     public function side_json()
@@ -190,6 +197,7 @@ class Dashboard_Widget {
                 $date = $day['date'];
                 $data_timestamp = $data_day['timestamp'];
                 $timestamp = $day['timestamp'];
+
                 if(date('m-d', $data_timestamp) === $date){
                     $data[] = array(
                         $date, 
@@ -250,6 +258,7 @@ class Dashboard_Widget {
         $min_max = $this->min_max_intervals($interval);
         $api_data = $this->idx_api->get_leads(); 
 
+        //if no leads in API data, throw exception
         if(empty($api_data)){
             throw new Exception('No Leads Returned');
         }
@@ -268,6 +277,11 @@ class Dashboard_Widget {
         }
 
         $interval_data = $this->interval_data($leads_array, $interval);
+
+        //if no leads are within the timeframe, throw exception
+        if(empty($interval_data)){
+            throw new Exception('No Leads Returned');
+        }
 
         return compact('min_max', 'interval_data');
 
@@ -304,22 +318,50 @@ class Dashboard_Widget {
         return $interval_data;
     }
 
-    
-
-    public function get_listings_number($listings, $status)
+    public function all_listings_numbers($timeframe)
     {
-        $count = 0;
-        foreach($listings as $listing){
-            $listingStatus = $listings->propStatus;
-            if($listingStatus === $status){
-                $count++;
-            }
-        }
-        return $count;
+
+        $featured = $this->idx_api->get_featured_listings('featured', $timeframe);
+        $archived = $this->idx_api->get_featured_listings('soldpending', $timeframe);
+        $all_listings = array_merge($featured, $archived);
+
+        $listings_json = $this->get_listings_number($all_listings, 'idxStatus');
+         
+        return $listings_json;
+
     }
 
-    public function hours_before_now($timeframe)
+    public function get_listings_number($listings, $status_type)
     {
-        return Carbon::parse($timeframe)->diffInHours(Carbon::now());
+        //if no listings, throw exception
+        if(empty($listings)){
+            throw new Exception('No Listings Returned');
+        }
+
+        //chart headers
+        $json_data = array(
+            array('Listing Status', 'Count')
+        );
+
+        $listings_record = array();
+
+        foreach($listings as $listing){
+            $listing_status = $listing->$status_type;
+
+            //if status entry is not yet set, add it
+            if(! isset($listings_record[$listing_status])){
+                $listings_record[$listing_status] = array($listing_status, 1);
+            } else {
+                //increase count of status
+                $listings_record[$listing_status][1] += 1;
+            }
+        }
+
+        //prepare data for use with front end charts
+        foreach($listings_record as $status){
+            $json_data[] = $status;
+        }
+
+        return $json_data;
     }
 }

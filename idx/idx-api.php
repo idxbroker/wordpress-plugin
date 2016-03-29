@@ -663,10 +663,10 @@ class Idx_Api
         return $leads;
     }
     
-    public function get_featured_listings($listing_type = 'featured', $timeframe = null, $start_date = null)
+    public function get_featured_listings($listing_type = 'featured', $timeframe = null)
     {
         if(! empty($timeframe)){
-            $listings = $this->idx_api("$listing_type?interval=$timeframe&startDatetime=$start_date");
+            $listings = $this->idx_api("$listing_type?interval=$timeframe");
         } else {
             $listings = $this->idx_api($listing_type);
         }

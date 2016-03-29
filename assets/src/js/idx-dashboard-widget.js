@@ -19,6 +19,7 @@ window.addEventListener('load', function(){
         //show loader
         loader.style.display = 'block';
         listingsOverviewContainer.style.display = 'none';
+        leadsOverviewContainer.style.display = 'block';
         leadsOverviewContainer.style.opacity = 0;
         //load json data
         jQuery.post(
@@ -28,7 +29,9 @@ window.addEventListener('load', function(){
         }).done(function(jsonData){
             //handle error
             if(jsonData === 'No Leads Returned'){
-                document.querySelector('.leads-overview').innerHTML = jsonData;
+                loader.style.display = 'none';
+                leadsOverviewContainer.style.opacity = 1;
+                return leadsOverviewContainer.innerHTML = jsonData;
             }
             var data = google.visualization.arrayToDataTable(JSON.parse(jsonData));
 
@@ -56,22 +59,25 @@ window.addEventListener('load', function(){
         //show loader
         loader.style.display = 'block';
         leadsOverviewContainer.style.display = 'none';
+        listingsOverviewContainer.style.display = 'block';
+        listingsOverviewContainer.style.opacity = 0;
         //load json data
         jQuery.post(
             ajaxurl, {
-                'action': 'idx_dashboard_leads',
+                'action': 'idx_dashboard_listings',
                 'timeframe' : getTimeframe()
         }).done(function(jsonData){
             //handle error
-            if(jsonData === 'No Leads Returned'){
-                document.querySelector('.listings-overview').innerHTML = jsonData;
+            if(jsonData === 'No Listings Returned'){
+                loader.style.display = 'none';
+                listingsOverviewContainer.style.opacity = 1;
+                return document.querySelector('.listings-overview').innerHTML = jsonData;
             }
             var data = google.visualization.arrayToDataTable(JSON.parse(jsonData));
 
             var options = {
                 title: 'Listing Statistics',
-                hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
-                vAxis: {minValue: 0},
+                pieHole: 0.4,
                 //show animation
                 animation: {
                     startup: true,
@@ -79,10 +85,12 @@ window.addEventListener('load', function(){
                 }
             };
 
-            var chart = new google.visualization.AreaChart(document.querySelector('.listings-overview'));
+            var chart = new google.visualization.PieChart(document.querySelector('.listings-overview'));
             chart.draw(data, options);
 
             listingsOverviewContainer.style.display = 'block';
+            listingsOverviewContainer.style.opacity = 1;
+
             return loader.style.display = 'none';
         }); 
  
@@ -90,6 +98,10 @@ window.addEventListener('load', function(){
 
     function getLeads(){
         google.charts.setOnLoadCallback(leadsChart);
+    }
+
+    function getListings(){
+        google.charts.setOnLoadCallback(listingsChart);
     }
 
     function initialLoad(){
@@ -103,7 +115,7 @@ window.addEventListener('load', function(){
     function listingOverview(event){
         event.preventDefault();
         listingsOverviewButton.classList.remove('button-primary');
-        listingsOverviewButton.disabled = 'disabled';
+        listingsOverviewButton.disabled = true;
         leadsOverviewButton.disabled = false;
         leadsOverviewButton.classList.add('button-primary');
         getListings();
@@ -112,15 +124,23 @@ window.addEventListener('load', function(){
     function leadOverview(event){
         event.preventDefault();
         leadsOverviewButton.classList.remove('button-primary');
-        leadsOverviewButton.disabled = 'disabled';
         leadsOverviewButton.disabled = true;
+        listingsOverviewButton.disabled = false;
         listingsOverviewButton.classList.add('button-primary');
         getLeads();
     }
 
+    function timeframeChange(){
+        if(leadsOverviewButton.disabled === true){
+            getLeads();
+        } else {
+            getListings();
+        }
+    }
+
     function listenToButtons(){
         //reload chart when timeframe is changed
-        timeframe.addEventListener('change', getLeads);
+        timeframe.addEventListener('change', timeframeChange);
         //change view when listing
         listingsOverviewButton.addEventListener('click', listingOverview);
         leadsOverviewButton.addEventListener('click', leadOverview);

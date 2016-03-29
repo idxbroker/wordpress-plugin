@@ -17,8 +17,12 @@
 
 #idx_dashboard_widget .inside {
     min-height: 17rem;
+    width: 100%;
 }
 
+#idx_dashboard_widget .leads-overview, #idx_dashboard_widget .listings-overview {
+    min-height: 17rem;
+}
 
 
 /* on off switch */
