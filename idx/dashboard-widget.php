@@ -33,7 +33,7 @@ class Dashboard_Widget {
         $output .= '<button class="button leads" disabled="disabled">Lead Overview</button>';
         $output .= '<button class="button button-primary listings">Listing Overview</button>';
         $output .= '<div class="timeframe">';
-        $output .= '<label>Day</label>';
+        $output .= '<label class="week-day-label">Day</label>';
         $output .= '<div class="onoffswitch">';
         $output .= '<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="timeframeswitch">';
         $output .= '<label class="onoffswitch-label" for="timeframeswitch">';
@@ -154,9 +154,11 @@ class Dashboard_Widget {
 
         //prepare leads for display
         foreach($leads_array as $lead){
+            //edit lead in MW link
+            $leads .= '<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id='  . $lead->id . '" target="_blank">';
             $leads .= '<li><p class="lead-name">';
             $leads .= $lead->firstName . ' ' . $lead->lastName[0] . '.</p>';
-            $leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fa fa-envelope-o"></i></li>';
+            $leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fa fa-envelope-o"></i></li></a>';
         }
 
         return $leads;
@@ -174,8 +176,9 @@ class Dashboard_Widget {
          
         //prepare listings for display
         foreach($listings_array as $listing){
+            $listings .= '<a href="' . $listing->fullDetailsURL . '" target="_blank">';
             $listings .= '<li><p class="listing-address">' . $listing->address . '</p>';
-            $listings .= '<p class="listing-views">' . $listing->viewCount . ' Views</p><i class="fa fa-external-link"></i></li>';
+            $listings .= '<p class="listing-views">' . $listing->viewCount . ' Views</p><i class="fa fa-external-link"></i></li></a>';
         }
 
         return $listings;

@@ -18,6 +18,7 @@ window.addEventListener('load', function(){
     function leadsChart(){
         //show loader
         loader.style.display = 'block';
+        document.querySelector('#idx_dashboard_widget .week-day-label').innerHTML = 'Day';
         listingsOverviewContainer.style.display = 'none';
         leadsOverviewContainer.style.display = 'block';
         leadsOverviewContainer.style.opacity = 0;
@@ -58,6 +59,7 @@ window.addEventListener('load', function(){
     function listingsChart(){
         //show loader
         loader.style.display = 'block';
+        document.querySelector('#idx_dashboard_widget .week-day-label').innerHTML = 'Week';
         leadsOverviewContainer.style.display = 'none';
         listingsOverviewContainer.style.display = 'block';
         listingsOverviewContainer.style.opacity = 0;
