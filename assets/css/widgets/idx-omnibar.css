@@ -122,7 +122,7 @@ div.awesomplete > ul > li {
     width: 100%;
 }
 
-.idx-omnibar-extra.idx-omnibar-price-container.idx-omnibar-min-price-container, .idx-omnibar-extra.idx-omnibar-price-container.idx-omnibar-max-price-container {
+.idx-omnibar-form.idx-omnibar-extra-form .idx-omnibar-extra.idx-omnibar-price-container.idx-omnibar-min-price-container, .idx-omnibar-extra.idx-omnibar-price-container.idx-omnibar-max-price-container {
     width: 47%;
 }
 

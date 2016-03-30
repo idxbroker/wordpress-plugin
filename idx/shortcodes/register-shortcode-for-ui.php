@@ -179,12 +179,12 @@ class Register_Shortcode_For_Ui
     {
         // Default Styles
         $output = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-        $output .= "<input type=\"checkbox\" id=\"extra\" data-short-name=\"extra\">";
-        $output .= "<label for\"extra\">Extra Fields?</label>";
-        $output .= "</div>";
-        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
+        $output .= "</div>";
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"extra\" data-short-name=\"extra\">";
+        $output .= "<label for\"extra\">Extra Fields?</label>";
         $output .= "</div>";
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"min_price\" data-short-name=\"min_price\">";
