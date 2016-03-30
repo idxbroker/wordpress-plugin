@@ -158,7 +158,7 @@ class Dashboard_Widget {
             $leads .= '<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id='  . $lead->id . '" target="_blank">';
             $leads .= '<li><p class="lead-name">';
             $leads .= $lead->firstName . ' ' . $lead->lastName[0] . '.</p>';
-            $leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fa fa-envelope-o"></i></li></a>';
+            $leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fa fa-user"></i></li></a>';
         }
 
         return $leads;

@@ -13,6 +13,7 @@
 
 #idx_dashboard_widget .widget-header {
     margin-bottom: 1.5rem;
+    vertical-align: top;
 }
 
 #idx_dashboard_widget .widget-header button {
@@ -126,6 +127,11 @@
 
 
 /* Loader */
+#idx_dashboard_widget .inside > div.idx-loader {
+    vertical-align: top;
+    display: block;
+}
+
 .idx-loader {
     display: none;
     width: 50px;

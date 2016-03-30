@@ -39,7 +39,11 @@ window.addEventListener('load', function(){
             var options = {
                 title: 'Lead Statistics',
                 hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
-                vAxis: {minValue: 0},
+                //no negative values, no repeat or decimals
+                vAxis: {minValue: 0, maxValue: 4, format: '#'},
+                legend: {position: 'in'},
+                axisTitlesPosition: 'out',
+                theme: 'maximized',
                 //show animation
                 animation: {
                     startup: true,
