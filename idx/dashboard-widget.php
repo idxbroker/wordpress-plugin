@@ -53,7 +53,7 @@ class Dashboard_Widget {
     public function leads_overview()
     {
         $interval = sanitize_text_field($_POST['timeframe']);
-        $timeframe = 144;
+        $timeframe = null;
 
         try {
             $leads = json_encode($this->leads_json($timeframe, $interval));
@@ -180,20 +180,6 @@ class Dashboard_Widget {
             $listings .= '<li><p class="listing-address">' . $listing->address . '</p>';
             $listings .= '<p class="listing-views">' . $listing->viewCount . ' Views</p><i class="fa fa-external-link"></i></li></a>';
         }
-
-        return $listings;
-    }
-
-    public function sort_listings_by_views($listings)
-    {
-        usort($listings, function($a, $b)
-        {
-            if((int) $a->viewCount === (int) $b->viewCount){
-                return 0;
-            }
-
-            return ((int) $a->viewCount < (int) $b->viewCount) ? -1 : 1;
-        });
 
         return $listings;
     }
@@ -383,9 +369,12 @@ class Dashboard_Widget {
 
         $featured = $this->idx_api->get_featured_listings('featured', $timeframe);
         $archived = $this->idx_api->get_featured_listings('soldpending', $timeframe);
+        //only idxStatus has sold/pending status, so copy that to propStatus
+        $archived = $this->clone_idx_status_to_prop_status($archived);
         $all_listings = array_merge($featured, $archived);
 
-        $listings_json = $this->get_listings_number($all_listings, 'idxStatus');
+        //find the number of listings per status for all account's listings
+        $listings_json = $this->get_listings_number($all_listings, 'propStatus');
          
         return $listings_json;
 
@@ -423,5 +412,29 @@ class Dashboard_Widget {
         }
 
         return $json_data;
+    }
+
+    //prepare sold/pending listings status
+    public function clone_idx_status_to_prop_status($listings)
+    {
+        foreach($listings as $listing){
+            $listing->propStatus = $listing->idxStatus;
+        }
+
+        return $listings;
+    }
+
+    public function sort_listings_by_views($listings)
+    {
+        usort($listings, function($a, $b)
+        {
+            if((int) $a->viewCount === (int) $b->viewCount){
+                return 0;
+            }
+
+            return ((int) $a->viewCount < (int) $b->viewCount) ? -1 : 1;
+        });
+
+        return $listings;
     }
 }
