@@ -84,12 +84,12 @@ class Dashboard_Widget {
         try {
             $leads = $this->new_leads();
         } catch (Exception $error){
-            $leads = $error->getMessage();
+            $leads = '<li>' . $error->getMessage() . '</li>';
         }
         try {
             $listings = $this->popular_listings();
         } catch (Exception $error){
-            $listings = $error->getMessage();
+            $listings = '<li>' . $error->getMessage() . '</li>';
         }
         $output = '<div class="new-leads"><p>New Leads</p>';
         $output .= '<ul>' . $leads . '</ul></div>';
@@ -144,11 +144,13 @@ class Dashboard_Widget {
     public function new_leads()
     {
         //order newest first
-        $leads_array = array_slice(array_reverse($this->idx_api->get_leads()), 0, 5);
+        $leads_array = $this->idx_api->get_leads();
         //handle empty leads and listing arrays
-        if(empty($leads_array)){
+        if(is_wp_error($leads_array) || empty($leads_array)){
             throw new Exception('No Leads Returned');
         }
+
+        $leads_array = array_slice(array_reverse($leads_array), 0, 5);
 
         $leads = '';
 
@@ -166,12 +168,15 @@ class Dashboard_Widget {
 
     public function popular_listings()
     {
-        $listings_array = $this->sort_listings_by_views($this->idx_api->get_featured_listings());
-        //only display 5 in order of most views first
-        $listings_array = array_slice(array_reverse($listings_array), 0, 5);
-        if(empty($listings_array)){
+        $listings_array = $this->idx_api->get_featured_listings();
+        if(is_wp_error($listings_array) || empty($listings_array)){
             throw new Exception('No Listings Returned');
         }
+
+        $listings_array = $this->sort_listings_by_views($listings_array);
+        //only display 5 in order of most views first
+        $listings_array = array_slice(array_reverse($listings_array), 0, 5);
+
         $listings = '';
          
         //prepare listings for display
@@ -302,10 +307,10 @@ class Dashboard_Widget {
     {
         $leads_array = array();
         $min_max = $this->min_max_intervals($interval);
-        $api_data = $this->idx_api->get_leads(); 
 
+        $api_data = $this->idx_api->get_leads(); 
         //if no leads in API data, throw exception
-        if(empty($api_data)){
+        if(is_wp_error($api_data) || empty($api_data)){
             throw new Exception('No Leads Returned');
         }
 
