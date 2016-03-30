@@ -6,6 +6,7 @@ node_modules
 vendor/*
 !vendor/netrivet
 !vendor/nesbot
+!vendor/autoload.php
 composer.lock
 *.swp
 *.swo
