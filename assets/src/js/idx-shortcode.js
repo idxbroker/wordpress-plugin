@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function(event){
 
     if(typeof el('#idx-shortcode')[0] === 'undefined'){
@@ -18,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function(event){
     var editTabButton = el('.idx-modal-tabs a:nth-of-type(1)')[0];
     var previewTabButton = el('.idx-modal-tabs a:nth-of-type(2)')[0];
     var tabButtons = el('.idx-modal-tabs-router')[0];
+    var styleSheetUrls = [];
+    var previewScriptsLoaded = false;
 
 
     //helper function avoiding jQuery for speed
@@ -203,13 +204,17 @@ document.addEventListener('DOMContentLoaded', function(event){
                 'action': 'idx_shortcode_preview',
                 'idx_shortcode' : shortcode
             }).done(function(data){
+                previewScriptsLoaded = false;
+                previewTab.querySelector('.idx-loader').style.display = 'none';
                 //set the preview tab to active styling
                 el('.idx-modal-tabs a:nth-of-type(2)')[0].classList.add('idx-active-tab');
                 //fill the preview tab with shortcode data
-                previewTab.innerHTML = data;
-                //evaluate scripts that would not load otherwise
-                var scripts = previewTab.querySelectorAll('script');
-                return evalScripts(scripts);
+                loadIframe(data);
+                var iframe = previewTab.querySelector('iframe');
+                //load scripts on edittab into iframe preview
+                evalPreviewScripts(editTab.querySelectorAll('script'), iframe.contentWindow.document.body);
+                //load scripts in shortcode into iframe
+                return 
             }).fail(function(data){
                 //if shortcode content fails, go back to the edit tab
                 openEditTab(event);
@@ -217,62 +222,115 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
     }
 
+    function loadIframe(data){
+        var iframe = document.createElement('iframe');
+        iframe.style.width = '100%';
+        iframe.style.minHeight = '100%';
+        iframe.onload = function(){
+            iframe.contentWindow.document.body.innerHTML = '<div class="idx-modal-shortcode-preview">' + data + '</div>';
+            addStyleSheets(styleSheetUrls, iframe.contentWindow.document.body);
+        }
+        previewTab.appendChild(iframe);
+    }
+
     //evaluate scripts - both external and inline
-    function evalScripts(scripts){
+    function evalPreviewScripts(scripts, destination){
         if(typeof scripts[0] === 'undefined'){
+            return loadPreviewScripts();
+        }
+
+        var i = 0;
+
+        loadScript(scripts[i]);
+
+        function loadScript(script){
+            //if external script, load it otherwise evaluate it
+            var src = script.getAttribute('src');
+            var dynamic = script.getAttribute('data-dynamic');
+            //index
+            i++;
+            //if script was added by this function, do not load again
+            if(dynamic !== null){
+                if(scripts[i]){
+                    return loadScript(scripts[i]);
+                } else {
+                    return loadPreviewScripts();
+                }
+            }
+            //if external script bring it in. Otherwise evaluate it.
+            if(src !== null){
+                var newScript = document.createElement('script');
+                newScript.src = src;
+                newScript.setAttribute('data-dynamic', true);
+
+
+                //if another script exists, load it when this one is done (synchronously)
+                if(scripts[i]){
+                    newScript.onload = function(){
+                        loadScript(scripts[i]);
+                    }
+                } else {
+                    newScript.onload = function(){
+                        loadPreviewScripts();
+                    }
+                }
+
+                return destination.appendChild(newScript);
+            } else {
+                var iframe = previewTab.querySelector('iframe');
+                iframe.contentWindow.eval(script.innerHTML);
+                //if another script exists, load it after this one
+                if(scripts[i]){
+                    loadScript(scripts[i]);
+                } else {
+                    //otherwise load preview scripts;
+                    return loadPreviewScripts();
+                }
+            }
+        }
+    }
+
+    function evalScripts(scripts){
+        if(scripts[0] === 'undefined'){
             return;
         }
         forEach(scripts, function(value){
-            //if external script, load it otherwise evaluate it
-            var src = value.getAttribute('src');
-            if(src !== null){
-                return jQuery.getScript(src);
-            } else {
-                eval(value.innerHTML);
-            }
+            eval(value.innerHTML);
         })
     }
 
+    function loadPreviewScripts(){
+        if(previewScriptsLoaded){
+            return;
+        }
+        previewScriptsLoaded = true;
+        var iframe = previewTab.querySelector('iframe');
+        evalPreviewScripts(iframe.contentWindow.document.querySelectorAll('script'), iframe.contentWindow.document.body);
+    }
+
+    function addStyleSheets(urls, context){
+        //only load styles when default styles is checked
+        var styles = document.querySelectorAll('.idx-modal-shortcode-edit #styles')[0];
+
+        if(typeof styles !== 'undefined' && styles.checked){
+            forEach(urls, function(value){
+                addStyleSheet(value, context);
+            });
+        }
+    }
+
     //Add a stylesheet for shortcodes to be styled properly
-    function addStyleSheet(url, fieldId){
-        if(typeof fieldId !== 'undefined'){
-            if(editTab.querySelector(fieldId).value && editTab.querySelector(fieldId).value !== '0'){
-                return addStyleSheetElement(url, true);
-            }
-        } else {
-            return addStyleSheetElement(url);
+    function addStyleSheet(url, context){
+        var styleSheet = document.createElement("link");
+        styleSheet.setAttribute("rel", "stylesheet");
+        styleSheet.setAttribute("type", "text/css");
+        styleSheet.setAttribute("href", url);
+        if(typeof removable !== 'undefined'){
+            styleSheet.setAttribute("class", "preview-css");
         }
+        return context.appendChild(styleSheet);
     }
 
-    //Create a new stylesheet and make removable if options require it
-    function addStyleSheetElement(url, removable){
-            var styleSheet = document.createElement("link");
-                styleSheet.setAttribute("rel", "stylesheet");
-                styleSheet.setAttribute("type", "text/css");
-                styleSheet.setAttribute("href", url);
-                if(typeof removable !== 'undefined'){
-                    styleSheet.setAttribute("class", "preview-css");
-                }
-                return document.getElementsByTagName("head")[0].appendChild(styleSheet);
-    }
-
-    //Array of stylesheets
-    var styleSheetUrls = [];
-    //Remove each old stylesheet and store in array (called from register-shortcode-for-ui.php)
-    function refreshStyles(fieldId){
-        if(typeof el('.preview-css')[0] !== 'undefined'){
-            forEach(el(".preview-css"), function(value, index){
-                styleSheetUrls.push(value.getAttribute('href'));
-                value.parentNode.removeChild(value);
-                return addStyleSheet(styleSheetUrls[index], fieldId);
-            });
-        } else{
-            forEach(styleSheetUrls, function(value, index){
-                addStyleSheet(styleSheetUrls[index], fieldId);
-            });
-        }
-
-    }
 
     //Go back to the edit tab after a preview of the shortcode
     function openEditTab(event){

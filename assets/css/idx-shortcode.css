@@ -45,6 +45,8 @@
     max-height: 84.9%;
     overflow-y: auto;
     overflow-x: hidden;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .idx-modal-content .media-modal-close {
@@ -86,6 +88,8 @@
 .idx-modal-shortcode-edit, .idx-modal-shortcode-preview {
     border-top: 1px solid #DDDDDD;
     padding: 1rem;
+    height: 93%;
+    box-sizing: border-box;
 }
 
 .wp-media-buttons .idx-modal-shortcode-edit a {
@@ -322,7 +326,7 @@
         bottom: 5.7%;
     }
     .idx-modal-inner-content {
-        max-height: 78.9%;
+        max-height: 84.9%;
     }
 
 }
