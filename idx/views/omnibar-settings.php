@@ -4,9 +4,10 @@ namespace IDX\Views;
 class Omnibar_Settings
 {
 
-    public function __construct(\IDX\Idx_Api $idx_api)
+    public function __construct($app, \IDX\Idx_Api $idx_api)
     {
 
+        $this->app = $app;
         $this->idx_api = $idx_api;
 
         //preload via javascript if first load of view
@@ -332,7 +333,7 @@ EOT;
         update_option('idx_omnibar_custom_fields', $fields);
         update_option('idx_default_property_types', $_POST['mlsPtIDs']);
         update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']));
-        new \IDX\Widgets\Omnibar\Get_Locations();
+        $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
         return wp_die();
     }
 
