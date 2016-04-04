@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', function(event){
     var previewScriptsLoaded = false;
 
 
-    //helper function avoiding jQuery for speed
+    //Helper function avoiding jQuery for speed.
     function el(selector){
         return document.querySelectorAll(selector);
     }
 
-    //helper function for loops
+    //Helper function for loops.
     function forEach (array, callback, scope) {
       for (var i = 0; i < array.length; i++) {
         callback.call(scope, array[i], i);
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function(event){
  *
  */
 
-    //Open the Modal and perform necessary actions
+    //Open the Modal and perform necessary actions.
     function openShortcodeModal(event) {
         event.preventDefault();
         modal.style.display = 'block';
@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', function(event){
         el('.idx-back-button')[0].style.display = 'none';
     }
 
-    //Close the modal and perform reset actions in case they open it again
+    //Close the modal and perform reset actions in case they open it again.
     function closeShortcodeModal(event) {
-        //only close the modal if the overlay, close, or insert buttons are clicked
+        //Only close the modal if the overlay, close, or insert buttons are clicked.
         if(event.target === modal || event.target === close || event.target === close.querySelector('span') || event.target === insertButton){
             event.preventDefault();
             modal.style.display = 'none';
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
     }
 
-    //Back button to get from Shortcode Details to the Overview
+    //Back button to get from Shortcode Details to the Overview.
     function backToOverview(event){
         event.preventDefault();
         overView.style.display = 'block';
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function(event){
     }
 
 
-    //initialize button and modal functionality
+    //Initialize button and modal functionality.
     function initializeModal(){
         el('#idx-shortcode')[0].addEventListener('click', openShortcodeModal);
         modal.addEventListener('click', function(event){
@@ -107,10 +107,10 @@ document.addEventListener('DOMContentLoaded', function(event){
         forEach(el('.idx-shortcode-type'), function (value, index) {value.addEventListener('click', getShortcodeData);});
     }
 
-    //get options for the shortcode type selected before insertion
+    //Get options for the shortcode type selected before insertion.
     function getShortcodeData(event){
         var nodeName = event.target.nodeName;
-        //prevent bug where clicking on the icon does not give correct shortname attribute
+        //Prevent bug where clicking on the icon does not give correct shortname attribute.
         if(nodeName === 'I'){
             shortcodeType = event.target.parentNode.parentNode.getAttribute('data-short-name');
         } else{
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         overView.style.display = 'none';
         editTab.style.display = 'block';
         el('.idx-back-button')[0].style.display = 'block';
-        //Display Loading Icon while Options Load
+        //Display Loading Icon while Options Load.
         editTab.innerHTML = "<div class=\"idx-loader\"></div>";
         return jQuery.post(
             ajaxurl, {
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         });
     }
 
-    //Change Details Modal Title
+    //Change Details Modal Title.
     function shortcodeDetailTitle(shortcodeType){
         switch(shortcodeType){
             case 'system_links':
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function(event){
                 modalTitle.innerHTML = 'Shortcode Details - IMPress Property Carousel';
                 break;
             default:
-                //for a custom third party title
+                //For a custom third party title.
                 jQuery.post(
                 ajaxurl, {
                     'action': 'idx_shortcode_title',
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         }
     }
 
-    //load shortcode html via ajax
+    //Load shortcode html via ajax.
     function openPreviewTab(event, loadContent){
         event.preventDefault();
         var shortcode = formShortcode();
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function(event){
         editTabButton.classList.remove('idx-active-tab');
         previewTabButton.classList.add('idx-active-tab');
 
-        //omnibar uses photo instead, so do not load content in that case
+        //Omnibar uses photo instead, so do not load content in that case.
         if(loadContent !== false){
             jQuery.post(
             ajaxurl, {
@@ -206,17 +206,17 @@ document.addEventListener('DOMContentLoaded', function(event){
             }).done(function(data){
                 previewScriptsLoaded = false;
                 previewTab.querySelector('.idx-loader').style.display = 'none';
-                //set the preview tab to active styling
+                //Set the preview tab to active styling.
                 el('.idx-modal-tabs a:nth-of-type(2)')[0].classList.add('idx-active-tab');
-                //fill the preview tab with shortcode data
+                //Fill the preview tab with shortcode data.
                 loadIframe(data);
                 var iframe = previewTab.querySelector('iframe');
-                //load scripts on edittab into iframe preview
+                //Load scripts on edittab into iframe preview.
                 evalPreviewScripts(editTab.querySelectorAll('script'), iframe.contentWindow.document.body);
-                //load scripts in shortcode into iframe
-                return 
+                //Load scripts in shortcode into iframe.
+                return; 
             }).fail(function(data){
-                //if shortcode content fails, go back to the edit tab
+                //If shortcode content fails, go back to the edit tab.
                 openEditTab(event);
             });
         }
