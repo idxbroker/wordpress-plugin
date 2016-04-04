@@ -1,4 +1,4 @@
-window.addEventListener('load', function(){
+window.addEventListener('load', function() {
     var timeframe = document.querySelector('#idx_dashboard_widget #timeframeswitch');
     var leadsOverviewButton = document.querySelector('#idx_dashboard_widget .leads');
     var listingsOverviewButton = document.querySelector('#idx_dashboard_widget .listings');
@@ -6,7 +6,7 @@ window.addEventListener('load', function(){
     var leadsOverviewContainer = document.querySelector('#idx_dashboard_widget .leads-overview');
     var listingsOverviewContainer = document.querySelector('#idx_dashboard_widget .listings-overview');
 
-    function getTimeframe(){
+    function getTimeframe() {
         var value = timeframe.checked;
         if(value === true){
             return 'month';
@@ -15,20 +15,20 @@ window.addEventListener('load', function(){
         }
     }
 
-    function leadsChart(){
-        //show loader
+    function leadsChart() {
+        //Show loader.
         loader.style.display = 'block';
         document.querySelector('#idx_dashboard_widget .week-day-label').innerHTML = 'Day';
         listingsOverviewContainer.style.display = 'none';
         leadsOverviewContainer.style.display = 'block';
         leadsOverviewContainer.style.opacity = 0;
-        //load json data
+        //Load json data.
         jQuery.post(
             ajaxurl, {
                 'action': 'idx_dashboard_leads',
                 'timeframe' : getTimeframe()
         }).done(function(jsonData){
-            //handle error
+            //Handle error.
             if(jsonData === 'No Leads Returned'){
                 loader.style.display = 'none';
                 leadsOverviewContainer.style.opacity = 1;
@@ -39,7 +39,7 @@ window.addEventListener('load', function(){
             var options = {
                 title: 'Lead Statistics',
                 hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
-                //no negative values, no repeat or decimals
+                //No negative values; no repeat or decimals.
                 vAxis: {minValue: 0, maxValue: 4, format: '#'},
                 legend: {position: 'in'},
                 axisTitlesPosition: 'out',
@@ -60,20 +60,20 @@ window.addEventListener('load', function(){
         }); 
     }
 
-    function listingsChart(){
-        //show loader
+    function listingsChart() {
+        //Show loader.
         loader.style.display = 'block';
         document.querySelector('#idx_dashboard_widget .week-day-label').innerHTML = 'Week';
         leadsOverviewContainer.style.display = 'none';
         listingsOverviewContainer.style.display = 'block';
         listingsOverviewContainer.style.opacity = 0;
-        //load json data
+        //Load json data.
         jQuery.post(
             ajaxurl, {
                 'action': 'idx_dashboard_listings',
                 'timeframe' : getTimeframe()
         }).done(function(jsonData){
-            //handle error
+            //Handle the error.
             if(jsonData === 'No Listings Returned'){
                 loader.style.display = 'none';
                 listingsOverviewContainer.style.opacity = 1;
@@ -84,7 +84,7 @@ window.addEventListener('load', function(){
             var options = {
                 title: 'Listing Statistics',
                 pieHole: 0.4,
-                //show animation
+                //Show animation.
                 animation: {
                     startup: true,
                     duration: 500
@@ -102,23 +102,23 @@ window.addEventListener('load', function(){
  
     }
 
-    function getLeads(){
+    function getLeads() {
         google.charts.setOnLoadCallback(leadsChart);
     }
 
-    function getListings(){
+    function getListings() {
         google.charts.setOnLoadCallback(listingsChart);
     }
 
-    function initialLoad(){
-        //load Leads Chart
+    function initialLoad() {
+        //Load Leads Chart.
         google.charts.load('current', {'packages':['corechart']});
         listenToButtons();
-        //load chart on page load
+        //Load chart on page load.
         getLeads();
     }
 
-    function listingOverview(event){
+    function listingOverview(event) {
         event.preventDefault();
         listingsOverviewButton.classList.remove('button-primary');
         listingsOverviewButton.disabled = true;
@@ -127,7 +127,7 @@ window.addEventListener('load', function(){
         getListings();
     }
 
-    function leadOverview(event){
+    function leadOverview(event) {
         event.preventDefault();
         leadsOverviewButton.classList.remove('button-primary');
         leadsOverviewButton.disabled = true;
@@ -136,7 +136,7 @@ window.addEventListener('load', function(){
         getLeads();
     }
 
-    function timeframeChange(){
+    function timeframeChange() {
         if(leadsOverviewButton.disabled === true){
             getLeads();
         } else {
@@ -144,10 +144,10 @@ window.addEventListener('load', function(){
         }
     }
 
-    function listenToButtons(){
-        //reload chart when timeframe is changed
+    function listenToButtons() {
+        //Reload chart when timeframe is changed.
         timeframe.addEventListener('change', timeframeChange);
-        //change view when listing
+        //Change view when listing.
         listingsOverviewButton.addEventListener('click', listingOverview);
         leadsOverviewButton.addEventListener('click', leadOverview);
     }

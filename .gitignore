@@ -11,3 +11,4 @@ vendor/*
 composer.lock
 *.swp
 *.swo
+.bash_profile
