@@ -242,6 +242,7 @@ class Dashboard_Widget {
 
         //create week from last 7 days to iterate over
         $week = $this->create_week($min, $max);
+        $unique_days = array();
         //if lead capture day matches day of week, add to array
         foreach($interval_data as $data_day){
             foreach($week as $day){
@@ -250,17 +251,33 @@ class Dashboard_Widget {
                 $timestamp = $day['timestamp'];
 
                 if(date('m-d', $data_timestamp) === $date){
-                    $data[] = array(
-                        $date, 
-                        $data_day['value']
-                    ); 
+                    if(isset($unique_days[$date])){
+                        $unique_days[$date] = array(
+                            $date,
+                            $unique_days[$date][1] + 1
+                        );
+                    } else {
+                        $unique_days[$date] = array(
+                            $date,
+                            $data_day['value']
+                        );
+                    }
                 } else {
-                    $data[] = array(
-                        $date, 
-                        0
-                    );
+                    if(isset($unique_days[$date])){
+                        //if already set, continue to next item in array
+                        continue;
+                    } else {
+                        $unique_days[$date] = array(
+                            $date,
+                            0
+                        );
+                    }
                 }
             }
+        }
+
+        foreach($unique_days as $unique_day){
+            $data[] = $unique_day;
         }
         return $data;
     }
