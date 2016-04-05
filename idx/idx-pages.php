@@ -11,7 +11,7 @@ class Idx_Pages
 
         add_action('admin_init', array($this, 'show_idx_pages_metabox_by_default'));
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
-        add_filter('cron_schedules', array($this, 'add_fifteen_minutes_schedule'));
+        add_filter('cron_schedules', array($this, 'add_five_minutes_schedule'));
 
         //register hooks for WP Cron to use to update IDX Pages
         add_action('idx_create_idx_pages', array($this, 'create_idx_pages'));
@@ -28,11 +28,11 @@ class Idx_Pages
     }
 
     public $idx_api;
-    public function add_fifteen_minutes_schedule()
+    public function add_five_minutes_schedule()
     {
-        $schedules['fifteenminutes'] = array(
-            'interval' => 60 * 15, //fifteen minutes in seconds
-            'display' => 'Fifteen Minutes',
+        $schedules['fiveminutes'] = array(
+            'interval' => 60 * 5, //five minutes in seconds
+            'display' => 'Five Minutes',
         );
 
         return $schedules;
@@ -46,10 +46,10 @@ class Idx_Pages
            return wp_schedule_single_event(time(), 'idx_delete_idx_pages');
        }
        if (!wp_next_scheduled('idx_create_idx_pages')) {
-           wp_schedule_event(time(), 'fifteenminutes', 'idx_create_idx_pages');
+           wp_schedule_event(time(), 'fiveminutes', 'idx_create_idx_pages');
        }
        if(!wp_next_scheduled('idx_delete_idx_pages')) {
-           wp_schedule_event(time(), 'fifteenminutes', 'idx_delete_idx_pages');
+           wp_schedule_event(time(), 'fiveminutes', 'idx_delete_idx_pages');
        }
    }
 
