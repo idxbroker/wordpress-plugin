@@ -92,7 +92,7 @@ class Idx_Broker_Plugin
         wp_clear_scheduled_hook('idx_omnibar_get_locations');
 
         //disable scheduled IDX Page Update as well
-        \IDX\Idx_Pages::unschedule_idx_page_update();
+        eval('\IDX\Idx_Pages::unschedule_idx_page_update();');
     }
 
     public static function idx_uninstall()
