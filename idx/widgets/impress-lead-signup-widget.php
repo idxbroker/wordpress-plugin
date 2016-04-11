@@ -60,6 +60,10 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         $title = $instance['title'];
         $custom_text = $instance['custom_text'];
 
+
+        //Validate fields
+        wp_enqueue_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
+
         echo $before_widget;
 
         if (!empty($title)) {
@@ -70,6 +74,10 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             echo '<p>', $custom_text, '</p>';
         }
 
+        //Page to go if duplicate account
+        $login_url = $this->lead_login_page();
+        echo "<script>idxLeadLoginUrl = \"$login_url\"</script>";
+
         ?>
 		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="<?php echo $target?>" name="LeadSignup">
 			<input type="hidden" name="action" value="addLead">
@@ -77,18 +85,18 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 			<input type="hidden" name="contactType" value="direct">
 
 			<label id="impress-widgetfirstName-label" class="ie-only" for="impress-widgetfirstName"><?php _e('First Name:', 'idxbroker');?></label>
-			<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name">
+			<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
 
 			<label id="impress-widgetlastName-label" class="ie-only" for="impress-widgetlastName"><?php _e('Last Name:', 'idxbroker');?></label>
-			<input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name">
+			<input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name" required>
 
 			<label id="impress-widgetemail-label" class="ie-only" for="impress-widgetemail"><?php _e('Email:', 'idxbroker');?></label>
-			<input id="impress-widgetemail" type="text" name="email" placeholder="Email">
+			<input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>
 
 			<?php if ($instance['phone_number'] == true) {
             echo '
 				<label id="impress-widgetphone-label" class="ie-only" for="impress-widgetphone">' . __('Phone:', 'idxbroker') . '</label>
-				<input id="impress-widgetphone" type="text" name="phone" placeholder="Phone">';
+				<input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone" required>';
         }?>
 
 			<input id="bb-IDX-widgetsubmit" type="submit" name="submit" value="Sign Up!">
@@ -168,5 +176,18 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         </p>
 		<?php
 
+    }
+
+    function lead_login_page()
+    {
+        $links = $this->idx_api->idx_api_get_systemlinks();
+        if(empty($links)){
+            return '';
+        }
+        foreach($links as $link){
+            if(preg_match('/userlogin/i', $link->url)){
+                return $link->url;
+            }
+        }
     }
 }
