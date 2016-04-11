@@ -139,11 +139,7 @@ class Impress_Carousel_Widget extends \WP_Widget
                 return $output;
             }
 
-            if (($instance['properties']) == 'savedlinks') {
-                $prop_image_url = (isset($prop['image']['1']['url'])) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-            } else {
-                $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-            }
+        $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 
             $count++;
 
