@@ -3,11 +3,6 @@
 .DS_Store?
 .Trashes
 node_modules
-vendor/*
-!vendor/netrivet
-!vendor/nesbot
-!vendor/autoload.php
-!vendor/composer/*
 composer.lock
 *.swp
 *.swo
