@@ -8,7 +8,9 @@ $baseDir = dirname($vendorDir);
 return array(
     'WPReadme2Markdown\\' => array($vendorDir . '/wpreadme2markdown/wpreadme2markdown/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'NetRivet\\Container\\' => array($vendorDir . '/netrivet/container/src'),
     'IDX\\' => array($baseDir . '/idx'),
+    'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
 );
