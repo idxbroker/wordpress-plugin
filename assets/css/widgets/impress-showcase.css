@@ -16,6 +16,7 @@
 }
 .impress-showcase-property img {
     border: 1px solid #ccc;
+    max-width: 100%;
 }
 .impress-showcase-property span.impress-price {
     font-size: 24px;

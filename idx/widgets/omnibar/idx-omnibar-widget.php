@@ -3,14 +3,18 @@ namespace IDX\Widgets\Omnibar;
 
 class IDX_Omnibar_Widget extends \WP_Widget
 {
-    public function __construct()
+    public function __construct(Create_Omnibar $create_omnibar)
     {
+        $this->create_omnibar = $create_omnibar;
         $widget_ops = array('classname' => 'IDX_Omnibar_Widget', 'description' => 'An Omnibar Search Widget for use with IDX WordPress Sites');
         parent::__construct('IDX_Omnibar_Widget', 'IMPress Omnibar Search', $widget_ops);
     }
 
+    public $create_omnibar;
+
     public $defaults = array(
         'title' => '',
+        'min_price' => 0,
         'styles' => 1,
         'extra' => 0,
     );
@@ -30,6 +34,10 @@ class IDX_Omnibar_Widget extends \WP_Widget
             <label for="<?php echo $this->get_field_id('extra');?>"><?php _e('Extra Fields?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('extra');?>" name="<?php echo $this->get_field_name('extra')?>" value="1" <?php checked($instance['extra'], true);?>>
         </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('min_price');?>"><?php _e('Show Min Price Extra Field?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('min_price');?>" name="<?php echo $this->get_field_name('min_price')?>" value="1" <?php checked($instance['min_price'], true);?>>
+        </p>
     <?php
 }
 
@@ -39,6 +47,7 @@ class IDX_Omnibar_Widget extends \WP_Widget
         $instance['title'] = $new_instance['title'];
         $instance['styles'] = (int) $new_instance['styles'];
         $instance['extra'] = (int) $new_instance['extra'];
+        $instance['min_price'] = (int) $new_instance['min_price'];
         return $instance;
     }
 
@@ -66,11 +75,10 @@ class IDX_Omnibar_Widget extends \WP_Widget
         $idx_url = get_option('idx_results_url');
 
         // Widget HTML:
-        $create_omnibar = new Create_Omnibar;
         if (!empty($instance['extra'])) {
-            echo $create_omnibar->idx_omnibar_extra($plugin_dir, $idx_url, $instance['styles']);
+            echo $this->create_omnibar->idx_omnibar_extra($plugin_dir, $idx_url, $instance['styles'], $instance['min_price']);
         } else {
-            echo $create_omnibar->idx_omnibar_basic($plugin_dir, $idx_url, $instance['styles']);
+            echo $this->create_omnibar->idx_omnibar_basic($plugin_dir, $idx_url, $instance['styles']);
         }
         echo $after_widget;
     }
