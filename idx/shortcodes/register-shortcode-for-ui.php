@@ -192,12 +192,10 @@ class Register_Shortcode_For_Ui
         $output .= "</div>";
 $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
         // Styles and Scripts for Preview
-        $output .= "<script>(function(){";
+        $output .= "<script>";
         //empty url array so styles can be disabled and enabled as expected
-        $output .= "styleSheetUrls = [];";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)) . "\", \"#styles\");";
-        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
-        $output .= "})();</script>";
+        $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)) . "\"];";
+        $output .= "</script>";
         return $output;
     }
 
@@ -209,7 +207,6 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         );
 
         $output = '';
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\"></div>";
         // Default Styles
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
@@ -221,12 +218,9 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         $output .= "<label for\"new_window\">Open in a New Window?</label>";
         $output .= "</div>";
         // Styles and Scripts for Preview
-        $output .= "<script>(function(){";
-        //empty url array so styles can be disabled and enabled as expected
-        $output .= "styleSheetUrls = [];";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-lead-login.css', dirname(__FILE__)) . "\", \"#styles\");";
-        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
-        $output .= "})();</script>";
+        $output .= "<script>";
+        $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/impress-lead-login.css', dirname(__FILE__)) . "\"];";
+        $output .= "</script>";
 
         return $output;
     }
@@ -255,12 +249,9 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         $output .= "<label for\"new_window\">Open in a New Window?</label>";
         $output .= "</div>";
         // Styles and Scripts for Preview
-        $output .= "<script>(function(){";
-        //empty url array so styles can be disabled and enabled as expected
-        $output .= "styleSheetUrls = [];";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)) . "\", \"#styles\");";
-        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
-        $output .= "})();</script>";
+        $output .= "<script>";
+        $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)) . "\"];";
+        $output .= "</script>";
 
         return $output;
     }
@@ -321,12 +312,9 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
 
         $output .= "<p>Don't have any city lists? Go create some in your <a href=\"http://middleware.idxbroker.com/mgmt/citycountyziplists.php\" target=\"_blank\">IDX dashboard.</a></p>";
         // Styles and Scripts for Preview
-        $output .= "<script>(function(){";
-        //empty url array so styles can be disabled and enabled as expected
-        $output .= "styleSheetUrls = [];";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-city-links.css', dirname(__FILE__)) . "\", \"#styles\");";
-        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
-        $output .= "})();</script>";
+        $output .= "<script>";
+        $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/impress-city-links.css', dirname(__FILE__)) . "\"];";
+        $output .= "</script>";
 
         return $output;
     }
@@ -415,11 +403,9 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         $output .= "</div>";
 
         // Styles and Scripts for Preview
-        $output .= "<script>(function(){";
-        $output .= "styleSheetUrls = [];";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-showcase.css', dirname(__FILE__)) . "\", \"#styles\");";
-        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
-        $output .= "})();</script>";
+        $output .= "<script>";
+        $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/impress-showcase.css', dirname(__FILE__)) . "\"];";
+        $output .= "</script>";
 
         return $output;
     }
@@ -497,12 +483,11 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         $output .= "</div>";
 
         // Styles and Scripts for Preview
-        $output .= "<script>(function(){";
-        $output .= "styleSheetUrls = [];";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)) . "\");";
-        $output .= "addStyleSheet(\"" . plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)) . "\", \"#styles\");";
-        $output .= "return previewTabButton.addEventListener('click', function(){refreshStyles('#styles')});";
-        $output .= "})();</script>";
+        $output .= "<script>";
+        $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)) . "\", \""; 
+        $output .= plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)) . "\"];";
+        $output .= "</script>";
+        $output .= "<script src=\"https://code.jquery.com/jquery-2.2.2.min.js\"></script>";
         $output .= "<script src=\"" . plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)) . "\"></script>";
 
         return $output;
