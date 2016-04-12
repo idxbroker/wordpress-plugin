@@ -45,6 +45,22 @@ class Wrappers
             'has_archive' => false,
             'hierarchical' => false,
             'rewrite' => array('pages' => false),
+            'supports' => array(
+                'title', 
+                'editor', 
+                'author', 
+                'excerpt', 
+                'thumbnail', 
+                'revisions', 
+                'equity-layouts', 
+                'equity-cpt-archives-settings', 
+                'genesis-seo', 
+                'genesis-layouts', 
+                'genesis-simple-sidebars', 
+                'genesis-cpt-archives-settings', 
+                'publicize', 
+                'wpcom-markdown'
+            ),
         );
         register_post_type('idx-wrapper', $args);
     }
@@ -64,7 +80,7 @@ class Wrappers
         }
     }
 
-//check if theme includes idxstart and stop tags
+    //check if theme includes idxstart and stop tags
     public function does_theme_include_idx_tag()
     {
         // default page content
