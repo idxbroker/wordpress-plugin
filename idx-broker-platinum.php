@@ -95,7 +95,7 @@ class Idx_Broker_Plugin
         wp_clear_scheduled_hook('idx_omnibar_get_locations');
 
         //disable scheduled IDX Page Update as well
-        \IDX\Idx_Pages::unschedule_idx_page_update();
+        eval('\IDX\Idx_Pages::unschedule_idx_page_update();');
     }
 
     public static function idx_uninstall()
@@ -107,8 +107,8 @@ class Idx_Broker_Plugin
         }
         //clear transients made by the plugin
         eval('$idx_api = \IDX\Idx_Api;');
-        eval('$idx_pages = new \IDX\Idx_Pages($idx_api);');
         $idx_api->idx_clean_transients();
-        $idx_pages->delete_all_idx_pages();
+        //clean up db by removing all idx pages
+        eval('\IDX\Idx_Pages::delete_all_idx_pages();');
     }
 }
