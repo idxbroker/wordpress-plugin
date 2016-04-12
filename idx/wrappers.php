@@ -19,9 +19,23 @@ class Wrappers
 
     public function register_wrapper_post_type()
     {
+        $labels = array(
+            'name' => 'Wrappers',
+            'singular_name' => 'Wrapper',
+            'add_new' => 'Add Wrapper',
+            'add_new_item' => 'Add New Wrapper',
+            'edit_item' => 'Edit Wrapper',
+            'new_item' => 'New Wrapper',
+            'view_item' => 'View Wrapper',
+            'search_items' => 'Search Wrappers',
+            'not_found' => 'No Wrappers found',
+            'not_found_in_trash' => 'No Wrappers found in Trash',
+            'parent_item_colon' => '',
+            'parent' => 'Parent Wrapper',
+        );
         $args = array(
             'public' => true,
-            'labels' => array('singular_name' => 'Wrapper'),
+            'labels' => $labels,
             'label' => 'Wrappers',
             'description' => 'Custom Posts Created To Match IDX Pages to the Website',
             'exclude_from_search' => true,

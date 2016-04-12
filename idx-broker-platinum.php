@@ -80,7 +80,6 @@ class Idx_Broker_Plugin
         //set timestamp to one week from activation to prompt user for plugin review
         // eval('IDX\Review_Prompt::set_timestamp();');
 
-
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
         eval('$idx_api = new \IDX\Idx_Api();');
         eval('$wrappers = new \IDX\Wrappers($idx_api);');
@@ -94,6 +93,9 @@ class Idx_Broker_Plugin
     {
         //disable scheduled update for omnibar
         wp_clear_scheduled_hook('idx_omnibar_get_locations');
+
+        //disable scheduled IDX Page Update as well
+        eval('\IDX\Idx_Pages::unschedule_idx_page_update();');
     }
 
     public static function idx_uninstall()
@@ -105,8 +107,8 @@ class Idx_Broker_Plugin
         }
         //clear transients made by the plugin
         eval('$idx_api = \IDX\Idx_Api;');
-        eval('$idx_pages = new \IDX\Idx_Pages($idx_api);');
         $idx_api->idx_clean_transients();
-        $idx_pages->delete_all_idx_pages();
+        //clean up db by removing all idx pages
+        eval('\IDX\Idx_Pages::delete_all_idx_pages();');
     }
 }

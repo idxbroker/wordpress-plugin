@@ -645,7 +645,7 @@ class Idx_Api
 
     public function get_blacklist()
     {
-        $blacklist = $this->idx_api('blacklist', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 60*15, 'GET', true);
+        $blacklist = $this->idx_api('blacklist', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 60 * 15, 'GET', true);
 
         return $blacklist;
     }
