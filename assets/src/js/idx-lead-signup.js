@@ -1,4 +1,4 @@
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
 
     function forEach(array, callback, scope) {
       for (var i = 0; i < array.length; i++) {
@@ -9,7 +9,7 @@
     //Add event listener to each signup widget
     function listenToSignupForms() {
         forEach(
-            document.querySelectorAll('.impress-idx-signup-widget'), 
+            document.querySelectorAll('.impress-lead-signup'), 
             function(form) {
                 form.addEventListener('submit', validateSignup);
             }
@@ -34,7 +34,7 @@
     }
 
     function findBlankFields(input) {
-        if(input.value === '' || input.value === ' ') {
+        if(input.getAttribute('required') !== null && (input.value === '' || input.value === ' ')) {
             input.className = 'input-error';
             throw "One or more fields is empty";
         }
@@ -55,4 +55,4 @@
     }
 
     listenToSignupForms();
-})();
+});

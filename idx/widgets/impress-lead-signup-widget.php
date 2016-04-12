@@ -12,8 +12,8 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 
         $this->idx_api = $idx_api;
 
-        if(isset($_SERVER['HTTP_REFERER']) && stristr($_SERVER['HTTP_REFERER'], 'error')){
-            $this->error_message = $this->handle_errors($_SERVER['HTTP_REFERER']);
+        if(isset($_GET['error'])){
+            $this->error_message = $this->handle_errors($_GET['error']);
         } else {
             $this->error_message = '';
         }
@@ -82,7 +82,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         }
 
         ?>
-		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="<?php echo $target?>" name="LeadSignup">
+		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="<?php echo $target?>" name="LeadSignup" id="LeadSignup">
                         <?php echo $this->error_message; ?>
 			<input type="hidden" name="action" value="addLead">
 			<input type="hidden" name="signupWidget" value="true">
@@ -195,19 +195,21 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         }
     }
 
-    public function handle_errors($referrer)
+    //For error handling since this is a cross domain request.
+    public function handle_errors($error)
     {
         $output = '';
-        //For error handling since this is a cross domain request.
-        if(stristr($referrer, 'error=true')){
+
+        //User already has an account.
+        if(stristr($error, 'lead' )){
+            //Redirect to lead login page.
+            return wp_redirect($this->lead_login_page());
+        //Other form error.
+        } elseif(stristr($error, 'true')){
             $output .= '<div class="error">';
             $output .= 'There is an error in the form. Please double check that your email address is valid.';
             $output .= '</div>';
-        //User already has an account.
-        } elseif(stristr($referrer, 'error=lead' )){
-            //Redirect to lead login page.
-            return wp_redirect($this->lead_login_page());
-        }
+        } 
 
         return $output;
     }
