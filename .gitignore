@@ -3,8 +3,7 @@
 .DS_Store?
 .Trashes
 node_modules
-vendor/*
-!vendor/netrivet
-!vendor/nesbot
 composer.lock
 *.swp
+*.swo
+.bash_profile
