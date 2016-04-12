@@ -128,7 +128,13 @@
 
 
 		var checkExtraFieldValues = function(input, fieldType, resultsQuery){
-			if(input.parentNode.parentNode.querySelector('.idx-omnibar-'+fieldType).value){
+			var field = input.parentNode.parentNode.querySelectorAll('.idx-omnibar-'+fieldType)[0];
+			//if field does not exist, return blank string
+			if(typeof field === 'undefined'){
+				return '';
+			} 
+			//if field is entered, use it
+			if(field.value){
 				return resultsQuery + input.parentNode.parentNode.querySelector('.idx-omnibar-'+fieldType).value;
 			} else {
 				return '';
@@ -137,6 +143,7 @@
 
 		var setExtraFieldValues = function(input){
 			var extraValues = '';
+			extraValues += checkExtraFieldValues(input, 'min-price', '&lp=');
 			extraValues += checkExtraFieldValues(input, 'price', '&hp=');
 			extraValues += checkExtraFieldValues(input, 'bed', '&bd=');
 			extraValues += checkExtraFieldValues(input, 'bath', '&tb=');

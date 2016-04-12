@@ -6,13 +6,16 @@ class Idx_Pages
 
     public function __construct(Idx_Api $idx_api)
     {
+        //deletes all IDX pages for troubleshooting purposes
         // $this->delete_all_idx_pages();
-        add_action('admin_init', array($this, 'create_idx_pages'), 10);
 
-        add_action('admin_init', array($this, 'delete_idx_pages'));
         add_action('admin_init', array($this, 'show_idx_pages_metabox_by_default'));
-
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
+        add_filter('cron_schedules', array($this, 'add_five_minutes_schedule'));
+
+        //register hooks for WP Cron to use to update IDX Pages
+        add_action('idx_create_idx_pages', array($this, 'create_idx_pages'));
+        add_action('idx_delete_idx_pages', array($this, 'delete_idx_pages'));
 
         add_action('init', array($this, 'register_idx_page_type'));
         add_action('admin_init', array($this, 'manage_idx_page_capabilities'));
@@ -20,10 +23,44 @@ class Idx_Pages
         add_action('save_post', array($this, 'set_wrapper_page'));
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
 
+        //schedule an IDX page update via WP cron
+        $this->schedule_idx_page_update();
+
         $this->idx_api = $idx_api;
     }
 
     public $idx_api;
+    public function add_five_minutes_schedule()
+    {
+        $schedules['fiveminutes'] = array(
+            'interval' => 60 * 5, //five minutes in seconds
+            'display' => 'Five Minutes',
+        );
+
+        return $schedules;
+    }
+
+   // $single = true for plugin settings refresh. Otherwise schedules hourly
+   public static function schedule_idx_page_update($single = false)
+   {
+       if ($single) {
+           wp_schedule_single_event(time(), 'idx_create_idx_pages');
+           return wp_schedule_single_event(time(), 'idx_delete_idx_pages');
+       }
+       if (!wp_next_scheduled('idx_create_idx_pages')) {
+           wp_schedule_event(time(), 'fiveminutes', 'idx_create_idx_pages');
+       }
+       if(!wp_next_scheduled('idx_delete_idx_pages')) {
+           wp_schedule_event(time(), 'fiveminutes', 'idx_delete_idx_pages');
+       }
+   }
+
+    //to be called on plugin deactivation
+    public static function unschedule_idx_page_update()
+    {
+        wp_clear_scheduled_hook('idx_create_idx_pages');
+        wp_clear_scheduled_hook('idx_delete_idx_pages');
+    }
 
     public function register_idx_page_type()
     {
@@ -38,8 +75,8 @@ class Idx_Pages
             'new_item' => 'New IDX Page',
             'view_item' => 'View IDX Page',
             'search_items' => 'Search IDX Pages',
-            'not_found' => 'No idx_pages found',
-            'not_found_in_trash' => 'No idx_pages found in Trash',
+            'not_found' => 'No IDX Pages found',
+            'not_found_in_trash' => 'No IDX Pages found in Trash',
             'parent_item_colon' => '',
             'parent' => 'Parent IDX Page',
         );
@@ -107,13 +144,21 @@ class Idx_Pages
             return;
         }
 
-        $idx_links = array_merge($saved_links, $system_links);
+        $idx_page_chunks = array_chunk(array_merge($saved_links, $system_links), 200);
 
         $existing_page_urls = $this->get_existing_idx_page_urls();
 
-        foreach ($idx_links as $link) {
-            if (!in_array($link->url, $existing_page_urls)) {
+        foreach ($idx_page_chunks as $idx_page_chunk) {
+            //for each chunk, create all idx pages within
+            $this->create_pages_from_chunk($idx_page_chunk, $existing_page_urls);
+        }
+    }
 
+    //use the chunk to create all the pages within (chunk is 200)
+    public function create_pages_from_chunk($idx_page_chunk, $existing_page_urls)
+    {
+        foreach ($idx_page_chunk as $link) {
+            if (!in_array($link->url, $existing_page_urls)) {
                 if (!empty($link->name)) {
                     $name = $link->name;
                 } else if ($link->linkTitle) {
@@ -228,6 +273,7 @@ class Idx_Pages
 
     /**
      * Deletes all posts of the "idx_page" post type
+     * This is called on uninstall of the plugin and when troubleshooting
      *
      * @return void
      */

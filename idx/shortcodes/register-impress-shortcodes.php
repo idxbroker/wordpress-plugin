@@ -171,11 +171,7 @@ class Register_Impress_Shortcodes
                 return $output;
             }
 
-            if (($property_type) == 'savedlinks') {
-                $prop_image_url = (isset($prop['image']['1']['url'])) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-            } else {
-                $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-            }
+           $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 
             if (1 == $use_rows && $count == 0 && $max != '1') {
                 $output .= '<div class="shortcode impress-property-showcase impress-row">';
@@ -192,7 +188,7 @@ class Register_Impress_Shortcodes
             if (1 == $show_image) {
                 $output .= sprintf('<div class="impress-showcase-property %12$s">
                         <a href="%3$s" class="impress-showcase-photo" target="%13$s">
-                            <img src="%4$s" alt="%5$s" title="%5$s" />
+                            <img src="%4$s" alt="%5$s" title="%6$s %7$s %8$s %9$s %10$s, %11$s" />
                             <span class="impress-price">%1$s</span>
                             <span class="impress-status">%2$s</span>
                         </a>
@@ -434,11 +430,7 @@ class Register_Impress_Shortcodes
                 return $output;
             }
 
-            if (($property_type) == 'savedlinks') {
-                $prop_image_url = (isset($prop['image']['1']['url'])) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-            } else {
-                $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-            }
+            $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 
             $count++;
 
@@ -447,7 +439,7 @@ class Register_Impress_Shortcodes
             $output .= sprintf(
                 '<div class="impress-carousel-property">
                     <a href="%2$s" class="impress-carousel-photo" target="%11$s">
-                        <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%4$s" />
+                        <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
                     <a href="%2$s" target="%11$s">

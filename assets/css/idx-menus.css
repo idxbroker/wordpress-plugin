@@ -1,22 +1,15 @@
-@font-face {
-    font-family: 'idx-dashicon';
-    src: url('../fonts/idx-dashicon.ttf'),
-         url('../fonts/idx-dashicon.woff'),
-         url('../fonts/idx-dashicon.eot'),
-         url('../fonts/idx-dashicon.svg');
-}
-
 #toplevel_page_idx-broker .dashicons-before:before {
-    content: "\e900";
-    font-family: 'idx-dashicon';
-    font-size: 6pt;
-    padding-top: 13px;
+    content: '\e021';
+    font-family: 'properticons';
+    font-size: 28pt;
+    padding-top: 0px;
+    margin-top: -8px;
 }
-#wpadminbar .idx-admin-bar-menu-icon:before {
-    content: "\e900";
-    font-family: 'idx-dashicon';
-    font-size: .7rem;
-    top: 7px;
+#wpadminbar .properticons-logo-idx:before {
+    content: '\e021';
+    font-family: 'properticons';
+    font-size: 3rem;
+    top: -18px;
     vertical-align: top;
 }
 #wp-admin-bar-idx_admin_bar_menu-default .update-plugins {
@@ -36,6 +29,7 @@
     margin: 0 0 0 6px;
     vertical-align:bottom;
 }
+
 /*help button glow*/
 @-webkit-keyframes glowing {
   0% {-webkit-box-shadow: 0 0 3px #004A7F; }

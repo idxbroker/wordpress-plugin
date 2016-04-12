@@ -96,7 +96,7 @@ class Ioc
             return new Help;
         });
         $app->bind('\IDX\Views\Omnibar_Settings', function ($app) use($idx_api) {
-            return new Views\Omnibar_Settings($idx_api);
+            return new Views\Omnibar_Settings($app, $idx_api);
         });
         $app->bind('\IDX\Migrate_Old_Table', function ($app) use($idx_api) {
             return new Migrate_Old_Table($idx_api);
