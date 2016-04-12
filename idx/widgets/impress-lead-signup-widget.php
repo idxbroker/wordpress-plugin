@@ -7,10 +7,10 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
     /**
      * Register widget with WordPress.
      */
-    public function __construct()
+    public function __construct(\IDX\Idx_Api $idx_api)
     {
 
-        $this->idx_api = new \IDX\Idx_Api();
+        $this->idx_api = $idx_api;
 
         parent::__construct(
             'impress_lead_signup', // Base ID

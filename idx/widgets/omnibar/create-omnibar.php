@@ -3,11 +3,14 @@ namespace IDX\Widgets\Omnibar;
 
 class Create_Omnibar
 {
-    public function __construct()
+    public function __construct($app)
     {
+        $this->app = $app;
         $this->register_shortcodes();
         $this->register_widgets();
     }
+
+    public $app;
 
     public function idx_omnibar_basic($plugin_dir, $idx_url, $styles = 1)
     {
@@ -31,7 +34,8 @@ class Create_Omnibar
 
         return <<<EOD
         <form class="idx-omnibar-form idx-omnibar-original-form">
-          <input class="idx-omnibar-input" type="text" placeholder="$placeholder"><button type="submit" value="Search"><i class="fa fa-search"></i><span>Search</span></button>
+          <label for="omnibar" class="screen-reader-text">$placeholder</label>
+          <input id="omnibar" class="idx-omnibar-input" type="text" placeholder="$placeholder"><button type="submit" value="Search"><i class="fa fa-search"></i><span>Search</span></button>
           <div class="idx-omnibar-extra idx-omnibar-price-container" style="display: none;"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bed-container" style="display: none;"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container" style="display: none;"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01"></div>
         </form>
 EOD;
@@ -61,7 +65,8 @@ EOD;
 
         return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">
-      <input class="idx-omnibar-input idx-omnibar-extra-input" type="text" placeholder="$placeholder">
+      <label for="omnibar" class="screen-reader-text">$placeholder</label>
+      <input id="omnibar" class="idx-omnibar-input idx-omnibar-extra-input" type="text" placeholder="$placeholder">
       $price_field<div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01" title="Only numbers and decimals are allowed"></div>
       <button class="idx-omnibar-extra-button" type="submit" value="Search"><i class="fa fa-search"></i><span>Search</span></button>
     </form>
@@ -125,6 +130,17 @@ EOD;
         return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles, $min_price);
     }
 
+    //use our own register function to allow dependency injection via the IoC container
+    public function register_widget($widget_name)
+    {
+        global $wp_widget_factory;
+
+        $widget_class = $this->app->make($widget_name);
+
+        $wp_widget_factory->widgets[$widget_name] = $widget_class;
+    }
+
+
     public static function show_omnibar_shortcodes($type, $name)
     {
         $widget_shortcode = '[' . $type . ']';
@@ -144,9 +160,12 @@ EOD;
 
     public function register_widgets()
     {
+        //for PHP5.3 compatibility
+        $scope = $this;
         //Initialize Instances of Widget Classes
-        add_action('widgets_init', create_function('', 'return register_widget("\IDX\Widgets\Omnibar\IDX_Omnibar_Widget");'));
-        add_action('widgets_init', create_function('', 'return register_widget("\IDX\Widgets\Omnibar\IDX_Omnibar_Widget_Extra");'));
+        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget');});
+        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget_Extra');});
+
 
     }
 

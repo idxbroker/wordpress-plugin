@@ -3,13 +3,13 @@ namespace IDX\Widgets\Omnibar;
 
 class Get_Locations
 {
-    public function __construct()
+    public function __construct(\IDX\Idx_Api $idx_api)
     {
         $api = get_option('idx_broker_apikey');
         if (empty($api)) {
             return;
         } else {
-            $this->idx_api = new \IDX\Idx_Api();
+            $this->idx_api = $idx_api;
             if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
                 return;
             }

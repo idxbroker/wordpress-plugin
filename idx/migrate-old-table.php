@@ -4,8 +4,10 @@ namespace IDX;
 //Migrate Legacy Plugin Pages from version <1.3
 class Migrate_Old_Table
 {
-    public function __construct()
+    public function __construct(Idx_Api $idx_api)
     {
+        $this->idx_api = $idx_api;
+
         $post_info = $this->grab_post_ids();
         if (empty($post_info)) {
             return;
@@ -105,8 +107,7 @@ class Migrate_Old_Table
 
             //update global wrapper
             $wrapper_page_url = get_permalink($page_id);
-            $idx_api = new Idx_Api();
-            $idx_api->set_wrapper('global', $wrapper_page_url);
+            $this->idx_api->set_wrapper('global', $wrapper_page_url);
         }
         flush_rewrite_rules();
     }
