@@ -649,4 +649,28 @@ class Idx_Api
 
         return $blacklist;
     }
+
+    public function get_leads($timeframe = null, $start_date = '')
+    {
+        if(! empty($start_date)){
+            $start_date = "&startDatetime=$start_date";
+        }
+        if(! empty($timeframe)){
+            $leads = $this->idx_api("lead?interval=$timeframe$start_date", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
+        } else {
+            $leads = $this->idx_api('lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
+        }
+        return $leads;
+    }
+    
+    public function get_featured_listings($listing_type = 'featured', $timeframe = null)
+    {
+        if(! empty($timeframe)){
+            $listings = $this->idx_api("$listing_type?interval=$timeframe");
+        } else {
+            $listings = $this->idx_api($listing_type);
+        }
+
+        return $listings;
+    }
 }
