@@ -118,6 +118,11 @@ class Impress_Carousel_Widget extends \WP_Widget
             </script>
             ';
         }
+
+        //Force type of array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
         // sort low to high
         usort($properties, array($this, 'price_cmp'));
 

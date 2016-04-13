@@ -65,7 +65,11 @@ class Impress_Showcase_Widget extends \WP_Widget
             return 'No properties found';
         }
 
-        // sort low to high
+        //Force type as array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
+        //Sort low to high.
         usort($properties, array($this, 'price_cmp'));
 
         if ('high-low' == $instance['order']) {

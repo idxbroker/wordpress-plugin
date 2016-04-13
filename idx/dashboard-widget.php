@@ -181,9 +181,9 @@ class Dashboard_Widget {
          
         //prepare listings for display
         foreach($listings_array as $listing){
-            $listings .= '<a href="' . $listing->fullDetailsURL . '" target="_blank">';
-            $listings .= '<li><p class="listing-address">' . $listing->address . '</p>';
-            $listings .= '<p class="listing-views">' . $listing->viewCount . ' Views</p><i class="fa fa-external-link"></i></li></a>';
+            $listings .= '<a href="' . $listing['fullDetailsURL'] . '" target="_blank">';
+            $listings .= '<li><p class="listing-address">' . $listing['address'] . '</p>';
+            $listings .= '<p class="listing-views">' . $listing['viewCount'] . ' Views</p><i class="fa fa-external-link"></i></li></a>';
         }
 
         return $listings;
@@ -417,7 +417,7 @@ class Dashboard_Widget {
         $listings_record = array();
 
         foreach($listings as $listing){
-            $listing_status = $listing->$status_type;
+            $listing_status = $listing["$status_type"];
 
             //if status entry is not yet set, add it
             if(! isset($listings_record[$listing_status])){
@@ -440,7 +440,7 @@ class Dashboard_Widget {
     public function clone_idx_status_to_prop_status($listings)
     {
         foreach($listings as $listing){
-            $listing->propStatus = $listing->idxStatus;
+            $listing['propStatus'] = $listing['idxStatus'];
         }
 
         return $listings;
@@ -450,11 +450,11 @@ class Dashboard_Widget {
     {
         usort($listings, function($a, $b)
         {
-            if((int) $a->viewCount === (int) $b->viewCount){
+            if((int) $a['viewCount'] === (int) $b['viewCount']){
                 return 0;
             }
 
-            return ((int) $a->viewCount < (int) $b->viewCount) ? -1 : 1;
+            return ((int) $a['viewCount'] < (int) $b['viewCount']) ? -1 : 1;
         });
 
         return $listings;

@@ -158,6 +158,10 @@ class Register_Impress_Shortcodes
 
         $target = $this->target($new_window);
 
+        //Force type as Array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
         // sort low to high
         usort($properties, array($this->idx_api, 'price_cmp'));
 
@@ -370,6 +374,11 @@ class Register_Impress_Shortcodes
         if (empty($properties) || gettype($properties) === 'object') {
             return 'No properties found';
         }
+
+        //Force type as array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
         // sort low to high
         usort($properties, array($this->idx_api, 'price_cmp'));
 
