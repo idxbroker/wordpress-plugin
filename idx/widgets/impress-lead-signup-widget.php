@@ -102,7 +102,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 			<?php if ($instance['phone_number'] == true) {
             echo '
 				<label id="impress-widgetphone-label" class="ie-only" for="impress-widgetphone">' . __('Phone:', 'idxbroker') . '</label>
-				<input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone" required>';
+				<input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">';
         }?>
 
 			<input id="bb-IDX-widgetsubmit" type="submit" name="submit" value="Sign Up!">
