@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
 
+    //Helper function.
     function forEach(array, callback, scope) {
       for (var i = 0; i < array.length; i++) {
         callback.call(scope, array[i], i);
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     }
 
+    //Prevent blank values from non-required fields.
     function findBlankFields(input) {
         if(input.getAttribute('required') !== null && (input.value === '' || input.value === ' ')) {
             input.className = 'input-error';
@@ -40,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     }
 
-    //Check for Errors from URL for IDX Pages
+    //Check for Errors from URL for IDX Pages.
     function checkForErrors() {
         var error = getQueryStringValue('error');
         if(error === 'lead') {
@@ -58,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function(){
     function getQueryStringValue(name) {
         var url = window.location.href;
         name = name.replace(/[\[\]]/g, "\\$&");
+        //Only select last occurrence of query string for latest error.
         var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)(?!.*" + name + ")", "i"),
         results = regex.exec(url);
         if (!results) return null;
@@ -65,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function(){
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
-    //If error div already exists, use it. Else create it.
+    //If error div already exists, use it. Else create it and display the error.
     function displayErr(err, form) {
         var errDiv = form.querySelectorAll('.error');
         if(typeof errDiv[0] !== 'undefined'){
@@ -77,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function(){
         form.insertBefore(errMessage, form.firstChild);
     }
 
+    //Check for previous Signup errors on page load.
     checkForErrors();
+    //Listen for more errors on submit of forms.
     listenToSignupForms();
 });
