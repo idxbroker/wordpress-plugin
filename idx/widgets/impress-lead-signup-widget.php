@@ -69,7 +69,9 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 
 
         //Validate fields
-        wp_enqueue_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
+        wp_register_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
+        wp_localize_script('impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page());
+        wp_enqueue_script('impress-lead-signup');
 
         echo $before_widget;
 

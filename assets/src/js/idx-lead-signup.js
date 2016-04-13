@@ -36,17 +36,40 @@ document.addEventListener('DOMContentLoaded', function(){
     function findBlankFields(input) {
         if(input.getAttribute('required') !== null && (input.value === '' || input.value === ' ')) {
             input.className = 'input-error';
-            throw "One or more fields is empty";
+            throw "One or more fields are empty.";
         }
     }
 
-    
+    //Check for Errors from URL for IDX Pages
+    function checkForErrors() {
+        var error = getQueryStringValue('error');
+        if(error === 'lead') {
+            return window.location = idxLeadLoginUrl;
+        } else if(error === 'true') {
+            forEach(document.querySelectorAll('.impress-lead-signup'),
+                function(form) {
+                    displayErr("There is an error in the form. Please double check that your email address is valid.", form);
+                }
+            );
+        }
+    }
+
+    //Get the value of the entered query string.
+    function getQueryStringValue(name) {
+        var url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
+        results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 
     //If error div already exists, use it. Else create it.
     function displayErr(err, form) {
-        var errDiv = form.querySelectorAll('.error')[0];
-        if(typeof errDiv !== 'undefined'){
-            return errDiv.innerHTML = err;
+        var errDiv = form.querySelectorAll('.error');
+        if(typeof errDiv[0] !== 'undefined'){
+            return errDiv[0].innerHTML = err;
         }
         var errMessage = document.createElement('div');
         errMessage.className = 'error';
@@ -54,5 +77,6 @@ document.addEventListener('DOMContentLoaded', function(){
         form.insertBefore(errMessage, form.firstChild);
     }
 
+    checkForErrors();
     listenToSignupForms();
 });

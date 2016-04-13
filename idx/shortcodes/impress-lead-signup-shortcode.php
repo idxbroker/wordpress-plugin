@@ -38,7 +38,9 @@ class Impress_Lead_Signup_Shortcode {
         $target = $this->target($new_window);
 
         //Validate fields
-        wp_enqueue_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
+        wp_register_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
+        wp_localize_script('impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page());
+        wp_enqueue_script('impress-lead-signup');
 
         $widget = sprintf('
             <form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup" id="LeadSignup">
@@ -68,7 +70,7 @@ class Impress_Lead_Signup_Shortcode {
         return $widget;
     }
 
-    function lead_login_page()
+    public function lead_login_page()
     {
         $links = $this->idx_api->idx_api_get_systemlinks();
         if(empty($links)){
