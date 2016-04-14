@@ -4,7 +4,7 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 3.7
-Tested up to: 4.4.2
+Tested up to: 4.5.0
 Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -107,10 +107,16 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 * IMPress Showcase and Carousels now use the address for the image title attribute for better SEO.
 * The Omnibar main input has been updated for better accessibility with screen readers.
 * A Shortcode has been added to make regular WP pages a wrapper for incompatible plugins.
-* Wrappers are now more compatible with other plugins.
+* A bug has been fixed where the omnibar was not updating properly from the Omnibar Settings page.
 * The Omnibar Settings page has been updated for a better UX.
 * A wrapper can now be applied to a specific IDX Page when editing IDX Pages.
+* Wrappers are now more compatible with other plugins.
+* Wrapper styling has been updated to hide common irrelevant meta data from IDX pages.
 * A new Dashboard widget has been added for a convenient overview of Leads and Listings.
+* Fixed an issue where IDX pages were not imported at all and caused slow downs on slower servers.
+
+= 2.0.3 =
+* Fixed an issue where plugin review prompt could not be dismissed.
 
 = 2.0.2 =
 * Fixed an issue where a saved links field was incorrectly displaying on Carousel and Showcase shortcodes for Lite accounts (This only works for Platinum accounts).
