@@ -19,18 +19,48 @@ class Wrappers
 
     public function register_wrapper_post_type()
     {
+        $labels = array(
+            'name' => 'Wrappers',
+            'singular_name' => 'Wrapper',
+            'add_new' => 'Add Wrapper',
+            'add_new_item' => 'Add New Wrapper',
+            'edit_item' => 'Edit Wrapper',
+            'new_item' => 'New Wrapper',
+            'view_item' => 'View Wrapper',
+            'search_items' => 'Search Wrappers',
+            'not_found' => 'No Wrappers found',
+            'not_found_in_trash' => 'No Wrappers found in Trash',
+            'parent_item_colon' => '',
+            'parent' => 'Parent Wrapper',
+        );
         $args = array(
             'public' => true,
-            'labels' => array('singular_name' => 'Wrapper'),
+            'labels' => $labels,
             'label' => 'Wrappers',
             'description' => 'Custom Posts Created To Match IDX Pages to the Website',
             'exclude_from_search' => true,
             'show_in_menu' => 'idx-broker',
             'show_in_nav_menus' => false,
-            'capability_type' => 'post',
+            'capability_type' => 'page',
             'has_archive' => false,
             'hierarchical' => false,
             'rewrite' => array('pages' => false),
+            'supports' => array(
+                'title', 
+                'editor', 
+                'author', 
+                'excerpt', 
+                'thumbnail', 
+                'revisions', 
+                'equity-layouts', 
+                'equity-cpt-archives-settings', 
+                'genesis-seo', 
+                'genesis-layouts', 
+                'genesis-simple-sidebars', 
+                'genesis-cpt-archives-settings', 
+                'publicize', 
+                'wpcom-markdown'
+            ),
         );
         register_post_type('idx-wrapper', $args);
     }
@@ -50,7 +80,7 @@ class Wrappers
         }
     }
 
-//check if theme includes idxstart and stop tags
+    //check if theme includes idxstart and stop tags
     public function does_theme_include_idx_tag()
     {
         // default page content

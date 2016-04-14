@@ -3,7 +3,7 @@
 .DS_Store?
 .Trashes
 node_modules
-vendor/*
-!vendor/netrivet
 composer.lock
 *.swp
+*.swo
+.bash_profile

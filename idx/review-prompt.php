@@ -9,7 +9,7 @@ class Review_Prompt
         add_action('admin_init', array($this, 'check_timestamp'));
         add_action('wp_ajax_idx_dismiss_review_prompt', array($this, 'dismiss_prompt'));
         //remove dismiss option for testing
-        //delete_option('idx_dismiss_review_prompt');
+        // delete_option('idx_dismiss_review_prompt');
     }
 
     public static function set_timestamp()

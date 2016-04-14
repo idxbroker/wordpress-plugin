@@ -65,7 +65,11 @@ class Impress_Showcase_Widget extends \WP_Widget
             return 'No properties found';
         }
 
-        // sort low to high
+        //Force type as array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
+        //Sort low to high.
         usort($properties, array($this, 'price_cmp'));
 
         if ('high-low' == $instance['order']) {
@@ -119,11 +123,7 @@ class Impress_Showcase_Widget extends \WP_Widget
                 return $output;
             }
 
-            if (($instance['properties']) == 'savedlinks') {
-                $prop_image_url = (isset($prop['image']['1']['url'])) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-            } else {
-                $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-            }
+            $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 
             if (1 == $instance['use_rows'] && $count == 0 && $max != '1') {
                 $output .= '<div class="impress-row">';
@@ -137,7 +137,7 @@ class Impress_Showcase_Widget extends \WP_Widget
                 $output .= sprintf(
                     '<div class="impress-showcase-property %12$s">
 						<a href="%3$s" class="impress-showcase-photo" target="%13$s">
-							<img src="%4$s" alt="%5$s" title="%5$s" />
+							<img src="%4$s" alt="%5$s" title="%6$s %7$s %8$s %9$s %10$s, %11$s" />
 							<span class="impress-price">%1$s</span>
 							<span class="impress-status">%2$s</span>
 						</a>

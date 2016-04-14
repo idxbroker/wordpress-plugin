@@ -8,7 +8,8 @@ var gulp = require('gulp'),
         uglify = require('gulp-uglify'),
         notify = require('gulp-notify'),
         sourcemaps = require('gulp-sourcemaps'),
-        glob = require('glob');
+        glob = require('glob'),
+        gutil = require('gulp-util');
 
 
 gulp.task('jshint', function(){
@@ -26,7 +27,7 @@ gulp.task('js', function() {
 
         var tasks = files.map(function(entry) {
             return gulp.src(entry)
-                .pipe(uglify())
+                .pipe(uglify().on('error', gutil.log))
                 .pipe(rename(function (path) {
                     path.extname = '.min.js';
                     }))

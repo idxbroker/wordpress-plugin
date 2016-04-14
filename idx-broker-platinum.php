@@ -3,7 +3,11 @@
 Plugin Name: IMPress for IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
+<<<<<<< HEAD
 Version: 2.0.3
+=======
+Version: 2.1.0
+>>>>>>> 80439c6f493c71ac86d8d73a2227ad2180e5863f
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -18,15 +22,16 @@ new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
 {
     //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '2.0.3';
+    const IDX_WP_PLUGIN_VERSION = '2.1.0';
 
     public function __construct()
     {
 
         if ($this->php_version_check()) {
+            //idx autoloader
             require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
-            require_once 'vendor' . DIRECTORY_SEPARATOR . 'netrivet/container/src/ContainerInterface.php';
-            require_once 'vendor' . DIRECTORY_SEPARATOR . 'netrivet/container/src/Container.php';
+            //composer autoload classes
+            require_once 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
             //eval is used to prevent namespace errors in parsing with PHP < 5.3
             eval('new IDX\Initiate_Plugin();');
             /** Function that is executed when plugin is activated. **/
@@ -78,8 +83,7 @@ class Idx_Broker_Plugin
         update_option('idx_plugin_version', self::IDX_WP_PLUGIN_VERSION);
 
         //set timestamp to one week from activation to prompt user for plugin review
-        eval('IDX\Review_Prompt::set_timestamp();');
-
+        // eval('IDX\Review_Prompt::set_timestamp();');
 
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
         eval('$idx_api = new \IDX\Idx_Api();');
@@ -94,6 +98,9 @@ class Idx_Broker_Plugin
     {
         //disable scheduled update for omnibar
         wp_clear_scheduled_hook('idx_omnibar_get_locations');
+
+        //disable scheduled IDX Page Update as well
+        eval('\IDX\Idx_Pages::unschedule_idx_page_update();');
     }
 
     public static function idx_uninstall()
@@ -105,8 +112,8 @@ class Idx_Broker_Plugin
         }
         //clear transients made by the plugin
         eval('$idx_api = \IDX\Idx_Api;');
-        eval('$idx_pages = new \IDX\Idx_Pages($idx_api);');
         $idx_api->idx_clean_transients();
-        $idx_pages->delete_all_idx_pages();
+        //clean up db by removing all idx pages
+        eval('\IDX\Idx_Pages::delete_all_idx_pages();');
     }
 }

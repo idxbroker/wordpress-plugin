@@ -608,7 +608,7 @@ class Idx_Api
         $a = $this->clean_price($a['listingPrice']);
         $b = $this->clean_price($b['listingPrice']);
 
-        if ($a == $b) {
+        if ($a === $b) {
             return 0;
         }
 
@@ -645,8 +645,33 @@ class Idx_Api
 
     public function get_blacklist()
     {
-        $blacklist = $this->idx_api('blacklist', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 60*15, 'GET', true);
+        $blacklist = $this->idx_api('blacklist', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 60 * 15, 'GET', true);
 
         return $blacklist;
+    }
+
+    public function get_leads($timeframe = null, $start_date = '')
+    {
+        if(! empty($start_date)){
+            $start_date = "&startDatetime=$start_date";
+        }
+        if(! empty($timeframe)){
+            $leads = $this->idx_api("lead?interval=$timeframe$start_date", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
+        } else {
+            $leads = $this->idx_api('lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
+        }
+        return $leads;
+    }
+    
+    public function get_featured_listings($listing_type = 'featured', $timeframe = null)
+    {
+        //Force type to array.
+        if(! empty($timeframe)){
+            $listings = $this->idx_api("$listing_type?interval=$timeframe", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true);
+        } else {
+            $listings = $this->idx_api($listing_type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true);
+        }
+
+        return $listings;
     }
 }

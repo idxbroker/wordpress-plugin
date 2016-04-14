@@ -1,11 +1,12 @@
 #idx-shortcode:before {
-    content: "\e900";
-    font-family: 'idx-dashicon';
-    margin-right: .3em;
-    font-size: .7rem;
+    content: '\e021';
+    font-family: 'properticons';
+    margin-right: 0.3rem;
+    margin-top: -.45rem;
+    font-size: 3rem;
     color: #82878c;
+    float: left;
 }
-
 #idx-overlay{
     display: none;
     position: fixed;
@@ -45,6 +46,8 @@
     max-height: 84.9%;
     overflow-y: auto;
     overflow-x: hidden;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .idx-modal-content .media-modal-close {
@@ -86,6 +89,8 @@
 .idx-modal-shortcode-edit, .idx-modal-shortcode-preview {
     border-top: 1px solid #DDDDDD;
     padding: 1rem;
+    height: 93%;
+    box-sizing: border-box;
 }
 
 .wp-media-buttons .idx-modal-shortcode-edit a {
@@ -326,7 +331,7 @@ span.select2.select2-container.select2-container--default.select2-container--bel
         bottom: 5.7%;
     }
     .idx-modal-inner-content {
-        max-height: 78.9%;
+        max-height: 84.9%;
     }
 
 }
