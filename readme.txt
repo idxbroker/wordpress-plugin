@@ -4,8 +4,8 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 3.7
-Tested up to: 4.4.2
-Stable tag: 2.1.0
+Tested up to: 4.5
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,9 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 5. Middleware API Key.
 
 == Changelog ==
+
+= 2.1.1 =
+* Error handling has been added to the IMPress Lead Signup widget for duplicate accounts, blank fields, and invalid email addresses.
 
 = 2.1.0 =
 * Adds Min Price option for the IMPress Omnibar Widget and Shortcode.
