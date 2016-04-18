@@ -27,9 +27,11 @@ class Idx_Pages
         $this->schedule_idx_page_update();
 
         $this->idx_api = $idx_api;
+        add_action('wp_loaded', array($this, 'create_idx_pages'));
     }
 
     public $idx_api;
+
     public function add_five_minutes_schedule()
     {
         $schedules['fiveminutes'] = array(
@@ -43,6 +45,10 @@ class Idx_Pages
    // $single = true for plugin settings refresh. Otherwise schedules hourly
    public static function schedule_idx_page_update($single = false)
    {
+       //only schedule update once IDX pages have UID
+       if(!empty(get_option('idx_added_uid_to_idx_pages'))){
+           return;
+       }
        if ($single) {
            wp_schedule_single_event(time(), 'idx_create_idx_pages');
            return wp_schedule_single_event(time(), 'idx_delete_idx_pages');
@@ -136,50 +142,78 @@ class Idx_Pages
 
     public function create_idx_pages()
     {
-
-        $saved_links = $this->idx_api->idx_api_get_savedlinks();
-        $system_links = $this->idx_api->idx_api_get_systemlinks();
-
-        if (!is_array($system_links) || !is_array($saved_links)) {
+        $all_idx_pages = $this->get_all_api_idx_pages();
+        if(empty($all_idx_pages)){
             return;
         }
 
-        $idx_page_chunks = array_chunk(array_merge($saved_links, $system_links), 200);
+        $idx_page_chunks = array_chunk($all_idx_pages, 200);
 
-        $existing_page_urls = $this->get_existing_idx_page_urls();
+        $existing_page_ids = $this->get_existing_idx_page_ids();
 
         foreach ($idx_page_chunks as $idx_page_chunk) {
             //for each chunk, create all idx pages within
-            $this->create_pages_from_chunk($idx_page_chunk, $existing_page_urls);
+            $this->create_pages_from_chunk($idx_page_chunk, $existing_page_ids);
         }
     }
 
     //use the chunk to create all the pages within (chunk is 200)
-    public function create_pages_from_chunk($idx_page_chunk, $existing_page_urls)
+    public function create_pages_from_chunk($idx_page_chunk, $existing_page_ids)
     {
         foreach ($idx_page_chunk as $link) {
-            if (!in_array($link->url, $existing_page_urls)) {
-                if (!empty($link->name)) {
-                    $name = $link->name;
-                } else if ($link->linkTitle) {
-                    $name = $link->linkTitle;
-                }
+            if (!empty($link->name)) {
+                $name = $link->name;
+            } else if ($link->linkTitle) {
+                $name = $link->linkTitle;
+            }
 
-                $post = array(
+            if (!in_array($link->uid, $existing_page_ids)) {
+
+                $post_info = array(
                     'comment_status' => 'closed',
                     'ping_status' => 'closed',
                     'post_name' => $link->url,
                     'post_content' => '',
                     'post_status' => 'publish',
                     'post_title' => $name,
-                    'post_type' => 'idx_page',
+                    'post_type' => 'idx_page'
                 );
 
                 // filter sanitize_tite so it returns the raw title
                 add_filter('sanitize_title', array($this, 'sanitize_title_filter'), 10, 2);
+                $wp_id = wp_insert_post($post_info);
 
-                wp_insert_post($post);
+                update_post_meta($wp_id, 'idx_uid', $link->uid);
+            } else {
+                $this->find_and_update_post($link, $name);
             }
+        }
+    }
+
+    public function find_and_update_post($link, $name)
+    {
+        $posts = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
+        foreach($posts as $post){
+            if(get_post_meta($post->ID, 'idx_uid', true) === $link->uid){
+                $this->update_post($post->ID, $link, $name);
+            }
+        }
+    }
+
+    //update the wp post info if it does not match api
+    public function update_post($id, $link, $name)
+    {
+        $post = get_post($id);
+        //If name or URL are different, update them.
+        if(($post->post_name !== $link->url) || $post->post_title !== $name){
+
+            $post_info = array(
+                'ID' => $id,
+                'post_name' => $link->url,
+                'post_title' => $name
+            );
+
+            wp_update_post($post_info);
         }
     }
 
@@ -193,6 +227,19 @@ class Idx_Pages
     public function sanitize_title_filter($title, $raw_title)
     {
         return $raw_title;
+    }
+
+    public function get_all_api_idx_pages()
+    {
+        $saved_links = $this->idx_api->idx_api_get_savedlinks();
+        $system_links = $this->idx_api->idx_api_get_systemlinks();
+
+        if (!is_array($system_links) || !is_array($saved_links)) {
+            return;
+        }
+
+        $idx_pages = array_merge($saved_links, $system_links);
+        return $idx_pages;
     }
 
     /**
@@ -299,7 +346,7 @@ class Idx_Pages
      *
      * @return array $existing urls of existing idx pages if any
      */
-    public function get_existing_idx_page_urls()
+    public function get_existing_idx_page_ids()
     {
 
         $posts = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
@@ -311,7 +358,7 @@ class Idx_Pages
         }
 
         foreach ($posts as $post) {
-            $existing[] = $post->post_name;
+            $existing[] = get_post_meta($post->ID, 'idx_uid', true);
         }
 
         return $existing;

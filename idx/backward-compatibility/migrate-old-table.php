@@ -1,5 +1,7 @@
 <?php
-namespace IDX;
+namespace IDX\Backward_Compatibility;
+
+use \IDX\Idx_Api;
 
 //Migrate Legacy Plugin Pages from version <1.3
 class Migrate_Old_Table
