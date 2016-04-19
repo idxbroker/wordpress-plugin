@@ -214,6 +214,9 @@ class Idx_Pages
                 'post_title' => $name
             );
 
+            //Prevent WP URL from appearing in IDX page URL.
+            add_filter('sanitize_title', array($this, 'sanitize_title_filter'), 10, 2);
+
             wp_update_post($post_info);
         }
     }
