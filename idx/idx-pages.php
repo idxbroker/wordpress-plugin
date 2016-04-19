@@ -4,7 +4,7 @@ namespace IDX;
 class Idx_Pages
 {
 
-    public function __construct(Idx_Api $idx_api)
+    public function __construct(Idx_Api $idx_api, $app)
     {
         //deletes all IDX pages for troubleshooting purposes
         // $this->delete_all_idx_pages();
@@ -23,15 +23,15 @@ class Idx_Pages
         add_action('save_post', array($this, 'set_wrapper_page'));
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
 
+        $this->idx_api = $idx_api;
+        $this->app = $app;
         //schedule an IDX page update via WP cron
         $this->schedule_idx_page_update();
-
-        $this->idx_api = $idx_api;
-        //for testing
-        add_action('wp_loaded', array($this, 'delete_idx_pages'));
+        
     }
 
     public $idx_api;
+    public $app;
 
     public function add_five_minutes_schedule()
     {
@@ -43,24 +43,20 @@ class Idx_Pages
         return $schedules;
     }
 
-   // $single = true for plugin settings refresh. Otherwise schedules hourly
-   public static function schedule_idx_page_update($single = false)
-   {
-       //only schedule update once IDX pages have UID
-       if(!empty(get_option('idx_added_uid_to_idx_pages'))){
-           return;
-       }
-       if ($single) {
-           wp_schedule_single_event(time(), 'idx_create_idx_pages');
-           return wp_schedule_single_event(time(), 'idx_delete_idx_pages');
-       }
-       if (!wp_next_scheduled('idx_create_idx_pages')) {
+    //Schedule IDX Page update regularly.
+    public function schedule_idx_page_update()
+    {
+        //Only schedule update once IDX pages have UID
+        if(empty(get_option('idx_added_uid_to_idx_pages'))){
+           return $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+        }
+        if (!wp_next_scheduled('idx_create_idx_pages')) {
            wp_schedule_event(time(), 'fiveminutes', 'idx_create_idx_pages');
-       }
-       if(!wp_next_scheduled('idx_delete_idx_pages')) {
+        }
+        if(!wp_next_scheduled('idx_delete_idx_pages')) {
            wp_schedule_event(time(), 'fiveminutes', 'idx_delete_idx_pages');
-       }
-   }
+        }
+    }
 
     //to be called on plugin deactivation
     public static function unschedule_idx_page_update()
@@ -196,6 +192,7 @@ class Idx_Pages
         $posts = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
         foreach($posts as $post){
             if(get_post_meta($post->ID, 'idx_uid', true) === $link->uid){
+                
                 $this->update_post($post->ID, $link, $name);
             }
         }
@@ -206,11 +203,14 @@ class Idx_Pages
     {
         $post = get_post($id);
         //If name or URL are different, update them.
-        if(($post->post_name !== $link->url) || $post->post_title !== $name){
+        if(($post->post_name !== $link->url) || ($post->post_title !== $name)){
+            //Keep old url from resurrecting.
+            remove_action('save_post', array($this, 'save_idx_page'), 1);
 
             $post_info = array(
                 'ID' => $id,
                 'post_name' => $link->url,
+                'guid' => $link->url,
                 'post_title' => $name
             );
 
