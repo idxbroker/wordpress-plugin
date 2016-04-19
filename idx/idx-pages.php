@@ -27,7 +27,8 @@ class Idx_Pages
         $this->schedule_idx_page_update();
 
         $this->idx_api = $idx_api;
-        add_action('wp_loaded', array($this, 'create_idx_pages'));
+        //for testing
+        add_action('wp_loaded', array($this, 'delete_idx_pages'));
     }
 
     public $idx_api;
@@ -242,6 +243,15 @@ class Idx_Pages
         return $idx_pages;
     }
 
+    public function get_all_api_idx_uids($idx_pages)
+    {
+        $uids = array();
+        foreach($idx_pages as $idx_page){
+            $uids[] = $idx_page->uid;
+        }
+        return $uids;
+    }
+
     /**
      * Deletes IDX pages that dont have a url or title matching a systemlink url or title
      *
@@ -255,27 +265,21 @@ class Idx_Pages
             return;
         }
 
-        $saved_link_urls = $this->idx_api->all_saved_link_urls();
 
-        $saved_link_names = $this->idx_api->all_saved_link_names();
+        $all_idx_pages = $this->get_all_api_idx_pages();
+        $idx_page_uids = $this->get_all_api_idx_uids($all_idx_pages);
 
-        $system_link_urls = $this->idx_api->all_system_link_urls();
-
-        $system_link_names = $this->idx_api->all_system_link_names();
-
-        if (empty($system_link_urls) || empty($system_link_names) || empty($saved_link_urls) || empty($saved_link_names)) {
+        if (empty($all_idx_pages)) {
             return;
         }
-
-        $idx_urls = array_merge($saved_link_urls, $system_link_urls);
-        $idx_names = array_merge($saved_link_names, $system_link_names);
 
         foreach ($posts as $post) {
             // post_name oddly refers to permalink in the db
             // if an idx hosted page url or title has been changed,
             // delete the page from the wpdb
             // the updated page will be repopulated automatically
-            if (!in_array($post->post_name, $idx_urls) || !in_array($post->post_title, $idx_names)) {
+            $wp_page_uid = get_post_meta($post->ID, 'idx_uid', true);
+            if (!in_array($wp_page_uid, $idx_page_uids)) {
                 wp_delete_post($post->ID);
             }
         }
