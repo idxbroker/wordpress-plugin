@@ -9,6 +9,12 @@ class Add_Uid_To_Idx_Pages
     {
         $this->idx_api = $idx_api;
 
+        //For testing:
+        // delete_option('idx_added_uid_to_idx_pages');
+        // return;
+        // var_dump(get_option('idx_added_uid_to_idx_pages'));
+        // return $this->add_uid();
+
         //Run Scheduled Addng of UID.
         add_action('idx_add_uid_to_idx_pages', array($this, 'add_uid'));
         //Only run this once.
@@ -28,8 +34,9 @@ class Add_Uid_To_Idx_Pages
         $wp_idx_pages = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
         //If no IDX Pages, do not cause an err.
         if(empty($wp_idx_pages)){
-            return;
+            return update_option('idx_added_uid_to_idx_pages', true);
         }
+
         foreach($wp_idx_pages as $wp_idx_page){
             $id = $wp_idx_page->ID;
             //Get IDX Page data by match to  URL.
@@ -39,7 +46,9 @@ class Add_Uid_To_Idx_Pages
                 continue;
             }
             //Add UID to post meta.
-            update_post_meta($id, $uid);
+            update_post_meta($id, 'idx_uid', $uid);
+            //For Testing:
+            // delete_post_meta($id, 'idx_uid');
         }
         return update_option('idx_added_uid_to_idx_pages', true);
     }

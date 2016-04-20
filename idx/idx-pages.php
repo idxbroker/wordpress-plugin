@@ -28,6 +28,9 @@ class Idx_Pages
         //schedule an IDX page update via WP cron
         $this->schedule_idx_page_update();
         
+        //for testing
+        // $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+        // add_action('wp_loaded', array($this, 'create_idx_pages'));
     }
 
     public $idx_api;
