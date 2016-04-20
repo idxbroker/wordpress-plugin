@@ -99,7 +99,7 @@ class Ioc
             return new Views\Omnibar_Settings($app, $idx_api);
         });
         $app->bind('\IDX\Backward_Compatibility\Migrate_Old_Table', function ($app) use($idx_api) {
-            return new Migrate_Old_Table($idx_api);
+            return new \IDX\Backward_Compatibility\Migrate_Old_Table($idx_api);
         });
         $app->bind('\IDX\Review_Prompt', function ($app) {
             return new Review_Prompt();

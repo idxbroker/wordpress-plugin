@@ -75,6 +75,9 @@ class Initiate_Plugin
             if (!wp_get_schedule('idx_migrate_old_table')) {
                 wp_schedule_single_event(time(), 'idx_migrate_old_table');
             }
+        } else {
+            //Make sure IDX pages update if migration is not necessary.
+            update_option('idx_migrated_old_table', true);
         }
     }
 

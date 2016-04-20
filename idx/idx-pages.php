@@ -11,7 +11,7 @@ class Idx_Pages
 
         add_action('admin_init', array($this, 'show_idx_pages_metabox_by_default'));
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
-        add_filter('cron_schedules', array($this, 'add_five_minutes_schedule'));
+        add_filter('cron_schedules', array($this, 'add_custom_schedule'));
 
         //register hooks for WP Cron to use to update IDX Pages
         add_action('idx_create_idx_pages', array($this, 'create_idx_pages'));
@@ -36,11 +36,11 @@ class Idx_Pages
     public $idx_api;
     public $app;
 
-    public function add_five_minutes_schedule()
+    public function add_custom_schedule()
     {
-        $schedules['fiveminutes'] = array(
-            'interval' => 60 * 5, //five minutes in seconds
-            'display' => 'Five Minutes',
+        $schedules['threeminutes'] = array(
+            'interval' => 60 * 3, //three minutes in seconds
+            'display' => 'Three Minutes',
         );
 
         return $schedules;
@@ -49,15 +49,12 @@ class Idx_Pages
     //Schedule IDX Page update regularly.
     public function schedule_idx_page_update()
     {
-        //Only schedule update once IDX pages have UID
-        if(empty(get_option('idx_added_uid_to_idx_pages'))){
-           return $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
-        }
+        
         if (!wp_next_scheduled('idx_create_idx_pages')) {
-           wp_schedule_event(time(), 'fiveminutes', 'idx_create_idx_pages');
+           wp_schedule_event(time(), 'threeminutes', 'idx_create_idx_pages');
         }
         if(!wp_next_scheduled('idx_delete_idx_pages')) {
-           wp_schedule_event(time(), 'fiveminutes', 'idx_delete_idx_pages');
+           wp_schedule_event(time(), 'threeminutes', 'idx_delete_idx_pages');
         }
     }
 
@@ -142,6 +139,11 @@ class Idx_Pages
 
     public function create_idx_pages()
     {
+        //Only schedule update once IDX pages have UID
+        if(empty(get_option('idx_added_uid_to_idx_pages'))){
+           return $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+        }
+
         $all_idx_pages = $this->get_all_api_idx_pages();
         if(empty($all_idx_pages)){
             return;
@@ -264,6 +266,10 @@ class Idx_Pages
      */
     public function delete_idx_pages()
     {
+        //Only schedule update once IDX pages have UID
+        if(empty(get_option('idx_added_uid_to_idx_pages'))){
+           return $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+        }
 
         $posts = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
 

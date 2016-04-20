@@ -12,8 +12,10 @@ class Add_Uid_To_Idx_Pages
         //For testing:
         // delete_option('idx_added_uid_to_idx_pages');
         // return;
-        // var_dump(get_option('idx_added_uid_to_idx_pages'));
         // return $this->add_uid();
+        if(empty(get_option('idx_migrated_old_table'))){
+            return;
+        }
 
         //Run Scheduled Addng of UID.
         add_action('idx_add_uid_to_idx_pages', array($this, 'add_uid'));
