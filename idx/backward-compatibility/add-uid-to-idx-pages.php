@@ -9,25 +9,16 @@ class Add_Uid_To_Idx_Pages
     {
         $this->idx_api = $idx_api;
 
-        //For testing:
-        // delete_option('idx_added_uid_to_idx_pages');
-        // return;
-        // return $this->add_uid();
+        //If Migrate_Old_Table has not run, wait for it.
         if(empty(get_option('idx_migrated_old_table'))){
             return;
         }
 
         //Run Scheduled Addng of UID.
         add_action('idx_add_uid_to_idx_pages', array($this, 'add_uid'));
-        //Only run this once.
-        if(empty(get_option('idx_added_uid_to_idx_pages'))){
-            $this->schedule_adding_uid();
-        }
-    }
 
-    public function schedule_adding_uid()
-    {
-        wp_schedule_single_event(time(), 'idx_add_uid_to_idx_pages');
+        //For testing:
+        // return $this->add_uid();
     }
 
     //Add UID to all IDX pages as the unique identifier.

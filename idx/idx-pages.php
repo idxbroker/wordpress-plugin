@@ -29,7 +29,6 @@ class Idx_Pages
         $this->schedule_idx_page_update();
         
         //for testing
-        // $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
         // add_action('wp_loaded', array($this, 'create_idx_pages'));
     }
 
@@ -141,7 +140,7 @@ class Idx_Pages
     {
         //Only schedule update once IDX pages have UID
         if(empty(get_option('idx_added_uid_to_idx_pages'))){
-           return $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+            return wp_schedule_single_event(time(), 'idx_add_uid_to_idx_pages');
         }
 
         $all_idx_pages = $this->get_all_api_idx_pages();
