@@ -383,7 +383,8 @@ class Register_Impress_Shortcodes
             $autoplay_param = '';
         }
 
-        if ($display === 1) {
+        //All Instance Values are strings for shortcodes but not widgets.
+        if ($display === "1") {
             $output = '
             <script>
             jQuery(function( $ ){
