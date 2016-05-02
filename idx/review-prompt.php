@@ -1,7 +1,7 @@
 <?php
 namespace IDX;
 
-class Review_Prompt 
+class Review_Prompt
 {
 
     public function __construct()
@@ -9,7 +9,7 @@ class Review_Prompt
         add_action('admin_init', array($this, 'check_timestamp'));
         add_action('wp_ajax_idx_dismiss_review_prompt', array($this, 'dismiss_prompt'));
         //remove dismiss option for testing
-        delete_option('idx_dismiss_review_prompt');
+        // delete_option('idx_dismiss_review_prompt');
     }
 
     public static function set_timestamp()
@@ -41,7 +41,7 @@ class Review_Prompt
     {
         $review_url = 'https://wordpress.org/support/view/plugin-reviews/idx-broker-platinum';
         $dismiss_url = esc_url(wp_nonce_url(admin_url('?idx_dismiss_review_prompt=true'), 'idx_review_prompt_nonce'));
-        
+
         echo '<div class="updated idx_review_prompt is-dismissible"><p>';
         echo 'Loving the updated IMPress for IDX Broker? If so, please leave us a review with your feedback!<br><br>';
         echo "<a href=\"$review_url\" class=\"button button-primary idx_accept_review_prompt\" target=\"_blank\">Review IMPress Now</a> ";
@@ -54,8 +54,11 @@ class Review_Prompt
 
     public function dismiss_prompt()
     {
+        if (!get_option('idx_dismiss_review_prompt')) {
+            add_option('idx_dismiss_review_prompt');
+        }
         update_option('idx_dismiss_review_prompt', true);
         wp_die();
     }
-    
+
 }

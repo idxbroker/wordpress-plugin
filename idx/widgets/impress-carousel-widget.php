@@ -65,7 +65,7 @@ class Impress_Carousel_Widget extends \WP_Widget
             $properties = $this->idx_api->client_properties($instance['properties']);
         }
         //If no properties or an error, load message
-        if (empty($properties) || gettype($properties) === 'object') {
+        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
             return 'No properties found';
         }
 
@@ -118,6 +118,11 @@ class Impress_Carousel_Widget extends \WP_Widget
             </script>
             ';
         }
+
+        //Force type of array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
         // sort low to high
         usort($properties, array($this, 'price_cmp'));
 
@@ -142,6 +147,24 @@ class Impress_Carousel_Widget extends \WP_Widget
         $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 
             $count++;
+
+            //Add Disclaimer when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['disclaimer'] as $disclaimer) {
+                    if(in_array('widget', $disclaimer)) {
+                        $disclaimer_text = $disclaimer['text'];
+                        $disclaimer_logo = $disclaimer['logoURL'];
+                    }
+                }
+            }
+            //Add Courtesy when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['courtesy'] as $courtesy) {
+                    if(in_array('widget', $courtesy)) {
+                        $courtesy_text = $courtesy['text'];
+                    }
+                }
+            }
 
             $prop = $this->set_missing_core_fields($prop);
 
@@ -177,6 +200,19 @@ class Impress_Carousel_Widget extends \WP_Widget
             //remove decimals and add commas to SqFt value
             $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
             $output .= "</p>";
+
+            //Add Disclaimer and Courtesy.
+            $output .= sprintf(
+                '<div class="disclaimer">
+                <p style="display: block !important; visibility: visible !important;">%1$s<br />
+                    <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
+                </p>
+                <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
+                </div>',
+                (isset($disclaimer_text)) ? $disclaimer_text : '',
+                (isset($disclaimer_logo)) ? $disclaimer_logo : '',
+                (isset($courtesy_text)) ? $courtesy_text : ''
+            );
             $output .= "</div>";
 
         }
