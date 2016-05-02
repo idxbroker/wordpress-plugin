@@ -474,7 +474,7 @@ class Idx_Api
 
     public function client_properties($type)
     {
-        $properties = $this->idx_api($type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+        $properties = $this->idx_api($type . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
 
         return $properties;
     }

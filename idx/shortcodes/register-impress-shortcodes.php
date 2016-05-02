@@ -187,6 +187,24 @@ class Register_Impress_Shortcodes
 
             $count++;
 
+            //Add Disclaimer when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['disclaimer'] as $disclaimer) {
+                    if(in_array('widget', $disclaimer)) {
+                        $disclaimer_text = $disclaimer['text'];
+                        $disclaimer_logo = $disclaimer['logoURL'];
+                    }
+                }
+            }
+            //Add Courtesy when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['courtesy'] as $courtesy) {
+                    if(in_array('widget', $courtesy)) {
+                        $courtesy_text = $courtesy['text'];
+                    }
+                }
+            }
+
             $prop = $this->set_missing_core_fields($prop);
 
             if (1 == $show_image) {
