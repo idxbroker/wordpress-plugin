@@ -204,10 +204,10 @@ class Impress_Carousel_Widget extends \WP_Widget
             //Add Disclaimer and Courtesy.
             $output .= sprintf(
                 '<div class="disclaimer">
-                <p style="display: block !important; visibility: visible !important;">%1$s<br />
-                    <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
-                </p>
-                <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
+                    <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
+                        <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
+                    </p>
+                    <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
                 </div>',
                 (isset($disclaimer_text)) ? $disclaimer_text : '',
                 (isset($disclaimer_logo)) ? $disclaimer_logo : '',

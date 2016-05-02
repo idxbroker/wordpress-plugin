@@ -187,6 +187,24 @@ class Register_Impress_Shortcodes
 
             $count++;
 
+            //Add Disclaimer when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['disclaimer'] as $disclaimer) {
+                    if(in_array('widget', $disclaimer)) {
+                        $disclaimer_text = $disclaimer['text'];
+                        $disclaimer_logo = $disclaimer['logoURL'];
+                    }
+                }
+            }
+            //Add Courtesy when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['courtesy'] as $courtesy) {
+                    if(in_array('widget', $courtesy)) {
+                        $courtesy_text = $courtesy['text'];
+                    }
+                }
+            }
+
             $prop = $this->set_missing_core_fields($prop);
 
             if (1 == $show_image) {
@@ -228,10 +246,10 @@ class Register_Impress_Shortcodes
                 //Add Disclaimer and Courtesy.
                 $output .= sprintf(
                     '<div class="disclaimer">
-                    <p style="display: block !important; visibility: visible !important;">%1$s<br />
-                        <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
-                    </p>
-                    <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
+                        <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
+                            <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
+                        </p>
+                        <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
                     </div>',
                     (isset($disclaimer_text)) ? $disclaimer_text : '',
                     (isset($disclaimer_logo)) ? $disclaimer_logo : '',
@@ -511,10 +529,10 @@ class Register_Impress_Shortcodes
             //Add Disclaimer and Courtesy.
             $output .= sprintf(
                 '<div class="disclaimer">
-                <p style="display: block !important; visibility: visible !important;">%1$s<br />
-                    <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
-                </p>
-                <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
+                    <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
+                        <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
+                    </p>
+                    <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
                 </div>',
                 (isset($disclaimer_text)) ? $disclaimer_text : '',
                 (isset($disclaimer_logo)) ? $disclaimer_logo : '',
