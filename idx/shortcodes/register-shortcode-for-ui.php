@@ -188,7 +188,7 @@ class Register_Shortcode_For_Ui
         $output .= "</div>";
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"min_price\" data-short-name=\"min_price\">";
-        $output .= "<label for\"min_price\">Show Min Price Extra Field?</label>";
+        $output .= "<label for\"min_price\">Include Min Price? (If Extra Fields is enabled)</label>";
         $output .= "</div>";
 $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
         // Styles and Scripts for Preview
