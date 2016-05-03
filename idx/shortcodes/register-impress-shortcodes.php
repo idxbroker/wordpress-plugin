@@ -117,7 +117,7 @@ class Register_Impress_Shortcodes
             $properties = $this->idx_api->client_properties($property_type);
         }
         //If no properties or an error, load message
-        if (empty($properties) || gettype($properties) === 'object') {
+        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
             return 'No properties found';
         }
 
@@ -158,6 +158,10 @@ class Register_Impress_Shortcodes
 
         $target = $this->target($new_window);
 
+        //Force type as Array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
         // sort low to high
         usort($properties, array($this->idx_api, 'price_cmp'));
 
@@ -182,6 +186,24 @@ class Register_Impress_Shortcodes
             }
 
             $count++;
+
+            //Add Disclaimer when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['disclaimer'] as $disclaimer) {
+                    if(in_array('widget', $disclaimer)) {
+                        $disclaimer_text = $disclaimer['text'];
+                        $disclaimer_logo = $disclaimer['logoURL'];
+                    }
+                }
+            }
+            //Add Courtesy when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['courtesy'] as $courtesy) {
+                    if(in_array('widget', $courtesy)) {
+                        $courtesy_text = $courtesy['text'];
+                    }
+                }
+            }
 
             $prop = $this->set_missing_core_fields($prop);
 
@@ -220,7 +242,20 @@ class Register_Impress_Shortcodes
                 $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
                 $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
                 $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
-                $output .= "</p></a>";
+                $output .= "</p>";
+                //Add Disclaimer and Courtesy.
+                $output .= sprintf(
+                    '<div class="disclaimer">
+                        <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
+                            <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
+                        </p>
+                        <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
+                    </div>',
+                    (isset($disclaimer_text)) ? $disclaimer_text : '',
+                    (isset($disclaimer_logo)) ? $disclaimer_logo : '',
+                    (isset($courtesy_text)) ? $courtesy_text : ''
+                );
+                $output .= "</a>";
                 $output .= "</div>";
             } else {
                 $output .= sprintf(
@@ -367,9 +402,14 @@ class Register_Impress_Shortcodes
             $properties = $this->idx_api->client_properties($property_type);
         }
         //If no properties or an error, load message
-        if (empty($properties) || gettype($properties) === 'object') {
+        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
             return 'No properties found';
         }
+
+        //Force type as array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
         // sort low to high
         usort($properties, array($this->idx_api, 'price_cmp'));
 
@@ -435,6 +475,24 @@ class Register_Impress_Shortcodes
 
             $count++;
 
+            //Add Disclaimer when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['disclaimer'] as $disclaimer) {
+                    if(in_array('widget', $disclaimer)) {
+                        $disclaimer_text = $disclaimer['text'];
+                        $disclaimer_logo = $disclaimer['logoURL'];
+                    }
+                }
+            }
+            //Add Courtesy when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['courtesy'] as $courtesy) {
+                    if(in_array('widget', $courtesy)) {
+                        $courtesy_text = $courtesy['text'];
+                    }
+                }
+            }
+
             $prop = $this->set_missing_core_fields($prop);
 
             $output .= sprintf(
@@ -468,6 +526,19 @@ class Register_Impress_Shortcodes
             $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
             $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
             $output .= "</p>";
+            //Add Disclaimer and Courtesy.
+            $output .= sprintf(
+                '<div class="disclaimer">
+                    <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
+                        <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
+                    </p>
+                    <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
+                </div>',
+                (isset($disclaimer_text)) ? $disclaimer_text : '',
+                (isset($disclaimer_logo)) ? $disclaimer_logo : '',
+                (isset($courtesy_text)) ? $courtesy_text : ''
+            );
+
             $output .= "</div>";
         }
 

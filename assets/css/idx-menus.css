@@ -8,7 +8,7 @@
 #wpadminbar .properticons-logo-idx:before {
     content: '\e021';
     font-family: 'properticons';
-    font-size: 3rem;
+    font-size: 36pt;
     top: -18px;
     vertical-align: top;
 }
