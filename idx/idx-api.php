@@ -467,7 +467,7 @@ class Idx_Api
     public function saved_link_properties($saved_link_id)
     {
 
-        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 7200, 'GET', true);
+        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 7200, 'GET', true);
 
         return $saved_link_properties;
     }
