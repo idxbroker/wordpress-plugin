@@ -174,6 +174,10 @@ class Idx_Api
         );
 
         $this->clear_wrapper_cache();
+
+        //Update IDX Pages Immediately.
+        wp_schedule_single_event(time(), 'idx_create_idx_pages');
+        wp_schedule_single_event(time(), 'idx_delete_idx_pages');
     }
 
     /**

@@ -27,7 +27,7 @@ class Ioc
         });
         $app->bind('\IDX\Idx_Pages', function ($app) use($idx_api) {
 
-            return new Idx_Pages($idx_api);
+            return new Idx_Pages($idx_api, $app);
         });
         $app->bind('\IDX\Widgets\Create_Idx_Widgets', function ($app) use($idx_api) {
 
@@ -98,8 +98,8 @@ class Ioc
         $app->bind('\IDX\Views\Omnibar_Settings', function ($app) use($idx_api) {
             return new Views\Omnibar_Settings($app, $idx_api);
         });
-        $app->bind('\IDX\Migrate_Old_Table', function ($app) use($idx_api) {
-            return new Migrate_Old_Table($idx_api);
+        $app->bind('\IDX\Backward_Compatibility\Migrate_Old_Table', function ($app) use($idx_api) {
+            return new \IDX\Backward_Compatibility\Migrate_Old_Table($idx_api);
         });
         $app->bind('\IDX\Review_Prompt', function ($app) {
             return new Review_Prompt();
@@ -110,5 +110,9 @@ class Ioc
         $app->bind('\IDX\Dashboard_Widget', function ($app) use($idx_api) {
             return new Dashboard_Widget($idx_api);
         });
+        $app->bind('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages', function ($app) use($idx_api) {
+            return new \IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages($idx_api);
+        });
+
     }
 }

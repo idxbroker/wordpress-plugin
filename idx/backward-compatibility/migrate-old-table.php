@@ -1,5 +1,7 @@
 <?php
-namespace IDX;
+namespace IDX\Backward_Compatibility;
+
+use \IDX\Idx_Api;
 
 //Migrate Legacy Plugin Pages from version <1.3
 class Migrate_Old_Table
@@ -80,6 +82,7 @@ class Migrate_Old_Table
                 'meta_key' => '_links_to',
             )
         );
+        return update_option('idx_migrated_old_table', true);
     }
 
     public function remove_duplicate_posts($page_id)
