@@ -28,7 +28,7 @@ class Initiate_Plugin
         add_action('wp_loaded', array($this, 'schedule_omnibar_update'));
         add_action('idx_omnibar_get_locations', array($this, 'idx_omnibar_get_locations'));
         add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
-        add_action('wp_loaded', array($this, 'backwards_compatibility'));
+        add_action('wp_loaded', array($this, 'legacy_functions'));
 
         //Instantiate Classes
         $this->idx_api = $this->app->make('\IDX\Idx_Api');
@@ -55,6 +55,8 @@ class Initiate_Plugin
         $this->app->make('\IDX\Views\Omnibar_Settings');
         $this->app->make('\IDX\Review_Prompt');
         $this->app->make('\IDX\Blacklist');
+        $this->app->make('\IDX\Dashboard_Widget');
+        $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
     }
 
     private function set_defaults()
@@ -74,12 +76,15 @@ class Initiate_Plugin
             if (!wp_get_schedule('idx_migrate_old_table')) {
                 wp_schedule_single_event(time(), 'idx_migrate_old_table');
             }
+        } else {
+            //Make sure IDX pages update if migration is not necessary.
+            update_option('idx_migrated_old_table', true);
         }
     }
 
     public function migrate_old_table()
     {
-        $this->app->make('\IDX\Migrate_Old_Table');
+        $this->app->make('\IDX\Backward_Compatibility\Migrate_Old_Table');
     }
 
     public function plugin_updated()
@@ -93,7 +98,7 @@ class Initiate_Plugin
     {
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
-            update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION); 
+            update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
             //set to prompt for review in one week
             \IDX\Review_Prompt::set_timestamp();
             //clear old api cache
@@ -181,7 +186,7 @@ class Initiate_Plugin
         update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey']);
         setcookie("api_refresh", 1, time() + 20);
         $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
-        die();
+        wp_die();
     }
 
     public function load_admin_menu_styles()
@@ -287,10 +292,10 @@ class Initiate_Plugin
         wp_enqueue_style('idxcss', plugins_url('/assets/css/idx-broker.css', dirname(__FILE__)));
     }
 
-    public function backwards_compatibility()
+    public function legacy_functions()
     {
         //add legacy idx-start functions for older themes
-        include 'backwards-compatibility.php';
+        include 'backward-compatibility' . DIRECTORY_SEPARATOR . 'legacy-functions.php';
     }
 
     public function disable_original_plugin()

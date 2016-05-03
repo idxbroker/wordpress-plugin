@@ -4,15 +4,18 @@ namespace IDX;
 class Idx_Pages
 {
 
-    public function __construct(Idx_Api $idx_api)
+    public function __construct(Idx_Api $idx_api, $app)
     {
+        //deletes all IDX pages for troubleshooting purposes
         // $this->delete_all_idx_pages();
-        add_action('admin_init', array($this, 'create_idx_pages'), 10);
 
-        add_action('admin_init', array($this, 'delete_idx_pages'));
         add_action('admin_init', array($this, 'show_idx_pages_metabox_by_default'));
-
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
+        add_filter('cron_schedules', array($this, 'add_custom_schedule'));
+
+        //register hooks for WP Cron to use to update IDX Pages
+        add_action('idx_create_idx_pages', array($this, 'create_idx_pages'));
+        add_action('idx_delete_idx_pages', array($this, 'delete_idx_pages'));
 
         add_action('init', array($this, 'register_idx_page_type'));
         add_action('admin_init', array($this, 'manage_idx_page_capabilities'));
@@ -21,9 +24,45 @@ class Idx_Pages
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
 
         $this->idx_api = $idx_api;
+        $this->app = $app;
+        //schedule an IDX page update via WP cron
+        $this->schedule_idx_page_update();
+        
+        //for testing
+        // add_action('wp_loaded', array($this, 'create_idx_pages'));
     }
 
     public $idx_api;
+    public $app;
+
+    public function add_custom_schedule()
+    {
+        $schedules['threeminutes'] = array(
+            'interval' => 60 * 3, //three minutes in seconds
+            'display' => 'Three Minutes',
+        );
+
+        return $schedules;
+    }
+
+    //Schedule IDX Page update regularly.
+    public function schedule_idx_page_update()
+    {
+        
+        if (!wp_next_scheduled('idx_create_idx_pages')) {
+           wp_schedule_event(time(), 'threeminutes', 'idx_create_idx_pages');
+        }
+        if(!wp_next_scheduled('idx_delete_idx_pages')) {
+           wp_schedule_event(time(), 'threeminutes', 'idx_delete_idx_pages');
+        }
+    }
+
+    //to be called on plugin deactivation
+    public static function unschedule_idx_page_update()
+    {
+        wp_clear_scheduled_hook('idx_create_idx_pages');
+        wp_clear_scheduled_hook('idx_delete_idx_pages');
+    }
 
     public function register_idx_page_type()
     {
@@ -38,8 +77,8 @@ class Idx_Pages
             'new_item' => 'New IDX Page',
             'view_item' => 'View IDX Page',
             'search_items' => 'Search IDX Pages',
-            'not_found' => 'No idx_pages found',
-            'not_found_in_trash' => 'No idx_pages found in Trash',
+            'not_found' => 'No IDX Pages found',
+            'not_found_in_trash' => 'No IDX Pages found in Trash',
             'parent_item_colon' => '',
             'parent' => 'Parent IDX Page',
         );
@@ -99,42 +138,90 @@ class Idx_Pages
 
     public function create_idx_pages()
     {
+        //Only schedule update once IDX pages have UID
+        if(empty(get_option('idx_added_uid_to_idx_pages'))){
+            return wp_schedule_single_event(time(), 'idx_add_uid_to_idx_pages');
+        }
 
-        $saved_links = $this->idx_api->idx_api_get_savedlinks();
-        $system_links = $this->idx_api->idx_api_get_systemlinks();
-
-        if (!is_array($system_links) || !is_array($saved_links)) {
+        $all_idx_pages = $this->get_all_api_idx_pages();
+        if(empty($all_idx_pages)){
             return;
         }
 
-        $idx_links = array_merge($saved_links, $system_links);
+        $idx_page_chunks = array_chunk($all_idx_pages, 200);
 
-        $existing_page_urls = $this->get_existing_idx_page_urls();
+        $existing_page_ids = $this->get_existing_idx_page_ids();
 
-        foreach ($idx_links as $link) {
-            if (!in_array($link->url, $existing_page_urls)) {
+        foreach ($idx_page_chunks as $idx_page_chunk) {
+            //for each chunk, create all idx pages within
+            $this->create_pages_from_chunk($idx_page_chunk, $existing_page_ids);
+        }
+    }
 
-                if (!empty($link->name)) {
-                    $name = $link->name;
-                } else if ($link->linkTitle) {
-                    $name = $link->linkTitle;
-                }
+    //use the chunk to create all the pages within (chunk is 200)
+    public function create_pages_from_chunk($idx_page_chunk, $existing_page_ids)
+    {
+        foreach ($idx_page_chunk as $link) {
+            if (!empty($link->name)) {
+                $name = $link->name;
+            } else if ($link->linkTitle) {
+                $name = $link->linkTitle;
+            }
 
-                $post = array(
+            if (!in_array($link->uid, $existing_page_ids)) {
+
+                $post_info = array(
                     'comment_status' => 'closed',
                     'ping_status' => 'closed',
                     'post_name' => $link->url,
                     'post_content' => '',
                     'post_status' => 'publish',
                     'post_title' => $name,
-                    'post_type' => 'idx_page',
+                    'post_type' => 'idx_page'
                 );
 
                 // filter sanitize_tite so it returns the raw title
                 add_filter('sanitize_title', array($this, 'sanitize_title_filter'), 10, 2);
+                $wp_id = wp_insert_post($post_info);
 
-                wp_insert_post($post);
+                update_post_meta($wp_id, 'idx_uid', $link->uid);
+            } else {
+                $this->find_and_update_post($link, $name);
             }
+        }
+    }
+
+    public function find_and_update_post($link, $name)
+    {
+        $posts = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
+        foreach($posts as $post){
+            if(get_post_meta($post->ID, 'idx_uid', true) === $link->uid){
+                
+                $this->update_post($post->ID, $link, $name);
+            }
+        }
+    }
+
+    //update the wp post info if it does not match api
+    public function update_post($id, $link, $name)
+    {
+        $post = get_post($id);
+        //If name or URL are different, update them.
+        if(($post->post_name !== $link->url) || ($post->post_title !== $name)){
+            //Keep old url from resurrecting.
+            remove_action('save_post', array($this, 'save_idx_page'), 1);
+
+            $post_info = array(
+                'ID' => $id,
+                'post_name' => $link->url,
+                'guid' => $link->url,
+                'post_title' => $name
+            );
+
+            //Prevent WP URL from appearing in IDX page URL.
+            add_filter('sanitize_title', array($this, 'sanitize_title_filter'), 10, 2);
+
+            wp_update_post($post_info);
         }
     }
 
@@ -150,12 +237,38 @@ class Idx_Pages
         return $raw_title;
     }
 
+    public function get_all_api_idx_pages()
+    {
+        $saved_links = $this->idx_api->idx_api_get_savedlinks();
+        $system_links = $this->idx_api->idx_api_get_systemlinks();
+
+        if (!is_array($system_links) || !is_array($saved_links)) {
+            return;
+        }
+
+        $idx_pages = array_merge($saved_links, $system_links);
+        return $idx_pages;
+    }
+
+    public function get_all_api_idx_uids($idx_pages)
+    {
+        $uids = array();
+        foreach($idx_pages as $idx_page){
+            $uids[] = $idx_page->uid;
+        }
+        return $uids;
+    }
+
     /**
      * Deletes IDX pages that dont have a url or title matching a systemlink url or title
      *
      */
     public function delete_idx_pages()
     {
+        //Only schedule update once IDX pages have UID
+        if(empty(get_option('idx_added_uid_to_idx_pages'))){
+           return $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+        }
 
         $posts = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
 
@@ -163,27 +276,21 @@ class Idx_Pages
             return;
         }
 
-        $saved_link_urls = $this->idx_api->all_saved_link_urls();
 
-        $saved_link_names = $this->idx_api->all_saved_link_names();
+        $all_idx_pages = $this->get_all_api_idx_pages();
+        $idx_page_uids = $this->get_all_api_idx_uids($all_idx_pages);
 
-        $system_link_urls = $this->idx_api->all_system_link_urls();
-
-        $system_link_names = $this->idx_api->all_system_link_names();
-
-        if (empty($system_link_urls) || empty($system_link_names) || empty($saved_link_urls) || empty($saved_link_names)) {
+        if (empty($all_idx_pages)) {
             return;
         }
-
-        $idx_urls = array_merge($saved_link_urls, $system_link_urls);
-        $idx_names = array_merge($saved_link_names, $system_link_names);
 
         foreach ($posts as $post) {
             // post_name oddly refers to permalink in the db
             // if an idx hosted page url or title has been changed,
             // delete the page from the wpdb
             // the updated page will be repopulated automatically
-            if (!in_array($post->post_name, $idx_urls) || !in_array($post->post_title, $idx_names)) {
+            $wp_page_uid = get_post_meta($post->ID, 'idx_uid', true);
+            if (!in_array($wp_page_uid, $idx_page_uids)) {
                 wp_delete_post($post->ID);
             }
         }
@@ -228,6 +335,7 @@ class Idx_Pages
 
     /**
      * Deletes all posts of the "idx_page" post type
+     * This is called on uninstall of the plugin and when troubleshooting
      *
      * @return void
      */
@@ -253,7 +361,7 @@ class Idx_Pages
      *
      * @return array $existing urls of existing idx pages if any
      */
-    public function get_existing_idx_page_urls()
+    public function get_existing_idx_page_ids()
     {
 
         $posts = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
@@ -265,7 +373,7 @@ class Idx_Pages
         }
 
         foreach ($posts as $post) {
-            $existing[] = $post->post_name;
+            $existing[] = get_post_meta($post->ID, 'idx_uid', true);
         }
 
         return $existing;

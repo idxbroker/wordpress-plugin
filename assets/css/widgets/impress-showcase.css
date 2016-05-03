@@ -16,6 +16,7 @@
 }
 .impress-showcase-property img {
     border: 1px solid #ccc;
+    max-width: 100%;
 }
 .impress-showcase-property span.impress-price {
     font-size: 24px;
@@ -76,6 +77,13 @@
 .impress-property-showcase .small-12 {
     width: 100%;
 }
+.impress-showcase-property .disclaimer p {
+    font-size: 10px;
+    margin: 0;
+}
+.impress-showcase-property .disclaimer p img {
+    border: none;
+}
 @media only screen and (min-width:64.063em) {
     .impress-property-showcase .large-1 {
         width: 8.3333333333%;
@@ -115,55 +123,56 @@
     }
 }
 @media only screen and (min-width:40.063em) {
-        .impress-row {
-              width: 100%;
-              margin-left: auto;
-              margin-right: auto;
-              margin-top: 0;
-              margin-bottom: 0;
-              max-width: 1140px;
-        }
-        .impress-row:before, .impress-row:after {
-            content: " ";
-            display: table;
-        }
-        .impress-row:after {
-            clear: both;
-        }
-        .impress-property-showcase .medium-1 {
-            width: 8.3333333333%;
-        }
-        .impress-property-showcase .medium-2 {
-            width: 16.6666666667%;
-        }
-        .impress-property-showcase .medium-3 {
-            width: 25%;
-        }
-        .impress-property-showcase .medium-4 {
-            width: 33.3333333333%;
-        }
-        .impress-property-showcase .medium-5 {
-            width: 41.6666666667%;
-        }
-        .impress-property-showcase .medium-6 {
-            width: 50%;
-        }
-        .impress-property-showcase .medium-7 {
-            width: 58.3333333333%;
-        }
-        .impress-property-showcase .medium-8 {
-            width: 66.6666666667%;
-        }
-        .impress-property-showcase .medium-9 {
-            width: 75%;
-        }
-        .impress-property-showcase .medium-10 {
-            width: 83.3333333333%;
-        }
-        .impress-property-showcase .medium-11 {
-            width: 91.6666666667%;
-        }
-        .impress-property-showcase .medium-12 {
-            width: 100%;
-        }
+    .impress-row {
+          width: 100%;
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: 0;
+          margin-bottom: 0;
+          max-width: 1140px;
+    }
+    .impress-row:before, .impress-row:after {
+        content: " ";
+        display: table;
+    }
+    .impress-row:after {
+        clear: both;
+    }
+    .impress-property-showcase .medium-1 {
+        width: 8.3333333333%;
+    }
+    .impress-property-showcase .medium-2 {
+        width: 16.6666666667%;
+    }
+    .impress-property-showcase .medium-3 {
+        width: 25%;
+    }
+    .impress-property-showcase .medium-4 {
+        width: 33.3333333333%;
+    }
+    .impress-property-showcase .medium-5 {
+        width: 41.6666666667%;
+    }
+    .impress-property-showcase .medium-6 {
+        width: 50%;
+    }
+    .impress-property-showcase .medium-7 {
+        width: 58.3333333333%;
+    }
+    .impress-property-showcase .medium-8 {
+        width: 66.6666666667%;
+    }
+    .impress-property-showcase .medium-9 {
+        width: 75%;
+    }
+    .impress-property-showcase .medium-10 {
+        width: 83.3333333333%;
+    }
+    .impress-property-showcase .medium-11 {
+        width: 91.6666666667%;
+    }
+    .impress-property-showcase .medium-12 {
+        width: 100%;
+    }
 }
+

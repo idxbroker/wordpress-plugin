@@ -63,3 +63,18 @@
     margin: 0 10px 0 0;
     font-size: 14px;
 }
+.impress-carousel .disclaimer p {
+    font-size: 10px;
+    margin: 0;
+}
+.impress-carousel .disclaimer p img {
+    border: none;
+}
+
+/*
+ * Preview/Theme Specific Styles
+ */
+.idx-modal-shortcode-preview img {
+    max-width: 100%;
+}
+

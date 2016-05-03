@@ -77,6 +77,10 @@ class Idx_Api
             if ($level === 'equity') {
                 $equity_api_key = get_option('equity_api_key');
                 $domain = site_url();
+                $custom_equity_domain = get_option('equity-settings');
+                if(isset($custom_equity_domain['equity_idx_domain'])) {
+                    $domain = $custom_equity_domain['equity_idx_domain'];
+                }
                 $equity_headers = array(
                     'equitykey' => $equity_api_key,
                     'domain' => apply_filters('equity_idx_api_domain', $domain),
@@ -170,6 +174,10 @@ class Idx_Api
         );
 
         $this->clear_wrapper_cache();
+
+        //Update IDX Pages Immediately.
+        wp_schedule_single_event(time(), 'idx_create_idx_pages');
+        wp_schedule_single_event(time(), 'idx_delete_idx_pages');
     }
 
     /**
@@ -463,14 +471,14 @@ class Idx_Api
     public function saved_link_properties($saved_link_id)
     {
 
-        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 7200, 'GET', true);
+        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 7200, 'GET', true);
 
         return $saved_link_properties;
     }
 
     public function client_properties($type)
     {
-        $properties = $this->idx_api($type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+        $properties = $this->idx_api($type . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
 
         return $properties;
     }
@@ -608,7 +616,7 @@ class Idx_Api
         $a = $this->clean_price($a['listingPrice']);
         $b = $this->clean_price($b['listingPrice']);
 
-        if ($a == $b) {
+        if ($a === $b) {
             return 0;
         }
 
@@ -645,8 +653,33 @@ class Idx_Api
 
     public function get_blacklist()
     {
-        $blacklist = $this->idx_api('blacklist', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 60*15, 'GET', true);
+        $blacklist = $this->idx_api('blacklist', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 60 * 15, 'GET', true);
 
         return $blacklist;
+    }
+
+    public function get_leads($timeframe = null, $start_date = '')
+    {
+        if(! empty($start_date)){
+            $start_date = "&startDatetime=$start_date";
+        }
+        if(! empty($timeframe)){
+            $leads = $this->idx_api("lead?interval=$timeframe$start_date", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
+        } else {
+            $leads = $this->idx_api('lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
+        }
+        return $leads;
+    }
+    
+    public function get_featured_listings($listing_type = 'featured', $timeframe = null)
+    {
+        //Force type to array.
+        if(! empty($timeframe)){
+            $listings = $this->idx_api("$listing_type?interval=$timeframe", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true);
+        } else {
+            $listings = $this->idx_api($listing_type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true);
+        }
+
+        return $listings;
     }
 }

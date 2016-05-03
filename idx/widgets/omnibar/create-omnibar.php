@@ -41,7 +41,7 @@ class Create_Omnibar
 EOD;
     }
 
-    public function idx_omnibar_extra($plugin_dir, $idx_url, $styles = 1)
+    public function idx_omnibar_extra($plugin_dir, $idx_url, $styles = 1, $min_price = 0)
     {
         $mlsPtIDs = $this->idx_omnibar_default_property_types();
         $placeholder = get_option('idx_omnibar_placeholder');
@@ -61,14 +61,27 @@ EOD;
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', plugins_url('../../assets/js/locationlist.js', dirname(__FILE__)));
 
+        $price_field = $this->price_field($min_price);
+
         return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">
       <label for="omnibar" class="screen-reader-text">$placeholder</label>
       <input id="omnibar" class="idx-omnibar-input idx-omnibar-extra-input" type="text" placeholder="$placeholder">
-      <div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0" title="No commas or dollar signs are allowed."></div><div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01" title="Only numbers and decimals are allowed"></div>
+      $price_field<div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01" title="Only numbers and decimals are allowed"></div>
       <button class="idx-omnibar-extra-button" type="submit" value="Search"><i class="fa fa-search"></i><span>Search</span></button>
     </form>
 EOD;
+    }
+
+    public function price_field($min_price)
+    {
+        if(empty($min_price)){
+            $price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
+        } else {
+            $price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-min-price-container"><label>Price Min</label><input class="idx-omnibar-min-price" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-max-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
+        }
+
+        return $price_field;
     }
 
     public function idx_omnibar_default_property_types()
@@ -89,6 +102,7 @@ EOD;
     public function add_omnibar_shortcode($atts)
     {
         extract(shortcode_atts(array(
+            'min_price' => 0,
             'styles' => 1,
             'extra' => 0,
         ), $atts));
@@ -97,7 +111,7 @@ EOD;
         $plugin_dir = plugins_url();
 
         if (!empty($extra)) {
-            return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles);
+            return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles, $min_price);
         } else {
             return $this->idx_omnibar_basic($plugin_dir, $idx_url, $styles);
         }
@@ -106,13 +120,14 @@ EOD;
     public function add_omnibar_extra_shortcode($atts)
     {
         extract(shortcode_atts(array(
+            'min_price' => 0,
             'styles' => 1,
         ), $atts));
 
         $idx_url = get_option('idx_results_url');
         $plugin_dir = plugins_url();
 
-        return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles);
+        return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles, $min_price);
     }
 
     //use our own register function to allow dependency injection via the IoC container

@@ -4,8 +4,8 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 3.7
-Tested up to: 4.4.2
-Stable tag: 2.1.0
+Tested up to: 4.5
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ IMPress for IDX Broker is part of the IMPress family of plugins. Your IDX Broker
 <h4>Native WordPress Widgets</h4>
 Add widgets previously only available in the Equity framework - lead login, signup, city links, showcase, and carousel widgets. Take advantage of these new widgets to deliver the best experience, and style them to match the design of your site.
 
-<h4>Conventiently Add Shortcodes</h4>
+<h4>Conveniently Add Shortcodes</h4>
 An overhauled user experience makes this plugin easy to use. Easily add new widgets to pages and posts with built-in shortcodes.
 
 <h4>Import Your Listings with IMPress Listings</h4>
@@ -102,13 +102,24 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 == Changelog ==
 
+= 2.1.1 =
+* Error handling has been added to the IMPress Lead Signup widget for duplicate accounts, blank fields, and invalid email addresses.
+
 = 2.1.0 =
 * Adds Min Price option for the IMPress Omnibar Widget and Shortcode.
 * IMPress Showcase and Carousels now use the address for the image title attribute for better SEO.
 * The Omnibar main input has been updated for better accessibility with screen readers.
 * A Shortcode has been added to make regular WP pages a wrapper for incompatible plugins.
-* Wrappers are now more compatible with other plugins.
+* A bug has been fixed where the omnibar was not updating properly from the Omnibar Settings page.
 * The Omnibar Settings page has been updated for a better UX.
+* A wrapper can now be applied to a specific IDX Page when editing IDX Pages.
+* Wrappers are now more compatible with other plugins.
+* Wrapper styling has been updated to hide common irrelevant meta data from IDX pages.
+* A new Dashboard widget has been added for a convenient overview of Leads and Listings.
+* Fixed an issue where IDX pages were not imported at all and caused slow downs on slower servers.
+
+= 2.0.3 =
+* Fixed an issue where plugin review prompt could not be dismissed.
 
 = 2.0.2 =
 * Fixed an issue where a saved links field was incorrectly displaying on Carousel and Showcase shortcodes for Lite accounts (This only works for Platinum accounts).
