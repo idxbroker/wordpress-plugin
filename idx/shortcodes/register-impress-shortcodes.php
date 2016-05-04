@@ -159,7 +159,7 @@ class Register_Impress_Shortcodes
                 }
             }
             //Add Courtesy when applicable.
-            if(isset($prop['disclaimer'])) {
+            if(isset($prop['courtesy'])) {
                 foreach($prop['courtesy'] as $courtesy) {
                     if(in_array('widget', $courtesy)) {
                         $courtesy_text = $courtesy['text'];
@@ -447,7 +447,7 @@ class Register_Impress_Shortcodes
                 }
             }
             //Add Courtesy when applicable.
-            if(isset($prop['disclaimer'])) {
+            if(isset($prop['courtesy'])) {
                 foreach($prop['courtesy'] as $courtesy) {
                     if(in_array('widget', $courtesy)) {
                         $courtesy_text = $courtesy['text'];

@@ -158,7 +158,7 @@ class Impress_Carousel_Widget extends \WP_Widget
                 }
             }
             //Add Courtesy when applicable.
-            if(isset($prop['disclaimer'])) {
+            if(isset($prop['courtesy'])) {
                 foreach($prop['courtesy'] as $courtesy) {
                     if(in_array('widget', $courtesy)) {
                         $courtesy_text = $courtesy['text'];
