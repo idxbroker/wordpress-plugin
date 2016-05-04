@@ -103,7 +103,12 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 == Changelog ==
 
 = 2.1.1 =
+* IDX Pages are now automatically updated when their URLs change allowing more seamless domain/subdomain changes for IDX accounts.
 * Error handling has been added to the IMPress Lead Signup widget for duplicate accounts, blank fields, and invalid email addresses.
+* An issue has been fixed where IMPress Carousel widgets and shortcodes displayed listing count was not being followed on smaller screens.
+* Verbiage for the min price field has been updated for the omnibar to clarify Extra Fields must be enabled to display it.
+* The styling was updated for the IDX icon where it was misaligned in the admin bar on the front end.
+* Courtesies are now displayed on IMPress Showcases and Carousels when required by MLS rules.
 
 = 2.1.0 =
 * Adds Min Price option for the IMPress Omnibar Widget and Shortcode.
