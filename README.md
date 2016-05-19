@@ -1,68 +1,58 @@
 # IMPress for IDX Broker #
-
-**Author:** IDX, LLC
-
-**Contributors:** idxco
-
-**Author URL:** http://www.idxbroker.com
-
-**Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
-
-**Requires at least:** 3.7
-
-**Tested up to:** 4.4
-
-**Stable tag:** 2.0.0
-
-**License:** GPLv2 or later
-
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
-
+Author: IDX, LLC
+**Contributors:** idxco  
+Author URL: http://www.idxbroker.com
+**Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
+**Requires at least:** 3.7  
+**Tested up to:** 4.5.2  
+**Stable tag:** 2.1.1  
+**License:** GPLv2 or later  
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
 ## Description ##
 IMPress for IDX Broker is part of the IMPress family of plugins. Your IDX Broker-enabled account provides this plugin with access to your MLS data feed. The IMPress for IDX Broker plugin (formerly IDX Broker) allows you to display that data on your WordPress site using widgets and shortcodes.
 
-### IMPress for IDX Broker ###
+<h3>IMPress for IDX Broker</h3>
 
-#### Native WordPress Widgets ####
-Add widgets previously only available in the Equity framework - lead login, signup, city links , and showcase, and carousel widgets. Take advantage of these new widgets to deliver the best experience and style them to match the design of your site.
+<h4>Native WordPress Widgets</h4>
+Add widgets previously only available in the Equity framework - lead login, signup, city links, showcase, and carousel widgets. Take advantage of these new widgets to deliver the best experience, and style them to match the design of your site.
 
-#### Conventiently Add Shortcodes ####
+<h4>Conveniently Add Shortcodes</h4>
 An overhauled user experience makes this plugin easy to use. Easily add new widgets to pages and posts with built-in shortcodes.
 
-#### Imprt Your Listings with IMPress Lstings ####
-Combine this plugin with [IMPress Listings](https://wordpress.org/plugins/wp-listings/) to import all your IDX properties into WordPress without wasting time on tedious data entry. You no longer have to manually enter your properties! Have them updated as the MLS changes.
+<h4>Import Your Listings with IMPress Listings</h4>
+Combine this plugin with <a href="https://wordpress.org/plugins/wp-listings/">IMPress Listings</a> to import all your IDX properties into WordPress without wasting time on tedious data entry. You no longer have to manually enter your properties! Have them updated as the MLS changes.
 
 An overhauled user experience makes this plugin easy to use. Easily add new widgets to pages and posts with built-in shortcodes.
 
-#### Capture and Convert Your Leads ####
+<h4>Capture and Convert Your Leads</h4>
 Use our powerful lead capture tools to generate new leads. Go beyond and customize your lead capture settings with IDX Broker Platinum.
 
-#### New Omni-Search Widget ####
-This new widget allows you to add an "Omni-Search" bar to your home page. Visitors can then search by city, county, postal code, address, or listing ID. No other IDX solution offers this many options in an omni-search bar for your home page.
+<h4>New Omnibar Search Widget</h4>
+This new widget allows you to add an Omnibar Search Widget to your home page. Visitors can then search by city, county, postal code, address, or listing ID. Custom Fields such as School or Subdivision can also be added. No other IDX solution offers this many options in a search widget for your home page.
 
-#### Cloud Hosted, Never Framed ####
+<h4>Cloud Hosted, Never Framed</h4>
 The IMPress for IDX Broker plugin links to pages on your site including your IDX Broker custom subdomain. This allows multiple unique URL results for each specific search engine query, leading to the best possible SEO results and more traffic from search engines. Don't be fooled by the scare tactics used by those who suggest that IDX pages must always appear on your root WordPress domain.
 
-#### Design Community ####
-Only IMPress for IDX Broker gives you the ability to choose premium IMPress WordPress themes designed specifically around use with your IDX Broker account. Agent Evolution and other [Premium Real Estate Theme Designers](http://www.idxbroker.com/wordpress-idx-themes) offer deep integration with the IMPress plugin suite.
+<h4>Design Community</h4>
+Only IMPress for IDX Broker gives you the ability to choose premium IMPress WordPress themes designed specifically around use with your IDX Broker account. Agent Evolution and other <a href="http://www.idxbroker.com/wordpress-idx-themes">Premium Real Estate Theme Designers</a> offer deep integration with the IMPress plugin suite.
 
-#### Mobile Responsive and Mobile-Friendly ####
+<h4>Mobile Responsive and Mobile-Friendly</h4>
 All your templates and widgets will be responsive if you're using a responsive theme. If you want to give visitors a more simplified, mobile app-like experience, simply activate mobile wrappers. Visitors can always select "View Full Site" to load the full version of your WordPress site on their mobile device. Only IMPress for IDX Broker offers this many options for your mobile visitors!
 
-#### Map Search Widget ####
-Add a full-sized [map search widget](http://www.idxbroker.com/features/map-search-widget) to ANY page on your domain. Create your own custom polygon searches with your IDX Broker Platinum account and allow visitors the ability to search within popular neighborhoods in your area.
+<h4>Map Search Widget</h4>
+Add a full-sized <a href="http://www.idxbroker.com/features/map-search-widget">map search widget</a> to ANY page on your domain.</li></ul> Create your own custom polygon searches with your IDX Broker Platinum account and allow visitors the ability to search within popular neighborhoods in your area.
 
-#### Build Neighborhood Pages ####
+<h4>Build Neighborhood Pages</h4>
 Write a story, or a post, and use anchor tags to link your custom neighborhoods in IMPress for IDX Broker. That's two indexed pages for the price of one!
 
-#### The Best Office IDX Available ####
-Assign leads to your agents exactly the way you want. Choose from multiple lead routing options, including [round robin](http://www.idxbroker.com/features/round-robin-and-core-fields-lead-routing), custom assignments for neighborhood pages, using a [showcase widget](http://www.idxbroker.com/features/feature-agent-listings-showcase), or by creating a unique [bio page](http://www.idxbroker.com/features/agent-bio-page-wrapper) for each agent!
+<h4>The Best Office IDX Available</h4>
+Assign leads to your agents exactly the way you want. Choose from multiple lead routing options, including <a href="http://www.idxbroker.com/features/round-robin-and-core-fields-lead-routing">round robin</a>, custom assignments for neighborhood pages, using a <a href="http://www.idxbroker.com/features/feature-agent-listings-showcase">showcase widget</a>, or by creating a unique <a href="http://www.idxbroker.com/features/agent-bio-page-wrapper">bio page</a> for each agent!
 
-#### Affordable Pricing ####
-IMPress for IDX Broker requires and IDX Broker account. Plans start at $39.99 for IDX Broker Lite and $59.99 for IDX Broker Platinum. [View all features now.](http://www.idxbroker.com/compare-idx)
+<h4>Affordable Pricing</h4>
+IMPress for IDX Broker requires and IDX Broker account. Plans start at $39.99 for IDX Broker Lite and $59.99 for IDX Broker Platinum. <a href="http://www.idxbroker.com/compare-idx">View all features now.</a>
 
-#### General Terms of Use ####
+<h4>General Terms of Use</h4>
 IMPress for IDX Broker uses the MLS/IDX feeds provided by your IDX Broker account. This means your MLS governs the display and disclaimers on your IDX results and details pages. IDX, LLC manages all the necessary MLS paperwork. The IMPress for IDX Broker plugin will automatically display the correct MLS/IDX disclaimers to ensure compliance with the MLS(s) & Board(s) that provides you with your IDX feed.
 
 ## Installation ##
@@ -85,7 +75,7 @@ The upgrade to IMPress for IDX Broker (formerly IDX Broker) is part of a free, s
 Internet Data Exchange, or IDX, is a type of data feed provided by your MLS. This data feed typically (but not always) mirrors the data available on your MLS's website. IMPress for IDX Broker IDX Broker connects to this data feed automatically, maps the necessary fields, and then adds forms, scripts, etc, giving you a way to add html links and widgets to you website(s).
 
 ### Do I need an IDX Broker Lite or Platinum account in order to use this plugin? ###
-Yes. IMPress for IDX Broker manages your IDX feed by building forms, results, and property details pages that match your website or blog design. All IDX feeds require approval from a local board or MLS. If you are not a member of a local board or MLS, or your MLS does not provide an IDX data feed, then you will be unable to add IMPress for IDX Broker plugin functionality to your WordPress site. [Read more about our MLS coverage.](http://www.idxbroker.com/idx_mls_coverage) Note that some MLS's may charge you a separate fee for access to your IDX feed.
+Yes. IMPress for IDX Broker manages your IDX feed by building forms, results, and property details pages that match your website or blog design. All IDX feeds require approval from a local board or MLS. If you are not a member of a local board or MLS, or your MLS does not provide an IDX data feed, then you will be unable to add IMPress for IDX Broker plugin functionality to your WordPress site. <a href="http://www.idxbroker.com/idx_mls_coverage">Read more about our MLS coverage.</a> Note that some MLS's may charge you a separate fee for access to your IDX feed.
 
 ### Does IDX Broker require a long-term contract? ###
 No. IDX Broker requires a month-to-month agreement only. There are three monthly account levels - Agent ($39.99+), Team ($69.99+), and Office ($98.99+).
@@ -100,7 +90,7 @@ Features provided by this Plugin - Widgets, links, and custom links may be place
 Yes. IMPress for IDX Broker provides you with a sign up widget, sign up links, a lead manager page, a customizable sign up form, and provides you with 'teaser' registration options.
 
 ### What are Other Requirements for this Plugin? ###
-This plugin requires a PHP version higher than 5.2. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See [this article](http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433) for more information.
+This plugin requires a PHP version higher than 5.2. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
 
 ## Screenshots ##
 
@@ -126,8 +116,42 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 ## Changelog ##
 
-### 2.0 ###
+### 2.1.1 ###
+* IDX Pages are now automatically updated when their URLs change allowing more seamless domain/subdomain changes for IDX accounts.
+* Error handling has been added to the IMPress Lead Signup widget for duplicate accounts, blank fields, and invalid email addresses.
+* An issue has been fixed where IMPress Carousel widgets and shortcodes displayed listing count was not being followed on smaller screens.
+* Verbiage for the min price field has been updated for the omnibar to clarify Extra Fields must be enabled to display it.
+* The styling was updated for the IDX icon where it was misaligned in the admin bar on the front end.
+* Courtesies are now displayed on IMPress Showcases and Carousels when required by MLS rules.
 
+### 2.1.0 ###
+* Adds Min Price option for the IMPress Omnibar Widget and Shortcode.
+* IMPress Showcase and Carousels now use the address for the image title attribute for better SEO.
+* The Omnibar main input has been updated for better accessibility with screen readers.
+* A Shortcode has been added to make regular WP pages a wrapper for incompatible plugins.
+* A bug has been fixed where the omnibar was not updating properly from the Omnibar Settings page.
+* The Omnibar Settings page has been updated for a better UX.
+* A wrapper can now be applied to a specific IDX Page when editing IDX Pages.
+* Wrappers are now more compatible with other plugins.
+* Wrapper styling has been updated to hide common irrelevant meta data from IDX pages.
+* A new Dashboard widget has been added for a convenient overview of Leads and Listings.
+* Fixed an issue where IDX pages were not imported at all and caused slow downs on slower servers.
+
+### 2.0.3 ###
+* Fixed an issue where plugin review prompt could not be dismissed.
+
+### 2.0.2 ###
+* Fixed an issue where a saved links field was incorrectly displaying on Carousel and Showcase shortcodes for Lite accounts (This only works for Platinum accounts).
+* Fixed a similar issue where saved links were displaying a UI to apply page level wrappers to them for Lite accounts.
+* Incorporated an IoC Container into the plugin for a cleaner coding structure.
+* Equity accounts now have ip blacklisting protection against scrapers stealing website content.
+* Added option to open several IMPress widgets and shortcodes in a new window.
+* Disable the IDX Broker Origin plugin if active to prevent conflicts.
+
+### 2.0.1 ###
+* Fixed a minor issue where a notice was displaying for users with error reporting enabled.
+
+### 2.0.0 ###
 * The IDX Broker plugin has been renamed as the IMPress plugin.
 * Five new WordPress native IMPress widgets and shortcodes have been added to the plugin: lead login and signup widgets, a city links widget, and showcase and carousel widgets have been added. Take advantage of these new widgets to deliver the best experience for your website visitors.
 * Each of these widgets has customization options right within WordPress including the ability to disable styling. Designers can use this to gain more control of the appearance of these widgets.
