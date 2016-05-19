@@ -10,7 +10,8 @@ class Add_Uid_To_Idx_Pages
         $this->idx_api = $idx_api;
 
         //If Migrate_Old_Table has not run, wait for it.
-        if(empty(get_option('idx_migrated_old_table'))){
+        $migrated = get_option('idx_migrated_old_table');
+        if(empty($migrated)){
             return;
         }
 
