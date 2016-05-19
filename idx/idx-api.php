@@ -77,6 +77,10 @@ class Idx_Api
             if ($level === 'equity') {
                 $equity_api_key = get_option('equity_api_key');
                 $domain = site_url();
+                $custom_equity_domain = get_option('equity-settings');
+                if(isset($custom_equity_domain['equity_idx_domain'])) {
+                    $domain = $custom_equity_domain['equity_idx_domain'];
+                }
                 $equity_headers = array(
                     'equitykey' => $equity_api_key,
                     'domain' => apply_filters('equity_idx_api_domain', $domain),
@@ -170,6 +174,10 @@ class Idx_Api
         );
 
         $this->clear_wrapper_cache();
+
+        //Update IDX Pages Immediately.
+        wp_schedule_single_event(time(), 'idx_create_idx_pages');
+        wp_schedule_single_event(time(), 'idx_delete_idx_pages');
     }
 
     /**
@@ -463,14 +471,14 @@ class Idx_Api
     public function saved_link_properties($saved_link_id)
     {
 
-        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 7200, 'GET', true);
+        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 7200, 'GET', true);
 
         return $saved_link_properties;
     }
 
     public function client_properties($type)
     {
-        $properties = $this->idx_api($type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+        $properties = $this->idx_api($type . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
 
         return $properties;
     }

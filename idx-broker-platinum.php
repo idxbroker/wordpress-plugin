@@ -3,7 +3,7 @@
 Plugin Name: IMPress for IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 2.1.0
+Version: 2.1.1
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -18,7 +18,7 @@ new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
 {
     //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '2.1.0';
+    const IDX_WP_PLUGIN_VERSION = '2.1.1';
 
     public function __construct()
     {
@@ -76,10 +76,6 @@ class Idx_Broker_Plugin
         if (!get_option('idx_results_url')) {
             add_option('idx_results_url');
         }
-        update_option('idx_plugin_version', self::IDX_WP_PLUGIN_VERSION);
-
-        //set timestamp to one week from activation to prompt user for plugin review
-        // eval('IDX\Review_Prompt::set_timestamp();');
 
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
         eval('$idx_api = new \IDX\Idx_Api();');

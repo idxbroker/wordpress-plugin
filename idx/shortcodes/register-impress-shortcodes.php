@@ -3,13 +3,16 @@ namespace IDX\Shortcodes;
 
 class Register_Impress_Shortcodes
 {
+    public $idx_api;
+    private $app;
 
-    public function __construct(\IDX\Idx_Api $idx_api)
+    public function __construct(\IDX\Idx_Api $idx_api, $app)
     {
         $this->idx_api = $idx_api;
+        $this->app = $app;
         add_shortcode('impress_lead_login', array($this, 'lead_login_shortcode'));
         if ($this->idx_api->platinum_account_type()) {
-            add_shortcode('impress_lead_signup', array($this, 'lead_signup_shortcode'));
+            add_action('wp_loaded', array($this, 'lead_signup_shortcode'));
         }
         add_shortcode('impress_property_showcase', array($this, 'property_showcase_shortcode'));
         add_shortcode('impress_property_carousel', array($this, 'property_carousel_shortcode'));
@@ -17,7 +20,6 @@ class Register_Impress_Shortcodes
 
     }
 
-    public $idx_api;
 
     public function lead_login_shortcode($atts)
     {
@@ -47,50 +49,10 @@ class Register_Impress_Shortcodes
         return $widget;
     }
 
-    public function lead_signup_shortcode($atts)
+    public function lead_signup_shortcode()
     {
-
-        extract(shortcode_atts(array(
-            'phone' => 0,
-            'styles' => 1,
-            'new_window' => 0,
-        ), $atts));
-
-        if (!empty($styles)) {
-            wp_enqueue_style('impress-lead-signup', plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)));
-        }
-
-        if (!isset($new_window)) {
-            $new_window = 0;
-        }
-
-        $target = $this->target($new_window);
-
-        $widget = sprintf('
-            <form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup">
-                <input type="hidden" name="action" value="addLead">
-                <input type="hidden" name="signupWidget" value="true">
-                <input type="hidden" name="contactType" value="direct">
-
-                <label id="impress-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName">First Name:</label>
-                <input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name">
-
-                <label id="impress-widgetlastName-label" class="ie-only" for="IDX-widgetlastName">Last Name:</label>
-                <input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name">
-
-                <label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
-                <input id="impress-widgetemail" type="text" name="email" placeholder="Email">', $this->idx_api->subdomain_url(), $target);
-
-        if ($phone) {
-            $widget .= sprintf('
-            <label id="impress-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
-            <input id="impress-widgetphone" type="text" name="phone" placeholder="Phone">');
-        }
-
-        $widget .= sprintf('<input id="impress-widgetsubmit" type="submit" name="submit" value="Sign Up!">
-            </form>');
-
-        return $widget;
+        $this->app->make('\IDX\Shortcodes\Impress_Lead_Signup_Shortcode');
+        
     }
 
     public function property_showcase_shortcode($atts = array())
@@ -117,7 +79,7 @@ class Register_Impress_Shortcodes
             $properties = $this->idx_api->client_properties($property_type);
         }
         //If no properties or an error, load message
-        if (empty($properties) || gettype($properties) === 'object') {
+        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
             return 'No properties found';
         }
 
@@ -187,6 +149,24 @@ class Register_Impress_Shortcodes
 
             $count++;
 
+            //Add Disclaimer when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['disclaimer'] as $disclaimer) {
+                    if(in_array('widget', $disclaimer)) {
+                        $disclaimer_text = $disclaimer['text'];
+                        $disclaimer_logo = $disclaimer['logoURL'];
+                    }
+                }
+            }
+            //Add Courtesy when applicable.
+            if(isset($prop['courtesy'])) {
+                foreach($prop['courtesy'] as $courtesy) {
+                    if(in_array('widget', $courtesy)) {
+                        $courtesy_text = $courtesy['text'];
+                    }
+                }
+            }
+
             $prop = $this->set_missing_core_fields($prop);
 
             if (1 == $show_image) {
@@ -224,7 +204,20 @@ class Register_Impress_Shortcodes
                 $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
                 $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
                 $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
-                $output .= "</p></a>";
+                $output .= "</p>";
+                //Add Disclaimer and Courtesy.
+                $output .= sprintf(
+                    '<div class="disclaimer">
+                        <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
+                            <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
+                        </p>
+                        <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
+                    </div>',
+                    (isset($disclaimer_text)) ? $disclaimer_text : '',
+                    (isset($disclaimer_logo)) ? $disclaimer_logo : '',
+                    (isset($courtesy_text)) ? $courtesy_text : ''
+                );
+                $output .= "</a>";
                 $output .= "</div>";
             } else {
                 $output .= sprintf(
@@ -371,7 +364,7 @@ class Register_Impress_Shortcodes
             $properties = $this->idx_api->client_properties($property_type);
         }
         //If no properties or an error, load message
-        if (empty($properties) || gettype($properties) === 'object') {
+        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
             return 'No properties found';
         }
 
@@ -392,7 +385,8 @@ class Register_Impress_Shortcodes
             $autoplay_param = '';
         }
 
-        if ($display === 1) {
+        //All Instance Values are strings for shortcodes but not widgets.
+        if ($display === "1") {
             $output = '
             <script>
             jQuery(function( $ ){
@@ -443,6 +437,24 @@ class Register_Impress_Shortcodes
 
             $count++;
 
+            //Add Disclaimer when applicable.
+            if(isset($prop['disclaimer'])) {
+                foreach($prop['disclaimer'] as $disclaimer) {
+                    if(in_array('widget', $disclaimer)) {
+                        $disclaimer_text = $disclaimer['text'];
+                        $disclaimer_logo = $disclaimer['logoURL'];
+                    }
+                }
+            }
+            //Add Courtesy when applicable.
+            if(isset($prop['courtesy'])) {
+                foreach($prop['courtesy'] as $courtesy) {
+                    if(in_array('widget', $courtesy)) {
+                        $courtesy_text = $courtesy['text'];
+                    }
+                }
+            }
+
             $prop = $this->set_missing_core_fields($prop);
 
             $output .= sprintf(
@@ -476,6 +488,19 @@ class Register_Impress_Shortcodes
             $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
             $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
             $output .= "</p>";
+            //Add Disclaimer and Courtesy.
+            $output .= sprintf(
+                '<div class="disclaimer">
+                    <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
+                        <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
+                    </p>
+                    <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
+                </div>',
+                (isset($disclaimer_text)) ? $disclaimer_text : '',
+                (isset($disclaimer_logo)) ? $disclaimer_logo : '',
+                (isset($courtesy_text)) ? $courtesy_text : ''
+            );
+
             $output .= "</div>";
         }
 

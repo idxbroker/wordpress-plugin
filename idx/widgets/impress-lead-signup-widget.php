@@ -12,6 +12,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 
         $this->idx_api = $idx_api;
 
+        if(isset($_GET['error'])){
+            $this->error_message = $this->handle_errors($_GET['error']);
+        } else {
+            $this->error_message = '';
+        }
+
         parent::__construct(
             'impress_lead_signup', // Base ID
             __('IMPress Lead Sign Up', 'idxbroker'), // Name
@@ -23,6 +29,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
     }
 
     public $idx_api;
+    public $error_message;
     public $defaults = array(
         'title' => 'Lead Sign Up',
         'custom_text' => '',
@@ -60,6 +67,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         $title = $instance['title'];
         $custom_text = $instance['custom_text'];
 
+
+        //Validate fields
+        wp_register_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
+        wp_localize_script('impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page());
+        wp_enqueue_script('impress-lead-signup');
+
         echo $before_widget;
 
         if (!empty($title)) {
@@ -71,24 +84,25 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         }
 
         ?>
-		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="<?php echo $target?>" name="LeadSignup">
+		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="<?php echo $target?>" name="LeadSignup" id="LeadSignup">
+                        <?php echo $this->error_message; ?>
 			<input type="hidden" name="action" value="addLead">
 			<input type="hidden" name="signupWidget" value="true">
 			<input type="hidden" name="contactType" value="direct">
 
 			<label id="impress-widgetfirstName-label" class="ie-only" for="impress-widgetfirstName"><?php _e('First Name:', 'idxbroker');?></label>
-			<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name">
+			<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
 
 			<label id="impress-widgetlastName-label" class="ie-only" for="impress-widgetlastName"><?php _e('Last Name:', 'idxbroker');?></label>
-			<input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name">
+			<input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name" required>
 
 			<label id="impress-widgetemail-label" class="ie-only" for="impress-widgetemail"><?php _e('Email:', 'idxbroker');?></label>
-			<input id="impress-widgetemail" type="text" name="email" placeholder="Email">
+			<input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>
 
 			<?php if ($instance['phone_number'] == true) {
             echo '
 				<label id="impress-widgetphone-label" class="ie-only" for="impress-widgetphone">' . __('Phone:', 'idxbroker') . '</label>
-				<input id="impress-widgetphone" type="text" name="phone" placeholder="Phone">';
+				<input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">';
         }?>
 
 			<input id="bb-IDX-widgetsubmit" type="submit" name="submit" value="Sign Up!">
@@ -168,5 +182,37 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         </p>
 		<?php
 
+    }
+
+    function lead_login_page()
+    {
+        $links = $this->idx_api->idx_api_get_systemlinks();
+        if(empty($links)){
+            return '';
+        }
+        foreach($links as $link){
+            if(preg_match('/userlogin/i', $link->url)){
+                return $link->url;
+            }
+        }
+    }
+
+    //For error handling since this is a cross domain request.
+    public function handle_errors($error)
+    {
+        $output = '';
+
+        //User already has an account.
+        if(stristr($error, 'lead' )){
+            //Redirect to lead login page.
+            return wp_redirect($this->lead_login_page());
+        //Other form error.
+        } elseif(stristr($error, 'true')){
+            $output .= '<div class="error">';
+            $output .= 'There is an error in the form. Please double check that your email address is valid.';
+            $output .= '</div>';
+        } 
+
+        return $output;
     }
 }

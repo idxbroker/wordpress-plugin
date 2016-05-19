@@ -28,7 +28,7 @@ class Initiate_Plugin
         add_action('wp_loaded', array($this, 'schedule_omnibar_update'));
         add_action('idx_omnibar_get_locations', array($this, 'idx_omnibar_get_locations'));
         add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
-        add_action('wp_loaded', array($this, 'backwards_compatibility'));
+        add_action('wp_loaded', array($this, 'legacy_functions'));
 
         //Instantiate Classes
         $this->idx_api = $this->app->make('\IDX\Idx_Api');
@@ -56,6 +56,7 @@ class Initiate_Plugin
         $this->app->make('\IDX\Review_Prompt');
         $this->app->make('\IDX\Blacklist');
         $this->app->make('\IDX\Dashboard_Widget');
+        $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
     }
 
     private function set_defaults()
@@ -75,12 +76,15 @@ class Initiate_Plugin
             if (!wp_get_schedule('idx_migrate_old_table')) {
                 wp_schedule_single_event(time(), 'idx_migrate_old_table');
             }
+        } else {
+            //Make sure IDX pages update if migration is not necessary.
+            update_option('idx_migrated_old_table', true);
         }
     }
 
     public function migrate_old_table()
     {
-        $this->app->make('\IDX\Migrate_Old_Table');
+        $this->app->make('\IDX\Backward_Compatibility\Migrate_Old_Table');
     }
 
     public function plugin_updated()
@@ -288,10 +292,10 @@ class Initiate_Plugin
         wp_enqueue_style('idxcss', plugins_url('/assets/css/idx-broker.css', dirname(__FILE__)));
     }
 
-    public function backwards_compatibility()
+    public function legacy_functions()
     {
         //add legacy idx-start functions for older themes
-        include 'backwards-compatibility.php';
+        include 'backward-compatibility' . DIRECTORY_SEPARATOR . 'legacy-functions.php';
     }
 
     public function disable_original_plugin()
