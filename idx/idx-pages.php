@@ -139,7 +139,8 @@ class Idx_Pages
     public function create_idx_pages()
     {
         //Only schedule update once IDX pages have UID
-        if(empty(get_option('idx_added_uid_to_idx_pages'))){
+        $uid_added = get_option('idx_added_uid_to_idx_pages');
+        if(empty($uid_added)){
             return wp_schedule_single_event(time(), 'idx_add_uid_to_idx_pages');
         }
 
@@ -266,7 +267,8 @@ class Idx_Pages
     public function delete_idx_pages()
     {
         //Only schedule update once IDX pages have UID
-        if(empty(get_option('idx_added_uid_to_idx_pages'))){
+        $uid_added = get_option('idx_added_uid_to_idx_pages');
+        if(empty($uid_added)){
            return $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
         }
 
