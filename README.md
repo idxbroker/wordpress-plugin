@@ -117,9 +117,7 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 ## Changelog ##
 
 ### 2.1.2 ###
-* An issue where warnings were displayed for showcase or carousels with some MLS when error reporting was enabled has been fixed.
-
-
+* An issue where warnings were displayed for some showcases and carousels has been fixed.
 
 ### 2.1.1 ###
 * IDX Pages are now automatically updated when their URLs change allowing more seamless domain/subdomain changes for IDX accounts.
