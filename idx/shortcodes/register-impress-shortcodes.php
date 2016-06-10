@@ -205,19 +205,14 @@ class Register_Impress_Shortcodes
                 $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
                 $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
                 $output .= "</p>";
+
                 //Add Disclaimer and Courtesy.
-                $output .= sprintf(
-                    '<div class="disclaimer">
-                        <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
-                            <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
-                        </p>
-                        <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
-                    </div>',
-                    (isset($disclaimer_text)) ? $disclaimer_text : '',
-                    (isset($disclaimer_logo)) ? $disclaimer_logo : '',
-                    (isset($courtesy_text)) ? $courtesy_text : ''
-                );
-                $output .= "</a>";
+                $output .= '<div class="disclaimer">';
+                (isset($disclaimer_text)) ? $output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>' : '';
+                (isset($disclaimer_logo)) ? $output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '';
+                (isset($courtesy_text)) ? $output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '';
+                $output .= "</div>";
+
                 $output .= "</div>";
             } else {
                 $output .= sprintf(
@@ -488,18 +483,13 @@ class Register_Impress_Shortcodes
             $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
             $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
             $output .= "</p>";
+
             //Add Disclaimer and Courtesy.
-            $output .= sprintf(
-                '<div class="disclaimer">
-                    <p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">%1$s<br />
-                        <img class="logo" src="%2$s" style="opacity: 1 !important; position: static !important;" />
-                    </p>
-                    <p class="courtesy" style="display: block !important; visibility: visible !important;">%3$s</p>
-                </div>',
-                (isset($disclaimer_text)) ? $disclaimer_text : '',
-                (isset($disclaimer_logo)) ? $disclaimer_logo : '',
-                (isset($courtesy_text)) ? $courtesy_text : ''
-            );
+            $output .= '<div class="disclaimer">';
+            (isset($disclaimer_text)) ? $output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>' : '';
+            (isset($disclaimer_logo)) ? $output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '';
+            (isset($courtesy_text)) ? $output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '';
+            $output .= "</div>";
 
             $output .= "</div>";
         }
