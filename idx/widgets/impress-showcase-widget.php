@@ -61,7 +61,7 @@ class Impress_Showcase_Widget extends \WP_Widget
             $properties = $this->idx_api->client_properties($instance['properties']);
         }
 
-        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
+        if (empty($properties) || (isset($properties) && $properties === 'No results returned') || gettype($properties) === 'object') {
             return 'No properties found';
         }
 
