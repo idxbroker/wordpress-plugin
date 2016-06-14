@@ -118,6 +118,8 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 ### 2.1.3 ###
 * Fixed the warning issue for showcase shortcodes as well.
+* Fixed disclaimer markup so it only displays if required.
+* Fixed issue with saved links with no results in shortcodes and widgets.
 
 ### 2.1.2 ###
 * An issue where warnings were displayed for some showcases and carousels has been fixed.
