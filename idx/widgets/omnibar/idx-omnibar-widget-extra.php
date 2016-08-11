@@ -3,9 +3,10 @@ namespace IDX\Widgets\Omnibar;
 
 class IDX_Omnibar_Widget_Extra extends \WP_Widget
 {
-    public function __construct(Create_Omnibar $create_omnibar)
+    public function __construct()
     {
-        $this->create_omnibar = $create_omnibar;
+        $app = new \NetRivet\Container\Container();
+        $this->create_omnibar = new \IDX\Widgets\Omnibar\Create_Omnibar($app);
 
         $widget_ops = array('classname' => 'IDX_Omnibar_Widget_Extra', 'description' => 'An Omnibar Search Widget with extra fields for use with IDX WordPress Sites');
         parent::__construct('IDX_Omnibar_Widget_Extra', 'Deprecated IMPress Omnibar With Extra Fields (Do Not Use)', $widget_ops);
@@ -41,6 +42,10 @@ class IDX_Omnibar_Widget_Extra extends \WP_Widget
 
     public function widget($args, $instance)
     {
+        $defaults = $this->defaults;
+
+        $instance = wp_parse_args( (array) $instance, $defaults );
+        
         extract($args, EXTR_SKIP);
 
         if (empty($instance)) {

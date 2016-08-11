@@ -6,10 +6,10 @@ class Impress_Carousel_Widget extends \WP_Widget
     /**
      * Register widget with WordPress.
      */
-    public function __construct(\IDX\Idx_Api $idx_api)
+    public function __construct()
     {
 
-        $this->idx_api = $idx_api;
+        $this->idx_api = new \IDX\Idx_Api();
 
         parent::__construct(
             'impress_carousel', // Base ID
@@ -346,11 +346,17 @@ class Impress_Carousel_Widget extends \WP_Widget
      */
     public function widget($args, $instance)
     {
+        $defaults = $this->defaults;
+
+        $instance = wp_parse_args( (array) $instance, $defaults );
+
         extract($args);
 
         if (empty($instance)) {
             $instance = $this->defaults;
         }
+
+        $title = $instance['title'];
 
         echo $before_widget;
 

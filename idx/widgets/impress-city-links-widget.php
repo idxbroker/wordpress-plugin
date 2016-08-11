@@ -7,10 +7,10 @@ class Impress_City_Links_Widget extends \WP_Widget
     /**
      * Register widget with WordPress.
      */
-    public function __construct(\IDX\Idx_Api $idx_api)
+    public function __construct()
     {
 
-        $this->idx_api = $idx_api;
+        $this->idx_api = new \IDX\Idx_Api();
 
         parent::__construct(
             'impress_city_links', // Base ID
@@ -42,7 +42,10 @@ class Impress_City_Links_Widget extends \WP_Widget
      * @param array $instance Saved values from database.
      */
     public function widget($args, $instance)
-    {
+    {   
+        $defaults = $this->defaults;
+
+        $instance = wp_parse_args( (array) $instance, $defaults );
 
         extract($args);
         if (empty($instance)) {
