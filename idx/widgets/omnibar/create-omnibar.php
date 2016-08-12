@@ -130,17 +130,6 @@ EOD;
         return $this->idx_omnibar_extra($plugin_dir, $idx_url, $styles, $min_price);
     }
 
-    //use our own register function to allow dependency injection via the IoC container
-    public function register_widget($widget_name)
-    {
-        global $wp_widget_factory;
-
-        $widget_class = $this->app->make($widget_name);
-
-        $wp_widget_factory->widgets[$widget_name] = $widget_class;
-    }
-
-
     public static function show_omnibar_shortcodes($type, $name)
     {
         $widget_shortcode = '[' . $type . ']';
@@ -158,14 +147,17 @@ EOD;
         add_shortcode('idx-omnibar-extra', array($this, 'add_omnibar_extra_shortcode'));
     }
 
+    public function register_impress_omnibar_widgets()
+    {
+        register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget');
+    }
+
     public function register_widgets()
     {
         //for PHP5.3 compatibility
         $scope = $this;
-        //Initialize Instances of Widget Classes
-        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget');});
-        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Omnibar\IDX_Omnibar_Widget_Extra');});
 
+        add_action('widgets_init', function () use ($scope) {$scope->register_impress_omnibar_widgets();});
 
     }
 
