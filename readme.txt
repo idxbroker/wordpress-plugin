@@ -102,6 +102,11 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 == Changelog ==
 
+= 2.1.4 =
+* Fixed issue with API URL in WP 4.6+
+* Refactored register widget function to use core functions
+* Added screen-reader-text CSS for themes without it
+
 = 2.1.3 =
 * Fixed the warning issue for showcase shortcodes as well.
 * Fixed disclaimer markup so it only displays if required.

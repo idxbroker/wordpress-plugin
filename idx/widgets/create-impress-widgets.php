@@ -11,28 +11,22 @@ class Create_Impress_Widgets
 
         //for PHP5.3 not allowing $this in anonymous functions
         $scope = $this;
-        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_Showcase_Widget');});
-        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_Carousel_Widget');});
-        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_City_Links_Widget');});
-        add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_Lead_Login_Widget');});
-        //Only load lead signup widget for Platinum Accounts
-        if ($this->idx_api->platinum_account_type()) {
-            add_action('widgets_init', function () use ($scope) {$scope->register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');});
-        }
+        add_action('widgets_init', function () use ($scope) {$scope->register_impress_widgets();});
 
     }
 
     public $idx_api;
     public $app;
 
-    //use our own register function to allow dependency injection via the IoC container
-    public function register_widget($widget_name)
+    public function register_impress_widgets()
     {
-        global $wp_widget_factory;
-
-        $widget_class = $this->app->make($widget_name);
-
-        $wp_widget_factory->widgets[$widget_name] = $widget_class;
+        register_widget('\IDX\Widgets\Impress_Showcase_Widget');
+        register_widget('\IDX\Widgets\Impress_Carousel_Widget');
+        register_widget('\IDX\Widgets\Impress_City_Links_Widget');
+        register_widget('\IDX\Widgets\Impress_Lead_Login_Widget');
+        if ($this->idx_api->platinum_account_type()) {
+            register_widget('\IDX\Widgets\Impress_Lead_Signup_Widget');
+        }
     }
 
     public function lead_login_shortcode()
