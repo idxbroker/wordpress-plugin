@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 3.7  
 **Tested up to:** 4.6 
-**Stable tag:** 2.1.4
+**Stable tag:** 2.1.5
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -115,6 +115,9 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 ![Alt text](screenshot-5.png?raw=true "Middleware API Key")
 
 ## Changelog ##
+
+### 2.1.5 ###
+* Added compatibility with custom user roles for IDX Pages.
 
 ### 2.1.4 ###
 * Fixed issue with API URL in WP 4.6+
