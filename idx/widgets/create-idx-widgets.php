@@ -28,6 +28,7 @@ class Create_Idx_Widgets
                 $widget_id = "idx" . str_replace('-', '_', $widget->uid);
                 $bad_characters = array('{', '}', '[', ']', '%'); // remove any potential braces or other script breaking characters, then escape them using WP's function esc_html
                 $widget_title = "IDX " . esc_html(str_replace($bad_characters, '', $widget->name)); // set widget title to "IDX [name]"
+                $widget_url = preg_replace('#^http:#', '', $widget->url);
 
                 $widget_ops = "array('classname' => '{$widget_class}',
                                 'description' => __('$widget_title', 'text domain'))"; // to be eval'd upon class creation below
@@ -37,7 +38,7 @@ class Create_Idx_Widgets
                 $eval = "class {$widget_class} extends \IDX\Widgets\Idx_Widget_Class {
                     function __construct() {
                        \WP_Widget::__construct('{$widget_id}', __('{$widget_title}', 'text domain'), $widget_ops);
-                        \$this->widget_url = '{$widget->url}';
+                        \$this->widget_url = '{$widget_url}';
                         \$this->widget_class = '{$widget_class}';
                         \$this->widget_id = '{$widget_id}';
                     }}";
@@ -57,13 +58,13 @@ class Create_Idx_Widgets
     public static function get_widget_by_uid($uid)
     {
         $idx_api = new \IDX\Idx_Api;
-$idx_widgets = $idx_api->idx_api_get_widgetsrc();
+        $idx_widgets = $idx_api->idx_api_get_widgetsrc();
         $idx_widget_code = null;
 
         if ($idx_widgets) {
             foreach ($idx_widgets as $widget) {
                 if (strcmp($widget->uid, $uid) == 0) {
-                    $idx_widget_link = $widget->url;
+                    $idx_widget_link = preg_replace('#^http:#', '', $widget->url);
 
                     //only load leaflet scripts and styles for map search widget. WP takes care of duplicates automatically
                     if (strpos($idx_widget_link, 'mapwidgetjs.php')) {
