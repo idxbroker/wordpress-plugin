@@ -116,24 +116,21 @@ class Idx_Pages
     public function manage_idx_page_capabilities()
     {
         // gets the role to add capabilities to
-        $admin = get_role('administrator');
-        $editor = get_role('editor');
-        // replicate all the remapped capabilites from the custom post type
-        $caps = array(
-            'edit_idx_page',
-            'edit_idx_pages',
-            'edit_others_idx_pages',
-            'publish_idx_pages',
-            'read_idx_pages',
-        );
-        // give all the capabilities to the administrator
-        foreach ($caps as $cap) {
-            $admin->add_cap($cap);
+        if (current_user_can('edit_others_posts')) {
+            $current_user = wp_get_current_user();
+            // replicate all the remapped capabilites from the custom post type
+            $caps = array(
+                'edit_idx_page',
+                'edit_idx_pages',
+                'edit_others_idx_pages',
+                'publish_idx_pages',
+                'read_idx_pages',
+            );
+            // give all the capabilities to the administrator
+            foreach ($caps as $cap) {
+                $current_user->add_cap($cap);
+            }
         }
-        // limited the capabilities to the editor or a custom role
-        $editor->add_cap('edit_idx_page');
-        $editor->add_cap('edit_idx_pages');
-        $editor->add_cap('read_idx_pages');
     }
 
     public function create_idx_pages()
