@@ -103,6 +103,8 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 == Changelog ==
 = 2.1.5 =
 * Added compatibility with custom user roles for IDX Pages.
+* Removed protocol from widget src for SSL compatibility.
+* Fixed error with Dashboard widget when lead has no last name.
 
 = 2.1.4 =
 * Fixed issue with API URL in WP 4.6+
