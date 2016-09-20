@@ -159,7 +159,7 @@ class Dashboard_Widget {
             //edit lead in MW link
             $leads .= '<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id='  . $lead->id . '" target="_blank">';
             $leads .= '<li><p class="lead-name">';
-            $leads .= $lead->firstName . ' ' . $lead->lastName[0] . '.</p>';
+            $leads .= $lead->firstName . ' ' . $lead->lastName . '</p>';
             $leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fa fa-user"></i></li></a>';
         }
 
