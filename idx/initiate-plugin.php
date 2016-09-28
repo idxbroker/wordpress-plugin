@@ -57,6 +57,7 @@ class Initiate_Plugin
         $this->app->make('\IDX\Blacklist');
         $this->app->make('\IDX\Dashboard_Widget');
         $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+        require_once('leads.php');
     }
 
     private function set_defaults()
