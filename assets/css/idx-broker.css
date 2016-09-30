@@ -181,7 +181,12 @@ label {
     padding: 1rem;
     border-color: #dd3d36;
 }
-
+.grom_tabs .properticons {
+    font-size: 80px;
+    width: 80px;
+    height: 30px;
+    margin-top: -30px;
+}
 @media screen and (max-width: 800px) {
     h2 {
         float: none;

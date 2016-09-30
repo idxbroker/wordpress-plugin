@@ -49,14 +49,14 @@ class IDX_Leads_GF
 		}
 		
 		?>
-			<h3><span><i class="fa fa-cogs"></i> IDX Broker Settings</span></h3>
+			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
 			<form action="" method="post" id="gform_form_settings">
 
 					<table class="gforms_form_settings" cellpadding="0" cellspacing="0">
 					<tbody>
 						<tr>
 							<td colspan="2">
-								<h4 class="gf_settings_subgroup_title">Import Leads</h4>
+								<h4 class="gf_settings_subgroup_title">Lead Capture</h4>
 							</td>
 						</tr>                                       
 						<tr>
