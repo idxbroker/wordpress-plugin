@@ -54,7 +54,6 @@ class Initiate_Plugin
         $this->app->make('\IDX\Help');
         $this->app->make('\IDX\Views\Omnibar_Settings');
         $this->app->make('\IDX\Review_Prompt');
-        $this->app->make('\IDX\Blacklist');
         $this->app->make('\IDX\Dashboard_Widget');
         $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
     }
