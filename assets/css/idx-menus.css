@@ -79,3 +79,10 @@ div.idx_review_prompt.updated a {
 .idx_review_prompt .button-primary {
     color: #fff !important;
 }
+
+#tab_idx_broker_leads_page .properticons {
+    font-size: 80px;
+    width: 80px;
+    height: 30px;
+    margin-top: -30px;
+}
