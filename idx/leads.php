@@ -190,8 +190,8 @@ class IDX_Leads_GF
 						}
 
 						// Loop through leads to match email address
-						foreach($all_leads as $lead) {
-							if(in_array($email, $lead)) {
+						foreach($all_leads as $leads => $lead) {
+							if($lead['email'] == $email) {
 								$api_url = 'https://api.idxbroker.com/leads/note/' . $lead['id'];
 								$args = array_replace($args, array('method' => 'PUT', 'body' => http_build_query($note)));
 								$response = wp_remote_request($api_url, $args);
