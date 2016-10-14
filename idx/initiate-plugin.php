@@ -57,6 +57,10 @@ class Initiate_Plugin
         $this->app->make('\IDX\Blacklist');
         $this->app->make('\IDX\Dashboard_Widget');
         $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+
+        require_once(dirname(__FILE__) . '/leads/class-gravity-forms.php');
+        //require_once(dirname(__FILE__) . '/leads/class-ninja-forms.php');
+        require_once(dirname(__FILE__) . '/leads/class-contact-form-7.php');
     }
 
     private function set_defaults()
