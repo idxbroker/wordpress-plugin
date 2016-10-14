@@ -36,8 +36,8 @@ class IDX_Leads_CF7
 	public function load_scripts() {
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-tooltip');
-		wp_enqueue_script('idx-tooltip', IMPRESS_IDX_URL . '/assets/js/tooltip.js');
-		wp_enqueue_style('idx-tooltip-css', IMPRESS_IDX_URL . '/assets/css/tooltip.css');
+		wp_enqueue_script('idx-tooltip', IMPRESS_IDX_URL . 'assets/js/tooltip.js');
+		wp_enqueue_style('idx-tooltip-css', IMPRESS_IDX_URL . 'assets/css/tooltip.css');
 	}
 
 	public function idx_save_lead_settings( $args ) {
