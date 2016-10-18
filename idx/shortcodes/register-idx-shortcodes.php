@@ -3,9 +3,9 @@ namespace IDX\Shortcodes;
 
 class Register_Idx_Shortcodes
 {
-    public function __construct(\IDX\Idx_Api $idx_api)
+    public function __construct()
     {
-        $this->idx_api = $idx_api;
+        $this->idx_api = new \IDX\Idx_Api();
         //Adding shortcodes
         add_shortcode('idx-platinum-link', array($this, 'show_link'));
         add_shortcode('idx-platinum-saved-link', array($this, 'show_saved_link'));

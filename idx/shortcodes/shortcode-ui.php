@@ -4,11 +4,11 @@ namespace IDX\Shortcodes;
 class Shortcode_Ui
 {
 
-    public function __construct(Register_Shortcode_For_Ui $shortcodes_for_ui)
+    public function __construct()
     {
         add_action('media_buttons_context', array($this, 'add_idx_button'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_shortcode_js'));
-        $this->shortcodes_for_ui = $shortcodes_for_ui;
+        $this->shortcodes_for_ui = new \IDX\Shortcodes\Register_Shortcode_For_Ui();
     }
 
     public $shortcodes_for_ui;

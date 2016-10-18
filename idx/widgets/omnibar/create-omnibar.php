@@ -3,14 +3,11 @@ namespace IDX\Widgets\Omnibar;
 
 class Create_Omnibar
 {
-    public function __construct($app)
+    public function __construct()
     {
-        $this->app = $app;
         $this->register_shortcodes();
         $this->register_widgets();
     }
-
-    public $app;
 
     public function idx_omnibar_basic($plugin_dir, $idx_url, $styles = 1)
     {
