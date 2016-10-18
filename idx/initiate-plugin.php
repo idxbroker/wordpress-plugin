@@ -30,6 +30,8 @@ class Initiate_Plugin
         add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
         add_action('wp_loaded', array($this, 'legacy_functions'));
 
+        add_action('plugins_loaded', array($this, 'idx_extensions'));
+
         //Instantiate Classes
         $this->idx_api = $this->app->make('\IDX\Idx_Api');
 
@@ -57,6 +59,10 @@ class Initiate_Plugin
         $this->app->make('\IDX\Blacklist');
         $this->app->make('\IDX\Dashboard_Widget');
         $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+    }
+
+    public function idx_extensions() {
+        require_once(dirname(__FILE__) . '/leads/class-ninja-forms.php');
     }
 
     private function set_defaults()
