@@ -10,5 +10,4 @@ composer.lock
 /vendor/bin/*
 /vendor/wpreadme2markdown/*
 /vendor/symfony/console/*
-/vendor/symfony/polyfill-mbstring/*
 /vendor/symfony/translation/Tests/*
