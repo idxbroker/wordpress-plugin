@@ -149,6 +149,13 @@ final class NF_Lead_Action extends NF_Abstracts_Action
         $this->_nicename = __( 'IDX Lead Push', 'ninja-forms' );
 
         $settings = array(
+        	'instruction' => array(
+				'name' 			=> 'instruction',
+				'type' 			=> 'textarea',
+				'group' 		=> 'primary',
+				'label' 		=> __( 'Instructions', 'ninja-forms' ),
+				'value'			=> 'Important! Your form must contain a First Name, Last Name, and Email field, all required, in order for the lead to be added to IDX Middleware.'
+			),
             'category' => array(
                 'name' => 'category',
                 'type' => 'select',
@@ -164,14 +171,14 @@ final class NF_Lead_Action extends NF_Abstracts_Action
                         array( 'label' => __( 'Seller', 'ninja-forms' ), 'value' => 'Seller' ),
                         array( 'label' => __( 'Unknown', 'ninja-forms' ), 'value' => 'Unknown' )
                     ),
-                'group' => 'advanced',
+                'group' => 'primary',
                 'label' => __( 'Category (optional)', 'ninja-forms' ),
                 'value' => '',
-                
             )
         );
 
         $this->_settings = array_merge( $this->_settings, $settings );
+
     }
 
     public function save( $action_settings )
