@@ -17,6 +17,7 @@ class Impress_Carousel_Widget extends \WP_Widget
             array(
                 'description' => 'Displays a carousel of properties',
                 'classname' => 'impress-carousel-widget',
+                'customize_selective_refresh' => true,
             )
         );
     }
