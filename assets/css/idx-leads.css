@@ -1,4 +1,5 @@
-.toplevel_page_leads {
+html,
+body.toplevel_page_leads {
 	font-family: 'Roboto', sans-serif;
 }
 .toplevel_page_leads table.mdl-data-table { width: 98%; }
@@ -9,4 +10,84 @@
 .toplevel_page_leads a {
 	text-decoration: none;
 	font-weight: 400;
+}
+.toplevel_page_leads .mdl-button--fab {
+	float: right;
+	right: 2.5%;
+	top: -1em;
+}
+/* Override WP Admin input style */
+.mdl-textfield__input[type="text"] {
+	font-family: 'Roboto','Helvetica','Arial',sans-serif;
+	border: none;
+	border-bottom: 1px solid rgba(0,0,0,.12);
+	background: 0 0;
+	color: inherit;
+	box-shadow: none;
+}
+.mdl-textfield__input[type=text]:focus {
+	border: none;
+	box-shadow: none;
+}
+
+/* Material Design select field */
+.leads_page_add-lead select {
+	font-family: 'Roboto','Helvetica','Arial',sans-serif;
+	background-color: transparent;
+	width: 100%;
+	padding: 4px 0;
+	font-size: 16px;
+	color: rgba(0, 0, 0, 0.87);
+	border: none;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Remove focus */
+.leads_page_add-lead select:focus {
+	border: none;
+	box-shadow: none;
+	outline: none;
+}
+
+.mdl-selectfield__label {
+	font-size: 13px;
+}
+/* Use custom arrow */
+.mdl-selectfield select {
+	position: relative;
+	border-radius: 0;
+	box-shadow: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+/*.mdl-selectfield,
+.mdl-radiofield,*/
+.mdl-fieldgroup {
+	font-family: 'Roboto','Helvetica','Arial',sans-serif;
+	position: relative;
+	font-size: 16px;
+	display: inline-block;
+	box-sizing: border-box;
+	width: 300px;
+	max-width: 100%;
+	margin: 0;
+	padding: 20px 0;
+}
+.mdl-selectfield:after {
+	position: absolute;
+	bottom: 2em;
+	right: 0.5em;
+	/* Styling the down arrow */
+	width: 0;
+	height: 0;
+	padding: 0;
+	content: '';
+	border-left: .25em solid transparent;
+	border-right: .25em solid transparent;
+	border-top: .375em solid rgba(0, 0, 0, 0.12);
+	pointer-events: none;
+}
+.mdl-radiofield span.mdl-label {
+	font-size: 13px;
+	display: block;
 }
