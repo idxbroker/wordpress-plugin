@@ -131,14 +131,14 @@ class Lead_Management {
 
 			$leads .= '<tr>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="#">' . $lead->firstName . ' ' . $lead->lastName . '</a></td>';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a></td>';
+			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . $lead->id . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $lead->phone . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $last_active . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $agent_name . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">
-						<a href="#" title="Edit Lead"><i class="material-icons md-18">create</i></a>
-						<a href="#" title="Delete Lead"><i class="material-icons md-18">delete</i></a>
-						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" title="Edit Lead in Middleware"><i class="material-icons md-18">exit_to_app</i></a>
+						<a href="#" id="edit-lead-' . $lead->id . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-lead-' . $lead->id . '">Edit Lead</div></a>
+						<a href="#" id="delete-lead-' . $lead->id . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-lead-' . $lead->id . '">Delete Lead</div></a>
+						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" id="edit-mw-' . $lead->id . '"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $lead->id . '">Edit Lead in Middleware</div></a>
 						</td>';
 			$leads .= '</tr>';
 		}
