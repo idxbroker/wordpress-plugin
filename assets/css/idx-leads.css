@@ -1,17 +1,28 @@
 html,
-body.toplevel_page_leads {
+body.toplevel_page_leads,
+body.leads_page_edit-lead {
 	font-family: 'Roboto', sans-serif;
 }
-.toplevel_page_leads table.mdl-data-table { width: 98%; }
+#wpwrap {
+	background: #fff;
+}
+a:hover,
+a:focus {
+	color: rgb(144, 25, 30);
+}
+.toplevel_page_leads table.mdl-data-table,
+.leads_page_edit-lead table.mdl-data-table { width: 98%; }
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
-.toplevel_page_leads a {
+.toplevel_page_leads a,
+.leads_page_edit-lead a {
 	text-decoration: none;
 	font-weight: 400;
 }
-.toplevel_page_leads .mdl-button--fab {
+.toplevel_page_leads .mdl-button--fab,
+.leads_page_edit-lead .mdl-button--fab {
 	float: right;
 	right: 2.5%;
 	top: -1em;
@@ -31,11 +42,11 @@ body.toplevel_page_leads {
 }
 
 /* Material Design select field */
-.leads_page_add-lead select {
+.leads_page_edit-lead select {
 	font-family: 'Roboto','Helvetica','Arial',sans-serif;
 	background-color: transparent;
 	width: 100%;
-	padding: 4px 0;
+	padding: 4px 0 0;
 	font-size: 16px;
 	color: rgba(0, 0, 0, 0.87);
 	border: none;
@@ -43,7 +54,7 @@ body.toplevel_page_leads {
 }
 
 /* Remove focus */
-.leads_page_add-lead select:focus {
+.leads_page_edit-lead select:focus {
 	border: none;
 	box-shadow: none;
 	outline: none;
@@ -60,8 +71,6 @@ body.toplevel_page_leads {
 	-webkit-appearance: none;
 	appearance: none;
 }
-/*.mdl-selectfield,
-.mdl-radiofield,*/
 .mdl-fieldgroup {
 	font-family: 'Roboto','Helvetica','Arial',sans-serif;
 	position: relative;
@@ -90,4 +99,21 @@ body.toplevel_page_leads {
 .mdl-radiofield span.mdl-label {
 	font-size: 13px;
 	display: block;
+}
+/** MDL tabs - override WP core styles */
+.mdl-tabs a:focus {
+	box-shadow: none;
+}
+/** Limit note column width */
+.render-note {
+	max-width: 900px;
+	overflow: hidden;
+	display: inline-block;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: normal;
+	line-break: strict;
+	hyphens: none;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
 }
