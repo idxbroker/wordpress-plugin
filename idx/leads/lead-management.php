@@ -18,6 +18,8 @@ class Lead_Management {
 		$this->idx_api = new \IDX\Idx_Api();
 		
 		add_action('plugins_loaded', array($this, 'add_lead_pages'));
+		add_action('admin_enqueue_scripts', array($this, 'idx_lead_scripts'));
+		add_action('init', array($this, 'idx_ajax_actions'));
 	}
 
 	public $idx_api;
@@ -78,6 +80,138 @@ class Lead_Management {
 
 	}
 
+	public function idx_ajax_actions() {
+		add_action('wp_ajax_idx_lead_add', array($this, 'idx_lead_add'));
+		add_action('wp_ajax_idx_lead_edit', array($this, 'idx_lead_edit'));
+		add_action('wp_ajax_idx_lead_delete', array($this, 'idx_lead_delete'));
+	}
+
+	public function idx_lead_scripts() {
+		wp_enqueue_script( 'idx_lead_delete_script', IMPRESS_IDX_URL . 'assets/js/idx-leads.js', array( 'jquery' ), true );
+		wp_localize_script( 'idx_lead_delete_script', 'IDXLeadAjax', array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'leadurl' => admin_url( 'admin.php?page=edit-lead&leadID=' )
+			)
+		);
+	}
+
+	/**
+	 * Add a lead via API
+	 * echoes response to /assets/js/idx-leads.js
+	 * @return void
+	 */
+	public function idx_lead_add(){
+
+		$permission = check_ajax_referer( 'idx_lead_add_nonce', 'nonce', false );
+		if( $permission == false || !isset($_POST['fields']) ) {
+			echo 'error';
+		} else {
+
+			// Add lead via API
+			$api_url = 'https://api.idxbroker.com/leads/lead';
+			$args = array(
+				'method' => 'PUT',
+				'headers' => array(
+					'content-type' => 'application/x-www-form-urlencoded',
+					'accesskey'    => get_option('idx_broker_apikey'),
+					'outputtype'   => 'json'
+				),
+				'sslverify' => false,
+				'body'		=> $_POST['fields']
+			);
+			$response = wp_remote_request($api_url, $args);
+
+			$decoded_response = json_decode($response['body'], 1);
+
+			if($decoded_response == 'Lead already exists.') {
+				echo 'Lead already exists.';
+			} elseif(wp_remote_retrieve_response_code($response) == '200') {
+				// Delete lead cache so new lead will show in list views immediately
+				delete_option('idx_lead_cache');
+				// return new lead ID to script
+				echo $decoded_response['newID'];
+			} else {
+				echo 'error';
+			}
+		}
+		die();
+	}
+
+	/**
+	 * Edit a lead via API
+	 * echoes response to /assets/js/idx-leads.js
+	 * @return void
+	 */
+	public function idx_lead_edit(){
+
+		$permission = check_ajax_referer( 'idx_lead_edit_nonce', 'nonce', false );
+		if( $permission == false || !isset($_POST['fields']) || !isset($_POST['leadID']) ) {
+			echo 'error';
+		} else {
+
+			// Edit lead via API
+			$api_url = 'https://api.idxbroker.com/leads/lead/' . $_POST['leadID'];
+			$args = array(
+				'method' => 'POST',
+				'headers' => array(
+					'content-type' => 'application/x-www-form-urlencoded',
+					'accesskey'    => get_option('idx_broker_apikey'),
+					'outputtype'   => 'json'
+				),
+				'sslverify' => false,
+				'body'		=> $_POST['fields']
+			);
+			$response = wp_remote_request($api_url, $args);
+
+			$decoded_response = json_decode($response['body'], 1);
+
+			if(wp_remote_retrieve_response_code($response) == '204') {
+				delete_option('idx_lead/' . $_POST['leadID'] . '_cache');
+				echo 'success';
+			} else {
+				echo 'error';
+			}
+		}
+		die();
+	}
+
+	/**
+	 * Delete a lead via API
+	 * echoes response to /assets/js/idx-leads.js
+	 * @return void
+	 */
+	public function idx_lead_delete(){
+
+		$permission = check_ajax_referer( 'idx_lead_delete_nonce', 'nonce', false );
+		if( $permission == false || !isset($_POST['id'])) {
+			echo 'error';
+		} else {
+			// Delete lead via API
+			$api_url = 'https://api.idxbroker.com/leads/lead/' . $_POST['id'];
+			$args = array(
+				'method' => 'DELETE',
+				'headers' => array(
+					'content-type' => 'application/x-www-form-urlencoded',
+					'accesskey'    => get_option('idx_broker_apikey'),
+					'outputtype'   => 'json',
+					'apiversion' => '1.2.3'
+				),
+				'sslverify' => false,
+				'body'		=> null
+			);
+			$response = wp_remote_request($api_url, $args);
+
+			if(wp_remote_retrieve_response_code($response) == '204') {
+				delete_option('idx_lead_cache');
+				delete_option('idx_lead/' . $_POST['id'] . '_cache');
+				echo 'success';
+			} else {
+				echo 'error';
+			}
+		}
+		die();
+	}
+
 	/**
 	 * Output leads table 
 	 * @return void
@@ -115,16 +249,22 @@ class Lead_Management {
 				$agent_name = 'None assigned';
 			}
 
-			$leads .= '<tr>';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url('admin.php?page=edit-lead&leadID=' . $lead->id) . '">' . $lead->firstName . ' ' . $lead->lastName . '</a></td>';
+			$avatar_args = array(
+				'force_display' => true
+			);
+
+			$nonce = wp_create_nonce('idx_lead_delete_nonce');
+
+			$leads .= '<tr class="lead-row">';
+			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url('admin.php?page=edit-lead&leadID=' . $lead->id) . '">' . get_avatar($lead->email, 32, '', false, $avatar_args) . ' ' . $lead->firstName . ' ' . $lead->lastName . '</a></td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . $lead->id . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $lead->phone . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $last_active . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $agent_name . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">
-						<a href="' . admin_url('admin.php?page=edit-lead&leadID=' . $lead->id) . '" id="edit-lead-' . $lead->id . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-lead-' . $lead->id . '">Edit Lead</div></a>
-						<a href="#" id="delete-lead-' . $lead->id . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-lead-' . $lead->id . '">Delete Lead</div></a>
-						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" id="edit-mw-' . $lead->id . '"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $lead->id . '">Edit Lead in Middleware</div></a>
+						<a href="' . admin_url('admin.php?page=edit-lead&leadID=' . $lead->id) . '" id="edit-lead-' . $lead->id . '" data-id="' . $lead->id . '" data-nonce="' . $nonce . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-lead-' . $lead->id . '">Edit Lead</div></a>
+						<a href="' . admin_url('admin-ajax.php?action=idx_lead_delete&id=' . $lead->id . '&nonce=' . $nonce) . '" id="delete-lead-' . $lead->id . '" class="delete-lead" data-id="' . $lead->id . '" data-nonce="' . $nonce . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-lead-' . $lead->id . '">Delete Lead</div></a>
+						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" id="edit-mw-' . $lead->id . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $lead->id . '">Edit Lead in Middleware</div></a>
 						</td>';
 			$leads .= '</tr>';
 		}
@@ -158,7 +298,7 @@ class Lead_Management {
 			</div>
 			';
 		echo '
-			<a href="' . admin_url('admin.php?page=add-lead') . '" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+			<a href="' . admin_url('admin.php?page=edit-lead') . '" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
 				<i class="material-icons">add</i>
 			</a>
 			';
@@ -176,41 +316,6 @@ class Lead_Management {
 
 	}
 
-	/**
-	 * Output custom CSS, Fonts, Material design CSS, scripts and icons
-	 * Called on admin_footer-*
-	*/
-	public function header_scripts(){
-		?>
-		<link rel="stylesheet" href="<?php echo IMPRESS_IDX_URL . 'assets/css/idx-leads.css' ;?>" type="text/css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<link rel="stylesheet" href="<?php echo IMPRESS_IDX_URL . 'assets/css/material.min.css' ;?>" type="text/css">
-		<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-		<!--script src="<?php //echo IMPRESS_IDX_URL . 'assets/js/idx-leads.js' ;?>"></script-->
-		<?php
-	}
-
-	/**
-	 * Output Agents as select options
-	 */
-	private function agents_select_list($agent_id = null) {
-		$agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
-
-		if($agent_id != null) {
-			$agents_list = '<option value="0" '. selected($agent_id, '0', 0) . '>None</option>';
-			foreach($agents_array['agent'] as $agent) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>'; 
-			}
-		} else {
-			$agents_list = '<option value="0">None</option>';
-			foreach($agents_array['agent'] as $agent) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
-			}
-		}
-
-		return $agents_list;
-	}
 
 	/**
 	 * Output edit lead page
@@ -224,46 +329,46 @@ class Lead_Management {
 
 			<h3>Add Lead</h3>
 			
-			<form id="add-lead" action="#">
+			<form id="add-lead" action="" method="post">
 				<h6>Account Information</h6>
-				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="firstName">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
+					<input class="mdl-textfield__input" type="text" id="firstName" name="firstName">
 					<label class="mdl-textfield__label" for="firstName">First Name</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="lastName">
+					<input class="mdl-textfield__input" type="text" id="lastName" name="lastName">
 					<label class="mdl-textfield__label" for="lastName">Last Name</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="phone">
+					<input class="mdl-textfield__input" type="text" id="phone" name="phone">
 					<label class="mdl-textfield__label" for="phone">Phone</label>
 				</div><br />
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="email">
+					<input class="mdl-textfield__input" type="text" id="email" name="email">
 					<label class="mdl-textfield__label" for="email">Email</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="email2">
+					<input class="mdl-textfield__input" type="text" id="email2" name="email2">
 					<label class="mdl-textfield__label" for="email2">Additional Email</label>
 				</div><br />
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="address">
+					<input class="mdl-textfield__input" type="text" id="address" name="address">
 					<label class="mdl-textfield__label" for="address">Street Address</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="city">
+					<input class="mdl-textfield__input" type="text" id="city" name="city">
 					<label class="mdl-textfield__label" for="city">City</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="stateProvince">
+					<input class="mdl-textfield__input" type="text" id="stateProvince" name="stateProvince">
 					<label class="mdl-textfield__label" for="stateProvince">State/Province</label>
 				</div><br />
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="zipCode">
+					<input class="mdl-textfield__input" type="text" id="zipCode" name="zipCode">
 					<label class="mdl-textfield__label" for="zipCode">Zip Code</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="country">
+					<input class="mdl-textfield__input" type="text" id="country" name="country">
 					<label class="mdl-textfield__label" for="country">Country</label>
 				</div>
 
@@ -271,7 +376,7 @@ class Lead_Management {
 				<div class="mdl-fieldgroup">
 					<label class="mdl-selectfield__label" for="emailFormat">Email Format</label>
 					<div class="mdl-selectfield">
-						<select class="mdl-selectfield__select" id="emailFormat">
+						<select class="mdl-selectfield__select" id="emailFormat" name="emailFormat">
 							<option value="html">HTML</option>
 							<option value="text">Plain Text</option>
 						</select>
@@ -280,7 +385,7 @@ class Lead_Management {
 				<div class="mdl-fieldgroup">
 					<label class="mdl-selectfield__label" for="agentOwner">Assigned Agent</label>
 					<div class="mdl-selectfield">
-						<select class="mdl-selectfield__select" id="agentOwner">
+						<select class="mdl-selectfield__select" id="agentOwner" name="agentOwner">
 							<?php echo self::agents_select_list(); ?>
 						</select>
 					</div>
@@ -289,7 +394,7 @@ class Lead_Management {
 				<div class="mdl-fieldgroup">
 					<label class="mdl-selectfield__label" for="actualCategory">Category</label>
 					<div class="mdl-selectfield">
-						<select class="mdl-selectfield__select" id="actualCategory">
+						<select class="mdl-selectfield__select" id="actualCategory" name="actualCategory">
 							<option value="">---</option>
 							<option value="Buyer">Buyer</option>
 							<option value="Contact">Contact</option>
@@ -308,11 +413,11 @@ class Lead_Management {
 					<div class="mdl-radiofield">
 						<span class="mdl-label">Account Disabled</span>
 						<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="disabled-y">
-							<input type="radio" id="disabled-y" class="mdl-radio__button" name="account-disabled" value="y">
+							<input type="radio" id="disabled-y" class="mdl-radio__button" name="disabled" value="y">
 							<span class="mdl-radio__label">Yes</span>
 						</label>
 						<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="disabled-n">
-							<input type="radio" id="disabled-n" class="mdl-radio__button" name="account-disabled" value="n" checked>
+							<input type="radio" id="disabled-n" class="mdl-radio__button" name="disabled" value="n" checked>
 							<span class="mdl-radio__label">No</span>
 						</label>
 					</div>
@@ -322,11 +427,11 @@ class Lead_Management {
 					<div class="mdl-radiofield">
 						<span class="mdl-label">Lead Can Login</span>
 						<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="canlogin-y">
-							<input type="radio" id="canlogin-y" class="mdl-radio__button" name="can-login" value="y" checked>
+							<input type="radio" id="canlogin-y" class="mdl-radio__button" name="canLogin" value="y" checked>
 							<span class="mdl-radio__label">Yes</span>
 						</label>
 						<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="canlogin-n">
-							<input type="radio" id="canlogin-n" class="mdl-radio__button" name="can-login" value="n">
+							<input type="radio" id="canlogin-n" class="mdl-radio__button" name="canLogin" value="n">
 							<span class="mdl-radio__label">No</span>
 						</label>
 					</div>
@@ -336,24 +441,28 @@ class Lead_Management {
 					<div class="mdl-radiofield">
 						<span class="mdl-label">Receive Property Updates</span>
 						<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="updates-y">
-							<input type="radio" id="updates-y" class="mdl-radio__button" name="updates" value="y" checked>
+							<input type="radio" id="updates-y" class="mdl-radio__button" name="receiveUpdates" value="y" checked>
 							<span class="mdl-radio__label">Yes</span>
 						</label>
 						<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="updates-n">
-							<input type="radio" id="updates-n" class="mdl-radio__button" name="updates" value="n">
+							<input type="radio" id="updates-n" class="mdl-radio__button" name="receiveUpdates" value="n">
 							<span class="mdl-radio__label">No</span>
 						</label>
 					</div>
 				</div>
 				<br />
 
-				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">Save Lead</button>
+				<input type="hidden" name="action" value="idx_lead_add" />
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead" data-nonce="<?php echo wp_create_nonce('idx_lead_add_nonce'); ?>" type="submit">Save Lead</button>
 
 			</form>
 		<?php
 		
 		} else {
 			$lead_id = $_GET['leadID'];
+			if(empty($lead_id)) {
+				return;
+			}
 			// Get Lead info
 			$lead = $this->idx_api->idx_api('lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 7200, 'GET', true);
 		?>
@@ -368,46 +477,46 @@ class Lead_Management {
 					<a href="#lead-traffic" class="mdl-tabs__tab">Traffic History</a>
 				</div>
 				<div class="mdl-tabs__panel is-active" id="lead-info">
-					<form action="#">
+					<form id="edit-lead" action="" method="post">
 						<h6>Account Information</h6>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="firstName" value="<?php echo ($lead['firstName']) ? $lead['firstName'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="firstName" name="firstName" value="<?php echo ($lead['firstName']) ? $lead['firstName'] : '';?>">
 							<label class="mdl-textfield__label" for="firstName">First Name</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="lastName" value="<?php echo ($lead['lastName']) ? $lead['lastName'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="lastName" name="lastName" value="<?php echo ($lead['lastName']) ? $lead['lastName'] : '';?>">
 							<label class="mdl-textfield__label" for="lastName">Last Name</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="phone" value="<?php echo ($lead['phone']) ? $lead['phone'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="phone" name="phone" value="<?php echo ($lead['phone']) ? $lead['phone'] : '';?>">
 							<label class="mdl-textfield__label" for="phone">Phone</label>
 						</div><br />
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="email" value="<?php echo ($lead['email']) ? $lead['email'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="email" name="email" value="<?php echo ($lead['email']) ? $lead['email'] : '';?>">
 							<label class="mdl-textfield__label" for="email">Email</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="email2" value="<?php echo ($lead['email2']) ? $lead['email2'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="email2" name="email2" value="<?php echo ($lead['email2']) ? $lead['email2'] : '';?>">
 							<label class="mdl-textfield__label" for="email2">Additional Email</label>
 						</div><br />
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="address" value="<?php echo ($lead['address']) ? $lead['address'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="address" name="address" value="<?php echo ($lead['address']) ? $lead['address'] : '';?>">
 							<label class="mdl-textfield__label" for="address">Street Address</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="city" value="<?php echo ($lead['city']) ? $lead['city'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="city" name="city" value="<?php echo ($lead['city']) ? $lead['city'] : '';?>">
 							<label class="mdl-textfield__label" for="city">City</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="stateProvince" value="<?php echo ($lead['stateProvince']) ? $lead['stateProvince'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="stateProvince" name="stateProvince" value="<?php echo ($lead['stateProvince']) ? $lead['stateProvince'] : '';?>">
 							<label class="mdl-textfield__label" for="stateProvince">State/Province</label>
 						</div><br />
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="zipCode" value="<?php echo ($lead['zipCode']) ? $lead['zipCode'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="zipCode" name="zipCode" value="<?php echo ($lead['zipCode']) ? $lead['zipCode'] : '';?>">
 							<label class="mdl-textfield__label" for="zipCode">Zip Code</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="country" value="<?php echo ($lead['country']) ? $lead['country'] : '';?>">
+							<input class="mdl-textfield__input" type="text" id="country" name="country" value="<?php echo ($lead['country']) ? $lead['country'] : '';?>">
 							<label class="mdl-textfield__label" for="country">Country</label>
 						</div>
 
@@ -415,7 +524,7 @@ class Lead_Management {
 						<div class="mdl-fieldgroup">
 							<label class="mdl-selectfield__label" for="emailFormat">Email Format</label>
 							<div class="mdl-selectfield">
-								<select class="mdl-selectfield__select" id="emailFormat">
+								<select class="mdl-selectfield__select" id="emailFormat" name="emailFormat">
 									<option value="html" <?php selected($lead['emailFormat'], 'html');?>>HTML</option>
 									<option value="text" <?php selected($lead['emailFormat'], 'text');?>>Plain Text</option>
 								</select>
@@ -424,7 +533,7 @@ class Lead_Management {
 						<div class="mdl-fieldgroup">
 							<label class="mdl-selectfield__label" for="agentOwner">Assigned Agent</label>
 							<div class="mdl-selectfield">
-								<select class="mdl-selectfield__select" id="agentOwner">
+								<select class="mdl-selectfield__select" id="agentOwner" name="agentOwner">
 									<?php echo self::agents_select_list($lead['agentOwner']); ?>
 								</select>
 							</div>
@@ -433,7 +542,7 @@ class Lead_Management {
 						<div class="mdl-fieldgroup">
 							<label class="mdl-selectfield__label" for="actualCategory">Category</label>
 							<div class="mdl-selectfield">
-								<select class="mdl-selectfield__select" id="actualCategory">
+								<select class="mdl-selectfield__select" id="actualCategory" name="actualCategory">
 									<option value="" <?php selected($lead['actualCategory'], '');?>>---</option>
 									<option value="Buyer" <?php selected($lead['actualCategory'], 'Buyer');?>>Buyer</option>
 									<option value="Contact" <?php selected($lead['actualCategory'], 'Contact');?>>Contact</option>
@@ -452,11 +561,11 @@ class Lead_Management {
 							<div class="mdl-radiofield">
 								<span class="mdl-label">Account Disabled</span>
 								<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="disabled-y">
-									<input type="radio" id="disabled-y" class="mdl-radio__button" name="account-disabled" value="y" <?php checked($lead['disabled'], 'y');?>>
+									<input type="radio" id="disabled-y" class="mdl-radio__button" name="disabled" value="y" <?php checked($lead['disabled'], 'y');?>>
 									<span class="mdl-radio__label">Yes</span>
 								</label>
 								<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="disabled-n">
-									<input type="radio" id="disabled-n" class="mdl-radio__button" name="account-disabled" value="n" <?php checked($lead['disabled'], 'n');?>>
+									<input type="radio" id="disabled-n" class="mdl-radio__button" name="disabled" value="n" <?php checked($lead['disabled'], 'n');?>>
 									<span class="mdl-radio__label">No</span>
 								</label>
 							</div>
@@ -466,11 +575,11 @@ class Lead_Management {
 							<div class="mdl-radiofield">
 								<span class="mdl-label">Lead Can Login</span>
 								<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="canlogin-y">
-									<input type="radio" id="canlogin-y" class="mdl-radio__button" name="can-login" value="y" <?php checked($lead['canLogin'], 'y');?>>
+									<input type="radio" id="canlogin-y" class="mdl-radio__button" name="canLogin" value="y" <?php checked($lead['canLogin'], 'y');?>>
 									<span class="mdl-radio__label">Yes</span>
 								</label>
 								<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="canlogin-n">
-									<input type="radio" id="canlogin-n" class="mdl-radio__button" name="can-login" value="n" <?php checked($lead['canLogin'], 'n');?>>
+									<input type="radio" id="canlogin-n" class="mdl-radio__button" name="canLogin" value="n" <?php checked($lead['canLogin'], 'n');?>>
 									<span class="mdl-radio__label">No</span>
 								</label>
 							</div>
@@ -480,20 +589,23 @@ class Lead_Management {
 							<div class="mdl-radiofield">
 								<span class="mdl-label">Receive Property Updates</span>
 								<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="updates-y">
-									<input type="radio" id="updates-y" class="mdl-radio__button" name="updates" value="y" <?php checked($lead['receiveUpdates'], 'y');?>>
+									<input type="radio" id="updates-y" class="mdl-radio__button" name="receiveUpdates" value="y" <?php checked($lead['receiveUpdates'], 'y');?>>
 									<span class="mdl-radio__label">Yes</span>
 								</label>
 								<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="updates-n">
-									<input type="radio" id="updates-n" class="mdl-radio__button" name="updates" value="n" <?php checked($lead['receiveUpdates'], 'n');?>>
+									<input type="radio" id="updates-n" class="mdl-radio__button" name="receiveUpdates" value="n" <?php checked($lead['receiveUpdates'], 'n');?>>
 									<span class="mdl-radio__label">No</span>
 								</label>
 							</div>
 						</div>
 						<br />
 
-						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">Save Lead</button>
+						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce('idx_lead_edit_nonce'); ?>" data-lead-id="<?php echo $lead_id; ?>" type="submit">Save Lead</button> 
 
 					</form>
+					<div class="lead-photo">
+						<?php $avatar_args = array( 'force_display' => true ); echo get_avatar($lead['email'], 256, '', false, $avatar_args); ?>
+					</div>
 				</div>
 				<div class="mdl-tabs__panel" id="lead-notes">
 					<?php
@@ -624,6 +736,41 @@ class Lead_Management {
 		global $post;
 		$post = (object) array('post_type' => null);
 
+	}
+
+		/**
+	 * Output custom CSS, Fonts, Material design CSS, scripts and icons
+	 * Called on admin_footer-*
+	*/
+	public function header_scripts(){
+		?>
+		<link rel="stylesheet" href="<?php echo IMPRESS_IDX_URL . 'assets/css/idx-leads.css' ;?>" type="text/css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="<?php echo IMPRESS_IDX_URL . 'assets/css/material.min.css' ;?>" type="text/css">
+		<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+		<?php
+	}
+
+	/**
+	 * Output Agents as select options
+	 */
+	private function agents_select_list($agent_id = null) {
+		$agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+		if($agent_id != null) {
+			$agents_list = '<option value="0" '. selected($agent_id, '0', 0) . '>None</option>';
+			foreach($agents_array['agent'] as $agent) {
+				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>'; 
+			}
+		} else {
+			$agents_list = '<option value="0">None</option>';
+			foreach($agents_array['agent'] as $agent) {
+				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+			}
+		}
+
+		return $agents_list;
 	}
 
 }
