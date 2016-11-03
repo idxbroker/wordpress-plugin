@@ -55,6 +55,90 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
+	// add lead note
+	$('form.add-lead-note').submit(function(e) {
+		e.preventDefault();
+		$('button.add-note').hide();
+		$('.mdl-spinner').addClass('is-active');
+
+		var note = $(this).serialize();
+		var id = $('button.add-note').data('id');
+		var nonce = $('button.add-note').data('nonce');
+		var display_note = $('#note').val();
+		
+		$.ajax({
+			type: 'post',
+			url: IDXLeadAjax.ajaxurl,
+			data: {
+				action: 'idx_lead_note_add',
+				note: note,
+				id: id,
+				nonce: nonce
+			},
+			success: function( result ) {
+				if( $.isNumeric( result ) ) {
+					var note_row = '<tr class="note-row"><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric note"><div class="render-note">' + display_note + '</div></td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-note-' + result + '" class="delete-note" data-id="' + id + '" data-noteid="' + result + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' + result + '">Delete Note</div></a></td></tr>';
+
+					$('.mdl-data-table tbody').prepend( note_row );
+					$('.mdl-spinner').removeClass('is-active');
+					$('button.add-note').show();
+					$('#note').val('');
+					tb_remove();
+				}
+			}
+		});
+		return false;
+	});
+
+	// add lead property
+	$('form.add-lead-property').submit(function(e) {
+		e.preventDefault();
+		$('button.add-property').hide();
+		$('.mdl-spinner').addClass('is-active');
+
+		var id = $('button.add-property').data('id');
+		var nonce = $('button.add-property').data('nonce');
+
+		var property_name = $('#propertyName').val();
+		var idxid = $('#idxID').val();
+		var listingid = $('#listingID').val();
+		var updates = $('#receiveUpdates').val();
+
+		var detailsurl = IDXLeadAjax.detailsurl;
+		
+		if(updates === 'on') {
+			updates = 'y';
+		} else {
+			updates ='n';
+		}
+
+		$.ajax({
+			type: 'post',
+			url: IDXLeadAjax.ajaxurl,
+			data: {
+				action: 'idx_lead_property_add',
+				id: id,
+				property_name: property_name,
+				idxid: idxid,
+				listingid: listingid,
+				updates: updates,
+				nonce: nonce
+			},
+			success: function( result ) {
+				if( $.isNumeric( result ) ) {
+					var property_row = '<tr class="property-row"><td class="mdl-data-table__cell--non-numeric property"><a href="' + detailsurl + '/' + id + '/' + result + '">' + property_name + '<div class="mdl-tooltip" data-mdl-for="view-property-' + result + '">View Property</div></a></td><td class="mdl-data-table__cell--non-numeric">' + updates + '</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + result + '" class="delete-property" data-id="' + id + '" data-listingid="' + result + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + result + '">Delete Note</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + result + '" id="edit-mw-' + result + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + result + '">Edit Property in Middleware</div></a></td></tr>';
+
+					$('.mdl-data-table tbody').prepend( property_row );
+					$('.mdl-spinner').removeClass('is-active');
+					$('button.add-property').show();
+					$('#propertyName, #listingID').val('');
+					tb_remove();
+				}
+			}
+		});
+		return false;
+	});
+
 	// delete lead
 	$(document).on( 'click', '.delete-lead', function() {
 		var go_ahead = confirm("Are you sure you want to delete this lead?");
@@ -185,34 +269,6 @@ jQuery(document).ready(function($) {
 			});
 
 			$('.mdl-spinner').removeClass('is-active');
-		}
-		return false;
-	});
-
-	// delete all leads
-	$(document).on( 'click', '.delete-selected', function() {
-		var go_ahead = confirm("Are you sure you want to delete these leads?");
-		var id = $(this).data('id');
-		var nonce = $(this).data('nonce');
-		var post = $(this).parents('.lead-row:first');
-
-		if ( go_ahead === true ) {
-			$.ajax({
-				type: 'post',
-				url: IDXLeadAjax.ajaxurl,
-				data: {
-					action: 'idx_lead_delete_all',
-					nonce: nonce,
-					id: id
-				},
-				success: function( result ) {
-					if( result == 'success' ) {
-						post.fadeOut( function(){
-							post.remove();
-						});
-					}
-				}
-			});
 		}
 		return false;
 	});
