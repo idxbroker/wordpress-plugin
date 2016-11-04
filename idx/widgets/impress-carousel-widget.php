@@ -429,7 +429,6 @@ class Impress_Carousel_Widget extends \WP_Widget
                 <option <?php selected($instance['properties'], 'featured');?> value="featured"><?php _e('Featured', 'idxbroker');?></option>
                 <option <?php selected($instance['properties'], 'soldpending');?> value="soldpending"><?php _e('Sold/Pending', 'idxbroker');?></option>
                 <option <?php selected($instance['properties'], 'supplemental');?> value="supplemental"><?php _e('Supplemental', 'idxbroker');?></option>
-                <option <?php selected($instance['properties'], 'historical');?> value="historical"><?php _e('Historical', 'idxbroker');?></option>
                 <?php //Only allow Saved Links if Equity is active ?>
                 <?php if (function_exists('equity')) {?>
                 <option <?php selected($instance['properties'], 'savedlinks');?> value="savedlinks"><?php _e('Use Saved Link', 'idxbroker');?></option>
