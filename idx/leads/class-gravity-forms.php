@@ -1,5 +1,6 @@
 <?php
 add_action('init', array('IDX_Leads_GF', 'init'));
+
 class IDX_Leads_GF
 {
 	public function __construct() {
@@ -16,6 +17,7 @@ class IDX_Leads_GF
 	}
 
 	public $idx_api;
+	
 	public static function idx_leads_gform_settings_menu( $menu_items ) {
 		
 		$menu_items[] = array(

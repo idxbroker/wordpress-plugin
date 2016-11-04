@@ -80,7 +80,9 @@ div.idx_review_prompt.updated a {
     color: #fff !important;
 }
 
-#tab_idx_broker_leads_page .properticons {
+/** Properticons on plugin lead capture pages */
+#tab_idx_broker_leads_page .properticons,
+.contact-form-editor-panel .properticons {
     font-size: 80px;
     width: 80px;
     height: 30px;
