@@ -341,7 +341,6 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         $output .= "<option value=\"featured\" selected=\"selected\">Featured</option>";
         $output .= "<option value=\"soldpending\">Sold/Pending</option>";
         $output .= "<option value=\"supplemental\">Supplemental</option>";
-        $output .= "<option value=\"historical\">Historical</option>";
         //Only allow Saved Links if Equity is active
         if (function_exists('equity')) {
             $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
@@ -431,7 +430,6 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         $output .= "<option value=\"featured\" selected=\"selected\">Featured</option>";
         $output .= "<option value=\"soldpending\">Sold/Pending</option>";
         $output .= "<option value=\"supplemental\">Supplemental</option>";
-        $output .= "<option value=\"historical\">Historical</option>";
         //Only allow Saved Links if Equity is active
         if (function_exists('equity')) {
             $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
