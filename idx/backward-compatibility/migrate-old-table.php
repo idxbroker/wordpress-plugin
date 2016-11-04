@@ -6,9 +6,9 @@ use \IDX\Idx_Api;
 //Migrate Legacy Plugin Pages from version <1.3
 class Migrate_Old_Table
 {
-    public function __construct(Idx_Api $idx_api)
+    public function __construct()
     {
-        $this->idx_api = $idx_api;
+        $this->idx_api = new \IDX\Idx_Api();
 
         $post_info = $this->grab_post_ids();
         if (empty($post_info)) {
