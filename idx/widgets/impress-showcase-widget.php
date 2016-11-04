@@ -18,6 +18,7 @@ class Impress_Showcase_Widget extends \WP_Widget
             array(
                 'description' => 'Displays a showcase of properties',
                 'classname' => 'impress-showcase-widget',
+                'customize_selective_refresh' => true,
             )
         );
     }
