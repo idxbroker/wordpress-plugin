@@ -6,9 +6,9 @@ class Impress_Lead_Signup_Shortcode {
     public $idx_api;
     public $error_message;
 
-    public function __construct(\IDX\Idx_Api $idx_api)
+    public function __construct()
     {
-        $this->idx_api = $idx_api;
+        $this->idx_api = new \IDX\Idx_Api();
 
         if(isset($_GET['error'])){
             $this->error_message = $this->handle_errors($_GET['error']);

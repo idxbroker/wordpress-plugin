@@ -4,12 +4,10 @@ namespace IDX\Shortcodes;
 class Register_Impress_Shortcodes
 {
     public $idx_api;
-    private $app;
 
-    public function __construct(\IDX\Idx_Api $idx_api, $app)
+    public function __construct()
     {
-        $this->idx_api = $idx_api;
-        $this->app = $app;
+        $this->idx_api = new \IDX\Idx_Api();
         add_shortcode('impress_lead_login', array($this, 'lead_login_shortcode'));
         if ($this->idx_api->platinum_account_type()) {
             add_action('wp_loaded', array($this, 'lead_signup_shortcode'));
@@ -51,7 +49,7 @@ class Register_Impress_Shortcodes
 
     public function lead_signup_shortcode()
     {
-        $this->app->make('\IDX\Shortcodes\Impress_Lead_Signup_Shortcode');
+        new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
         
     }
 

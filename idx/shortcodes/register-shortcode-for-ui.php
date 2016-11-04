@@ -4,9 +4,9 @@ namespace IDX\Shortcodes;
 class Register_Shortcode_For_Ui
 {
 
-    public function __construct(\IDX\Idx_Api $idx_api)
+    public function __construct()
     {
-        $this->idx_api = $idx_api;
+        $this->idx_api = new \IDX\Idx_Api();
         add_action('wp_ajax_idx_shortcode_options', array($this, 'get_shortcode_options'));
         add_action('wp_ajax_idx_shortcode_preview', array($this, 'shortcode_preview'));
     }
@@ -341,7 +341,6 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         $output .= "<option value=\"featured\" selected=\"selected\">Featured</option>";
         $output .= "<option value=\"soldpending\">Sold/Pending</option>";
         $output .= "<option value=\"supplemental\">Supplemental</option>";
-        $output .= "<option value=\"historical\">Historical</option>";
         //Only allow Saved Links if Equity is active
         if (function_exists('equity')) {
             $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
@@ -431,7 +430,6 @@ $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omniba
         $output .= "<option value=\"featured\" selected=\"selected\">Featured</option>";
         $output .= "<option value=\"soldpending\">Sold/Pending</option>";
         $output .= "<option value=\"supplemental\">Supplemental</option>";
-        $output .= "<option value=\"historical\">Historical</option>";
         //Only allow Saved Links if Equity is active
         if (function_exists('equity')) {
             $output .= "<option value=\"savedlinks\">Use Saved Link</option>";

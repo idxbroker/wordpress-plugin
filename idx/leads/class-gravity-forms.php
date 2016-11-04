@@ -16,7 +16,6 @@ class IDX_Leads_GF
 	}
 
 	public $idx_api;
-
 	public static function idx_leads_gform_settings_menu( $menu_items ) {
 		
 		$menu_items[] = array(

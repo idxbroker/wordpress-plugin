@@ -18,6 +18,7 @@ class Impress_City_Links_Widget extends \WP_Widget
             array(
                 'description' => __('Outputs a list of city links', 'idxbroker'),
                 'classname' => 'impress-city-links-widget',
+                'customize_selective_refresh' => true,
             )
         );
     }
