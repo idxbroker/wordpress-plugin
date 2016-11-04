@@ -1,6 +1,5 @@
 <?php
 add_action('init', array('IDX_Leads_GF', 'init'));
-
 class IDX_Leads_GF
 {
 	public function __construct() {
@@ -11,16 +10,13 @@ class IDX_Leads_GF
 	}
 
 	public static function init() {
-		if(class_exists('RGForms')) {
-			add_action( 'gform_after_submission', array('IDX_Leads_GF', 'idx_put_lead'), 10, 2 );
-			add_filter( 'gform_form_settings_menu', array('IDX_Leads_GF', 'idx_leads_gform_settings_menu') );
-			add_action( 'gform_form_settings_page_idx_broker_leads_page', array('IDX_Leads_GF', 'idx_broker_leads_page') );
-		}
+		add_action( 'gform_after_submission', array('IDX_Leads_GF', 'idx_put_lead'), 10, 2 );
+		add_filter( 'gform_form_settings_menu', array('IDX_Leads_GF', 'idx_leads_gform_settings_menu') );
+		add_action( 'gform_form_settings_page_idx_broker_leads_page', array('IDX_Leads_GF', 'idx_broker_leads_page') );
 	}
 
 	public $idx_api;
-
-	public function idx_leads_gform_settings_menu( $menu_items ) {
+	public static function idx_leads_gform_settings_menu( $menu_items ) {
 		
 		$menu_items[] = array(
 			'name' => 'idx_broker_leads_page',
@@ -30,7 +26,7 @@ class IDX_Leads_GF
 		return $menu_items;
 	}
 
-	public function idx_broker_leads_page() {
+	public static function idx_broker_leads_page() {
 
 		GFFormSettings::page_header();
 
