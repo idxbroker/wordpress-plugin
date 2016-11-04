@@ -1,23 +1,23 @@
 <?php
 add_action('init', array('IDX_Leads_GF', 'init'));
-
 class IDX_Leads_GF
 {
-	public function __construct(Idx_Api $idx_api) {
-		$this->idx_api = $idx_api;
+	public function __construct() {
+		if(!class_exists('GFForms'))
+			exit;
+
+		$this->idx_api = new \IDX\Idx_Api();
 	}
 
 	public static function init() {
-		if(class_exists('RGForms')) {
-			add_action( 'gform_after_submission', array('IDX_Leads_GF', 'idx_put_lead'), 10, 2 );
-			add_filter( 'gform_form_settings_menu', array('IDX_Leads_GF', 'idx_leads_gform_settings_menu') );
-			add_action( 'gform_form_settings_page_idx_broker_leads_page', array('IDX_Leads_GF', 'idx_broker_leads_page') );
-		}
+		add_action( 'gform_after_submission', array('IDX_Leads_GF', 'idx_put_lead'), 10, 2 );
+		add_filter( 'gform_form_settings_menu', array('IDX_Leads_GF', 'idx_leads_gform_settings_menu') );
+		add_action( 'gform_form_settings_page_idx_broker_leads_page', array('IDX_Leads_GF', 'idx_broker_leads_page') );
 	}
 
 	public $idx_api;
 
-	public function idx_leads_gform_settings_menu( $menu_items ) {
+	public static function idx_leads_gform_settings_menu( $menu_items ) {
 		
 		$menu_items[] = array(
 			'name' => 'idx_broker_leads_page',
@@ -27,7 +27,7 @@ class IDX_Leads_GF
 		return $menu_items;
 	}
 
-	public function idx_broker_leads_page() {
+	public static function idx_broker_leads_page() {
 
 		GFFormSettings::page_header();
 
@@ -109,36 +109,36 @@ class IDX_Leads_GF
 		if ($checked) {
 			if (!empty($apikey)) {
 
-				$fields = get_all_form_fields($form_id);
+				$fields = self::get_all_form_fields($form_id);
 				
-				$code_firstname = (string)find_field($fields, 'Name (First)');
+				$code_firstname = (string)self::find_field($fields, 'Name (First)');
 				$firstname = filter_var($entry[$code_firstname],FILTER_SANITIZE_STRING);
 
-				$code_lastname = (string)find_field($fields, 'Name (Last)');
+				$code_lastname = (string)self::find_field($fields, 'Name (Last)');
 				$lastname = filter_var($entry[$code_lastname],FILTER_SANITIZE_STRING);
 
-				$code_email = (string)find_field($fields, 'Email');
+				$code_email = (string)self::find_field($fields, 'Email');
 				$email = filter_var($entry[$code_email],FILTER_SANITIZE_STRING);
 
-				$code_phone = (string)find_field($fields, 'Phone');
+				$code_phone = (string)self::find_field($fields, 'Phone');
 				if($code_phone) {$phone = filter_var($entry[$code_phone],FILTER_SANITIZE_STRING);}
 
-				$code_streetAddress = (string)find_field($fields, 'Address (Street Address)');
+				$code_streetAddress = (string)self::find_field($fields, 'Address (Street Address)');
 				if($code_streetAddress) {$streetAddress = filter_var($entry[$code_streetAddress],FILTER_SANITIZE_STRING);}
 
-				$code_addressLine = (string)find_field($fields, 'Address (Address Line 2)');
+				$code_addressLine = (string)self::find_field($fields, 'Address (Address Line 2)');
 				if($code_addressLine) {$addressLine = filter_var($entry[$code_addressLine],FILTER_SANITIZE_STRING);}
 
-				$code_city = (string)find_field($fields, 'Address (City)');
+				$code_city = (string)self::find_field($fields, 'Address (City)');
 				if($code_city) {$city = filter_var($entry[$code_city],FILTER_SANITIZE_STRING);}
 
-				$code_state = (string)find_field($fields, 'Address (State / Province)');
+				$code_state = (string)self::find_field($fields, 'Address (State / Province)');
 				if($code_state) {$state = filter_var($entry[$code_state],FILTER_SANITIZE_STRING);}
 
-				$code_zip = (string)find_field($fields, 'Address (ZIP / Postal Code)');
+				$code_zip = (string)self::find_field($fields, 'Address (ZIP / Postal Code)');
 				if($code_zip) {$zip = filter_var($entry[$code_zip],FILTER_SANITIZE_STRING);}
 
-				$code_country = (string)find_field($fields, 'Address (Country)');
+				$code_country = (string)self::find_field($fields, 'Address (Country)');
 				if($code_country) {$country = filter_var($entry[$code_country],FILTER_SANITIZE_STRING);}
 
 				$lead_data = array(
@@ -175,7 +175,7 @@ class IDX_Leads_GF
 					$decoded_response = json_decode($response['body']);
 
 					$note = array(
-						'note' => output_form_fields($entry, $form_id)
+						'note' => self::output_form_fields($entry, $form_id)
 					);
 
 					// Add note if lead already exists
@@ -214,9 +214,8 @@ class IDX_Leads_GF
 			}
 		}   
 	}
-}
 
-function get_all_form_fields($form_id) {
+	private static function get_all_form_fields($form_id) {
 		$form = RGFormsModel::get_form_meta($form_id);
 		$fields = array();
 
@@ -233,23 +232,26 @@ function get_all_form_fields($form_id) {
 			}
 		}        
 		return $fields;
-}
-function find_field($fields, $fid) {
+	}
+
+	private static function find_field($fields, $fid) {
 		foreach($fields as $field) {              
 			if($field['name'] == $fid) return $field['id'];
 		}
 		return false;
-}
-function output_form_fields($entry, $form_id) {
-	$fields = get_all_form_fields($form_id);
-	$output = '';
-	foreach($fields as $field) {
-		$field_id = $field['id'];
-		$field_entry = filter_var($entry[$field_id], FILTER_SANITIZE_STRING);
-
-		if($field_entry)
-			$output .= $field['name'] . ":\r\n" . $field_entry . "\r\n\r\n";
 	}
 
-	return $output;
+	private static function output_form_fields($entry, $form_id) {
+		$fields = self::get_all_form_fields($form_id);
+		$output = '';
+		foreach($fields as $field) {
+			$field_id = $field['id'];
+			$field_entry = filter_var($entry[$field_id], FILTER_SANITIZE_STRING);
+
+			if($field_entry)
+				$output .= $field['name'] . ":\r\n" . $field_entry . "\r\n\r\n";
+		}
+
+		return $output;
+	}
 }
