@@ -99,6 +99,7 @@ class Lead_Management {
 			'detailsurl' => $this->idx_api->details_url()
 			)
 		);
+		wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array('jquery'), true);
 	}
 
 	/**
@@ -420,10 +421,8 @@ class Lead_Management {
 		echo '<h3>Leads</h3>';
 
 		$leads_array = $this->idx_api->get_leads();
-		// order by lastActivityDate
 		
 		$leads_array = array_reverse($leads_array);
-		//$leads_array = array_slice(array_reverse($leads_array), 0, 5);
 		
 		$agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
 		
@@ -431,7 +430,8 @@ class Lead_Management {
 
 		//prepare leads for display
 		foreach($leads_array as $lead){
-			$last_active = Carbon::now()->createFromTimestampUTC(strtotime(($lead->lastActivityDate === '0000-00-00 00:00:00') ? $lead->subscribeDate : $lead->lastActivityDate))->diffForHumans();
+
+			$last_active = Carbon::parse(($lead->lastActivityDate === '0000-00-00 00:00:00') ? $lead->subscribeDate : $lead->lastActivityDate)->toDayDateTimeString();
 
 			if ($lead->agentOwner != '0') {
 				foreach($agents_array['agent'] as $agent) {
@@ -463,7 +463,7 @@ class Lead_Management {
 			$leads .= '</tr>';
 		}
 
-		echo '<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">';
+		echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp leads">';
 		echo '
 			<a href="#" title="Delete Lead" class="delete-selected hide"><i class="material-icons md-18">delete</i> Delete Selected</a>
 			<thead>
@@ -479,19 +479,9 @@ class Lead_Management {
 		echo $leads;
 		echo '</tbody></table>';
 		echo '
-			<div class="mdl-selectfield">
-				Rows per page:
-				<select class="mdl-selectfield__select">
-					<option value="10">10</option>
-					<option value="25">25</option>
-					<option value="50">50</option>
-					<option value="100">100</option>
-				</select>
-			</div>
-			';
-		echo '
-			<a href="' . admin_url('admin.php?page=edit-lead') . '" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+			<a href="' . admin_url('admin.php?page=edit-lead') . '" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 				<i class="material-icons">add</i>
+				<div class="mdl-tooltip" data-mdl-for="add-lead">Add New Lead</div>
 			</a>
 			<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 			';
@@ -803,6 +793,11 @@ class Lead_Management {
 						<?php $avatar_args = array( 'force_display' => true ); echo get_avatar($lead['email'], 256, '', false, $avatar_args); ?>
 					</div>
 
+					<a href="<?php echo admin_url('admin.php?page=edit-lead'); ?>" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+						<i class="material-icons">add</i>
+						<div class="mdl-tooltip" data-mdl-for="add-lead">Add New Lead</div>
+					</a>
+
 				</div>
 
 				<div class="mdl-tabs__panel" id="lead-notes">
@@ -812,7 +807,6 @@ class Lead_Management {
 					// order newest first
 					$notes_array = $this->idx_api->idx_api('note/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 7200, 'GET', true);
 					$notes_array = array_reverse($notes_array);
-					//$leads_array = array_slice(array_reverse($leads_array), 0, 5);
 					
 					$notes = '';
 
@@ -832,7 +826,7 @@ class Lead_Management {
 						$notes .= '</tr>';
 					}
 
-					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">';
+					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-notes">';
 					echo '
 						<thead>
 							<th class="mdl-data-table__cell--non-numeric">Date Created</th>
@@ -844,18 +838,7 @@ class Lead_Management {
 					echo $notes;
 					echo '</tbody></table>';
 					echo '
-						<div class="mdl-selectfield">
-							Rows per page:
-							<select class="mdl-selectfield__select">
-								<option value="10">10</option>
-								<option value="25">25</option>
-								<option value="50">50</option>
-								<option value="100">100</option>
-							</select>
-						</div>
-						';
-					echo '
-						<a href="#TB_inline?width=600&height=350&inlineId=add-lead-note" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored thickbox">
+						<a href="#TB_inline?width=600&height=350&inlineId=add-lead-note" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
 						</a>
 						';
@@ -904,7 +887,7 @@ class Lead_Management {
 						$properties .= '</tr>';
 					}
 
-					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">';
+					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-properties">';
 					echo '
 						<a style="display: none;" href="#" title="Delete Properties"><i class="material-icons md-18">delete</i> Delete Selected</a>
 						<thead>
@@ -918,18 +901,7 @@ class Lead_Management {
 					echo $properties;
 					echo '</tbody></table>';
 					echo '
-						<div class="mdl-selectfield">
-							Rows per page:
-							<select class="mdl-selectfield__select">
-								<option value="10">10</option>
-								<option value="25">25</option>
-								<option value="50">50</option>
-								<option value="100">100</option>
-							</select>
-						</div>
-						';
-					echo '
-						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-property" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored thickbox">
+						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-property" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
 						</a>
 						';
@@ -970,35 +942,39 @@ class Lead_Management {
 
 					// order newest first
 					$searches_array = $this->idx_api->idx_api('search/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 7200, 'GET', true);
-					$searches_array = array_reverse($searches_array['searchInformation']);
+					$searches_array = (isset($searches_array['searchInformation'])) ? array_reverse($searches_array['searchInformation']) : null;
 					
 					$searches = '';
 
 					$results_url = $this->idx_api->system_results_url();
 
 					//prepare searches for display
-					foreach($searches_array as $search){
+					if($searches_array != null) {
+						foreach($searches_array as $search){
 
-						$search_query = http_build_query(($search['search']));
+							$search_query = http_build_query(($search['search']));
 
-						$nice_created_date = Carbon::parse($search['created'])->toDayDateTimeString();
-						$updates = ($search['receiveUpdates'] == 'y') ? 'Yes' : 'No';
+							$nice_created_date = Carbon::parse($search['created'])->toDayDateTimeString();
+							$updates = ($search['receiveUpdates'] == 'y') ? 'Yes' : 'No';
 
-						$searches .= '<tr class="search-row">';
-						$searches .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $results_url . '?' . $search_query .'" target="_blank" id="view-search-' . $search['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-search-' . $search['id'] . '">View Search</div>' . $search['searchName'] . '</a><br /><a href="' . $results_url . '?' . $search_query .'&add=1" target="_blank" id="view-search-today-' . $search['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-search-today-' . $search['id'] . '">View Today\'s Results</div>View Today\'s Results</a></td>';
-						$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $updates . '</td>';
-						$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_created_date . '</td>';
-						$searches .= '<td class="mdl-data-table__cell--non-numeric">
-									<!--<a href="' . admin_url('admin.php?page=edit-search&searchID=' . $search['id']) . '" id="edit-search-' . $search['id'] . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-search-' . $search['id'] . '">Edit Search</div></a>-->
+							$searches .= '<tr class="search-row">';
+							$searches .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $results_url . '?' . $search_query .'" target="_blank" id="view-search-' . $search['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-search-' . $search['id'] . '">View Search</div>' . $search['searchName'] . '</a><br /><a href="' . $results_url . '?' . $search_query .'&add=1" target="_blank" id="view-search-today-' . $search['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-search-today-' . $search['id'] . '">View Today\'s Results</div>View Today\'s Results</a></td>';
+							$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $updates . '</td>';
+							$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_created_date . '</td>';
+							$searches .= '<td class="mdl-data-table__cell--non-numeric">
+										<!--<a href="' . admin_url('admin.php?page=edit-search&searchID=' . $search['id']) . '" id="edit-search-' . $search['id'] . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-search-' . $search['id'] . '">Edit Search</div></a>-->
 
-									<a href="#" id="delete-search-' . $search['id'] . '" class="delete-search" data-id="' . $lead_id . '" data-ssid="' . $search['id'] . '" data-nonce="' . wp_create_nonce('idx_lead_search_delete_nonce') . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . $search['id'] . '">Delete Saved Search</div></a>
+										<a href="#" id="delete-search-' . $search['id'] . '" class="delete-search" data-id="' . $lead_id . '" data-ssid="' . $search['id'] . '" data-nonce="' . wp_create_nonce('idx_lead_search_delete_nonce') . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . $search['id'] . '">Delete Saved Search</div></a>
 
-									<a href="https://middleware.idxbroker.com/mgmt/addeditsavedsearch.php?id=' . $lead_id . '&ssid=' . $search['id'] . '" id="edit-mw-' . $search['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $search['id'] . '">Edit Search in Middleware</div></a>
-									</td>';
-						$searches .= '</tr>';
+										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedsearch.php?id=' . $lead_id . '&ssid=' . $search['id'] . '" id="edit-mw-' . $search['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $search['id'] . '">Edit Search in Middleware</div></a>
+										</td>';
+							$searches .= '</tr>';
+						}
+					} else {
+						$searches .= '<tr class="search-row"><td class="mdl-data-table__cell--non-numeric">No searches found</td></tr>';
 					}
 
-					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">';
+					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-searches">';
 					echo '
 						<a style="display: none;" href="#" title="Delete Searches"><i class="material-icons md-18">delete</i> Delete Selected</a>
 						<thead>
@@ -1011,17 +987,6 @@ class Lead_Management {
 						';
 					echo $searches;
 					echo '</tbody></table>';
-					echo '
-						<div class="mdl-selectfield">
-							Rows per page:
-							<select class="mdl-selectfield__select">
-								<option value="10">10</option>
-								<option value="25">25</option>
-								<option value="50">50</option>
-								<option value="100">100</option>
-							</select>
-						</div>
-						';
 					?>
 				</div>
 				<div class="mdl-tabs__panel" id="lead-traffic">
@@ -1046,7 +1011,7 @@ class Lead_Management {
 						$traffic .= '</tr>';
 					}
 
-					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">';
+					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-traffic">';
 					echo '
 						<thead>
 							<th class="mdl-data-table__cell--non-numeric">Date</th>
@@ -1057,17 +1022,6 @@ class Lead_Management {
 						';
 					echo $traffic;
 					echo '</tbody></table>';
-					echo '
-						<div class="mdl-selectfield">
-							Rows per page:
-							<select class="mdl-selectfield__select">
-								<option value="10">10</option>
-								<option value="25">25</option>
-								<option value="50">50</option>
-								<option value="100">100</option>
-							</select>
-						</div>
-						';
 				?>
 				</div>
 			</div>
@@ -1098,6 +1052,7 @@ class Lead_Management {
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="<?php echo IMPRESS_IDX_URL . 'assets/css/material.min.css' ;?>" type="text/css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css" type="text/css">
 		<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 		<?php
 	}
