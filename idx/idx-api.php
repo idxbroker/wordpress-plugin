@@ -652,13 +652,6 @@ class Idx_Api
         return false;
     }
 
-    public function get_blacklist()
-    {
-        $blacklist = $this->idx_api('blacklist', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 60 * 15, 'GET', true);
-
-        return $blacklist;
-    }
-
     public function get_leads($timeframe = null, $start_date = '')
     {
         if(! empty($start_date)){

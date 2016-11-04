@@ -5,9 +5,9 @@ class Add_Uid_To_Idx_Pages
 {
     public $idx_api;
 
-    public function __construct(\IDX\Idx_Api $idx_api)
-    {
-        $this->idx_api = $idx_api;
+    public function __construct()
+    {   
+        $this->idx_api = new \IDX\Idx_Api();
 
         //If Migrate_Old_Table has not run, wait for it.
         $migrated = get_option('idx_migrated_old_table');

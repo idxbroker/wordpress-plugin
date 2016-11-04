@@ -5,10 +5,11 @@ use \Carbon\Carbon;
 use \Exception;
 
 class Dashboard_Widget {
-    public function __construct(Idx_Api $idx_api)
+    public function __construct()
     {
+        $this->idx_api = new Idx_Api();
+
         add_action('wp_dashboard_setup', array($this, 'add_dashboard_widget'));
-        $this->idx_api = $idx_api;
         add_action('wp_ajax_idx_dashboard_leads', array($this, 'leads_overview'));
         add_action('wp_ajax_idx_dashboard_listings', array($this, 'listings_overview'));
        

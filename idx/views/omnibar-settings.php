@@ -4,11 +4,10 @@ namespace IDX\Views;
 class Omnibar_Settings
 {
 
-    public function __construct($app, \IDX\Idx_Api $idx_api)
+    public function __construct()
     {
 
-        $this->app = $app;
-        $this->idx_api = $idx_api;
+        $this->idx_api = new \IDX\Idx_Api();
 
         //preload via javascript if first load of view
         add_action('wp_ajax_idx_preload_omnibar_settings_view', array($this, 'idx_preload_omnibar_settings_view'));
