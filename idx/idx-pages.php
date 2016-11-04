@@ -4,8 +4,9 @@ namespace IDX;
 class Idx_Pages
 {
 
-    public function __construct(Idx_Api $idx_api, $app)
-    {
+    public function __construct()
+    {   
+        $this->idx_api = new Idx_Api();
         //deletes all IDX pages for troubleshooting purposes
         // $this->delete_all_idx_pages();
 
@@ -23,8 +24,6 @@ class Idx_Pages
         add_action('save_post', array($this, 'set_wrapper_page'));
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
 
-        $this->idx_api = $idx_api;
-        $this->app = $app;
         //schedule an IDX page update via WP cron
         $this->schedule_idx_page_update();
         
@@ -33,7 +32,6 @@ class Idx_Pages
     }
 
     public $idx_api;
-    public $app;
 
     public function add_custom_schedule()
     {

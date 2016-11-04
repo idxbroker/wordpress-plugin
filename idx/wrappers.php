@@ -3,8 +3,9 @@ namespace IDX;
 
 class Wrappers
 {
-    public function __construct(Idx_Api $idx_api)
+    public function __construct()
     {
+        $this->idx_api = new Idx_Api();
         add_action('wp_ajax_create_dynamic_page', array($this, 'idx_ajax_create_dynamic_page'));
         add_action('wp_ajax_delete_dynamic_page', array($this, 'idx_ajax_delete_dynamic_page'));
         add_action('init', array($this, 'register_wrapper_post_type'));
@@ -12,7 +13,6 @@ class Wrappers
         add_action('wp_enqueue_scripts', array($this, 'wrapper_styles'));
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
         add_action('save_post', array($this, 'set_wrapper_page'));
-        $this->idx_api = $idx_api;
     }
 
     public $idx_api;

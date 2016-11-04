@@ -181,7 +181,6 @@ label {
     padding: 1rem;
     border-color: #dd3d36;
 }
-
 @media screen and (max-width: 800px) {
     h2 {
         float: none;

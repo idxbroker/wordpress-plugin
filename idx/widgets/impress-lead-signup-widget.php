@@ -24,6 +24,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             array(
                 'description' => __('Lead sign up form', 'idxbroker'),
                 'classname' => 'impress-idx-signup-widget',
+                'customize_selective_refresh' => true,
             )
         );
     }

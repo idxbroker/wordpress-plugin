@@ -22,14 +22,16 @@ class Idx_Broker_Plugin
 
     public function __construct()
     {
+        define( 'IMPRESS_IDX_URL', plugin_dir_url( __FILE__ ) );
+        define( 'IMPRESS_IDX_DIR', plugin_dir_path( __FILE__ ) );
 
         if ($this->php_version_check()) {
             //idx autoloader
             require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
             //composer autoload classes
             require_once 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-            //eval is used to prevent namespace errors in parsing with PHP < 5.3
-            eval('new IDX\Initiate_Plugin();');
+            
+            new IDX\Initiate_Plugin();
             /** Function that is executed when plugin is activated. **/
             register_activation_hook(__FILE__, array($this, 'idx_activate'));
             register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
@@ -78,8 +80,8 @@ class Idx_Broker_Plugin
         }
 
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
-        eval('$idx_api = new \IDX\Idx_Api();');
-        eval('$wrappers = new \IDX\Wrappers($idx_api);');
+        $idx_api = new \IDX\Idx_Api();
+        $wrappers = new \IDX\Wrappers($idx_api);
         $wrappers->register_wrapper_post_type();
 
         flush_rewrite_rules();
@@ -92,7 +94,7 @@ class Idx_Broker_Plugin
         wp_clear_scheduled_hook('idx_omnibar_get_locations');
 
         //disable scheduled IDX Page Update as well
-        eval('\IDX\Idx_Pages::unschedule_idx_page_update();');
+        \IDX\Idx_Pages::unschedule_idx_page_update();
     }
 
     public static function idx_uninstall()
@@ -103,9 +105,9 @@ class Idx_Broker_Plugin
             wp_trash_post($page_id);
         }
         //clear transients made by the plugin
-        eval('$idx_api = \IDX\Idx_Api;');
+        $idx_api = \IDX\Idx_Api;
         $idx_api->idx_clean_transients();
         //clean up db by removing all idx pages
-        eval('\IDX\Idx_Pages::delete_all_idx_pages();');
+        \IDX\Idx_Pages::delete_all_idx_pages();
     }
 }
