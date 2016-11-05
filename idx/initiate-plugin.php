@@ -49,6 +49,7 @@ class Initiate_Plugin
         new Review_Prompt();
         new Dashboard_Widget();
         new Backward_Compatibility\Add_Uid_To_Idx_Pages();
+        new Leads\Lead_Management();
 
         require_once(dirname(__FILE__) . '/leads/class-gravity-forms.php');
         //require_once(dirname(__FILE__) . '/leads/class-ninja-forms.php');
