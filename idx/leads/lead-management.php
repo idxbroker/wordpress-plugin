@@ -662,6 +662,9 @@ class Lead_Management {
 					<a href="#lead-traffic" class="mdl-tabs__tab">Traffic History</a>
 				</div>
 				<div class="mdl-tabs__panel is-active" id="lead-info">
+					<div class="lead-photo">
+						<?php $avatar_args = array( 'force_display' => true ); echo get_avatar($lead['email'], 256, '', false, $avatar_args); ?>
+					</div>
 					<form id="edit-lead" action="" method="post">
 						<h6>Account Information</h6>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -789,9 +792,7 @@ class Lead_Management {
 						<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 
 					</form>
-					<div class="lead-photo">
-						<?php $avatar_args = array( 'force_display' => true ); echo get_avatar($lead['email'], 256, '', false, $avatar_args); ?>
-					</div>
+					
 
 					<a href="<?php echo admin_url('admin.php?page=edit-lead'); ?>" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 						<i class="material-icons">add</i>
@@ -971,7 +972,7 @@ class Lead_Management {
 							$searches .= '</tr>';
 						}
 					} else {
-						$searches .= '<tr class="search-row"><td class="mdl-data-table__cell--non-numeric">No searches found</td></tr>';
+						$searches .= '<tr class="search-row"><td class="mdl-data-table__cell--non-numeric">No searches found</td><td class="mdl-data-table__cell--non-numeric"></td><td class="mdl-data-table__cell--non-numeric"></td><td class="mdl-data-table__cell--non-numeric"></td></tr>';
 					}
 
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-searches">';
@@ -987,7 +988,73 @@ class Lead_Management {
 						';
 					echo $searches;
 					echo '</tbody></table>';
+					echo '
+						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
+							<i class="material-icons">add</i>
+						</a>
+						';
 					?>
+					<div id="add-lead-search" style="display: none;">
+						<h5>Add Saved Search</h5>
+						<form action="" method="post" class="add-lead-search">
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" id="searchName" name="searchName" autofocus>
+								<label class="mdl-textfield__label" for="searchName">Search Name</label>
+							</div>
+							<div class="mdl-fieldgroup">
+								<label class="mdl-selectfield__label" for="idxID">MLS</label>
+								<div class="mdl-selectfield">
+									<select class="mdl-selectfield__select" id="idxID" name="idxID">
+										<?php echo self::approved_mls_select_list(); ?>
+									</select>
+								</div>
+							</div>
+							<div class="mdl-fieldgroup">
+								<label class="mdl-selectfield__label" for="idxID">Property Type</label>
+								<div class="mdl-selectfield">
+									<select class="mdl-selectfield__select" id="pt" name="pt">
+										<?php echo self::property_type_select_list(); ?>
+									</select>
+								</div>
+							</div>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" id="lp" name="lp">
+								<label class="mdl-textfield__label" for="lp">Price Min</label>
+							</div>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" id="hp" name="hp">
+								<label class="mdl-textfield__label" for="hp">Price Max</label>
+							</div>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" id="bd" name="bd">
+								<label class="mdl-textfield__label" for="bd">Beds</label>
+							</div>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" id="ba" name="ba">
+								<label class="mdl-textfield__label" for="ba">Baths</label>
+							</div>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" id="sqft" name="sqft">
+								<label class="mdl-textfield__label" for="sqft">Square Feet</label>
+							</div>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" id="acres" name="acres">
+								<label class="mdl-textfield__label" for="acres">Acres</label>
+							</div>
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+								<input class="mdl-textfield__input" type="text" id="add" name="add">
+								<label class="mdl-textfield__label" for="add">Max Days Listed</label>
+							</div>
+							<div class="mdl-fieldgroup">
+								<label for="receiveUpdates" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+									<input type="checkbox" id="receiveUpdates" name="receiveUpdates" class="mdl-switch__input" checked>
+									<span class="mdl-switch__label">Receive Property Updates Off/On</span>
+								</label>
+							</div><br />
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-search" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce('idx_lead_search_add_nonce'); ?>" type="submit">Save Search</button>
+							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
+						</form>
+					</div>
 				</div>
 				<div class="mdl-tabs__panel" id="lead-traffic">
 				<?php
@@ -1089,8 +1156,30 @@ class Lead_Management {
 			$mls_list .= '<option value="' . $mls['id'] . '">' . $mls['name'] . '</option>'; 
 		}
 
-		$mls_list .= '<option value="a000">Demo</option>';
+		if(empty($mls_list)) {
+			$mls_list .= '<option value="a000">Demo</option>';
+		}
+
 		return $mls_list;
+	}
+
+	/**
+	 * Output property types as select options
+	 */
+	private function property_type_select_list() {
+		$mls_array = $this->idx_api->approved_mls();
+
+		$pt_list = '';
+		foreach($mls_array as $mls) {
+			$pt_array = $this->idx_api->idx_api('propertytypes/' . $mls['id'], \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 7200, 'GET', true);
+			$pt_list .= '<option value="' . $pt_array['parentPt'] . '">' . $pt_array['mlsPropertyType'] . '</option>'; 
+		}
+
+		if(empty($pt_list)) {
+			$pt_list .= '<option value="sfr">sfr</option>';
+		}
+
+		return $pt_list;
 	}
 
 }
