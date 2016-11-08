@@ -988,11 +988,11 @@ class Lead_Management {
 						';
 					echo $searches;
 					echo '</tbody></table>';
-					echo '
-						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
-							<i class="material-icons">add</i>
-						</a>
-						';
+					// echo '
+					// 	<a href="#TB_inline?width=600&height=500&inlineId=add-lead-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
+					// 		<i class="material-icons">add</i>
+					// 	</a>
+					// 	';
 					?>
 					<div id="add-lead-search" style="display: none;">
 						<h5>Add Saved Search</h5>
