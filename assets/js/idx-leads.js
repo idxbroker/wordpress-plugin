@@ -180,7 +180,7 @@ jQuery(document).ready(function($) {
 		var note = $(this).serialize();
 		var id = $('button.add-note').data('id');
 		var nonce = $('button.add-note').data('nonce');
-		var display_note = $('#note').val();
+		var display_note = $('form.add-lead-note #note').val();
 		
 		$.ajax({
 			type: 'post',
@@ -198,9 +198,53 @@ jQuery(document).ready(function($) {
 					$('.mdl-data-table.lead-notes tbody').prepend( note_row );
 					$('.mdl-spinner').removeClass('is-active');
 					$('button.add-note').show();
-					$('#note').val('');
+					$('form.add-lead-note #note').val('');
 					tb_remove();
 				}
+			}
+		});
+		return false;
+	});
+
+	// edit lead note
+	$('a.edit-note').click( function() {
+		var note = $(this).data('note');
+		var noteid = $(this).data('noteid');
+
+		$('button.edit-note').attr('data-noteid', noteid);
+		$('form.edit-lead-note #note').focus();
+		$('form.edit-lead-note #note').val(note);
+	});
+
+	$('form.edit-lead-note').submit(function(e) {
+		e.preventDefault();
+		$('button.edit-note').hide();
+		$('.mdl-spinner').addClass('is-active');
+
+		var note = $(this).serialize();
+		var id = $('button.edit-note').data('id');
+		var noteid = $('button.edit-note').data('noteid');
+		var nonce = $('button.edit-note').data('nonce');
+		var display_note = $('form.edit-lead-note #note').val();
+		
+		$.ajax({
+			type: 'post',
+			url: IDXLeadAjax.ajaxurl,
+			data: {
+				action: 'idx_lead_note_edit',
+				note: note,
+				id: id,
+				noteid: noteid,
+				nonce: nonce
+			},
+			success: function( result ) {
+				var note_row = '<tr class="note-row note-id' + noteid + '"><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric note"><div class="render-note+' + noteid + '">' + display_note + '</div></td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-note-' + noteid + '" class="delete-note" data-id="' + id + '" data-noteid="' + noteid + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' + noteid + '">Delete Note</div></a></td></tr>';
+				$('tr.note-id-' + noteid).remove();
+				$('.mdl-data-table.lead-notes tbody').prepend( note_row );
+				$('.mdl-spinner').removeClass('is-active');
+				$('button.edit-note').show();
+				$('form.edit-lead-note #note').val('');
+				tb_remove();
 			}
 		});
 		return false;
@@ -241,15 +285,83 @@ jQuery(document).ready(function($) {
 				nonce: nonce
 			},
 			success: function( result ) {
-				if( $.isNumeric( result ) ) {
-					var property_row = '<tr class="property-row"><td class="mdl-data-table__cell--non-numeric property"><a href="' + detailsurl + '/' + id + '/' + result + '">' + property_name + '<div class="mdl-tooltip" data-mdl-for="view-property-' + result + '">View Property</div></a></td><td class="mdl-data-table__cell--non-numeric">' + updates + '</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + result + '" class="delete-property" data-id="' + id + '" data-listingid="' + result + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + result + '">Delete Note</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + result + '" id="edit-mw-' + result + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + result + '">Edit Property in Middleware</div></a></td></tr>';
+				if( result == 'success' ) {
+					if( $.isNumeric( result ) ) {
+						var property_row = '<tr class="property-row"><td class="mdl-data-table__cell--non-numeric property"><a href="' + detailsurl + '/' + id + '/' + result + '">' + property_name + '<div class="mdl-tooltip" data-mdl-for="view-property-' + result + '">View Property</div></a></td><td class="mdl-data-table__cell--non-numeric">' + updates + '</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + result + '" class="delete-property" data-id="' + id + '" data-listingid="' + result + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + result + '">Delete Note</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + result + '" id="edit-mw-' + result + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + result + '">Edit Property in Middleware</div></a></td></tr>';
 
-					$('.mdl-data-table.lead-property tbody').prepend( property_row );
-					$('.mdl-spinner').removeClass('is-active');
-					$('button.add-property').show();
-					$('#propertyName, #listingID').val('');
-					tb_remove();
+						$('.mdl-data-table.lead-property tbody').prepend( property_row );
+						$('.mdl-spinner').removeClass('is-active');
+						$('button.add-property').show();
+						$('#propertyName, #listingID').val('');
+						tb_remove();
+					}
 				}
+			}
+		});
+		return false;
+	});
+
+	// edit lead property
+	$('a.edit-property').click( function() {
+		var name = $(this).data('name');
+		var spid = $(this).data('spid');
+		var listingid = $(this).data('listingid');
+		var idxid = $(this).data('idxid');
+		var updates = $(this).data('updates');
+		var nonce = $(this).data('nonce');
+
+		$('button.edit-property').attr('data-spid', spid);
+		$('button.edit-property').attr('data-nonce', nonce);
+
+		$('form.edit-lead-property #propertyName').focus();
+		$('form.edit-lead-property #propertyName').val(name);
+		$('form.edit-lead-property #listingID').val(listingid);
+		
+		if(updates == 'y') {
+			$('form.edit-lead-property #receiveUpdates-edit').prop('checked', true);
+		}
+
+		$('form.edit-lead-property #idxID option').each(function(){
+			if($(this).val() == idxid) {
+				$(this).attr('selected','selected');
+			}
+		});
+	});
+
+	$('form.edit-lead-property').submit(function(e) {
+		e.preventDefault();
+		$('button.edit-property').hide();
+		$('.mdl-spinner').addClass('is-active');
+
+		var id = $('button.edit-property').data('id');
+		var name = $('form.edit-lead-property #propertyName').val();
+		var listingid = $('form.edit-lead-property #listingID').val();
+		var idxid = $('form.edit-lead-property #idxID').val();
+		var spid = $('button.edit-property').data('spid');
+		var updates = $('form.edit-lead-property #receiveUpdates-edit').val();
+		var nonce = $('button.edit-property').data('nonce');
+		var detailsurl = IDXLeadAjax.detailsurl;
+		
+		$.ajax({
+			type: 'post',
+			url: IDXLeadAjax.ajaxurl,
+			data: {
+				action: 'idx_lead_property_edit',
+				id: id,
+				name: name,
+				listingid: listingid,
+				idxid: idxid,
+				spid: spid,
+				updates: updates,
+				nonce: nonce
+			},
+			success: function( result ) {
+				var property_row = '<tr class="property-row property-id' + spid + '"><td class="mdl-data-table__cell--non-numeric"><a href="' + detailsurl + '/' + idxid + '/' + listingid + '">' + name + '</a></td><td class="mdl-data-table__cell--non-numeric property">' + updates +'</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + spid + '" class="delete-property" data-id="' + id + '" data-spid="' + spid + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + spid + '">Delete Property</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + spid + '" id="edit-mw-' + spid + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + spid + '">Edit Property in Middleware</div></a></td></tr>';
+				$('tr.property-id-' + spid).remove();
+				$('.mdl-data-table.lead-properties tbody').prepend( property_row );
+				$('.mdl-spinner').removeClass('is-active');
+				$('button.edit-property').show();
+				tb_remove();
 			}
 		});
 		return false;
