@@ -540,13 +540,14 @@ class Lead_Management {
 			}
 
 			$avatar_args = array(
+				'default' 		=> '404',
 				'force_display' => true
 			);
 
 			$nonce = wp_create_nonce('idx_lead_delete_nonce');
 
 			$leads .= '<tr class="lead-row">';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url('admin.php?page=edit-lead&leadID=' . $lead->id) . '">' . get_avatar($lead->email, 32, '', false, $avatar_args) . ' ' . $lead->firstName . ' ' . $lead->lastName . '</a></td>';
+			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url('admin.php?page=edit-lead&leadID=' . $lead->id) . '">' . get_avatar($lead->email, 32, '', 'Lead photo', $avatar_args) . ' ' . $lead->firstName . ' ' . $lead->lastName . '</a></td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . $lead->id . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $lead->phone . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $last_active . '</td>';
@@ -613,19 +614,19 @@ class Lead_Management {
 				<h6>Account Information</h6>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 					<input class="mdl-textfield__input" type="text" id="firstName" name="firstName">
-					<label class="mdl-textfield__label" for="firstName">First Name</label>
+					<label class="mdl-textfield__label" for="firstName">First Name <span class="is-required">(required)</span></label>
 				</div>
-				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 					<input class="mdl-textfield__input" type="text" id="lastName" name="lastName">
-					<label class="mdl-textfield__label" for="lastName">Last Name</label>
+					<label class="mdl-textfield__label" for="lastName">Last Name <span class="is-required">(required)</span></label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 					<input class="mdl-textfield__input" type="text" id="phone" name="phone">
 					<label class="mdl-textfield__label" for="phone">Phone</label>
 				</div><br />
-				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 					<input class="mdl-textfield__input" type="text" id="email" name="email">
-					<label class="mdl-textfield__label" for="email">Email</label>
+					<label class="mdl-textfield__label" for="email">Email <span class="is-required">(required)</span></label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 					<input class="mdl-textfield__input" type="text" id="email2" name="email2">
@@ -759,7 +760,7 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel is-active" id="lead-info">
 					<div class="lead-photo">
-						<?php $avatar_args = array( 'force_display' => true ); echo get_avatar($lead['email'], 256, '', false, $avatar_args); ?>
+						<?php $avatar_args = array( 'force_display' => true, 'default' => '404' ); echo get_avatar($lead['email'], 256, '', 'Lead photo', $avatar_args); ?>
 					</div>
 					<form id="edit-lead" action="" method="post">
 						<h6>Account Information</h6>
@@ -935,8 +936,9 @@ class Lead_Management {
 					echo $notes;
 					echo '</tbody></table>';
 					echo '
-						<a href="#TB_inline?width=600&height=350&inlineId=add-lead-note" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
+						<a href="#TB_inline?width=600&height=350&inlineId=add-lead-note" id="add-lead-note" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
+							<div class="mdl-tooltip" data-mdl-for="add-lead-note">Add Lead Note</div>
 						</a>
 						';
 					?>
@@ -1010,8 +1012,9 @@ class Lead_Management {
 					echo $properties;
 					echo '</tbody></table>';
 					echo '
-						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-property" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
+						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-property" id="add-lead-property" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
+							<div class="mdl-tooltip" data-mdl-for="add-lead-property">Add New Property</div>
 						</a>
 						';
 					?>
