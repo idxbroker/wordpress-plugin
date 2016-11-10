@@ -419,8 +419,7 @@ class Lead_Management {
 					'outputtype'   => 'json'
 				),
 				'sslverify' => false,
-				'body'		=> null,
-				'apiversion' => '1.2.3'
+				'body'		=> null
 			);
 			$response = wp_remote_request($api_url, $args);
 
@@ -746,7 +745,7 @@ class Lead_Management {
 				return;
 			}
 			// Get Lead info
-			$lead = $this->idx_api->idx_api('lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 7200, 'GET', true);
+			$lead = $this->idx_api->idx_api('lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 		?>
 			<h3>Edit Lead</h3>
 
@@ -903,7 +902,7 @@ class Lead_Management {
 					echo '<h6>Notes</h6>';
 
 					// order newest first
-					$notes_array = $this->idx_api->idx_api('note/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 7200, 'GET', true);
+					$notes_array = $this->idx_api->idx_api('note/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$notes_array = array_reverse($notes_array);
 					
 					$notes = '';
@@ -971,7 +970,7 @@ class Lead_Management {
 					echo '<h6>Saved Properties</h6>';
 
 					// order newest first
-					$properties_array = $this->idx_api->idx_api('property/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 7200, 'GET', true);
+					$properties_array = $this->idx_api->idx_api('property/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$properties_array = array_reverse($properties_array);
 
 					// Get details URL
@@ -1083,7 +1082,7 @@ class Lead_Management {
 					echo '<h6>Saved Searches</h6>';
 
 					// order newest first
-					$searches_array = $this->idx_api->idx_api('search/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 7200, 'GET', true);
+					$searches_array = $this->idx_api->idx_api('search/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$searches_array = (isset($searches_array['searchInformation'])) ? array_reverse($searches_array['searchInformation']) : null;
 					
 					$searches = '';
@@ -1202,7 +1201,7 @@ class Lead_Management {
 					echo '<h6>Traffic</h6>';
 
 					// order newest first
-					$traffic_array = $this->idx_api->idx_api('leadtraffic/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 7200, 'GET', true);
+					$traffic_array = $this->idx_api->idx_api('leadtraffic/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$traffic_array = array_reverse($traffic_array);
 					//$leads_array = array_slice(array_reverse($leads_array), 0, 5);
 					
@@ -1214,8 +1213,8 @@ class Lead_Management {
 
 						$traffic .= '<tr>';
 						$traffic .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
-						$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['page'] . '">' . substr($traffic_entry['page'], 0, 80) . '</td>';
-						$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['referrer'] . '">' . substr($traffic_entry['referrer'], 0, 80) . '</a></td>';
+						$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['page'] . '" target="_blank">' . substr($traffic_entry['page'], 0, 80) . '</td>';
+						$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['referrer'] . '" target="_blank">' . substr($traffic_entry['referrer'], 0, 80) . '</a></td>';
 						$traffic .= '</tr>';
 					}
 
