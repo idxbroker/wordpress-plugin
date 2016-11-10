@@ -21,7 +21,9 @@ jQuery(document).ready(function($) {
 		"dom": '<"table-filter"f>rt<"lead-table-controls mdl-shadow--2dp"lip>',
 		"oLanguage": {
 			"sSearch": ""
-		}
+		},
+		"sScrollX": "100%",
+		"sScrollXInner": "98%"
 	} );
 
 	$('.mdl-data-table.lead-notes').DataTable( {
@@ -43,7 +45,9 @@ jQuery(document).ready(function($) {
 		"dom": '<"table-filter"f>rt<"lead-table-controls mdl-shadow--2dp"lip>',
 		"oLanguage": {
 			"sSearch": ""
-		}
+		},
+		"sScrollX": "100%",
+		"sScrollXInner": "98%"
 	} );
 
 	$('.mdl-data-table.lead-properties').DataTable( {
@@ -65,7 +69,9 @@ jQuery(document).ready(function($) {
 		"dom": '<"search"f>rt<"lead-table-controls mdl-shadow--2dp"lip>',
 		"oLanguage": {
 			"sSearch": ""
-		}
+		},
+		"sScrollX": "100%",
+		"sScrollXInner": "98%"
 	} );
 
 	$('.mdl-data-table.lead-searches').DataTable( {
@@ -87,7 +93,9 @@ jQuery(document).ready(function($) {
 		"dom": '<"search"f>rt<"lead-table-controls mdl-shadow--2dp"lip>',
 		"oLanguage": {
 			"sSearch": ""
-		}
+		},
+		"sScrollX": "100%",
+		"sScrollXInner": "98%"
 	} );
 
 	$('.mdl-data-table.lead-traffic').DataTable( {
@@ -105,7 +113,9 @@ jQuery(document).ready(function($) {
 		"dom": '<"search"f>rt<"lead-table-controls mdl-shadow--2dp"lip>',
 		"oLanguage": {
 			"sSearch": ""
-		}
+		},
+		"sScrollX": "100%",
+		"sScrollXInner": "98%"
 	} );
 
 	// add mdl classes to table length select

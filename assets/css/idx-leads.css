@@ -37,6 +37,12 @@ a:focus {
 	position: absolute;
 	top: 100%;
 }
+#add-lead .mdl-textfield,
+#add-lead .mdl-fieldgroup,
+#edit-lead .mdl-textfield,
+#edit-lead .mdl-fieldgroup {
+	margin: 0 40px 0 0;
+}
 /* Override WP Admin input style */
 .mdl-textfield__input[type="text"] {
 	font-family: 'Roboto','Helvetica','Arial',sans-serif;
@@ -62,9 +68,6 @@ a:focus {
 	color: rgba(0, 0, 0, 0.87);
 	border: none;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-#edit-lead select {
-	width: 100%;
 }
 
 /* Remove focus */
@@ -113,6 +116,8 @@ a:focus {
 	border-top: .375em solid rgba(0, 0, 0, 0.12);
 	pointer-events: none;
 }
+#add-lead .mdl-selectfield select,
+#edit-lead .mdl-selectfield select,
 #TB_window .mdl-selectfield select {
 	width: 100%;
 }
@@ -121,12 +126,18 @@ a:focus {
 	font-size: 13px;
 }
 .dataTables_length.mdl-selectfield:after {
-	right: 3.4em;
+	right: 3.3em;
+	bottom: 1.2em;
 }
 .mdl-radiofield span.mdl-label {
 	font-size: 13px;
 	display: block;
 }
+/** Required input */
+.mdl-textfield.is-focused span.is-required {
+	color: red;
+}
+
 /** MDL tabs - override WP core styles */
 .mdl-tabs a:focus {
 	box-shadow: none;
@@ -155,23 +166,23 @@ a:focus {
 	display: inline-block;
 	border: none;
 	padding: 10px 0;
-	border-bottom: solid 1px rgb(37, 104, 173);
+	border-bottom: solid 1px rgba(0,0,0,0.13);
 	transition: all 0.3s cubic-bezier(.64,.09,.08,1);
 	box-shadow: none;
-	color: rgb(37, 104, 173);
+	color: rgb(142, 198, 65);
 }
 .dataTables_filter input:focus {
-	background: linear-gradient(to bottom, rgba(255,255,255,0) 96%, rgb(37, 104, 173) 4%);
+	background: linear-gradient(to bottom, rgba(255,255,255,0) 96%, rgb(142, 198, 65) 4%);
 	background-position: -200px 0;
 	background-size: 200px 100%;
 	background-repeat: no-repeat;
-
+	border: none;
     box-shadow: none;
     outline: none;
     background-position: 0 0;
 }
 .dataTables_filter input:focus::-webkit-input-placeholder {
-	color: rgb(37, 104, 173);
+	color: rgb(142, 198, 65);
 	font-size: 11px;
 	transform: translateY(-20px);
 	visibility: visible !important;
