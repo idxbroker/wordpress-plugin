@@ -129,6 +129,29 @@ jQuery(document).ready(function($) {
 	// add lead
 	$('#add-lead').submit(function(e) {
 		e.preventDefault();
+
+		var firstname = $('#firstName').val();
+		if(firstname === '') {
+			$('#firstName').parent().addClass('is-dirty');
+			$('#firstName').focus();
+			$('#add-lead .error-incomplete').show();
+			return false;
+		}
+		var lastname = $('#lastName').val();
+		if(lastname === '') {
+			$('#lastName').parent().addClass('is-dirty');
+			$('#lastName').focus();
+			$('#add-lead .error-incomplete').show();
+			return false;
+		}
+		var email = $('#email').val();
+		if(email === '') {
+			$('#email').parent().addClass('is-dirty');
+			$('#email').focus();
+			$('#add-lead .error-incomplete').show();
+			return false;
+		}
+
 		$('button.add-lead').hide();
 		$('.mdl-spinner').addClass('is-active');
 
@@ -156,6 +179,29 @@ jQuery(document).ready(function($) {
 	// edit lead
 	$('#edit-lead').submit(function(e) {
 		e.preventDefault();
+
+		var firstname = $('#firstName').val();
+		if(firstname === '') {
+			$('#firstName').parent().addClass('is-dirty');
+			$('#firstName').focus();
+			$('#edit-lead .error-incomplete').show();
+			return false;
+		}
+		var lastname = $('#lastName').val();
+		if(lastname === '') {
+			$('#lastName').parent().addClass('is-dirty');
+			$('#lastName').focus();
+			$('#edit-lead .error-incomplete').show();
+			return false;
+		}
+		var email = $('#email').val();
+		if(email === '') {
+			$('#email').parent().addClass('is-dirty');
+			$('#email').focus();
+			$('#edit-lead .error-incomplete').show();
+			return false;
+		}
+
 		$('button.edit-lead').hide();
 		$('.mdl-spinner').addClass('is-active');
 
@@ -184,6 +230,18 @@ jQuery(document).ready(function($) {
 	// add lead note
 	$('form.add-lead-note').submit(function(e) {
 		e.preventDefault();
+
+		var notefield = $('.add-lead-note #note').val();
+
+		if(!notefield) {
+			$('.add-lead-note #note').parent().addClass('is-dirty');
+			$('.add-lead-note #note').focus();
+			$('.add-lead-note .error-incomplete').show();
+			return false;
+		} else {
+			$('.add-lead-note .error-incomplete').hide();
+		}
+
 		$('button.add-note').hide();
 		$('.mdl-spinner').addClass('is-active');
 
@@ -228,6 +286,18 @@ jQuery(document).ready(function($) {
 
 	$('form.edit-lead-note').submit(function(e) {
 		e.preventDefault();
+
+		var notefield = $('.edit-lead-note #note').val();
+
+		if(!notefield) {
+			$('.edit-lead-note #note').parent().addClass('is-dirty');
+			$('.edit-lead-note #note').focus();
+			$('.edit-lead-note .error-incomplete').show();
+			return false;
+		} else {
+			$('.edit-lead-note .error-incomplete').hide();
+		}
+
 		$('button.edit-note').hide();
 		$('.mdl-spinner').addClass('is-active');
 

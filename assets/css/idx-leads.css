@@ -13,7 +13,12 @@ a:focus {
 }
 .hide {display: none;}
 .toplevel_page_leads table.mdl-data-table,
-.leads_page_edit-lead table.mdl-data-table { width: 98%; }
+.leads_page_edit-lead table.mdl-data-table {
+	width: 98% !important;
+}
+.dataTables_scrollHeadInner {
+	width: 100% !important;
+}
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
@@ -22,6 +27,10 @@ a:focus {
 .leads_page_edit-lead a {
 	text-decoration: none;
 	font-weight: 400;
+}
+/*.mdl-tabs.is-upgraded .mdl-tabs__panel.is-active,*/
+.dataTables_wrapper {
+	width: 98%;
 }
 .toplevel_page_leads table.mdl-data-table .avatar {
 	margin-right: 0.7em;
@@ -134,9 +143,17 @@ a:focus {
 	font-size: 13px;
 	display: block;
 }
-/** Required input */
+/** Error / Required input */
+.mdl-textfield.is-dirty span.is-required {
+	display: none;
+}
 .mdl-textfield.is-focused span.is-required {
 	color: red;
+	display: inline-block;
+}
+.error-incomplete {
+	color: red;
+	margin: 1em 0;
 }
 
 /** MDL tabs - override WP core styles */

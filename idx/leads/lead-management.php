@@ -734,6 +734,7 @@ class Lead_Management {
 
 				<input type="hidden" name="action" value="idx_lead_add" />
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead" data-nonce="<?php echo wp_create_nonce('idx_lead_add_nonce'); ?>" type="submit">Save Lead</button>
+				<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 				<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 
 			</form>
@@ -765,11 +766,11 @@ class Lead_Management {
 						<h6>Account Information</h6>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 							<input class="mdl-textfield__input" type="text" id="firstName" name="firstName" value="<?php echo ($lead['firstName']) ? $lead['firstName'] : '';?>">
-							<label class="mdl-textfield__label" for="firstName">First Name</label>
+							<label class="mdl-textfield__label" for="firstName">First Name <span class="is-required">(required)</span></label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 							<input class="mdl-textfield__input" type="text" id="lastName" name="lastName" value="<?php echo ($lead['lastName']) ? $lead['lastName'] : '';?>">
-							<label class="mdl-textfield__label" for="lastName">Last Name</label>
+							<label class="mdl-textfield__label" for="lastName">Last Name <span class="is-required">(required)</span></label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 							<input class="mdl-textfield__input" type="text" id="phone" name="phone" value="<?php echo ($lead['phone']) ? $lead['phone'] : '';?>">
@@ -777,7 +778,7 @@ class Lead_Management {
 						</div><br />
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 							<input class="mdl-textfield__input" type="text" id="email" name="email" value="<?php echo ($lead['email']) ? $lead['email'] : '';?>">
-							<label class="mdl-textfield__label" for="email">Email</label>
+							<label class="mdl-textfield__label" for="email">Email <span class="is-required">(required)</span></label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 							<input class="mdl-textfield__input" type="text" id="email2" name="email2" value="<?php echo ($lead['email2']) ? $lead['email2'] : '';?>">
@@ -885,6 +886,7 @@ class Lead_Management {
 						<br />
 
 						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce('idx_lead_edit_nonce'); ?>" data-lead-id="<?php echo $lead_id; ?>" type="submit">Save Lead</button>
+						<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 						<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 
 					</form>
@@ -935,9 +937,9 @@ class Lead_Management {
 					echo $notes;
 					echo '</tbody></table>';
 					echo '
-						<a href="#TB_inline?width=600&height=350&inlineId=add-lead-note" id="add-lead-note" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
+						<a href="#TB_inline?width=600&height=350&inlineId=add-lead-note" id="add-lead-note-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
-							<div class="mdl-tooltip" data-mdl-for="add-lead-note">Add Lead Note</div>
+							<div class="mdl-tooltip" data-mdl-for="add-lead-note-btn">Add Lead Note</div>
 						</a>
 						';
 					?>
@@ -949,6 +951,7 @@ class Lead_Management {
 								<label class="mdl-textfield__label" for="note">Note</label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce('idx_lead_note_add_nonce'); ?>" type="submit">Save Note</button>
+							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 						</form>
 					</div>
@@ -961,6 +964,7 @@ class Lead_Management {
 								<label class="mdl-textfield__label" for="note">Note</label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce('idx_lead_note_edit_nonce'); ?>" type="submit">Save Note</button>
+							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 						</form>
 					</div>
@@ -1011,9 +1015,9 @@ class Lead_Management {
 					echo $properties;
 					echo '</tbody></table>';
 					echo '
-						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-property" id="add-lead-property" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
+						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-property" id="add-lead-property-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
-							<div class="mdl-tooltip" data-mdl-for="add-lead-property">Add New Property</div>
+							<div class="mdl-tooltip" data-mdl-for="add-lead-property-btn">Add New Property</div>
 						</a>
 						';
 					?>
