@@ -735,6 +735,7 @@ class Lead_Management {
 				<input type="hidden" name="action" value="idx_lead_add" />
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead" data-nonce="<?php echo wp_create_nonce('idx_lead_add_nonce'); ?>" type="submit">Save Lead</button>
 				<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
+				<div class="error-fail" style="display: none;">Lead addition failed. Check all required fields or try again later.</div>
 				<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 
 			</form>
@@ -887,6 +888,7 @@ class Lead_Management {
 
 						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce('idx_lead_edit_nonce'); ?>" data-lead-id="<?php echo $lead_id; ?>" type="submit">Save Lead</button>
 						<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
+						<div class="error-fail" style="display: none;">Lead update failed. Check all required fields or try again later.</div>
 						<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 
 					</form>
@@ -946,12 +948,13 @@ class Lead_Management {
 					<div id="add-lead-note" style="display: none;">
 						<h5>Add Note</h5>
 						<form action="" method="post" class="add-lead-note">
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 								<textarea class="mdl-textfield__input" type="text" rows="4" id="note" name="note" autofocus></textarea>
-								<label class="mdl-textfield__label" for="note">Note</label>
+								<label class="mdl-textfield__label" for="note">Note <span class="is-required">(required)</span></label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce('idx_lead_note_add_nonce'); ?>" type="submit">Save Note</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
+							<div class="error-fail" style="display: none;">Lead note addition failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 						</form>
 					</div>
@@ -959,12 +962,13 @@ class Lead_Management {
 					<div id="edit-lead-note" style="display: none;">
 						<h5>Edit Note</h5>
 						<form action="" method="post" class="edit-lead-note">
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 								<textarea class="mdl-textfield__input" type="text" rows="4" id="note" name="note" value="" autofocus></textarea>
-								<label class="mdl-textfield__label" for="note">Note</label>
+								<label class="mdl-textfield__label" for="note">Note <span class="is-required">(required)</span></label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce('idx_lead_note_edit_nonce'); ?>" type="submit">Save Note</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
+							<div class="error-fail" style="display: none;">Lead note update failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 						</form>
 					</div>
@@ -1024,9 +1028,9 @@ class Lead_Management {
 					<div id="add-lead-property" style="display: none;">
 						<h5>Add Property</h5>
 						<form action="" method="post" class="add-lead-property">
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 								<input class="mdl-textfield__input" type="text" id="propertyName" name="propertyName" autofocus>
-								<label class="mdl-textfield__label" for="propertyName">Name</label>
+								<label class="mdl-textfield__label" for="propertyName">Name <span class="is-required">(required)</span></label>
 							</div>
 							<div class="mdl-fieldgroup">
 								<label class="mdl-selectfield__label" for="idxID">MLS</label>
@@ -1036,9 +1040,9 @@ class Lead_Management {
 									</select>
 								</div>
 							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 								<input class="mdl-textfield__input" type="text" id="listingID" name="listingID">
-								<label class="mdl-textfield__label" for="property">MLS ID</label>
+								<label class="mdl-textfield__label" for="property">MLS ID <span class="is-required">(required)</span></label>
 							</div>
 							<div class="mdl-fieldgroup">
 								<label for="receiveUpdates" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
@@ -1047,6 +1051,8 @@ class Lead_Management {
 								</label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-property" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce('idx_lead_property_add_nonce'); ?>" type="submit">Save Property</button>
+							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
+							<div class="error-fail" style="display: none;">Lead saved property addition failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 						</form>
 					</div>
@@ -1054,9 +1060,9 @@ class Lead_Management {
 					<div id="edit-lead-property" style="display: none;">
 						<h5>Edit Property</h5>
 						<form action="" method="post" class="edit-lead-property">
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 								<input class="mdl-textfield__input" type="text" id="propertyName" name="propertyName" autofocus>
-								<label class="mdl-textfield__label" for="propertyName">Name</label>
+								<label class="mdl-textfield__label" for="propertyName">Name <span class="is-required">(required)</span></label>
 							</div>
 							<div class="mdl-fieldgroup">
 								<label class="mdl-selectfield__label" for="idxID">MLS</label>
@@ -1066,9 +1072,9 @@ class Lead_Management {
 									</select>
 								</div>
 							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
 								<input class="mdl-textfield__input" type="text" id="listingID" name="listingID">
-								<label class="mdl-textfield__label" for="property">MLS ID</label>
+								<label class="mdl-textfield__label" for="property">MLS ID <span class="is-required">(required)</span></label>
 							</div>
 							<div class="mdl-fieldgroup">
 								<label for="receiveUpdates-edit" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
@@ -1077,6 +1083,8 @@ class Lead_Management {
 								</label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-property" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce('idx_lead_property_edit_nonce'); ?>" type="submit">Save Property</button>
+							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
+							<div class="error-fail" style="display: none;">Lead saved property update failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 						</form>
 					</div>

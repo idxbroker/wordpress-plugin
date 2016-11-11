@@ -122,6 +122,7 @@ jQuery(document).ready(function($) {
 	$('.dataTables_length').addClass('mdl-selectfield');
 	$('.dataTables_length select').addClass('mdl-selectfield__select');
 
+	// add placeholder to table filter
 	$('.dataTables_filter input').attr({
 		placeholder: 'Search'
 	});
@@ -152,6 +153,7 @@ jQuery(document).ready(function($) {
 			return false;
 		}
 
+		$('#add-lead .error-fail').hide();
 		$('button.add-lead').hide();
 		$('.mdl-spinner').addClass('is-active');
 
@@ -170,6 +172,10 @@ jQuery(document).ready(function($) {
 			success: function( result ) {
 				if( $.isNumeric( result ) ) {
 					window.location.href = leadurl + result;
+				} else {
+					$('#add-lead .error-fail').show();
+					$('button.add-lead').show();
+					$('.mdl-spinner').removeClass('is-active');
 				}
 			}
 		});
@@ -202,6 +208,7 @@ jQuery(document).ready(function($) {
 			return false;
 		}
 
+		$('#edit-lead .error-fail').hide();
 		$('button.edit-lead').hide();
 		$('.mdl-spinner').addClass('is-active');
 
@@ -221,6 +228,10 @@ jQuery(document).ready(function($) {
 			success: function( result ) {
 				if( result == 'success' ) {
 					window.location.reload(true);
+				} else {
+					$('#edit-lead .error-fail').show();
+					$('button.edit-lead').show();
+					$('.mdl-spinner').removeClass('is-active');
 				}
 			}
 		});
@@ -240,6 +251,7 @@ jQuery(document).ready(function($) {
 			return false;
 		} else {
 			$('.add-lead-note .error-incomplete').hide();
+			$('.add-lead-note .error-fail').hide();
 		}
 
 		$('button.add-note').hide();
@@ -268,6 +280,8 @@ jQuery(document).ready(function($) {
 					$('button.add-note').show();
 					$('form.add-lead-note #note').val('');
 					tb_remove();
+				} else {
+					$('.add-lead-note .error-fail').show();
 				}
 			}
 		});
@@ -296,6 +310,7 @@ jQuery(document).ready(function($) {
 			return false;
 		} else {
 			$('.edit-lead-note .error-incomplete').hide();
+			$('.edit-lead-note .error-fail').hide();
 		}
 
 		$('button.edit-note').hide();
@@ -318,13 +333,17 @@ jQuery(document).ready(function($) {
 				nonce: nonce
 			},
 			success: function( result ) {
-				var note_row = '<tr class="note-row note-id' + noteid + '"><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric note"><div class="render-note+' + noteid + '">' + display_note + '</div></td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-note-' + noteid + '" class="delete-note" data-id="' + id + '" data-noteid="' + noteid + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' + noteid + '">Delete Note</div></a></td></tr>';
-				$('tr.note-id-' + noteid).remove();
-				$('.mdl-data-table.lead-notes tbody').prepend( note_row );
-				$('.mdl-spinner').removeClass('is-active');
-				$('button.edit-note').show();
-				$('form.edit-lead-note #note').val('');
-				tb_remove();
+				if( result == 'success' ) {
+					var note_row = '<tr class="note-row note-id' + noteid + '"><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric note"><div class="render-note+' + noteid + '">' + display_note + '</div></td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-note-' + noteid + '" class="delete-note" data-id="' + id + '" data-noteid="' + noteid + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' + noteid + '">Delete Note</div></a></td></tr>';
+					$('tr.note-id-' + noteid).remove();
+					$('.mdl-data-table.lead-notes tbody').prepend( note_row );
+					$('.mdl-spinner').removeClass('is-active');
+					$('button.edit-note').show();
+					$('form.edit-lead-note #note').val('');
+					tb_remove();
+				} else {
+					$('.edit-lead-note .error-fail').show();
+				}
 			}
 		});
 		return false;
@@ -333,18 +352,38 @@ jQuery(document).ready(function($) {
 	// add lead property
 	$('form.add-lead-property').submit(function(e) {
 		e.preventDefault();
+		
+		var id = $('button.add-property').data('id');
+		var nonce = $('button.add-property').data('nonce');
+		var property_name = $('.add-lead-property #propertyName').val();
+		var idxid = $('.add-lead-property #idxID').val();
+		var listingid = $('.add-lead-property #listingID').val();
+		var updates = $('.add-lead-property #receiveUpdates').val();
+		var detailsurl = IDXLeadAjax.detailsurl;
+
+		if(!property_name) {
+			$('.add-lead-property #propertyName').parent().addClass('is-dirty');
+			$('.add-lead-property #propertyName').focus();
+			$('.add-lead-property .error-incomplete').show();
+			return false;
+		} if(!idxid) {
+			$('.add-lead-property #idxID').parent().addClass('is-dirty');
+			$('.add-lead-property #idxID').focus();
+			$('.add-lead-property .error-incomplete').show();
+			return false;
+		} if(!listingid) {
+			$('.add-lead-property #listingID').parent().addClass('is-dirty');
+			$('.add-lead-property #listingID').focus();
+			$('.add-lead-property .error-incomplete').show();
+			return false;
+		} else {
+			$('.add-lead-property .error-incomplete').hide();
+			$('.add-lead-property .error-fail').hide();
+		}
+
 		$('button.add-property').hide();
 		$('.mdl-spinner').addClass('is-active');
 
-		var id = $('button.add-property').data('id');
-		var nonce = $('button.add-property').data('nonce');
-
-		var property_name = $('#propertyName').val();
-		var idxid = $('#idxID').val();
-		var listingid = $('#listingID').val();
-		var updates = $('#receiveUpdates').val();
-
-		var detailsurl = IDXLeadAjax.detailsurl;
 		
 		if(updates === 'on') {
 			updates = 'y';
@@ -365,16 +404,16 @@ jQuery(document).ready(function($) {
 				nonce: nonce
 			},
 			success: function( result ) {
-				if( result == 'success' ) {
-					if( $.isNumeric( result ) ) {
-						var property_row = '<tr class="property-row"><td class="mdl-data-table__cell--non-numeric property"><a href="' + detailsurl + '/' + id + '/' + result + '">' + property_name + '<div class="mdl-tooltip" data-mdl-for="view-property-' + result + '">View Property</div></a></td><td class="mdl-data-table__cell--non-numeric">' + updates + '</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + result + '" class="delete-property" data-id="' + id + '" data-listingid="' + result + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + result + '">Delete Note</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + result + '" id="edit-mw-' + result + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + result + '">Edit Property in Middleware</div></a></td></tr>';
+				if( $.isNumeric( result ) ) {
+					var property_row = '<tr class="property-row"><td class="mdl-data-table__cell--non-numeric property"><a href="' + detailsurl + '/' + id + '/' + result + '">' + property_name + '<div class="mdl-tooltip" data-mdl-for="view-property-' + result + '">View Property</div></a></td><td class="mdl-data-table__cell--non-numeric">' + updates + '</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + result + '" class="delete-property" data-id="' + id + '" data-listingid="' + result + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + result + '">Delete Note</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + result + '" id="edit-mw-' + result + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + result + '">Edit Property in Middleware</div></a></td></tr>';
 
-						$('.mdl-data-table.lead-property tbody').prepend( property_row );
-						$('.mdl-spinner').removeClass('is-active');
-						$('button.add-property').show();
-						$('#propertyName, #listingID').val('');
-						tb_remove();
-					}
+					$('.mdl-data-table.lead-properties tbody').prepend( property_row );
+					$('.mdl-spinner').removeClass('is-active');
+					$('button.add-property').show();
+					$('#propertyName, #listingID').val('');
+					tb_remove();
+				} else {
+					$('.add-lead-property .error-fail').show();
 				}
 			}
 		});
@@ -410,6 +449,7 @@ jQuery(document).ready(function($) {
 
 	$('form.edit-lead-property').submit(function(e) {
 		e.preventDefault();
+
 		$('button.edit-property').hide();
 		$('.mdl-spinner').addClass('is-active');
 
@@ -422,6 +462,26 @@ jQuery(document).ready(function($) {
 		var nonce = $('button.edit-property').data('nonce');
 		var detailsurl = IDXLeadAjax.detailsurl;
 		
+		if(!name) {
+			$('.edit-lead-property #propertyName').parent().addClass('is-dirty');
+			$('.edit-lead-property #propertyName').focus();
+			$('.edit-lead-property .error-incomplete').show();
+			return false;
+		} if(!idxid) {
+			$('.edit-lead-property #idxID').parent().addClass('is-dirty');
+			$('.edit-lead-property #idxID').focus();
+			$('.edit-lead-property .error-incomplete').show();
+			return false;
+		} if(!listingid) {
+			$('.edit-lead-property #listingID').parent().addClass('is-dirty');
+			$('.edit-lead-property #listingID').focus();
+			$('.edit-lead-property .error-incomplete').show();
+			return false;
+		} else {
+			$('.edit-lead-property .error-incomplete').hide();
+			$('.edit-lead-property .error-fail').hide();
+		}
+
 		$.ajax({
 			type: 'post',
 			url: IDXLeadAjax.ajaxurl,
@@ -436,12 +496,16 @@ jQuery(document).ready(function($) {
 				nonce: nonce
 			},
 			success: function( result ) {
-				var property_row = '<tr class="property-row property-id' + spid + '"><td class="mdl-data-table__cell--non-numeric"><a href="' + detailsurl + '/' + idxid + '/' + listingid + '">' + name + '</a></td><td class="mdl-data-table__cell--non-numeric property">' + updates +'</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + spid + '" class="delete-property" data-id="' + id + '" data-spid="' + spid + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + spid + '">Delete Property</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + spid + '" id="edit-mw-' + spid + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + spid + '">Edit Property in Middleware</div></a></td></tr>';
-				$('tr.property-id-' + spid).remove();
-				$('.mdl-data-table.lead-properties tbody').prepend( property_row );
-				$('.mdl-spinner').removeClass('is-active');
-				$('button.edit-property').show();
-				tb_remove();
+				if( result == 'success' ) {
+					var property_row = '<tr class="property-row property-id' + spid + '"><td class="mdl-data-table__cell--non-numeric"><a href="' + detailsurl + '/' + idxid + '/' + listingid + '">' + name + '</a></td><td class="mdl-data-table__cell--non-numeric property">' + updates +'</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + spid + '" class="delete-property" data-id="' + id + '" data-spid="' + spid + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + spid + '">Delete Property</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + spid + '" id="edit-mw-' + spid + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + spid + '">Edit Property in Middleware</div></a></td></tr>';
+					$('tr.property-id-' + spid).remove();
+					$('.mdl-data-table.lead-properties tbody').prepend( property_row );
+					$('.mdl-spinner').removeClass('is-active');
+					$('button.edit-property').show();
+					tb_remove();
+				} else {
+					$('.edit-lead-property .error-fail').show();
+				}
 			}
 		});
 		return false;
