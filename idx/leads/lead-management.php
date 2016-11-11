@@ -1045,8 +1045,8 @@ class Lead_Management {
 								<label class="mdl-textfield__label" for="property">MLS ID <span class="is-required">(required)</span></label>
 							</div>
 							<div class="mdl-fieldgroup">
-								<label for="receiveUpdates" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-									<input type="checkbox" id="receiveUpdates" name="receiveUpdates" class="mdl-switch__input" checked>
+								<label for="receiveUpdates-add" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+									<input type="checkbox" id="receiveUpdates-add" name="receiveUpdates" class="mdl-switch__input" checked>
 									<span class="mdl-switch__label">Receive Property Updates Off/On</span>
 								</label>
 							</div><br />

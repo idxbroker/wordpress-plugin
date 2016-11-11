@@ -55,7 +55,7 @@ jQuery(document).ready(function($) {
 		"bSort": true,
 		"bPaginate":true,
 		"iDisplayLength": 10,
-		"order": [[ 0, "desc" ]],
+		"order": [[ 2, "desc" ]],
 		"columnDefs": [
 			{
 				"targets": [ 0, 1, 2, 3 ],
@@ -358,7 +358,7 @@ jQuery(document).ready(function($) {
 		var property_name = $('.add-lead-property #propertyName').val();
 		var idxid = $('.add-lead-property #idxID').val();
 		var listingid = $('.add-lead-property #listingID').val();
-		var updates = $('.add-lead-property #receiveUpdates').val();
+		var update = $('.add-lead-property #receiveUpdates-add').val();
 		var detailsurl = IDXLeadAjax.detailsurl;
 
 		if(!property_name) {
@@ -385,7 +385,7 @@ jQuery(document).ready(function($) {
 		$('.mdl-spinner').addClass('is-active');
 
 		
-		if(updates === 'on') {
+		if(update === 'on') {
 			updates = 'y';
 		} else {
 			updates ='n';
@@ -458,7 +458,7 @@ jQuery(document).ready(function($) {
 		var listingid = $('form.edit-lead-property #listingID').val();
 		var idxid = $('form.edit-lead-property #idxID').val();
 		var spid = $('button.edit-property').data('spid');
-		var updates = $('form.edit-lead-property #receiveUpdates-edit').val();
+		var update = $('form.edit-lead-property #receiveUpdates-edit').val();
 		var nonce = $('button.edit-property').data('nonce');
 		var detailsurl = IDXLeadAjax.detailsurl;
 		
@@ -480,6 +480,12 @@ jQuery(document).ready(function($) {
 		} else {
 			$('.edit-lead-property .error-incomplete').hide();
 			$('.edit-lead-property .error-fail').hide();
+		}
+
+		if(update === 'on') {
+			updates = 'y';
+		} else {
+			updates ='n';
 		}
 
 		$.ajax({
