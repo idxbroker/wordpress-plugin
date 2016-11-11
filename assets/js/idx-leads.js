@@ -358,7 +358,6 @@ jQuery(document).ready(function($) {
 		var property_name = $('.add-lead-property #propertyName').val();
 		var idxid = $('.add-lead-property #idxID').val();
 		var listingid = $('.add-lead-property #listingID').val();
-		var update = $('.add-lead-property #receiveUpdates-add').val();
 		var detailsurl = IDXLeadAjax.detailsurl;
 
 		if(!property_name) {
@@ -384,11 +383,12 @@ jQuery(document).ready(function($) {
 		$('button.add-property').hide();
 		$('.mdl-spinner').addClass('is-active');
 
-		
-		if(update === 'on') {
+		if($('.add-lead-property #receiveUpdates-add').parent().hasClass('is-checked')) {
 			updates = 'y';
+			update_nice = 'Yes';
 		} else {
-			updates ='n';
+			updates = 'n';
+			update_nice = 'No';
 		}
 
 		$.ajax({
@@ -405,7 +405,7 @@ jQuery(document).ready(function($) {
 			},
 			success: function( result ) {
 				if( $.isNumeric( result ) ) {
-					var property_row = '<tr class="property-row"><td class="mdl-data-table__cell--non-numeric property"><a href="' + detailsurl + '/' + id + '/' + result + '">' + property_name + '<div class="mdl-tooltip" data-mdl-for="view-property-' + result + '">View Property</div></a></td><td class="mdl-data-table__cell--non-numeric">' + updates + '</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + result + '" class="delete-property" data-id="' + id + '" data-listingid="' + result + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + result + '">Delete Note</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + result + '" id="edit-mw-' + result + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + result + '">Edit Property in Middleware</div></a></td></tr>';
+					var property_row = '<tr class="property-row"><td class="mdl-data-table__cell--non-numeric property"><a href="' + detailsurl + '/' + id + '/' + result + '">' + property_name + '<div class="mdl-tooltip" data-mdl-for="view-property-' + result + '">View Property</div></a></td><td class="mdl-data-table__cell--non-numeric">' + update_nice + '</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + result + '" class="delete-property" data-id="' + id + '" data-listingid="' + result + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + result + '">Delete Note</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + result + '" id="edit-mw-' + result + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + result + '">Edit Property in Middleware</div></a></td></tr>';
 
 					$('.mdl-data-table.lead-properties tbody').prepend( property_row );
 					$('.mdl-spinner').removeClass('is-active');
@@ -458,7 +458,6 @@ jQuery(document).ready(function($) {
 		var listingid = $('form.edit-lead-property #listingID').val();
 		var idxid = $('form.edit-lead-property #idxID').val();
 		var spid = $('button.edit-property').data('spid');
-		var update = $('form.edit-lead-property #receiveUpdates-edit').val();
 		var nonce = $('button.edit-property').data('nonce');
 		var detailsurl = IDXLeadAjax.detailsurl;
 		
@@ -482,10 +481,12 @@ jQuery(document).ready(function($) {
 			$('.edit-lead-property .error-fail').hide();
 		}
 
-		if(update === 'on') {
+		if($('.edit-lead-property #receiveUpdates-edit').parent().hasClass('is-checked')) {
 			updates = 'y';
+			update_nice = 'Yes';
 		} else {
-			updates ='n';
+			updates = 'n';
+			update_nice = 'No';
 		}
 
 		$.ajax({
@@ -503,7 +504,7 @@ jQuery(document).ready(function($) {
 			},
 			success: function( result ) {
 				if( result == 'success' ) {
-					var property_row = '<tr class="property-row property-id' + spid + '"><td class="mdl-data-table__cell--non-numeric"><a href="' + detailsurl + '/' + idxid + '/' + listingid + '">' + name + '</a></td><td class="mdl-data-table__cell--non-numeric property">' + updates +'</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + spid + '" class="delete-property" data-id="' + id + '" data-spid="' + spid + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + spid + '">Delete Property</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + spid + '" id="edit-mw-' + spid + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + spid + '">Edit Property in Middleware</div></a></td></tr>';
+					var property_row = '<tr class="property-row property-id' + spid + '"><td class="mdl-data-table__cell--non-numeric"><a href="' + detailsurl + '/' + idxid + '/' + listingid + '">' + name + '</a></td><td class="mdl-data-table__cell--non-numeric property">' + update_nice +'</td><td class="mdl-data-table__cell--non-numeric">Just Now</td><td class="mdl-data-table__cell--non-numeric"><a href="#" id="delete-property-' + spid + '" class="delete-property" data-id="' + id + '" data-spid="' + spid + '" data-nonce="' + nonce + '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' + spid + '">Delete Property</div></a><a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' + id + '&spid=' + spid + '" id="edit-mw-' + spid + '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' + spid + '">Edit Property in Middleware</div></a></td></tr>';
 					$('tr.property-id-' + spid).remove();
 					$('.mdl-data-table.lead-properties tbody').prepend( property_row );
 					$('.mdl-spinner').removeClass('is-active');
