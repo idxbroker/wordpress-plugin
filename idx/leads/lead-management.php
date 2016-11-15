@@ -735,6 +735,7 @@ class Lead_Management {
 				<input type="hidden" name="action" value="idx_lead_add" />
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead" data-nonce="<?php echo wp_create_nonce('idx_lead_add_nonce'); ?>" type="submit">Save Lead</button>
 				<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
+				<div class="error-existing" style="display: none;">Lead already exists.</div>
 				<div class="error-fail" style="display: none;">Lead addition failed. Check all required fields or try again later.</div>
 				<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 

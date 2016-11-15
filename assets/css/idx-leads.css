@@ -134,6 +134,7 @@ a:focus {
 	margin: 0 0.25em;
 	font-size: 12px;
 	top: -2px;
+	width: 27px;
 }
 .dataTables_length.mdl-selectfield:after {
 	right: 3.3em;
@@ -152,7 +153,8 @@ a:focus {
 	display: inline-block;
 }
 .error-incomplete,
-.error-fail {
+.error-fail,
+.error-existing {
 	color: red;
 	margin: 1em 0;
 }
@@ -260,3 +262,4 @@ a:focus {
 	-webkit-hyphens: none;
 	-moz-hyphens: none;
 }
+

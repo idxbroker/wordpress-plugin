@@ -153,6 +153,7 @@ jQuery(document).ready(function($) {
 			return false;
 		}
 
+		$('#add-lead .error-existing').hide();
 		$('#add-lead .error-fail').hide();
 		$('button.add-lead').hide();
 		$('.mdl-spinner').addClass('is-active');
@@ -172,6 +173,10 @@ jQuery(document).ready(function($) {
 			success: function( result ) {
 				if( $.isNumeric( result ) ) {
 					window.location.href = leadurl + result;
+				} else if (result === 'Lead already exists.') {
+					$('#add-lead .error-existing').show();
+					$('button.add-lead').show();
+					$('.mdl-spinner').removeClass('is-active');
 				} else {
 					$('#add-lead .error-fail').show();
 					$('button.add-lead').show();
