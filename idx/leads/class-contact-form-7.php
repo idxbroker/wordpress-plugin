@@ -21,7 +21,7 @@ class IDX_Leads_CF7
 
 	public $idx_api;
 
-	public function idx_add_settings_panel( $panels ) {
+	public static function idx_add_settings_panel( $panels ) {
 		
 		$panels = array_merge($panels,
 			array('idx-panel' => array(
@@ -33,7 +33,7 @@ class IDX_Leads_CF7
 		return $panels;
 	}
 
-	public function load_scripts() {
+	public static function load_scripts() {
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-tooltip');
 		wp_enqueue_script('idx-tooltip', IMPRESS_IDX_URL . 'assets/js/tooltip.js');
@@ -64,11 +64,11 @@ class IDX_Leads_CF7
 		}
 	}
 
-	public function idx_cf7_settings() {
+	public static function idx_cf7_settings() {
 
 		// Get the form object
 		$form = wpcf7_get_current_contact_form();
-		$form_id = $form->id;
+		$form_id = $form->id();
 		// Set the form option name
 		$option_name = 'idx_lead_form_' . $form_id;
 		$form_options = get_option($option_name);
@@ -79,8 +79,9 @@ class IDX_Leads_CF7
 		}
 
 		// Instantiate ContactForm class and get tags for form fields
-		$cf7 = WPCF7_ContactForm::get_instance(get_post($form->id));
-		$mail_tags = $cf7->collect_mail_tags(get_post($form->id));
+		$cf7 = WPCF7_ContactForm::get_instance(get_post($form->id()));
+		
+		if(is_object($cf7)) {$mail_tags = $cf7->collect_mail_tags(get_post($form->id()));}
 		?>
 			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
 			<form action="" method="post" id="cf7_form_settings">

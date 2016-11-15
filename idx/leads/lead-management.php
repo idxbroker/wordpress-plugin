@@ -749,7 +749,7 @@ class Lead_Management {
 			// Get Lead info
 			$lead = $this->idx_api->idx_api('lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 		?>
-			<h3>Edit Lead</h3>
+			<h3>Edit Lead &raquo; <?php echo ($lead['firstName']) ? $lead['firstName'] : '';?> <?php echo ($lead['lastName']) ? $lead['lastName'] : '';?></h3>
 
 			<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 				<div class="mdl-tabs__tab-bar">
@@ -761,7 +761,7 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel is-active" id="lead-info">
 					<div class="lead-photo">
-						<?php $avatar_args = array( 'force_display' => true, 'default' => '404' ); echo get_avatar($lead['email'], 256, '', 'Lead photo', $avatar_args); ?>
+						<?php // $avatar_args = array( 'force_display' => true, 'default' => '404' ); echo get_avatar($lead['email'], 256, '', 'Lead photo', $avatar_args); ?>
 					</div>
 					<form id="edit-lead" action="" method="post">
 						<h6>Account Information</h6>
@@ -1101,11 +1101,11 @@ class Lead_Management {
 
 					$results_url = $this->idx_api->system_results_url();
 
-					//prepare searches for display
-					if($searches_array != null) {
+					// prepare searches for display
+					if(is_array($searches_array) && $searches_array != null) {
 						foreach($searches_array as $search){
 
-							$search_query = http_build_query(($search['search']));
+							//$search_query = http_build_query(($search['search']));
 
 							$nice_created_date = Carbon::parse($search['created'])->toDayDateTimeString();
 							$updates = ($search['receiveUpdates'] == 'y') ? 'Yes' : 'No';
@@ -1219,15 +1219,18 @@ class Lead_Management {
 					
 					$traffic = '';
 
-					//prepare traffic for display
-					foreach($traffic_array as $traffic_entry){
-						$nice_date = Carbon::parse($traffic_entry['date'])->toDayDateTimeString();
+					if(is_array($traffic_array)) {
 
-						$traffic .= '<tr>';
-						$traffic .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
-						$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['page'] . '" target="_blank">' . substr($traffic_entry['page'], 0, 80) . '</td>';
-						$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['referrer'] . '" target="_blank">' . substr($traffic_entry['referrer'], 0, 80) . '</a></td>';
-						$traffic .= '</tr>';
+						//prepare traffic for display
+						foreach($traffic_array as $traffic_entry){
+							$nice_date = Carbon::parse($traffic_entry['date'])->toDayDateTimeString();
+
+							$traffic .= '<tr>';
+							$traffic .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
+							$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['page'] . '" target="_blank">' . substr($traffic_entry['page'], 0, 80) . '</td>';
+							$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['referrer'] . '" target="_blank">' . substr($traffic_entry['referrer'], 0, 80) . '</a></td>';
+							$traffic .= '</tr>';
+						}
 					}
 
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-traffic">';
