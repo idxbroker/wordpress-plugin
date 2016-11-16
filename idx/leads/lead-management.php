@@ -530,10 +530,12 @@ class Lead_Management {
 
 			if ($lead->agentOwner != '0') {
 				foreach($agents_array['agent'] as $agent) {
-					if(in_array($lead->agentOwner, $agent)) {
+					if($lead->agentOwner == $agent['agentID']) {
 						$agent_name = $agent['agentDisplayName'];
 					}
 				}
+				if(!isset($agent_name))
+					$agent_name = 'None assigned';
 			} else {
 				$agent_name = 'None assigned';
 			}
@@ -747,6 +749,7 @@ class Lead_Management {
 			if(empty($lead_id)) {
 				return;
 			}
+
 			// Get Lead info
 			$lead = $this->idx_api->idx_api('lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 		?>
@@ -904,8 +907,6 @@ class Lead_Management {
 
 				<div class="mdl-tabs__panel" id="lead-notes">
 					<?php
-					echo '<h6>Notes</h6>';
-
 					// order newest first
 					$notes_array = $this->idx_api->idx_api('note/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$notes_array = array_reverse($notes_array);
@@ -976,8 +977,6 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-properties">
 					<?php
-					echo '<h6>Saved Properties</h6>';
-
 					// order newest first
 					$properties_array = $this->idx_api->idx_api('property/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$properties_array = array_reverse($properties_array);
@@ -1092,8 +1091,6 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-searches">
 					<?php
-					echo '<h6>Saved Searches</h6>';
-
 					// order newest first
 					$searches_array = $this->idx_api->idx_api('search/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$searches_array = (isset($searches_array['searchInformation'])) ? array_reverse($searches_array['searchInformation']) : null;
@@ -1211,8 +1208,6 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-traffic">
 				<?php
-					echo '<h6>Traffic</h6>';
-
 					// order newest first
 					$traffic_array = $this->idx_api->idx_api('leadtraffic/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$traffic_array = array_reverse($traffic_array);
@@ -1294,7 +1289,7 @@ class Lead_Management {
 		$mls_list = '';
 		if(is_array($mls_array)) {
 			foreach($mls_array as $mls) {
-				$mls_list .= '<option value="' . $mls['id'] . '">' . $mls['name'] . '</option>'; 
+				$mls_list .= '<option value="' . $mls->id . '">' . $mls->name . '</option>'; 
 			}
 		} elseif(empty($mls_list)) {
 			$mls_list .= '<option value="a000">Demo</option>';

@@ -250,7 +250,7 @@ a:focus {
 }
 
 /** Limit note column width */
-.render-note {
+div[class*='render-note'] {
 	max-width: 900px;
 	overflow: hidden;
 	display: inline-block;
