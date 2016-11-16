@@ -920,7 +920,7 @@ class Lead_Management {
 						$notes .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
 						$notes .= '<td class="mdl-data-table__cell--non-numeric note"><div class="render-note-' . $note['id'] . '">' . str_replace('&quot;', '"', str_replace('&gt;', '>', str_replace('&lt;', '<', $note['note']))) . '</div></td>';
 						$notes .= '<td class="mdl-data-table__cell--non-numeric">
-									<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . $note['id'] . '" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-note="' . str_replace('&quot;', '"', str_replace('&gt;', '>', str_replace('&lt;', '<', $note['note']))) . '" data-nonce="' . wp_create_nonce('idx_lead_note_edit_nonce') . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . $note['id'] . '">Edit Note</div></a>
+									<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . $note['id'] . '" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-note="' . $note['note'] . '" data-nonce="' . wp_create_nonce('idx_lead_note_edit_nonce') . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . $note['id'] . '">Edit Note</div></a>
 
 									<a href="#" id="delete-note-' . $note['id'] . '" class="delete-note" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-nonce="' . wp_create_nonce('idx_lead_note_delete_nonce') . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' . $note['id'] . '">Delete Note</div></a>
 
@@ -1106,7 +1106,7 @@ class Lead_Management {
 					if(is_array($searches_array) && $searches_array != null) {
 						foreach($searches_array as $search){
 
-							//$search_query = http_build_query(($search['search']));
+							$search_query = http_build_query(($search['search']));
 
 							$nice_created_date = Carbon::parse($search['created'])->toDayDateTimeString();
 							$updates = ($search['receiveUpdates'] == 'y') ? 'Yes' : 'No';
@@ -1158,7 +1158,7 @@ class Lead_Management {
 								<label class="mdl-selectfield__label" for="idxID">MLS</label>
 								<div class="mdl-selectfield">
 									<select class="mdl-selectfield__select" id="idxID" name="idxID">
-										<?php echo self::approved_mls_select_list(); ?>
+										<?php //echo self::approved_mls_select_list(); ?>
 									</select>
 								</div>
 							</div>
@@ -1166,7 +1166,7 @@ class Lead_Management {
 								<label class="mdl-selectfield__label" for="idxID">Property Type</label>
 								<div class="mdl-selectfield">
 									<select class="mdl-selectfield__select" id="pt" name="pt">
-										<?php echo self::property_type_select_list(); ?>
+										<?php //echo self::property_type_select_list(); ?>
 									</select>
 								</div>
 							</div>
@@ -1216,7 +1216,6 @@ class Lead_Management {
 					// order newest first
 					$traffic_array = $this->idx_api->idx_api('leadtraffic/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true);
 					$traffic_array = array_reverse($traffic_array);
-					//$leads_array = array_slice(array_reverse($leads_array), 0, 5);
 					
 					$traffic = '';
 
@@ -1293,34 +1292,15 @@ class Lead_Management {
 		$mls_array = $this->idx_api->approved_mls();
 
 		$mls_list = '';
-		foreach($mls_array as $mls) {
-			$mls_list .= '<option value="' . $mls['id'] . '">' . $mls['name'] . '</option>'; 
-		}
-
-		if(empty($mls_list)) {
+		if(is_array($mls_array)) {
+			foreach($mls_array as $mls) {
+				$mls_list .= '<option value="' . $mls['id'] . '">' . $mls['name'] . '</option>'; 
+			}
+		} elseif(empty($mls_list)) {
 			$mls_list .= '<option value="a000">Demo</option>';
 		}
 
 		return $mls_list;
-	}
-
-	/**
-	 * Output property types as select options
-	 */
-	private function property_type_select_list() {
-		$mls_array = $this->idx_api->approved_mls();
-
-		$pt_list = '';
-		foreach($mls_array as $mls) {
-			$pt_array = $this->idx_api->idx_api('propertytypes/' . $mls['id'], \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 7200, 'GET', true);
-			$pt_list .= '<option value="' . $pt_array['parentPt'] . '">' . $pt_array['mlsPropertyType'] . '</option>'; 
-		}
-
-		if(empty($pt_list)) {
-			$pt_list .= '<option value="sfr">sfr</option>';
-		}
-
-		return $pt_list;
 	}
 
 }
