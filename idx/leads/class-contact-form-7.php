@@ -83,7 +83,6 @@ class IDX_Leads_CF7
 		$cf7 = WPCF7_ContactForm::get_instance(get_post($form->id()));
 		
 		if(is_object($cf7)) {$mail_tags = $cf7->collect_mail_tags(get_post($form->id()));}
-
 		?>
 			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
 			<form action="" method="post" id="cf7_form_settings">

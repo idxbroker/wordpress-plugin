@@ -51,6 +51,7 @@ class Initiate_Plugin
         new Review_Prompt();
         new Dashboard_Widget();
         new Backward_Compatibility\Add_Uid_To_Idx_Pages();
+        new Leads\Lead_Management();
     }
 
     public function idx_extensions() {
