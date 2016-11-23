@@ -18,6 +18,7 @@ class Impress_Showcase_Widget extends \WP_Widget
             array(
                 'description' => 'Displays a showcase of properties',
                 'classname' => 'impress-showcase-widget',
+                'customize_selective_refresh' => true,
             )
         );
     }
@@ -482,7 +483,6 @@ class Impress_Showcase_Widget extends \WP_Widget
 				<option <?php selected($instance['properties'], 'featured');?> value="featured"><?php echo 'Featured';?></option>
 				<option <?php selected($instance['properties'], 'soldpending');?> value="soldpending"><?php echo 'Sold/Pending';?></option>
 				<option <?php selected($instance['properties'], 'supplemental');?> value="supplemental"><?php echo 'Supplemental';?></option>
-				<option <?php selected($instance['properties'], 'historical');?> value="historical"><?php echo 'Historical';?></option>
                 <?php //Only allow Saved Links if Equity is active ?>
                 <?php if (function_exists('equity')) {?>
 				<option <?php selected($instance['properties'], 'savedlinks');?> value="savedlinks"><?php echo 'Use Saved Link';?></option>

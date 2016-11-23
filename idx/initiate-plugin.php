@@ -27,6 +27,8 @@ class Initiate_Plugin
         add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
         add_action('wp_loaded', array($this, 'legacy_functions'));
 
+        add_action('plugins_loaded', array($this, 'idx_extensions'));
+
         $this->instantiate_classes();
 
     }
@@ -50,10 +52,18 @@ class Initiate_Plugin
         new Dashboard_Widget();
         new Backward_Compatibility\Add_Uid_To_Idx_Pages();
         new Leads\Lead_Management();
+    }
 
-        require_once(dirname(__FILE__) . '/leads/class-gravity-forms.php');
-        //require_once(dirname(__FILE__) . '/leads/class-ninja-forms.php');
-        require_once(dirname(__FILE__) . '/leads/class-contact-form-7.php');
+    public function idx_extensions() {
+        if(class_exists( 'NF_Abstracts_Action' )) {
+            require_once(dirname(__FILE__) . '/leads/class-ninja-forms.php');
+        }
+        if(class_exists('GFForms')) {
+            require_once(dirname(__FILE__) . '/leads/class-gravity-forms.php');
+        }
+        if(class_exists('WPCF7')) {
+            require_once(dirname(__FILE__) . '/leads/class-contact-form-7.php');
+        }
     }
 
     private function set_defaults()

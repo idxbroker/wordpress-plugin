@@ -6,7 +6,7 @@ class IDX_Omnibar_Widget extends \WP_Widget
     public function __construct()
     {
         $this->create_omnibar = new \IDX\Widgets\Omnibar\Create_Omnibar();
-        $widget_ops = array('classname' => 'IDX_Omnibar_Widget', 'description' => 'An Omnibar Search Widget for use with IDX WordPress Sites');
+        $widget_ops = array('classname' => 'IDX_Omnibar_Widget', 'description' => 'An Omnibar Search Widget for use with IDX WordPress Sites', 'customize_selective_refresh' => true);
         parent::__construct('IDX_Omnibar_Widget', 'IMPress Omnibar Search', $widget_ops);
     }
 

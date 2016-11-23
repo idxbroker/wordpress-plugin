@@ -17,6 +17,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
             array(
                 'description' => __('Lead login form', 'idxbroker'),
                 'classname' => 'impress-idx-login-widget',
+                'customize_selective_refresh' => true,
             )
         );
     }
