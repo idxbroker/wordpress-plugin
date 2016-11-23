@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 3.7  
 **Tested up to:** 4.6 
-**Stable tag:** 2.1.6
+**Stable tag:** 2.2.0
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -116,8 +116,15 @@ This plugin requires a PHP version higher than 5.2. For security reasons, we rec
 
 ## Changelog ##
 
-### 2.1.6 ###
-* Removed ineffective Equity IP blacklist functionality
+### 2.2.0 ###
+* New: Added Lead Management interface so you can manage leads directly in WordPress
+* New: Capture leads with integration with popular WordPress form plugins (Gravity Forms, Ninja Forms, Contact Form 7)
+* New: Widgets updated to use selective refresh in WP > 4.5
+* Tweak: Refactored plugin to remove IoC container that caused conflicts on some hosting platforms
+* Tweak: Limit use of eval that caused false positive security warnings in some scanners
+* Tweak: Removed historical as an option for property widgets as its no longer available in the API 
+* Tweak: Removed disallowed fields from Omnibar search
+* Tweak: Removed ineffective Equity IP blacklist functionality
 
 ### 2.1.5 ###
 * Added compatibility with custom user roles for IDX Pages.
