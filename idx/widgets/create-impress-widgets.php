@@ -4,19 +4,14 @@ namespace IDX\Widgets;
 class Create_Impress_Widgets
 {
 
-    public function __construct(\IDX\Idx_Api $idx_api, $app)
+    public function __construct()
     {
-        $this->idx_api = $idx_api;
-        $this->app = $app;
-
-        //for PHP5.3 not allowing $this in anonymous functions
-        $scope = $this;
-        add_action('widgets_init', function () use ($scope) {$scope->register_impress_widgets();});
+        $this->idx_api = new \IDX\Idx_Api();
+        add_action('widgets_init', array($this, 'register_impress_widgets'));
 
     }
 
     public $idx_api;
-    public $app;
 
     public function register_impress_widgets()
     {

@@ -80,6 +80,9 @@ window.addEventListener('DOMContentLoaded', function(){
             } else {
                 value.disabled = false;
             }
+            if(value.getAttribute('value') == 'listingAgentID' || value.getAttribute('value') == 'listingOfficeID' || value.getAttribute('value') == 'coListingAgentID' || value.getAttribute('value') == 'coListingOfficeID' || value.getAttribute('value') == 'tertiaryListingAgentID' || value.getAttribute('value') == 'tertiaryListingOfficeID'){
+                value.disabled = true;
+            }
         });
         return refreshSelect2(customField);
     }

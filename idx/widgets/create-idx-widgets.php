@@ -3,9 +3,9 @@ namespace IDX\Widgets;
 
 class Create_Idx_Widgets
 {
-    public function __construct(\IDX\Idx_Api $idx_api)
+    public function __construct()
     {
-        $this->idx_api = $idx_api;
+        $this->idx_api = new \IDX\Idx_Api();
         $this->create_widgets();
     }
 

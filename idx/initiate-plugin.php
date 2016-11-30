@@ -5,10 +5,7 @@ class Initiate_Plugin
 {
     public function __construct()
     {
-        //Use Laravel's IoC Container for Class Instantiation
-
-        $this->app = new \NetRivet\Container\Container();
-        new Ioc($this->app);
+        $this->idx_api = new Idx_Api();
 
         $this->set_defaults();
 
@@ -30,8 +27,7 @@ class Initiate_Plugin
         add_action('idx_migrate_old_table', array($this, 'migrate_old_table'));
         add_action('wp_loaded', array($this, 'legacy_functions'));
 
-        //Instantiate Classes
-        $this->idx_api = $this->app->make('\IDX\Idx_Api');
+        add_action('plugins_loaded', array($this, 'idx_extensions'));
 
         $this->instantiate_classes();
 
@@ -39,24 +35,35 @@ class Initiate_Plugin
 
     const IDX_API_DEFAULT_VERSION = '1.3.0';
     const IDX_API_URL = 'https://api.idxbroker.com';
-    public $app;
 
     public function instantiate_classes()
     {
-        $this->app->make('\IDX\Wrappers');
-        $this->app->make('\IDX\Idx_Pages');
-        $this->app->make('\IDX\Widgets\Create_Idx_Widgets');
-        $this->app->make('\IDX\Shortcodes\Register_Idx_Shortcodes');
-        $this->app->make('\IDX\Widgets\Create_Impress_Widgets');
-        $this->app->make('\IDX\Shortcodes\Register_Impress_Shortcodes');
-        $this->app->make('\IDX\Widgets\Omnibar\Create_Omnibar');
-        $this->app->make('\IDX\Shortcodes\Shortcode_Ui');
-        $this->app->make('\IDX\Help');
-        $this->app->make('\IDX\Views\Omnibar_Settings');
-        $this->app->make('\IDX\Review_Prompt');
-        $this->app->make('\IDX\Blacklist');
-        $this->app->make('\IDX\Dashboard_Widget');
-        $this->app->make('\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages');
+        new Wrappers();
+        new Idx_Pages();
+        new Widgets\Create_Idx_Widgets();
+        new Shortcodes\Register_Idx_Shortcodes();
+        new Widgets\Create_Impress_Widgets();
+        new Shortcodes\Register_Impress_Shortcodes();
+        new Widgets\Omnibar\Create_Omnibar();
+        new Shortcodes\Shortcode_Ui();
+        new Help();
+        new \IDX\Views\Omnibar_Settings();
+        new Review_Prompt();
+        new Dashboard_Widget();
+        new Backward_Compatibility\Add_Uid_To_Idx_Pages();
+        new Leads\Lead_Management();
+    }
+
+    public function idx_extensions() {
+        if(class_exists( 'NF_Abstracts_Action' )) {
+            require_once(dirname(__FILE__) . '/leads/class-ninja-forms.php');
+        }
+        if(class_exists('GFForms')) {
+            require_once(dirname(__FILE__) . '/leads/class-gravity-forms.php');
+        }
+        if(class_exists('WPCF7')) {
+            require_once(dirname(__FILE__) . '/leads/class-contact-form-7.php');
+        }
     }
 
     private function set_defaults()
@@ -84,7 +91,7 @@ class Initiate_Plugin
 
     public function migrate_old_table()
     {
-        $this->app->make('\IDX\Backward_Compatibility\Migrate_Old_Table');
+        new \IDX\Backward_Compatibility\Migrate_Old_Table();
     }
 
     public function plugin_updated()
@@ -118,7 +125,7 @@ class Initiate_Plugin
 
     public function idx_omnibar_get_locations()
     {
-        $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
+        new \IDX\Widgets\Omnibar\Get_Locations();
     }
 
     //Adds a comment declaring the version of the WordPress.
@@ -185,7 +192,7 @@ class Initiate_Plugin
         $this->idx_api->idx_clean_transients();
         update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey']);
         setcookie("api_refresh", 1, time() + 20);
-        $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
+        new \IDX\Widgets\Omnibar\Get_Locations();
         wp_die();
     }
 
@@ -319,7 +326,7 @@ class Initiate_Plugin
 
     public function idx_omnibar_settings_interface()
     {
-        $omnibar_settings = $this->app->make('\IDX\Views\Omnibar_Settings');
+        $omnibar_settings = new \IDX\Views\Omnibar_Settings();
         //preload current cczs for omnibar settings
         $omnibar_settings->idx_omnibar_settings_interface();
     }

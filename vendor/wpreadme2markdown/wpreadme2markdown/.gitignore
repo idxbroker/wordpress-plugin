@@ -1,6 +1,0 @@
-*.iml
-*.ipr
-composer.phar
-/build/*.phar
-/vendor/
-/test/
