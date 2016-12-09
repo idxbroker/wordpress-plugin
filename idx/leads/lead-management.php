@@ -1,6 +1,7 @@
 <?php
 namespace IDX\Leads;
 use \Carbon\Carbon;
+require_once( ABSPATH . 'wp-admin/includes/plugin.php');
 
 class Lead_Management {
 
