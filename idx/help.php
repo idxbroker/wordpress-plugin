@@ -80,6 +80,9 @@ class Help
                 <strong>Applying Additional Wrappers</strong> - You may create many wrappers and use different ones for each category or page.
                 <br>&bull; To apply a new wrapper within WordPress, edit the Wrapper page from the IDX Broker/Wrappers menu.
                 <br>&bull; In edit mode select where to apply the wrapper in the upper right of the screen.
+                <br>
+                <br>Additionally, you can make any post or page a Wrapper by adding the shortcode <strong>[idx-wrapper-tags]</strong> to the post/page.
+                <br>
                 <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank">this article</a>.
                 ',
         ),

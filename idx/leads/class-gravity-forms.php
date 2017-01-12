@@ -96,7 +96,7 @@ class IDX_Leads_GF
 		GFFormSettings::page_footer();
 	}
 
-	public function idx_put_lead( $entry, $form ) {        
+	public static function idx_put_lead( $entry, $form ) {        
 		$form_id = $form['id'];
 
 		$option_name = 'idx_lead_form_' . $form_id;
