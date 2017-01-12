@@ -17,14 +17,14 @@ class IDX_Leads_GF
 	}
 
 	public $idx_api;
-	
+
 	public static function idx_leads_gform_settings_menu( $menu_items ) {
-		
+
 		$menu_items[] = array(
 			'name' => 'idx_broker_leads_page',
 			'label' => __( 'IDX Broker' )
 			);
-		
+
 		return $menu_items;
 	}
 
@@ -45,10 +45,10 @@ class IDX_Leads_GF
 			$new_value = array();
 			$new_value['enable_lead'] = isset($_POST["enable_lead"]) ? (int)stripslashes($_POST["enable_lead"]) : 0;
 			$new_value['category'] = isset($_POST["category"]) ? stripslashes($_POST["category"]) : 0;
-			
+
 			update_option($option_name, $new_value);
 		}
-		
+
 		?>
 			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
 			<form action="" method="post" id="gform_form_settings">
@@ -59,7 +59,7 @@ class IDX_Leads_GF
 							<td colspan="2">
 								<h4 class="gf_settings_subgroup_title">Lead Capture</h4>
 							</td>
-						</tr>                                       
+						</tr>
 						<tr>
 							<th>Enable Lead Import?
 								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;''>This requires that your form have a required First and Last Name field and required Email field.</strong>"><i class="fa fa-question-circle"></i></a>
@@ -96,13 +96,13 @@ class IDX_Leads_GF
 		GFFormSettings::page_footer();
 	}
 
-	public function idx_put_lead( $entry, $form ) {        
+	public static function idx_put_lead( $entry, $form ) {        
 		$form_id = $form['id'];
 
 		$option_name = 'idx_lead_form_' . $form_id;
 
 		$form_options = get_option($option_name);
-		 
+
 		$checked = $form_options['enable_lead'];
 
 		$apikey = get_option('idx_broker_apikey');
@@ -111,7 +111,7 @@ class IDX_Leads_GF
 			if (!empty($apikey)) {
 
 				$fields = self::get_all_form_fields($form_id);
-				
+
 				$code_firstname = (string)self::find_field($fields, 'Name (First)');
 				$firstname = filter_var($entry[$code_firstname],FILTER_SANITIZE_STRING);
 
@@ -143,8 +143,8 @@ class IDX_Leads_GF
 				if($code_country) {$country = filter_var($entry[$code_country],FILTER_SANITIZE_STRING);}
 
 				$lead_data = array(
-					'firstName' => $firstname, 
-					'lastName' => $lastname, 
+					'firstName' => $firstname,
+					'lastName' => $lastname,
 					'email' => $email,
 					'phone' => (isset($phone)) ? $phone : '',
 					'address' => (isset($streetAddress)) ? $streetAddress : '',
@@ -213,7 +213,7 @@ class IDX_Leads_GF
 					}
 				}
 			}
-		}   
+		}
 	}
 
 	private static function get_all_form_fields($form_id) {
@@ -231,12 +231,12 @@ class IDX_Leads_GF
 					$fields[] =  array('id' => $field["id"], 'name' => GFCommon::get_label($field));
 				}
 			}
-		}        
+		}
 		return $fields;
 	}
 
 	private static function find_field($fields, $fid) {
-		foreach($fields as $field) {              
+		foreach($fields as $field) {
 			if($field['name'] == $fid) return $field['id'];
 		}
 		return false;
