@@ -13,6 +13,7 @@ class Omnibar_Settings
         add_action('wp_ajax_idx_preload_omnibar_settings_view', array($this, 'idx_preload_omnibar_settings_view'));
         add_action('wp_ajax_idx_update_omnibar_current_ccz', array($this, 'idx_update_omnibar_current_ccz'));
         add_action('wp_ajax_idx_update_omnibar_custom_fields', array($this, 'idx_update_omnibar_custom_fields'));
+        add_action('wp_ajax_idx_update_sort_order', array($this, 'idx_update_sort_order'));
     }
 
     public $idx_api;
@@ -191,6 +192,29 @@ class Omnibar_Settings
         echo "<h3>Custom Placeholder</h3>";
         echo "<div class=\"help-text\">This is a placeholder for the main input of Omnibar widgets.<div><i>Examples: \"Search for Properties\" or \"Location, School, Address, or Listing ID\"</i></div></div>";
         echo "<input class=\"omnibar-placeholder\" type=\"text\" value=\"$placeholder\">";
+
+        echo "<h3>Default sort order</h3>";
+        echo "<div class=\"help-text\">Choose a default sort order for results pages.</div>";
+
+        $sort_order = get_option('idx_omnibar_sort');
+        if (empty($sort_order)) {
+            $sort_order = 'newest';
+        }
+        echo '
+        <select id="sort-order" class="sort-order">
+            <option value="newest" ' . selected($sort_order, 'newest', false) . '>Newest Listings</option>
+            <option value="oldest" ' . selected($sort_order, 'oldest', false) . '>Oldest Listings</option>
+            <option value="pra" ' . selected($sort_order, 'pra', false) . '>Least expensive to most</option>
+            <option value="prd" ' . selected($sort_order, 'prd', false) . '>Most expensive to least</option>
+            <option value="bda" ' . selected($sort_order, 'bda', false) . '>Bedrooms (Low to High)</option>
+            <option value="bdd" ' . selected($sort_order, 'bdd', false) . '>Bedrooms (High to Low)</option>
+            <option value="tba" ' . selected($sort_order, 'tba', false) . '>Bathrooms (High to Low)</option>
+            <option value="tbd" ' . selected($sort_order, 'tbd', false) . '>Bathrooms (High to Low)</option>
+            <option value="sqfta" ' . selected($sort_order, 'sqfta', false) . '>Square Feet (High to Low)</option>
+            <option value="sqftd" ' . selected($sort_order, 'sqftd', false) . '>Square Feet (Low to High)</option>
+        </select>
+        ';
+
         echo "</div>";
         echo <<<EOT
                         <div class="saveFooter">
@@ -333,6 +357,12 @@ EOT;
         update_option('idx_default_property_types', $_POST['mlsPtIDs']);
         update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']));
         $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
+        return wp_die();
+    }
+
+    public function idx_update_sort_order() {
+        $sort_order = $_POST['sort-order'];
+        update_option('idx_omnibar_sort', $sort_order);
         return wp_die();
     }
 
