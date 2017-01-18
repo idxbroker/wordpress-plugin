@@ -193,7 +193,7 @@ class Omnibar_Settings
         echo "<div class=\"help-text\">This is a placeholder for the main input of Omnibar widgets.<div><i>Examples: \"Search for Properties\" or \"Location, School, Address, or Listing ID\"</i></div></div>";
         echo "<input class=\"omnibar-placeholder\" type=\"text\" value=\"$placeholder\">";
 
-        echo "<h3>Default sort order</h3>";
+        echo "<h3>Default Sort Order</h3>";
         echo "<div class=\"help-text\">Choose a default sort order for results pages.</div>";
 
         $sort_order = get_option('idx_omnibar_sort');
@@ -208,10 +208,10 @@ class Omnibar_Settings
             <option value="prd" ' . selected($sort_order, 'prd', false) . '>Most expensive to least</option>
             <option value="bda" ' . selected($sort_order, 'bda', false) . '>Bedrooms (Low to High)</option>
             <option value="bdd" ' . selected($sort_order, 'bdd', false) . '>Bedrooms (High to Low)</option>
-            <option value="tba" ' . selected($sort_order, 'tba', false) . '>Bathrooms (High to Low)</option>
+            <option value="tba" ' . selected($sort_order, 'tba', false) . '>Bathrooms (Low to High)</option>
             <option value="tbd" ' . selected($sort_order, 'tbd', false) . '>Bathrooms (High to Low)</option>
-            <option value="sqfta" ' . selected($sort_order, 'sqfta', false) . '>Square Feet (High to Low)</option>
-            <option value="sqftd" ' . selected($sort_order, 'sqftd', false) . '>Square Feet (Low to High)</option>
+            <option value="sqfta" ' . selected($sort_order, 'sqfta', false) . '>Square Feet (Low to High)</option>
+            <option value="sqftd" ' . selected($sort_order, 'sqftd', false) . '>Square Feet (High to Low)</option>
         </select>
         ';
 
