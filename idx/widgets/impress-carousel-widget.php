@@ -199,7 +199,7 @@ class Impress_Carousel_Widget extends \WP_Widget
             $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
             $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
             //remove decimals and add commas to SqFt value
-            $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
+            $output .= $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']);
             $output .= "</p>";
 
             //Add Disclaimer and Courtesy.
