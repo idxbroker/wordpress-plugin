@@ -154,7 +154,8 @@ a:focus {
 }
 .error-incomplete,
 .error-fail,
-.error-existing {
+.error-existing,
+.error-invalid-email {
 	color: red;
 	margin: 1em 0;
 }
@@ -263,3 +264,89 @@ div[class*='render-note'] {
 	-moz-hyphens: none;
 }
 
+/** dialog element polyfill CSS */
+dialog {
+  position: absolute;
+  left: 0; right: 0;
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: -webkit-fit-content;
+  height: fit-content;
+  margin: auto;
+  border: none;
+  padding: 1em;
+  background: white;
+  color: black;
+  display: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+dialog h5 {
+	font-weight: 500;
+    font-size: 20px;
+    color: rgba(0,0,0,.8);
+    line-height: 24px;
+    letter-spacing: 0.03px;
+    margin: 0 0 16px;
+}
+dialog p {
+	color: rgba(0,0,0,.5);
+	margin-bottom: 30px;
+}
+
+dialog button {
+	-webkit-appearance: button; /* for input */
+	-webkit-user-select: none; /* for button */
+	-moz-user-select: none;
+	-ms-user-select: none;
+	border: none;
+	float: right;
+	text-transform: uppercase;
+	font-weight: 500;
+	font-size: 14px;
+	color: rgb(142, 198, 65);
+	background: none;
+	padding: 8px;
+	margin-left: 8px;
+}
+
+dialog button:hover {
+	cursor: pointer;
+}
+
+dialog button:focus {
+	border: none;
+	outline: none;
+}
+
+dialog[open] {
+  display: block;
+}
+
+dialog + .backdrop {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0,0,0,0.1);
+}
+
+/* for small devices, modal dialogs go full-screen */
+@media screen and (max-width: 540px) {
+  dialog[_polyfill_modal] {  /* TODO: implement */
+    top: 0;
+    width: auto;
+    margin: 1em;
+  }
+}
+
+._dialog_overlay {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+
+dialog.fixed {
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+}
