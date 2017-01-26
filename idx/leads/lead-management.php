@@ -524,10 +524,12 @@ class Lead_Management {
 		
 		$leads = '';
 
+		$offset = get_option('gmt_offset', 0);
+
 		//prepare leads for display
 		foreach($leads_array as $lead){
 
-			$last_active = Carbon::parse(($lead->lastActivityDate === '0000-00-00 00:00:00') ? $lead->subscribeDate : $lead->lastActivityDate)->toDayDateTimeString();
+			$last_active = Carbon::parse(($lead->lastActivityDate === '0000-00-00 00:00:00') ? $lead->subscribeDate : $lead->lastActivityDate)->addHours($offset)->toDayDateTimeString();
 
 			if ($lead->agentOwner != '0') {
 				foreach($agents_array['agent'] as $agent) {
@@ -894,6 +896,7 @@ class Lead_Management {
 						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce('idx_lead_edit_nonce'); ?>" data-lead-id="<?php echo $lead_id; ?>" type="submit">Save Lead</button>
 						<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 						<div class="error-fail" style="display: none;">Lead update failed. Check all required fields or try again later.</div>
+						<div class="error-invalid-email" style="display: none;">Invalid email address detected. Please enter a valid email.</div>
 						<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 
 					</form>
@@ -914,20 +917,25 @@ class Lead_Management {
 					
 					$notes = '';
 
+					$offset = get_option('gmt_offset', 0);
+
 					//prepare notes for display
-					foreach($notes_array as $note){
-						$nice_date = Carbon::parse($note['created'])->toDayDateTimeString();
+					if($notes_array) {
+						foreach($notes_array as $note){
+							
+							$nice_date = Carbon::parse($note['created'])->addHours($offset)->toDayDateTimeString();
 
-						$notes .= '<tr class="note-row note-id-' . $note['id'] . '">';
-						$notes .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
-						$notes .= '<td class="mdl-data-table__cell--non-numeric note"><div class="render-note-' . $note['id'] . '">' . str_replace('&quot;', '"', str_replace('&gt;', '>', str_replace('&lt;', '<', $note['note']))) . '</div></td>';
-						$notes .= '<td class="mdl-data-table__cell--non-numeric">
-									<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . $note['id'] . '" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-note="' . $note['note'] . '" data-nonce="' . wp_create_nonce('idx_lead_note_edit_nonce') . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . $note['id'] . '">Edit Note</div></a>
+							$notes .= '<tr class="note-row note-id-' . $note['id'] . '">';
+							$notes .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
+							$notes .= '<td class="mdl-data-table__cell--non-numeric note"><div class="render-note-' . $note['id'] . '">' . str_replace('&quot;', '"', str_replace('&gt;', '>', str_replace('&lt;', '<', $note['note']))) . '</div></td>';
+							$notes .= '<td class="mdl-data-table__cell--non-numeric">
+										<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . $note['id'] . '" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-note="' . $note['note'] . '" data-nonce="' . wp_create_nonce('idx_lead_note_edit_nonce') . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . $note['id'] . '">Edit Note</div></a>
 
-									<a href="#" id="delete-note-' . $note['id'] . '" class="delete-note" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-nonce="' . wp_create_nonce('idx_lead_note_delete_nonce') . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' . $note['id'] . '">Delete Note</div></a>
+										<a href="#" id="delete-note-' . $note['id'] . '" class="delete-note" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-nonce="' . wp_create_nonce('idx_lead_note_delete_nonce') . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' . $note['id'] . '">Delete Note</div></a>
 
-									</td>';
-						$notes .= '</tr>';
+										</td>';
+							$notes .= '</tr>';
+						}
 					}
 
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-notes">';
@@ -987,9 +995,11 @@ class Lead_Management {
 					
 					$properties = '';
 
+					$offset = get_option('gmt_offset', 0);
+
 					//prepare properties for display
 					foreach($properties_array as $property){
-						$nice_created_date = Carbon::parse($property['created'])->toDayDateTimeString();
+						$nice_created_date = Carbon::parse($property['created'])->addHours($offset)->toDayDateTimeString();
 						$updates = ($property['receiveUpdates'] == 'y') ? 'Yes' : 'No';
 
 						$properties .= '<tr class="property-row property-id-' . $property['id'] . '">';
@@ -1100,13 +1110,15 @@ class Lead_Management {
 
 					$results_url = $this->idx_api->system_results_url();
 
+					$offset = get_option('gmt_offset', 0);
+
 					// prepare searches for display
 					if(is_array($searches_array) && $searches_array != null) {
 						foreach($searches_array as $search){
 
 							$search_query = http_build_query(($search['search']));
 
-							$nice_created_date = Carbon::parse($search['created'])->toDayDateTimeString();
+							$nice_created_date = Carbon::parse($search['created'])->addHours($offset)->toDayDateTimeString();
 							$updates = ($search['receiveUpdates'] == 'y') ? 'Yes' : 'No';
 
 							$searches .= '<tr class="search-row">';
@@ -1215,11 +1227,13 @@ class Lead_Management {
 					
 					$traffic = '';
 
+					$offset = get_option('gmt_offset', 0);
+
 					if(is_array($traffic_array)) {
 
 						//prepare traffic for display
 						foreach($traffic_array as $traffic_entry){
-							$nice_date = Carbon::parse($traffic_entry['date'])->toDayDateTimeString();
+							$nice_date = Carbon::parse($traffic_entry['date'])->addHours($offset)->toDayDateTimeString();
 
 							$traffic .= '<tr>';
 							$traffic .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
