@@ -44,7 +44,7 @@ class Idx_Broker_Plugin
      */
     public function php_version_check()
     {
-        if (PHP_VERSION < 5.3) {
+        if (PHP_VERSION < 5.4) {
             add_action('admin_init', array($this, 'idx_deactivate_plugin'));
             add_action('admin_notices', array($this, 'incompatible_message'));
             return false;
@@ -77,6 +77,14 @@ class Idx_Broker_Plugin
     {
         if (!get_option('idx_results_url')) {
             add_option('idx_results_url');
+        }
+
+        if (get_site_option('idx_dismiss_review_prompt') != false) {
+            delete_option('idx_dismiss_review_prompt');
+        }
+
+        if (get_site_option('idx_review_prompt_time') != false) {
+            delete_option('idx_review_prompt_time');
         }
 
         //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
