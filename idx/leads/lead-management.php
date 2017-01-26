@@ -524,10 +524,12 @@ class Lead_Management {
 		
 		$leads = '';
 
+		$offset = get_option('gmt_offset', 0);
+
 		//prepare leads for display
 		foreach($leads_array as $lead){
 
-			$last_active = Carbon::parse(($lead->lastActivityDate === '0000-00-00 00:00:00') ? $lead->subscribeDate : $lead->lastActivityDate)->toDayDateTimeString();
+			$last_active = Carbon::parse(($lead->lastActivityDate === '0000-00-00 00:00:00') ? $lead->subscribeDate : $lead->lastActivityDate)->addHours($offset)->toDayDateTimeString();
 
 			if ($lead->agentOwner != '0') {
 				foreach($agents_array['agent'] as $agent) {
@@ -915,10 +917,13 @@ class Lead_Management {
 					
 					$notes = '';
 
+					$offset = get_option('gmt_offset', 0);
+
 					//prepare notes for display
 					if($notes_array) {
 						foreach($notes_array as $note){
-							$nice_date = Carbon::parse($note['created'])->toDayDateTimeString();
+							
+							$nice_date = Carbon::parse($note['created'])->addHours($offset)->toDayDateTimeString();
 
 							$notes .= '<tr class="note-row note-id-' . $note['id'] . '">';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
@@ -990,9 +995,11 @@ class Lead_Management {
 					
 					$properties = '';
 
+					$offset = get_option('gmt_offset', 0);
+
 					//prepare properties for display
 					foreach($properties_array as $property){
-						$nice_created_date = Carbon::parse($property['created'])->toDayDateTimeString();
+						$nice_created_date = Carbon::parse($property['created'])->addHours($offset)->toDayDateTimeString();
 						$updates = ($property['receiveUpdates'] == 'y') ? 'Yes' : 'No';
 
 						$properties .= '<tr class="property-row property-id-' . $property['id'] . '">';
@@ -1103,13 +1110,15 @@ class Lead_Management {
 
 					$results_url = $this->idx_api->system_results_url();
 
+					$offset = get_option('gmt_offset', 0);
+
 					// prepare searches for display
 					if(is_array($searches_array) && $searches_array != null) {
 						foreach($searches_array as $search){
 
 							$search_query = http_build_query(($search['search']));
 
-							$nice_created_date = Carbon::parse($search['created'])->toDayDateTimeString();
+							$nice_created_date = Carbon::parse($search['created'])->addHours($offset)->toDayDateTimeString();
 							$updates = ($search['receiveUpdates'] == 'y') ? 'Yes' : 'No';
 
 							$searches .= '<tr class="search-row">';
@@ -1218,11 +1227,13 @@ class Lead_Management {
 					
 					$traffic = '';
 
+					$offset = get_option('gmt_offset', 0);
+
 					if(is_array($traffic_array)) {
 
 						//prepare traffic for display
 						foreach($traffic_array as $traffic_entry){
-							$nice_date = Carbon::parse($traffic_entry['date'])->toDayDateTimeString();
+							$nice_date = Carbon::parse($traffic_entry['date'])->addHours($offset)->toDayDateTimeString();
 
 							$traffic .= '<tr>';
 							$traffic .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
