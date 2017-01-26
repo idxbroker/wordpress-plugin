@@ -4,8 +4,8 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 3.7
-Tested up to: 4.7
-Stable tag: 2.2.0
+Tested up to: 4.7.1
+Stable tag: 2.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,23 +113,37 @@ This plugin requires a PHP version higher than 5.4. For security reasons, we rec
 
 == Screenshots ==
 
-1. Omnibar Search Widget.
-2. IDX Shortcode UI.
-3. Widget Customizer.
-4. Plugin Settings Page.
-5. Middleware API Key.
+1. Modify your Omnibar settings to give visitors the option to search by over a dozen different MLS fields. 
+2. IMPress will sync with your IDX Broker account and display all of your leads within your WordPress Dashboard. 
+3. Edit leads directly from within your WordPress Dashboard. Changes will sync with your IDX Broker account. 
+4. Add leads from your WordPress Dashboard and they will automatically sync with your IDX Broker account. 
+5. View popular listing pages (stats pulled from IDX Broker) and leads from your IMPress Dashboard. 
+6. IMPress Listings (a separate plugin, part of the IMPress Suite) will pull all of your featured listing data into WordPress so that you can host the content on your root domain. Note: At this time this feature is limited to only your Featured listings.
+7. The Omnibar Search Widget allows your visitors to view a live search of City, State, Subdivision, Area, and more.
+8. With the IDX shortcode interface, you can easily add shortcodes to your posts and pages.
+9. Combine the Widget Customizer with an Equity license provided by Agent Evolution and easily add Widgets to any Equity child theme. 
+10. Simply add your API key and click a button to auto-generate a wrapper page to ensure that your IDX Broker pages synchronize with the header, sidebar, and footer of your WordPress website. Note: IDX content is co-brandable, and hosted on a subdomain of your primary domain. IDX content is integrated, not framed. 
+11. Pull or reset your API key from within your IDX Broker Dashboard.
+12. View all the IDX Broker page traffic history for each of your leads. One-click access to the IDX Broker Dashboard to create a new saved search or property for the lead based on traffic history.
+13. View Saved Searches created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved searches, toggle emails on, or edit an existing search.
+14. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+
+== 2.2.1 ==
+* Fix: Square feet showing truncated values in widgets and shortcodes
+* Fix: Added email validation for lead management
+* Fix: Lead management times are now offset based on WP timezone settings
 
 = 2.2.0 =
 * New: Added Lead Management interface so you can manage leads directly in WordPress
 * New: Capture leads with integration with popular WordPress form plugins (Gravity Forms, Ninja Forms, Contact Form 7)
 * New: Widgets updated to use selective refresh in WP > 4.5
-* Tweak: Refactored plugin to remove IoC container that caused conflicts on some hosting platforms
-* Tweak: Limit use of eval that caused false positive security warnings in some scanners
-* Tweak: Removed historical as an option for property widgets as its no longer available in the API 
-* Tweak: Removed disallowed fields from Omnibar search
-* Tweak: Removed ineffective Equity IP blacklist functionality
+* Fix: Refactored plugin to remove IoC container that caused conflicts on some hosting platforms
+* Fix: Limit use of eval that caused false positive security warnings in some scanners
+* Fix: Removed historical as an option for property widgets as its no longer available in the API 
+* Fix: Removed disallowed fields from Omnibar search
+* Fix: Removed ineffective Equity IP blacklist functionality
 
 = 2.1.5 =
 * Added compatibility with custom user roles for IDX Pages.
