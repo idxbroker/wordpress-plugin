@@ -48,7 +48,6 @@ class Initiate_Plugin
         new Shortcodes\Shortcode_Ui();
         new Help();
         new \IDX\Views\Omnibar_Settings();
-        new Review_Prompt();
         new Dashboard_Widget();
         new Backward_Compatibility\Add_Uid_To_Idx_Pages();
         new Leads\Lead_Management();
@@ -106,8 +105,6 @@ class Initiate_Plugin
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
             update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
-            //set to prompt for review in one week
-            \IDX\Review_Prompt::set_timestamp();
             //clear old api cache
             $this->idx_api->idx_clean_transients();
             $this->idx_omnibar_get_locations();

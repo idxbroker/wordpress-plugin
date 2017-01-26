@@ -212,6 +212,12 @@ jQuery(document).ready(function($) {
 			$('#edit-lead .error-incomplete').show();
 			return false;
 		}
+		if(validateEmail(email) === false) {
+			$('#email').parent().addClass('is-dirty');
+			$('#email').focus();
+			$('#edit-lead .error-invalid-email').show();
+			return false;
+		}
 
 		$('#edit-lead .error-fail').hide();
 		$('button.edit-lead').hide();
@@ -656,5 +662,10 @@ jQuery(document).ready(function($) {
 		}
 		return false;
 	});
+
+	function validateEmail(email) {
+		var re = /\S+@\S+\.\S+/;
+		return re.test(email);
+	}
 
 });

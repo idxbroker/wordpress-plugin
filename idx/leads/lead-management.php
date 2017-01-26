@@ -922,6 +922,7 @@ class Lead_Management {
 					//prepare notes for display
 					if($notes_array) {
 						foreach($notes_array as $note){
+							
 							$nice_date = Carbon::parse($note['created'])->addHours($offset)->toDayDateTimeString();
 
 							$notes .= '<tr class="note-row note-id-' . $note['id'] . '">';
