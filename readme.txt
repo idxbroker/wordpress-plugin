@@ -130,7 +130,7 @@ This plugin requires a PHP version higher than 5.4. For security reasons, we rec
 
 == Changelog ==
 
-== 2.2.1 ==
+= 2.2.1 =
 * Fix: Square feet showing truncated values in widgets and shortcodes
 * Fix: Added email validation for lead management
 * Fix: Lead management times are now offset based on WP timezone settings
