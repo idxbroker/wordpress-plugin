@@ -1,10 +1,14 @@
 html,
 body.toplevel_page_leads,
-body.leads_page_edit-lead {
+body.leads_page_edit-lead,
+body.impress_page_searches {
 	font-family: 'Roboto', sans-serif;
 }
 #wpwrap {
 	background: #fff;
+}
+.dataTables_wrapper a {
+	text-decoration: none;
 }
 a:hover,
 a:focus {
@@ -13,7 +17,8 @@ a:focus {
 }
 .hide {display: none;}
 .toplevel_page_leads table.mdl-data-table,
-.leads_page_edit-lead table.mdl-data-table {
+.leads_page_edit-lead table.mdl-data-table,
+.impress_page_searches table.mdl-data-table {
 	width: 98% !important;
 }
 .dataTables_scrollHeadInner {
@@ -24,7 +29,8 @@ a:focus {
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 .toplevel_page_leads a,
-.leads_page_edit-lead a {
+.leads_page_edit-lead a,
+.impress_page_searches a, {
 	text-decoration: none;
 	font-weight: 400;
 }
@@ -36,7 +42,8 @@ a:focus {
 	margin-right: 0.7em;
 }
 .toplevel_page_leads .mdl-button--fab,
-.leads_page_edit-lead .mdl-button--fab {
+.leads_page_edit-lead .mdl-button--fab,
+.impress_page_searches .mdl-button--fab {
 	float: right;
 	right: 2.5%;
 	top: -1em;
@@ -49,7 +56,9 @@ a:focus {
 #add-lead .mdl-textfield,
 #add-lead .mdl-fieldgroup,
 #edit-lead .mdl-textfield,
-#edit-lead .mdl-fieldgroup {
+#edit-lead .mdl-fieldgroup,
+#add-search .mdl-textfield,
+#add-search .mdl-fieldgroup {
 	margin: 0 40px 0 0;
 }
 /* Override WP Admin input style */
@@ -66,9 +75,23 @@ a:focus {
 	box-shadow: none;
 }
 
+.mdl-textfield,
+.mdl-fieldgroup {
+	vertical-align: top;
+}
+
+.mdl-textfield.one-third {
+	width: 100px;
+}
+.mdl-textfield.one-half {
+	width: 150px;
+}
+
 /* Material Design select field */
 .toplevel_page_leads select,
-.leads_page_edit-lead select {
+.leads_page_edit-lead select,
+.impress_page_searches select,
+.impress_page_edit-search select {
 	font-family: 'Roboto','Helvetica','Arial',sans-serif;
 	background-color: transparent;
 	height: auto;
@@ -81,7 +104,9 @@ a:focus {
 
 /* Remove focus */
 .toplevel_page_leads select:focus,
-.leads_page_edit-lead select:focus {
+.leads_page_edit-lead select:focus,
+.impress_page_searches select:focus,
+.impress_page_edit-search select:focus {
 	border: none;
 	box-shadow: none;
 	outline: none;
@@ -103,6 +128,7 @@ a:focus {
 .mdl-fieldgroup {
 	font-family: 'Roboto','Helvetica','Arial',sans-serif;
 	position: relative;
+	vertical-align: top;
 	font-size: 16px;
 	display: inline-block;
 	box-sizing: border-box;
@@ -127,8 +153,21 @@ a:focus {
 }
 #add-lead .mdl-selectfield select,
 #edit-lead .mdl-selectfield select,
+.add-search .mdl-selectfield select,
+.impress_page_edit-search .mdl-selectfield select,
 #TB_window .mdl-selectfield select {
 	width: 100%;
+}
+.select2-container--default .select2-selection--multiple,
+.select2-container--default.select2-container--focused .select2-selection--multiple {
+	border: none !important;
+	border-radius: 0;
+}
+.select2-container--default .select2-search--inline .select2-search__field {
+	box-shadow: none;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 .dataTables_length.mdl-selectfield select {
 	margin: 0 0.25em;
@@ -264,3 +303,89 @@ div[class*='render-note'] {
 	-moz-hyphens: none;
 }
 
+/** dialog element polyfill CSS */
+dialog {
+  position: absolute;
+  left: 0; right: 0;
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: -webkit-fit-content;
+  height: fit-content;
+  margin: auto;
+  border: none;
+  padding: 1em;
+  background: white;
+  color: black;
+  display: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+dialog h5 {
+	font-weight: 500;
+    font-size: 20px;
+    color: rgba(0,0,0,.8);
+    line-height: 24px;
+    letter-spacing: 0.03px;
+    margin: 0 0 16px;
+}
+dialog p {
+	color: rgba(0,0,0,.5);
+	margin-bottom: 30px;
+}
+
+dialog button {
+	-webkit-appearance: button; /* for input */
+	-webkit-user-select: none; /* for button */
+	-moz-user-select: none;
+	-ms-user-select: none;
+	border: none;
+	float: right;
+	text-transform: uppercase;
+	font-weight: 500;
+	font-size: 14px;
+	color: rgb(142, 198, 65);
+	background: none;
+	padding: 8px;
+	margin-left: 8px;
+}
+
+dialog button:hover {
+	cursor: pointer;
+}
+
+dialog button:focus {
+	border: none;
+	outline: none;
+}
+
+dialog[open] {
+  display: block;
+}
+
+dialog + .backdrop {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0,0,0,0.1);
+}
+
+/* for small devices, modal dialogs go full-screen */
+@media screen and (max-width: 540px) {
+  dialog[_polyfill_modal] {  /* TODO: implement */
+    top: 0;
+    width: auto;
+    margin: 1em;
+  }
+}
+
+._dialog_overlay {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+
+dialog.fixed {
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+}

@@ -1,5 +1,5 @@
 <?php
-namespace IDX\Leads;
+namespace IDX\Views;
 use \Carbon\Carbon;
 require_once( ABSPATH . 'wp-admin/includes/plugin.php');
 
@@ -104,14 +104,16 @@ class Lead_Management {
 				'detailsurl' => $this->idx_api->details_url()
 				)
 			);
-			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array('jquery'), true);
-			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array('jquery'), true);
+			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
+			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array('jquery'), true );
+			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array('jquery'), true );
+			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery' );
 
-			wp_enqueue_style('idx-leads', IMPRESS_IDX_URL . 'assets/css/idx-leads.css');
-			wp_enqueue_style('idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
-			wp_enqueue_style('idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons');
-			wp_enqueue_style('idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css');
-			wp_enqueue_style('idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css');
+			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.css' );
+			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
+			wp_enqueue_style( 'idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons' );
+			wp_enqueue_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css' );
+			wp_enqueue_style( 'idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css' );
 		}
 	}
 
@@ -513,7 +515,7 @@ class Lead_Management {
 		if ( !is_user_logged_in() || !current_user_can( 'manage_options' ) ){
 			return;
 		}
-
+		
 		echo '<h3>Leads</h3>';
 
 		$leads_array = $this->idx_api->get_leads();
@@ -579,6 +581,14 @@ class Lead_Management {
 			';
 		echo $leads;
 		echo '</tbody></table>';
+		echo '<dialog id="dialog-lead-delete">
+				<form method="dialog">
+					<h5>Delete Lead</h5>
+					<p>Are you sure you want to delete this lead?</p>
+					<button type="submit" value="no" autofocus>No</button>
+					<button type="submit" value="yes">Yes</button>
+				</form>
+			</dialog>';
 		echo '
 			<a href="' . admin_url('admin.php?page=edit-lead') . '" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 				<i class="material-icons">add</i>
@@ -922,10 +932,9 @@ class Lead_Management {
 					//prepare notes for display
 					if($notes_array) {
 						foreach($notes_array as $note){
-							
 							$nice_date = Carbon::parse($note['created'])->addHours($offset)->toDayDateTimeString();
 
-							$notes .= '<tr class="note-row note-id-' . $note['id'] . '">';
+							$notes .= '<tr id="note-id-' . $note['id'] . '" class="note-row note-id-' . $note['id'] . '">';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric note"><div class="render-note-' . $note['id'] . '">' . str_replace('&quot;', '"', str_replace('&gt;', '>', str_replace('&lt;', '<', $note['note']))) . '</div></td>';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric">
@@ -949,6 +958,14 @@ class Lead_Management {
 						';
 					echo $notes;
 					echo '</tbody></table>';
+					echo '<dialog id="dialog-lead-note-delete">
+							<form method="dialog">
+								<h5>Delete Lead Note</h5>
+								<p>Are you sure you want to delete this lead note?</p>
+								<button type="submit" value="no" autofocus>No</button>
+								<button type="submit" value="yes">Yes</button>
+							</form>
+						</dialog>';
 					echo '
 						<a href="#TB_inline?width=600&height=350&inlineId=add-lead-note" id="add-lead-note-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
@@ -1021,14 +1038,22 @@ class Lead_Management {
 						<a style="display: none;" href="#" title="Delete Properties"><i class="material-icons md-18">delete</i> Delete Selected</a>
 						<thead>
 							<th class="mdl-data-table__cell--non-numeric">Property Name</th>
-							<th class="mdl-data-table__cell--non-numeric note">Receive Updates</th>
-							<th class="mdl-data-table__cell--non-numeric note">Created</th>
+							<th class="mdl-data-table__cell--non-numeric">Receive Updates</th>
+							<th class="mdl-data-table__cell--non-numeric">Created</th>
 							<th class="mdl-data-table__cell--non-numeric">Actions</th>
 						</thead>
 						<tbody>
 						';
 					echo $properties;
 					echo '</tbody></table>';
+					echo '<dialog id="dialog-lead-property-delete">
+							<form method="dialog">
+								<h5>Delete Lead Property</h5>
+								<p>Are you sure you want to delete this lead saved property?</p>
+								<button type="submit" value="no" autofocus>No</button>
+								<button type="submit" value="yes">Yes</button>
+							</form>
+						</dialog>';
 					echo '
 						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-property" id="add-lead-property-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
@@ -1143,81 +1168,29 @@ class Lead_Management {
 						<a style="display: none;" href="#" title="Delete Searches"><i class="material-icons md-18">delete</i> Delete Selected</a>
 						<thead>
 							<th class="mdl-data-table__cell--non-numeric">Search Name</th>
-							<th class="mdl-data-table__cell--non-numeric note">Receive Updates</th>
-							<th class="mdl-data-table__cell--non-numeric note">Created</th>
+							<th class="mdl-data-table__cell--non-numeric">Receive Updates</th>
+							<th class="mdl-data-table__cell--non-numeric">Created</th>
 							<th class="mdl-data-table__cell--non-numeric">Actions</th>
 						</thead>
 						<tbody>
 						';
 					echo $searches;
 					echo '</tbody></table>';
-					// echo '
-					// 	<a href="#TB_inline?width=600&height=500&inlineId=add-lead-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
-					// 		<i class="material-icons">add</i>
-					// 	</a>
-					// 	';
+					echo '<dialog id="dialog-lead-search-delete">
+							<form method="dialog">
+								<h5>Delete Lead Saved Search</h5>
+								<p>Are you sure you want to delete this lead saved search?</p>
+								<button type="submit" value="no" autofocus>No</button>
+								<button type="submit" value="yes">Yes</button>
+							</form>
+						</dialog>';
+					echo '
+						<a href="' . admin_url('admin.php?page=edit-search&leadID=' . $lead_id) . '" id="add-lead-search-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+							<i class="material-icons">add</i>
+							<div class="mdl-tooltip" data-mdl-for="add-lead-search-btn">Add Lead Saved Search</div>
+						</a>
+						';
 					?>
-					<div id="add-lead-search" style="display: none;">
-						<h5>Add Saved Search</h5>
-						<form action="" method="post" class="add-lead-search">
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="searchName" name="searchName" autofocus>
-								<label class="mdl-textfield__label" for="searchName">Search Name</label>
-							</div>
-							<div class="mdl-fieldgroup">
-								<label class="mdl-selectfield__label" for="idxID">MLS</label>
-								<div class="mdl-selectfield">
-									<select class="mdl-selectfield__select" id="idxID" name="idxID">
-										<?php //echo self::approved_mls_select_list(); ?>
-									</select>
-								</div>
-							</div>
-							<div class="mdl-fieldgroup">
-								<label class="mdl-selectfield__label" for="idxID">Property Type</label>
-								<div class="mdl-selectfield">
-									<select class="mdl-selectfield__select" id="pt" name="pt">
-										<?php //echo self::property_type_select_list(); ?>
-									</select>
-								</div>
-							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="lp" name="lp">
-								<label class="mdl-textfield__label" for="lp">Price Min</label>
-							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="hp" name="hp">
-								<label class="mdl-textfield__label" for="hp">Price Max</label>
-							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="bd" name="bd">
-								<label class="mdl-textfield__label" for="bd">Beds</label>
-							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="ba" name="ba">
-								<label class="mdl-textfield__label" for="ba">Baths</label>
-							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="sqft" name="sqft">
-								<label class="mdl-textfield__label" for="sqft">Square Feet</label>
-							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="acres" name="acres">
-								<label class="mdl-textfield__label" for="acres">Acres</label>
-							</div>
-							<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-								<input class="mdl-textfield__input" type="text" id="add" name="add">
-								<label class="mdl-textfield__label" for="add">Max Days Listed</label>
-							</div>
-							<div class="mdl-fieldgroup">
-								<label for="receiveUpdates" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-									<input type="checkbox" id="receiveUpdates" name="receiveUpdates" class="mdl-switch__input" checked>
-									<span class="mdl-switch__label">Receive Property Updates Off/On</span>
-								</label>
-							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-search" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce('idx_lead_search_add_nonce'); ?>" type="submit">Save Search</button>
-							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
-						</form>
-					</div>
 				</div>
 				<div class="mdl-tabs__panel" id="lead-traffic">
 				<?php
@@ -1229,7 +1202,7 @@ class Lead_Management {
 
 					$offset = get_option('gmt_offset', 0);
 
-					if(is_array($traffic_array)) {
+					if ( is_array( $traffic_array ) ) {
 
 						//prepare traffic for display
 						foreach($traffic_array as $traffic_entry){
@@ -1302,11 +1275,11 @@ class Lead_Management {
 		$mls_array = $this->idx_api->approved_mls();
 
 		$mls_list = '';
-		if(is_array($mls_array)) {
+		if(is_array($mls_array) && !empty($mls_array)) {
 			foreach($mls_array as $mls) {
 				$mls_list .= '<option value="' . $mls->id . '">' . $mls->name . '</option>'; 
 			}
-		} elseif(empty($mls_list)) {
+		} else {
 			$mls_list .= '<option value="a000">Demo</option>';
 		}
 

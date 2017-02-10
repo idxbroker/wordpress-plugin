@@ -79,7 +79,7 @@ jQuery(document).ready(function($) {
 		"bSort": true,
 		"bPaginate":true,
 		"iDisplayLength": 10,
-		"order": [[ 0, "desc" ]],
+		"order": [[ 2, "desc" ]],
 		"columnDefs": [
 			{
 				"targets": [ 0, 1, 2, 3 ],
@@ -531,141 +531,168 @@ jQuery(document).ready(function($) {
 
 	// delete lead
 	$(document).on( 'click', '.delete-lead', function() {
-		var go_ahead = confirm("Are you sure you want to delete this lead?");
+		var dialog = document.getElementById('dialog-lead-delete');
+		dialogPolyfill.registerDialog(dialog);
+		dialog.showModal();
+
 		var id = $(this).data('id');
 		var nonce = $(this).data('nonce');
 		var post = $(this).parents('.lead-row:first');
 
-		if ( go_ahead === true ) {
-			$('.mdl-spinner').addClass('is-active');
+		dialog.addEventListener('close', function (event) {
+			if (dialog.returnValue == 'yes') {
+				$('.mdl-spinner').addClass('is-active');
 
-			$.ajax({
-				type: 'post',
-				url: IDXLeadAjax.ajaxurl,
-				data: {
-					action: 'idx_lead_delete',
-					nonce: nonce,
-					id: id
-				},
-				success: function( result ) {
-					if( result == 'success' ) {
-						post.fadeOut( function(){
-							post.remove();
-						});
+				$.ajax({
+					type: 'post',
+					url: IDXLeadAjax.ajaxurl,
+					data: {
+						action: 'idx_lead_delete',
+						nonce: nonce,
+						id: id
+					},
+					success: function( result ) {
+						if( result == 'success' ) {
+							post.fadeOut( function(){
+								post.remove();
+							});
+						}
 					}
-				}
-			});
+				});
 
-			$('.mdl-spinner').removeClass('is-active');
-		}
+				$('.mdl-spinner').removeClass('is-active');
+			}
+		});
 		return false;
 	});
 
 	// delete lead note
 	$(document).on( 'click', '.delete-note', function() {
-		var go_ahead = confirm("Are you sure you want to delete this note?");
+		var dialog = document.getElementById('dialog-lead-note-delete');
+		dialogPolyfill.registerDialog(dialog);
+		dialog.showModal();
+
 		var id = $(this).data('id');
 		var noteid = $(this).data('noteid');
 		var nonce = $(this).data('nonce');
 		var post = $(this).parents('.note-row:first');
 
-		if ( go_ahead === true ) {
-			$('.mdl-spinner').addClass('is-active');
+		dialog.addEventListener('close', function (event) {
+			if (dialog.returnValue == 'yes') {
+				$('.mdl-spinner').addClass('is-active');
 
-			$.ajax({
-				type: 'post',
-				url: IDXLeadAjax.ajaxurl,
-				data: {
-					action: 'idx_lead_note_delete',
-					nonce: nonce,
-					id: id,
-					noteid: noteid
-				},
-				success: function( result ) {
-					if( result == 'success' ) {
-						post.fadeOut( function(){
-							post.remove();
-						});
+				$.ajax({
+					type: 'post',
+					url: IDXLeadAjax.ajaxurl,
+					data: {
+						action: 'idx_lead_note_delete',
+						nonce: nonce,
+						id: id,
+						noteid: noteid
+					},
+					success: function( result ) {
+						if( result == 'success' ) {
+							post.fadeOut( function(){
+								post.remove();
+							});
+						}
 					}
-				}
-			});
+				});
 
-			$('.mdl-spinner').removeClass('is-active');
-		}
+				$('.mdl-spinner').removeClass('is-active');
+			}
+		});
+		
 		return false;
 	});
 
 	// delete lead saved property
 	$(document).on( 'click', '.delete-property', function() {
-		var go_ahead = confirm("Are you sure you want to delete this saved property?");
+		var dialog = document.getElementById('dialog-lead-property-delete');
+		dialogPolyfill.registerDialog(dialog);
+		dialog.showModal();
+
 		var id = $(this).data('id');
 		var spid = $(this).data('spid');
 		var nonce = $(this).data('nonce');
 		var post = $(this).parents('.property-row:first');
 
-		if ( go_ahead === true ) {
-			$('.mdl-spinner').addClass('is-active');
+		dialog.addEventListener('close', function (event) {
+			if (dialog.returnValue == 'yes') {
+				$('.mdl-spinner').addClass('is-active');
 
-			$.ajax({
-				type: 'post',
-				url: IDXLeadAjax.ajaxurl,
-				data: {
-					action: 'idx_lead_property_delete',
-					nonce: nonce,
-					id: id,
-					spid: spid
-				},
-				success: function( result ) {
-					if( result == 'success' ) {
-						post.fadeOut( function(){
-							post.remove();
-						});
+				$.ajax({
+					type: 'post',
+					url: IDXLeadAjax.ajaxurl,
+					data: {
+						action: 'idx_lead_property_delete',
+						nonce: nonce,
+						id: id,
+						spid: spid
+					},
+					success: function( result ) {
+						if( result == 'success' ) {
+							post.fadeOut( function(){
+								post.remove();
+							});
+						}
 					}
-				}
-			});
+				});
 
-			$('.mdl-spinner').removeClass('is-active');
-		}
+				$('.mdl-spinner').removeClass('is-active');
+			
+			}
+		});
 		return false;
 	});
 
 	// delete lead saved search
 	$(document).on( 'click', '.delete-search', function() {
-		var go_ahead = confirm("Are you sure you want to delete this saved search?");
+		var dialog = document.getElementById('dialog-lead-search-delete');
+		dialogPolyfill.registerDialog(dialog);
+		dialog.showModal();
+
 		var id = $(this).data('id');
 		var ssid = $(this).data('ssid');
 		var nonce = $(this).data('nonce');
 		var post = $(this).parents('.search-row:first');
 
-		if ( go_ahead === true ) {
-			$('.mdl-spinner').addClass('is-active');
+		dialog.addEventListener('close', function (event) {
+			if (dialog.returnValue == 'yes') {
+				$('.mdl-spinner').addClass('is-active');
 
-			$.ajax({
-				type: 'post',
-				url: IDXLeadAjax.ajaxurl,
-				data: {
-					action: 'idx_lead_search_delete',
-					nonce: nonce,
-					id: id,
-					ssid: ssid
-				},
-				success: function( result ) {
-					if( result == 'success' ) {
-						post.fadeOut( function(){
-							post.remove();
-						});
+				$.ajax({
+					type: 'post',
+					url: IDXLeadAjax.ajaxurl,
+					data: {
+						action: 'idx_lead_search_delete',
+						nonce: nonce,
+						id: id,
+						ssid: ssid
+					},
+					success: function( result ) {
+						if( result == 'success' ) {
+							post.fadeOut( function(){
+								post.remove();
+							});
+						}
 					}
-				}
-			});
+				});
 
-			$('.mdl-spinner').removeClass('is-active');
-		}
+				$('.mdl-spinner').removeClass('is-active');
+			}
+		});
 		return false;
 	});
 
+	// validate email
 	function validateEmail(email) {
 		var re = /\S+@\S+\.\S+/;
 		return re.test(email);
 	}
+	
+	// init select2 on ccz list
+	$('#ccz').select2();
 
 });
+
