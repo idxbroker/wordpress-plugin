@@ -36,20 +36,6 @@ class Search_Management {
 
 	public function add_search_pages() {
 
-		// Add Searches menu page
-		// $this->page = add_menu_page(
-		// 	'Searches',
-		// 	'Searches',
-		// 	'manage_options',
-		// 	'searches',
-		// 	array(
-		// 		$this,
-		// 		'idx_searches_list',
-		// 	),
-		// 	'dashicons-search',
-		// 	'30'
-		// );
-
 		// Add Searches as submenu page
 		$this->page = add_submenu_page(
 			'idx-broker',
@@ -120,19 +106,16 @@ class Search_Management {
 	public function idx_search_add(){
 
 		$permission = check_ajax_referer( 'idx_search_add_nonce', 'nonce', false );
-		// if( $permission == false || !isset($_POST['pageTitle']) || !isset($_POST['linkName']) || !isset($_POST['linkTitle']) ) {
 		if( $permission == false || !isset($_POST['pageTitle']) || !isset($_POST['linkTitle']) ) {
 			echo 'missing required fields';
 		} else {
 
 			// Add search via API
 			$api_url = 'https://api.idxbroker.com/clients/savedlinks';
-			$data = array(
-				'pageTitle' => $_POST['pageTitle'],
-				'linkName' => str_replace(' ', '-', strtolower($_POST['linkTitle'])),
-				'linkTitle' => $_POST['linkTitle'],
-				'queryString' => array(
+
+			$search_query = array(
 					'pt' => $_POST['pt'],
+					'ccz' => $_POST['ccz'],
 					'lp' => $_POST['lp'],
 					'hp' => $_POST['hp'],
 					'bd' => $_POST['bd'],
@@ -140,7 +123,24 @@ class Search_Management {
 					'sqft' => $_POST['sqft'],
 					'acres' => $_POST['acres'],
 					'add' => $_POST['add'],
-				),
+			);
+
+			if($_POST['ccz'] === 'city') {
+				$city_array = array('city' => $_POST['locations']);
+				$search_query = $search_query + $city_array;
+			} elseif($_POST['ccz'] == 'county') {
+				$county_array = array('county' => $_POST['locations']);
+				$search_query = $search_query + $county_array;
+			} elseif($_POST['ccz'] == 'zipcode') {
+				$zipcode_array = array('zipcode' => $_POST['locations']);
+				$search_query = $search_query + $zipcode_array;
+			}
+
+			$data = array(
+				'pageTitle' => $_POST['pageTitle'],
+				'linkName' => str_replace(' ', '-', strtolower($_POST['linkTitle'])),
+				'linkTitle' => $_POST['linkTitle'],
+				'queryString' => $search_query,
 				'useDescriptionMeta' => (isset($_POST['useDescriptionMeta'])) ? $_POST['useDescriptionMeta'] : '',
 				'descriptionMeta' => (isset($_POST['descriptionMeta'])) ? $_POST['descriptionMeta'] : '',
 				'useKeywordsMeta' => (isset($_POST['useKeywordsMeta'])) ? $_POST['useKeywordsMeta'] : '',
@@ -149,6 +149,9 @@ class Search_Management {
 				'linkCopy' => (isset($_POST['linkCopy'])) ? $_POST['linkCopy'] : '',
 				'agentID' => (isset($_POST['agentID'])) ? $_POST['agentID'] : '',
 			);
+
+			$data = array_merge($data, $search_query);
+
 			$args = array(
 				'method' => 'PUT',
 				'headers' => array(
@@ -190,10 +193,10 @@ class Search_Management {
 
 			// Add search via API
 			$api_url = 'https://api.idxbroker.com/leads/search/' . $_POST['leadID'];
-			$data = array(
-				'searchName' => $_POST['searchName'],
-				'search' => array(
+
+			$search_query = array(
 					'pt' => $_POST['pt'],
+					'ccz' => $_POST['ccz'],
 					'lp' => $_POST['lp'],
 					'hp' => $_POST['hp'],
 					'bd' => $_POST['bd'],
@@ -201,7 +204,22 @@ class Search_Management {
 					'sqft' => $_POST['sqft'],
 					'acres' => $_POST['acres'],
 					'add' => $_POST['add'],
-				),
+			);
+
+			if($_POST['ccz'] === 'city') {
+				$city_array = array('city' => $_POST['locations']);
+				$search_query = $search_query + $city_array;
+			} elseif($_POST['ccz'] == 'county') {
+				$county_array = array('county' => $_POST['locations']);
+				$search_query = $search_query + $county_array;
+			} elseif($_POST['ccz'] == 'zipcode') {
+				$zipcode_array = array('zipcode' => $_POST['locations']);
+				$search_query = $search_query + $zipcode_array;
+			}
+
+			$data = array(
+				'searchName' => $_POST['searchName'],
+				'search' => $search_query,
 				'receiveUpdates' => (isset($_POST['receiveUpdates'])) ? $_POST['receiveUpdates'] : '',
 			);
 			$args = array(
@@ -587,19 +605,19 @@ class Search_Management {
 	private function ccz_select_list() {
 		$cities = $this->idx_api->idx_api( 'cities/combinedActiveMLS' );
 
-		$ccz_select = '<optgroup label="Cities" data-type="city">';
+		$ccz_select = '<optgroup label="Cities" id="city" data-type="city">';
 		foreach ( $cities as $city ) {
 			$ccz_select .= '<option data-ccz="city" data-value="' . $city->id . '" value="' . $city->id . '">' . $city->name . '</option>';
 		}
-		$ccz_select .= '</optgroup><optgroup label="Counties" data-type="county">';
+		$ccz_select .= '</optgroup><optgroup label="Counties" id="county" data-type="county">';
 		$counties = $this->idx_api->idx_api( 'counties/combinedActiveMLS' );
 		foreach ( $counties as $county ) {
 			$ccz_select .= '<option data-ccz="county" value="' . $county->id . '">' . $county->name . '</option>';
 		}
-		$ccz_select .= '</optgroup><optgroup label="Postal Codes" data-type="postalcode">';
+		$ccz_select .= '</optgroup><optgroup label="Postal Codes" id="postalcode" data-type="zipcode">';
 		$zips = $this->idx_api->idx_api( 'postalcodes/combinedActiveMLS' );
 		foreach ( $zips as $zip ) {
-			$ccz_select .= '<option data-ccz="postalcode" value="' . $zip->id . '">' . $zip->name . '</option>';
+			$ccz_select .= '<option data-ccz="zipcode" value="' . $zip->id . '">' . $zip->name . '</option>';
 		}
 		$ccz_select .= '</optgroup>';
 

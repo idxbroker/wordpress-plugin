@@ -39,6 +39,8 @@ jQuery(document).ready(function($) {
 	$('#add-search').submit(function(e) {
 		e.preventDefault();
 
+		var ccz = $('#ccz').select2().find(':selected').data('ccz');
+		var locations = $('#ccz').select2().val();
 		var pt = $('#pt').val();
 		var lp = $('#lp').val();
 		var hp = $('#hp').val();
@@ -55,13 +57,6 @@ jQuery(document).ready(function($) {
 			$('#add-search .error-incomplete').show();
 			return false;
 		}
-		// var linkName = $('#linkName').val();
-		// if(linkName === '') {
-		// 	$('#linkName').parent().addClass('is-dirty');
-		// 	$('#linkName').focus();
-		// 	$('#add-search .error-incomplete').show();
-		// 	return false;
-		// }
 		var linkTitle = $('#linkTitle').val();
 		if(linkTitle === '') {
 			$('#linkTitle').parent().addClass('is-dirty');
@@ -107,6 +102,8 @@ jQuery(document).ready(function($) {
 			data: {
 				action: 'idx_search_add',
 				pt: pt,
+				ccz: ccz,
+				locations: locations,
 				lp: lp,
 				hp: hp,
 				bd: bd,
@@ -115,7 +112,6 @@ jQuery(document).ready(function($) {
 				acres: acres,
 				add: add,
 				pageTitle: pageTitle,
-				// linkName: linkName,
 				linkTitle: linkTitle,
 				useDescriptionMeta: useDescriptionMeta,
 				descriptionMeta: descriptionMeta,
@@ -143,6 +139,8 @@ jQuery(document).ready(function($) {
 	$('#add-lead-search').submit(function(e) {
 		e.preventDefault();
 
+		var ccz = $('#ccz').select2().find(':selected').data('ccz');
+		var locations = $('#ccz').select2().val();
 		var pt = $('#pt').val();
 		var lp = $('#lp').val();
 		var hp = $('#hp').val();
@@ -176,6 +174,8 @@ jQuery(document).ready(function($) {
 			data: {
 				action: 'idx_lead_search_add',
 				pt: pt,
+				ccz: ccz,
+				locations: locations,
 				lp: lp,
 				hp: hp,
 				bd: bd,
@@ -242,6 +242,13 @@ jQuery(document).ready(function($) {
 	// init select2 on ccz list
 	$('#ccz').select2({
 		placeholder: "Enter City, County, or Postal Code"
+	});
+
+	// Disable other optgroups after one has been selected
+	$('#ccz').on('select2:select', function() {
+		selectedOptGroup = $('#ccz').select2().find(':selected').parent('optgroup');
+		otherOptGroups = $('#ccz').find('optgroup').not(selectedOptGroup);
+		$(otherOptGroups).find('option').prop('disabled', true);
 	});
 
 });
