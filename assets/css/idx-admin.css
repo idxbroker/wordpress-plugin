@@ -48,11 +48,6 @@ a:focus {
 	right: 2.5%;
 	top: -1em;
 }
-.leads_page_edit-lead .mdl-button--fab {
-	clear: both;
-	position: absolute;
-	top: 100%;
-}
 #add-lead .mdl-textfield,
 #add-lead .mdl-fieldgroup,
 #edit-lead .mdl-textfield,
