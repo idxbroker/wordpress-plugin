@@ -134,7 +134,12 @@ class Get_Locations
 
         //test to confirm API call worked properly before updating JSON file etc.
         if (!empty($system_links_call) && empty($system_links_call->errors)) {
-            file_put_contents(dirname(dirname(dirname(dirname(__FILE__)))) . '/assets/js/locationlist.js', $output);
+            $upload_dir = wp_upload_dir();
+            $idx_dir_path = $upload_dir['basedir'] . '/idx_cache';
+            if ( ! file_exists( $idx_dir_path ) ) {
+                wp_mkdir_p( $idx_dir_path );
+            }
+            file_put_contents($idx_dir_path . '/locationlist.js', $output);
 
             //update database with new results url
             //get base Url for client's results page for use on omnibar.js front end
