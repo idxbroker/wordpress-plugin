@@ -104,6 +104,7 @@ class Lead_Management {
 				'detailsurl' => $this->idx_api->details_url()
 				)
 			);
+			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
 			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array('jquery'), true);
 			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array('jquery'), true);
 
@@ -513,7 +514,7 @@ class Lead_Management {
 		if ( !is_user_logged_in() || !current_user_can( 'manage_options' ) ){
 			return;
 		}
-
+		
 		echo '<h3>Leads</h3>';
 
 		$leads_array = $this->idx_api->get_leads();
@@ -579,6 +580,14 @@ class Lead_Management {
 			';
 		echo $leads;
 		echo '</tbody></table>';
+		echo '<dialog id="dialog-lead-delete">
+				<form method="dialog">
+					<h5>Delete Lead</h5>
+					<p>Are you sure you want to delete this lead?</p>
+					<button type="submit" value="no" autofocus>No</button>
+					<button type="submit" value="yes">Yes</button>
+				</form>
+			</dialog>';
 		echo '
 			<a href="' . admin_url('admin.php?page=edit-lead') . '" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 				<i class="material-icons">add</i>
@@ -925,7 +934,7 @@ class Lead_Management {
 							
 							$nice_date = Carbon::parse($note['created'])->addHours($offset)->toDayDateTimeString();
 
-							$notes .= '<tr class="note-row note-id-' . $note['id'] . '">';
+							$notes .= '<tr id="note-id-' . $note['id'] . '" class="note-row note-id-' . $note['id'] . '">';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric note"><div class="render-note-' . $note['id'] . '">' . str_replace('&quot;', '"', str_replace('&gt;', '>', str_replace('&lt;', '<', $note['note']))) . '</div></td>';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric">
@@ -949,6 +958,14 @@ class Lead_Management {
 						';
 					echo $notes;
 					echo '</tbody></table>';
+					echo '<dialog id="dialog-lead-note-delete">
+							<form method="dialog">
+								<h5>Delete Lead Note</h5>
+								<p>Are you sure you want to delete this lead note?</p>
+								<button type="submit" value="no" autofocus>No</button>
+								<button type="submit" value="yes">Yes</button>
+							</form>
+						</dialog>';
 					echo '
 						<a href="#TB_inline?width=600&height=350&inlineId=add-lead-note" id="add-lead-note-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
@@ -1029,6 +1046,14 @@ class Lead_Management {
 						';
 					echo $properties;
 					echo '</tbody></table>';
+					echo '<dialog id="dialog-lead-property-delete">
+							<form method="dialog">
+								<h5>Delete Lead Property</h5>
+								<p>Are you sure you want to delete this lead saved property?</p>
+								<button type="submit" value="no" autofocus>No</button>
+								<button type="submit" value="yes">Yes</button>
+							</form>
+						</dialog>';
 					echo '
 						<a href="#TB_inline?width=600&height=500&inlineId=add-lead-property" id="add-lead-property-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 							<i class="material-icons">add</i>
@@ -1151,6 +1176,14 @@ class Lead_Management {
 						';
 					echo $searches;
 					echo '</tbody></table>';
+					echo '<dialog id="dialog-lead-search-delete">
+							<form method="dialog">
+								<h5>Delete Lead Saved Search</h5>
+								<p>Are you sure you want to delete this lead saved search?</p>
+								<button type="submit" value="no" autofocus>No</button>
+								<button type="submit" value="yes">Yes</button>
+							</form>
+						</dialog>';
 					// echo '
 					// 	<a href="#TB_inline?width=600&height=500&inlineId=add-lead-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp thickbox">
 					// 		<i class="material-icons">add</i>
