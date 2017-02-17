@@ -79,7 +79,7 @@ jQuery(document).ready(function($) {
 		"bSort": true,
 		"bPaginate":true,
 		"iDisplayLength": 10,
-		"order": [[ 0, "desc" ]],
+		"order": [[ 2, "desc" ]],
 		"columnDefs": [
 			{
 				"targets": [ 0, 1, 2, 3 ],
@@ -685,9 +685,10 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
+	// validate email
 	function validateEmail(email) {
 		var re = /\S+@\S+\.\S+/;
 		return re.test(email);
 	}
-	
+
 });

@@ -50,7 +50,8 @@ class Initiate_Plugin
         new \IDX\Views\Omnibar_Settings();
         new Dashboard_Widget();
         new Backward_Compatibility\Add_Uid_To_Idx_Pages();
-        new Leads\Lead_Management();
+        new \IDX\Views\Lead_Management();
+        new \IDX\Views\Search_Management();
     }
 
     public function idx_extensions() {
@@ -186,6 +187,7 @@ class Initiate_Plugin
  */
     public function idx_refreshapi()
     {
+        $this->idx_api->clear_wrapper_cache();
         $this->idx_api->idx_clean_transients();
         update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey']);
         setcookie("api_refresh", 1, time() + 20);
