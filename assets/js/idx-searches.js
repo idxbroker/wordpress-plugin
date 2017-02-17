@@ -71,7 +71,7 @@ jQuery(document).ready(function($) {
 		$('.mdl-spinner').addClass('is-active');
 
 		var descriptionMeta = $('#descriptionMeta').val();
-		var keywordsMeta = $('#keywordsMeta').val();
+		var keywords = $('#keywords').val();
 		var linkCopy = $('#linkCopy').val();
 		var agentID = $('#agentID').val();
 
@@ -116,7 +116,7 @@ jQuery(document).ready(function($) {
 				useDescriptionMeta: useDescriptionMeta,
 				descriptionMeta: descriptionMeta,
 				useKeywordsMeta: useKeywordsMeta,
-				keywordsMeta: keywordsMeta,
+				keywords: keywords,
 				featured: featured,
 				linkCopy: linkCopy,
 				agentID: agentID,
