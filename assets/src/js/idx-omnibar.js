@@ -36,7 +36,7 @@
 										displayName = longName;
 									}
 								}
-								return displayName;
+								return '<span style="text-transform: uppercase; font-size: 60%; color: #bbb;">' + displayName + '</span>';
 			};
 			//helper function for grabbing the name of each item in JSON creating new array
 			var createArrays = function(array, newArray, type, fieldName){
