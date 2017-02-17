@@ -62,7 +62,7 @@ class IDX_Leads_GF
 						</tr>                                       
 						<tr>
 							<th>Enable Lead Import?
-								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;''>This requires that your form have a required First and Last Name field and required Email field.</strong>"><i class="fa fa-question-circle"></i></a>
+								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;''>This requires that your form use the advanced "Name" and "Email" fields and those fields be required..</strong>"><i class="fa fa-question-circle"></i></a>
 							</th>
 							<td>
 								<input id="enable_lead" name="enable_lead"  value="1" type="checkbox" <?php checked($checked, 1, true); ?>>
@@ -96,7 +96,7 @@ class IDX_Leads_GF
 		GFFormSettings::page_footer();
 	}
 
-	public function idx_put_lead( $entry, $form ) {        
+	public static function idx_put_lead( $entry, $form ) {        
 		$form_id = $form['id'];
 
 		$option_name = 'idx_lead_form_' . $form_id;

@@ -3,9 +3,9 @@ Author: IDX, LLC
 **Contributors:** idxco  
 Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
-**Requires at least:** 3.7  
-**Tested up to:** 4.7
-**Stable tag:** 2.2.0
+**Requires at least:** 3.7
+**Tested up to:** 4.7.2
+**Stable tag:** 2.2.1
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -111,29 +111,13 @@ Features provided by this Plugin - Widgets, links, and custom links may be place
 ### What are Other Requirements for this Plugin? ###
 This plugin requires a PHP version higher than 5.4. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
 
-## Screenshots ##
-
-###1. Omnibar Search Widget. ###
-
-![Alt text](screenshot-1.png?raw=true "Omnibar Search Widget")
-
-###2. IDX Shortcode UI. ###
-
-![Alt text](screenshot-2.jpg?raw=true "IDX Shortcode UI")
-
-###3. Widget Customizer. ###
-
-![Alt text](screenshot-3.jpg?raw=true " Widget Customizer")
-
-###4. Plugin Settings Page. ###
-
-![Alt text](screenshot-4.jpg?raw=true "Plugin Settings Page")
-
-###5. Middleware API Key. ###
-
-![Alt text](screenshot-5.png?raw=true "Middleware API Key")
-
 ## Changelog ##
+
+### 2.2.1 ###
+* Fix: Square feet showing truncated values in widgets and shortcodes
+* Fix: Added email validation for lead management
+* Fix: Lead management times are now offset based on WP timezone settings
+* Fix: PHP notice in lead management UI
 
 ### 2.2.0 ###
 * New: Added Lead Management interface so you can manage leads directly in WordPress

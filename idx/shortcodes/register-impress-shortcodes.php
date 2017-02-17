@@ -201,7 +201,7 @@ class Register_Impress_Shortcodes
                 $output .= '<p class="beds-baths-sqft">';
                 $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
                 $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
-                $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
+                $output .= $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']);
                 $output .= "</p>";
 
                 //Add Disclaimer and Courtesy.
@@ -238,7 +238,7 @@ class Register_Impress_Shortcodes
                 $output .= '<span class="impress-beds-baths-sqft">';
                 $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
                 $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
-                $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
+                $output .= $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']);
                 $output .= "</span></p></a>";
                 $output .= "</li>";
             }
@@ -479,7 +479,7 @@ class Register_Impress_Shortcodes
             $output .= '<p class="impress-beds-baths-sqft">';
             $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
             $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
-            $output .= $this->hide_empty_fields('sqft', 'SqFt', number_format($prop['sqFt']));
+            $output .= $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']);
             $output .= "</p>";
 
             //Add Disclaimer and Courtesy.
