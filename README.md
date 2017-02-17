@@ -126,6 +126,7 @@ This plugin requires a PHP version higher than 5.4. For security reasons, we rec
 * Fix: Added email validation for lead management
 * Fix: Lead management times are now offset based on WP timezone settings
 * Fix: PHP notice in lead management UI
+* Notice: Dropped support for PHP < 5.4
 
 ### 2.2.0 ###
 * New: Added Lead Management interface so you can manage leads directly in WordPress
