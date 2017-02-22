@@ -171,6 +171,9 @@ document.addEventListener('DOMContentLoaded', function(event){
             case 'impress_property_carousel':
                 modalTitle.innerHTML = 'Shortcode Details - IMPress Property Carousel';
                 break;
+            case 'idx_wrapper_tags':
+                modalTitle.innerHTML = 'Shortcode Details - IDX Wrapper Tags';
+                break;
             default:
                 //For a custom third party title.
                 jQuery.post(
@@ -457,13 +460,3 @@ document.addEventListener('DOMContentLoaded', function(event){
     initializeModal();
 
 });
-
-
-
-
-
-
-
-
-
-
