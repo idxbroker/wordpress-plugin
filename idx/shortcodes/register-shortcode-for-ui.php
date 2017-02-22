@@ -25,6 +25,7 @@ class Register_Shortcode_For_Ui
             'impress_property_showcase' => array('name' => 'IMPress Property Showcase', 'short_name' => 'impress_property_showcase', 'icon' => 'fa fa-home'),
             'impress_property_carousel' => array('name' => 'IMPress Property Carousel', 'short_name' => 'impress_property_carousel', 'icon' => 'dashicons dashicons-admin-multisite'),
             'impress_lead_login' => array('name' => 'IMPress Lead Login Widget', 'short_name' => 'impress_lead_login', 'icon' => 'fa fa-users'),
+            'idx_wrapper_tags' => array('name' => 'IDX Wrapper Tags', 'short_name' => 'idx_wrapper_tags', 'icon' => 'fa fa-cog'),
         );
         //Only add lead signup shortcode if the account type is Platinum
         if ($this->idx_api->platinum_account_type()) {
@@ -77,6 +78,9 @@ class Register_Shortcode_For_Ui
             case "impress_property_carousel":
                 echo $this->get_property_carousel("impress_property_carousel");
                 break;
+            case "idx_wrapper_tags":
+                echo $this->idx_wrapper_tags();
+                break;
         }
         //return html for the desired type for 3rd party plugins
         do_action('idx-get-shortcode-options');
@@ -89,6 +93,12 @@ class Register_Shortcode_For_Ui
         $shortcode = sanitize_text_field($_POST['idx_shortcode']);
         echo do_shortcode(stripslashes($shortcode));
         wp_die();
+    }
+
+    public function idx_wrapper_tags($shortcode) {
+        $output = '<div class="idx-modal-shortcode-field" data-shortcode="idx-wrapper-tags"></div>';
+
+        return $output;
     }
 
     public function get_shortcodes_for_ui()
@@ -190,7 +200,7 @@ class Register_Shortcode_For_Ui
         $output .= "<input type=\"checkbox\" id=\"min_price\" data-short-name=\"min_price\">";
         $output .= "<label for\"min_price\">Include Min Price? (If Extra Fields is enabled)</label>";
         $output .= "</div>";
-$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"idx-omnibar\"></div>";
         // Styles and Scripts for Preview
         $output .= "<script>";
         //empty url array so styles can be disabled and enabled as expected
