@@ -11,6 +11,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var saveButton = document.querySelectorAll('#save_changes')[0];
     var ajax_load = "<span class='ajax'></span>";
     var mlsPts = document.querySelectorAll('.omnibar-mlsPtID');
+    var sort = document.querySelectorAll('.sort-order');
     var customField = document.querySelectorAll('.omnibar-additional-custom-field')[0];
     var errorMessage = document.querySelectorAll('.customFieldError')[0];
 
@@ -44,6 +45,7 @@ window.addEventListener('DOMContentLoaded', function(){
             event.preventDefault();
             jQuery('.status').fadeIn('fast').html(ajax_load + 'Saving Settings...');
             updateOmnibarCurrentCcz();
+            updateOmnibarSortOrder();
             });
         }
     }
@@ -168,6 +170,15 @@ window.addEventListener('DOMContentLoaded', function(){
                 'fields': customFieldValues,
                 'mlsPtIDs': mlsPtIDs,
                 'placeholder': placeholder
+        }, function(){window.location.reload();});
+    }
+
+    function updateOmnibarSortOrder(){
+        var sortorder = document.getElementById( "sort-order" );
+         jQuery.post(
+                ajaxurl, {
+                'action': 'idx_update_sort_order',
+                'sort-order': sortorder.options[ sortorder.selectedIndex ].value
         }, function(){window.location.reload();});
     }
 });
