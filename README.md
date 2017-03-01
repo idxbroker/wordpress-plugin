@@ -118,6 +118,7 @@ This plugin requires a PHP version higher than 5.4. For security reasons, we rec
 * New: Added option for omnibar default results sorting
 * New: Implemented material design dialogs instead of browser native dialogs
 * New: Added idx-wrapper-tags shortcode to shortcode UI
+* New: Added filter for developers to modify IDX meta tags added to wrapper (h/t imforza)
 * Fix: Multisite compatibility - Omnibar location list moved to site uploads folder
 * Fix: Omnibar extra fields UX enhancement - fields names distinguished from values
 * Fix: Gravity Forms lead import tooltip instruction clarified
