@@ -36,7 +36,7 @@
 										displayName = longName;
 									}
 								}
-								return '<span style="text-transform: uppercase; font-size: 60%; color: #bbb;">' + displayName + '</span>';
+								return displayName;
 			};
 			//helper function for grabbing the name of each item in JSON creating new array
 			var createArrays = function(array, newArray, type, fieldName){
@@ -464,7 +464,7 @@
 						forEach(fieldValues, function(index, value){
 							if(input.value !== '' && (input.value.toLowerCase() === value.toLowerCase() || input.value.toLowerCase() === (value + ' ' + checkFieldName(fieldName)).toLowerCase())){
 								foundResult = true;
-								return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&widgetReferer=true');
+								return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&widgetReferer=true' + '&srt=' + sortOrder);
 							}
 						})
 						if(foundResult){
