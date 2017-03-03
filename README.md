@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 3.7
 **Tested up to:** 4.7.2
-**Stable tag:** 2.3.0
+**Stable tag:** 2.3.1
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -112,6 +112,9 @@ Features provided by this Plugin - Widgets, links, and custom links may be place
 This plugin requires a PHP version higher than 5.4. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
 
 ## Changelog ##
+
+### 2.3.1 ### 
+* Fix: Omnibar extra fields UX enhancement reverted due to issues with form submission
 
 ### 2.3.0 ###
 * New: Added interface for creating saved searches and lead saved searches
