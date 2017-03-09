@@ -52,6 +52,7 @@ EOD;
         if (empty($placeholder)) {
             $placeholder = 'City, Postal Code, Address, or Listing ID';
         }
+        $sort_order = get_option('idx_omnibar_sort', 'newest');
 
         $upload_dir = wp_upload_dir();
         $idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
@@ -64,6 +65,7 @@ EOD;
         wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)));
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
+        wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
         wp_localize_script('idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs);
         wp_localize_script('idx-omnibar-js', 'idxOmnibarPlaceholder', $placeholder);
         wp_enqueue_script('idx-omnibar-js');
