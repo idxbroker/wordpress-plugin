@@ -8,6 +8,9 @@ if (!current_user_can('manage_options')) {
 global $api_error;
 $idx_api = new \IDX\Idx_Api;
 
+// get wpl options if they exist
+$wpl_options = get_option('plugin_wp_listings_settings');
+
 if (!$api_error) {
     $system_links = $idx_api->idx_api_get_systemlinks();
     if (is_wp_error($system_links)) {
@@ -85,7 +88,19 @@ if ($wrapper_page_id != '') {
                     <span id="protocol" class="label hidden"></span>
                     <input id="page_link" class="hidden" type="text" value="<?php echo $wrapper_page_url;?>" readonly>
                 </div>
-    <?php settings_fields('idx-platinum-settings-group');?>
+
+                <!-- Add ReCaptcha field if a key has not already been entered in WP Listings settings -->
+                <?php if( $wpl_options['wp_listings_captcha_site_key'] == '' || $wpl_options['wp_listings_captcha_site_key'] == null ) { ?>
+                    <div id="recaptcha-key">
+                        <h3>Add Google ReCaptcha</h3>
+                        <div class="help-text">You can choose to add Google ReCaptcha to prevent spam lead signups. To use Google ReCaptcha, you must first <a href="https://www.google.com/recaptcha/admin">sign up for a key</a>, then enter the site key below:</div>
+                        <label for="idx_recaptcha_site_key">Site Key:</label>
+                        <input name="idx_recaptcha_site_key" type="text" id="idx_recaptcha_site_key" size="40" value="<?php echo get_option('idx_recaptcha_site_key'); ?>" />
+                        <input type="button" class="button-primary" id="idx_update_recaptcha_key" value="Update" />
+                    </div>
+                <?php }
+        settings_fields('idx-platinum-settings-group');
+    ?>
     </form>
 
 </div>
