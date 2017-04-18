@@ -21,6 +21,15 @@ document.addEventListener('DOMContentLoaded', function(){
     function validateSignup(event) {
         var form = event.target;
 
+        if(typeof grecaptcha.getResponse == 'function') {
+            var captcha = grecaptcha.getResponse();
+            if(captcha.length == 0) {
+                var err = "You can't leave Captcha Code empty";
+                displayErr(err, form);
+                event.preventDefault();
+            }
+        }
+
         try {
             forEach(form.querySelectorAll('input'),
                 function(input) {

@@ -72,11 +72,15 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         $title = $instance['title'];
         $custom_text = $instance['custom_text'];
 
+        $wpl_options = get_option('plugin_wp_listings_settings');
 
         //Validate fields
         wp_register_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
         wp_localize_script('impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page());
         wp_enqueue_script('impress-lead-signup');
+        if( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key') != '' ) {
+            wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js');
+        }
 
         echo $before_widget;
 
@@ -90,7 +94,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 
         ?>
 		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/usersignup.php" class="impress-lead-signup" method="post" target="<?php echo $target?>" name="LeadSignup" id="LeadSignup">
-                        <?php echo $this->error_message; ?>
+            <?php echo $this->error_message; ?>
 			<input type="hidden" name="action" value="addLead">
 			<input type="hidden" name="signupWidget" value="true">
 			<input type="hidden" name="contactType" value="direct">
@@ -108,7 +112,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             echo '
 				<label id="impress-widgetphone-label" class="ie-only" for="impress-widgetphone">' . __('Phone:', 'idxbroker') . '</label>
 				<input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">';
-        }?>
+            }?>
+
+            <?php if( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key' ) != '' ) {
+                $site_key = ( $wpl_options['wp_listings_captcha_site_key'] != '' ) ? $wpl_options['wp_listings_captcha_site_key'] : get_option( 'idx_recaptcha_site_key' );
+                echo '<div id="recaptcha" class="g-recaptcha" data-sitekey="' . $site_key . '"></div>'; 
+            } ?>
 
 			<input id="bb-IDX-widgetsubmit" type="submit" name="submit" value="Sign Up!">
 		</form>
