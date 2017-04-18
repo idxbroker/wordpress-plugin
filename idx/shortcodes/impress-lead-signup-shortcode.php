@@ -37,10 +37,15 @@ class Impress_Lead_Signup_Shortcode {
 
         $target = $this->target($new_window);
 
+        $wpl_options = get_option('plugin_wp_listings_settings');
+
         //Validate fields
         wp_register_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
         wp_localize_script('impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page());
         wp_enqueue_script('impress-lead-signup');
+        if( $wpl_options['wp_listings_captcha_site_key']  != '' || get_option( 'idx_recaptcha_site_key')  != '' ) {
+            wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js');
+        }
 
         $widget = sprintf('
             <form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup" id="LeadSignup">
@@ -62,6 +67,11 @@ class Impress_Lead_Signup_Shortcode {
             $widget .= sprintf('
             <label id="impress-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
             <input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">');
+        }
+
+        if( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key' ) != '' ) {
+            $site_key = ( $wpl_options['wp_listings_captcha_site_key'] != '' ) ? $wpl_options['wp_listings_captcha_site_key'] : get_option( 'idx_recaptcha_site_key' );
+            $widget .= sprintf('<div id="recaptcha" class="g-recaptcha" data-sitekey="%s"></div>', $site_key);
         }
 
         $widget .= sprintf('<input id="impress-widgetsubmit" type="submit" name="submit" value="Sign Up!">
@@ -115,5 +125,3 @@ class Impress_Lead_Signup_Shortcode {
     }
 
 }
-
-
