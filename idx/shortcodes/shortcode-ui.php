@@ -25,6 +25,10 @@ class Shortcode_Ui
             return;
         }
 
+    if( ( !empty($_GET['post_type']) && 'idx_page' != $_GET['post_type'] )|| (!empty($_GET['post']) && 'idx_page' != get_post_type($_GET['post']) ))
+    {
+        return;
+        }
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
         wp_enqueue_script('idx-shortcode', plugins_url('../assets/js/idx-shortcode.min.js', dirname(__FILE__)), array('jquery'));
