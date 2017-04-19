@@ -24,9 +24,10 @@ class Shortcode_Ui
         if ('post.php' != $hook && 'post-new.php' != $hook) {
             return;
         }
-
-    if( ( !empty($_GET['post_type']) && 'idx_page' != $_GET['post_type'] )|| (!empty($_GET['post']) && 'idx_page' != get_post_type($_GET['post']) ))
-    {
+        
+        if( ( !empty($_GET['post_type']) && 'idx_page' != $_GET['post_type'] )
+           || (!empty($_GET['post']) && 'idx_page' != get_post_type($_GET['post']) )
+          ){
         return;
         }
         wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
