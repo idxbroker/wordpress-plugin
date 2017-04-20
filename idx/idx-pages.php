@@ -33,7 +33,7 @@ class Idx_Pages
 
     public $idx_api;
 
-    public function add_custom_schedule()
+    public function add_custom_schedule($schedules)
     {
         $schedules['threeminutes'] = array(
             'interval' => 60 * 3, //three minutes in seconds
