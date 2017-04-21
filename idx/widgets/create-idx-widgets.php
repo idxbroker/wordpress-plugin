@@ -71,9 +71,9 @@ class Create_Idx_Widgets
                         wp_enqueue_script('custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__);
                         wp_enqueue_script('custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__);
                         wp_enqueue_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet-1.000.css');
-                        $idx_widget_code = "<script src=\"{$idx_widget_link}\" defer></script>";
+                        $idx_widget_code = "<script src=" .str_replace( 'http://', '//', "{$idx_widget_link}") . " async defer></script>";
                     } else {
-                        $idx_widget_code = "<script src=\"{$idx_widget_link}\"></script>";
+                        $idx_widget_code = "<script src=" .str_replace( 'http://', '//', "{$idx_widget_link}") . " async defer></script>";
                     }
 
                     return $idx_widget_code;
