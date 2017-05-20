@@ -14,7 +14,7 @@ IMPress for IDX Broker is part of the IMPress family of plugins. Your IDX Broker
 
 <h3>IMPress for IDX Broker</h3>
 
-[vimeo https://vimeo.com/200904870]
+`[vimeo https://vimeo.com/200904870]`
 
 <h4>New! Manage Your Leads</h4>
 No more going between browser windows with the Lead Management interface. Now you can see and manage your leads right within the WordPress dashboard.
