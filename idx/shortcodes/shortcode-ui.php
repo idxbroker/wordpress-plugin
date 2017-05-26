@@ -25,8 +25,8 @@ class Shortcode_Ui
             return;
         }
 
-        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
-        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
+        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
+        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery'), '4.0.3', true);
         wp_enqueue_script('idx-shortcode', plugins_url('../assets/js/idx-shortcode.min.js', dirname(__FILE__)), array('jquery'));
         wp_enqueue_style('idx-shortcode', plugins_url('../assets/css/idx-shortcode.css', dirname(__FILE__)));
         wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
