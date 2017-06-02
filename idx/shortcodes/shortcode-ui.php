@@ -6,17 +6,17 @@ class Shortcode_Ui
 
     public function __construct()
     {
-        add_action('media_buttons_context', array($this, 'add_idx_button'));
+        add_action('media_buttons', array($this, 'add_idx_media_button'), 15);
         add_action('admin_enqueue_scripts', array($this, 'enqueue_shortcode_js'));
         $this->shortcodes_for_ui = new \IDX\Shortcodes\Register_Shortcode_For_Ui();
     }
 
     public $shortcodes_for_ui;
 
-    public function add_idx_button($context)
+    public function add_idx_media_button($editor_id)
     {
-        $this->modal();
-        return $context .= "<button id=\"idx-shortcode\" class=\"button thickbox\">Add IDX Shortcode</button>";
+        echo $this->modal();
+        printf('<button id="idx-shortcode" class="button thickbox" data-editor="%s">Add IDX Shortcode</button>', esc_attr( $editor_id ));
     }
 
     public function enqueue_shortcode_js($hook)
@@ -29,11 +29,13 @@ class Shortcode_Ui
         wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery'), '4.0.3', true);
         wp_enqueue_script('idx-shortcode', plugins_url('../assets/js/idx-shortcode.min.js', dirname(__FILE__)), array('jquery'));
         wp_enqueue_style('idx-shortcode', plugins_url('../assets/css/idx-shortcode.css', dirname(__FILE__)));
-        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
-        //javascript for map search widget preview
-        wp_enqueue_script('custom-scriptLeaf', '//idxdyncdn.idxbroker.com/graphical/javascript/leaflet.js', __FILE__);
-        wp_enqueue_script('custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__);
-        wp_enqueue_style('cssLeaf', '//idxdyncdn.idxbroker.com/graphical/css/leaflet.css');
+        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
+        // scripts and styles for map search widget preview
+        wp_enqueue_script('custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', array());
+        wp_enqueue_script('custom-scriptLeafDraw', '//d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', array('custom-scriptLeaf'));
+        wp_enqueue_script('custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', array('custom-scriptLeaf', 'custom-scriptLeafDraw'));
+        wp_enqueue_style('cssLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css');
+        wp_enqueue_style('cssLeafLabel', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css');
     }
 
     public function modal()
