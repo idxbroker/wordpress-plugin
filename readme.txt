@@ -136,6 +136,7 @@ This plugin requires a PHP version higher than 5.4. For security reasons, we rec
 * Fix: Cron schedule filter modified to prevent interference with other scheduled cron jobs
 * Fix: Broken knowledge base links on settings page
 * Fix: Load select2 script in footer to prevent conflict with custom select2 script packaged with Avada theme
+* Fix: Deprecated URLs causing console errors in Admin Dashboard Edit pages
 
 = 2.3.3 =
 * New: Added reCaptcha to lead signup widget to prevent spam signups
