@@ -33,9 +33,9 @@ class Idx_Api
                 case 403.4:$err_message = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.<br />Please contact your developer and/or hosting provider.';
                     break;
                 case 405:
-                case 409:$err_message = 'Invalid request sent to IDX Broker API, please re-install the IDX Broker Platinum plugin';
+                case 409:$err_message = 'Invalid request sent to IDX Broker API, please re-install the IMPress for IDX Broker plugin';
                     break;
-                case 406:$err_message = 'Access key is missing. To obtain an access key, please visit your IDX Broker Platinum Dashboard';
+                case 406:$err_message = 'Access key is missing. To obtain an access key, please visit your IDX Broker Dashboard';
                     break;
                 case 412:$err_message = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the IDX Broker Platinum Dashboard, or call 800-421-9668.';
                     break;
