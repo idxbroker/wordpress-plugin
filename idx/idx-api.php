@@ -37,7 +37,7 @@ class Idx_Api
                     break;
                 case 406:$err_message = 'Access key is missing. To obtain an access key, please visit your IDX Broker Dashboard';
                     break;
-                case 412:$err_message = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the IDX Broker Platinum Dashboard, or call 800-421-9668.';
+                case 412:$err_message = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the IDX Broker Dashboard, or call 800-421-9668.';
                     break;
                 case 500:$err_message = 'General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact 800-421-9668 if the problem persists.';
                     break;
