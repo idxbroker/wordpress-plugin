@@ -28,7 +28,7 @@ class Idx_Api
             switch ($response_code) {
                 case 401:$err_message = 'Access key is invalid or has been revoked, please ensure there are no spaces in your key.<br />If the problem persists, please reset your API key in the IDX Broker Platinum Dashboard or call 800-421-9668.';
                     break;
-                case 403:$err_message = 'IP address blocked due to violation of TOS. Contact 800-421-9668 to determine the reason for the block.';
+                case 403:$err_message = $ip = gethostbyname(trim(`hostname`)); $err_message = 'IP address'.$ip.' was blocked due to violation of TOS. Contact 800-421-9668 to determine the reason for the block.';
                     break;
                 case 403.4:$err_message = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.<br />Please contact your developer and/or hosting provider.';
                     break;
