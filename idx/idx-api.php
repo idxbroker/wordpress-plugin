@@ -26,9 +26,9 @@ class Idx_Api
         $err_message = false;
         if (is_numeric($response_code)) {
             switch ($response_code) {
-                case 401:$err_message = 'Access key is invalid or has been revoked, please ensure there are no spaces in your key.<br />If the problem persists, please reset your API key in the IDX Broker Dashboard or call 800-421-9668.';
+                case 401:$err_message = 'Access key is invalid or has been revoked, please ensure there are no spaces in your key.<br />If the problem persists, please reset your API key in the IDX Broker Dashboard or contact help@idxbroker.com.';
                     break;
-                case 403:$ip = gethostbyname(trim(`hostname`)); $err_message = 'IP address: '.$ip.' was blocked due to violation of TOS. Contact 800-421-9668 to determine the reason for the block.';
+                case 403:$ip = gethostbyname(trim(`hostname`)); $err_message = 'IP address: '.$ip.' was blocked due to violation of TOS. Contact help@idxbroker.com with your IP to determine the reason for the block.';
                     break;
                 case 403.4:$err_message = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.<br />Please contact your developer and/or hosting provider.';
                     break;
@@ -37,11 +37,11 @@ class Idx_Api
                     break;
                 case 406:$err_message = 'Access key is missing. To obtain an access key, please visit your IDX Broker Dashboard';
                     break;
-                case 412:$err_message = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the IDX Broker Dashboard, or call 800-421-9668.';
+                case 412:$err_message = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the IDX Broker Dashboard, or contact help@idxbroker.com.';
                     break;
-                case 500:$err_message = 'General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact 800-421-9668 if the problem persists.';
+                case 500:$err_message = 'General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact help@idxbroker.com if the problem persists.';
                     break;
-                case 503:$err_message = 'IDX Broker API is currently undergoing maintenance. Please try again in a few moments or call 800-421-9668 if the problem persists.';
+                case 503:$err_message = 'IDX Broker API is currently undergoing maintenance. Please try again in a few moments or contact help@idxbroker.com if the problem persists.';
                     break;
             }
         }
