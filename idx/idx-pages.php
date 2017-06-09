@@ -33,7 +33,7 @@ class Idx_Pages
 
     public $idx_api;
 
-    public function add_custom_schedule()
+    public function add_custom_schedule($schedules)
     {
         $schedules['threeminutes'] = array(
             'interval' => 60 * 3, //three minutes in seconds
@@ -450,8 +450,8 @@ class Idx_Pages
         // when saving a post, save the meta of which wrapper is set
         wp_nonce_field('idx-wrapper-page', 'idx-wrapper-page-nonce');
         $this->wrapper_page_dropdown();
-        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
-        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
+        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
+        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery'), '4.0.3', true);
         wp_enqueue_script('idx-wrapper', plugins_url('../assets/js/idx-wrappers.min.js', __FILE__));
     }
 

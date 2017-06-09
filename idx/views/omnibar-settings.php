@@ -31,8 +31,8 @@ class Omnibar_Settings
             //tell JS to reload page when ready
             wp_localize_script('idx-omnibar-settings', 'loadOmnibarView', 'true');
         }
-        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css');
-        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js', 'jquery');
+        wp_enqueue_style('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css');
+        wp_enqueue_script('select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array('jquery'), '4.0.3', true);
 
         return wp_enqueue_script('idx-omnibar-settings');
     }
@@ -214,7 +214,7 @@ class Omnibar_Settings
             <option value="sqftd" ' . selected($sort_order, 'sqftd', false) . '>Square Feet (High to Low)</option>
         </select>
         ';
-
+        
         echo "</div>";
         echo <<<EOT
                         <div class="saveFooter">
