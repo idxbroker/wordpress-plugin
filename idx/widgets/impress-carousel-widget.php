@@ -58,15 +58,22 @@ class Impress_Carousel_Widget extends \WP_Widget
             wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
         }
 
+        $output = '';
         if (($instance['properties']) == 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($instance['saved_link_id']);
+            $output .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
         } else {
             $properties = $this->idx_api->client_properties($instance['properties']);
+            $output .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
         }
 
+        //Force type of array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
         //If no properties or an error, load message
-        if (empty($properties) || (isset($properties) && $properties === 'No results returned') || gettype($properties) === 'object') {
-            return 'No properties found';
+        if (empty($properties) || (isset($properties) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
+            return $output .= '<p>No properties found</p>';
         }
 
         if ($instance['autoplay']) {
@@ -84,7 +91,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         $target = $this->target($instance['new_window']);
 
         if ($display === 1) {
-            echo '
+            $output .= '
             <script>
             jQuery(function( $ ){
                 $(".impress-listing-carousel-' . $display . '").owlCarousel({
@@ -101,7 +108,7 @@ class Impress_Carousel_Widget extends \WP_Widget
             </script>
             ';
         } else {
-            echo '
+            $output .= '
             <script>
             jQuery(function( $ ){
                 $(".impress-listing-carousel-' . $display . '").owlCarousel({
@@ -119,10 +126,6 @@ class Impress_Carousel_Widget extends \WP_Widget
             ';
         }
 
-        //Force type of array.
-        $properties = json_encode($properties);
-        $properties = json_decode($properties, true);
-
         // sort low to high
         usort($properties, array($this, 'price_cmp'));
 
@@ -134,8 +137,6 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         $total = count($properties);
         $count = 0;
-
-        $output = '';
 
         $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s">', $instance['display']);
 

@@ -71,20 +71,26 @@ class Register_Impress_Shortcodes
             wp_enqueue_style('impress-showcase', plugins_url('../assets/css/widgets/impress-showcase.css', dirname(__FILE__)));
         }
 
-        if (($property_type) == 'savedlinks') {
+        $output = '';
+        if (($property_type) === 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($saved_link_id);
+            $output .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
         } else {
             $properties = $this->idx_api->client_properties($property_type);
+            $output .= '<!-- Property Type: ' . $property_type . ' -->';
         }
+
+        //Force type as Array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+
         //If no properties or an error, load message
-        if (empty($properties) || (isset($properties) && $properties === 'No results returned') || gettype($properties) === 'object') {
-            return 'No properties found';
+        if (empty($properties) || (isset($properties) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
+            return $output .= '<p>No properties found</p>';
         }
 
         $total = count($properties);
         $count = 0;
-
-        $output = '';
 
         $column_class = '';
 
@@ -117,10 +123,6 @@ class Register_Impress_Shortcodes
         }
 
         $target = $this->target($new_window);
-
-        //Force type as Array.
-        $properties = json_encode($properties);
-        $properties = json_decode($properties, true);
 
         // sort low to high
         usort($properties, array($this->idx_api, 'price_cmp'));
@@ -322,7 +324,7 @@ class Register_Impress_Shortcodes
 
     public function property_carousel_shortcode($atts = array())
     {
-        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
 
         extract(shortcode_atts(array(
             'max' => 4,
@@ -351,19 +353,23 @@ class Register_Impress_Shortcodes
         $prev_link = apply_filters('idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __('<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker'));
         $next_link = apply_filters('idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __('<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker'));
 
+        $output = '';
         if (($property_type) === 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($saved_link_id);
+            $output .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
         } else {
             $properties = $this->idx_api->client_properties($property_type);
-        }
-        //If no properties or an error, load message
-        if (empty($properties) || (isset($properties) && $properties === 'No results returned') || gettype($properties) === 'object') {
-            return 'No properties found';
+            $output .= '<!-- Property Type: ' . $property_type . ' -->';
         }
 
         //Force type as array.
         $properties = json_encode($properties);
         $properties = json_decode($properties, true);
+
+        //If no properties or an error, load message
+        if (empty($properties) || (isset($properties) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
+            return $output .= '<p>No properties found</p>';
+        }
 
         // sort low to high
         usort($properties, array($this->idx_api, 'price_cmp'));
@@ -380,7 +386,7 @@ class Register_Impress_Shortcodes
 
         //All Instance Values are strings for shortcodes but not widgets.
         if ($display === "1") {
-            $output = '
+            $output .= '
             <script>
             jQuery(function( $ ){
                 jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
@@ -397,7 +403,7 @@ class Register_Impress_Shortcodes
             </script>
             ';
         } else {
-            $output = '
+            $output .= '
             <script>
             jQuery(function( $ ){
                 jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
