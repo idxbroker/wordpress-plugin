@@ -70,10 +70,14 @@ class Impress_Carousel_Widget extends \WP_Widget
         //Force type of array.
         $properties = json_encode($properties);
         $properties = json_decode($properties, true);
-
+        
         //If no properties or an error, load message
-        if (empty($properties) || (isset($properties) && $properties[0] === 'No results returned') || gettype($properties) === 'object') {
-            return $output .= '<p>No properties found</p>';
+        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || isset($properties['errors']['idx_api_error']) ) {
+            if (isset($properties['errors']['idx_api_error'])) {
+                return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
+            } else {
+                return $output .= '<p>No properties found</p>';
+            }
         }
 
         if ($instance['autoplay']) {
