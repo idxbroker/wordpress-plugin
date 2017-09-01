@@ -422,15 +422,15 @@
 					switch(listType){
 						case 'cities':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=city&city[]=' + list[i].id + '&widgetReferer=true' + '&srt=' + sortOrder);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=city&city[]=' + list[i].id + '&srt=' + sortOrder);
 							break;
 						case 'counties':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=county&county[]=' + list[i].id + '&widgetReferer=true' + '&srt=' + sortOrder);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=county&county[]=' + list[i].id + '&srt=' + sortOrder);
 							break;
 						case 'zipcodes':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=zipcode&zipcode[]=' + list[i].id + '&widgetReferer=true' + '&srt=' + sortOrder);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=zipcode&zipcode[]=' + list[i].id + '&srt=' + sortOrder);
 							break;
 					}
 				} else if (foundResult === false && i == list.length - 1) {
@@ -464,7 +464,7 @@
 						forEach(fieldValues, function(index, value){
 							if(input.value !== '' && (input.value.toLowerCase() === value.toLowerCase() || input.value.toLowerCase() === (value + ' ' + checkFieldName(fieldName)).toLowerCase())){
 								foundResult = true;
-								return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&widgetReferer=true' + '&srt=' + sortOrder);
+								return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&srt=' + sortOrder);
 							}
 						})
 						if(foundResult){
@@ -484,23 +484,30 @@
 				var hasSpaces = /\s/g.test(input.value);
 				if (!input.value) {
 					//nothing in input
-					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&widgetReferer=true' + '&srt=' + sortOrder);
+					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&srt=' + sortOrder);
 				} else if(hasSpaces === false && parseInt(input.value) !== isNaN) {
 					//MLS Number/ListingID
 					var listingID = true;
-					goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID + '&widgetReferer=true' + '&srt=' + sortOrder);
+					goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID + '&srt=' + sortOrder);
 				} else {
 					//address (split into number and street)
 					var addressSplit = input.value.split(' ');
 					//if first entry is number, search for street number otherwise search for street name
 					if(Number(addressSplit[0]) > 0){
-						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&a_streetNumber=' + addressSplit[0] + '&aw_streetName=' + addressSplit[1] + '&widgetReferer=true' + '&srt=' + sortOrder);
+						var addressName = addressSplit[1];
+						// don't assume street name is one word, combine address pieces
+						if(addressSplit.length > 1) {
+							for(var i=2, len=addressSplit.length; i < len; i++){
+								addressName += '+' + addressSplit[i];
+							}
+						}
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&a_streetNumber=' + addressSplit[0] + '&aw_address=' + addressName + '&srt=' + sortOrder);
 					} else if(input.value === idxOmnibarPlaceholder){
 						//prevent placeholder from interfering with results URL
-						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&widgetReferer=true' + '&srt=' + sortOrder);
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&srt=' + sortOrder);
 					} else {
 						//search by just street name (without state or city if comma is used)
-						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&aw_streetName=' + input.value.split(', ')[0] + '&widgetReferer=true' + '&srt=' + sortOrder);
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&aw_address=' + input.value.split(', ')[0] + '&srt=' + sortOrder);
 					}
 				}
 			};
