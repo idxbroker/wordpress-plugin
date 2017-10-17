@@ -523,6 +523,22 @@ class Idx_Api
     }
 
     /**
+     * Returns a property count integer for an id (city, county, or zip)
+     *
+     * @param  string $type The count type (city, county or zip)
+     * @param  string $idx_id The idxID (mlsID)
+     * @param  string $id The identifier. City id, county id or zip code
+     * @return array $city_list
+     */
+    public function property_count_by_id($type = 'city', $idx_id, $id)
+    {
+
+        $city_count = $this->idx_api('propertycount/' . $idx_id . '?countType=' . $type . '&countSpecifier=' . $id, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 12);
+
+        return $city_count;
+    }
+
+    /**
      * Returns the IDs and names for each of a client's city lists including MLS city lists
      *
      * @return array

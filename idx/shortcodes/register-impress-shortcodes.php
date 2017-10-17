@@ -505,7 +505,8 @@ class Register_Impress_Shortcodes
             'use_columns' => 1,
             'number_columns' => 4,
             'styles' => 1,
-            'new_window' => 0,
+            'show_count' => 0,
+            'new_window' => 0
         ), $atts));
 
         if (!empty($styles)) {
@@ -519,7 +520,7 @@ class Register_Impress_Shortcodes
         $target = $this->target($new_window);
 
         $city_links = "<div class=\"impress-city-links\">";
-        $city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links($city_list, $mls, $use_columns, $number_columns, $target, $this->idx_api);
+        $city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links($city_list, $mls, $use_columns, $number_columns, $target, $show_count, $this->idx_api);
         $city_links .= "</div>";
 
         if (false == $city_links) {
@@ -724,6 +725,16 @@ class Register_Impress_Shortcodes
                             'attr' => 'mls',
                             'type' => 'text',
                             'value' => 'a000',
+                        ),
+                        array(
+                            'label' => 'Show Count?',
+                            'attr' => 'show_count',
+                            'type' => 'radio',
+                            'value' => 0,
+                            'options' => array(
+                                1 => 'Yes',
+                                0 => 'No',
+                            ),
                         ),
                         array(
                             'label' => 'Use Columns?',
