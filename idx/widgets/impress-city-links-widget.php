@@ -21,7 +21,6 @@ class Impress_City_Links_Widget extends \WP_Widget
                 'customize_selective_refresh' => true,
             )
         );
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
     }
 
     public $idx_api;
@@ -35,13 +34,6 @@ class Impress_City_Links_Widget extends \WP_Widget
         'show_count' => 0,
         'new_window' => 0,
     );
-    
-    public function admin_scripts() {
-        $screen = get_current_screen();
-        if ( 'widgets' === $screen->id ) {
-            wp_enqueue_script( 'impress-city-links-widget', plugins_url( '../assets/js/idx-broker-admin.js', dirname(__FILE__), array( 'jquery'), false, true ) );
-        }
-    }
 
     /**
      * Front-end display of widget.
@@ -158,7 +150,7 @@ class Impress_City_Links_Widget extends \WP_Widget
 		</p>
         <p class="show-count">
             <input class="checkbox" type="checkbox" <?php checked($instance['show_count'], 1);?> id="<?php echo $this->get_field_id('show_count');?>" name="<?php echo $this->get_field_name('show_count');?>" value="1" />
-            <label for="<?php echo $this->get_field_id('show_count');?>">Show number of listings for each?</label>
+            <label for="<?php echo $this->get_field_id('show_count');?>">Show number of listings (up to 50 cities)?</label>
         </p>
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked($instance['use_columns'], 1);?> id="<?php echo $this->get_field_id('use_columns');?>" name="<?php echo $this->get_field_name('use_columns');?>" value="1" />
@@ -317,7 +309,7 @@ class Impress_City_Links_Widget extends \WP_Widget
                 //avoid duplicates by keeping track of cities already used
                 array_push($cities_list, $city->id);
                 
-                if ( $listing_count && ! is_wp_error( $listings = $idx_api->property_count_by_id( 'city', $idx_id, $city->id) ) && isset( $listings[0] ) ) {
+                if ( $listing_count && ! is_wp_error( $listings = $idx_api->property_count_by_id( 'city', $idx_id, $city->id) ) && isset( $listings[0] ) && $count <= 50 ) {
                     $output .= "\n\t\t" .
                     '<li>' .
                     "\n\t\t\t" .

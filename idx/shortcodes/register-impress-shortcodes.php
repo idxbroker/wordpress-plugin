@@ -517,6 +517,10 @@ class Register_Impress_Shortcodes
             $new_window = 0;
         }
 
+        if (!isset($mls)) {
+            $mls = 'a000';
+        }
+
         $target = $this->target($new_window);
 
         $city_links = "<div class=\"impress-city-links\">";
@@ -727,7 +731,7 @@ class Register_Impress_Shortcodes
                             'value' => 'a000',
                         ),
                         array(
-                            'label' => 'Show Count?',
+                            'label' => 'Show Number of Listings (up to 50 cities)?',
                             'attr' => 'show_count',
                             'type' => 'radio',
                             'value' => 0,
