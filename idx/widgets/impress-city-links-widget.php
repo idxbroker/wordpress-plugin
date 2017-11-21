@@ -242,7 +242,7 @@ class Impress_City_Links_Widget extends \WP_Widget
      * @param bool $columns if true adds column classes to the ul tags
      * @param int $number_of_columns optional total number of columns to split the links into
      */
-    public static function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4, $target, $listing_count = false, $idx_api)
+    public static function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4, $target, $show_count = false, $idx_api)
     {
         $cities = $idx_api->city_list($list_id);
 
@@ -309,7 +309,9 @@ class Impress_City_Links_Widget extends \WP_Widget
                 //avoid duplicates by keeping track of cities already used
                 array_push($cities_list, $city->id);
                 
-                if ( $listing_count && ! is_wp_error( $listings = $idx_api->property_count_by_id( 'city', $idx_id, $city->id) ) && isset( $listings[0] ) && $count <= 50 ) {
+                if ( $show_count && $count <= 50 ) {
+                    $listing_count = $idx_api->property_count_by_id( 'city', $idx_id, $city->id );
+                    $number = ( ! is_wp_error( $listing_count ) && isset( $listing_count[0] ) ) ? $listing_count[0] : '';
                     $output .= "\n\t\t" .
                     '<li>' .
                     "\n\t\t\t" .
@@ -320,8 +322,8 @@ class Impress_City_Links_Widget extends \WP_Widget
                     '">' .
                     $city->name .
                     ' <span class="count">' .
-                    $listings[0] .
-                    '</span>' .
+                    $number .
+                    ' <span class="screen-reader-text">Listings</span></span>' .
                     '</a>' .
                     "\n\t\t" .
                     '</li>';
