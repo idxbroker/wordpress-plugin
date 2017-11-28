@@ -10,11 +10,11 @@ jQuery(document).ready(function($) {
 		"order": [[ 3, "desc" ]],
 		"columnDefs": [
 			{
-				"targets": [ 0, 1, 2, 3, 4, 5 ],
+				"targets": [ 0, 1, 2, 3, 4, 5, 6 ],
 				"className": 'mdl-data-table__cell--non-numeric'
 			},
 			{
-				"targets": [ 1, 2, 5 ],
+				"targets": [ 1, 2, 6 ],
 				"orderable": false
 			}
 		],
