@@ -6,7 +6,7 @@ class Shortcode_Ui
 
     public function __construct()
     {
-        add_action('media_buttons', array($this, 'add_idx_media_button'), 15);
+        add_action('media_buttons', array($this, 'add_idx_media_button'), 15, 1);
         add_action('admin_enqueue_scripts', array($this, 'enqueue_shortcode_js'));
         $this->shortcodes_for_ui = new \IDX\Shortcodes\Register_Shortcode_For_Ui();
     }
@@ -15,6 +15,10 @@ class Shortcode_Ui
 
     public function add_idx_media_button($editor_id)
     {
+        if ($editor_id !== 'content') {
+            return;
+        }
+
         echo $this->modal();
         printf('<button id="idx-shortcode" class="button thickbox" data-editor="%s">Add IDX Shortcode</button>', esc_attr( $editor_id ));
     }
