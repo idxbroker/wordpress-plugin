@@ -34,8 +34,6 @@ class Impress_Showcase_Widget extends \WP_Widget
         'listings_per_row' => 4,
         'max' => '',
         'order' => 'high-low',
-        'geoip' => '',
-        'geoip-location' => '',
         'styles' => 1,
         'new_window' => 0,
     );
@@ -412,17 +410,11 @@ class Impress_Showcase_Widget extends \WP_Widget
 
         echo $before_widget;
 
-        if ($instance['geoip'] && function_exists('turnkey_dashboard_setup')) {
-            $geoip_before = '[geoip-content ' . $instance['geoip'] . '="' . $instance['geoip-location'] . '"]';
-            $geoip_after = '[/geoip-content]';
-            echo do_shortcode($geoip_before . $before_title . $title . $after_title . $this->body($instance) . $geoip_after);
-        } else {
-            if (!empty($title)) {
-                echo $before_title . $title . $after_title;
-            }
-
-            echo $this->body($instance);
+        if (!empty($title)) {
+            echo $before_title . $title . $after_title;
         }
+
+        echo $this->body($instance);
 
         echo $after_widget;
 
@@ -448,8 +440,6 @@ class Impress_Showcase_Widget extends \WP_Widget
         $instance['max'] = strip_tags($new_instance['max']);
         $instance['order'] = strip_tags($new_instance['order']);
         $instance['use_rows'] = (bool) $new_instance['use_rows'];
-        $instance['geoip'] = strip_tags($new_instance['geoip']);
-        $instance['geoip-location'] = strip_tags($new_instance['geoip-location']);
         $instance['styles'] = strip_tags($new_instance['styles']);
         $instance['new_window'] = strip_tags($new_instance['new_window']);
 
@@ -542,22 +532,6 @@ class Impress_Showcase_Widget extends \WP_Widget
             <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
 
-		<?php if (function_exists('turnkey_dashboard_setup')) {?>
-		<p>
-			<label for="<?php echo $this->get_field_id('geoip');?>"><?php echo 'Only show content for (optional):';?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id('geoip');?>" name="<?php echo $this->get_field_name('geoip')?>">
-				<option <?php selected($instance['geoip'], '');?> value=""><?php echo 'All';?></option>
-				<option <?php selected($instance['geoip'], 'region');?> value="region"><?php echo 'State';?></option>
-				<option <?php selected($instance['geoip'], 'city');?> value="city"><?php echo 'City';?></option>
-				<option <?php selected($instance['geoip'], 'postalcode');?> value="postalcode"><?php echo 'Postal Code';?></option>
-			</select>
-		</p>
-
-		<p>
-			<label for="<?php echo $this->get_field_id('geoip-location');?>"><?php echo 'Enter location to show for: <br /><em> Values can be comma separated.<br />For State, use 2 letter abbreviation.</em>';?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('geoip-location');?>" name="<?php echo $this->get_field_name('geoip-location');?>" type="text" value="<?php esc_attr_e($instance['geoip-location']);?>" />
-		</p>
-
-		<?php }
+	<?php
     }
 }
