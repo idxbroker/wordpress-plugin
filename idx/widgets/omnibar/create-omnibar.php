@@ -23,18 +23,18 @@ class Create_Omnibar
         $idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
 
         //css and js have been minified and combined to help performance
-        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
         if (!empty($styles)) {
             wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
         }
-        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)));
+        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)), array(), false, true);
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
         wp_localize_script('idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs);
         wp_localize_script('idx-omnibar-js', 'idxOmnibarPlaceholder', $placeholder);
         wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js');
+        wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
 
         return <<<EOD
         <form class="idx-omnibar-form idx-omnibar-original-form">
@@ -53,23 +53,23 @@ EOD;
             $placeholder = 'City, Postal Code, Address, or Listing ID';
         }
         $sort_order = get_option('idx_omnibar_sort', 'newest');
-
+        
         $upload_dir = wp_upload_dir();
         $idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
         
         //css and js have been minified and combined to help performance
-        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
         if (!empty($styles)) {
             wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
         }
-        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)));
+        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)), array(), false, true);
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
         wp_localize_script('idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs);
         wp_localize_script('idx-omnibar-js', 'idxOmnibarPlaceholder', $placeholder);
         wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js');
+        wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
 
         $price_field = $this->price_field($min_price);
 
