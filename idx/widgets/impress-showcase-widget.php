@@ -54,19 +54,27 @@ class Impress_Showcase_Widget extends \WP_Widget
             wp_enqueue_style('impress-showcase', plugins_url('../assets/css/widgets/impress-showcase.css', dirname(__FILE__)));
         }
 
+        $output = '';
         if (($instance['properties']) == 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($instance['saved_link_id']);
+            $output .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
         } else {
             $properties = $this->idx_api->client_properties($instance['properties']);
-        }
-
-        if (empty($properties) || (isset($properties) && $properties === 'No results returned') || gettype($properties) === 'object') {
-            return 'No properties found';
+            $output .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
         }
 
         //Force type as array.
         $properties = json_encode($properties);
         $properties = json_decode($properties, true);
+
+        //If no properties or an error, load message
+        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || isset($properties['errors']['idx_api_error']) ) {
+            if (isset($properties['errors']['idx_api_error'])) {
+                return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
+            } else {
+                return $output .= '<p>No properties found</p>';
+            }
+        }
 
         //Sort low to high.
         usort($properties, array($this, 'price_cmp'));
@@ -80,8 +88,6 @@ class Impress_Showcase_Widget extends \WP_Widget
 
         $total = count($properties);
         $count = 0;
-
-        $output = '';
 
         $column_class = '';
 
