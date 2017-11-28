@@ -8,6 +8,17 @@
 }
 .impress-city-links ul li {
     list-style-type: none;
+    clear: both;
+}
+.impress-city-links ul li .count {
+    float: right;
+    color: #fff;
+    background: #999;
+    padding: 3px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 12px;
+    border-radius: 9px;
 }
 .impress-city-links .impress-column, .impress-city-links .impress-columns {
     position: relative;

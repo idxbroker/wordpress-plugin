@@ -274,6 +274,7 @@ class Register_Shortcode_For_Ui
             'use_columns' => 0,
             'number_columns' => 4,
             'styles' => 1,
+            'show_count' => 0,
             'new_window' => 0,
         );
 
@@ -291,7 +292,7 @@ class Register_Shortcode_For_Ui
         // City List
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"city-list\">Select a city list</label>";
-        $output .= "<select id=\"city-list\" data-short-name=\"city_list\">";
+        $output .= "<select id=\"city-list\" class=\"city-list-options\" data-short-name=\"city_list\">";
         $output .= $city_list_options;
         $output .= "</select>";
         $output .= "</div>";
@@ -314,7 +315,12 @@ class Register_Shortcode_For_Ui
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
-        //New Window
+        // Show Count
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox show-count\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"show_count\" data-short-name=\"show_count\" checked>";
+        $output .= "<label for\"show_count\">Show Number of Listings (up to 50 cities)?</label>";
+        $output .= "</div>";
+        // New Window
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
         $output .= "<label for\"new_window\">Open Links in a New Window?</label>";

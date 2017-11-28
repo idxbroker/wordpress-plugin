@@ -31,6 +31,7 @@ class Impress_City_Links_Widget extends \WP_Widget
         'use_columns' => 0,
         'number_columns' => 4,
         'styles' => 1,
+        'show_count' => 0,
         'new_window' => 0,
     );
 
@@ -82,7 +83,7 @@ class Impress_City_Links_Widget extends \WP_Widget
             echo 'Invalid MLS IDX ID. Email help@idxbroker.com to get your MLS IDX ID';
         } else {
             echo "<div class=\"impress-city-links\">";
-            echo $this->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns'], $target, $this->idx_api);
+            echo $this->city_list_links($instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns'], $target, $instance['show_count'], $this->idx_api);
             echo "</div>";
         }
 
@@ -107,6 +108,7 @@ class Impress_City_Links_Widget extends \WP_Widget
         $instance['use_columns'] = (int) $new_instance['use_columns'];
         $instance['number_columns'] = (int) $new_instance['number_columns'];
         $instance['styles'] = (int) $new_instance['styles'];
+        $instance['show_count'] = (bool) $new_instance['show_count'];
         $instance['new_window'] = (int) $new_instance['new_window'];
 
         return $instance;
@@ -142,10 +144,14 @@ class Impress_City_Links_Widget extends \WP_Widget
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id('city_list');?>">Select a city list:</label>
-			<select class="widefat" id="<?php echo $this->get_field_id('city_list');?>" name="<?php echo $this->get_field_name('city_list')?>">
+			<select class="city-list-options widefat" id="<?php echo $this->get_field_id('city_list');?>" name="<?php echo $this->get_field_name('city_list')?>">
 				<?php echo $this->city_list_options($instance, $this->idx_api);?>
 			</select>
 		</p>
+        <p class="show-count">
+            <input class="checkbox" type="checkbox" <?php checked($instance['show_count'], 1);?> id="<?php echo $this->get_field_id('show_count');?>" name="<?php echo $this->get_field_name('show_count');?>" value="1" />
+            <label for="<?php echo $this->get_field_id('show_count');?>">Show number of listings (up to 50 cities)?</label>
+        </p>
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked($instance['use_columns'], 1);?> id="<?php echo $this->get_field_id('use_columns');?>" name="<?php echo $this->get_field_name('use_columns');?>" value="1" />
 			<label for="<?php echo $this->get_field_id('use_columns');?>">Split links into columns?</label>
@@ -188,11 +194,12 @@ class Impress_City_Links_Widget extends \WP_Widget
         }
 
         foreach ($lists as $list) {
+            $city_count = count( (array) $idx_api->city_list($list->id) );
 
             // display the list id if no list name has been assigned
             $list_text = empty($list->name) ? $list->id : $list->name;
 
-            $output .= '<option ' . selected($instance['city_list'], $list->id, 0) . ' value="' . $list->id . '">' . $list_text . '</option>';
+            $output .= '<option class="city-list-option" ' . selected($instance['city_list'], $list->id, 0) . ' value="' . $list->id . '" data-count="' . $city_count . '">' . $list_text . '</option>';
         }
         return $output;
     }
@@ -235,7 +242,7 @@ class Impress_City_Links_Widget extends \WP_Widget
      * @param bool $columns if true adds column classes to the ul tags
      * @param int $number_of_columns optional total number of columns to split the links into
      */
-    public static function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4, $target, $idx_api)
+    public static function city_list_links($list_id, $idx_id, $columns = 0, $number_columns = 4, $target, $show_count = false, $idx_api)
     {
         $cities = $idx_api->city_list($list_id);
 
@@ -301,18 +308,39 @@ class Impress_City_Links_Widget extends \WP_Widget
             if (!empty($city->name) && !empty($city->id) && !in_array($city->id, $cities_list) && $city->name !== 'Other' && $city->name !== 'Out of State' && $city->name !== 'Out of Area') {
                 //avoid duplicates by keeping track of cities already used
                 array_push($cities_list, $city->id);
-                $output .= "\n\t\t" .
-                '<li>' .
-                "\n\t\t\t" .
-                '<a href="' .
-                $href .
-                '" target="' .
-                $target .
-                '">' .
-                $city->name .
-                '</a>' .
-                "\n\t\t" .
-                '</li>';
+                
+                if ( $show_count && $count <= 50 ) {
+                    $listing_count = $idx_api->property_count_by_id( 'city', $idx_id, $city->id );
+                    $number = ( ! is_wp_error( $listing_count ) && isset( $listing_count[0] ) ) ? $listing_count[0] : '';
+                    $output .= "\n\t\t" .
+                    '<li>' .
+                    "\n\t\t\t" .
+                    '<a href="' .
+                    $href .
+                    '" target="' .
+                    $target .
+                    '">' .
+                    $city->name .
+                    ' <span class="count">' .
+                    $number .
+                    ' <span class="screen-reader-text">Listings</span></span>' .
+                    '</a>' .
+                    "\n\t\t" .
+                    '</li>';
+                } else {
+                    $output .= "\n\t\t" .
+                    '<li>' .
+                    "\n\t\t\t" .
+                    '<a href="' .
+                    $href .
+                    '" target="' .
+                    $target .
+                    '">' .
+                    $city->name .
+                    '</a>' .
+                    "\n\t\t" .
+                    '</li>';
+                }
             }
 
             if (true == $columns && $count % $column_size == 0 && $count != 1 && $count != $number_links) {
