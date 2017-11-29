@@ -1,10 +1,10 @@
-.content .entry-title,
-.content .entry-author-link,
-.content .entry-permalink,
-.content .entry-date,
-.content .entry-meta,
+article.idx-wrapper .entry-title,
+article.idx-wrapper .entry-author-link,
+article.idx-wrapper .entry-permalink,
+article.idx-wrapper .entry-date,
+article.idx-wrapper .entry-meta,
 .content .pagination,
-.content .post-navigation,
+nav.post-navigation,
 .breadcrumb {
     display: none;
 }
