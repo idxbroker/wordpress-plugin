@@ -31,8 +31,6 @@ class Impress_Carousel_Widget extends \WP_Widget
         'max' => 15,
         'order' => 'high-low',
         'autoplay' => 1,
-        'geoip' => '',
-        'geoip-location' => '',
         'styles' => 1,
         'new_window' => 0,
     );
@@ -57,17 +55,29 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         if ($instance['styles']) {
             wp_enqueue_style('impress-carousel', plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)));
-            wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+            wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
         }
 
+        $output = '';
         if (($instance['properties']) == 'savedlinks') {
             $properties = $this->idx_api->saved_link_properties($instance['saved_link_id']);
+            $output .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
         } else {
             $properties = $this->idx_api->client_properties($instance['properties']);
+            $output .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
         }
+
+        //Force type of array.
+        $properties = json_encode($properties);
+        $properties = json_decode($properties, true);
+        
         //If no properties or an error, load message
-        if (empty($properties) || (isset($properties) && $properties === 'No results returned') || gettype($properties) === 'object') {
-            return 'No properties found';
+        if (empty($properties) || (isset($properties[0]) && $properties[0] === 'No results returned') || isset($properties['errors']['idx_api_error']) ) {
+            if (isset($properties['errors']['idx_api_error'])) {
+                return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
+            } else {
+                return $output .= '<p>No properties found</p>';
+            }
         }
 
         if ($instance['autoplay']) {
@@ -85,7 +95,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         $target = $this->target($instance['new_window']);
 
         if ($display === 1) {
-            echo '
+            $output .= '
             <script>
             jQuery(function( $ ){
                 $(".impress-listing-carousel-' . $display . '").owlCarousel({
@@ -102,7 +112,7 @@ class Impress_Carousel_Widget extends \WP_Widget
             </script>
             ';
         } else {
-            echo '
+            $output .= '
             <script>
             jQuery(function( $ ){
                 $(".impress-listing-carousel-' . $display . '").owlCarousel({
@@ -120,10 +130,6 @@ class Impress_Carousel_Widget extends \WP_Widget
             ';
         }
 
-        //Force type of array.
-        $properties = json_encode($properties);
-        $properties = json_decode($properties, true);
-
         // sort low to high
         usort($properties, array($this, 'price_cmp'));
 
@@ -135,8 +141,6 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         $total = count($properties);
         $count = 0;
-
-        $output = '';
 
         $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s">', $instance['display']);
 
@@ -361,17 +365,11 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         echo $before_widget;
 
-        if (!empty($instance['geoip']) && function_exists('turnkey_dashboard_setup')) {
-            $geoip_before = '[geoip-content ' . $instance['geoip'] . '="' . $instance['geoip-location'] . '"]';
-            $geoip_after = '[/geoip-content]';
-            echo do_shortcode($geoip_before . $before_title . $title . $after_title . $this->body($instance) . $geoip_after);
-        } else {
-            if (!empty($title)) {
-                echo $before_title . $title . $after_title;
-            }
-
-            echo $this->body($instance);
+        if (!empty($title)) {
+            echo $before_title . $title . $after_title;
         }
+
+        echo $this->body($instance);
 
         echo $after_widget;
     }
@@ -397,8 +395,6 @@ class Impress_Carousel_Widget extends \WP_Widget
         $instance['autoplay'] = strip_tags($new_instance['autoplay']);
         $instance['styles'] = strip_tags($new_instance['styles']);
         $instance['new_window'] = strip_tags($new_instance['new_window']);
-        $instance['geoip'] = strip_tags($new_instance['geoip']);
-        $instance['geoip-location'] = strip_tags($new_instance['geoip-location']);
 
         return $instance;
     }
@@ -479,22 +475,6 @@ class Impress_Carousel_Widget extends \WP_Widget
             <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
 
-        <?php if (function_exists('turnkey_dashboard_setup')) {?>
-        <p>
-            <label for="<?php echo $this->get_field_id('geoip');?>"><?php _e('Only show content for (optional):', 'idxbroker');?></label>
-            <select class="widefat" id="<?php echo $this->get_field_id('geoip');?>" name="<?php echo $this->get_field_name('geoip')?>">
-                <option <?php selected($instance['geoip'], '');?> value=""><?php _e('All', 'idxbroker');?></option>
-                <option <?php selected($instance['geoip'], 'region');?> value="region"><?php _e('State', 'idxbroker');?></option>
-                <option <?php selected($instance['geoip'], 'city');?> value="city"><?php _e('City', 'idxbroker');?></option>
-                <option <?php selected($instance['geoip'], 'postalcode');?> value="postalcode"><?php _e('Postal Code', 'idxbroker');?></option>
-            </select>
-        </p>
-
-        <p>
-            <label for="<?php echo $this->get_field_id('geoip-location');?>"><?php _e('Enter location to show for: <br /><em> Values can be comma separated.<br />For State, use 2 letter abbreviation.</em>');?></label>
-            <input class="widefat" id="<?php echo $this->get_field_id('geoip-location');?>" name="<?php echo $this->get_field_name('geoip-location');?>" type="text" value="<?php esc_attr_e($instance['geoip-location']);?>" />
-        </p>
-
-        <?php }
+    <?php
     }
 }

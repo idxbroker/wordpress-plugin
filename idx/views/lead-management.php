@@ -533,6 +533,8 @@ class Lead_Management {
 
 			$last_active = Carbon::parse(($lead->lastActivityDate === '0000-00-00 00:00:00') ? $lead->subscribeDate : $lead->lastActivityDate)->addHours($offset)->toDayDateTimeString();
 
+			$subscribed_on = Carbon::parse($lead->subscribeDate)->addHours($offset)->toDayDateTimeString();
+
 			if ($lead->agentOwner != '0') {
 				foreach($agents_array['agent'] as $agent) {
 					if($lead->agentOwner == $agent['agentID']) {
@@ -556,6 +558,7 @@ class Lead_Management {
 			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url('admin.php?page=edit-lead&leadID=' . $lead->id) . '">' . get_avatar($lead->email, 32, '', 'Lead photo', $avatar_args) . ' ' . $lead->firstName . ' ' . $lead->lastName . '</a></td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . $lead->id . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $lead->phone . '</td>';
+			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $subscribed_on . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $last_active . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $agent_name . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">
@@ -573,6 +576,7 @@ class Lead_Management {
 				<th class="mdl-data-table__cell--non-numeric">Lead Name</th>
 				<th class="mdl-data-table__cell--non-numeric">Email</th>
 				<th class="mdl-data-table__cell--non-numeric">Phone</th>
+				<th class="mdl-data-table__cell--non-numeric">Subscribed</th>
 				<th class="mdl-data-table__cell--non-numeric">Last Active</th>
 				<th class="mdl-data-table__cell--non-numeric">Agent</th>
 				<th class="mdl-data-table__cell--non-numeric">Actions</th>
