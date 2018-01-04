@@ -56,15 +56,16 @@ class Register_Impress_Shortcodes
     public function property_showcase_shortcode($atts = array())
     {
         extract(shortcode_atts(array(
-            'max' => 4,
-            'use_rows' => 1,
-            'num_per_row' => 4,
-            'show_image' => 1,
-            'order' => 'high-low',
+            'max'           => 4,
+            'use_rows'      => 1,
+            'num_per_row'   => 4,
+            'show_image'    => 1,
+            'order'         => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
-            'styles' => 1,
-            'new_window' => 0,
+            'agentID'       => '',
+            'styles'        => 1,
+            'new_window'    => 0,
         ), $atts));
 
         if (!empty($styles)) {
@@ -136,6 +137,12 @@ class Register_Impress_Shortcodes
         }
 
         foreach ($properties as $prop) {
+
+            if ( isset( $agentID, $prop['userAgentID'] ) && ! empty( $agentID ) ) {
+                if ( $agentID !== (int) $prop['userAgentID'] ) {
+                    continue;
+                }
+            }
 
             if (!empty($max) && $count == $max) {
                 return $output;
@@ -331,14 +338,15 @@ class Register_Impress_Shortcodes
         wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
 
         extract(shortcode_atts(array(
-            'max' => 4,
-            'display' => 3,
-            'autoplay' => 1,
-            'order' => 'high-low',
+            'max'           => 4,
+            'display'       => 3,
+            'autoplay'      => 1,
+            'order'         => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
-            'styles' => 1,
-            'new_window' => 0,
+            'agentID'       => '',
+            'styles'        => 1,
+            'new_window'    => 0,
         ), $atts));
 
         wp_enqueue_style('owl-css', plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)));
@@ -434,6 +442,12 @@ class Register_Impress_Shortcodes
         $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode">', $display);
 
         foreach ($properties as $prop) {
+
+            if ( isset( $agentID, $prop['userAgentID'] ) && ! empty( $agentID ) ) {
+                if ( $agentID !== (int) $prop['userAgentID'] ) {
+                    continue;
+                }
+            }
 
             if (!empty($max) && $count == $max) {
                 $output .= '</div><!-- end .impress-listing-carousel -->';
@@ -661,6 +675,12 @@ class Register_Impress_Shortcodes
                             'type' => 'text',
                             'value' => '',
                         ),
+                        array(
+                            'label' => 'Limit by Agent ID',
+                            'attr' => 'agentID',
+                            'type' => 'text',
+                            'value' => '',
+                        ),
                     ),
                 )
             );
@@ -720,6 +740,12 @@ class Register_Impress_Shortcodes
                         array(
                             'label' => 'Saved Link ID',
                             'attr' => 'saved_link_id',
+                            'type' => 'text',
+                            'value' => '',
+                        ),
+                        array(
+                            'label' => 'Limit by Agent ID',
+                            'attr' => 'agentID',
                             'type' => 'text',
                             'value' => '',
                         ),

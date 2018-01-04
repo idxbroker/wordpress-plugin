@@ -24,15 +24,16 @@ class Impress_Carousel_Widget extends \WP_Widget
 
     public $idx_api;
     public $defaults = array(
-        'title' => 'Properties',
-        'properties' => 'featured',
+        'title'         => 'Properties',
+        'properties'    => 'featured',
         'saved_link_id' => '',
-        'display' => 3,
-        'max' => 15,
-        'order' => 'high-low',
-        'autoplay' => 1,
-        'styles' => 1,
-        'new_window' => 0,
+        'agentID'       => '',
+        'display'       => 3,
+        'max'           => 15,
+        'order'         => 'high-low',
+        'autoplay'      => 1,
+        'styles'        => 1,
+        'new_window'    => 0,
     );
 
     /**
@@ -145,6 +146,13 @@ class Impress_Carousel_Widget extends \WP_Widget
         $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s">', $instance['display']);
 
         foreach ($properties as $prop) {
+
+            if ( isset( $instance['agentID'], $prop['userAgentID'] ) && ! empty( $instance['agentID'] ) ) {
+                if ( $instance['agentID'] !== (int) $prop['userAgentID'] ) {
+                    continue;
+                }
+            }
+
             if (!empty($max) && $count == $max) {
                 return $output;
             }
@@ -386,15 +394,16 @@ class Impress_Carousel_Widget extends \WP_Widget
     public function update($new_instance, $old_instance)
     {
         $instance = array();
-        $instance['title'] = strip_tags($new_instance['title']);
-        $instance['properties'] = strip_tags($new_instance['properties']);
-        $instance['saved_link_id'] = (int) ($new_instance['saved_link_id']);
-        $instance['display'] = (int) ($new_instance['display']);
-        $instance['max'] = (int) ($new_instance['max']);
-        $instance['order'] = strip_tags($new_instance['order']);
-        $instance['autoplay'] = strip_tags($new_instance['autoplay']);
-        $instance['styles'] = strip_tags($new_instance['styles']);
-        $instance['new_window'] = strip_tags($new_instance['new_window']);
+        $instance['title']         = strip_tags($new_instance['title']);
+        $instance['properties']    = strip_tags($new_instance['properties']);
+        $instance['saved_link_id'] = (int) $new_instance['saved_link_id'];
+        $instance['agentID']       = (int) $new_instance['agentID'];
+        $instance['display']       = (int) $new_instance['display'];
+        $instance['max']           = (int) $new_instance['max'];
+        $instance['order']         = strip_tags($new_instance['order']);
+        $instance['autoplay']      = strip_tags($new_instance['autoplay']);
+        $instance['styles']        = strip_tags($new_instance['styles']);
+        $instance['new_window']    = strip_tags($new_instance['new_window']);
 
         return $instance;
     }
@@ -443,6 +452,13 @@ class Impress_Carousel_Widget extends \WP_Widget
         <?php }?>
 
         <p>
+            <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'equity' ); ?></label>
+            <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ) ?>">
+                <?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
+            </select>
+        </p>
+
+        <p>
             <label for="<?php echo $this->get_field_id('display');?>"><?php _e('Listings to show without scrolling:', 'idxbroker');?></label>
             <input class="widefat" type="number" id="<?php echo $this->get_field_id('display');?>" name="<?php echo $this->get_field_name('display')?>" value="<?php esc_attr_e($instance['display']);?>" size="3">
         </p>
@@ -476,5 +492,33 @@ class Impress_Carousel_Widget extends \WP_Widget
         </p>
 
     <?php
+    }
+
+    /**
+     * Returns agents wrapped in option tags
+     *
+     * @param  int $agent_id Instance agentID if exists
+     * @return str           HTML options tags of agents ids and names
+     */
+    public function get_agents_select_list( $agent_id ) {
+        $agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+        if ( ! is_array( $agents_array ) ) {
+            return;
+        }
+
+        if($agent_id != null) {
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+            }
+        } else {
+            $agents_list = '<option value="">All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+            }
+        }
+
+        return $agents_list;
     }
 }
