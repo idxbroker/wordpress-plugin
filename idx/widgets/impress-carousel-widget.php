@@ -233,7 +233,7 @@ class Impress_Carousel_Widget extends \WP_Widget
                 (isset($disclaimer_logo)) ? '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '',
                 (isset($courtesy_text)) ? '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '',
                 $target
-            ), $prop, $instance );
+            ), $prop, $instance, $url );
         }
 
         $output .= '</div><!-- end .impress-carousel -->';
