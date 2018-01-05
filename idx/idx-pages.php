@@ -166,10 +166,12 @@ class Idx_Pages
 
             if (!in_array($link->uid, $existing_page_ids)) {
 
+                $url = apply_filters( 'impress_idx_page_insert_post_name', $link->url, $link );
+
                 $post_info = array(
                     'comment_status' => 'closed',
                     'ping_status' => 'closed',
-                    'post_name' => $link->url,
+                    'post_name' => $url,
                     'post_content' => '',
                     'post_status' => 'publish',
                     'post_title' => $name,
@@ -207,10 +209,12 @@ class Idx_Pages
             //Keep old url from resurrecting.
             remove_action('save_post', array($this, 'save_idx_page'), 1);
 
+            $url = apply_filters( 'impress_idx_page_insert_post_name', $link->url, $link );
+
             $post_info = array(
                 'ID' => $id,
-                'post_name' => $link->url,
-                'guid' => $link->url,
+                'post_name' => $url,
+                'guid' => $url,
                 'post_title' => $name
             );
 

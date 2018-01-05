@@ -181,6 +181,17 @@ class Impress_Carousel_Widget extends \WP_Widget
 
             $prop = $this->set_missing_core_fields($prop);
 
+            // Get URL and add suffix if one exists
+            if ( isset($prop['fullDetailsURL']) ) {
+                $url = $prop['fullDetailsURL'];
+            } else {
+                $url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
+            }
+
+            if ( has_filter( 'impress_carousel_property_url_suffix' ) ) {
+                $url = $url . apply_filters( 'impress_carousel_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+            }
+
             $output .= apply_filters( 'impress_carousel_property_html', sprintf(
                 '<div class="impress-carousel-property">
                     <a href="%2$s" class="impress-carousel-photo" target="%18$s">
@@ -205,7 +216,7 @@ class Impress_Carousel_Widget extends \WP_Widget
                     </div>
                     </div><!-- end .impress-carousel-property -->',
                 $prop['listingPrice'],
-                $this->idx_api->details_url() . '/' . $prop['detailsURL'],
+                $url,
                 $prop_image_url,
                 htmlspecialchars($prop['remarksConcat']),
                 $prop['streetNumber'],
