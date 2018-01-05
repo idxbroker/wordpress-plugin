@@ -27,7 +27,7 @@ class Multisite {
 			'idx-broker',
 			'Multisite Settings',
 			'Multisite',
-			apply_filters( 'impress_multisite_capability', 'manage_options' ), // Allow capability to be filtered
+			apply_filters( 'impress_multisite_admin_cap', 'manage_options' ),
 			'impress-multisite',
 			array( $this, 'settings_page' )
 		);
