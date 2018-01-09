@@ -63,7 +63,7 @@ class Register_Impress_Shortcodes
             'order'         => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
-            'agentID'       => '',
+            'agent_id'      => '',
             'styles'        => 1,
             'new_window'    => 0,
         ), $atts));
@@ -123,23 +123,23 @@ class Register_Impress_Shortcodes
             }
         }
 
-        if (!isset($new_window)) {
+        if ( ! isset( $new_window ) ) {
             $new_window = 0;
         }
 
-        $target = $this->target($new_window);
+        $target = $this->target( $new_window );
 
         // sort low to high
-        usort($properties, array($this->idx_api, 'price_cmp'));
+        usort( $properties, array( $this->idx_api, 'price_cmp' ) );
 
-        if ('high-low' == $order) {
+        if ( 'high-low' == $order ) {
             $properties = array_reverse($properties);
         }
 
-        foreach ($properties as $prop) {
+        foreach ( $properties as $prop ) {
 
-            if ( isset( $agentID, $prop['userAgentID'] ) && ! empty( $agentID ) ) {
-                if ( $agentID !== (int) $prop['userAgentID'] ) {
+            if ( isset( $agent_id, $prop['userAgentID'] ) && ! empty( $agent_id ) ) {
+                if ( (int) $agent_id !== (int) $prop['userAgentID'] ) {
                     continue;
                 }
             }
@@ -180,6 +180,17 @@ class Register_Impress_Shortcodes
 
             $prop = $this->set_missing_core_fields($prop);
 
+            // Get URL and add suffix if one exists
+            if ( isset($prop['fullDetailsURL']) ) {
+                $url = $prop['fullDetailsURL'];
+            } else {
+                $url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
+            }
+
+            if ( has_filter( 'impress_showcase_property_url_suffix' ) ) {
+                $url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+            }
+
             if (1 == $show_image) {
                 $output .= sprintf('<div class="impress-showcase-property %12$s">
                         <a href="%3$s" class="impress-showcase-photo" target="%13$s">
@@ -198,7 +209,7 @@ class Register_Impress_Shortcodes
                         ',
                     $prop['listingPrice'],
                     $prop['propStatus'],
-                    $this->idx_api->details_url() . '/' . $prop['detailsURL'],
+                    $url,
                     $prop_image_url,
                     htmlspecialchars($prop['remarksConcat']),
                     $prop['streetNumber'],
@@ -237,7 +248,7 @@ class Register_Impress_Shortcodes
                                     <span class="impress-state"> %8$s</span>
                                 </span>',
                     $prop['listingPrice'],
-                    $this->idx_api->details_url() . '/' . $prop['detailsURL'],
+                    $url,
                     $prop['streetNumber'],
                     $prop['streetName'],
                     $prop['streetDirection'],
@@ -344,7 +355,7 @@ class Register_Impress_Shortcodes
             'order'         => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
-            'agentID'       => '',
+            'agent_id'      => '',
             'styles'        => 1,
             'new_window'    => 0,
         ), $atts));
@@ -443,8 +454,8 @@ class Register_Impress_Shortcodes
 
         foreach ($properties as $prop) {
 
-            if ( isset( $agentID, $prop['userAgentID'] ) && ! empty( $agentID ) ) {
-                if ( $agentID !== (int) $prop['userAgentID'] ) {
+            if ( isset( $agent_id, $prop['userAgentID'] ) && ! empty( $agent_id ) ) {
+                if ( (int) $agent_id !== (int) $prop['userAgentID'] ) {
                     continue;
                 }
             }
@@ -478,6 +489,17 @@ class Register_Impress_Shortcodes
 
             $prop = $this->set_missing_core_fields($prop);
 
+            // Get URL and add suffix if one exists
+            if ( isset($prop['fullDetailsURL']) ) {
+                $url = $prop['fullDetailsURL'];
+            } else {
+                $url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
+            }
+
+            if ( has_filter( 'impress_carousel_property_url_suffix' ) ) {
+                $url = $url . apply_filters( 'impress_carousel_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+            }
+
             $output .= apply_filters( 'impress_carousel_property_html', sprintf(
                 '<div class="impress-carousel-property">
                     <a href="%2$s" class="impress-carousel-photo" target="%18$s">
@@ -502,7 +524,7 @@ class Register_Impress_Shortcodes
                     </div>
                     </div><!-- end .impress-carousel-property -->',
                 $prop['listingPrice'],
-                $this->idx_api->details_url() . '/' . $prop['detailsURL'],
+                $url,
                 $prop_image_url,
                 htmlspecialchars($prop['remarksConcat']),
                 $prop['streetNumber'],
@@ -677,7 +699,7 @@ class Register_Impress_Shortcodes
                         ),
                         array(
                             'label' => 'Limit by Agent ID',
-                            'attr' => 'agentID',
+                            'attr' => 'agent_id',
                             'type' => 'text',
                             'value' => '',
                         ),
@@ -745,7 +767,7 @@ class Register_Impress_Shortcodes
                         ),
                         array(
                             'label' => 'Limit by Agent ID',
-                            'attr' => 'agentID',
+                            'attr' => 'agent_id',
                             'type' => 'text',
                             'value' => '',
                         ),
