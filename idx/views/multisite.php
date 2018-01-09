@@ -34,7 +34,7 @@ class Multisite {
 	}
 
 	/**
-	 * Output Broker settings page
+	 * Output Multisite settings page
 	 */
 	function settings_page() {
 		$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
@@ -115,18 +115,18 @@ class Multisite {
 		$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
 		$suffix = array();
 		$suffix['agentHeaderID'] = $options['agent_id'];
-		return '&' . http_build_query( $suffix );
+		return '?' . http_build_query( $suffix );
 	}
 
 	/**
-	 * Returns a url encoded string including the agentID key and value
+	 * Returns a url encoded string including the contactRoutingAgent key and agentID value
 	 *
 	 * @param  array $field The field. Default empty.
 	 * @return string $field The field to return.
 	 */
 	public function multisite_lead_signup_agent_id_field( $field ) {
 		$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
-		return '<input type="hidden" name="agentHeaderID" value="' . $options['agent_id'] . '">';
+		return '<input type="hidden" name="contactRoutingAgent" value="' . $options['agent_id'] . '">';
 	}
 
 	/**
@@ -138,7 +138,7 @@ class Multisite {
 	 */
 	public function multisite_idx_page_insert_post_name( $url, $link ) {
 		$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
-		return $url . '&agentHeaderID=' . $options['agent_id'];
+		return $url . '?agentHeaderID=' . $options['agent_id'];
 	}
 
 }

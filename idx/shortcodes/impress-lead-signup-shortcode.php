@@ -25,6 +25,7 @@ class Impress_Lead_Signup_Shortcode {
             'phone' => 0,
             'styles' => 1,
             'new_window' => 0,
+            'agent_id' => '',
         ), $atts));
 
         if (!empty($styles)) {
@@ -43,9 +44,12 @@ class Impress_Lead_Signup_Shortcode {
         wp_register_script('impress-lead-signup', plugins_url('../assets/js/idx-lead-signup.min.js', dirname(__FILE__)));
         wp_localize_script('impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page());
         wp_enqueue_script('impress-lead-signup');
+
         if( $wpl_options['wp_listings_captcha_site_key']  != '' || get_option( 'idx_recaptcha_site_key')  != '' ) {
             wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js');
         }
+
+        $hidden_fields = ( $agent_id || has_filter( 'impress_lead_signup_agent_id_field' ) ) ? apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="contactRoutingAgent" value="' . $agent_id . '">' ) : '';
 
         $widget = sprintf('
             <form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup" id="LeadSignup">
@@ -53,6 +57,7 @@ class Impress_Lead_Signup_Shortcode {
                 <input type="hidden" name="action" value="addLead">
                 <input type="hidden" name="signupWidget" value="true">
                 <input type="hidden" name="contactType" value="direct">
+                %4$s
 
                 <label id="impress-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName">First Name:</label>
                 <input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
@@ -61,7 +66,7 @@ class Impress_Lead_Signup_Shortcode {
                 <input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name" required>
 
                 <label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
-                <input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>', $this->idx_api->subdomain_url(), $target, $this->error_message);
+                <input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>', $this->idx_api->subdomain_url(), $target, $this->error_message, $hidden_fields);
 
         if ($phone) {
             $widget .= sprintf('

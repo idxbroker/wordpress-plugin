@@ -37,6 +37,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         'phone_number' => false,
         'styles'       => 1,
         'new_window'   => 0,
+        'agentID'     => ''
     );
 
     /**
@@ -101,7 +102,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 
             <?php
             if ( has_filter( 'impress_lead_signup_agent_id_field' ) ) {
-                echo apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="agentOwner" value="' . $instance['agentID'] . '">' );
+                echo apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="contactRoutingAgent" value="' . $instance['agentID'] . '">' );
 
             } ?>
 
@@ -159,6 +160,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         $instance['phone_number'] = $new_instance['phone_number'];
         $instance['styles']       = (int) $new_instance['styles'];
         $instance['new_window']   = strip_tags($new_instance['new_window']);
+        $instance['agentID']       = (int) $new_instance['agentID'];
 
         return $instance;
     }
@@ -200,6 +202,13 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open in a New Window?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Route to Agent:', 'idxbroker' ); ?></label>
+            <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ) ?>">
+                <?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
+            </select>
+        </p>
 		<?php
 
     }
@@ -234,5 +243,33 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         } 
 
         return $output;
+    }
+
+    /**
+     * Returns agents wrapped in option tags
+     *
+     * @param  int $agent_id Instance agentID if exists
+     * @return str           HTML options tags of agents ids and names
+     */
+    public function get_agents_select_list( $agent_id ) {
+        $agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+        if ( ! is_array( $agents_array ) ) {
+            return;
+        }
+
+        if($agent_id != null) {
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+            }
+        } else {
+            $agents_list = '<option value="">All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+            }
+        }
+
+        return $agents_list;
     }
 }
