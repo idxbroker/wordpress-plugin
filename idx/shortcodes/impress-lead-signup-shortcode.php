@@ -49,7 +49,7 @@ class Impress_Lead_Signup_Shortcode {
             wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js');
         }
 
-        $hidden_fields = ( $agent_id || has_filter( 'impress_lead_signup_agent_id_field' ) ) ? apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="contactRoutingAgent" value="' . $agent_id . '">' ) : '';
+        $hidden_fields = ( $agent_id || has_filter( 'impress_lead_signup_agent_id_field' ) ) ? apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="agentOwner" value="' . $agent_id . '">' ) : '';
 
         $widget = sprintf('
             <form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup" id="LeadSignup">
