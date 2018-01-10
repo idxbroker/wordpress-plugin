@@ -114,10 +114,10 @@ class Multisite {
 	 */
 	public function multisite_add_property_widget_suffix( $suffix, $prop, $idx ) {
 		$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
-		
+
 		if ( ! is_array( $suffix ) ) {
 			$suffix = array(
-				'agentHeaderID' => $options['agentID']
+				'agentHeaderID' => $options['agent_id']
 			);
 		}
 
