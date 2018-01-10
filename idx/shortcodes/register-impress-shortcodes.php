@@ -56,15 +56,16 @@ class Register_Impress_Shortcodes
     public function property_showcase_shortcode($atts = array())
     {
         extract(shortcode_atts(array(
-            'max' => 4,
-            'use_rows' => 1,
-            'num_per_row' => 4,
-            'show_image' => 1,
-            'order' => 'high-low',
+            'max'           => 4,
+            'use_rows'      => 1,
+            'num_per_row'   => 4,
+            'show_image'    => 1,
+            'order'         => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
-            'styles' => 1,
-            'new_window' => 0,
+            'agent_id'      => '',
+            'styles'        => 1,
+            'new_window'    => 0,
         ), $atts));
 
         if (!empty($styles)) {
@@ -122,20 +123,26 @@ class Register_Impress_Shortcodes
             }
         }
 
-        if (!isset($new_window)) {
+        if ( ! isset( $new_window ) ) {
             $new_window = 0;
         }
 
-        $target = $this->target($new_window);
+        $target = $this->target( $new_window );
 
         // sort low to high
-        usort($properties, array($this->idx_api, 'price_cmp'));
+        usort( $properties, array( $this->idx_api, 'price_cmp' ) );
 
-        if ('high-low' == $order) {
+        if ( 'high-low' == $order ) {
             $properties = array_reverse($properties);
         }
 
-        foreach ($properties as $prop) {
+        foreach ( $properties as $prop ) {
+
+            if ( isset( $agent_id, $prop['userAgentID'] ) && ! empty( $agent_id ) ) {
+                if ( (int) $agent_id !== (int) $prop['userAgentID'] ) {
+                    continue;
+                }
+            }
 
             if (!empty($max) && $count == $max) {
                 return $output;
@@ -173,6 +180,17 @@ class Register_Impress_Shortcodes
 
             $prop = $this->set_missing_core_fields($prop);
 
+            // Get URL and add suffix if one exists
+            if ( isset($prop['fullDetailsURL']) ) {
+                $url = $prop['fullDetailsURL'];
+            } else {
+                $url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
+            }
+
+            if ( has_filter( 'impress_showcase_property_url_suffix' ) ) {
+                $url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+            }
+
             if (1 == $show_image) {
                 $output .= sprintf('<div class="impress-showcase-property %12$s">
                         <a href="%3$s" class="impress-showcase-photo" target="%13$s">
@@ -191,7 +209,7 @@ class Register_Impress_Shortcodes
                         ',
                     $prop['listingPrice'],
                     $prop['propStatus'],
-                    $this->idx_api->details_url() . '/' . $prop['detailsURL'],
+                    $url,
                     $prop_image_url,
                     htmlspecialchars($prop['remarksConcat']),
                     $prop['streetNumber'],
@@ -204,49 +222,83 @@ class Register_Impress_Shortcodes
                     $target
                 );
 
-                $output .= '<p class="beds-baths-sqft">';
-                $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
-                $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
-                $output .= $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']);
-                $output .= "</p>";
-
-                //Add Disclaimer and Courtesy.
-                $output .= '<div class="disclaimer">';
-                (isset($disclaimer_text)) ? $output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>' : '';
-                (isset($disclaimer_logo)) ? $output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '';
-                (isset($courtesy_text)) ? $output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '';
-                $output .= "</div>";
-
-                $output .= "</div>";
-            } else {
-                $output .= sprintf(
-                    '<li class="impress-showcase-property-list %9$s">
-                        <a href="%2$s" target="%10$s">
-                            <p>
-                                <span class="impress-price">%1$s</span>
-                                <span class="impress-address">
-                                    <span class="impress-street">%3$s %4$s %5$s %6$s</span>
-                                    <span class="impress-cityname">%7$s</span>,
-                                    <span class="impress-state"> %8$s</span>
-                                </span>',
+                $output .= apply_filters( 'impress_showcase_property_html', sprintf(
+                    '<div class="impress-showcase-property %17$s">
+                        <a href="%3$s" class="impress-showcase-photo" target="%18$s">
+                            <img src="%4$s" alt="%5$s" title="%6$s %7$s %8$s %9$s %10$s, %11$s" />
+                            <span class="impress-price">%1$s</span>
+                            <span class="impress-status">%2$s</span>
+                        </a>
+                        <a href="%3$s" target="%18$s">
+                            <p class="impress-address">
+                                <span class="impress-street">%6$s %7$s %8$s %9$s</span>
+                                <span class="impress-cityname">%10$s</span>,
+                                <span class="impress-state"> %11$s</span>
+                            </p>
+                        </a>
+                        <p class="impress-beds-baths-sqft">
+                        %12$s
+                        %13$s
+                        %14$s
+                        %15$s
+                        </p>
+                        %16$s',
                     $prop['listingPrice'],
-                    $this->idx_api->details_url() . '/' . $prop['detailsURL'],
+                    $prop['propStatus'],
+                    $url,
+                    $prop_image_url,
+                    htmlspecialchars($prop['remarksConcat']),
                     $prop['streetNumber'],
                     $prop['streetName'],
                     $prop['streetDirection'],
                     $prop['unitNumber'],
                     $prop['cityName'],
                     $prop['state'],
+                    $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']),
+                    $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']),
+                    $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']),
+                    $this->hide_empty_fields('acres', 'Acres', $prop['acres']),
+                    $this->maybe_add_disclaimer_and_courtesy($prop),
                     $column_class,
                     $target
-                );
+                ), $prop, $instance, $url, $this->maybe_add_disclaimer_and_courtesy($prop) );
 
-                $output .= '<span class="impress-beds-baths-sqft">';
-                $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
-                $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
-                $output .= $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']);
-                $output .= "</span></p></a>";
-                $output .= "</li>";
+                $output .= "</div>";
+            } else {
+                $output .= apply_filters( 'impress_showcase_property_list_html', sprintf(
+                    '<li class="impress-showcase-property-list %13$s">
+                        <a href="%2$s" target="%14$s">
+                            <p>
+                                <span class="impress-price">%1$s</span>
+                                <span class="impress-address">
+                                    <span class="impress-street">%3$s %4$s %5$s %6$s</span>
+                                    <span class="impress-cityname">%7$s</span>,
+                                    <span class="impress-state"> %8$s</span>
+                                </span>
+                                <span class="impress-beds-baths-sqft">
+                                    %9$s
+                                    %10$s
+                                    %11$s
+                                    %12$s
+                                </span>
+                            </p>
+                        </a>
+                    </li>',
+                    $prop['listingPrice'],
+                    $url,
+                    $prop['streetNumber'],
+                    $prop['streetName'],
+                    $prop['streetDirection'],
+                    $prop['unitNumber'],
+                    $prop['cityName'],
+                    $prop['state'],
+                    $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']),
+                    $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']),
+                    $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']),
+                    $this->hide_empty_fields('acres', 'Acres', $prop['acres']),
+                    $column_class,
+                    $target
+                ), $prop, $instance, $url );
             }
 
             if (1 == $use_rows && $count != 1) {
@@ -326,19 +378,62 @@ class Register_Impress_Shortcodes
         }
     }
 
+    /**
+     * Output disclaimer and courtesy if applicable
+     *
+     * @param  array $prop The current property in the loop
+     * @return string       HTML of disclaimer, logo, and courtesy
+     */
+    public function maybe_add_disclaimer_and_courtesy( $prop ) {
+        //Add Disclaimer when applicable.
+        if(isset($prop['disclaimer']) && !empty($prop['disclaimer'])) {
+            foreach($prop['disclaimer'] as $disclaimer) {
+                if(in_array('widget', $disclaimer)) {
+                    $disclaimer_text = $disclaimer['text'];
+                    $disclaimer_logo = $disclaimer['logoURL'];
+                }
+            }
+        }
+        //Add Courtesy when applicable.
+        if(isset($prop['courtesy']) && !empty($prop['courtesy'])) {
+            foreach($prop['courtesy'] as $courtesy) {
+                if(in_array('widget', $courtesy)) {
+                    $courtesy_text = $courtesy['text'];
+                }
+            }
+        }
+
+        $output = '';
+
+        if ( isset( $disclaimer_text ) ) {
+            $output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>';
+        }
+        if ( isset( $disclaimer_logo ) ) {
+            $output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />';
+        }
+        if ( isset( $courtesy_text ) ) {
+            $output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
+        }
+
+        if ( $output !== '' ) {
+            return '<div class="disclaimer">' . $output . '</div>';
+        }
+    }
+
     public function property_carousel_shortcode($atts = array())
     {
         wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
 
         extract(shortcode_atts(array(
-            'max' => 4,
-            'display' => 3,
-            'autoplay' => 1,
-            'order' => 'high-low',
+            'max'           => 4,
+            'display'       => 3,
+            'autoplay'      => 1,
+            'order'         => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
-            'styles' => 1,
-            'new_window' => 0,
+            'agent_id'      => '',
+            'styles'        => 1,
+            'new_window'    => 0,
         ), $atts));
 
         wp_enqueue_style('owl-css', plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)));
@@ -435,6 +530,12 @@ class Register_Impress_Shortcodes
 
         foreach ($properties as $prop) {
 
+            if ( isset( $agent_id, $prop['userAgentID'] ) && ! empty( $agent_id ) ) {
+                if ( (int) $agent_id !== (int) $prop['userAgentID'] ) {
+                    continue;
+                }
+            }
+
             if (!empty($max) && $count == $max) {
                 $output .= '</div><!-- end .impress-listing-carousel -->';
                 return $output;
@@ -464,6 +565,17 @@ class Register_Impress_Shortcodes
 
             $prop = $this->set_missing_core_fields($prop);
 
+            // Get URL and add suffix if one exists
+            if ( isset($prop['fullDetailsURL']) ) {
+                $url = $prop['fullDetailsURL'];
+            } else {
+                $url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
+            }
+
+            if ( has_filter( 'impress_carousel_property_url_suffix' ) ) {
+                $url = $url . apply_filters( 'impress_carousel_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+            }
+
             $output .= apply_filters( 'impress_carousel_property_html', sprintf(
                 '<div class="impress-carousel-property">
                     <a href="%2$s" class="impress-carousel-photo" target="%18$s">
@@ -488,7 +600,7 @@ class Register_Impress_Shortcodes
                     </div>
                     </div><!-- end .impress-carousel-property -->',
                 $prop['listingPrice'],
-                $this->idx_api->details_url() . '/' . $prop['detailsURL'],
+                $url,
                 $prop_image_url,
                 htmlspecialchars($prop['remarksConcat']),
                 $prop['streetNumber'],
@@ -505,7 +617,7 @@ class Register_Impress_Shortcodes
                 (isset($disclaimer_logo)) ? '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '',
                 (isset($courtesy_text)) ? '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '',
                 $target
-            ), $prop, $atts );
+            ), $prop, $atts, $url );
         }
 
         $output .= '</div><!-- end .impress-carousel -->';
@@ -522,7 +634,8 @@ class Register_Impress_Shortcodes
             'number_columns' => 4,
             'styles' => 1,
             'show_count' => 0,
-            'new_window' => 0
+            'new_window' => 0,
+            'agent_id'   => '',
         ), $atts));
 
         if (!empty($styles)) {
@@ -661,6 +774,12 @@ class Register_Impress_Shortcodes
                             'type' => 'text',
                             'value' => '',
                         ),
+                        array(
+                            'label' => 'Limit by Agent ID',
+                            'attr' => 'agent_id',
+                            'type' => 'text',
+                            'value' => '',
+                        ),
                     ),
                 )
             );
@@ -720,6 +839,12 @@ class Register_Impress_Shortcodes
                         array(
                             'label' => 'Saved Link ID',
                             'attr' => 'saved_link_id',
+                            'type' => 'text',
+                            'value' => '',
+                        ),
+                        array(
+                            'label' => 'Limit by Agent ID',
+                            'attr' => 'agent_id',
                             'type' => 'text',
                             'value' => '',
                         ),
