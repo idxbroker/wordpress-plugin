@@ -98,14 +98,15 @@ class Multisite {
 			add_filter( 'impress_showcase_property_url_suffix', array( $this, 'multisite_add_property_widget_suffix' ), 10, 3 );
 			add_filter( 'impress_carousel_property_url_suffix', array( $this, 'multisite_add_property_widget_suffix' ), 10, 3 );
 			add_filter( 'impress_lead_signup_agent_id_field', array( $this, 'multisite_lead_signup_agent_id_field' ), 10, 1 );
-			add_filter( 'impress_idx_page_insert_post_name', array( $this, 'multisite_idx_page_insert_post_name' ), 10, 2 );
+			add_filter( 'impress_city_links_url_suffix', array( $this, 'multisite_url_with_agent_header_id' ), 10, 2 );
+			add_filter( 'impress_idx_page_insert_post_name', array( $this, 'multisite_url_with_agent_header_id' ), 10, 2 );
 		}
 	}
 
 	/**
 	 * Returns a url encoded string including the agentID key and value
 	 *
-	 * @param  array $suffix    The URL suffix. Default empty array.
+	 * @param  array $suffix    The URL suffix(es). Default empty array.
 	 * @param  array $prop      The property in the loop
 	 * @param  obj   $idx       The IDX API object
 	 *
@@ -113,30 +114,38 @@ class Multisite {
 	 */
 	public function multisite_add_property_widget_suffix( $suffix, $prop, $idx ) {
 		$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
-		$suffix = array();
-		$suffix['agentHeaderID'] = $options['agent_id'];
+		
+		if ( ! is_array( $suffix ) ) {
+			$suffix = array(
+				'agentHeaderID' => $options['agentID']
+			);
+		}
+
+		foreach ( $suffix as $key => $value ) {
+			$suffix[ $key ] = $options[ $value ];
+		}
 		return '?' . http_build_query( $suffix );
 	}
 
 	/**
-	 * Returns a url encoded string including the contactRoutingAgent key and agentID value
+	 * Returns a url encoded string including the agentOwner key and agentID value
 	 *
 	 * @param  array $field The field. Default empty.
 	 * @return string $field The field to return.
 	 */
 	public function multisite_lead_signup_agent_id_field( $field ) {
 		$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
-		return '<input type="hidden" name="contactRoutingAgent" value="' . $options['agent_id'] . '">';
+		return '<input type="hidden" name="agentOwner" value="' . $options['agent_id'] . '">';
 	}
 
 	/**
-	 * Returns IDX page URL with agentHeaderID param appended
+	 * Returns any URL with agentHeaderID param appended
 	 *
-	 * @param  string  $url  The IDX page URL.
-	 * @param  array  $link  The IDX page data.
+	 * @param  string  $url  The IDX page URL. required
+	 * @param  array  $link  The IDX page data. (optional)
 	 * @return string        The modified URL.
 	 */
-	public function multisite_idx_page_insert_post_name( $url, $link ) {
+	public function multisite_url_with_agent_header_id( $url, $link ) {
 		$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
 		return $url . '?agentHeaderID=' . $options['agent_id'];
 	}

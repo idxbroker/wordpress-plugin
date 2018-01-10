@@ -102,7 +102,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 
             <?php
             if ( has_filter( 'impress_lead_signup_agent_id_field' ) ) {
-                echo apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="contactRoutingAgent" value="' . $instance['agentID'] . '">' );
+                echo apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="agentOwner" value="' . $instance['agentID'] . '">' );
 
             } ?>
 
