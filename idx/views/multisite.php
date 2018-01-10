@@ -117,13 +117,10 @@ class Multisite {
 
 		if ( ! is_array( $suffix ) ) {
 			$suffix = array(
-				'agentHeaderID' => $options['agent_id']
+				'agentHeaderID' => $options['agent_id'],
 			);
 		}
 
-		foreach ( $suffix as $key => $value ) {
-			$suffix[ $key ] = $options[ $value ];
-		}
 		return '?' . http_build_query( $suffix );
 	}
 
