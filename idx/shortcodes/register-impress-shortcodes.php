@@ -228,8 +228,6 @@ class Register_Impress_Shortcodes
                             <img src="%4$s" alt="%5$s" title="%6$s %7$s %8$s %9$s %10$s, %11$s" />
                             <span class="impress-price">%1$s</span>
                             <span class="impress-status">%2$s</span>
-                        </a>
-                        <a href="%3$s" target="%18$s">
                             <p class="impress-address">
                                 <span class="impress-street">%6$s %7$s %8$s %9$s</span>
                                 <span class="impress-cityname">%10$s</span>,
@@ -242,7 +240,8 @@ class Register_Impress_Shortcodes
                         %14$s
                         %15$s
                         </p>
-                        %16$s',
+                        %16$s
+                        </div>',
                     $prop['listingPrice'],
                     $prop['propStatus'],
                     $url,
@@ -262,8 +261,6 @@ class Register_Impress_Shortcodes
                     $column_class,
                     $target
                 ), $prop, $instance, $url, $this->maybe_add_disclaimer_and_courtesy($prop) );
-
-                $output .= "</div>";
             } else {
                 $output .= apply_filters( 'impress_showcase_property_list_html', sprintf(
                     '<li class="impress-showcase-property-list %13$s">
