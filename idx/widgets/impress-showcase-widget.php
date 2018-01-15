@@ -177,7 +177,8 @@ class Impress_Showcase_Widget extends \WP_Widget
                         %14$s
                         %15$s
                         </p>
-                        %16$s',
+                        %16$s
+                        </div>',
                     $prop['listingPrice'],
                     $prop['propStatus'],
                     $url,
@@ -197,8 +198,6 @@ class Impress_Showcase_Widget extends \WP_Widget
                     $column_class,
                     $target
                 ), $prop, $instance, $url, $this->maybe_add_disclaimer_and_courtesy($prop) );
-
-                $output .= "</div>";
             } else {
                 $output .= apply_filters( 'impress_showcase_property_list_html', sprintf(
                     '<li class="impress-showcase-property-list %13$s">
