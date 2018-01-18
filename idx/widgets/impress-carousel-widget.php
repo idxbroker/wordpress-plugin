@@ -161,24 +161,6 @@ class Impress_Carousel_Widget extends \WP_Widget
 
             $count++;
 
-            //Add Disclaimer when applicable.
-            if(isset($prop['disclaimer']) && !empty($prop['disclaimer'])) {
-                foreach($prop['disclaimer'] as $disclaimer) {
-                    if(in_array('widget', $disclaimer)) {
-                        $disclaimer_text = $disclaimer['text'];
-                        $disclaimer_logo = $disclaimer['logoURL'];
-                    }
-                }
-            }
-            //Add Courtesy when applicable.
-            if(isset($prop['courtesy']) && !empty($prop['courtesy'])) {
-                foreach($prop['courtesy'] as $courtesy) {
-                    if(in_array('widget', $courtesy)) {
-                        $courtesy_text = $courtesy['text'];
-                    }
-                }
-            }
-
             $prop = $this->set_missing_core_fields($prop);
 
             // Get URL and add suffix if one exists
@@ -194,11 +176,11 @@ class Impress_Carousel_Widget extends \WP_Widget
 
             $output .= apply_filters( 'impress_carousel_property_html', sprintf(
                 '<div class="impress-carousel-property">
-                    <a href="%2$s" class="impress-carousel-photo" target="%18$s">
+                    <a href="%2$s" class="impress-carousel-photo" target="%16$s">
                         <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
-                    <a href="%2$s" target="%18$s">
+                    <a href="%2$s" target="%16$s">
                         <p class="impress-address">
                             <span class="impress-street">%5$s %6$s %7$s %8$s</span>
                             <span class="impress-cityname">%9$s</span>,
@@ -211,9 +193,7 @@ class Impress_Carousel_Widget extends \WP_Widget
                         %13$s
                         %14$s
                     </p>
-                    <div class="disclaimer">
-                        %15$s %16$s %17$s
-                    </div>
+                    %15$s
                     </div><!-- end .impress-carousel-property -->',
                 $prop['listingPrice'],
                 $url,
@@ -229,11 +209,9 @@ class Impress_Carousel_Widget extends \WP_Widget
                 $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']),
                 $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']),
                 $this->hide_empty_fields('acres', 'Acres', $prop['acres']),
-                (isset($disclaimer_text)) ? '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>' : '',
-                (isset($disclaimer_logo)) ? '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '',
-                (isset($courtesy_text)) ? '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '',
+                $this->maybe_add_disclaimer_and_courtesy($prop),
                 $target
-            ), $prop, $instance, $url );
+            ), $prop, $instance, $url, $this->maybe_add_disclaimer_and_courtesy($prop) );
         }
 
         $output .= '</div><!-- end .impress-carousel -->';
@@ -463,7 +441,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         <?php }?>
 
         <p>
-            <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'equity' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'idxbroker' ); ?></label>
             <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ) ?>">
                 <?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
             </select>
@@ -531,5 +509,49 @@ class Impress_Carousel_Widget extends \WP_Widget
         }
 
         return $agents_list;
+    }
+
+    /**
+     * Output disclaimer and courtesy if applicable
+     *
+     * @param  array $prop The current property in the loop
+     * @return string       HTML of disclaimer, logo, and courtesy
+     */
+    public function maybe_add_disclaimer_and_courtesy( $prop ) {
+        //Add Disclaimer when applicable.
+        if(isset($prop['disclaimer']) && !empty($prop['disclaimer'])) {
+            foreach($prop['disclaimer'] as $disclaimer) {
+                if(in_array('widget', $disclaimer)) {
+                    $disclaimer_text = $disclaimer['text'];
+                    $disclaimer_logo = $disclaimer['logoURL'];
+                }
+            }
+        }
+        //Add Courtesy when applicable.
+        if(isset($prop['courtesy']) && !empty($prop['courtesy'])) {
+            foreach($prop['courtesy'] as $courtesy) {
+                if(in_array('widget', $courtesy)) {
+                    $courtesy_text = $courtesy['text'];
+                }
+            }
+        }
+
+        $output = '';
+
+        if ( isset( $disclaimer_text ) ) {
+            $output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>';
+        }
+        if ( isset( $disclaimer_logo ) ) {
+            $output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />';
+        }
+        if ( isset( $courtesy_text ) ) {
+            $output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
+        }
+
+        if ( $output == '' ) {
+            return;
+        } else {
+            return '<div class="disclaimer">' . $output . '</div>';
+        }
     }
 }
