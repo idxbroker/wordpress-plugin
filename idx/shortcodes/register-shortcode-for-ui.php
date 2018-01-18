@@ -345,7 +345,7 @@ class Register_Shortcode_For_Ui
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
-            'agentID'       => '',
+            'agent_id'      => '',
             'styles' => 1,
             'new_window' => 0,
         );
@@ -377,9 +377,9 @@ class Register_Shortcode_For_Ui
 
         // Agent select
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-        $output .= "<label for\"agentID\">Limit by Agent:</label>";
-        $output .= "<select id=\"agentID\" data-short-name=\"agentID\">";
-        $output .= $this->get_agents_select_list($defaults['agentID']);
+        $output .= "<label for\"agent_id\">Limit by Agent:</label>";
+        $output .= "<select id=\"agent_id\" data-short-name=\"agent_id\">";
+        $output .= $this->get_agents_select_list($defaults['agent_id']);
         $output .= "</select>";
         $output .= "</div>";
 
@@ -443,7 +443,7 @@ class Register_Shortcode_For_Ui
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
-            'agentID'       => '',
+            'agent_id'      => '',
             'styles' => 1,
             'new_window' => 0,
         );
@@ -474,9 +474,9 @@ class Register_Shortcode_For_Ui
         }
         // Agent select
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-        $output .= "<label for\"agentID\">Limit by Agent:</label>";
-        $output .= "<select id=\"agentID\" data-short-name=\"agentID\">";
-        $output .= $this->get_agents_select_list($defaults['agentID']);
+        $output .= "<label for\"agent_id\">Limit by Agent:</label>";
+        $output .= "<select id=\"agent_id\" data-short-name=\"agent_id\">";
+        $output .= $this->get_agents_select_list($defaults['agent_id']);
         $output .= "</select>";
         $output .= "</div>";
 
