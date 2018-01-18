@@ -304,6 +304,10 @@ class Impress_City_Links_Widget extends \WP_Widget
 
             $href = $idx_api->subdomain_url() . 'city-' . $idx_id . '-' . rawurlencode($city->name) . '-' . $city->id;
 
+            if ( has_filter( 'impress_city_links_url_suffix' ) ) {
+                $href = apply_filters( 'impress_city_links_url_suffix', $href, $link = null );
+            }
+
             //do not add empty city names, ids, duplicates, or 'Other' cities
             if (!empty($city->name) && !empty($city->id) && !in_array($city->id, $cities_list) && $city->name !== 'Other' && $city->name !== 'Out of State' && $city->name !== 'Out of Area') {
                 //avoid duplicates by keeping track of cities already used

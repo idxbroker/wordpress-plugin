@@ -241,6 +241,7 @@ class Register_Shortcode_For_Ui
             'phone' => 0,
             'styles' => 1,
             'new_window' => 0,
+            'agent_id' => '',
         );
 
         $output = '';
@@ -262,6 +263,14 @@ class Register_Shortcode_For_Ui
         $output .= "<script>";
         $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)) . "\"];";
         $output .= "</script>";
+
+        // Agent select
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"agent_id\">Route to Agent:</label>";
+        $output .= "<select id=\"agent_id\" data-short-name=\"agent_id\">";
+        $output .= $this->get_agents_select_list($defaults['agent_id']);
+        $output .= "</select>";
+        $output .= "</div>";
 
         return $output;
     }
@@ -534,14 +543,14 @@ class Register_Shortcode_For_Ui
         }
 
         if($agent_id != null) {
-            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>All</option>';
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>Use default routing</option>';
             foreach($agents_array['agent'] as $agent) {
-                $agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+                $agents_list .= '<option value="' . $agent['agent_id'] . '" ' . selected($agent_id, $agent['agent_id'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
             }
         } else {
             $agents_list = '<option value="">All</option>';
             foreach($agents_array['agent'] as $agent) {
-                $agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+                $agents_list .= '<option value="' . $agent['agent_id'] . '">' . $agent['agentDisplayName'] . '</option>'; 
             }
         }
 

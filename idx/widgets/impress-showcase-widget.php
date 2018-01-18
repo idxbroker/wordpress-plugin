@@ -163,6 +163,17 @@ class Impress_Showcase_Widget extends \WP_Widget
                 }
             }
 
+            // Get URL and add suffix if one exists
+            if ( isset($prop['fullDetailsURL']) ) {
+                $url = $prop['fullDetailsURL'];
+            } else {
+                $url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
+            }
+
+            if ( has_filter( 'impress_showcase_property_url_suffix' ) ) {
+                $url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+            }
+
             if (1 == $instance['show_image']) {
                 $output .= sprintf(
                     '<div class="impress-showcase-property %12$s">
@@ -180,7 +191,7 @@ class Impress_Showcase_Widget extends \WP_Widget
 						</a>',
                     $prop['listingPrice'],
                     $prop['propStatus'],
-                    $this->idx_api->details_url() . '/' . $prop['detailsURL'],
+                    $url,
                     $prop_image_url,
                     htmlspecialchars($prop['remarksConcat']),
                     $prop['streetNumber'],
@@ -567,7 +578,7 @@ class Impress_Showcase_Widget extends \WP_Widget
         if ( ! is_array( $agents_array ) ) {
             return;
         }
-        
+
         if($agent_id != null) {
             $agents_list = '<option value="" '. selected($agent_id, '', '') . '>All</option>';
             foreach($agents_array['agent'] as $agent) {

@@ -54,6 +54,9 @@ class Initiate_Plugin
         new Backward_Compatibility\Add_Uid_To_Idx_Pages();
         new \IDX\Views\Lead_Management();
         new \IDX\Views\Search_Management();
+        if ( is_multisite() ) {
+             new \IDX\Views\Multisite();
+        }
     }
 
     public function idx_extensions() {
