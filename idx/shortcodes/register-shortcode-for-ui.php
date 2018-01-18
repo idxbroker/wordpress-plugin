@@ -345,6 +345,7 @@ class Register_Shortcode_For_Ui
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
+            'agentID'       => '',
             'styles' => 1,
             'new_window' => 0,
         );
@@ -373,6 +374,14 @@ class Register_Shortcode_For_Ui
             $output .= "</div>";
             //endif
         }
+
+        // Agent select
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"agentID\">Limit by Agent:</label>";
+        $output .= "<select id=\"agentID\" data-short-name=\"agentID\">";
+        $output .= $this->get_agents_select_list($defaults['agentID']);
+        $output .= "</select>";
+        $output .= "</div>";
 
         // Images
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
@@ -434,6 +443,7 @@ class Register_Shortcode_For_Ui
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
+            'agentID'       => '',
             'styles' => 1,
             'new_window' => 0,
         );
@@ -462,6 +472,14 @@ class Register_Shortcode_For_Ui
             $output .= "</div>";
             //endif
         }
+        // Agent select
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"agentID\">Limit by Agent:</label>";
+        $output .= "<select id=\"agentID\" data-short-name=\"agentID\">";
+        $output .= $this->get_agents_select_list($defaults['agentID']);
+        $output .= "</select>";
+        $output .= "</div>";
+
         // Per row
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"display\">Listings to show without scrolling</label>";
@@ -507,4 +525,26 @@ class Register_Shortcode_For_Ui
         return $output;
     }
 
+
+    public function get_agents_select_list( $agent_id ) {
+        $agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+        if ( ! is_array( $agents_array ) ) {
+            return;
+        }
+
+        if($agent_id != null) {
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+            }
+        } else {
+            $agents_list = '<option value="">All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+            }
+        }
+
+        return $agents_list;
+    }
 }

@@ -26,16 +26,17 @@ class Impress_Showcase_Widget extends \WP_Widget
     public $idx_api;
 
     public $defaults = array(
-        'title' => 'Properties',
-        'properties' => 'featured',
-        'saved_link_id' => '',
-        'show_image' => '1',
-        'use_rows' => '1',
+        'title'            => 'Properties',
+        'properties'       => 'featured',
+        'saved_link_id'    => '',
+        'agentID'          => '',
+        'show_image'       => '1',
+        'use_rows'         => '1',
         'listings_per_row' => 4,
-        'max' => '',
-        'order' => 'high-low',
-        'styles' => 1,
-        'new_window' => 0,
+        'max'              => '',
+        'order'            => 'high-low',
+        'styles'           => 1,
+        'new_window'       => 0,
     );
 
     /**
@@ -123,6 +124,12 @@ class Impress_Showcase_Widget extends \WP_Widget
         }
 
         foreach ($properties as $prop) {
+
+            if ( isset( $instance['agentID'], $prop['userAgentID'] ) && ! empty( $instance['agentID'] ) ) {
+                if ( $instance['agentID'] !== (int) $prop['userAgentID'] ) {
+                    continue;
+                }
+            }
 
             if (!empty($max) && $count == $max) {
                 return $output;
@@ -438,16 +445,17 @@ class Impress_Showcase_Widget extends \WP_Widget
     public function update($new_instance, $old_instance)
     {
         $instance = array();
-        $instance['title'] = strip_tags($new_instance['title']);
-        $instance['properties'] = strip_tags($new_instance['properties']);
-        $instance['saved_link_id'] = (int) ($new_instance['saved_link_id']);
-        $instance['show_image'] = (bool) $new_instance['show_image'];
+        $instance['title']            = strip_tags($new_instance['title']);
+        $instance['properties']       = strip_tags($new_instance['properties']);
+        $instance['saved_link_id']    = (int) ($new_instance['saved_link_id']);
+        $instance['agentID']          = (int) $new_instance['agentID'];
+        $instance['show_image']       = (bool) $new_instance['show_image'];
         $instance['listings_per_row'] = (int) $new_instance['listings_per_row'];
-        $instance['max'] = strip_tags($new_instance['max']);
-        $instance['order'] = strip_tags($new_instance['order']);
-        $instance['use_rows'] = (bool) $new_instance['use_rows'];
-        $instance['styles'] = strip_tags($new_instance['styles']);
-        $instance['new_window'] = strip_tags($new_instance['new_window']);
+        $instance['max']              = strip_tags($new_instance['max']);
+        $instance['order']            = strip_tags($new_instance['order']);
+        $instance['use_rows']         = (bool) $new_instance['use_rows'];
+        $instance['styles']           = strip_tags($new_instance['styles']);
+        $instance['new_window']       = strip_tags($new_instance['new_window']);
 
         return $instance;
     }
@@ -495,6 +503,12 @@ class Impress_Showcase_Widget extends \WP_Widget
 		</p>
         <?php }?>
 
+        <p>
+            <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'equity' ); ?></label>
+            <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ) ?>">
+                <?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
+            </select>
+        </p>
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked($instance['show_image'], 1);?> id="<?php echo $this->get_field_id('show_image');?>" name="<?php echo $this->get_field_name('show_image');?>" value="1" />
@@ -539,5 +553,33 @@ class Impress_Showcase_Widget extends \WP_Widget
         </p>
 
 	<?php
+    }
+
+    /**
+     * Returns agents wrapped in option tags
+     *
+     * @param  int $agent_id Instance agentID if exists
+     * @return str           HTML options tags of agents ids and names
+     */
+    public function get_agents_select_list( $agent_id ) {
+        $agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+        if ( ! is_array( $agents_array ) ) {
+            return;
+        }
+        
+        if($agent_id != null) {
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+            }
+        } else {
+            $agents_list = '<option value="">All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+            }
+        }
+
+        return $agents_list;
     }
 }

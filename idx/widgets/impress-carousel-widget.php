@@ -24,15 +24,16 @@ class Impress_Carousel_Widget extends \WP_Widget
 
     public $idx_api;
     public $defaults = array(
-        'title' => 'Properties',
-        'properties' => 'featured',
+        'title'         => 'Properties',
+        'properties'    => 'featured',
         'saved_link_id' => '',
-        'display' => 3,
-        'max' => 15,
-        'order' => 'high-low',
-        'autoplay' => 1,
-        'styles' => 1,
-        'new_window' => 0,
+        'agentID'       => '',
+        'display'       => 3,
+        'max'           => 15,
+        'order'         => 'high-low',
+        'autoplay'      => 1,
+        'styles'        => 1,
+        'new_window'    => 0,
     );
 
     /**
@@ -145,11 +146,18 @@ class Impress_Carousel_Widget extends \WP_Widget
         $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s">', $instance['display']);
 
         foreach ($properties as $prop) {
+
+            if ( isset( $instance['agentID'], $prop['userAgentID'] ) && ! empty( $instance['agentID'] ) ) {
+                if ( $instance['agentID'] !== (int) $prop['userAgentID'] ) {
+                    continue;
+                }
+            }
+
             if (!empty($max) && $count == $max) {
                 return $output;
             }
 
-        $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+            $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 
             $count++;
 
@@ -173,19 +181,29 @@ class Impress_Carousel_Widget extends \WP_Widget
 
             $prop = $this->set_missing_core_fields($prop);
 
-            $output .= sprintf(
+            $output .= apply_filters( 'impress_carousel_property_html', sprintf(
                 '<div class="impress-carousel-property">
-                    <a href="%2$s" class="impress-carousel-photo" target="%11$s">
+                    <a href="%2$s" class="impress-carousel-photo" target="%18$s">
                         <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
-                    <a href="%2$s" target="%11$s">
+                    <a href="%2$s" target="%18$s">
                         <p class="impress-address">
                             <span class="impress-street">%5$s %6$s %7$s %8$s</span>
                             <span class="impress-cityname">%9$s</span>,
                             <span class="impress-state"> %10$s</span>
                         </p>
-                    </a>',
+                    </a>
+                    <p class="impress-beds-baths-sqft">
+                        %11$s
+                        %12$s
+                        %13$s
+                        %14$s
+                    </p>
+                    <div class="disclaimer">
+                        %15$s %16$s %17$s
+                    </div>
+                    </div><!-- end .impress-carousel-property -->',
                 $prop['listingPrice'],
                 $this->idx_api->details_url() . '/' . $prop['detailsURL'],
                 $prop_image_url,
@@ -196,28 +214,18 @@ class Impress_Carousel_Widget extends \WP_Widget
                 $prop['unitNumber'],
                 $prop['cityName'],
                 $prop['state'],
+                $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']),
+                $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']),
+                $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']),
+                $this->hide_empty_fields('acres', 'Acres', $prop['acres']),
+                (isset($disclaimer_text)) ? '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>' : '',
+                (isset($disclaimer_logo)) ? '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '',
+                (isset($courtesy_text)) ? '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '',
                 $target
-            );
-
-            $output .= '<p class="impress-beds-baths-sqft">';
-            $output .= $this->hide_empty_fields('beds', 'Beds', $prop['bedrooms']);
-            $output .= $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']);
-            //remove decimals and add commas to SqFt value
-            $output .= $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']);
-            $output .= "</p>";
-
-            //Add Disclaimer and Courtesy.
-            $output .= '<div class="disclaimer">';
-            (isset($disclaimer_text)) ? $output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>' : '';
-            (isset($disclaimer_logo)) ? $output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '';
-            (isset($courtesy_text)) ? $output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '';
-            $output .= '</div>';
-
-            $output .= "</div>";
-
+            ), $prop, $instance );
         }
 
-        $output .= '';
+        $output .= '</div><!-- end .impress-carousel -->';
 
         return $output;
     }
@@ -386,15 +394,16 @@ class Impress_Carousel_Widget extends \WP_Widget
     public function update($new_instance, $old_instance)
     {
         $instance = array();
-        $instance['title'] = strip_tags($new_instance['title']);
-        $instance['properties'] = strip_tags($new_instance['properties']);
-        $instance['saved_link_id'] = (int) ($new_instance['saved_link_id']);
-        $instance['display'] = (int) ($new_instance['display']);
-        $instance['max'] = (int) ($new_instance['max']);
-        $instance['order'] = strip_tags($new_instance['order']);
-        $instance['autoplay'] = strip_tags($new_instance['autoplay']);
-        $instance['styles'] = strip_tags($new_instance['styles']);
-        $instance['new_window'] = strip_tags($new_instance['new_window']);
+        $instance['title']         = strip_tags($new_instance['title']);
+        $instance['properties']    = strip_tags($new_instance['properties']);
+        $instance['saved_link_id'] = (int) $new_instance['saved_link_id'];
+        $instance['agentID']       = (int) $new_instance['agentID'];
+        $instance['display']       = (int) $new_instance['display'];
+        $instance['max']           = (int) $new_instance['max'];
+        $instance['order']         = strip_tags($new_instance['order']);
+        $instance['autoplay']      = strip_tags($new_instance['autoplay']);
+        $instance['styles']        = strip_tags($new_instance['styles']);
+        $instance['new_window']    = strip_tags($new_instance['new_window']);
 
         return $instance;
     }
@@ -443,6 +452,13 @@ class Impress_Carousel_Widget extends \WP_Widget
         <?php }?>
 
         <p>
+            <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'equity' ); ?></label>
+            <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ) ?>">
+                <?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
+            </select>
+        </p>
+
+        <p>
             <label for="<?php echo $this->get_field_id('display');?>"><?php _e('Listings to show without scrolling:', 'idxbroker');?></label>
             <input class="widefat" type="number" id="<?php echo $this->get_field_id('display');?>" name="<?php echo $this->get_field_name('display')?>" value="<?php esc_attr_e($instance['display']);?>" size="3">
         </p>
@@ -476,5 +492,33 @@ class Impress_Carousel_Widget extends \WP_Widget
         </p>
 
     <?php
+    }
+
+    /**
+     * Returns agents wrapped in option tags
+     *
+     * @param  int $agent_id Instance agentID if exists
+     * @return str           HTML options tags of agents ids and names
+     */
+    public function get_agents_select_list( $agent_id ) {
+        $agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+        if ( ! is_array( $agents_array ) ) {
+            return;
+        }
+
+        if($agent_id != null) {
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+            }
+        } else {
+            $agents_list = '<option value="">All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+            }
+        }
+
+        return $agents_list;
     }
 }
