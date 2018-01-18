@@ -192,36 +192,6 @@ class Register_Impress_Shortcodes
             }
 
             if (1 == $show_image) {
-                $output .= sprintf('<div class="impress-showcase-property %12$s">
-                        <a href="%3$s" class="impress-showcase-photo" target="%13$s">
-                            <img src="%4$s" alt="%5$s" title="%6$s %7$s %8$s %9$s %10$s, %11$s" />
-                            <span class="impress-price">%1$s</span>
-                            <span class="impress-status">%2$s</span>
-                        </a>
-                        <a href="%3$s" target="%13$s">
-                            <p class="impress-address">
-                                <span class="impress-street">%6$s %7$s %8$s %9$s</span>
-                                <span class="impress-cityname">%10$s</span>,
-                                <span class="impress-state"> %11$s</span>
-                            </p>
-                        </a>
-
-                        ',
-                    $prop['listingPrice'],
-                    $prop['propStatus'],
-                    $url,
-                    $prop_image_url,
-                    htmlspecialchars($prop['remarksConcat']),
-                    $prop['streetNumber'],
-                    $prop['streetName'],
-                    $prop['streetDirection'],
-                    $prop['unitNumber'],
-                    $prop['cityName'],
-                    $prop['state'],
-                    $column_class,
-                    $target
-                );
-
                 $output .= apply_filters( 'impress_showcase_property_html', sprintf(
                     '<div class="impress-showcase-property %17$s">
                         <a href="%3$s" class="impress-showcase-photo" target="%18$s">
