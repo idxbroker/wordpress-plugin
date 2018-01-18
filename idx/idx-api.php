@@ -127,7 +127,11 @@ class Idx_Api
      */
     public function get_transient($name)
     {
-        $data = get_option($name);
+        if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+            $data = get_blog_option( get_main_site_id(), $name );
+        } else {
+            $data = get_option($name);
+        }
         if (empty($data)) {
             return false;
         }
@@ -147,12 +151,20 @@ class Idx_Api
             'expiration' => $expiration,
         );
         $data = serialize($data);
-        update_option($name, $data);
+        if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+            update_blog_option( get_main_site_id(), $name, $data );
+        } else {
+            update_option( $name, $data );
+        }
     }
 
     public function delete_transient($name)
-    {
-        delete_option($name);
+    {   
+        if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+            delete_blog_option( get_main_site_id(), $name );
+        } else {
+            delete_option($name);
+        }
     }
 
     /**
