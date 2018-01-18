@@ -33,6 +33,13 @@ class Create_Omnibar
         wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
         wp_localize_script('idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs);
         wp_localize_script('idx-omnibar-js', 'idxOmnibarPlaceholder', $placeholder);
+        // Adds agent header ID if multisite + not main site + it's set
+        if ( is_multisite() ) {
+            $options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
+            if ( isset( $options['agent_id'] ) && ! empty( $options['agent_id'] ) && ! is_main_site() ) {
+                wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
+            }
+        }
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
 
@@ -68,6 +75,13 @@ EOD;
         wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
         wp_localize_script('idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs);
         wp_localize_script('idx-omnibar-js', 'idxOmnibarPlaceholder', $placeholder);
+        // Adds agent header ID if multisite + not main site + it's set
+        if ( is_multisite() ) {
+            $options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
+            if ( isset( $options['agent_id'] ) && ! empty( $options['agent_id'] ) && ! is_main_site() ) {
+                wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
+            }
+        }
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
 

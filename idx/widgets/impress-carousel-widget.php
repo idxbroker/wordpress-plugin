@@ -161,24 +161,6 @@ class Impress_Carousel_Widget extends \WP_Widget
 
             $count++;
 
-            //Add Disclaimer when applicable.
-            if(isset($prop['disclaimer']) && !empty($prop['disclaimer'])) {
-                foreach($prop['disclaimer'] as $disclaimer) {
-                    if(in_array('widget', $disclaimer)) {
-                        $disclaimer_text = $disclaimer['text'];
-                        $disclaimer_logo = $disclaimer['logoURL'];
-                    }
-                }
-            }
-            //Add Courtesy when applicable.
-            if(isset($prop['courtesy']) && !empty($prop['courtesy'])) {
-                foreach($prop['courtesy'] as $courtesy) {
-                    if(in_array('widget', $courtesy)) {
-                        $courtesy_text = $courtesy['text'];
-                    }
-                }
-            }
-
             $prop = $this->set_missing_core_fields($prop);
 
             // Get URL and add suffix if one exists

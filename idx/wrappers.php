@@ -33,6 +33,18 @@ class Wrappers
             'parent_item_colon' => '',
             'parent' => 'Parent Wrapper',
         );
+        $capabilities = array(
+            'publish_posts' => 'publish_idx_wrappers',
+            'edit_posts' => 'edit_idx_wrappers',
+            'edit_others_posts' => 'edit_others_idx_wrappers',
+            'delete_posts' => 'delete_idx_wrappers',
+            'delete_others_posts' => 'delete_others_idx_wrappers',
+            'read_private_posts' => 'read_private_idx_wrappers',
+            'edit_post' => 'edit_idx_wrapper',
+            'delete_post' => 'delete_idx_wrapper',
+            'read_post' => 'read_idx_wrapper',
+        );
+
         $args = array(
             'public' => true,
             'labels' => $labels,
@@ -41,7 +53,8 @@ class Wrappers
             'exclude_from_search' => true,
             'show_in_menu' => 'idx-broker',
             'show_in_nav_menus' => false,
-            'capability_type' => 'page',
+            'capability_type' => array('idx_wrapper', 'idx_wrappers'),
+            'capabilities' => $capabilities,
             'has_archive' => false,
             'hierarchical' => false,
             'rewrite' => array('pages' => false),

@@ -120,6 +120,9 @@
 		var foundResult = false;
 
 		var goToResultsPage = function (input, url, additionalQuery, listingID){
+			if(agentHeaderID !== undefined) {
+				additionalQuery = additionalQuery + '&agentHeaderID=' + agentHeaderID;
+			}
 			if(listingID !== undefined){
 				return window.location = url + additionalQuery;
 			}

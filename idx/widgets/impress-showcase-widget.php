@@ -156,6 +156,17 @@ class Impress_Showcase_Widget extends \WP_Widget
                 $url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
             }
 
+            // Get URL and add suffix if one exists
+            if ( isset($prop['fullDetailsURL']) ) {
+                $url = $prop['fullDetailsURL'];
+            } else {
+                $url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
+            }
+
+            if ( has_filter( 'impress_showcase_property_url_suffix' ) ) {
+                $url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
+            }
+
             if (1 == $instance['show_image']) {
                 $output .= apply_filters( 'impress_showcase_property_html', sprintf(
                     '<div class="impress-showcase-property %17$s">
