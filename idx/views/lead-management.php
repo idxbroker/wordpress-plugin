@@ -610,7 +610,7 @@ class Lead_Management {
 
 		/* Create an empty post object for dumb plugins like soliloquy */
 		global $post;
-		$post = (object) array('post_type' => null);
+		$post = (object) array( 'post_type' => null, 'ID' => null );
 
 	}
 
