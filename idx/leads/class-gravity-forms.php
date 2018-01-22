@@ -29,6 +29,7 @@ class IDX_Leads_GF
 	}
 
 	public static function idx_broker_leads_page() {
+		$idx_api = new \IDX\Idx_Api();
 
 		GFFormSettings::page_header();
 
@@ -39,12 +40,16 @@ class IDX_Leads_GF
 		if(!isset($form_options['category'])) {
 			$form_options['category'] = '';
 		}
+		if(!isset($form_options['agent_id'])) {
+			$form_options['agent_id'] = '';
+		}
 
 		if (isset($_POST['submit'])) {
 
 			$new_value = array();
-			$new_value['enable_lead'] = isset($_POST["enable_lead"]) ? (int)stripslashes($_POST["enable_lead"]) : 0;
+			$new_value['enable_lead'] = isset($_POST["enable_lead"]) ? (int) stripslashes($_POST["enable_lead"]) : 0;
 			$new_value['category'] = isset($_POST["category"]) ? stripslashes($_POST["category"]) : 0;
+			$new_value['agent_id'] = isset($_POST["agent_id"]) ? (int) stripslashes($_POST["agent_id"]) : 0;
 			
 			update_option($option_name, $new_value);
 		}
@@ -67,6 +72,16 @@ class IDX_Leads_GF
 							<td>
 								<input id="enable_lead" name="enable_lead"  value="1" type="checkbox" <?php checked($checked, 1, true); ?>>
 								<label for="enable_lead">Import Leads</label>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								Assign to agent (optional)
+							</th>
+							<td>
+								<select name="agent_id">
+									<?php echo $idx_api->get_agents_select_list( $form_options['agent_id'] ); ?>
+								</select>
 							</td>
 						</tr>
 						<tr>
@@ -152,7 +167,8 @@ class IDX_Leads_GF
 					'stateProvince' => (isset($state)) ? $state : '',
 					'zipCode' => (isset($zip)) ? $zip : '',
 					'country' => (isset($country)) ? $country : '',
-					'actualCategory' => (isset($form_options['category'])) ? $form_options['category'] : ''
+					'actualCategory' => (isset($form_options['category'])) ? $form_options['category'] : '',
+					'agentOwner' => (isset($form_options['agent_id'])) ? $form_options['agent_id'] : ''
 				);
 
 				$api_url = 'https://api.idxbroker.com/leads/lead';
