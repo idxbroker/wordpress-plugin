@@ -142,12 +142,6 @@ class Initiate_Plugin
         echo "\n<!-- IDX Broker WordPress Plugin " . \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION . " Activated -->\n";
 
         echo "<!-- IDX Broker WordPress Plugin Wrapper Meta-->\n\n";
-        global $post;
-        //If wrapper, add noindex tag which is stripped out by our system
-        if ($post && $post->post_type === 'idx-wrapper') {
-            // If html is being modified we offer filters for developers to modify this tag as needed.
-            echo apply_filters( 'idx_activation_meta_tags', "<meta name='idx-robot'>\n<meta name='robots' content='noindex,nofollow'>\n");
-        }
     }
 
     public function idx_broker_platinum_plugin_actlinks($links)
