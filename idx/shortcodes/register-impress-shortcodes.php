@@ -403,8 +403,8 @@ class Register_Impress_Shortcodes
             'new_window'    => 0,
         ), $atts));
 
-        wp_enqueue_style('owl-css', plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)));
-        wp_enqueue_script('owl', plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)));
+        wp_enqueue_style('owl2-css', plugins_url('../assets/css/widgets/owl2.carousel.css', dirname(__FILE__)));
+        wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)));
 
         if ($styles) {
             wp_enqueue_style('impress-carousel', plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)));
