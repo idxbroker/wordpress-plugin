@@ -119,8 +119,8 @@
 		*/
 		var foundResult = false;
 
-		var goToResultsPage = function (input, url, additionalQuery, listingID, agentHeaderID){
-			if(agentHeaderID !== undefined) {
+		var goToResultsPage = function (input, url, additionalQuery, listingID){
+			if(typeof agentHeaderID !== 'undefined') {
 				additionalQuery = additionalQuery + '&agentHeaderID=' + agentHeaderID;
 			}
 			if(listingID !== undefined){
@@ -425,15 +425,15 @@
 					switch(listType){
 						case 'cities':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=city&city[]=' + list[i].id + '&srt=' + sortOrder, agentHeaderID);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=city&city[]=' + list[i].id + '&srt=' + sortOrder);
 							break;
 						case 'counties':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=county&county[]=' + list[i].id + '&srt=' + sortOrder, agentHeaderID);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=county&county[]=' + list[i].id + '&srt=' + sortOrder);
 							break;
 						case 'zipcodes':
 							foundResult = true;
-							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=zipcode&zipcode[]=' + list[i].id + '&srt=' + sortOrder, agentHeaderID);
+							goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=zipcode&zipcode[]=' + list[i].id + '&srt=' + sortOrder);
 							break;
 					}
 				} else if (foundResult === false && i == list.length - 1) {
@@ -467,7 +467,7 @@
 						forEach(fieldValues, function(index, value){
 							if(input.value !== '' && (input.value.toLowerCase() === value.toLowerCase() || input.value.toLowerCase() === (value + ' ' + checkFieldName(fieldName)).toLowerCase())){
 								foundResult = true;
-								return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&srt=' + sortOrder, agentHeaderID);
+								return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&srt=' + sortOrder);
 							}
 						})
 						if(foundResult){
@@ -487,11 +487,12 @@
 				var hasSpaces = /\s/g.test(input.value);
 				if (!input.value) {
 					//nothing in input
-					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&srt=' + sortOrder, agentHeaderID);
+					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&srt=' + sortOrder);
 				} else if(hasSpaces === false && parseInt(input.value) !== isNaN) {
 					//MLS Number/ListingID
 					var listingID = true;
-					goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID + '&srt=' + sortOrder, agentHeaderID);
+					var agentHeaderID = false;
+					goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID);
 				} else {
 					//address (split into number and street)
 					var addressSplit = input.value.split(' ');
@@ -504,13 +505,13 @@
 								addressName += '+' + addressSplit[i];
 							}
 						}
-						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&a_streetNumber=' + addressSplit[0] + '&aw_address=' + addressName + '&srt=' + sortOrder, agentHeaderID);
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&a_streetNumber=' + addressSplit[0] + '&aw_address=' + addressName + '&srt=' + sortOrder);
 					} else if(input.value === idxOmnibarPlaceholder){
 						//prevent placeholder from interfering with results URL
 						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&srt=' + sortOrder);
 					} else {
 						//search by just street name (without state or city if comma is used)
-						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&aw_address=' + input.value.split(', ')[0] + '&srt=' + sortOrder, agentHeaderID);
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&aw_address=' + input.value.split(', ')[0] + '&srt=' + sortOrder);
 					}
 				}
 			};
