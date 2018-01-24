@@ -39,6 +39,8 @@ class Create_Omnibar
             if ( isset( $options['agent_id'] ) && ! empty( $options['agent_id'] ) && ! is_main_site() ) {
                 wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
             }
+        } else {
+            wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', false );
         }
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
@@ -81,6 +83,8 @@ EOD;
             if ( isset( $options['agent_id'] ) && ! empty( $options['agent_id'] ) && ! is_main_site() ) {
                 wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
             }
+        } else {
+            wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', false );
         }
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
