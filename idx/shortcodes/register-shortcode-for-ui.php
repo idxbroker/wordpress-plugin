@@ -241,6 +241,7 @@ class Register_Shortcode_For_Ui
             'phone' => 0,
             'styles' => 1,
             'new_window' => 0,
+            'agent_id' => '',
         );
 
         $output = '';
@@ -262,6 +263,14 @@ class Register_Shortcode_For_Ui
         $output .= "<script>";
         $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)) . "\"];";
         $output .= "</script>";
+
+        // Agent select
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"agent_id\">Route to Agent:</label>";
+        $output .= "<select id=\"agent_id\" data-short-name=\"agent_id\">";
+        $output .= $this->get_agents_select_list($defaults['agent_id']);
+        $output .= "</select>";
+        $output .= "</div>";
 
         return $output;
     }
@@ -345,6 +354,7 @@ class Register_Shortcode_For_Ui
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
+            'agent_id'      => '',
             'styles' => 1,
             'new_window' => 0,
         );
@@ -373,6 +383,14 @@ class Register_Shortcode_For_Ui
             $output .= "</div>";
             //endif
         }
+
+        // Agent select
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"agent_id\">Limit by Agent:</label>";
+        $output .= "<select id=\"agent_id\" data-short-name=\"agent_id\">";
+        $output .= $this->get_agents_select_list($defaults['agent_id']);
+        $output .= "</select>";
+        $output .= "</div>";
 
         // Images
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
@@ -434,6 +452,7 @@ class Register_Shortcode_For_Ui
             'order' => 'high-low',
             'property_type' => 'featured',
             'saved_link_id' => '',
+            'agent_id'      => '',
             'styles' => 1,
             'new_window' => 0,
         );
@@ -462,6 +481,14 @@ class Register_Shortcode_For_Ui
             $output .= "</div>";
             //endif
         }
+        // Agent select
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"agent_id\">Limit by Agent:</label>";
+        $output .= "<select id=\"agent_id\" data-short-name=\"agent_id\">";
+        $output .= $this->get_agents_select_list($defaults['agent_id']);
+        $output .= "</select>";
+        $output .= "</div>";
+
         // Per row
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"display\">Listings to show without scrolling</label>";
@@ -507,4 +534,26 @@ class Register_Shortcode_For_Ui
         return $output;
     }
 
+
+    public function get_agents_select_list( $agent_id ) {
+        $agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+        if ( ! is_array( $agents_array ) ) {
+            return;
+        }
+
+        if($agent_id != null) {
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>Use default routing</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agent_id'] . '" ' . selected($agent_id, $agent['agent_id'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+            }
+        } else {
+            $agents_list = '<option value="">All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agent_id'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+            }
+        }
+
+        return $agents_list;
+    }
 }

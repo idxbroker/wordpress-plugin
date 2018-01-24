@@ -32,11 +32,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
     public $idx_api;
     public $error_message;
     public $defaults = array(
-        'title' => 'Lead Sign Up',
-        'custom_text' => '',
+        'title'        => 'Lead Sign Up',
+        'custom_text'  => '',
         'phone_number' => false,
-        'styles' => 1,
-        'new_window' => 0,
+        'styles'       => 1,
+        'new_window'   => 0,
+        'agentID'     => ''
     );
 
     /**
@@ -99,6 +100,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 			<input type="hidden" name="signupWidget" value="true">
 			<input type="hidden" name="contactType" value="direct">
 
+            <?php
+            if ( has_filter( 'impress_lead_signup_agent_id_field' ) ) {
+                echo apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="agentOwner" value="' . $instance['agentID'] . '">' );
+
+            } ?>
+
 			<label id="impress-widgetfirstName-label" class="ie-only" for="impress-widgetfirstName"><?php _e('First Name:', 'idxbroker');?></label>
 			<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
 
@@ -119,7 +126,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
                 echo '<div id="recaptcha" class="g-recaptcha" data-sitekey="' . $site_key . '"></div>'; 
             } ?>
 
-			<input id="bb-IDX-widgetsubmit" type="submit" name="submit" value="Sign Up!">
+			<button id="bb-IDX-widgetsubmit" type="submit" name="submit"><?php echo apply_filters( 'impress_lead_signup_submit_text', 'Sign Up!' ); ?></button>
 		</form>
 		<?php
 
@@ -148,11 +155,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
     public function update($new_instance, $old_instance)
     {
         $instance = array();
-        $instance['title'] = strip_tags($new_instance['title']);
-        $instance['custom_text'] = htmlentities($new_instance['custom_text']);
+        $instance['title']        = strip_tags($new_instance['title']);
+        $instance['custom_text']  = htmlentities($new_instance['custom_text']);
         $instance['phone_number'] = $new_instance['phone_number'];
-        $instance['styles'] = (int) $new_instance['styles'];
-        $instance['new_window'] = strip_tags($new_instance['new_window']);
+        $instance['styles']       = (int) $new_instance['styles'];
+        $instance['new_window']   = strip_tags($new_instance['new_window']);
+        $instance['agentID']       = (int) $new_instance['agentID'];
 
         return $instance;
     }
@@ -194,6 +202,13 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open in a New Window?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Route to Agent:', 'idxbroker' ); ?></label>
+            <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ) ?>">
+                <?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
+            </select>
+        </p>
 		<?php
 
     }
@@ -228,5 +243,33 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         } 
 
         return $output;
+    }
+
+    /**
+     * Returns agents wrapped in option tags
+     *
+     * @param  int $agent_id Instance agentID if exists
+     * @return str           HTML options tags of agents ids and names
+     */
+    public function get_agents_select_list( $agent_id ) {
+        $agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+        if ( ! is_array( $agents_array ) ) {
+            return;
+        }
+
+        if($agent_id != null) {
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+            }
+        } else {
+            $agents_list = '<option value="">All</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+            }
+        }
+
+        return $agents_list;
     }
 }
