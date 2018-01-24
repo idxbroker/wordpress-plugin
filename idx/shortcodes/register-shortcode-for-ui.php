@@ -525,11 +525,11 @@ class Register_Shortcode_For_Ui
 
         // Styles and Scripts for Preview
         $output .= "<script>";
-        $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)) . "\", \""; 
+        $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/owl2.carousel.css', dirname(__FILE__)) . "\", \""; 
         $output .= plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)) . "\"];";
         $output .= "</script>";
         $output .= "<script src=\"https://code.jquery.com/jquery-2.2.2.min.js\"></script>";
-        $output .= "<script src=\"" . plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)) . "\"></script>";
+        $output .= "<script src=\"" . plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)) . "\"></script>";
 
         return $output;
     }
