@@ -9,6 +9,7 @@ class Wrappers
         add_action('wp_ajax_create_dynamic_page', array($this, 'idx_ajax_create_dynamic_page'));
         add_action('wp_ajax_delete_dynamic_page', array($this, 'idx_ajax_delete_dynamic_page'));
         add_action('init', array($this, 'register_wrapper_post_type'));
+        add_action('admin_init', array($this, 'manage_idx_wrapper_capabilities'));
         add_filter('default_content', array($this, 'idx_wrapper_content'), 10, 2);
         add_action('wp_enqueue_scripts', array($this, 'wrapper_styles'));
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
@@ -90,6 +91,30 @@ class Wrappers
                     __FILE__
                 )
             );
+        }
+    }
+
+    public function manage_idx_wrapper_capabilities()
+    {
+        // gets the role to add capabilities to
+        if (current_user_can('edit_others_posts')) {
+            $current_user = wp_get_current_user();
+            // replicate all the remapped capabilites from the custom post type
+            $caps = array(
+                'publish_idx_wrappers',
+                'edit_idx_wrappers',
+                'edit_others_idx_wrappers',
+                'delete_idx_wrappers',
+                'delete_others_idx_wrappers',
+                'read_private_idx_wrappers',
+                'edit_idx_wrapper',
+                'delete_idx_wrapper',
+                'read_idx_wrapper',
+            );
+            // give all the capabilities to the administrator
+            foreach ($caps as $cap) {
+                $current_user->add_cap($cap);
+            }
         }
     }
 

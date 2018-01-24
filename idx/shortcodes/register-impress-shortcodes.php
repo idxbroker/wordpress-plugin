@@ -403,8 +403,8 @@ class Register_Impress_Shortcodes
             'new_window'    => 0,
         ), $atts));
 
-        wp_enqueue_style('owl-css', plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)));
-        wp_enqueue_script('owl', plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)));
+        wp_enqueue_style('owl2-css', plugins_url('../assets/css/widgets/owl2.carousel.css', dirname(__FILE__)));
+        wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)));
 
         if ($styles) {
             wp_enqueue_style('impress-carousel', plugins_url('../assets/css/widgets/impress-carousel.css', dirname(__FILE__)));
@@ -449,51 +449,49 @@ class Register_Impress_Shortcodes
         }
 
         if ($autoplay == 1) {
-            $autoplay_param = 'autoPlay: true,';
+            $autoplay_param = 'autoplay: true,';
         } else {
             $autoplay_param = '';
         }
 
         //All Instance Values are strings for shortcodes but not widgets.
-        if ($display === "1") {
-            $output .= '
+        $output .= '
             <script>
-            jQuery(function( $ ){
-                jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
-                    singleItem: true,
-                    ' . $autoplay_param . '
-                    navigation: true,
-                    navigationText: ["' . $prev_link . '", "' . $next_link . '"],
-                    pagination: false,
-                    lazyLoad: true,
-                    addClassActive: true,
-                    itemsScaleUp: true
-                });
-            });
-            </script>
-            ';
-        } else {
-            $output .= '
-            <script>
-            jQuery(function( $ ){
-                jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+            jQuery(document).ready(function( $ ){
+                $(".impress-listing-carousel-' . $display . '").owlCarousel({
                     items: ' . $display . ',
                     ' . $autoplay_param . '
-                    navigation: true,
-                    navigationText: ["' . $prev_link . '", "' . $next_link . '"],
-                    pagination: false,
+                    nav: true,
+                    navText: ["' . $prev_link . '", "' . $next_link . '"],
+                    loop: true,
                     lazyLoad: true,
                     addClassActive: true,
-                    itemsScaleUp: true
+                    itemsScaleUp: true,
+                    addClassActive: true,
+                    itemsScaleUp: true,
+                    navContainerClass: "owl-controls owl-nav",
+                    responsiveClass:true,
+                    responsive:{
+                        0:{
+                            items: 1,
+                            nav: true,
+                            margin: 0 
+                        },
+                        450:{
+                            items: ' . round( $display / 2 ) . '
+                        },
+                        800:{
+                            items: ' . $display . '
+                        }
+                    }
                 });
             });
             </script>
             ';
-        }
 
         $count = 0;
 
-        $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode">', $display);
+        $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $display);
 
         foreach ($properties as $prop) {
 
@@ -509,6 +507,7 @@ class Register_Impress_Shortcodes
             }
 
             $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+            $image_alt_tag = apply_filters( 'impress_carousel_image_alt_tag', esc_html($prop['address']), $prop );
 
             $count++;
 
@@ -546,7 +545,7 @@ class Register_Impress_Shortcodes
             $output .= apply_filters( 'impress_carousel_property_html', sprintf(
                 '<div class="impress-carousel-property">
                     <a href="%2$s" class="impress-carousel-photo" target="%18$s">
-                        <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
+                        <img class="owl-lazy lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
                     <a href="%2$s" target="%18$s">
@@ -569,7 +568,7 @@ class Register_Impress_Shortcodes
                 $prop['listingPrice'],
                 $url,
                 $prop_image_url,
-                htmlspecialchars($prop['remarksConcat']),
+                $image_alt_tag,
                 $prop['streetNumber'],
                 $prop['streetName'],
                 $prop['streetDirection'],

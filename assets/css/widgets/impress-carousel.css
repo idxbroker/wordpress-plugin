@@ -9,6 +9,9 @@
     margin: 0 10px;
     text-align: left;
 }
+.impress-carousel .owl-dots {
+    display: none;
+}
 .impress-carousel .owl-controls {
     text-align: center;
 }
@@ -21,7 +24,8 @@
     font-size: 12px;
     display: none;
 }
-.impress-carousel .owl-controls .owl-prev, .impress-carousel .owl-controls .owl-next {
+.impress-carousel .owl-nav.owl-controls button.owl-prev,
+.impress-carousel .owl-nav.owl-controls button.owl-next {
     background: #f3f3f3;
     color: #9a9a9a;
     padding: 10px;

@@ -120,7 +120,7 @@
 		var foundResult = false;
 
 		var goToResultsPage = function (input, url, additionalQuery, listingID){
-			if(agentHeaderID !== undefined) {
+			if(typeof agentHeaderID !== 'undefined') {
 				additionalQuery = additionalQuery + '&agentHeaderID=' + agentHeaderID;
 			}
 			if(listingID !== undefined){
@@ -491,7 +491,8 @@
 				} else if(hasSpaces === false && parseInt(input.value) !== isNaN) {
 					//MLS Number/ListingID
 					var listingID = true;
-					goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID + '&srt=' + sortOrder);
+					var agentHeaderID = false;
+					goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID);
 				} else {
 					//address (split into number and street)
 					var addressSplit = input.value.split(' ');
