@@ -44,8 +44,8 @@ class Impress_Carousel_Widget extends \WP_Widget
      */
     public function body($instance)
     {
-        wp_enqueue_style('owl-css', plugins_url('../assets/css/widgets/owl.carousel.css', dirname(__FILE__)));
-        wp_enqueue_script('owl', plugins_url('../assets/js/owl.carousel.min.js', dirname(__FILE__)));
+        wp_enqueue_style('owl2-css', plugins_url('../assets/css/widgets/owl2.carousel.css', dirname(__FILE__)));
+        wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)));
 
         if (empty($instance)) {
             $instance = $this->defaults;
@@ -82,7 +82,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         }
 
         if ($instance['autoplay']) {
-            $autoplay = 'autoPlay: true,';
+            $autoplay = 'autoplay: true,';
         } else {
             $autoplay = '';
         }
@@ -95,41 +95,39 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         $target = $this->target($instance['new_window']);
 
-        if ($display === 1) {
-            $output .= '
-            <script>
-            jQuery(function( $ ){
-                $(".impress-listing-carousel-' . $display . '").owlCarousel({
-                    singleItem: true,
-                    ' . $autoplay . '
-                    navigation: true,
-                    navigationText: ["' . $prev_link . '", "' . $next_link . '"],
-                    pagination: false,
-                    lazyLoad: true,
-                    addClassActive: true,
-                    itemsScaleUp: true
-                });
+        $output .= '
+        <script>
+        jQuery(document).ready(function( $ ){
+            $(".impress-listing-carousel-' . $display . '").owlCarousel({
+                items: ' . $display . ',
+                ' . $autoplay . '
+                nav: true,
+                navText: ["' . $prev_link . '", "' . $next_link . '"],
+                loop: true,
+                lazyLoad: true,
+                addClassActive: true,
+                itemsScaleUp: true,
+                addClassActive: true,
+                itemsScaleUp: true,
+                navContainerClass: "owl-controls owl-nav",
+                responsiveClass:true,
+                responsive:{
+                    0:{
+                        items: 1,
+                        nav: true,
+                        margin: 0 
+                    },
+                    450:{
+                        items: ' . round( $display / 2 ) . '
+                    },
+                    800:{
+                        items: ' . $display . '
+                    }
+                }
             });
-            </script>
-            ';
-        } else {
-            $output .= '
-            <script>
-            jQuery(function( $ ){
-                $(".impress-listing-carousel-' . $display . '").owlCarousel({
-                    items: ' . $display . ',
-                    ' . $autoplay . '
-                    navigation: true,
-                    navigationText: ["' . $prev_link . '", "' . $next_link . '"],
-                    pagination: false,
-                    lazyLoad: true,
-                    addClassActive: true,
-                    itemsScaleUp: true
-                });
-            });
-            </script>
-            ';
-        }
+        });
+        </script>
+        ';
 
         // sort low to high
         usort($properties, array($this, 'price_cmp'));
@@ -143,7 +141,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         $total = count($properties);
         $count = 0;
 
-        $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s">', $instance['display']);
+        $output .= sprintf('<div class="impress-carousel impress-listing-carousel-%s owl-carousel owl-theme">', $instance['display']);
 
         foreach ($properties as $prop) {
 
@@ -158,6 +156,7 @@ class Impress_Carousel_Widget extends \WP_Widget
             }
 
             $prop_image_url = (isset($prop['image']['0']['url'])) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+            $image_alt_tag = apply_filters( 'impress_carousel_image_alt_tag', esc_html($prop['address']), $prop );
 
             $count++;
 
@@ -177,7 +176,7 @@ class Impress_Carousel_Widget extends \WP_Widget
             $output .= apply_filters( 'impress_carousel_property_html', sprintf(
                 '<div class="impress-carousel-property">
                     <a href="%2$s" class="impress-carousel-photo" target="%16$s">
-                        <img class="lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
+                        <img class="lazyOwl owl-lazy" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
                     <a href="%2$s" target="%16$s">
@@ -198,7 +197,7 @@ class Impress_Carousel_Widget extends \WP_Widget
                 $prop['listingPrice'],
                 $url,
                 $prop_image_url,
-                htmlspecialchars($prop['remarksConcat']),
+                $image_alt_tag,
                 $prop['streetNumber'],
                 $prop['streetName'],
                 $prop['streetDirection'],

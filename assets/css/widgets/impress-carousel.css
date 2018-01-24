@@ -9,6 +9,9 @@
     margin: 0 10px;
     text-align: left;
 }
+.impress-carousel .owl-dots {
+    display: none;
+}
 .impress-carousel .owl-controls {
     text-align: center;
 }
