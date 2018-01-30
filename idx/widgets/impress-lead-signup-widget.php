@@ -38,7 +38,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         'styles'       => 1,
         'new_window'   => 0,
         'agentID'     => '',
-        'button_text' => "Sign Up",
+        'button_text' => 'Sign Up',
     );
 
     /**
@@ -197,7 +197,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 		</p>
         <p>
             <label for="<?php echo $this->get_field_id('styles');?>"><?php _e('Default Styling?', 'idxbroker');?></label>
-            <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles')?>" value="1" <?php checked($instance['styles'], true);?>>
+            <input type="checkbox" id="<?php echo $this->get_field_id('styles');?>" name="<?php echo $this->get_field_name('styles'); ?>" value="1" <?php checked($instance['styles'], true);?>>
         </p>
 
         <p>
@@ -206,13 +206,13 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         </p>
         <p>
             <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Route to Agent:', 'idxbroker' ); ?></label>
-            <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ) ?>">
+            <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
                 <?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
             </select>
         </p>
         <p>
             <label for="<?php echo $this->get_field_id('button_text');?>"><?php _e('Button text:', 'idxbroker');?></label>
-            <input class="widefat" type="text" id="<?php echo $this->get_field_id('button_text');?>" name="<?php echo $this->get_field_name('button_text')?>" value="<?php esc_attr_e($instance['button_text']);?>">
+            <input class="widefat" type="text" id="<?php echo $this->get_field_id('button_text'); ?>" name="<?php echo $this->get_field_name('button_text'); ?>" value="<?php esc_attr_e($instance['button_text']); ?>">
         </p>
 		<?php
 
