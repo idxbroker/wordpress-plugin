@@ -37,7 +37,8 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         'phone_number' => false,
         'styles'       => 1,
         'new_window'   => 0,
-        'agentID'     => ''
+        'agentID'     => '',
+        'button_text' => "Sign Up",
     );
 
     /**
@@ -126,7 +127,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
                 echo '<div id="recaptcha" class="g-recaptcha" data-sitekey="' . $site_key . '"></div>'; 
             } ?>
 
-			<button id="bb-IDX-widgetsubmit" type="submit" name="submit"><?php echo apply_filters( 'impress_lead_signup_submit_text', 'Sign Up!' ); ?></button>
+			<button id="bb-IDX-widgetsubmit" type="submit" name="submit"><?php echo apply_filters( 'impress_lead_signup_submit_text', $instance['button_text'] ); ?></button>
 		</form>
 		<?php
 
@@ -160,7 +161,8 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         $instance['phone_number'] = $new_instance['phone_number'];
         $instance['styles']       = (int) $new_instance['styles'];
         $instance['new_window']   = strip_tags($new_instance['new_window']);
-        $instance['agentID']       = (int) $new_instance['agentID'];
+        $instance['agentID']      = (int) $new_instance['agentID'];
+        $instance['button_text']  = strip_tags($new_instance['button_text']);
 
         return $instance;
     }
@@ -202,12 +204,15 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open in a New Window?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
-
         <p>
             <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Route to Agent:', 'idxbroker' ); ?></label>
             <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ) ?>">
                 <?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
             </select>
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('button_text');?>"><?php _e('Button text:', 'idxbroker');?></label>
+            <input class="widefat" type="text" id="<?php echo $this->get_field_id('button_text');?>" name="<?php echo $this->get_field_name('button_text')?>" value="<?php esc_attr_e($instance['button_text']);?>">
         </p>
 		<?php
 
