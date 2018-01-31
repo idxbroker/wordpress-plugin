@@ -339,9 +339,9 @@ EOT;
         $city_list = htmlspecialchars($_POST['city-list']);
         $county_list = htmlspecialchars($_POST['county-list']);
         $zipcode_list = htmlspecialchars($_POST['zipcode-list']);
-        update_option('idx_omnibar_current_city_list', $city_list);
-        update_option('idx_omnibar_current_county_list', $county_list);
-        update_option('idx_omnibar_current_zipcode_list', $zipcode_list);
+        update_option('idx_omnibar_current_city_list', $city_list, false);
+        update_option('idx_omnibar_current_county_list', $county_list, false);
+        update_option('idx_omnibar_current_zipcode_list', $zipcode_list, false);
         return wp_die();
     }
 
@@ -353,16 +353,16 @@ EOT;
         } else {
             $fields = array();
         }
-        update_option('idx_omnibar_custom_fields', $fields);
-        update_option('idx_default_property_types', $_POST['mlsPtIDs']);
-        update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']));
+        update_option('idx_omnibar_custom_fields', $fields, false);
+        update_option('idx_default_property_types', $_POST['mlsPtIDs'], false);
+        update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']), false);
         $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
         return wp_die();
     }
 
     public function idx_update_sort_order() {
         $sort_order = $_POST['sort-order'];
-        update_option('idx_omnibar_sort', $sort_order);
+        update_option('idx_omnibar_sort', $sort_order, false);
         return wp_die();
     }
 

@@ -25,7 +25,7 @@ $post_title = '';
 $wrapper_page_url = '';
 if ($wrapper_page_id) {
     if (!get_page_uri($wrapper_page_id)) {
-        update_option('idx_broker_dynamic_wrapper_page_id', '');
+        update_option('idx_broker_dynamic_wrapper_page_id', '', false);
         $wrapper_page_id = '';
     } else {
         $post_title = get_post($wrapper_page_id)->post_title;

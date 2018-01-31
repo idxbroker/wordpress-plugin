@@ -90,7 +90,7 @@ class Initiate_Plugin
             }
         } else {
             //Make sure IDX pages update if migration is not necessary.
-            update_option('idx_migrated_old_table', true);
+            update_option('idx_migrated_old_table', true, false);
         }
     }
 
@@ -110,7 +110,7 @@ class Initiate_Plugin
     {
         if ($this->plugin_updated()) {
             //update db option and update omnibar data
-            update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION);
+            update_option('idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION, false);
             //clear old api cache
             $this->idx_api->idx_clean_transients();
             $this->idx_omnibar_get_locations();
@@ -194,7 +194,7 @@ class Initiate_Plugin
     {
         $this->idx_api->clear_wrapper_cache();
         $this->idx_api->idx_clean_transients();
-        update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey']);
+        update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey'], false);
         setcookie("api_refresh", 1, time() + 20);
         new \IDX\Widgets\Omnibar\Get_Locations();
         wp_die();
@@ -206,7 +206,7 @@ class Initiate_Plugin
  */
     public function idx_update_recaptcha_key() {
         if ($_POST['idx_recaptcha_site_key']) {
-            update_option('idx_recaptcha_site_key', $_POST['idx_recaptcha_site_key']);
+            update_option('idx_recaptcha_site_key', $_POST['idx_recaptcha_site_key'], false);
             echo 1;
         } else {
             delete_option('idx_recaptcha_site_key');

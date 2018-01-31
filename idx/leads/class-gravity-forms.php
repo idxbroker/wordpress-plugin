@@ -51,7 +51,7 @@ class IDX_Leads_GF
 			$new_value['category'] = isset($_POST["category"]) ? stripslashes($_POST["category"]) : 0;
 			$new_value['agent_id'] = isset($_POST["agent_id"]) ? (int) stripslashes($_POST["agent_id"]) : 0;
 			
-			update_option($option_name, $new_value);
+			update_option($option_name, $new_value, false);
 		}
 		
 		?>
