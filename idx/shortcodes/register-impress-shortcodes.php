@@ -24,6 +24,7 @@ class Register_Impress_Shortcodes
         extract(shortcode_atts(array(
             'styles' => 1,
             'new_window' => 0,
+            'password_field' => false,
         ), $atts));
 
         if (!empty($styles)) {
@@ -36,13 +37,33 @@ class Register_Impress_Shortcodes
 
         $target = $this->target($new_window);
 
+        // Returns hidden if false or not set
+        $password_field_type = $password_field ? 'password' : 'hidden';
+
+        if($password_field_type === 'password') {
+
+            $password_exists_css = '
+                #impress-widgetPassword, #impress-widgetEmail {
+                    width: 30%;
+                }
+
+                #impress-widgetLeadLoginSubmit {
+                    width: 36%;
+                }
+            ';
+
+            wp_add_inline_style('impress-lead-login', $password_exists_css);
+        }
+
         $widget = sprintf('
             <form action="%1$sajax/userlogin.php" class="impress-lead-login" method="post" target="%2$s" name="leadLoginForm">
                 <input type="hidden" name="action" value="login">
                 <input type="hidden" name="loginWidget" value="true">
                 <label for="impress-widgetEmail">Email Address:</label>
-                <input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address"><input id="impress-widgetPassword" type="hidden" name="password" value=""><input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
-            </form>', $this->idx_api->subdomain_url(), $target);
+                <input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address">
+                <input id="impress-widgetPassword" type="%3$s" name="password" placeholder="Password">
+                <input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
+            </form>', $this->idx_api->subdomain_url(), $target, $password_field_type);
 
         return $widget;
     }
