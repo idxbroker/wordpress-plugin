@@ -242,7 +242,7 @@ class Register_Shortcode_For_Ui
             'styles' => 1,
             'new_window' => 0,
             'agent_id' => '',
-            'button_text' => "Sign Up",
+            'button_text' => "Sign Up!",
         );
 
         $output = '';

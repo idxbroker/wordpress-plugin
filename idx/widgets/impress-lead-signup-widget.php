@@ -38,7 +38,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         'styles'       => 1,
         'new_window'   => 0,
         'agentID'     => '',
-        'button_text' => 'Sign Up',
+        'button_text' => 'Sign Up!',
     );
 
     /**

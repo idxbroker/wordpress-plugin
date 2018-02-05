@@ -26,7 +26,7 @@ class Impress_Lead_Signup_Shortcode {
             'styles' => 1,
             'new_window' => 0,
             'agent_id' => '',
-            'button_text' => 'Sign Up',
+            'button_text' => 'Sign Up!',
         ), $atts));
 
         if (!empty($styles)) {
