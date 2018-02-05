@@ -74,24 +74,9 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
             echo '<p>', $custom_text, '</p>';
         }
 
-
         // Returns hidden if false or not set
         $password_field_type = $password_field ? 'password' : 'hidden';
 
-        if($password_field_type === 'password') {
-
-            $password_exists_css = '
-                #impress-widgetPassword, #impress-widgetEmail {
-                    width: 30%;
-                }
-
-                #impress-widgetLeadLoginSubmit {
-                    width: 36%;
-                }
-            ';
-
-            wp_add_inline_style('impress-lead-login', $password_exists_css);
-        }
 
         ?>
 		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/userlogin.php" class="impress-lead-login" method="post" target="<?php echo $target?>" name="leadLoginForm">
@@ -99,7 +84,11 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
 			<input type="hidden" name="loginWidget" value="true">
 			<label for="impress-widgetEmail"><?php _e('Email Address:', 'idxbroker');?></label>
 			<input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address">
-            <input id="impress-widgetPassword" type="<?php echo $password_field_type; ?>" name="password" placeholder="password">
+            <?php if($password_field_type === 'password') {
+                echo '<label for=\'impress-widgetPassword\'>Password:</label>';
+            } ?>
+            
+            <input id="impress-widgetPassword" type="<?php echo $password_field_type; ?>" name="password" placeholder="Password">
             <input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
 		</form>
 		<?php
