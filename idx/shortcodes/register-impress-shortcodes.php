@@ -39,7 +39,7 @@ class Register_Impress_Shortcodes
 
         // Returns hidden if false or not set
         $password_field_type = $password_field ? 'password' : 'hidden';
-        $password_label = $password_field ? '<label for=\'impress-widgetPassword\'>Password:</label>' : '';
+        $password_label = $password_field ? '<label for="impress-widgetPassword">Password:</label>' : '';
 
         $widget = sprintf('
             <form action="%1$sajax/userlogin.php" class="impress-lead-login" method="post" target="%2$s" name="leadLoginForm">

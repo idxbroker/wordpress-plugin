@@ -85,7 +85,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
 			<label for="impress-widgetEmail"><?php _e('Email Address:', 'idxbroker');?></label>
 			<input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address">
             <?php if($password_field_type === 'password') {
-                echo '<label for=\'impress-widgetPassword\'>Password:</label>';
+                echo '<label for="impress-widgetPassword">Password:</label>';
             } ?>
             
             <input id="impress-widgetPassword" type="<?php echo $password_field_type; ?>" name="password" placeholder="Password">
