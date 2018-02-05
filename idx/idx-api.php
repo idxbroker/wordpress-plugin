@@ -19,9 +19,6 @@ class Idx_Api
         if (!$response || !is_array($response) || !isset($response['response'])) {
             return array("code" => "Generic", "error" => "Unable to complete API call.");
         }
-        if (!function_exists('curl_init')) {
-            return array("code" => "PHP", "error" => "The cURL extension for PHP is not enabled on your server.<br />Please contact your developer and/or hosting provider.");
-        }
         $response_code = $response['response']['code'];
         $err_message = false;
         if (is_numeric($response_code)) {
