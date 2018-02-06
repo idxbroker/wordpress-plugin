@@ -1,30 +1,30 @@
 <?php
-add_action('init', array('IDX_Leads_GF', 'init'));
+add_action( 'init', array( 'IDX_Leads_GF', 'init' ) );
 
 class IDX_Leads_GF
 {
 	public function __construct() {
-		if(!class_exists('GFForms'))
+		if( ! class_exists( 'GFForms' ) )
 			exit;
 
 		$this->idx_api = new \IDX\Idx_Api();
 	}
 
 	public static function init() {
-		add_action( 'gform_after_submission', array('IDX_Leads_GF', 'idx_put_lead'), 10, 2 );
-		add_filter( 'gform_form_settings_menu', array('IDX_Leads_GF', 'idx_leads_gform_settings_menu') );
-		add_action( 'gform_form_settings_page_idx_broker_leads_page', array('IDX_Leads_GF', 'idx_broker_leads_page') );
+		add_action( 'gform_after_submission', array( 'IDX_Leads_GF', 'idx_put_lead' ), 10, 2 );
+		add_filter( 'gform_form_settings_menu', array( 'IDX_Leads_GF', 'idx_leads_gform_settings_menu' ) );
+		add_action( 'gform_form_settings_page_idx_broker_leads_page', array( 'IDX_Leads_GF', 'idx_broker_leads_page' ) );
 	}
 
 	public $idx_api;
-	
+
 	public static function idx_leads_gform_settings_menu( $menu_items ) {
-		
+
 		$menu_items[] = array(
 			'name' => 'idx_broker_leads_page',
-			'label' => __( 'IDX Broker' )
-			);
-		
+			'label' => __( 'IDX Broker' ),
+		);
+
 		return $menu_items;
 	}
 
@@ -33,27 +33,26 @@ class IDX_Leads_GF
 
 		GFFormSettings::page_header();
 
-		$form_id = rgget('id');
+		$form_id = rgget( 'id' );
 		$option_name = 'idx_lead_form_' . $form_id;
-		$form_options = get_option($option_name);
+		$form_options = get_option( $option_name );
 		$checked = $form_options['enable_lead'];
-		if(!isset($form_options['category'])) {
+		if ( ! isset( $form_options['category'] ) ) {
 			$form_options['category'] = '';
 		}
-		if(!isset($form_options['agent_id'])) {
+		if ( ! isset( $form_options['agent_id'] ) ) {
 			$form_options['agent_id'] = '';
 		}
 
-		if (isset($_POST['submit'])) {
+		if ( isset( $_POST['submit'] ) ) {
 
 			$new_value = array();
-			$new_value['enable_lead'] = isset($_POST["enable_lead"]) ? (int) stripslashes($_POST["enable_lead"]) : 0;
-			$new_value['category'] = isset($_POST["category"]) ? stripslashes($_POST["category"]) : 0;
-			$new_value['agent_id'] = isset($_POST["agent_id"]) ? (int) stripslashes($_POST["agent_id"]) : 0;
-			
-			update_option($option_name, $new_value, false);
+			$new_value['enable_lead'] = isset( $_POST['enable_lead'] ) ? (int) stripslashes( $_POST['enable_lead'] ) : 0;
+			$new_value['category'] = isset( $_POST['category'] ) ? stripslashes( $_POST['category'] ) : 0;
+			$new_value['agent_id'] = isset( $_POST['agent_id'] ) ? (int) stripslashes( $_POST['agent_id'] ) : 0;
+
+			update_option( $option_name, $new_value, false );
 		}
-		
 		?>
 			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
 			<form action="" method="post" id="gform_form_settings">
@@ -70,7 +69,7 @@ class IDX_Leads_GF
 								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;'>This requires that your form use the advanced &#34;Name&#34; and &#34;Email&#34; fields and those fields be required.</strong>"><i class="fa fa-question-circle"></i></a>
 							</th>
 							<td>
-								<input id="enable_lead" name="enable_lead"  value="1" type="checkbox" <?php checked($checked, 1, true); ?>>
+								<input id="enable_lead" name="enable_lead"  value="1" type="checkbox" <?php checked( $checked, 1, true ); ?>>
 								<label for="enable_lead">Import Leads</label>
 							</td>
 						</tr>
@@ -111,22 +110,22 @@ class IDX_Leads_GF
 		GFFormSettings::page_footer();
 	}
 
-	public static function idx_put_lead( $entry, $form ) {        
+	public static function idx_put_lead( $entry, $form ) {
 		$form_id = $form['id'];
 
 		$option_name = 'idx_lead_form_' . $form_id;
 
-		$form_options = get_option($option_name);
-		 
+		$form_options = get_option( $option_name );
+
 		$checked = $form_options['enable_lead'];
 
-		$apikey = get_option('idx_broker_apikey');
+		$apikey = get_option( 'idx_broker_apikey' );
 
-		if ($checked) {
-			if (!empty($apikey)) {
+		if ( $checked ) {
+			if ( ! empty( $apikey ) ) {
 
-				$fields = self::get_all_form_fields($form_id);
-				
+				$fields = self::get_all_form_fields( $form_id );
+
 				$code_firstname = (string)self::find_field($fields, 'Name (First)');
 				$firstname = filter_var($entry[$code_firstname],FILTER_SANITIZE_STRING);
 
@@ -157,18 +156,27 @@ class IDX_Leads_GF
 				$code_country = (string)self::find_field($fields, 'Address (Country)');
 				if($code_country) {$country = filter_var($entry[$code_country],FILTER_SANITIZE_STRING);}
 
+				// Get agent ID from form field if it exists
+				// otherwise get from form settings
+				$code_agent_id = (string) self::find_field( $fields, 'Agent ID' );
+				if ( $code_agent_id ) {
+					$agent_owner = filter_var( $entry[ $code_agent_id ], FILTER_SANITIZE_STRING );
+				} else {
+					$agent_owner = ( isset( $form_options['agent_id'] ) ) ? $form_options['agent_id'] : '';
+				}
+
 				$lead_data = array(
-					'firstName' => $firstname, 
-					'lastName' => $lastname, 
+					'firstName' => $firstname,
+					'lastName' => $lastname,
 					'email' => $email,
-					'phone' => (isset($phone)) ? $phone : '',
-					'address' => (isset($streetAddress)) ? $streetAddress : '',
-					'city' => (isset($city)) ? $city : '',
-					'stateProvince' => (isset($state)) ? $state : '',
-					'zipCode' => (isset($zip)) ? $zip : '',
-					'country' => (isset($country)) ? $country : '',
-					'actualCategory' => (isset($form_options['category'])) ? $form_options['category'] : '',
-					'agentOwner' => (isset($form_options['agent_id'])) ? $form_options['agent_id'] : ''
+					'phone' => ( isset( $phone ) ) ? $phone : '',
+					'address' => ( isset( $streetAddress ) ) ? $streetAddress : '',
+					'city' => ( isset( $city ) ) ? $city : '',
+					'stateProvince' => ( isset( $state ) ) ? $state : '',
+					'zipCode' => ( isset( $zip ) ) ? $zip : '',
+					'country' => ( isset( $country ) ) ? $country : '',
+					'actualCategory' => ( isset( $form_options['category'] ) ) ? $form_options['category'] : '',
+					'agentOwner' => $agent_owner,
 				);
 
 				$api_url = 'https://api.idxbroker.com/leads/lead';
@@ -176,43 +184,43 @@ class IDX_Leads_GF
 					'method' => 'PUT',
 					'headers' => array(
 						'content-type' => 'application/x-www-form-urlencoded',
-						'accesskey'    => get_option('idx_broker_apikey'),
-						'outputtype'   => 'json'
+						'accesskey'    => get_option( 'idx_broker_apikey' ),
+						'outputtype'   => 'json',
 					),
 					'sslverify' => false,
-					'body'		=> http_build_query($lead_data)
+					'body'      => http_build_query( $lead_data ),
 				);
-				$response = wp_remote_request($api_url, $args);
+				$response = wp_remote_request( $api_url, $args );
 
 				// Check for error then add note
-				if (is_wp_error($response)) {
+				if ( is_wp_error( $response ) ) {
 					return;
 				} else {
 
-					$decoded_response = json_decode($response['body']);
+					$decoded_response = json_decode( $response['body'] );
 
 					$note = array(
-						'note' => self::output_form_fields($entry, $form_id)
+						'note' => self::output_form_fields( $entry, $form_id ),
 					);
 
 					// Add note if lead already exists
-					if($decoded_response == 'Lead already exists.') {
-						$args = array_replace($args, array('method' => 'GET', 'body' => null));
+					if ( 'Lead already exists.' === $decoded_response ) {
+						$args = array_replace( $args, array( 'method' => 'GET', 'body' => null ) );
 
 						// Get leads
-						if ( false === ( $all_leads = get_transient('idx_leads') ) ) {
-							$response = wp_remote_request($api_url, $args);
-							$all_leads = json_decode($response['body'], 1);
-							set_transient('idx_leads', $all_leads, 60*60*1);
+						if ( false === ( $all_leads = get_transient( 'idx_leads' ) ) ) {
+							$response = wp_remote_request( $api_url, $args );
+							$all_leads = json_decode( $response['body'], 1 );
+							set_transient( 'idx_leads', $all_leads, 60*60*1 );
 						}
 
 						// Loop through leads to match email address
-						foreach($all_leads as $leads => $lead) {
-							if($lead['email'] == $email) {
+						foreach ( $all_leads as $leads => $lead ) {
+							if ( $lead['email'] === $email ) {
 								$api_url = 'https://api.idxbroker.com/leads/note/' . $lead['id'];
-								$args = array_replace($args, array('method' => 'PUT', 'body' => http_build_query($note)));
-								$response = wp_remote_request($api_url, $args);
-								if (is_wp_error($response)) {
+								$args = array_replace( $args, array( 'method' => 'PUT', 'body' => http_build_query( $note ) ) );
+								$response = wp_remote_request( $api_url, $args );
+								if ( is_wp_error( $response ) ) {
 									return;
 								}
 							}
@@ -221,51 +229,51 @@ class IDX_Leads_GF
 						// Add note for new lead
 						$lead_id = $decoded_response->newID;
 						$api_url = 'https://api.idxbroker.com/leads/note/' . $lead_id;
-						$args = array_replace($args, array('body' => http_build_query($note)));
-						$response = wp_remote_request($api_url, $args);
-						if (is_wp_error($response)) {
+						$args = array_replace( $args, array( 'body' => http_build_query( $note ) ) );
+						$response = wp_remote_request( $api_url, $args );
+						if ( is_wp_error( $response ) ) {
 							return;
 						}
 					}
 				}
 			}
-		}   
+		}
 	}
 
-	private static function get_all_form_fields($form_id) {
-		$form = RGFormsModel::get_form_meta($form_id);
+	private static function get_all_form_fields( $form_id ) {
+		$form = RGFormsModel::get_form_meta( $form_id );
 		$fields = array();
 
-		if(is_array($form["fields"])){
-			foreach($form["fields"] as $field) {
-				if(isset($field["inputs"]) && is_array($field["inputs"])) {
+		if ( is_array( $form["fields"] ) ) {
+			foreach ( $form["fields"] as $field ) {
+				if( isset( $field["inputs"] ) && is_array( $field["inputs"] ) ) {
 
-					foreach($field["inputs"] as $input)
-						$fields[] =  array('id' => $input["id"], 'name' => GFCommon::get_label($field, $input["id"]));
+					foreach( $field["inputs"] as $input )
+						$fields[] =  array('id' => $input["id"], 'name' => GFCommon::get_label( $field, $input["id"] ) );
 				}
-				else if(!rgar($field, 'displayOnly')){
-					$fields[] =  array('id' => $field["id"], 'name' => GFCommon::get_label($field));
+				else if ( !rgar( $field, 'displayOnly') ) {
+					$fields[] =  array( 'id' => $field["id"], 'name' => GFCommon::get_label( $field ) );
 				}
 			}
 		}        
 		return $fields;
 	}
 
-	private static function find_field($fields, $fid) {
-		foreach($fields as $field) {              
-			if($field['name'] == $fid) return $field['id'];
+	private static function find_field( $fields, $fid ) {
+		foreach( $fields as $field ) {              
+			if( $field['name'] == $fid ) return $field['id'];
 		}
 		return false;
 	}
 
-	private static function output_form_fields($entry, $form_id) {
-		$fields = self::get_all_form_fields($form_id);
+	private static function output_form_fields( $entry, $form_id ) {
+		$fields = self::get_all_form_fields( $form_id );
 		$output = '';
 		foreach($fields as $field) {
 			$field_id = $field['id'];
-			$field_entry = filter_var($entry[$field_id], FILTER_SANITIZE_STRING);
+			$field_entry = filter_var( $entry[$field_id], FILTER_SANITIZE_STRING );
 
-			if($field_entry)
+			if( $field_entry )
 				$output .= $field['name'] . ":\r\n" . $field_entry . "\r\n\r\n";
 		}
 

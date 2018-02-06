@@ -684,4 +684,53 @@ class Idx_Api
 
         return $listings;
     }
+
+    /**
+     * Returns agents wrapped in option tags
+     *
+     * @param  int $agent_id Instance agentID if exists
+     * @return str           HTML options tags of agents ids and names
+     */
+    public function get_agents_select_list( $agent_id ) {
+        $agents_array = $this->idx_api('agents', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
+
+        if ( ! is_array( $agents_array ) || ! isset( $agents_array['agent'] ) ) {
+            return;
+        }
+
+        if($agent_id != null) {
+            $agents_list = '<option value="" '. selected($agent_id, '', '') . '>---</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>';
+            }
+        } else {
+            $agents_list = '<option value="">---</option>';
+            foreach($agents_array['agent'] as $agent) {
+                $agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
+            }
+        }
+
+        return $agents_list;
+    }
+
+    /**
+     * Determine if agent has properties.
+     * @param  int $agent_id The IDX assigned agent ID.
+     * @return bool           True if yes, false if no, null if no agentID provided.
+     */
+    public function agent_has_properties( $agent_id ) {
+        if ( ! $agent_id ) {
+            return null;
+        }
+
+        $properties = $this->client_properties('featured');
+
+        foreach ( $properties as $prop ) {
+            if ( isset( $prop['userAgentID'] ) && (int) $prop['userAgentID'] === (int) $agent_id ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
