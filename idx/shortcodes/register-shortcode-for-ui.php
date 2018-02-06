@@ -214,6 +214,7 @@ class Register_Shortcode_For_Ui
         $defaults = array(
             'styles' => 1,
             'new_window' => 0,
+            'password_field' => false
         );
 
         $output = '';
@@ -226,6 +227,11 @@ class Register_Shortcode_For_Ui
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
         $output .= "<label for\"new_window\">Open in a New Window?</label>";
+        $output .= "</div>";
+        //Password field
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"password_field\" data-short-name=\"password_field\">";
+        $output .= "<label for\"password_field\">Add password form field?</label>";
         $output .= "</div>";
         // Styles and Scripts for Preview
         $output .= "<script>";
@@ -242,6 +248,7 @@ class Register_Shortcode_For_Ui
             'styles' => 1,
             'new_window' => 0,
             'agent_id' => '',
+            'button_text' => "Sign Up!",
         );
 
         $output = '';
@@ -254,7 +261,7 @@ class Register_Shortcode_For_Ui
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
-        //New Window
+        // New Window
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
         $output .= "<label for\"new_window\">Open in a New Window?</label>";
@@ -270,6 +277,12 @@ class Register_Shortcode_For_Ui
         $output .= "<select id=\"agent_id\" data-short-name=\"agent_id\">";
         $output .= $this->get_agents_select_list($defaults['agent_id']);
         $output .= "</select>";
+        $output .= "</div>";
+
+        // Button text
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"button_text\">Sign up button text:</label>";
+        $output .= "<input type=\"text\" id=\"button_text\" data-short-name=\"button_text\" value=\"" . $defaults['button_text'] . "\">";
         $output .= "</div>";
 
         return $output;

@@ -28,7 +28,7 @@ class Add_Uid_To_Idx_Pages
         $wp_idx_pages = get_posts(array('post_type' => 'idx_page', 'numberposts' => -1));
         //If no IDX Pages, do not cause an err.
         if(empty($wp_idx_pages)){
-            return update_option('idx_added_uid_to_idx_pages', true);
+            return update_option('idx_added_uid_to_idx_pages', true, false);
         }
 
         foreach($wp_idx_pages as $wp_idx_page){
@@ -44,7 +44,7 @@ class Add_Uid_To_Idx_Pages
             //For Testing:
             // delete_post_meta($id, 'idx_uid');
         }
-        return update_option('idx_added_uid_to_idx_pages', true);
+        return update_option('idx_added_uid_to_idx_pages', true, false);
     }
 
     //Find the IDX page with matching URL.
