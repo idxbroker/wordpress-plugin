@@ -179,7 +179,12 @@ class Omnibar_Settings
         echo "<h3>Custom Fields</h3>";
         echo "<div class=\"help-text\">By default the omnibar searches by City, County, Postal Code, Address, or Listing ID. Add up to 10 custom fields to be used as well.<div><i>Examples: High School, Area, Subdivision</i></div></div>";
         echo "<div class=\"customFieldError error\"><p></p></div>";
-        echo "<select class=\"omnibar-additional-custom-field select2\" name=\"omnibar-additional-custom-field\" multiple=\"multiple\">";
+
+        // There is a bug in firefox that will select all options of the same value on
+        // refresh if one option of that value is already selected. The omnibar logic
+        // relies on specific selected option behavior, so we add autocomplete="off"
+        // to force Firefox to not cache its option selections on refresh.
+        echo "<select class=\"omnibar-additional-custom-field select2\" name=\"omnibar-additional-custom-field\" multiple=\"multiple\" autocomplete=\"off\">";
         
         echo $this->get_all_custom_fields($all_mls_fields[0], $mls_pt_key);
 
