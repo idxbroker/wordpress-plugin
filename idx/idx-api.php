@@ -19,9 +19,6 @@ class Idx_Api
         if (!$response || !is_array($response) || !isset($response['response'])) {
             return array("code" => "Generic", "error" => "Unable to complete API call.");
         }
-        if (!function_exists('curl_init')) {
-            return array("code" => "PHP", "error" => "The cURL extension for PHP is not enabled on your server.<br />Please contact your developer and/or hosting provider.");
-        }
         $response_code = $response['response']['code'];
         $err_message = false;
         if (is_numeric($response_code)) {
@@ -443,42 +440,25 @@ class Idx_Api
         }
     }
 
+    // Return value not currently checked
     public function clear_wrapper_cache()
     {
         $idx_broker_key = $this->api_key;
-
-        // access URL and request method
-
         $url = Initiate_Plugin::IDX_API_URL . '/clients/wrappercache';
-        $method = 'DELETE';
-
-        // headers (required and optional)
-        $headers = array(
-            'Content-Type: application/x-www-form-urlencoded',
-            'accesskey: ' . $idx_broker_key,
-            'outputtype: json',
+        $args = array(
+            'method' => 'DELETE',
+            'headers' => array(
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'accesskey' => $idx_broker_key,
+                'outputtype' => 'json'
+            ),
         );
-
-        // set up cURL
-        $handle = curl_init();
-        curl_setopt($handle, CURLOPT_URL, $url);
-        curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($handle, CURLOPT_CUSTOMREQUEST, $method);
-
-        // exec the cURL request and returned information. Store the returned HTTP code in $code for later reference
-        $response = curl_exec($handle);
-        $code = curl_getinfo($handle, CURLINFO_HTTP_CODE);
-
-        if ($code == 204) {
-            $response = true;
-        } else {
-            $response = false;
+        $response = wp_remote_request($url, $args);
+        $response_code = wp_remote_retrieve_response_code ($response);
+        if ($response_code !== 204) {
+            return false;
         }
-
-        return $response;
+        return true;
     }
 
     public function saved_link_properties($saved_link_id)
