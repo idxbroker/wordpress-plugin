@@ -151,7 +151,7 @@ class Idx_Api
         if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
             update_blog_option( get_main_site_id(), $name, $data );
         } else {
-            update_option( $name, $data );
+            update_option( $name, $data, false );
         }
     }
 

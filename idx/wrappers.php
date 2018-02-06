@@ -173,8 +173,8 @@ class Wrappers
             $new_post['ID'] = $_POST['wrapper_page_id'];
         }
         $wrapper_page_id = wp_insert_post($new_post);
-        update_option('idx_broker_dynamic_wrapper_page_name', $post_title);
-        update_option('idx_broker_dynamic_wrapper_page_id', $wrapper_page_id);
+        update_option('idx_broker_dynamic_wrapper_page_name', $post_title, false);
+        update_option('idx_broker_dynamic_wrapper_page_id', $wrapper_page_id, false);
         $wrapper_page_url = get_permalink($wrapper_page_id);
         $this->idx_api->set_wrapper('global', $wrapper_page_url);
         update_post_meta($wrapper_page_id, 'idx-wrapper-page', 'global');
