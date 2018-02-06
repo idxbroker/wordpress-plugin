@@ -5,6 +5,10 @@
 #impress-widgetEmail {
     width: 60%;
 }
+#impress-widgetPassword {
+    width: 60%;
+    display: block;
+}
 #impress-widgetLeadLoginSubmit {
     width: 39%;
 }

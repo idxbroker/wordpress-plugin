@@ -62,6 +62,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
 
         $title = $instance['title'];
         $custom_text = $instance['custom_text'];
+        $password_field = $instance['password_field'];
 
         echo $before_widget;
 
@@ -73,12 +74,16 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
             echo '<p>', $custom_text, '</p>';
         }
 
+        // Returns hidden if false or not set
+        $password_field_type = $password_field ? 'password' : 'hidden';
+
+
         ?>
 		<form action="<?php echo $this->idx_api->subdomain_url();?>ajax/userlogin.php" class="impress-lead-login" method="post" target="<?php echo $target?>" name="leadLoginForm">
 			<input type="hidden" name="action" value="login">
 			<input type="hidden" name="loginWidget" value="true">
 			<label for="impress-widgetEmail"><?php _e('Email Address:', 'idxbroker');?></label>
-			<input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address"><input id="impress-widgetPassword" type="hidden" name="password" value=""><input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
+			<input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address"><?php if($password_field_type === 'password') echo '<label for="impress-widgetPassword">Password:</label>'; ?><input id="impress-widgetPassword" type="<?php echo $password_field_type; ?>" name="password" placeholder="Password"><input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
 		</form>
 		<?php
 
@@ -111,6 +116,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         $instance['custom_text'] = htmlentities($new_instance['custom_text']);
         $instance['styles'] = (int) $new_instance['styles'];
         $instance['new_window'] = strip_tags($new_instance['new_window']);
+        $instance['password_field'] = strip_tags($new_instance['password_field']);
 
         return $instance;
     }
@@ -148,6 +154,11 @@ class IMPress_Lead_Login_Widget extends \WP_Widget
         <p>
             <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open in a New Window?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('password_field');?>"><?php _e('Add password form field?', 'idxbroker');?></label>
+            <input type="checkbox" id="<?php echo $this->get_field_id('password_field');?>" name="<?php echo $this->get_field_name('password_field')?>" value="1" <?php checked($instance['password_field'], true);?>>
         </p>
 
 		<?php
