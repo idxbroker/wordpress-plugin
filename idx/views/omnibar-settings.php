@@ -179,7 +179,12 @@ class Omnibar_Settings
         echo "<h3>Custom Fields</h3>";
         echo "<div class=\"help-text\">By default the omnibar searches by City, County, Postal Code, Address, or Listing ID. Add up to 10 custom fields to be used as well.<div><i>Examples: High School, Area, Subdivision</i></div></div>";
         echo "<div class=\"customFieldError error\"><p></p></div>";
-        echo "<select class=\"omnibar-additional-custom-field select2\" name=\"omnibar-additional-custom-field\" multiple=\"multiple\">";
+
+        // There is a bug in firefox that will select all options of the same value on
+        // refresh if one option of that value is already selected. The omnibar logic
+        // relies on specific selected option behavior, so we add autocomplete="off"
+        // to force Firefox to not cache its option selections on refresh.
+        echo "<select class=\"omnibar-additional-custom-field select2\" name=\"omnibar-additional-custom-field\" multiple=\"multiple\" autocomplete=\"off\">";
         
         echo $this->get_all_custom_fields($all_mls_fields[0], $mls_pt_key);
 
@@ -339,9 +344,9 @@ EOT;
         $city_list = htmlspecialchars($_POST['city-list']);
         $county_list = htmlspecialchars($_POST['county-list']);
         $zipcode_list = htmlspecialchars($_POST['zipcode-list']);
-        update_option('idx_omnibar_current_city_list', $city_list);
-        update_option('idx_omnibar_current_county_list', $county_list);
-        update_option('idx_omnibar_current_zipcode_list', $zipcode_list);
+        update_option('idx_omnibar_current_city_list', $city_list, false);
+        update_option('idx_omnibar_current_county_list', $county_list, false);
+        update_option('idx_omnibar_current_zipcode_list', $zipcode_list, false);
         return wp_die();
     }
 
@@ -353,16 +358,16 @@ EOT;
         } else {
             $fields = array();
         }
-        update_option('idx_omnibar_custom_fields', $fields);
-        update_option('idx_default_property_types', $_POST['mlsPtIDs']);
-        update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']));
+        update_option('idx_omnibar_custom_fields', $fields, false);
+        update_option('idx_default_property_types', $_POST['mlsPtIDs'], false);
+        update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']), false);
         $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
         return wp_die();
     }
 
     public function idx_update_sort_order() {
         $sort_order = $_POST['sort-order'];
-        update_option('idx_omnibar_sort', $sort_order);
+        update_option('idx_omnibar_sort', $sort_order, false);
         return wp_die();
     }
 

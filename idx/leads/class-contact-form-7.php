@@ -60,7 +60,7 @@ class IDX_Leads_CF7
 			$new_value['zipCode'] = isset($_POST["zipCode"]) ? stripslashes($_POST["zipCode"]) : null;
 			$new_value['country'] = isset($_POST["country"]) ? stripslashes($_POST["country"]) : null;
 			
-			update_option($option_name, $new_value);
+			update_option($option_name, $new_value, false);
 		}
 	}
 

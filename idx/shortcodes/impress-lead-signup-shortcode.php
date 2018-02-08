@@ -26,6 +26,7 @@ class Impress_Lead_Signup_Shortcode {
             'styles' => 1,
             'new_window' => 0,
             'agent_id' => '',
+            'button_text' => 'Sign Up!',
         ), $atts));
 
         if (!empty($styles)) {
@@ -79,8 +80,8 @@ class Impress_Lead_Signup_Shortcode {
             $widget .= sprintf('<div id="recaptcha" class="g-recaptcha" data-sitekey="%s"></div>', $site_key);
         }
 
-        $widget .= sprintf('<input id="impress-widgetsubmit" type="submit" name="submit" value="Sign Up!">
-            </form>');
+        $widget .= sprintf('<input id="impress-widgetsubmit" type="submit" name="submit" value="%s">
+            </form>', $button_text);
 
         return $widget;
     }

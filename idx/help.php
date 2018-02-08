@@ -170,7 +170,7 @@ class Help
     //Disable the help button glowing via AJAX
     public function disable_glow()
     {
-        update_option('idx_disable_glow', '1');
+        update_option('idx_disable_glow', '1', false);
         wp_die();
     }
 }

@@ -11,7 +11,7 @@ var gulp = require('gulp'),
         glob = require('glob'),
         gutil = require('gulp-util');
 
-
+/*
 gulp.task('jshint', function(){
 
     return gulp.src('./assets/src/js/*.js')
@@ -19,6 +19,7 @@ gulp.task('jshint', function(){
         .pipe ( jshint.reporter( stylish ) )
         .pipe ( jshint.reporter( 'fail' ) );
 })
+*/
 
 gulp.task('js', function() {
 
@@ -49,8 +50,9 @@ gulp.task('readme', function() {
     console.log('readme conversion not yet implemented');
 })
 
+
 gulp.task('watch', function() {
-    gulp.watch('./assets/src/js/*.js', ['jshint', 'js']);
+    gulp.watch('./assets/src/js/*.js', ['js']);
 })
 
-gulp.task('default', ['jshint', 'js'], function() {});
+gulp.task('default', ['js'], function() {});
