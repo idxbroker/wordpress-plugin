@@ -315,7 +315,7 @@ class Impress_City_Links_Widget extends \WP_Widget
                 
                 if ( $show_count && $count <= 50 ) {
                     $listing_count = $idx_api->property_count_by_id( 'city', $idx_id, $city->id );
-                    $number = ( ! is_wp_error( $listing_count ) && isset( $listing_count[0] ) ) ? $listing_count[0] : '';
+                    $number = ( ! is_wp_error( $listing_count ) && isset( $listing_count[0] ) ) ? $listing_count[0] : 0;
                     $output .= "\n\t\t" .
                     '<li>' .
                     "\n\t\t\t" .
