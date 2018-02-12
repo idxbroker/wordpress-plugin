@@ -248,6 +248,7 @@ class Register_Shortcode_For_Ui
             'styles' => 1,
             'new_window' => 0,
             'agent_id' => '',
+            'password_field' => false,
             'button_text' => "Sign Up!",
         );
 
@@ -256,20 +257,29 @@ class Register_Shortcode_For_Ui
         $output .= "<input type=\"checkbox\" id=\"idx-phone-number\" data-short-name=\"phone\">";
         $output .= "<label for\"idx-phone-number\">Show phone number field?</label>";
         $output .= "</div>";
+
         // Default Styles
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"styles\" data-short-name=\"styles\" checked>";
         $output .= "<label for\"styles\">Default Styles?</label>";
         $output .= "</div>";
+
         // New Window
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"new_window\" data-short-name=\"new_window\">";
         $output .= "<label for\"new_window\">Open in a New Window?</label>";
         $output .= "</div>";
+
         // Styles and Scripts for Preview
         $output .= "<script>";
         $output .= "styleSheetUrls = [\"" . plugins_url('../assets/css/widgets/impress-lead-signup.css', dirname(__FILE__)) . "\"];";
         $output .= "</script>";
+
+        // Password field
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"password_field\" data-short-name=\"password_field\"";
+        $output .= "<label for\"password_field\">Add password form field?:</label>";
+        $output .= "</div>";
 
         // Agent select
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
