@@ -5,7 +5,7 @@
 #impress-widgetEmail {
     width: 60%;
 }
-#impress-widgetPassword {
+.impress-lead-login #impress-widgetPassword {
     width: 60%;
     display: block;
 }
