@@ -276,9 +276,9 @@ class Register_Shortcode_For_Ui
         $output .= "</script>";
 
         // Password field
-        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-        $output .= "<input type=\"checkbox\" id=\"password_field\" data-short-name=\"password_field\"";
-        $output .= "<label for\"password_field\">Add password form field?:</label>";
+        $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+        $output .= "<input type=\"checkbox\" id=\"password_field\" data-short-name=\"password_field\">";
+        $output .= "<label for\"password_field\">Add password form field?</label>";
         $output .= "</div>";
 
         // Agent select
