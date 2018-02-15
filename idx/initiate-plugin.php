@@ -57,6 +57,7 @@ class Initiate_Plugin
         if ( is_multisite() ) {
              new \IDX\Views\Multisite();
         }
+        new Noindex();
     }
 
     public function idx_extensions() {
