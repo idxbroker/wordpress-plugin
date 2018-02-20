@@ -74,7 +74,7 @@ function updateSidebarIcon() {
 	}
 }
 
-// Wait to apply script until page is 
+// Wait to apply script until DOM is loaded so we can remove the WordPress notice event handler
 document.addEventListener("DOMContentLoaded", function(event) {
 	initalizeEventListeners();
 });
