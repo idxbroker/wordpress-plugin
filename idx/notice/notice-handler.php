@@ -22,7 +22,7 @@ class Notice_Handler {
 				$name,
 				__( 'Yoast is not allowing your pages to be indexed!', 'idxbroker' ),
 				'error',
-				'https://support.idxbroker.com/?/Knowledgebase',
+				'http://confluence.idx.local/display/~erikb/Yoast+SEO+causing+IMPress+pages+to+not+be+indexed',
 				__( 'How can I fix this?', 'idxbroker' )
 			);
 		}
