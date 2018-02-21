@@ -390,7 +390,7 @@ EOD;
 		}
 
 		// Get all active notices and store in object, need this state for the sidebar notice icon
-		$this->notices = Notice::get_all_notices();
+		$this->notices = Notice\Notice_Handler::get_all_notices();
 
 		// If no notices, return
 		if ( count( $this->notices ) < 1 ) {
@@ -410,6 +410,6 @@ EOD;
 		wp_localize_script( 'idx-notice', 'idxNoticeNonce', $ajax_nonce );
 		wp_enqueue_script( 'idx-notice' );
 
-		add_action( 'wp_ajax_idx_dismissed', array( 'IDX\Notice', 'dismissed' ) );
+		add_action( 'wp_ajax_idx_dismissed', array( 'IDX\Notice\Notice_Handler', 'dismissed' ) );
 	}
 }

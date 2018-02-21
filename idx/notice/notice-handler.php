@@ -1,27 +1,22 @@
 <?php
 
-namespace IDX;
+namespace IDX\Notice;
 
-/* Allows creation of admin notices that are permanently dismissable.
+/* Has a bulk add notice method and holds all notice conditions.
  *
  * Currently supports detection and creation of specific plugins notices:
  *   Yoast,
  */
-class Notice {
-	function __construct( $handle, $message, $type, $url = '', $link_text = 'info' ) {
-		$this->name      = $handle;
-		$this->message   = $message;
-		$this->type      = $type;
-		$this->url       = $url;
-		$this->link_text = $link_text;
-	}
+class Notice_Handler {
+	// We don't want anyone instantiating this class
+	private function __construct() {}
 
 	// Returns array of all non-dismissed notices
 	public static function get_all_notices() {
 		$notices = [];
 
 		// Always use the name returned from the notice function to avoid mistyping
-		$name = Notice::yoast();
+		$name = self::yoast();
 		if ( $name ) {
 			$notices[] = new Notice(
 				$name,
@@ -33,6 +28,17 @@ class Notice {
 		}
 
 		return $notices;
+	}
+
+	// Function called via ajax to dismiss the notice
+	public static function dismissed() {
+		check_ajax_referer( 'idx-notice-nonce' );
+		$post = filter_input_array( INPUT_POST );
+		if ( isset( $post['name'] ) && '' !== $post['name'] ) {
+			$name = $post['name'];
+			update_option( "idx-notice-dismissed-$name", true );
+		}
+		wp_die();
 	}
 
 	// Checks if Yoast is noindexing our custom page types
@@ -73,28 +79,5 @@ class Notice {
 	// Checks wp_options if a specific notice has been dismissed
 	private static function is_dismissed( $name ) {
 		return get_option( "idx-notice-dismissed-$name" );
-	}
-
-	// Creates notice if in the IMPress menu and is not dismissed
-	public function create_notice() {
-		$current_page = get_current_screen();
-		if ( 'idx-broker' !== $current_page->parent_file ) {
-			return;
-		}
-		if ( $this->dismissed ) {
-			return;
-		}
-		\IDX\Views\Notice::create_notice( $this->name, $this->message, $this->type, $this->url, $this->link_text );
-	}
-
-	// Function called via ajax to dismiss the notice
-	public static function dismissed() {
-		check_ajax_referer( 'idx-notice-nonce' );
-		$post = filter_input_array( INPUT_POST );
-		if ( isset( $post['name'] ) && '' !== $post['name'] ) {
-			$name = $post['name'];
-			update_option( "idx-notice-dismissed-$name", true );
-		}
-		wp_die();
 	}
 }
