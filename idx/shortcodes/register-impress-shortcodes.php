@@ -540,7 +540,7 @@ class Register_Impress_Shortcodes
                         <img class="owl-lazy lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
-                    <a href="%2$s" target="%18$s">
+                    <a href="%2$s" target="%16$s">
                         <p class="impress-address">
                             <span class="impress-street">%5$s %6$s %7$s %8$s</span>
                             <span class="impress-cityname">%9$s</span>,
