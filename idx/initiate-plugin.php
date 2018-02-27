@@ -399,8 +399,7 @@ EOD;
 
 		// Create admin_notice box for each notice
 		foreach ( $this->notices as $notice ) {
-			// Use 'shutdown' instead of 'admin_notices' so it doesn't print before page load, causing a visual repositioning of the notice
-			add_action( 'shutdown', array( $notice, 'create_notice' ) );
+			add_action( 'admin_notices', array( $notice, 'create_notice' ) );
 		}
 
 		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.css' );
