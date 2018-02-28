@@ -26,6 +26,7 @@ class Impress_Lead_Signup_Shortcode {
             'styles' => 1,
             'new_window' => 0,
             'agent_id' => '',
+            'password_field' => false,
             'button_text' => 'Sign Up!',
         ), $atts));
 
@@ -68,6 +69,12 @@ class Impress_Lead_Signup_Shortcode {
 
                 <label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
                 <input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>', $this->idx_api->subdomain_url(), $target, $this->error_message, $hidden_fields);
+
+		if ( $password_field ) {
+			$widget .= sprintf('
+				<label for="impress-widgetPassword">Password:</label>
+                <input id="impress-widgetPassword" type="password" name="password" placeholder="Password">');
+		}
 
         if ($phone) {
             $widget .= sprintf('
