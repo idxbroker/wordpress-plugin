@@ -397,7 +397,7 @@ class Register_Impress_Shortcodes
 
     public function property_carousel_shortcode($atts = array())
     {
-        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
+        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0');
 
         extract(shortcode_atts(array(
             'max'           => 4,
