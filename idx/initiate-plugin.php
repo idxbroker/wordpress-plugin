@@ -405,7 +405,7 @@ EOD;
 		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.css' );
 
 		$ajax_nonce = wp_create_nonce( 'idx-notice-nonce' );
-		wp_register_script( 'idx-notice', IMPRESS_IDX_URL . '/assets/src/js/idx-notice.js', 'jquery', false, true );
+		wp_register_script( 'idx-notice', IMPRESS_IDX_URL . '/assets/js/idx-notice.min.js', 'jquery', false, true );
 		wp_localize_script( 'idx-notice', 'idxNoticeNonce', $ajax_nonce );
 		wp_enqueue_script( 'idx-notice' );
 
