@@ -118,7 +118,7 @@ This plugin requires a PHP version higher than 5.4. For security reasons, we rec
 
 ### 2.4.4 ###
 * New: Can now add password field to lead sign up widget and shortcode
-* New: Now notifies you if other plugins are causing your pages to not be indexed by search engines
+* New: Now notifies you if Yoast SEO is causing your pages to not be indexed by search engines
 * Fix: No longer loads multiple versions of Font Awesome
 * Fix: City Links now show 0 when there are no properties in those cities
 * Fix: Error when using Carousel shortcode with impress_carousel_property_html filter
