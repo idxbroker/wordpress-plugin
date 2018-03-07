@@ -38,6 +38,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         'styles'       => 1,
         'new_window'   => 0,
         'agentID'     => '',
+        'password_field' => false,
         'button_text' => 'Sign Up!',
     );
 
@@ -116,6 +117,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
 			<label id="impress-widgetemail-label" class="ie-only" for="impress-widgetemail"><?php _e('Email:', 'idxbroker');?></label>
 			<input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>
 
+			<?php if ( $instance['password_field'] == true ) {
+			echo '
+				<label for="impress-widgetPassword">Password:</label>
+				<input id="impress-widgetPassword" type="password" name="password" placeholder="Password">';
+			}?>
+
 			<?php if ($instance['phone_number'] == true) {
             echo '
 				<label id="impress-widgetphone-label" class="ie-only" for="impress-widgetphone">' . __('Phone:', 'idxbroker') . '</label>
@@ -161,6 +168,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
         $instance['phone_number'] = $new_instance['phone_number'];
         $instance['styles']       = (int) $new_instance['styles'];
         $instance['new_window']   = strip_tags($new_instance['new_window']);
+        $instance['password_field']   = strip_tags($new_instance['password_field']);
         $instance['agentID']      = (int) $new_instance['agentID'];
         $instance['button_text']  = strip_tags($new_instance['button_text']);
 
@@ -204,6 +212,10 @@ class Impress_Lead_Signup_Widget extends \WP_Widget
             <label for="<?php echo $this->get_field_id('new_window');?>"><?php _e('Open in a New Window?', 'idxbroker');?></label>
             <input type="checkbox" id="<?php echo $this->get_field_id('new_window');?>" name="<?php echo $this->get_field_name('new_window')?>" value="1" <?php checked($instance['new_window'], true);?>>
         </p>
+		<p>
+			<label for="<?php echo $this->get_field_id('password_field');?>"><?php _e('Add password form field?', 'idxbroker');?></label>
+			<input type="checkbox" id="<?php echo $this->get_field_id('password_field');?>" name="<?php echo $this->get_field_name('password_field')?>" value="1" <?php checked($instance['password_field'], true);?>>
+		</p>
         <p>
             <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Route to Agent:', 'idxbroker' ); ?></label>
             <select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">

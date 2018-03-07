@@ -30,9 +30,9 @@ class Initiate_Plugin
         add_action('wp_loaded', array($this, 'legacy_functions'));
 
         add_action('plugins_loaded', array($this, 'idx_extensions'));
+		add_action('plugins_loaded', array($this, 'add_notices'));
 
         $this->instantiate_classes();
-
     }
 
     const IDX_API_DEFAULT_VERSION = '1.4.0';
@@ -229,7 +229,16 @@ class Initiate_Plugin
 
     public function add_menu()
     {
-        add_menu_page('IMPress for IDX Broker Settings', 'IMPress', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'), 'none', 55.572);
+		$notice_num = count( $this->notices );
+		add_menu_page(
+			'IMPress for IDX Broker Settings',
+			\IDX\Views\Notice::menu_text_notice( 'IMPress', $notice_num ),
+			'administrator',
+			'idx-broker',
+			array( $this, 'idx_broker_platinum_admin_page' ),
+			'none',
+			55.572
+		);
         add_submenu_page('idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array($this, 'idx_broker_platinum_admin_page'));
         //Only add Omnibar page if no errors in API
         $systemlinks = $this->idx_api->idx_api_get_systemlinks();
@@ -364,7 +373,7 @@ class Initiate_Plugin
     {
         //Only load if account is not Platinum level
         if (!$this->idx_api->platinum_account_type()) {
-            wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+            wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0');
             $html = "<li><a href=\"https://middleware.idxbroker.com/mgmt/upgrade\" target=\"_blank\">Upgrade Account<i class=\"fa fa-arrow-up update-plugins\"></i></a>";
             echo <<<EOD
             <script>window.addEventListener('DOMContentLoaded',function(){
@@ -373,5 +382,33 @@ class Initiate_Plugin
 EOD;
         }
     }
-}
 
+	// Adds notices property and adds actions for the admin notices and ajax call
+	public function add_notices() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		// Get all active notices and store in object, need this state for the sidebar notice icon
+		$this->notices = Notice\Notice_Handler::get_all_notices();
+
+		// If no notices, return
+		if ( count( $this->notices ) < 1 ) {
+			return;
+		}
+
+		// Create admin_notice box for each notice
+		foreach ( $this->notices as $notice ) {
+			add_action( 'admin_notices', array( $notice, 'create_notice' ) );
+		}
+
+		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.css' );
+
+		$ajax_nonce = wp_create_nonce( 'idx-notice-nonce' );
+		wp_register_script( 'idx-notice', IMPRESS_IDX_URL . '/assets/js/idx-notice.min.js', 'jquery', false, true );
+		wp_localize_script( 'idx-notice', 'idxNoticeNonce', $ajax_nonce );
+		wp_enqueue_script( 'idx-notice' );
+
+		add_action( 'wp_ajax_idx_dismissed', array( 'IDX\Notice\Notice_Handler', 'dismissed' ) );
+	}
+}

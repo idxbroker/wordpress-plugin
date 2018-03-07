@@ -104,7 +104,7 @@ class Dashboard_Widget {
         wp_enqueue_style('idx-dashboard-widget', plugins_url('/assets/css/idx-dashboard-widget.css', dirname(__FILE__)));
         wp_enqueue_script('google-charts', 'https://www.gstatic.com/charts/loader.js');
         wp_enqueue_script('idx-dashboard-widget', plugins_url('/assets/js/idx-dashboard-widget.min.js', dirname(__FILE__)));
-        wp_enqueue_style('font-awesome-4.4.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.css');
+        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0');
     }
 
     public function leads_json($timeframe, $interval)

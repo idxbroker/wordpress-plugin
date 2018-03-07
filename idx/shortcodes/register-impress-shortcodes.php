@@ -397,7 +397,7 @@ class Register_Impress_Shortcodes
 
     public function property_carousel_shortcode($atts = array())
     {
-        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
+        wp_enqueue_style('font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0');
 
         extract(shortcode_atts(array(
             'max'           => 4,
@@ -519,25 +519,9 @@ class Register_Impress_Shortcodes
 
             $count++;
 
-            //Add Disclaimer when applicable.
-            if(isset($prop['disclaimer']) && !empty($prop['disclaimer'])) {
-                foreach($prop['disclaimer'] as $disclaimer) {
-                    if(in_array('widget', $disclaimer)) {
-                        $disclaimer_text = $disclaimer['text'];
-                        $disclaimer_logo = $disclaimer['logoURL'];
-                    }
-                }
-            }
-            //Add Courtesy when applicable.
-            if(isset($prop['courtesy']) && !empty($prop['courtesy'])) {
-                foreach($prop['courtesy'] as $courtesy) {
-                    if(in_array('widget', $courtesy)) {
-                        $courtesy_text = $courtesy['text'];
-                    }
-                }
-            }
-
             $prop = $this->set_missing_core_fields($prop);
+
+            $disclaimer = $this->maybe_add_disclaimer_and_courtesy($prop);
 
             // Get URL and add suffix if one exists
             if ( isset($prop['fullDetailsURL']) ) {
@@ -552,11 +536,11 @@ class Register_Impress_Shortcodes
 
             $output .= apply_filters( 'impress_carousel_property_html', sprintf(
                 '<div class="impress-carousel-property">
-                    <a href="%2$s" class="impress-carousel-photo" target="%18$s">
+                    <a href="%2$s" class="impress-carousel-photo" target="%16$s">
                         <img class="owl-lazy lazyOwl" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
                         <span class="impress-price">%1$s</span>
                     </a>
-                    <a href="%2$s" target="%18$s">
+                    <a href="%2$s" target="%16$s">
                         <p class="impress-address">
                             <span class="impress-street">%5$s %6$s %7$s %8$s</span>
                             <span class="impress-cityname">%9$s</span>,
@@ -569,9 +553,7 @@ class Register_Impress_Shortcodes
                         %13$s
                         %14$s
                     </p>
-                    <div class="disclaimer">
-                        %15$s %16$s %17$s
-                    </div>
+                    %15$s
                     </div><!-- end .impress-carousel-property -->',
                 $prop['listingPrice'],
                 $url,
@@ -587,11 +569,9 @@ class Register_Impress_Shortcodes
                 $this->hide_empty_fields('baths', 'Baths', $prop['totalBaths']),
                 $this->hide_empty_fields('sqft', 'SqFt', $prop['sqFt']),
                 $this->hide_empty_fields('acres', 'Acres', $prop['acres']),
-                (isset($disclaimer_text)) ? '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>' : '',
-                (isset($disclaimer_logo)) ? '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />' : '',
-                (isset($courtesy_text)) ? '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>' : '',
+                $disclaimer,
                 $target
-            ), $prop, $atts, $url );
+            ), $prop, $atts, $url, $disclaimer );
         }
 
         $output .= '</div><!-- end .impress-carousel -->';
