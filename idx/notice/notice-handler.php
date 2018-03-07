@@ -55,11 +55,11 @@ class Notice_Handler {
 			return false;
 		}
 
-		// Yoast stores the page type visibility option in their xml sitemap option table
-		$data = get_option( 'wpseo_xml' );
+		// Yoast stores their noindex flag for page types in wpseo_titles
+		$data = get_option( 'wpseo_titles' );
 
-		$wrapper_no_index   = (boolean) $data['post_types-idx-wrapper-not_in_sitemap'];
-		$idx_pages_no_index = (boolean) $data['post_types-idx_page-not_in_sitemap'];
+		$wrapper_no_index   = (boolean) $data['noindex-idx-wrapper'];
+		$idx_pages_no_index = (boolean) $data['noindex-idx_page'];
 
 		if ( $wrapper_no_index || $idx_pages_no_index ) {
 			if ( self::is_dismissed( $name ) ) {
