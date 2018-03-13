@@ -27,6 +27,10 @@ class Notice_Handler {
 			);
 		}
 
+		if (count($notices) > 0) {
+       		add_action('admin_enqueue_scripts', ['\IDX\Notice\Notice_Handler', 'notice_script_styles']);
+		}
+
 		return $notices;
 	}
 
@@ -55,11 +59,11 @@ class Notice_Handler {
 			return false;
 		}
 
-		// Yoast stores the page type visibility option in their xml sitemap option table
-		$data = get_option( 'wpseo_xml' );
+		// Yoast stores their noindex flag for page types in wpseo_titles
+		$data = get_option( 'wpseo_titles' );
 
-		$wrapper_no_index   = (boolean) $data['post_types-idx-wrapper-not_in_sitemap'];
-		$idx_pages_no_index = (boolean) $data['post_types-idx_page-not_in_sitemap'];
+		$wrapper_no_index   = (boolean) $data['noindex-idx-wrapper'];
+		$idx_pages_no_index = (boolean) $data['noindex-idx_page'];
 
 		if ( $wrapper_no_index || $idx_pages_no_index ) {
 			if ( self::is_dismissed( $name ) ) {
@@ -72,12 +76,19 @@ class Notice_Handler {
 	}
 
 	// $name should only be passed in from the returned notice functions
-	private function delete_dismissed_option( $name ) {
+	private static function delete_dismissed_option( $name ) {
 		delete_option( "idx-notice-dismissed-$name" );
 	}
 
 	// Checks wp_options if a specific notice has been dismissed
 	private static function is_dismissed( $name ) {
 		return get_option( "idx-notice-dismissed-$name" );
+	}
+
+	public static function notice_script_styles() {
+		$ajax_nonce = wp_create_nonce( 'idx-notice-nonce' );
+		wp_register_script( 'idx-notice', IMPRESS_IDX_URL . '/assets/js/idx-notice.min.js', 'jquery', false, true );
+		wp_localize_script( 'idx-notice', 'idxNoticeNonce', $ajax_nonce );
+		wp_enqueue_script( 'idx-notice' );
 	}
 }
