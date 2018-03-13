@@ -116,6 +116,9 @@ This plugin requires a PHP version higher than 5.4. For security reasons, we rec
 
 ## Changelog ##
 
+### 2.4.5 ###
+* Fix: Yoast SEO noindex detection 
+
 ### 2.4.4 ###
 * New: Can now add password field to lead sign up widget and shortcode
 * New: Now notifies you if Yoast SEO is causing your pages to not be indexed by search engines
