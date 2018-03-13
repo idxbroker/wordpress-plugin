@@ -27,6 +27,10 @@ class Notice_Handler {
 			);
 		}
 
+		if (count($notices) > 0) {
+       		add_action('admin_enqueue_scripts', ['\IDX\Notice\Notice_Handler', 'notice_script_styles']);
+		}
+
 		return $notices;
 	}
 
@@ -79,5 +83,12 @@ class Notice_Handler {
 	// Checks wp_options if a specific notice has been dismissed
 	private static function is_dismissed( $name ) {
 		return get_option( "idx-notice-dismissed-$name" );
+	}
+
+	public static function notice_script_styles() {
+		$ajax_nonce = wp_create_nonce( 'idx-notice-nonce' );
+		wp_register_script( 'idx-notice', IMPRESS_IDX_URL . '/assets/js/idx-notice.min.js', 'jquery', false, true );
+		wp_localize_script( 'idx-notice', 'idxNoticeNonce', $ajax_nonce );
+		wp_enqueue_script( 'idx-notice' );
 	}
 }
