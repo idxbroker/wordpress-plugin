@@ -72,7 +72,7 @@ class Notice_Handler {
 	}
 
 	// $name should only be passed in from the returned notice functions
-	private function delete_dismissed_option( $name ) {
+	private static function delete_dismissed_option( $name ) {
 		delete_option( "idx-notice-dismissed-$name" );
 	}
 
