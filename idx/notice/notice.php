@@ -18,6 +18,7 @@ class Notice {
 		if ( 'idx-broker' !== $current_page->parent_file ) {
 			return;
 		}
+
 		\IDX\Views\Notice::create_notice( $this->name, $this->message, $this->type, $this->url, $this->link_text );
 	}
 }

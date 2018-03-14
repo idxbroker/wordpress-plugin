@@ -320,6 +320,9 @@ class Initiate_Plugin
  */
     public function idx_inject_script_and_style($page)
     {
+
+        wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.css' );
+
         if ('toplevel_page_idx-broker' !== $page) {
             return;
         }
@@ -402,13 +405,6 @@ EOD;
 			add_action( 'admin_notices', array( $notice, 'create_notice' ) );
 		}
 
-		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.css' );
-
-		$ajax_nonce = wp_create_nonce( 'idx-notice-nonce' );
-		wp_register_script( 'idx-notice', IMPRESS_IDX_URL . '/assets/js/idx-notice.min.js', 'jquery', false, true );
-		wp_localize_script( 'idx-notice', 'idxNoticeNonce', $ajax_nonce );
-		wp_enqueue_script( 'idx-notice' );
-
-		add_action( 'wp_ajax_idx_dismissed', array( 'IDX\Notice\Notice_Handler', 'dismissed' ) );
+        add_action( 'wp_ajax_idx_dismissed', array( '\IDX\Notice\Notice_Handler', 'dismissed' ) );
 	}
 }
