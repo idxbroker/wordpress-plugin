@@ -364,6 +364,24 @@ EOT;
         $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
         return wp_die();
     }
+    
+	private function create_table() {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'idxbroker_advanced_fields';
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE $table_name (
+			mls varchar(4) NOT NULL,
+			field text NOT NULL,
+			value text NOT NULL 
+		) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+		dbDelta( $sql );
+	}
 
     public function idx_update_sort_order() {
         $sort_order = $_POST['sort-order'];

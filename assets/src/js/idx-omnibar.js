@@ -112,8 +112,24 @@ var idxOmnibar = function(jsonData){
 
 	//Initialize Autocomplete of CCZs for each omnibar allowing multiple per page
 	forEach(document.querySelectorAll('.idx-omnibar-input'), function (index, value) {
-		new Awesomplete(value,{autoFirst: true}).list = removeDuplicates(buildLocationList(jsonData));
+		var a = new Awesomplete(value,{autoFirst: true})
+		value.addEventListener('input', function(){
+			jQuery.ajax({
+				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete",
+			}).done(function(data) {
+				jsonData = buildNewJsonData(jsonData);
+				a.list = data;
+				// a.list = removeDuplicates(buildLocationList(jsonData));
+			});
+
+		});
 	});
+
+	function buildNewJsonData(data) {
+		// Ajax pull new data
+
+		return data;
+	}
 
 
 	/*
@@ -530,7 +546,7 @@ var idxOmnibar = function(jsonData){
 
 	//on submit, run the search (applies this to each omnibar)
 	forEach(document.querySelectorAll('.idx-omnibar-form'), function(index, value){value.addEventListener('submit', runSearch);});
-	
+
 	//make omnibar fit sidebars better by pushing button to bottom for basic omnibr
 	forEach(document.querySelectorAll('.idx-omnibar-original-form'), function(index, value){
 		if(value.offsetWidth < 400){

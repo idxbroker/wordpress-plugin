@@ -7,6 +7,7 @@ class Create_Omnibar
     {
         $this->register_shortcodes();
         $this->register_widgets();
+        $this->register_rest_endpoint();
 
     }
 
@@ -27,7 +28,7 @@ class Create_Omnibar
         if (!empty($styles)) {
             wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
         }
-        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)), array(), false, true);
+        wp_register_script('idx-omnibar-js', plugins_url('../../assets/src/js/idx-omnibar.js', dirname(__FILE__)), array(), false, true);
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
@@ -69,7 +70,7 @@ EOD;
         if (!empty($styles)) {
             wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
         }
-        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)), array(), false, true);
+        wp_register_script('idx-omnibar-js', plugins_url('../../assets/src/js/idx-omnibar.js', dirname(__FILE__)), array(), false, true);
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
@@ -184,5 +185,12 @@ EOD;
         add_action('widgets_init', function () use ($scope) {$scope->register_impress_omnibar_widgets();});
 
     }
-
+    public function register_rest_endpoint() {
+        add_action( 'rest_api_init', function() {
+            register_rest_route( 'idxbroker/v1', '/omnibar/autocomplete', array(
+                'methods' => 'GET',
+                'callback' => '\IDX\Widgets\Omnibar\Autocomplete::get_autocomplete_data',
+            ) );
+        });
+    }
 }
