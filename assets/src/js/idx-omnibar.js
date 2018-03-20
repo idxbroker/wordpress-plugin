@@ -64,6 +64,12 @@ var idxOmnibar = function(jsonData){
 					newArray.push(item.name + ', ' + item.stateAbrv);
 				}
 			});
+		} else if (type === 'address'){
+			array.forEach(function(item){
+				if(item.name !== '' && item.name !== 'Other'){
+					newArray.push(item.name);
+				}
+			});
 		} else {
 			array.forEach(function(item){
 				if(item !== '' && item !== 'Other'){
@@ -90,7 +96,7 @@ var idxOmnibar = function(jsonData){
 
 	//dependent upon createArrays. Creates cczList array
 	var buildLocationList = function (data){
-		return addAdvancedFields(createArrays(data[0].core.zipcodes, createArrays(data[0].core.counties, createArrays(data[0].core.cities, cczList, 'city'), 'county'), 'zip'));
+		return addAdvancedFields(createArrays(data[0].core.addresses, createArrays(data[0].core.zipcodes, createArrays(data[0].core.counties, createArrays(data[0].core.cities, cczList, 'city'), 'county'), 'zip'), 'address'));
 	};
 	//remove duplicate entries
 	var removeDuplicates = function(data) {
@@ -112,7 +118,9 @@ var idxOmnibar = function(jsonData){
 
 	//Initialize Autocomplete of CCZs for each omnibar allowing multiple per page
 	forEach(document.querySelectorAll('.idx-omnibar-input'), function (index, value) {
-		var a = new Awesomplete(value,{autoFirst: true})
+		var a = new Awesomplete(value,{autoFirst: true});
+		a.list = removeDuplicates(buildLocationList(jsonData));
+		/*
 		value.addEventListener('input', function(){
 			jQuery.ajax({
 				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete",
@@ -121,8 +129,8 @@ var idxOmnibar = function(jsonData){
 				a.list = data;
 				// a.list = removeDuplicates(buildLocationList(jsonData));
 			});
-
 		});
+		*/
 	});
 
 	function buildNewJsonData(data) {
