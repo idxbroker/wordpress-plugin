@@ -13,7 +13,9 @@ class Get_Locations
             if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
                 return;
             }
-            $this->initiate_get_locations();
+
+			$this->create_table();
+            // $this->initiate_get_locations();
         }
     }
 
@@ -116,6 +118,103 @@ class Get_Locations
         $zipcodes = ', "zipcodes" : ' . json_encode($this->idx_api->idx_api("postalcodes/$omnibar_zipcode"));
         return $cities . $counties . $zipcodes;
     }
+    
+	private function drop_table() {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
+
+		$sql = "DROP TABLE IF EXISTS $table_name";
+
+		$wpdb->query( $sql );
+	}
+
+	public function create_table() {
+		$this->drop_table();
+
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
+
+		$charset_collate = $wpdb->get_charset_collate();
+		$sql = "CREATE TABLE $table_name (
+			mls varchar(4) NOT NULL,
+			field text NOT NULL,
+			value text NOT NULL 
+		) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+		dbDelta( $sql );
+
+		// TODO: Remove this option on uninstall
+		add_option( 'idxbroker_autocomplete_values_version', '1.0' );
+
+		$this->populate_table();
+	}
+
+	private function populate_table() {
+
+		$args = array(
+			'headers' => array(
+				'Content-Type' => 'application/x-www-form-urlencoded',
+				'accesskey' => get_option('idx_broker_apikey'),
+				'apiversion' => \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+				'outputtype' => 'json',
+			),
+			'timeout' => 120,
+		);
+
+		// TODO: CHANGE MLS & PtID TO BE OPTION IN SETTINGS & HANDLE ERRORS
+		// TODO: MOVE THIS BEFORE CLEARING TABLE
+		$response = wp_remote_get("https://api.idxbroker.com/mls/searchfieldvalues/a001?mlsPtID=1&name=address", $args);
+
+		if ( is_wp_error($response) || ! isset($response['body']) ) {
+			return;
+		}
+
+		$field_values = json_decode($response['body']);
+
+		$mls   = 'a001';
+		$field = 'address';
+
+		$field_values_string = '';
+		$it = 0;
+
+		foreach($field_values as $val) {
+			if($it > 0) {
+				$field_values_string .= ',';
+			}
+			$escaped_val = addslashes($val);
+			$field_values_string .= "('$mls', '$field', '$escaped_val')";
+			$it++;
+			// TODO: GET THIS NUMBER SET WELL
+			if($it >= 200) {
+				$this->run_insert_query($field_values_string);
+				$field_values_string = '';
+				$it = 0;
+			}
+		}
+
+		if ($field_values_string !== '') {
+			$this->run_insert_query($field_values_string);
+		}
+
+
+	}
+
+	private function run_insert_query($values) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
+
+		$sql = "INSERT INTO $table_name (mls, field, value) VALUES $values";
+
+		$wpdb->query(
+			$sql
+		);
+
+	}
 
     private function initiate_get_locations()
     {
