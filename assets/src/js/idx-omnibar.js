@@ -33,7 +33,7 @@ var idxOmnibar = function(jsonData){
 		var displayName = '';
 		for(var i = 0; i < Object.size(customFieldsKey); i++){
 			var systemName = Object.keys(customFieldsKey)[i];
-			var longName = eval('customFieldsKey["' + systemName + '"]');
+			var longName = customFieldsKey['systemName'];
 			if(fieldName === systemName){
 				displayName = longName;
 			}
@@ -66,8 +66,8 @@ var idxOmnibar = function(jsonData){
 			});
 		} else if (type === 'address'){
 			array.forEach(function(item){
-				if(item.name !== '' && item.name !== 'Other'){
-					newArray.push(item.name);
+				if(item !== '' && item !== 'Other' && item !== 'Other State'){
+					newArray.push(item);
 				}
 			});
 		} else {
@@ -83,10 +83,10 @@ var idxOmnibar = function(jsonData){
 	var addAdvancedFields = function(newArray){
 		for(var i = 1; i < jsonData.length; i++){
 			var idxID = Object.keys(jsonData[i])[0];
-			var fieldNumber = eval('Object.size(jsonData[i].' + idxID + ')');
+			var fieldNumber = Object.size(jsonData[i][idxID]);
 			for(var j = 0; j < fieldNumber; j++){
-				var fieldName = eval('Object.keys(jsonData[i].' + idxID + '[j])')[0];
-				var fieldValues = eval('jsonData[i].' + idxID + '[j].' + fieldName);
+				var fieldName = Object.keys(jsonData[i][idxID][j])[0];
+				var fieldValues = jsonData[i][idxID][j][fieldName];
 				createArrays(fieldValues, newArray, 'custom', fieldName);
 			}
 		}
@@ -96,6 +96,10 @@ var idxOmnibar = function(jsonData){
 
 	//dependent upon createArrays. Creates cczList array
 	var buildLocationList = function (data){
+		// Hacky fix for addresses not being a core field by default
+		if (data[0].core.addresses === undefined) {
+			data[0].core.addresses = [];
+		}
 		return addAdvancedFields(createArrays(data[0].core.addresses, createArrays(data[0].core.zipcodes, createArrays(data[0].core.counties, createArrays(data[0].core.cities, cczList, 'city'), 'county'), 'zip'), 'address'));
 	};
 	//remove duplicate entries
@@ -114,23 +118,26 @@ var idxOmnibar = function(jsonData){
 		return out;
 	};
 
-
-
+	// TODO:JUST STORE NEW DATA AT END OF AUTOCOMPLETE ARRAY AND KEEP TRACK OF ARRAY LOCATION
 	//Initialize Autocomplete of CCZs for each omnibar allowing multiple per page
 	forEach(document.querySelectorAll('.idx-omnibar-input'), function (index, value) {
 		var a = new Awesomplete(value,{autoFirst: true});
 		a.list = removeDuplicates(buildLocationList(jsonData));
-		/*
 		value.addEventListener('input', function(){
+			var test = value;
 			jQuery.ajax({
-				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete",
+				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + test.value,
 			}).done(function(data) {
-				jsonData = buildNewJsonData(jsonData);
-				a.list = data;
+				jsonData[0].core.addresses = data;
+				console.log(data);
+				// Omnibar uses this as a global var for the autocomplete list, needs to be cleared so it doesn't
+				// increase in size for each autocomplete list compile
+				cczList = [];
+				var test = removeDuplicates(buildLocationList(jsonData));
+				a.list = test;
 				// a.list = removeDuplicates(buildLocationList(jsonData));
 			});
 		});
-		*/
 	});
 
 	function buildNewJsonData(data) {
@@ -471,7 +478,7 @@ var idxOmnibar = function(jsonData){
 		var advancedList = function(input){
 			for(var i = 1; i < jsonData.length; i++){
 				var idxID = Object.keys(jsonData[i])[0];
-				var fieldNumber = eval('Object.size(jsonData[i].' + idxID + ')');
+				var fieldNumber = Object.size(jsonData[i][idxID]);
 				//check for mlsPtID (skip 0 index as it is for basic searches)
 				for(var j = 1; j < mlsPtIDs.length; j++){
 					keyIdxID = mlsPtIDs[j].idxID;
@@ -487,8 +494,8 @@ var idxOmnibar = function(jsonData){
 				}
 
 				for(var j = 0; j < fieldNumber; j++){
-					var fieldName = eval('Object.keys(jsonData[i].' + idxID + '[j])')[0];
-					var fieldValues = eval('jsonData[i].' + idxID + '[j].' + fieldName);
+					var fieldName = Object.keys(jsonData[i][idxID][j])[0];
+					var fieldValues = jsonData[i][idxID][j][fieldName];
 
 					forEach(fieldValues, function(index, value){
 						if(input.value !== '' && (input.value.toLowerCase() === value.toLowerCase() || input.value.toLowerCase() === (value + ' ' + checkFieldName(fieldName)).toLowerCase())){
