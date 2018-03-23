@@ -187,9 +187,9 @@ EOD;
     }
     public function register_rest_endpoint() {
         add_action( 'rest_api_init', function() {
-            register_rest_route( 'idxbroker/v1', '/omnibar/autocomplete', array(
+            register_rest_route( 'idxbroker/v1', '/omnibar/autocomplete/(?P<query>.*+)', array(
                 'methods' => 'GET',
-                'callback' => '\IDX\Widgets\Omnibar\Autocomplete::get_autocomplete_data',
+                'callback' => [new \IDX\Widgets\Omnibar\Autocomplete(), 'get_autocomplete_data'],
             ) );
         });
     }
