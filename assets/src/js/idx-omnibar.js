@@ -126,7 +126,7 @@ var idxOmnibar = function(jsonData){
 		value.addEventListener('input', function(){
 			var test = value;
 			jQuery.ajax({
-				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + test.value,
+				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + test.value + "?_wpnonce=" + serverObj.nonce,
 			}).done(function(data) {
 				jsonData[0].core.addresses = data;
 				console.log(data);

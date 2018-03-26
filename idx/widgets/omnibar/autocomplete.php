@@ -8,6 +8,8 @@ class Autocomplete {
 
 	public function get_autocomplete_data( $data ) {
 
+		check_ajax_referer('wp_rest', '_wpnonce');
+
 		$search_text = urldecode($data['query']);
 
 		global $wpdb;
