@@ -3,23 +3,36 @@ namespace IDX\Widgets\Omnibar;
 
 class Get_Locations
 {
-    public function __construct()
+    public function __construct($disable_address_update = false)
     {
         $api = get_option('idx_broker_apikey');
         if (empty($api)) {
             return;
-        } else {
-            $this->idx_api = new \IDX\Idx_Api();
-            if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
-                return;
-            }
-
-			$this->create_table();
-            // $this->initiate_get_locations();
         }
+        $this->idx_api = new \IDX\Idx_Api();
+        if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
+            return;
+        }
+
+        $this->mls_list = $this->idx_api->approved_mls();
+        $this->address_mls = get_option('idx_omnibar_address_mls', 'none');
+		$this->property_types = get_option('idx_default_property_types');
+
+        $this->initiate_get_locations();
+
+
+        if( $disable_address_update ) {
+			return;
+        }
+
+
+        $this->create_table();
     }
 
     public $idx_api;
+    private $address_mls;
+    private $mls_list;
+    private $property_types;
 
     /*
      * Custom Advanced Fields added via admin
@@ -154,6 +167,30 @@ class Get_Locations
 	}
 
 	private function populate_table() {
+		if( $this->address_mls === "none" ) {
+			return;
+		}
+		if( $this->address_mls !== "all" ) {
+			$pt_arr_id = array_search(
+				$this->address_mls,
+				array_column($this->property_types, 'idxID')
+			);
+			$this->address_table_insert($this->address_mls, $this->property_types[$pt_arr_id]['mlsPtID']);
+			return;
+		}
+		if ( $this->address_mls === "all" ) {
+			foreach ( $this->mls_list as $mls ) {
+				$pt_arr_id = array_search(
+					$mls->id,
+					array_column( $this->property_types, 'idxID' )
+				);
+				$this->address_table_insert( $mls->id, $this->property_types[ $pt_arr_id ]['mlsPtID'] );
+			}
+			return;
+		}
+	}
+
+	private function address_table_insert($mls, $parent_id) {
 
 		$args = array(
 			'headers' => array(
@@ -165,9 +202,9 @@ class Get_Locations
 			'timeout' => 120,
 		);
 
-		// TODO: CHANGE MLS & PtID TO BE OPTION IN SETTINGS & HANDLE ERRORS
+		// TODO: HANDLE ERRORS
 		// TODO: MOVE THIS BEFORE CLEARING TABLE
-		$response = wp_remote_get("https://api.idxbroker.com/mls/searchfieldvalues/a001?mlsPtID=1&name=address", $args);
+		$response = wp_remote_get("https://api.idxbroker.com/mls/searchfieldvalues/$mls?mlsPtID=$parent_id&name=address", $args);
 
 		if ( is_wp_error($response) || ! isset($response['body']) ) {
 			return;
@@ -175,7 +212,6 @@ class Get_Locations
 
 		$field_values = json_decode($response['body']);
 
-		$mls   = 'a001';
 		$field = 'address';
 
 		$field_values_string = '';
