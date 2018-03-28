@@ -6,23 +6,31 @@ class Omnibar_Settings
 
     public function __construct()
     {
-
         $this->idx_api = new \IDX\Idx_Api();
+        $this->mls_list = $this->idx_api->approved_mls();
+        $this->defaults['address'] = get_option('idx_omnibar_address_mls', 'none');
+		$this->property_types = get_option('idx_default_property_types');
 
         //preload via javascript if first load of view
         add_action('wp_ajax_idx_preload_omnibar_settings_view', array($this, 'idx_preload_omnibar_settings_view'));
         add_action('wp_ajax_idx_update_omnibar_current_ccz', array($this, 'idx_update_omnibar_current_ccz'));
         add_action('wp_ajax_idx_update_omnibar_custom_fields', array($this, 'idx_update_omnibar_custom_fields'));
         add_action('wp_ajax_idx_update_sort_order', array($this, 'idx_update_sort_order'));
+		add_action( 'wp_ajax_idx_update_address_mls', array( $this, 'idx_update_address_mls' ) );
+		add_action( 'wp_ajax_idx_update_database', array( $this, 'idx_update_database' ) );
+		add_action( 'idx_get_new_location_data', array($this, 'get_locations') );
     }
 
+    private $mls_list;
     public $idx_api;
+    private $defaults;
+    private $property_types;
 
     //preload view via javascript if first load of view to give user feedback of loading the page and decreased perceived page load time
     public function idx_omnibar_settings_interface()
     {
         //register omnibar settings script
-        wp_register_script('idx-omnibar-settings', plugins_url('/assets/js/idx-omnibar-settings.min.js', dirname(dirname(__FILE__))), 'jquery');
+        wp_register_script('idx-omnibar-settings', plugins_url('/assets/src/js/idx-omnibar-settings.js', dirname(dirname(__FILE__))), 'jquery');
         wp_enqueue_style('idx-omnibar-settings', plugins_url('/assets/css/idx-omnibar-settings.css', dirname(dirname(__FILE__))));
         if ($this->idx_api->get_transient('idx_approvedmls_cache') !== false) {
             $this->idx_preload_omnibar_settings_view();
@@ -131,9 +139,31 @@ class Omnibar_Settings
             echo "<option value=\"$id\"" . selected($id, $saved_list, false) . ">$name</option>";
         }
         echo "</select></div></div>";
+
+		// Addresses:
+		echo '<h3>Addresses</h3><div class="idx-omnibar-address-settings">';
+		echo '<div class="help-text">Choose which MLS is included in the address autofill. <b>All</b> property addresses will be included for each MLS selected.';
+		echo '<br />Do <b>NOT</b> select address as a custom field while using this option.</div>';
+		?>
+		<div class="select-div">
+				<label for="address-mls">Address MLS:</label><select id="omnibar-address-mls" name="address-mls">
+				<option value="none" <?php selected( $this->defaults['address'], 'none' ); ?>>None</option>
+					<?php
+					foreach ( $this->mls_list as $mls ) {
+						?>
+						<option value="<?php echo esc_attr( $mls->id ); ?>" <?php selected( $this->defaults['address'], $mls->id ); ?>>
+							<?php echo esc_html( $mls->name ); ?>
+						</option>
+						<?php
+					}
+					?>
+				<option value="all" <?php selected( $val, 1 ); ?>>Combined MLS Addresses</option>
+
+		    </select>
+		</div>
+		<?php
         //Advanced Fields:
         $all_mls_fields = $this->idx_omnibar_advanced_fields();
-
         //Default property type for each MLS
         $default_property_type = get_option('idx_default_property_types');
         echo "<h3>Property Type</h3><div class=\"idx-property-types\">";
@@ -153,7 +183,7 @@ class Omnibar_Settings
         </div>
 
         <div class="mls-specific-pt">
-            <h4>MLS Specific Property Type (For Custom Fields Searches)</h4>
+            <h4>MLS Specific Property Type (For Custom Fields Searches and Addresses)</h4>
         <?php
         // store array of property type names, idxIDs, and  mlsPtIDs
         $mls_pt_key = array();
@@ -276,11 +306,10 @@ EOT;
 
         //Grab all advanced field names for all MLS
         //grab all idxIDs for account
-        $mls_list = $this->idx_api->approved_mls();
         $all_mls_fields = array();
         $all_mlsPtIDs = array();
         //grab all field names for each idxID
-        foreach ($mls_list as $mls) {
+        foreach ($this->mls_list as $mls) {
             $idxID = $mls->id;
             $mls_name = $mls->name;
             $fields = json_encode($this->idx_api->idx_api("searchfields/$idxID", $this->idx_api->idx_api_get_apiversion(), 'mls', array(), 86400));
@@ -298,8 +327,7 @@ EOT;
     public function get_all_custom_fields($mls_fields, $mls_pt_key)
     {
         $output = '';
-        $mls_list = $this->idx_api->approved_mls();
-        foreach($mls_list as $mls){
+        foreach($this->mls_list as $mls){
             $idxID = $mls->id;
             if($idxID !== 'basic'){
                 $output .= $this->get_custom_fields($idxID, $mls_fields, $mls_pt_key);
@@ -359,16 +387,55 @@ EOT;
             $fields = array();
         }
         update_option('idx_omnibar_custom_fields', $fields, false);
+        $output = $this->has_property_type_changed();
         update_option('idx_default_property_types', $_POST['mlsPtIDs'], false);
         update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']), false);
-        $this->app->make('\IDX\Widgets\Omnibar\Get_Locations');
-        return wp_die();
+        return wp_die($output);
     }
 
     public function idx_update_sort_order() {
         $sort_order = $_POST['sort-order'];
         update_option('idx_omnibar_sort', $sort_order, false);
-        return wp_die();
+        return wp_die(0);
     }
+
+	public function idx_update_address_mls() {
+		// TODO: ADD NONCE
+		$address_mls = $_POST['address-mls'];
+		$output = $this->has_address_changed($address_mls);
+		update_option( 'idx_omnibar_address_mls', $address_mls, false );
+		return wp_die($output);
+	}
+
+	public function idx_update_database() {
+		wp_schedule_single_event( time(), 'idx_get_new_location_data', [$disable_address_update] );
+		wp_die();
+	}
+
+	private function has_property_type_changed() {
+		$arr1 = [];
+		$arr2 = [];
+		foreach($_POST['mlsPtIDs'] as $mls) {
+			$arr1[] = $mls['idxID'] . $mls['mlsPtID'];
+		}
+		foreach($this->property_types as $mls) {
+			$arr2[] = $mls['idxID'] . $mls['mlsPtID'];
+		}
+		if( empty(array_diff( $arr1, $arr2 ) ) ) {
+			return 0;
+		}
+		return 1;
+	}
+
+	private function has_address_changed($address_mls) {
+		if ( get_option( 'idx_omnibar_address_mls', 'none' ) !== $address_mls ) {
+			return 1;
+		}
+		return 0;
+	}
+
+	public function get_locations($disable_address_update) {
+		new \IDX\Widgets\Omnibar\Get_Locations( $disable_address_update );
+	}
 
 }
