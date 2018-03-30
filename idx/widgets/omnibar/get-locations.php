@@ -3,31 +3,36 @@ namespace IDX\Widgets\Omnibar;
 
 class Get_Locations
 {
-    public function __construct($disable_address_update = false)
-    {
-        $api = get_option('idx_broker_apikey');
-        if (empty($api)) {
-            return;
-        }
-        $this->idx_api = new \IDX\Idx_Api();
-        if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
-            return;
-        }
+	public function __construct($disable_address_update = false)
+	{
+		$api = get_option('idx_broker_apikey');
+		if (empty($api)) {
+		 	return;
+		}
+		$this->idx_api = new \IDX\Idx_Api();
+		if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
+			return;
+		}
 
-        $this->mls_list = $this->idx_api->approved_mls();
-        $this->address_mls = get_option('idx_omnibar_address_mls', 'none');
+		$this->mls_list = $this->idx_api->approved_mls();
+
+		$this->address_mls = get_option('idx_omnibar_address_mls', []);
+		if ( ! is_array( $this->address_mls ) ) {
+			$this->address_mls = [];
+		}
+
 		$this->property_types = get_option('idx_default_property_types');
 
-        $this->initiate_get_locations();
+		$this->initiate_get_locations();
 
 
-        if( $disable_address_update ) {
+		if( $disable_address_update ) {
 			return;
-        }
+		}
 
 
-        $this->create_table();
-    }
+		$this->create_table();
+	}
 
     public $idx_api;
     private $address_mls;
@@ -166,31 +171,20 @@ class Get_Locations
 		$this->populate_table();
 	}
 
+	// Loops through all selected address autofill MLSs & takes the property type
+	// selection to insert the correct addresses into the db.
 	private function populate_table() {
-		if( $this->address_mls === "none" ) {
-			return;
-		}
-		if( $this->address_mls !== "all" ) {
+		foreach ( $this->address_mls as $mls ) {
 			$pt_arr_id = array_search(
-				$this->address_mls,
-				array_column($this->property_types, 'idxID')
+				$mls,
+				array_column( $this->property_types, 'idxID' )
 			);
-			$this->address_table_insert($this->address_mls, $this->property_types[$pt_arr_id]['mlsPtID']);
-			return;
-		}
-		if ( $this->address_mls === "all" ) {
-			foreach ( $this->mls_list as $mls ) {
-				$pt_arr_id = array_search(
-					$mls->id,
-					array_column( $this->property_types, 'idxID' )
-				);
-				$this->address_table_insert( $mls->id, $this->property_types[ $pt_arr_id ]['mlsPtID'] );
-			}
-			return;
+			$this->address_table_insert( $mls, $this->property_types[ $pt_arr_id ]['mlsPtID'] );
 		}
 	}
 
-	private function address_table_insert($mls, $parent_id) {
+	// Performs a wp_remote_get then does the database insert. Should do one huge insert.
+	private function address_table_insert( $mls, $parent_id ) {
 
 		$args = array(
 			'headers' => array(
@@ -202,54 +196,57 @@ class Get_Locations
 			'timeout' => 120,
 		);
 
-		// TODO: HANDLE ERRORS
-		// TODO: MOVE THIS BEFORE CLEARING TABLE
 		$response = wp_remote_get("https://api.idxbroker.com/mls/searchfieldvalues/$mls?mlsPtID=$parent_id&name=address", $args);
 
 		if ( is_wp_error($response) || ! isset($response['body']) ) {
 			return;
 		}
 
-		$field_values = json_decode($response['body']);
+		$field_values = json_decode( $response['body'] );
+
+		// Make sure we have a nonempty array
+		if (! is_array( $field_values ) || empty( $field_values ) ) {
+			return;
+		}
 
 		$field = 'address';
 
-		$field_values_string = '';
-		$it = 0;
-
-		foreach($field_values as $val) {
-			if($it > 0) {
-				$field_values_string .= ',';
-			}
-			$escaped_val = addslashes($val);
-			$field_values_string .= "('$mls', '$field', '$escaped_val')";
-			$it++;
-			// TODO: GET THIS NUMBER SET WELL
-			if($it >= 200) {
-				$this->run_insert_query($field_values_string);
-				$field_values_string = '';
-				$it = 0;
-			}
-		}
-
-		if ($field_values_string !== '') {
-			$this->run_insert_query($field_values_string);
-		}
-
-
+		$this->run_insert_query( $mls, $field_values, $field );
 	}
 
-	private function run_insert_query($values) {
+	private function run_insert_query( $mls, $field_values, $field ) {
 		global $wpdb;
+		$wpdb->show_errors();
+
+		$insert_values = [];
 
 		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
 
-		$sql = "INSERT INTO $table_name (mls, field, value) VALUES $values";
+		$query = "INSERT INTO $table_name (mls, field, value) VALUES ";
+
+		$it = 0;
+		foreach ( $field_values as $val ) {
+			if ( $it > 0 ) {
+				$query .= ',';
+			}
+			$insert_values[] = $mls;
+			$insert_values[] = $field;
+			$insert_values[] = $val;
+			$query .= '(%s,%s,%s)';
+			$it++;
+			if ($it >= 30000) {
+				$wpdb->query(
+					$wpdb->prepare($query, $insert_values)
+				);
+				$it = 0;
+				$insert_values = [];
+				$query = "INSERT INTO $table_name (mls, field, value) VALUES ";
+			}
+		}
 
 		$wpdb->query(
-			$sql
+			$wpdb->prepare($query, $insert_values)
 		);
-
 	}
 
     private function initiate_get_locations()
