@@ -4,11 +4,15 @@ namespace IDX\Views;
 class Omnibar_Settings
 {
 
-    public function __construct()
-    {
-        $this->idx_api = new \IDX\Idx_Api();
-        $this->mls_list = $this->idx_api->approved_mls();
-        $this->defaults['address'] = get_option('idx_omnibar_address_mls', 'none');
+	public function __construct()
+	{
+		$this->idx_api = new \IDX\Idx_Api();
+		$this->mls_list = $this->idx_api->approved_mls();
+		$this->defaults['address'] = get_option('idx_omnibar_address_mls', []);
+		if ( ! is_array( $this->defaults['address'] ) ) {
+			$this->defaults['address'] = [];
+			update_option( 'idx_omnibar_address_mls', [] );
+		}
 		$this->property_types = get_option('idx_default_property_types');
 
         //preload via javascript if first load of view
@@ -140,28 +144,6 @@ class Omnibar_Settings
         }
         echo "</select></div></div>";
 
-		// Addresses:
-		echo '<h3>Addresses</h3><div class="idx-omnibar-address-settings">';
-		echo '<div class="help-text">Choose which MLS is included in the address autofill. <b>All</b> property addresses will be included for each MLS selected.';
-		echo '<br />Do <b>NOT</b> select address as a custom field while using this option.</div>';
-		?>
-		<div class="select-div">
-				<label for="address-mls">Address MLS:</label><select id="omnibar-address-mls" name="address-mls">
-				<option value="none" <?php selected( $this->defaults['address'], 'none' ); ?>>None</option>
-					<?php
-					foreach ( $this->mls_list as $mls ) {
-						?>
-						<option value="<?php echo esc_attr( $mls->id ); ?>" <?php selected( $this->defaults['address'], $mls->id ); ?>>
-							<?php echo esc_html( $mls->name ); ?>
-						</option>
-						<?php
-					}
-					?>
-				<option value="all" <?php selected( $val, 1 ); ?>>Combined MLS Addresses</option>
-
-		    </select>
-		</div>
-		<?php
         //Advanced Fields:
         $all_mls_fields = $this->idx_omnibar_advanced_fields();
         //Default property type for each MLS
@@ -204,6 +186,27 @@ class Omnibar_Settings
         }
 
         echo "</div>";
+
+		// Addresses:
+		echo '<h3>Addresses</h3><div class="idx-omnibar-address-settings">';
+		echo '<div class="help-text">Choose which MLS is included in the address autofill. <b>All</b> property addresses will be included for each MLS selected.';
+		echo '<br />Do <b>NOT</b> select address as a custom field while using this option.</div>';
+		?>
+		<div class="select-div">
+			<label for="address-mls[]">Address MLS:</label>
+			<select id="omnibar-address-mls" class="omnibar-address-multiselect" name="address-mls[]" multiple="multiple" autocomplete="off">
+				<?php
+				foreach ( $this->mls_list as $mls ) {
+					?>
+					<option value="<?php echo esc_attr( $mls->id ); ?>" <?php selected( $mls->id, $this->address_selected( $mls->id ) ); ?>>
+						<?php echo esc_html( $mls->name ); ?>
+					</option>
+					<?php
+				}
+				?>
+			</select>
+		</div>
+		<?php
 
         //echo them as one select
         echo "<h3>Custom Fields</h3>";
@@ -264,6 +267,17 @@ class Omnibar_Settings
 EOT;
 
     }
+
+	// Checks if address MLS is selected, to be used with WordPress's select() function.
+	public function address_selected( $mls ) {
+		// If this mls was already selected, return the mls id ($mls) since WordPress's
+		// select() function compares two values and we want them to be the same.
+		if ( in_array( $mls, $this->defaults['address'] ) ) {
+			return $mls;
+		}
+		// If the address wasn't selected already, return 0, which does not match any MLS id.
+		return 0;
+	}
 
     // find the display name of the mls property type
     public function find_property_type($idxID, $mlsPtID, $mls_pt_key)
@@ -375,7 +389,7 @@ EOT;
         update_option('idx_omnibar_current_city_list', $city_list, false);
         update_option('idx_omnibar_current_county_list', $county_list, false);
         update_option('idx_omnibar_current_zipcode_list', $zipcode_list, false);
-        return wp_die();
+        wp_die();
     }
 
     public function idx_update_omnibar_custom_fields()
@@ -390,51 +404,65 @@ EOT;
         $output = $this->has_property_type_changed();
         update_option('idx_default_property_types', $_POST['mlsPtIDs'], false);
         update_option('idx_omnibar_placeholder', htmlspecialchars($_POST['placeholder']), false);
-        return wp_die($output);
+        wp_die($output);
     }
 
     public function idx_update_sort_order() {
         $sort_order = $_POST['sort-order'];
         update_option('idx_omnibar_sort', $sort_order, false);
-        return wp_die(0);
+        wp_die(0);
     }
 
+    // Updates the mls selected for address autocomplete in wp_options
 	public function idx_update_address_mls() {
-		// TODO: ADD NONCE
 		$address_mls = $_POST['address-mls'];
-		$output = $this->has_address_changed($address_mls);
+		if( ! is_array( $address_mls ) ) {
+			$address_mls = [];
+		}
+		$output = $this->has_address_changed( $address_mls );
 		update_option( 'idx_omnibar_address_mls', $address_mls, false );
-		return wp_die($output);
+		wp_die( $output );
 	}
 
+	// wp_schedule_single_event() allows us to run tasks in the background
 	public function idx_update_database() {
-		wp_schedule_single_event( time(), 'idx_get_new_location_data', [$disable_address_update] );
+		wp_schedule_single_event( time(), 'idx_get_new_location_data', [ false ] );
 		wp_die();
 	}
 
+	// Returns 1 if property changed, 0 otherwise
 	private function has_property_type_changed() {
 		$arr1 = [];
 		$arr2 = [];
-		foreach($_POST['mlsPtIDs'] as $mls) {
+
+		// Concat property type and mls id then compare POST and wp_option data to see
+		// if any additional property types are present in the POST data.
+		foreach ( $_POST['mlsPtIDs'] as $mls ) {
 			$arr1[] = $mls['idxID'] . $mls['mlsPtID'];
 		}
-		foreach($this->property_types as $mls) {
+		foreach ( $this->property_types as $mls ) {
 			$arr2[] = $mls['idxID'] . $mls['mlsPtID'];
 		}
-		if( empty(array_diff( $arr1, $arr2 ) ) ) {
+		if ( empty( array_diff( $arr1, $arr2 ) ) ) {
 			return 0;
 		}
 		return 1;
 	}
 
-	private function has_address_changed($address_mls) {
-		if ( get_option( 'idx_omnibar_address_mls', 'none' ) !== $address_mls ) {
-			return 1;
+	// Returns 1 if address changed, 0 otherwise
+	private function has_address_changed( $address_mls ) {
+		$selected_mls = $this->defaults['address'];
+
+		// Sort the POST field and the wp_options entry then compare the two arrays
+		sort( $address_mls );
+		sort( $selected_mls );
+		if ( $address_mls == $selected_mls ) {
+			return 0;
 		}
-		return 0;
+		return 1;
 	}
 
-	public function get_locations($disable_address_update) {
+	public function get_locations( $disable_address_update = false ) {
 		new \IDX\Widgets\Omnibar\Get_Locations( $disable_address_update );
 	}
 
