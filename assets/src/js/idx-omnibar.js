@@ -1,6 +1,8 @@
 // Awesomplete - Lea Verou - MIT license
 !function(){function t(t,e){for(var i in t){var n=t[i],s=this.input.getAttribute("data-"+i.toLowerCase());this[i]="number"==typeof n?parseInt(s):n===!1?null!==s:n instanceof Function?null:s,this[i]||0===this[i]||(this[i]=i in e?e[i]:n)}}function e(t,e){return"string"==typeof t?(e||document).querySelector(t):t||null}function i(t,e){return r.call((e||document).querySelectorAll(t))}function n(){i("input.awesomplete").forEach(function(t){new Awesomplete(t)})}var s=function(i,n){var r=this;this.input=e(i),this.input.setAttribute("autocomplete","off"),this.input.setAttribute("aria-autocomplete","list"),n=n||{},t.call(this,{minChars:2,maxItems:10,autoFirst:!1,filter:s.FILTER_CONTAINS,sort:s.SORT_BYLENGTH,item:function(t,i){return e.create("li",{innerHTML:t.replace(RegExp(e.regExpEscape(i.trim()),"gi"),"<mark>$&</mark>"),"aria-selected":"false"})},replace:function(t){this.input.value=t}},n),this.index=-1,this.container=i.parentNode.className.search(/awesomplete/)<0?e.create("div",{className:"awesomplete",around:i}):i.parentNode,this.ul=e.create("ul",{hidden:"",inside:this.container}),this.status=e.create("span",{className:"visually-hidden",role:"status","aria-live":"assertive","aria-relevant":"additions",inside:this.container}),e.bind(this.input,{input:this.evaluate.bind(this),blur:this.close.bind(this),keydown:function(t){var e=t.keyCode;r.opened&&(13===e&&r.selected?(t.preventDefault(),r.select()):27===e?r.close():(38===e||40===e)&&(t.preventDefault(),r[38===e?"previous":"next"]()))}}),e.bind(this.input.form,{submit:this.close.bind(this)}),e.bind(this.ul,{mousedown:function(t){var e=t.target;if(e!==this){for(;e&&!/li/i.test(e.nodeName);)e=e.parentNode;e&&r.select(e)}}}),this.input.hasAttribute("list")?(this.list="#"+i.getAttribute("list"),i.removeAttribute("list")):this.list=this.input.getAttribute("data-list")||n.list||[],s.all.push(this)};s.prototype={set list(t){Array.isArray(t)?this._list=t:"string"==typeof t&&t.indexOf(",")>-1?this._list=t.split(/\s*,\s*/):(t=e(t),t&&t.children&&(this._list=r.apply(t.children).map(function(t){return t.textContent.trim()}))),document.activeElement===this.input&&this.evaluate()},get selected(){return this.index>-1},get opened(){return this.ul&&null==this.ul.getAttribute("hidden")},close:function(){this.ul.setAttribute("hidden",""),this.index=-1,e.fire(this.input,"awesomplete-close")},open:function(){this.ul.removeAttribute("hidden"),this.autoFirst&&-1===this.index&&this.goto(0),e.fire(this.input,"awesomplete-open")},next:function(){var t=this.ul.children.length;this.goto(this.index<t-1?this.index+1:-1)},previous:function(){var t=this.ul.children.length;this.goto(this.selected?this.index-1:t-1)},"goto":function(t){var i=this.ul.children;this.selected&&i[this.index].setAttribute("aria-selected","false"),this.index=t,t>-1&&i.length>0&&(i[t].setAttribute("aria-selected","true"),this.status.textContent=i[t].textContent),e.fire(this.input,"awesomplete-highlight")},select:function(t){if(t=t||this.ul.children[this.index]){var i;e.fire(this.input,"awesomplete-select",{text:t.textContent,preventDefault:function(){i=!0}}),i||(this.replace(t.textContent),this.close(),e.fire(this.input,"awesomplete-selectcomplete"))}},evaluate:function(){var t=this,e=this.input.value;e.length>=this.minChars&&this._list.length>0?(this.index=-1,this.ul.innerHTML="",this._list.filter(function(i){return t.filter(i,e)}).sort(this.sort).every(function(i,n){return t.ul.appendChild(t.item(i,e)),n<t.maxItems-1}),0===this.ul.children.length?this.close():this.open()):this.close()}},s.all=[],s.FILTER_CONTAINS=function(t,i){return RegExp(e.regExpEscape(i.trim()),"i").test(t)},s.FILTER_STARTSWITH=function(t,i){return RegExp("^"+e.regExpEscape(i.trim()),"i").test(t)},s.SORT_BYLENGTH=function(t,e){return t.length!==e.length?t.length-e.length:e>t?-1:1};var r=Array.prototype.slice;return e.create=function(t,i){var n=document.createElement(t);for(var s in i){var r=i[s];if("inside"===s)e(r).appendChild(n);else if("around"===s){var o=e(r);o.parentNode.insertBefore(n,o),n.appendChild(o)}else s in n?n[s]=r:n.setAttribute(s,r)}return n},e.bind=function(t,e){if(t)for(var i in e){var n=e[i];i.split(/\s+/).forEach(function(e){t.addEventListener(e,n)})}},e.fire=function(t,e,i){var n=document.createEvent("HTMLEvents");n.initEvent(e,!0,!0);for(var s in i)n[s]=i[s];t.dispatchEvent(n)},e.regExpEscape=function(t){return t.replace(/[-\\^$*+?.()|[\]{}]/g,"\\$&")},"undefined"!=typeof Document&&("loading"!==document.readyState?n():document.addEventListener("DOMContentLoaded",n)),s.$=e,s.$$=i,"undefined"!=typeof self&&(self.Awesomplete=s),"object"==typeof exports&&(module.exports=s),s}();
 
+// Debounce - Jason Garber - MIT license
+!function(e,t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?module.exports=t():e.debounce=t()}(this,function(){"use strict";return function(e,t){var n;return function(){var o=this,i=arguments;clearTimeout(n),n=setTimeout(function(){e.apply(o,i)},t)}}});
 
 	//Omnibar:
 var idxOmnibar = function(jsonData){
@@ -118,26 +120,28 @@ var idxOmnibar = function(jsonData){
 		return out;
 	};
 
+	var triggerAutcomplete = debounce(function(a, value) {
+		var test = value;
+		jQuery.ajax({
+			url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + test.value + "?_wpnonce=" + serverObj.nonce,
+		}).done(function(data) {
+			jsonData[0].core.addresses = data;
+			console.log(data);
+			// Omnibar uses this as a global var for the autocomplete list, needs to be cleared so it doesn't
+			// increase in size for each autocomplete list compile
+			cczList = [];
+			var test = removeDuplicates(buildLocationList(jsonData));
+			a.list = test;
+			// a.list = removeDuplicates(buildLocationList(jsonData));
+		});
+	}, 200);
+
 	// TODO:JUST STORE NEW DATA AT END OF AUTOCOMPLETE ARRAY AND KEEP TRACK OF ARRAY LOCATION
 	//Initialize Autocomplete of CCZs for each omnibar allowing multiple per page
 	forEach(document.querySelectorAll('.idx-omnibar-input'), function (index, value) {
 		var a = new Awesomplete(value,{autoFirst: true});
 		a.list = removeDuplicates(buildLocationList(jsonData));
-		value.addEventListener('input', function(){
-			var test = value;
-			jQuery.ajax({
-				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + test.value + "?_wpnonce=" + serverObj.nonce,
-			}).done(function(data) {
-				jsonData[0].core.addresses = data;
-				console.log(data);
-				// Omnibar uses this as a global var for the autocomplete list, needs to be cleared so it doesn't
-				// increase in size for each autocomplete list compile
-				cczList = [];
-				var test = removeDuplicates(buildLocationList(jsonData));
-				a.list = test;
-				// a.list = removeDuplicates(buildLocationList(jsonData));
-			});
-		});
+		value.addEventListener('input', function() {triggerAutcomplete(a, value)});
 	});
 
 	function buildNewJsonData(data) {
