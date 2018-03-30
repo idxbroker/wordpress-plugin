@@ -1,5 +1,4 @@
 window.addEventListener('DOMContentLoaded', function(){
-
     if(typeof loadOmnibarView !== 'undefined'){
         jQuery.post(
             ajaxurl, {
@@ -33,9 +32,12 @@ window.addEventListener('DOMContentLoaded', function(){
     }
 
     function activateSelect2() {
-        jQuery('.select2').select2({
+        jQuery('.omnibar-additional-custom-field').select2({
             maximumSelectionLength: 10,
             placeholder: 'Select Up to Ten Fields'
+        });
+        $('.omnibar-address-multiselect').select2({
+            placeholder: "Select MLS"
         });
     }
     
@@ -213,11 +215,11 @@ window.addEventListener('DOMContentLoaded', function(){
     }
 
     function updateOmnibarAddressMLS(){
-        var address = document.getElementById( "omnibar-address-mls" );
+        var address = $("#omnibar-address-mls");
          jQuery.post(
                 ajaxurl, {
                 'action': 'idx_update_address_mls',
-                'address-mls': address.options[ address.selectedIndex ].value
+                'address-mls': address.val()
         }, function(data) {ajaxFinished(data); } );
     }
 });
