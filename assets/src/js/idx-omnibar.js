@@ -120,36 +120,40 @@ var idxOmnibar = function(jsonData){
 		return out;
 	};
 
-	var triggerAutcomplete = debounce(function(a, value) {
-		var test = value;
-		jQuery.ajax({
-			url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + test.value + "?_wpnonce=" + serverObj.nonce,
-		}).done(function(data) {
-			jsonData[0].core.addresses = data;
-			console.log(data);
-			// Omnibar uses this as a global var for the autocomplete list, needs to be cleared so it doesn't
-			// increase in size for each autocomplete list compile
-			cczList = [];
-			var test = removeDuplicates(buildLocationList(jsonData));
-			a.list = test;
-			// a.list = removeDuplicates(buildLocationList(jsonData));
-		});
-	}, 200);
+	// The debounce function will wait until a specified amount of time has passed between events before triggering (only once per batch)
+	// This function doesn't guarantee the correct order of ajax responses, but one generally get them in order given our debounce value.
+	// Can add a timer in this closure to keep track if needed.
+	function debounceAjax() {
+		var prevDataLength = 0;
+		return debounce(function(a, value) {
+			jQuery.ajax({
+				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + value.value + "?_wpnonce=" + serverObj.nonce,
+			}).done(function(data) {
+				// If our data isn't an array of length > 0 then return (this should preserve old behavior)
+				if(!Array.isArray(data) || data.length === 0) {
+					return;
+				}
 
-	// TODO:JUST STORE NEW DATA AT END OF AUTOCOMPLETE ARRAY AND KEEP TRACK OF ARRAY LOCATION
-	//Initialize Autocomplete of CCZs for each omnibar allowing multiple per page
+				// a.list is a setter with a._list being the actual data array
+				// We want to remove the last address entries and add the news ones (mostly to remove duplicates)
+				a.list = a._list.slice(0, a._list.length - prevDataLength).concat(data);
+
+				prevDataLength = data.length;
+			});
+		}, 250);
+	}
+
+	// Make the closure
+	var triggerAutcomplete = debounceAjax();
+
+	// Initialize Autocomplete of CCZs for each omnibar allowing multiple per page
 	forEach(document.querySelectorAll('.idx-omnibar-input'), function (index, value) {
 		var a = new Awesomplete(value,{autoFirst: true});
 		a.list = removeDuplicates(buildLocationList(jsonData));
+
+		// Add event listener for address autocomplete
 		value.addEventListener('input', function() {triggerAutcomplete(a, value)});
 	});
-
-	function buildNewJsonData(data) {
-		// Ajax pull new data
-
-		return data;
-	}
-
 
 	/*
 	* Running the Search
