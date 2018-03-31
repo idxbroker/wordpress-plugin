@@ -117,5 +117,8 @@ class Idx_Broker_Plugin
         $idx_api->idx_clean_transients();
         //clean up db by removing all idx pages
         \IDX\Idx_Pages::delete_all_idx_pages();
+
+		// Setting the second param to true will remove our location data
+		new \IDX\Widgets\Omnibar\Get_Locations( false, true );
     }
 }
