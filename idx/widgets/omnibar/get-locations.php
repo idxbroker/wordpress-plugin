@@ -3,8 +3,14 @@ namespace IDX\Widgets\Omnibar;
 
 class Get_Locations
 {
-	public function __construct($disable_address_update = false)
+	public function __construct($disable_address_update = false, $remove_all_data = false)
 	{
+		// To be run on uninstall
+		if ( $remove_all_data ) {
+			$this->remove_all_data();
+			return;
+		}
+
 		$api = get_option('idx_broker_apikey');
 		if (empty($api)) {
 		 	return;
@@ -31,7 +37,7 @@ class Get_Locations
 		}
 
 
-		$this->create_table();
+		$this->create_autocomplete_table();
 	}
 
     public $idx_api;
@@ -137,7 +143,10 @@ class Get_Locations
         return $cities . $counties . $zipcodes;
     }
     
-	private function drop_table() {
+    // Drops the table on each new data fetch.
+    // This is super inefficient, but not going to bother optimizing with elastic search
+    // around the corner.
+	private function drop_autocomplete_table() {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
@@ -147,8 +156,9 @@ class Get_Locations
 		$wpdb->query( $sql );
 	}
 
-	public function create_table() {
-		$this->drop_table();
+	// Creates our table
+	public function create_autocomplete_table() {
+		$this->drop_autocomplete_table();
 
 		global $wpdb;
 
@@ -247,6 +257,11 @@ class Get_Locations
 		$wpdb->query(
 			$wpdb->prepare($query, $insert_values)
 		);
+	}
+
+	private function remove_all_data() {
+		$this->drop_autocomplete_table();
+		delete_option( 'idx_omnibar_address_mls' );
 	}
 
     private function initiate_get_locations()
