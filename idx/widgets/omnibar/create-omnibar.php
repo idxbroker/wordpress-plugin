@@ -41,10 +41,10 @@ class Create_Omnibar
                 wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
             }
         }
-        $server_obj = array(
-            'nonce'  => wp_create_nonce( 'wp_rest' )
-        );
-        wp_localize_script( 'idx-omnibar-js', 'serverObj', $server_obj);
+		$server_obj = array(
+			'nonce'  => wp_create_nonce( 'wp_rest' )
+		);
+		wp_localize_script( 'idx-omnibar-js', 'serverObj', $server_obj);
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
 
@@ -87,6 +87,11 @@ EOD;
                 wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
             }
         }
+
+		$server_obj = array(
+			'nonce'  => wp_create_nonce( 'wp_rest' )
+		);
+        wp_localize_script( 'idx-omnibar-js', 'serverObj', $server_obj);
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
 
@@ -189,8 +194,11 @@ EOD;
         add_action('widgets_init', function () use ($scope) {$scope->register_impress_omnibar_widgets();});
 
     }
+
+    // Registers the endpoint, the logic is in Omnibar\Autocomplete
     public function register_rest_endpoint() {
         add_action( 'rest_api_init', function() {
+        	// Query string can be anything
             register_rest_route( 'idxbroker/v1', '/omnibar/autocomplete/(?P<query>.*+)', array(
                 'methods' => 'GET',
                 'callback' => [new \IDX\Widgets\Omnibar\Autocomplete(), 'get_autocomplete_data'],
