@@ -193,7 +193,6 @@ class Omnibar_Settings
 		echo '<br />Do <b>NOT</b> select address as a custom field while using this option.</div>';
 		?>
 		<div class="select-div">
-			<label for="address-mls[]">Address MLS:</label>
 			<select id="omnibar-address-mls" class="omnibar-address-multiselect" name="address-mls[]" multiple="multiple" autocomplete="off">
 				<?php
 				foreach ( $this->mls_list as $mls ) {
