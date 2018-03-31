@@ -146,28 +146,27 @@ window.addEventListener('DOMContentLoaded', function(){
     function allAjaxProcesses(){
         var runningTotal = 0;
         var dataChanged = 0;
-    return function (data){
-        if( +data === 1 || +data === 0) {
-            dataChanged += +data;
-        }
-        runningTotal++;
-        // In case we don't get any respone from Ajax after 10 seconds
-
-        // If we get all 3 responses back, reload page
-        if( runningTotal >= 3 ) {
-            if(dataChanged > 0) {
-                jQuery.post(
-                    ajaxurl, {
-                    'action': 'idx_update_database',
-                }, function() { window.location.reload(); } );
-            } else {
-                window.location.reload();
+        return function (data){
+            if( +data === 1 || +data === 0) {
+                dataChanged += +data;
             }
-            runningtotal = 0;
-            dataChanged = 0;
-            
+            runningTotal++;
+            // In case we don't get any respone from Ajax after 10 seconds
+
+            // If we get all 3 responses back, reload page
+            if( runningTotal >= 3 ) {
+                if(dataChanged > 0) {
+                    jQuery.post(
+                        ajaxurl, {
+                        'action': 'idx_update_database',
+                    }, function() { window.location.reload(); } );
+                } else {
+                    window.location.reload();
+                }
+                runningtotal = 0;
+                dataChanged = 0;
+            }
         }
-    }
     }
 
     var ajaxFinished = allAjaxProcesses();
