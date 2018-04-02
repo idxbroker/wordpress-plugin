@@ -358,6 +358,13 @@ class Impress_City_Links_Widget extends \WP_Widget
         return $output;
     }
 
+    /**
+     * Get cumulative number of occurances (properties) for a given city ID.
+     *
+     * @param  string   $city_id The city ID.
+     * @param  callable $idx_api The IDX API class.
+     * @return int               The total number of occurances.
+     */
     public static function get_cumulative_property_count_from_mls( $city_id, $idx_api ) {
         // Get approved MLS's.
         $approved_mls = $idx_api->approved_mls();
