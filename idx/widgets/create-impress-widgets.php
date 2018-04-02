@@ -626,25 +626,4 @@ class Create_Impress_Widgets
             );
         }
     }
-
-    //add_action('idx_shortcode_tab', 'equityidx_api_shortcode_tab');
-    public function equityidx_api_shortcode_tab()
-    {
-        echo '<li><a href="#tab4">Equity Widgets</a></li>';
-    }
-    //add_action('idx_shortcode_tab_content', 'equityidx_api_shortcode_tab_content');
-    public function equityidx_api_shortcode_tab_content()
-    {
-        echo '<div id="tab4" class="tab_content">';
-        ?>
-            <div class="each_shortcode_row">
-                <input type="hidden" id="lead_login" value="[lead_login]">
-                <span>Lead Login <a name="lead_login" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $idx_link->uid . '\')" class="shortcode_link">insert</a>
-                &nbsp;<a href="?uid=' . urlencode($idx_link->uid) . '&current_title=' . urlencode($idx_link->name) . '&short_code=' . urlencode($link_short_code) . '">change title</a>
-                </span>
-            </div>
-
-        <?php
-echo '</div>';
-    }
 }

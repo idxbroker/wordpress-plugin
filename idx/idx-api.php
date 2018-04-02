@@ -71,22 +71,6 @@ class Idx_Api
             'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
         );
 
-        if (function_exists('equity')) {
-            if ($level === 'equity') {
-                $equity_api_key = get_option('equity_api_key');
-                $domain = site_url();
-                $custom_equity_domain = get_option('equity-settings');
-                if(isset($custom_equity_domain['equity_idx_domain'])) {
-                    $domain = $custom_equity_domain['equity_idx_domain'];
-                }
-                $equity_headers = array(
-                    'equitykey' => $equity_api_key,
-                    'domain' => apply_filters('equity_idx_api_domain', $domain),
-                );
-                $headers = array_merge($headers, $equity_headers);
-            }
-        }
-
         $params = array_merge(array('timeout' => 120, 'sslverify' => false, 'headers' => $headers), $params);
         $url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
@@ -101,10 +85,6 @@ class Idx_Api
         if (isset($error) && $error !== false) {
             if ($code == 401) {
                 $this->delete_transient($cache_key);
-            }
-            if ($level === 'equity' && $code == 401) {
-                $equity_401_message = 'Also confirm you are using the same domain as on your IDX Broker account.';
-                return new \WP_Error("idx_api_error", __("Error {$code}: $error $equity_401_message"));
             }
             return new \WP_Error("idx_api_error", __("Error {$code}: $error"));
         } else {
@@ -464,7 +444,7 @@ class Idx_Api
     public function saved_link_properties($saved_link_id)
     {
 
-        $saved_link_properties = $this->idx_api('properties/' . $saved_link_id . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'equity', array(), 7200, 'GET', true);
+        $saved_link_properties = $this->idx_api('savedlinks/' . $saved_link_id . '/results?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
 
         return $saved_link_properties;
     }
