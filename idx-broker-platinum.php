@@ -33,9 +33,9 @@ class Idx_Broker_Plugin
             
             new IDX\Initiate_Plugin();
             /** Function that is executed when plugin is activated. **/
-            register_activation_hook(__FILE__, array($this, 'idx_activate'));
-            register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
-            register_uninstall_hook(__FILE__, array('idx-broker-platinum', 'idx_uninstall'));
+            register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
+            register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
+            register_uninstall_hook( __FILE__, array( 'Idx_Broker_Plugin', 'idx_uninstall' ) );
         }
     }
 
@@ -112,10 +112,17 @@ class Idx_Broker_Plugin
             wp_delete_post($page_id, true);
             wp_trash_post($page_id);
         }
-        //clear transients made by the plugin
-        $idx_api = \IDX\Idx_Api;
+        require_once( IMPRESS_IDX_DIR . '/idx/idx-api.php');
+        // Clear transients made by the plugin.
+        $idx_api = new \IDX\Idx_Api;
         $idx_api->idx_clean_transients();
-        //clean up db by removing all idx pages
-        \IDX\Idx_Pages::delete_all_idx_pages();
+        require_once( IMPRESS_IDX_DIR . '/idx/idx-pages.php');
+        // Clean up db by removing all idx pages.
+        $idx_pages = new \IDX\Idx_Pages;
+        $idx_pages->delete_all_idx_pages();
+        require_once( IMPRESS_IDX_DIR . '/idx/notice/notice-handler.php');
+        // Clean up any notices.
+        $idx_notices = new \IDX\Notice\Notice_Handler;
+        $idx_notices->delete_all_notices();
     }
 }

@@ -8,8 +8,8 @@ namespace IDX\Notice;
  *   Yoast,
  */
 class Notice_Handler {
-	// We don't want anyone instantiating this class
-	private function __construct() {}
+	// Make it public so we can call these functions on uninstall.
+	public function __construct() {}
 
 	// Returns array of all non-dismissed notices
 	public static function get_all_notices() {
@@ -85,10 +85,29 @@ class Notice_Handler {
 		return get_option( "idx-notice-dismissed-$name" );
 	}
 
+	/**
+	 * Adds scripts and localizes AJAX variables
+	 *
+	 * @return void
+	 */
 	public static function notice_script_styles() {
 		$ajax_nonce = wp_create_nonce( 'idx-notice-nonce' );
 		wp_register_script( 'idx-notice', IMPRESS_IDX_URL . '/assets/js/idx-notice.min.js', 'jquery', false, true );
 		wp_localize_script( 'idx-notice', 'idxNoticeNonce', $ajax_nonce );
 		wp_enqueue_script( 'idx-notice' );
+	}
+
+	/**
+	 * Deletes all stored notices. Used on idx_uninstall() hook.
+	 *
+	 * @return void
+	 */
+	public static function delete_all_notices() {
+		$notices = self::get_all_notices();
+		if ( count( $notices ) > 0 ) {
+			foreach ( $notices as $notice ) {
+				delete_option( 'idx-notice-dismissed-' . $notice->name );
+			}
+		}
 	}
 }
