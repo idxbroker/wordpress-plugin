@@ -309,13 +309,13 @@ class Impress_City_Links_Widget extends \WP_Widget
             }
 
             //do not add empty city names, ids, duplicates, or 'Other' cities
-            if (!empty($city->name) && !empty($city->id) && !in_array($city->id, $cities_list) && $city->name !== 'Other' && $city->name !== 'Out of State' && $city->name !== 'Out of Area') {
+            if ( ! empty( $city->name ) && ! empty( $city->id ) && !in_array($city->id, $cities_list) && $city->name !== 'Other' && $city->name !== 'Out of State' && $city->name !== 'Out of Area') {
                 //avoid duplicates by keeping track of cities already used
                 array_push($cities_list, $city->id);
                 
-                if ( $show_count && $count <= 50 ) {
-                    $listing_count = $idx_api->property_count_by_id( 'city', $idx_id, $city->id );
-                    $number = ( ! is_wp_error( $listing_count ) && isset( $listing_count[0] ) ) ? $listing_count[0] : 0;
+                if ( $show_count ) {
+                    $listing_count = self::get_cumulative_property_count_from_mls( $city->id, $idx_api );
+                    $number = ( ! is_wp_error( $listing_count ) && is_numeric( $listing_count ) ) ? $listing_count : 0;
                     $output .= "\n\t\t" .
                     '<li>' .
                     "\n\t\t\t" .
@@ -356,5 +356,33 @@ class Impress_City_Links_Widget extends \WP_Widget
         $output .= "\n\t" . '</ul>' . "\n" . '</div><!-- .city-list-links -->';
 
         return $output;
+    }
+
+    /**
+     * Get cumulative number of occurances (properties) for a given city ID.
+     *
+     * @param  string   $city_id The city ID.
+     * @param  callable $idx_api The IDX API class.
+     * @return int               The total number of occurances.
+     */
+    public static function get_cumulative_property_count_from_mls( $city_id, $idx_api ) {
+        // Get approved MLS's.
+        $approved_mls = $idx_api->approved_mls();
+        $mls_cities = array();
+        // Loop through MLS's and merge cities into single array.
+        foreach ( $approved_mls as $mls ) {
+            $mls_cities = array_merge( $mls_cities, $idx_api->idx_api( 'cities/' . $mls->id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24, 'GET', true ) );
+        }
+
+        // Loop through cities and add number to $occurances if $city_id matches.
+        $occurances = 0;
+        foreach ( $mls_cities as $city ) {
+            if ( $city_id !== $city['cityID'] ) {
+                continue;
+            }
+            $occurances += $city['occurances'];
+        }
+
+        return $occurances;
     }
 }
