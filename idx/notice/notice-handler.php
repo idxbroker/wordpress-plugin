@@ -8,8 +8,8 @@ namespace IDX\Notice;
  *   Yoast,
  */
 class Notice_Handler {
-	// Make it public so we can call these functions on uninstall.
-	public function __construct() {}
+	// We don't want anyone instantiating this class
+	private function __construct() {}
 
 	// Returns array of all non-dismissed notices
 	public static function get_all_notices() {
