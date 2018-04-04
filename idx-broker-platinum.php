@@ -35,7 +35,6 @@ class Idx_Broker_Plugin
             /** Function that is executed when plugin is activated. **/
             register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
             register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
-            register_uninstall_hook( __FILE__, array( 'Idx_Broker_Plugin', 'idx_uninstall' ) );
         }
     }
 
@@ -103,26 +102,5 @@ class Idx_Broker_Plugin
 
         //disable scheduled IDX Page Update as well
         \IDX\Idx_Pages::unschedule_idx_page_update();
-    }
-
-    public static function idx_uninstall()
-    {
-        $page_id = get_option('idx_broker_dynamic_wrapper_page_id');
-        if ($page_id) {
-            wp_delete_post($page_id, true);
-            wp_trash_post($page_id);
-        }
-        require_once( IMPRESS_IDX_DIR . '/idx/idx-api.php');
-        // Clear transients made by the plugin.
-        $idx_api = new \IDX\Idx_Api;
-        $idx_api->idx_clean_transients();
-        require_once( IMPRESS_IDX_DIR . '/idx/idx-pages.php');
-        // Clean up db by removing all idx pages.
-        $idx_pages = new \IDX\Idx_Pages;
-        $idx_pages->delete_all_idx_pages();
-        require_once( IMPRESS_IDX_DIR . '/idx/notice/notice-handler.php');
-        // Clean up any notices.
-        $idx_notices = new \IDX\Notice\Notice_Handler;
-        $idx_notices->delete_all_notices();
     }
 }

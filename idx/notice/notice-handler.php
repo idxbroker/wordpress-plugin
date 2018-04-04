@@ -96,18 +96,4 @@ class Notice_Handler {
 		wp_localize_script( 'idx-notice', 'idxNoticeNonce', $ajax_nonce );
 		wp_enqueue_script( 'idx-notice' );
 	}
-
-	/**
-	 * Deletes all stored notices. Used on idx_uninstall() hook.
-	 *
-	 * @return void
-	 */
-	public static function delete_all_notices() {
-		$notices = self::get_all_notices();
-		if ( count( $notices ) > 0 ) {
-			foreach ( $notices as $notice ) {
-				delete_option( 'idx-notice-dismissed-' . $notice->name );
-			}
-		}
-	}
 }
