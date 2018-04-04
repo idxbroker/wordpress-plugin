@@ -209,7 +209,7 @@ class Omnibar_Settings
 
         //echo them as one select
         echo "<h3>Custom Fields</h3>";
-        echo "<div class=\"help-text\">By default the omnibar searches by City, County, Postal Code, Address, or Listing ID. Add up to 10 custom fields to be used as well.<div><i>Examples: High School, Area, Subdivision</i></div></div>";
+        echo "<div class=\"help-text\">By default the omnibar searches by City, County, Postal Code, or Listing ID. Add up to 10 custom fields to be used as well.<div><i>Examples: High School, Area, Subdivision</i></div></div>";
         echo "<div class=\"customFieldError error\"><p></p></div>";
 
         // There is a bug in firefox that will select all options of the same value on
