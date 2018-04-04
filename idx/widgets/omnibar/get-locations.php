@@ -153,12 +153,19 @@ class Get_Locations
 
 		$sql = "DROP TABLE IF EXISTS $table_name";
 
-		$wpdb->query( $sql );
+		return $wpdb->query( $sql );
 	}
 
 	// Creates our table
 	public function create_autocomplete_table() {
-		$this->drop_autocomplete_table();
+		$drop_result = $this->drop_autocomplete_table();
+
+		// Table failed to drop
+		if ( $drop_result === false ) {
+			// Return so we don't get duplicate entries in the table
+			// We should probably set an alert for the user when this fails
+			return;
+		}
 
 		global $wpdb;
 
