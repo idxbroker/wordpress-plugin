@@ -826,7 +826,7 @@ class Register_Impress_Shortcodes
                             'value' => 'a000',
                         ),
                         array(
-                            'label' => 'Show Number of Listings (up to 50 cities)?',
+                            'label' => 'Show Number of Listings for each city?',
                             'attr' => 'show_count',
                             'type' => 'radio',
                             'value' => 0,
