@@ -370,7 +370,10 @@ class Impress_City_Links_Widget extends \WP_Widget
         // Loop through cities and add number to $occurances if $city_id matches.
         $occurances = 0;
         foreach ( $mls_cities as $city ) {
-            if ( ! isset( $city['cityID'] ) || $city_id !== $city['cityID'] ) {
+            if ( ! isset( $city['cityID'] ) ) {
+                return;
+            }
+            if ( $city_id !== $city['cityID'] ) {
                 continue;
             }
             $occurances += $city['occurances'];
