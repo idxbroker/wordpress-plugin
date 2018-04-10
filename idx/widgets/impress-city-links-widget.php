@@ -75,9 +75,9 @@ class Impress_City_Links_Widget extends \WP_Widget
         $idx_api = $this->idx_api;
 
         // For testing with demo data
-        // if ( empty($instance['mls'] ) ) {
-        //     $instance['mls'] = 'a000';
-        // }
+        if ( empty($instance['mls'] ) && defined( 'IDX_TESTING' ) ) {
+            $instance['mls'] = 'a000';
+        }
 
         if (empty($instance['mls'])) {
             echo 'Invalid MLS IDX ID. Email help@idxbroker.com to get your MLS IDX ID';
@@ -150,7 +150,7 @@ class Impress_City_Links_Widget extends \WP_Widget
 		</p>
         <p class="show-count">
             <input class="checkbox" type="checkbox" <?php checked($instance['show_count'], 1);?> id="<?php echo $this->get_field_id('show_count');?>" name="<?php echo $this->get_field_name('show_count');?>" value="1" />
-            <label for="<?php echo $this->get_field_id('show_count');?>">Show number of listings (up to 50 cities)?</label>
+            <label for="<?php echo $this->get_field_id('show_count');?>">Show number of listings in each city?</label>
         </p>
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked($instance['use_columns'], 1);?> id="<?php echo $this->get_field_id('use_columns');?>" name="<?php echo $this->get_field_name('use_columns');?>" value="1" />
@@ -194,12 +194,10 @@ class Impress_City_Links_Widget extends \WP_Widget
         }
 
         foreach ($lists as $list) {
-            $city_count = count( (array) $idx_api->city_list($list->id) );
-
             // display the list id if no list name has been assigned
             $list_text = empty($list->name) ? $list->id : $list->name;
 
-            $output .= '<option class="city-list-option" ' . selected($instance['city_list'], $list->id, 0) . ' value="' . $list->id . '" data-count="' . $city_count . '">' . $list_text . '</option>';
+            $output .= '<option class="city-list-option" ' . selected($instance['city_list'], $list->id, 0) . ' value="' . $list->id . '">' . $list_text . '</option>';
         }
         return $output;
     }
@@ -314,7 +312,7 @@ class Impress_City_Links_Widget extends \WP_Widget
                 array_push($cities_list, $city->id);
                 
                 if ( $show_count ) {
-                    $listing_count = self::get_cumulative_property_count_from_mls( $city->id, $idx_api );
+                    $listing_count = self::get_cumulative_property_count_from_mls( $city->id, $idx_id, $idx_api );
                     $number = ( ! is_wp_error( $listing_count ) && is_numeric( $listing_count ) ) ? $listing_count : 0;
                     $output .= "\n\t\t" .
                     '<li>' .
@@ -362,22 +360,17 @@ class Impress_City_Links_Widget extends \WP_Widget
      * Get cumulative number of occurances (properties) for a given city ID.
      *
      * @param  string   $city_id The city ID.
+     * @param  string   $idx_id  The IDX (MLS) ID
      * @param  callable $idx_api The IDX API class.
      * @return int               The total number of occurances.
      */
-    public static function get_cumulative_property_count_from_mls( $city_id, $idx_api ) {
-        // Get approved MLS's.
-        $approved_mls = $idx_api->approved_mls();
-        $mls_cities = array();
-        // Loop through MLS's and merge cities into single array.
-        foreach ( $approved_mls as $mls ) {
-            $mls_cities = array_merge( $mls_cities, $idx_api->idx_api( 'cities/' . $mls->id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24, 'GET', true ) );
-        }
+    public static function get_cumulative_property_count_from_mls( $city_id, $idx_id, $idx_api ) {
+         $mls_cities = $idx_api->idx_api( 'cities/' . $idx_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24, 'GET', true );
 
         // Loop through cities and add number to $occurances if $city_id matches.
         $occurances = 0;
         foreach ( $mls_cities as $city ) {
-            if ( $city_id !== $city['cityID'] ) {
+            if ( ! isset( $city['cityID'] ) || $city_id !== $city['cityID'] ) {
                 continue;
             }
             $occurances += $city['occurances'];

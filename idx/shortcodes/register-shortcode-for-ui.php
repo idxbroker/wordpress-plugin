@@ -350,7 +350,7 @@ class Register_Shortcode_For_Ui
         // Show Count
         $output .= "<div class=\"idx-modal-shortcode-field checkbox show-count\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"show_count\" data-short-name=\"show_count\" checked>";
-        $output .= "<label for\"show_count\">Show Number of Listings (up to 50 cities)?</label>";
+        $output .= "<label for\"show_count\">Show Number of Listings for each city?</label>";
         $output .= "</div>";
         // New Window
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";

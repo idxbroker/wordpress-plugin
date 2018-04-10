@@ -57,7 +57,7 @@ class Idx_Api
         $request_type = 'GET',
         $json_decode_type = false
     ) {
-        $cache_key = 'idx_' . $method . '_cache';
+        $cache_key = 'idx_' . $level . '_' . $method . '_cache';
         if ($this->get_transient($cache_key) !== false) {
             $data = $this->get_transient($cache_key);
             return $data;
