@@ -127,7 +127,7 @@ var idxOmnibar = function(jsonData){
 		var prevDataLength = 0;
 		return debounce(function(a, value) {
 			jQuery.ajax({
-				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + value.value + "?_wpnonce=" + serverObj.nonce,
+				url: "http://localhost/wp-json/idxbroker/v1/omnibar/autocomplete/" + value.value + "?_wpnonce=" + idxAutocompleteServerObj.nonce,
 			}).done(function(data) {
 				// If our data isn't an array of length > 0 then return (this should preserve old behavior)
 				if(!Array.isArray(data) || data.length === 0) {

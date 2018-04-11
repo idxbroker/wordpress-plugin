@@ -44,7 +44,7 @@ class Create_Omnibar
 		$server_obj = array(
 			'nonce'  => wp_create_nonce( 'wp_rest' )
 		);
-		wp_localize_script( 'idx-omnibar-js', 'serverObj', $server_obj);
+		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj);
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
 
@@ -91,7 +91,7 @@ EOD;
 		$server_obj = array(
 			'nonce'  => wp_create_nonce( 'wp_rest' )
 		);
-        wp_localize_script( 'idx-omnibar-js', 'serverObj', $server_obj);
+        wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj);
         wp_enqueue_script('idx-omnibar-js');
         wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
 
