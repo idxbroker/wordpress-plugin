@@ -22,7 +22,7 @@ function idx_delete_plugin_data() {
 	// Delete dismissed notices.
 	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s", '%idx-notice-dismissed%' ) );
 	// Delete any other idx_broker prefixed options. *Includes API key
-	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s", '%idx_broker%' ) );
+	// $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s", '%idx_broker%' ) );
 
 	// Delete all IDX page posts.
 	$idx_pages = get_posts(
