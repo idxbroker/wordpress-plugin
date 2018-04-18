@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	die();
 }
 /**
- * Contains uninstall routines to clean up data on plugin deletion.
+ * Contains uninstall routines to clean up plugin data on deletion.
  */
 function idx_delete_plugin_data() {
 	// Delete the assigned dynamic wrapper page ID. Legacy - we remove all idx-wrapper posts later.
@@ -21,8 +21,8 @@ function idx_delete_plugin_data() {
 	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s", '%widget_idx%' ) );
 	// Delete dismissed notices.
 	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s", '%idx-notice-dismissed%' ) );
-	// Delete any other idx_broker prefixed options. *Includes API key
-	// $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s", '%idx_broker%' ) );
+	// Delete any other idx_ prefixed options. *Excludes API key
+	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s AND option_name NOT LIKE %s", 'idx_%', 'idx_broker_apikey' ) );
 
 	// Delete all IDX page posts.
 	$idx_pages = get_posts(
