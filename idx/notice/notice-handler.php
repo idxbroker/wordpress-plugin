@@ -85,6 +85,11 @@ class Notice_Handler {
 		return get_option( "idx-notice-dismissed-$name" );
 	}
 
+	/**
+	 * Adds scripts and localizes AJAX variables
+	 *
+	 * @return void
+	 */
 	public static function notice_script_styles() {
 		$ajax_nonce = wp_create_nonce( 'idx-notice-nonce' );
 		wp_register_script( 'idx-notice', IMPRESS_IDX_URL . '/assets/js/idx-notice.min.js', 'jquery', false, true );

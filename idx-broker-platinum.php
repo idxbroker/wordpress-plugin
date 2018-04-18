@@ -33,9 +33,8 @@ class Idx_Broker_Plugin
             
             new IDX\Initiate_Plugin();
             /** Function that is executed when plugin is activated. **/
-            register_activation_hook(__FILE__, array($this, 'idx_activate'));
-            register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
-            register_uninstall_hook(__FILE__, array('idx-broker-platinum', 'idx_uninstall'));
+            register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
+            register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
         }
     }
 
@@ -103,19 +102,5 @@ class Idx_Broker_Plugin
 
         //disable scheduled IDX Page Update as well
         \IDX\Idx_Pages::unschedule_idx_page_update();
-    }
-
-    public static function idx_uninstall()
-    {
-        $page_id = get_option('idx_broker_dynamic_wrapper_page_id');
-        if ($page_id) {
-            wp_delete_post($page_id, true);
-            wp_trash_post($page_id);
-        }
-        //clear transients made by the plugin
-        $idx_api = \IDX\Idx_Api;
-        $idx_api->idx_clean_transients();
-        //clean up db by removing all idx pages
-        \IDX\Idx_Pages::delete_all_idx_pages();
     }
 }
