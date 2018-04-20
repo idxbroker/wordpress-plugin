@@ -8,10 +8,10 @@ class Omnibar_Settings
 	{
 		$this->idx_api = new \IDX\Idx_Api();
 		$this->mls_list = $this->idx_api->approved_mls();
-		$this->defaults['address'] = get_option('idx_omnibar_address_mls', []);
+		$this->defaults['address'] = get_option('idx_broker_omnibar_address_mls', []);
 		if ( ! is_array( $this->defaults['address'] ) ) {
 			$this->defaults['address'] = [];
-			update_option( 'idx_omnibar_address_mls', [] );
+			update_option( 'idx_broker_omnibar_address_mls', [] );
 		}
 		$this->property_types = get_option('idx_default_property_types');
 
@@ -419,7 +419,7 @@ EOT;
 			$address_mls = [];
 		}
 		$output = $this->has_address_changed( $address_mls );
-		update_option( 'idx_omnibar_address_mls', $address_mls, false );
+		update_option( 'idx_broker_omnibar_address_mls', $address_mls, false );
 		wp_die( $output );
 	}
 

@@ -3,13 +3,8 @@ namespace IDX\Widgets\Omnibar;
 
 class Get_Locations
 {
-	public function __construct($disable_address_update = false, $remove_all_data = false)
+	public function __construct($disable_address_update = false)
 	{
-		// To be run on uninstall
-		if ( $remove_all_data ) {
-			$this->remove_all_data();
-			return;
-		}
 
 		$api = get_option('idx_broker_apikey');
 		if (empty($api)) {
@@ -22,7 +17,7 @@ class Get_Locations
 
 		$this->mls_list = $this->idx_api->approved_mls();
 
-		$this->address_mls = get_option('idx_omnibar_address_mls', []);
+		$this->address_mls = get_option('idx_broker_omnibar_address_mls', []);
 		if ( ! is_array( $this->address_mls ) ) {
 			$this->address_mls = [];
 		}
@@ -149,7 +144,7 @@ class Get_Locations
 	private function drop_autocomplete_table() {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
+		$table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
 
 		$sql = "DROP TABLE IF EXISTS $table_name";
 
@@ -169,7 +164,7 @@ class Get_Locations
 
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
+		$table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
 
 		$charset_collate = $wpdb->get_charset_collate();
 		$sql = "CREATE TABLE $table_name (
@@ -183,7 +178,7 @@ class Get_Locations
 		dbDelta( $sql );
 
 		// TODO: Remove this option on uninstall
-		add_option( 'idxbroker_autocomplete_values_version', '1.0' );
+		add_option( 'idx_broker_autocomplete_values_version', '1.0' );
 
 		$this->populate_table();
 	}
@@ -237,7 +232,7 @@ class Get_Locations
 
 		$insert_values = [];
 
-		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
+		$table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
 
 		$query = "INSERT INTO $table_name (mls, field, value) VALUES ";
 
@@ -264,11 +259,6 @@ class Get_Locations
 		$wpdb->query(
 			$wpdb->prepare($query, $insert_values)
 		);
-	}
-
-	private function remove_all_data() {
-		$this->drop_autocomplete_table();
-		delete_option( 'idx_omnibar_address_mls' );
 	}
 
     private function initiate_get_locations()
