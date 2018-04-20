@@ -151,8 +151,6 @@ window.addEventListener('DOMContentLoaded', function(){
                 dataChanged += +data;
             }
             runningTotal++;
-            // In case we don't get any respone from Ajax after 10 seconds
-
             // If we get all 3 responses back, reload page
             if( runningTotal >= 3 ) {
                 if(dataChanged > 0) {
