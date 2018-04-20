@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function(){
             maximumSelectionLength: 10,
             placeholder: 'Select Up to Ten Fields'
         });
-        $('.omnibar-address-multiselect').select2({
+        jQuery('.omnibar-address-multiselect').select2({
             placeholder: "Select MLS"
         });
     }
@@ -214,7 +214,7 @@ window.addEventListener('DOMContentLoaded', function(){
     }
 
     function updateOmnibarAddressMLS(){
-        var address = $("#omnibar-address-mls");
+        var address = jQuery("#omnibar-address-mls");
          jQuery.post(
                 ajaxurl, {
                 'action': 'idx_update_address_mls',
