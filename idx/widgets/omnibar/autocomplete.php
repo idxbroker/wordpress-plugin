@@ -15,7 +15,7 @@ class Autocomplete {
 
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'idxbroker_autocomplete_values';
+		$table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
 
 		// Direct db call is fine, since we can't cache every search variant
 		// Selects distinct in case of duplicate address in MLS
