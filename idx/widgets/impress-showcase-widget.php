@@ -494,21 +494,16 @@ class Impress_Showcase_Widget extends \WP_Widget
 				<option <?php selected($instance['properties'], 'featured');?> value="featured"><?php echo 'Featured';?></option>
 				<option <?php selected($instance['properties'], 'soldpending');?> value="soldpending"><?php echo 'Sold/Pending';?></option>
 				<option <?php selected($instance['properties'], 'supplemental');?> value="supplemental"><?php echo 'Supplemental';?></option>
-                <?php //Only allow Saved Links if Equity is active ?>
-                <?php if (function_exists('equity')) {?>
 				<option <?php selected($instance['properties'], 'savedlinks');?> value="savedlinks"><?php echo 'Use Saved Link';?></option>
-                <?php }?>
 			</select>
 		</p>
-        <?php //Only allow Saved Links if Equity is active ?>
-        <?php if (function_exists('equity')) {?>
+        
 		<p>
 			<label for="<?php echo $this->get_field_id('saved_link_id');?>">Choose a saved link (if selected above):</label>
 			<select class="widefat" id="<?php echo $this->get_field_id('saved_link_id');?>" name="<?php echo $this->get_field_name('saved_link_id')?>">
 				<?php $this->saved_link_options($instance);?>
 			</select>
 		</p>
-        <?php }?>
 
         <p>
             <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'idxbroker' ); ?></label>

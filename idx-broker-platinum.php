@@ -3,7 +3,7 @@
 Plugin Name: IMPress for IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 2.4.5
+Version: 2.5.0
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -18,7 +18,7 @@ new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
 {
     //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '2.4.5';
+    const IDX_WP_PLUGIN_VERSION = '2.5.0';
 
     public function __construct()
     {
@@ -33,9 +33,8 @@ class Idx_Broker_Plugin
             
             new IDX\Initiate_Plugin();
             /** Function that is executed when plugin is activated. **/
-            register_activation_hook(__FILE__, array($this, 'idx_activate'));
-            register_deactivation_hook(__FILE__, array($this, 'idx_deactivate'));
-            register_uninstall_hook(__FILE__, array('idx-broker-platinum', 'idx_uninstall'));
+            register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
+            register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
         }
     }
 
@@ -103,22 +102,5 @@ class Idx_Broker_Plugin
 
         //disable scheduled IDX Page Update as well
         \IDX\Idx_Pages::unschedule_idx_page_update();
-    }
-
-    public static function idx_uninstall()
-    {
-        $page_id = get_option('idx_broker_dynamic_wrapper_page_id');
-        if ($page_id) {
-            wp_delete_post($page_id, true);
-            wp_trash_post($page_id);
-        }
-        //clear transients made by the plugin
-        $idx_api = \IDX\Idx_Api;
-        $idx_api->idx_clean_transients();
-        //clean up db by removing all idx pages
-        \IDX\Idx_Pages::delete_all_idx_pages();
-
-		// Setting the second param to true will remove our location data
-		new \IDX\Widgets\Omnibar\Get_Locations( false, true );
     }
 }

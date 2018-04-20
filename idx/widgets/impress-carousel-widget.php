@@ -423,21 +423,16 @@ class Impress_Carousel_Widget extends \WP_Widget
                 <option <?php selected($instance['properties'], 'featured');?> value="featured"><?php _e('Featured', 'idxbroker');?></option>
                 <option <?php selected($instance['properties'], 'soldpending');?> value="soldpending"><?php _e('Sold/Pending', 'idxbroker');?></option>
                 <option <?php selected($instance['properties'], 'supplemental');?> value="supplemental"><?php _e('Supplemental', 'idxbroker');?></option>
-                <?php //Only allow Saved Links if Equity is active ?>
-                <?php if (function_exists('equity')) {?>
                 <option <?php selected($instance['properties'], 'savedlinks');?> value="savedlinks"><?php _e('Use Saved Link', 'idxbroker');?></option>
-                <?php }?>
             </select>
         </p>
 
-        <?php if (function_exists('equity')) {?>
-         <p>
+        <p>
             <label for="<?php echo $this->get_field_id('saved_link_id');?>">Choose a saved link (if selected above):</label>
             <select class="widefat" id="<?php echo $this->get_field_id('saved_link_id');?>" name="<?php echo $this->get_field_name('saved_link_id')?>">
                 <?=$this->saved_link_options($instance, $this->idx_api);?>
             </select>
         </p>
-        <?php }?>
 
         <p>
             <label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'idxbroker' ); ?></label>

@@ -350,7 +350,7 @@ class Register_Shortcode_For_Ui
         // Show Count
         $output .= "<div class=\"idx-modal-shortcode-field checkbox show-count\" data-shortcode=\"$shortcode\">";
         $output .= "<input type=\"checkbox\" id=\"show_count\" data-short-name=\"show_count\" checked>";
-        $output .= "<label for\"show_count\">Show Number of Listings (up to 50 cities)?</label>";
+        $output .= "<label for\"show_count\">Show Number of Listings for each city?</label>";
         $output .= "</div>";
         // New Window
         $output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
@@ -390,22 +390,17 @@ class Register_Shortcode_For_Ui
         $output .= "<option value=\"featured\" selected=\"selected\">Featured</option>";
         $output .= "<option value=\"soldpending\">Sold/Pending</option>";
         $output .= "<option value=\"supplemental\">Supplemental</option>";
-        //Only allow Saved Links if Equity is active
-        if (function_exists('equity')) {
-            $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
-        }
+        $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
         $output .= "</select>";
         $output .= "</div>";
-        //Saved Link ID (only show for equity users)
-        if (function_exists('equity')) {
-            $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-            $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
-            $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
-            $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
-            $output .= "</select>";
-            $output .= "</div>";
-            //endif
-        }
+
+        // Saved link ID
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
+        $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
+        $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
+        $output .= "</select>";
+        $output .= "</div>";
 
         // Agent select
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
@@ -488,22 +483,18 @@ class Register_Shortcode_For_Ui
         $output .= "<option value=\"featured\" selected=\"selected\">Featured</option>";
         $output .= "<option value=\"soldpending\">Sold/Pending</option>";
         $output .= "<option value=\"supplemental\">Supplemental</option>";
-        //Only allow Saved Links if Equity is active
-        if (function_exists('equity')) {
-            $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
-        }
+        $output .= "<option value=\"savedlinks\">Use Saved Link</option>";
         $output .= "</select>";
         $output .= "</div>";
-        //Saved Link ID (only for equity users)
-        if (function_exists('equity')) {
-            $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-            $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
-            $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
-            $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
-            $output .= "</select>";
-            $output .= "</div>";
-            //endif
-        }
+        
+        //Saved Link ID
+        $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
+        $output .= "<label for\"saved-link-id\">Choose a saved link (if selected above):</label>";
+        $output .= "<select id=\"saved-link-id\" data-short-name=\"saved_link_id\">";
+        $output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options($defaults, $this->idx_api);
+        $output .= "</select>";
+        $output .= "</div>";
+
         // Agent select
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"agent_id\">Limit by Agent:</label>";
