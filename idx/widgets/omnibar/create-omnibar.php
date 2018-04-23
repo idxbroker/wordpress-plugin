@@ -42,7 +42,8 @@ class Create_Omnibar
             }
         }
 		$server_obj = array(
-			'nonce'  => wp_create_nonce( 'wp_rest' )
+			'nonce'  => wp_create_nonce( 'wp_rest' ),
+            'url' => get_rest_url() . 'idxbroker/v1/omnibar/autocomplete/'
 		);
 		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj);
         wp_enqueue_script('idx-omnibar-js');
