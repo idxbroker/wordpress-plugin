@@ -14,17 +14,17 @@ class Migrate_Legacy_Widgets {
 			return;
 		}
 
-		//add_action( 'wp_loaded', array( $this, 'convert_mw_widgets' ) );
-		add_action( 'wp_loaded', array( $this, 'get_and_convert_active_mw_widgets' ) );
+		add_action( 'wp_loaded', array( $this, 'convert_mw_widgets' ) );
+		//add_action( 'wp_loaded', array( $this, 'get_and_convert_active_mw_widgets' ) );
 	}
 
-	// public function convert_mw_widgets() {
-	// 	$active_widgets = $this->get_active_mw_widgets();
+	public function convert_mw_widgets() {
+		$active_widgets = $this->get_active_mw_widgets();
 
-	// 	foreach ( $active_widgets as $active_widget ) {
-	// 		$this->convert_widget( $active_widget );
-	// 	}
-	// }
+		foreach ( $active_widgets as $active_widget ) {
+			$this->convert_widget( $active_widget );
+		}
+	}
 	
 	public function get_active_mw_widgets() {
 		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
@@ -85,7 +85,7 @@ class Migrate_Legacy_Widgets {
 	// 	return ( $active_widgets ) ? $active_widgets : false;
 	// }
 
-	public function convert_widget( $widget_uid, $key, $instance, $sidebar_widgets ) {
+	public function convert_widget( $active_widgets ) {
 		if ( null === $key ) {
 			return;
 		}
