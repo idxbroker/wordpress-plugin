@@ -14,11 +14,11 @@ class Migrate_Legacy_Widgets {
 			return;
 		}
 
-		add_action( 'wp_loaded', array( $this, 'convert_mw_widgets' ) );
+		add_action( 'wp_loaded', array( $this, 'convert_mw_widgets' ), 10, 1 );
 		//add_action( 'wp_loaded', array( $this, 'get_and_convert_active_mw_widgets' ) );
 	}
 
-	public function convert_mw_widgets() {
+	public function convert_mw_widgets( $active_widgets ) {
 		$active_widgets = $this->get_active_mw_widgets();
 
 		foreach ( $active_widgets as $active_widget ) {
