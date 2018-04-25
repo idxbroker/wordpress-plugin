@@ -23,10 +23,41 @@ class Migrate_Legacy_Widgets {
 
 	// 	foreach ( $active_widgets as $active_widget ) {
 	// 		$this->convert_widget( $active_widget );
-	// 		//$this->convert_widget( $widget->uid, $key, $instance, $sidebar_widgets );
 	// 	}
 	// }
-	// public function get_active_mw_widgets() {
+	
+	public function get_active_mw_widgets() {
+		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
+
+		if ( ! is_array( $idx_widgets ) ) {
+			return;
+		}
+
+		foreach ( $idx_widgets as $widget ) {
+			$widget_base_id = 'idx' . str_replace( '-', '_', $widget->uid );
+			$widget_instances = get_option( 'widget_' . $widget_base_id );
+			$sidebar_widgets = get_option( 'sidebars_widgets' );
+			if ( false !== $widget_instances ) {
+				foreach ( $widget_instances as $instances => $instance ) {
+					// If it's an array, we have a widget here. Convert it.
+					if ( is_array( $instance ) ) {
+						$key = ( is_int( $instances ) ) ? $instances : null;
+						if ( null !== $key ) {
+							$active_widgets[] = array(
+								'widget_id'       => $widget->uid . '-' . $key,
+								'instances'       => $instances,
+								'sidebar_widgets' => $sidebar_widgets,
+							);
+						}
+					}
+				}
+			}
+		}
+
+		return ( $active_widgets ) ? $active_widgets : false;
+	}
+
+	// public function get_and_convert_active_mw_widgets() {
 	// 	$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
 
 	// 	if ( ! is_array( $idx_widgets ) ) {
@@ -44,6 +75,7 @@ class Migrate_Legacy_Widgets {
 	// 					$key = ( is_int( $instances ) ) ? $instances : null;
 	// 					if ( null !== $key ) {
 	// 						$active_widgets[] = $widget->uid . '-' . $key;
+	// 						$this->convert_widget( $widget->uid, $key, $instance, $sidebar_widgets );
 	// 					}
 	// 				}
 	// 			}
@@ -53,34 +85,6 @@ class Migrate_Legacy_Widgets {
 	// 	return ( $active_widgets ) ? $active_widgets : false;
 	// }
 
-	public function get_and_convert_active_mw_widgets() {
-		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
-
-		if ( ! is_array( $idx_widgets ) ) {
-			return;
-		}
-
-		foreach ( $idx_widgets as $widget ) {
-			$widget_base_id = 'idx' . str_replace( '-', '_', $widget->uid );
-			$widget_instances = get_option( 'widget_' . $widget_base_id );
-			$sidebar_widgets = get_option( 'sidebars_widgets' );
-			if ( false !== $widget_instances ) {
-				foreach ( $widget_instances as $instances => $instance ) {
-					// If it's an array, we have a widget here. Convert it.
-					if ( is_array( $instance ) ) {
-						$key = ( is_int( $instances ) ) ? $instances : null;
-						if ( null !== $key ) {
-							$active_widgets[] = $widget->uid . '-' . $key;
-							$this->convert_widget( $widget->uid, $key, $instance, $sidebar_widgets );
-						}
-					}
-				}
-			}
-		}
-
-		return ( $active_widgets ) ? $active_widgets : false;
-	}
-
 	public function convert_widget( $widget_uid, $key, $instance, $sidebar_widgets ) {
 		if ( null === $key ) {
 			return;
@@ -88,7 +92,7 @@ class Migrate_Legacy_Widgets {
 		// Get the new widget instances.
 		$new_widget_instance = get_option( 'widget_impress_idx_dashboard_widget' );
 
-		// Widget base ID.
+		// Old widget base ID.
 		$widget_base_id = 'idx' . str_replace( '-', '_', $widget_uid );
 
 		// Get replaceable widgets.
