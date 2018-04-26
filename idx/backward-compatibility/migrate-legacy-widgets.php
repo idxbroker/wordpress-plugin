@@ -18,18 +18,11 @@ class Migrate_Legacy_Widgets {
 		//add_action( 'wp_loaded', array( $this, 'get_and_convert_active_mw_widgets' ) );
 	}
 
-	public function convert_mw_widgets( $active_widgets ) {
-		$active_widgets = $this->get_active_mw_widgets();
-
-		foreach ( $active_widgets as $active_widget ) {
-			$widgets_converted = $this->convert_widget( $active_widget );
-		}
-
-		if ( null !== $widgets_converted ) {
-			// update_option();
-		}
-	}
-	
+	/**
+	 * Get all the active MW widgets.
+	 *
+	 * @return array|false  array of widget_id and widget_instance, or false if none active
+	 */
 	public function get_active_mw_widgets() {
 		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
 
@@ -53,7 +46,7 @@ class Migrate_Legacy_Widgets {
 						if ( null !== $key ) {
 							$active_widgets[] = array(
 								'widget_id'       => $widget_base_id . '-' . $key,
-								'widget_instance' => $widget_instance,
+								'widget_instance' => $instance,
 							);
 						}
 					}
@@ -63,6 +56,23 @@ class Migrate_Legacy_Widgets {
 
 		return ( $active_widgets ) ? $active_widgets : false;
 	}
+
+
+	public function convert_mw_widgets( $active_widgets ) {
+		$active_widgets = $this->get_active_mw_widgets();
+
+		foreach ( $active_widgets as $active_widget ) {
+			$widgets_converted[] = $this->convert_widget( $active_widget );
+		}
+
+		if ( is_array( $widgets_converted ) ) {
+			// update_option();
+			return true;
+		}
+
+		return;
+	}
+	
 
 	// public function get_and_convert_active_mw_widgets() {
 	// 	$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
@@ -92,16 +102,17 @@ class Migrate_Legacy_Widgets {
 	// 	return ( $active_widgets ) ? $active_widgets : false;
 	// }
 
-	public function convert_widget( $active_widgets ) {
+	public function convert_widget( $active_widget ) {
 		if ( ! is_array( $active_widget ) ) {
 			return null;
 		}
-
+		var_dump($active_widget);
+		die;
 		// Get the new widget instances.
 		$new_widget_instance = get_option( 'widget_impress_idx_dashboard_widget' );
 
 		// Get replaceable widgets.
-		$replaceable_widgets = $this->get_replaceable_widgets( $active_widgets['widget_instance'] );
+		$replaceable_widgets = $this->get_replaceable_widgets( $active_widget['widget_instance'] );
 		var_dump($replaceable_widgets);
 		die;
 
