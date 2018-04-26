@@ -22,7 +22,11 @@ class Migrate_Legacy_Widgets {
 		$active_widgets = $this->get_active_mw_widgets();
 
 		foreach ( $active_widgets as $active_widget ) {
-			$this->convert_widget( $active_widget );
+			$widgets_converted = $this->convert_widget( $active_widget );
+		}
+
+		if ( null !== $widgets_converted ) {
+			// update_option();
 		}
 	}
 	
@@ -34,19 +38,22 @@ class Migrate_Legacy_Widgets {
 		}
 
 		foreach ( $idx_widgets as $widget ) {
+			// Build our widget_base_id
 			$widget_base_id = 'idx' . str_replace( '-', '_', $widget->uid );
+
+			// Get our widget instances based on the option name widget_{widget_base_id}
 			$widget_instances = get_option( 'widget_' . $widget_base_id );
-			$sidebar_widgets = get_option( 'sidebars_widgets' );
+
+			// If there are instances, then loop through them instances and find actives.
 			if ( false !== $widget_instances ) {
 				foreach ( $widget_instances as $instances => $instance ) {
-					// If it's an array, we have a widget here. Convert it.
+					// If this $instance is an array, we have a widget here. Add it to the array.
 					if ( is_array( $instance ) ) {
 						$key = ( is_int( $instances ) ) ? $instances : null;
 						if ( null !== $key ) {
 							$active_widgets[] = array(
-								'widget_id'       => $widget->uid . '-' . $key,
-								'instances'       => $instances,
-								'sidebar_widgets' => $sidebar_widgets,
+								'widget_id'       => $widget_base_id . '-' . $key,
+								'widget_instance' => $widget_instance,
 							);
 						}
 					}
@@ -86,17 +93,17 @@ class Migrate_Legacy_Widgets {
 	// }
 
 	public function convert_widget( $active_widgets ) {
-		if ( null === $key ) {
-			return;
+		if ( ! is_array( $active_widget ) ) {
+			return null;
 		}
+
 		// Get the new widget instances.
 		$new_widget_instance = get_option( 'widget_impress_idx_dashboard_widget' );
 
-		// Old widget base ID.
-		$widget_base_id = 'idx' . str_replace( '-', '_', $widget_uid );
-
 		// Get replaceable widgets.
-		$replaceable_widgets = $this->get_replaceable_widgets( $sidebar_widgets, $widget_base_id . '-' . $key );
+		$replaceable_widgets = $this->get_replaceable_widgets( $active_widgets['widget_instance'] );
+		var_dump($replaceable_widgets);
+		die;
 
 		// Loop through registered sidebars (widget areas).
 		foreach ( $sidebar_widgets as $widget_area_ids => $widgets ) {
@@ -181,8 +188,9 @@ class Migrate_Legacy_Widgets {
 		//}
 	}
 
-	public function get_replaceable_widgets( $sidebar_widgets, $widget_base_id . '-' . $key ) {
-
+	public function get_replaceable_widgets( $widget_instance ) {
+		if ( $widget_instance)
+			var_dump($widget_instance);
 	}
 
 	public function get_widget_url( $widget_uid ) {
