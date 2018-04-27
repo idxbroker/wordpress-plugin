@@ -40,8 +40,20 @@ class Idx_Middleware_Widget extends \WP_Widget {
 			echo $before_title . $instance['title'] . $after_title;
 		}
 
+		// If we have an ID, this is a shortcode, so we need to get the widget url from the ID.
+		if ( ! empty( $instance['id'] ) ) {
+			$instance['widget'] = $this->get_widget_url( $instance['id'] );
+		}
+
 		if ( ! empty( $instance['widget'] ) ) {
-			echo '<script type="text/javascript" src="', $instance['widget'], '"></script>';
+			if ( strpos( $instance['widget'], 'mapwidgetjs.php' ) ) {
+				wp_enqueue_script( 'custom-scriptLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', __FILE__ );
+				wp_enqueue_script( 'custom-scriptLeafDraw', 'https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', __FILE__ );
+				wp_enqueue_script( 'custom-scriptMQ', 'https://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
+				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.css' );
+				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
+			}
+			echo '<script type="text/javascript" src="' . $instance['widget'] . '"></script>';
 		}
 
 		echo $after_widget;
@@ -117,5 +129,21 @@ class Idx_Middleware_Widget extends \WP_Widget {
 		foreach ( $widgets as $widget ) {
 			echo '<option ', selected( $instance['widget'], $widget->url, 0 ), ' value="', $widget->url, '">', $widget->name, '</option>';
 		}
+	}
+
+	/**
+	 * Returns the widget URL given a widget UID.
+	 *
+	 * @param  string $widget_uid The IDX assigned widget UID.
+	 * @return string | false     Widget or URL or false if none found.
+	 */
+	public function get_widget_url( $widget_uid ) {
+		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
+		foreach ( $idx_widgets as $widget ) {
+			if ( $widget_uid === $widget->uid ) {
+				return $widget->url;
+			}
+		}
+		return false;
 	}
 }
