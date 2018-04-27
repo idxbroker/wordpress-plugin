@@ -21,8 +21,8 @@ class Register_Idx_Shortcodes
     const SHORTCODE_WIDGET = 'idx-platinum-widget';
 
     /**
-     * Function to show a idx link with shortcode of type:
-     * [idx-platinum-link title="widget title here"]
+     * Function to show a idx widget with shortcode of type:
+     * [idx-platinum-widget id="widget-id"]
      *
      * @param array $atts
      * @return html code for showing the widget/ bool false
@@ -34,7 +34,7 @@ class Register_Idx_Shortcodes
         ), $atts));
 
         if (!is_null($id)) {
-            return \IDX\Widgets\Create_Idx_Widgets::get_widget_by_uid($id);
+            return the_widget( '\IDX\Widgets\Idx_Middleware_Widget', array( 'id' => $id ) );
         } else {
             return false;
         }
