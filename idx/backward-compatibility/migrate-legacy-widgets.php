@@ -57,9 +57,14 @@ class Migrate_Legacy_Widgets {
 		// Get sidebar widgets
 		$sidebar_widgets = get_option( 'sidebars_widgets' );
 
+		// Make sure $sidebar_widgets is an array.
+		if ( ! is_array( $sidebar_widgets ) ) {
+			return false;
+		}
+
 		// Loop through registered sidebars (widget areas).
 		foreach ( $sidebar_widgets as $widget_area_id => $widgets ) {
-			// Make sure it's an array.
+			// Make sure $widgets is an array.
 			if ( ! is_array( $widgets ) ) {
 				return false;
 			}
@@ -124,7 +129,7 @@ class Migrate_Legacy_Widgets {
 			$widget_instances = get_option( 'widget_' . $widget_base_id );
 
 			// If there are instances, then loop through them instances and find actives.
-			if ( false !== $widget_instances ) {
+			if ( $widget_instances && is_array( $widget_instances ) ) {
 				foreach ( $widget_instances as $instances => $instance ) {
 					// If this $instance is an array, we have a widget here. Add it to new active_widgets array.
 					if ( is_array( $instance ) ) {
