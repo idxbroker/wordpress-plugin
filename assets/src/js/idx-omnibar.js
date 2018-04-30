@@ -129,8 +129,14 @@ var idxOmnibar = function(jsonData){
 	function debounceAjax() {
 		var prevDataLength = 0;
 		return debounce(function(a, value) {
+			var nonceParam = '_wpnonce=';
+			if( ~idxAutocompleteServerObj.url.indexOf('?') ) {
+				nonceParam = '&' + nonceParam;
+			} else {
+				nonceParam = '?' + nonceParam;
+			}
 			jQuery.ajax({
-				url: idxAutocompleteServerObj.url + value.value + "?_wpnonce=" + idxAutocompleteServerObj.nonce,
+				url: idxAutocompleteServerObj.url + value.value + nonceParam + idxAutocompleteServerObj.nonce,
 			}).done(function(data) {
 				// If our data isn't an array of length > 0 then return (this should preserve old behavior)
 				if(!Array.isArray(data) || data.length === 0) {
