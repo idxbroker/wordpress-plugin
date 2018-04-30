@@ -42,12 +42,12 @@ class Create_Omnibar
             }
         }
 		$server_obj = array(
-			'nonce'  => wp_create_nonce( 'wp_rest' ),
-            'url' => get_rest_url() . 'idxbroker/v1/omnibar/autocomplete/'
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'url'   => get_rest_url() . 'idxbroker/v1/omnibar/autocomplete/',
 		);
-		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj);
-        wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
+		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj );
+		wp_enqueue_script( 'idx-omnibar-js' );
+		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), false, true );
 
         return <<<EOD
         <form class="idx-omnibar-form idx-omnibar-original-form">
@@ -90,11 +90,12 @@ EOD;
         }
 
 		$server_obj = array(
-			'nonce'  => wp_create_nonce( 'wp_rest' )
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'url'   => get_rest_url() . 'idxbroker/v1/omnibar/autocomplete/',
 		);
-        wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj);
-        wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
+		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj );
+		wp_enqueue_script( 'idx-omnibar-js' );
+		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), false, true );
 
         $price_field = $this->price_field($min_price);
 
