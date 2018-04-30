@@ -16,6 +16,9 @@ var idxOmnibar = function(jsonData){
 	var cczList = [];
 	var basicPtID = mlsPtIDs[0].mlsPtID;
 
+	// Don't want to create more globals, but the current setup necessitates this without a bigger rewrite.
+	var currentAutocompleteData = [];
+
 	//helper function for finding Object properties number
 	Object.size = function(obj) {
 	    var size = 0, key;
@@ -126,6 +129,7 @@ var idxOmnibar = function(jsonData){
 	function debounceAjax() {
 		var prevDataLength = 0;
 		return debounce(function(a, value) {
+			console.log(a);
 			jQuery.ajax({
 				url: idxAutocompleteServerObj.url + value.value + "?_wpnonce=" + idxAutocompleteServerObj.nonce,
 			}).done(function(data) {
@@ -134,6 +138,9 @@ var idxOmnibar = function(jsonData){
 					return;
 				}
 
+				currentAutocompleteData = data;
+
+				data = data.map(function(x){return x.value});
 				// a.list is a setter with a._list being the actual data array
 				// We want to remove the last address entries and add the news ones (mostly to remove duplicates)
 				a.list = a._list.slice(0, a._list.length - prevDataLength).concat(data);
@@ -144,7 +151,7 @@ var idxOmnibar = function(jsonData){
 	}
 
 	// Make the closure
-	var triggerAutcomplete = debounceAjax();
+	var triggerAutocomplete = debounceAjax();
 
 	// Initialize Autocomplete of CCZs for each omnibar allowing multiple per page
 	forEach(document.querySelectorAll('.idx-omnibar-input'), function (index, value) {
@@ -152,7 +159,7 @@ var idxOmnibar = function(jsonData){
 		a.list = removeDuplicates(buildLocationList(jsonData));
 
 		// Add event listener for address autocomplete
-		value.addEventListener('input', function() {triggerAutcomplete(a, value)});
+		value.addEventListener('input', function() {triggerAutocomplete(a, value)});
 	});
 
 	/*
@@ -483,79 +490,92 @@ var idxOmnibar = function(jsonData){
 		}
 	};
 	//check input against advanced fields
-		var advancedList = function(input){
-			for(var i = 1; i < jsonData.length; i++){
-				var idxID = Object.keys(jsonData[i])[0];
-				var fieldNumber = Object.size(jsonData[i][idxID]);
-				//check for mlsPtID (skip 0 index as it is for basic searches)
-				for(var j = 1; j < mlsPtIDs.length; j++){
-					keyIdxID = mlsPtIDs[j].idxID;
-					keyMlsPtID = mlsPtIDs[j].mlsPtID;
-					//if mlsPtIDs global object property matches idxID, use that property type
-					if(keyIdxID === idxID){
-						var mlsPtID = keyMlsPtID;
-					}
+	var advancedList = function(input){
+		for(var i = 1; i < jsonData.length; i++){
+			var idxID = Object.keys(jsonData[i])[0];
+			var fieldNumber = Object.size(jsonData[i][idxID]);
+			//check for mlsPtID (skip 0 index as it is for basic searches)
+			for(var j = 1; j < mlsPtIDs.length; j++){
+				keyIdxID = mlsPtIDs[j].idxID;
+				keyMlsPtID = mlsPtIDs[j].mlsPtID;
+				//if mlsPtIDs global object property matches idxID, use that property type
+				if(keyIdxID === idxID){
+					var mlsPtID = keyMlsPtID;
 				}
-				//if no default pt, default to 1
-				if(typeof mlsPtID === 'undefined'){
-					var mlsPtID = 1;
-				}
+			}
+			//if no default pt, default to 1
+			if(typeof mlsPtID === 'undefined'){
+				var mlsPtID = 1;
+			}
 
-				for(var j = 0; j < fieldNumber; j++){
-					var fieldName = Object.keys(jsonData[i][idxID][j])[0];
-					var fieldValues = jsonData[i][idxID][j][fieldName];
+			for(var j = 0; j < fieldNumber; j++){
+				var fieldName = Object.keys(jsonData[i][idxID][j])[0];
+				var fieldValues = jsonData[i][idxID][j][fieldName];
 
-					forEach(fieldValues, function(index, value){
-						if(input.value !== '' && (input.value.toLowerCase() === value.toLowerCase() || input.value.toLowerCase() === (value + ' ' + checkFieldName(fieldName)).toLowerCase())){
-							foundResult = true;
-							return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&srt=' + sortOrder);
-						}
-					})
-					if(foundResult){
-						return;
+				forEach(fieldValues, function(index, value){
+					if(input.value !== '' && (input.value.toLowerCase() === value.toLowerCase() || input.value.toLowerCase() === (value + ' ' + checkFieldName(fieldName)).toLowerCase())){
+						foundResult = true;
+						return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&srt=' + sortOrder);
 					}
-
+				})
+				if(foundResult){
+					return;
 				}
 
 			}
-			if(foundResult === false){
-				return notOnList(input);
-			}
+
 		}
+		if(foundResult === false){
+			return notOnList(input);
+		}
+	}
 
 	//callback for checkAgainstList function. Inherits global idxUrl variable from widget HTML script
 	var notOnList = function (input) {
-			var hasSpaces = /\s/g.test(input.value);
-			if (!input.value) {
-				//nothing in input
-				goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&srt=' + sortOrder);
-			} else if(hasSpaces === false && parseInt(input.value) !== isNaN) {
-				//MLS Number/ListingID
-				var listingID = true;
-				var agentHeaderID = false;
-				goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID);
-			} else {
-				//address (split into number and street)
-				var addressSplit = input.value.split(' ');
-				//if first entry is number, search for street number otherwise search for street name
-				if(Number(addressSplit[0]) > 0){
-					var addressName = addressSplit[1];
-					// don't assume street name is one word, combine address pieces
-					if(addressSplit.length > 1) {
-						for(var i=2, len=addressSplit.length; i < len; i++){
-							addressName += '+' + addressSplit[i];
-						}
+		var mlsPtId = basicPtID;
+
+		// The address autocomplete will never be on the list, so let's check for the mls property type here.
+		currentAutocompleteData.forEach(function(x){
+			if(x.value == input.value) {
+				mlsPtIDs.forEach(function(y) {
+					if(y.idxID == x.mls) {
+						mlsPtId = y.mlsPtID;
 					}
-					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&a_streetNumber=' + addressSplit[0] + '&aw_address=' + addressName + '&srt=' + sortOrder);
-				} else if(input.value === idxOmnibarPlaceholder){
-					//prevent placeholder from interfering with results URL
-					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&srt=' + sortOrder);
-				} else {
-					//search by just street name (without state or city if comma is used)
-					goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&aw_address=' + input.value.split(', ')[0] + '&srt=' + sortOrder);
-				}
+				});
 			}
-		};
+		});
+		
+		var hasSpaces = /\s/g.test(input.value);
+		if (!input.value) {
+			//nothing in input
+			goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&srt=' + sortOrder);
+		} else if(hasSpaces === false && parseInt(input.value) !== isNaN) {
+			//MLS Number/ListingID
+			var listingID = true;
+			var agentHeaderID = false;
+			goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID);
+		} else {
+			//address (split into number and street)
+			var addressSplit = input.value.split(' ');
+			//if first entry is number, search for street number otherwise search for street name
+			if(Number(addressSplit[0]) > 0){
+				var addressName = addressSplit[1];
+				// don't assume street name is one word, combine address pieces
+				if(addressSplit.length > 1) {
+					for(var i=2, len=addressSplit.length; i < len; i++){
+						addressName += '+' + addressSplit[i];
+					}
+				}
+				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&a_streetNumber=' + addressSplit[0] + '&aw_address=' + addressName + '&srt=' + sortOrder);
+			} else if(input.value === idxOmnibarPlaceholder){
+				//prevent placeholder from interfering with results URL
+				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&srt=' + sortOrder);
+			} else {
+				//search by just street name (without state or city if comma is used)
+				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&aw_address=' + input.value.split(', ')[0] + '&srt=' + sortOrder);
+			}
+		}
+	};
 
 
 	var runSearch = function(event) {
