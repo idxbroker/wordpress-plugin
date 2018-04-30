@@ -129,7 +129,6 @@ var idxOmnibar = function(jsonData){
 	function debounceAjax() {
 		var prevDataLength = 0;
 		return debounce(function(a, value) {
-			console.log(a);
 			jQuery.ajax({
 				url: idxAutocompleteServerObj.url + value.value + "?_wpnonce=" + idxAutocompleteServerObj.nonce,
 			}).done(function(data) {
