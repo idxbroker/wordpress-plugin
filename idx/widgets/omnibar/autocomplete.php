@@ -12,26 +12,25 @@ class Autocomplete {
 		check_ajax_referer( 'wp_rest', '_wpnonce' );
 
 		$search_text = urldecode( $data['query'] );
+		$like_query  = '%' . $search_text . '%';
 
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
 
-		// Direct db call is fine, since we can't cache every search variant
-		// Selects distinct in case of duplicate address in MLS
+		// Need to interpolate the table name, since wpdb::prepare will escape the value, adding quotes, and that table doesn't exist.
+		// It is safe though, since we are deriving the table name from $wpdb->prefix.
 		$results = $wpdb->get_results(
-			"SELECT DISTINCT value FROM $table_name WHERE value LIKE '%$search_text%' LIMIT 10"
+			$wpdb->prepare(
+				"SELECT DISTINCT value, mls FROM $table_name WHERE value LIKE %s LIMIT 10", $like_query
+			)
 		);
 
 		if ( ! is_array( $results ) ) {
 			return [];
 		}
 
-		$output_array = array_map( function( $x ) {
-			return $x->value;
-		}, $results);
-
-		return $output_array;
+		return $results;
 	}
 
 }
