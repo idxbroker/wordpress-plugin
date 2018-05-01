@@ -538,7 +538,8 @@ var idxOmnibar = function(jsonData){
 	//callback for checkAgainstList function. Inherits global idxUrl variable from widget HTML script
 	var notOnList = function (input) {
 		var mlsPtId = basicPtID;
-		var fieldType = '';
+		var AddressFieldType = '';
+		var AddressMLS = '';
 
 		// The address autocomplete will never be on the list, so let's check for the mls property type here.
 		currentAutocompleteData.forEach(function(x){
@@ -548,13 +549,14 @@ var idxOmnibar = function(jsonData){
 						mlsPtId = y.mlsPtID;
 					}
 				});
-				fieldType = x.field;
+				AddressFieldType = x.field;
+				AddressMLS = x.mls;
 			}
 		});
 
 		// Quick fix for if using the address autocomplete
-		if(fieldType === 'address') {
-			goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&aw_address=' + input.value);
+		if(AddressFieldType === 'address') {
+			goToResultsPage(input, idxUrl, '?idxID=' + AddressMLS + '&pt=' + mlsPtId + '&aw_address=' + input.value);
 			return;
 		}
 		
