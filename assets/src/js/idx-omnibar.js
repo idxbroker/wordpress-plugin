@@ -38,7 +38,7 @@ var idxOmnibar = function(jsonData){
 		var displayName = '';
 		for(var i = 0; i < Object.size(customFieldsKey); i++){
 			var systemName = Object.keys(customFieldsKey)[i];
-			var longName = customFieldsKey['systemName'];
+			var longName = customFieldsKey[systemName];
 			if(fieldName === systemName){
 				displayName = longName;
 			}
