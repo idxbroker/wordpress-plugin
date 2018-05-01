@@ -1,5 +1,4 @@
 window.addEventListener('DOMContentLoaded', function(){
-
     if(typeof loadOmnibarView !== 'undefined'){
         jQuery.post(
             ajaxurl, {
@@ -33,9 +32,12 @@ window.addEventListener('DOMContentLoaded', function(){
     }
 
     function activateSelect2() {
-        jQuery('.select2').select2({
+        jQuery('.omnibar-additional-custom-field').select2({
             maximumSelectionLength: 10,
             placeholder: 'Select Up to Ten Fields'
+        });
+        jQuery('.omnibar-address-multiselect').select2({
+            placeholder: "Select MLS"
         });
     }
     
@@ -46,6 +48,7 @@ window.addEventListener('DOMContentLoaded', function(){
             jQuery('.status').fadeIn('fast').html(ajax_load + 'Saving Settings...');
             updateOmnibarCurrentCcz();
             updateOmnibarSortOrder();
+            updateOmnibarAddressMLS();
             });
         }
     }
@@ -140,6 +143,35 @@ window.addEventListener('DOMContentLoaded', function(){
         }, function(){updateOmnibarCustomFields();});
     }
 
+    function allAjaxProcesses(){
+        var runningTotal = 0;
+        // We don't want to redownload all the address data if not needed, so this var keeps track if any relevant settings changed for address data
+        var addressDataChanged = 0;
+        return function (data){
+            if( +data === 1 || +data === 0) {
+                addressDataChanged += +data;
+            }
+            runningTotal++;
+            // If we get all 3 responses back, reload page
+            if( runningTotal >= 3 ) {
+                var toUpdate = 'custom';
+                if(addressDataChanged > 0) {
+                    toUpdate = 'all'
+                }
+                jQuery.post(
+                    ajaxurl, {
+                    'action': 'idx_update_database',
+                    'toUpdate': toUpdate
+                }, function() { window.location.reload(); } );
+
+                runningTotal = 0;
+                addressDataChanged = 0;
+            }
+        }
+    }
+
+    var ajaxFinished = allAjaxProcesses();
+
 
     function updateOmnibarCustomFields(){
         if(customField.options === undefined){
@@ -170,7 +202,7 @@ window.addEventListener('DOMContentLoaded', function(){
                 'fields': customFieldValues,
                 'mlsPtIDs': mlsPtIDs,
                 'placeholder': placeholder
-        }, function(){window.location.reload();});
+        }, function(data) {ajaxFinished(data); } );
     }
 
     function updateOmnibarSortOrder(){
@@ -179,6 +211,15 @@ window.addEventListener('DOMContentLoaded', function(){
                 ajaxurl, {
                 'action': 'idx_update_sort_order',
                 'sort-order': sortorder.options[ sortorder.selectedIndex ].value
-        }, function(){window.location.reload();});
+        }, function(data) {ajaxFinished(data); } );
+    }
+
+    function updateOmnibarAddressMLS(){
+        var address = jQuery("#omnibar-address-mls");
+         jQuery.post(
+                ajaxurl, {
+                'action': 'idx_update_address_mls',
+                'address-mls': address.val()
+        }, function(data) {ajaxFinished(data); } );
     }
 });
