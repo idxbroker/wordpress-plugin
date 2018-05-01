@@ -189,7 +189,7 @@ class Omnibar_Settings
 
 		// Addresses:
 		echo '<h3>Addresses</h3><div class="idx-omnibar-address-settings">';
-		echo '<div class="help-text">Choose which MLS is included in the address autofill. <b>All</b> property addresses will be included for each MLS selected.';
+		echo '<div class="help-text">Choose which MLS is included in the address autofill. Addresses will only be included from the above selected property types.';
 		echo '<br />Do <b>NOT</b> select address as a custom field while using this option.</div>';
 		?>
 		<div class="select-div">
