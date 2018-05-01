@@ -145,24 +145,27 @@ window.addEventListener('DOMContentLoaded', function(){
 
     function allAjaxProcesses(){
         var runningTotal = 0;
-        var dataChanged = 0;
+        // We don't want to redownload all the address data if not needed, so this var keeps track if any relevant settings changed for address data
+        var addressDataChanged = 0;
         return function (data){
             if( +data === 1 || +data === 0) {
-                dataChanged += +data;
+                addressDataChanged += +data;
             }
             runningTotal++;
             // If we get all 3 responses back, reload page
             if( runningTotal >= 3 ) {
-                if(dataChanged > 0) {
-                    jQuery.post(
-                        ajaxurl, {
-                        'action': 'idx_update_database',
-                    }, function() { window.location.reload(); } );
-                } else {
-                    window.location.reload();
+                var toUpdate = 'custom';
+                if(addressDataChanged > 0) {
+                    toUpdate = 'all'
                 }
-                runningtotal = 0;
-                dataChanged = 0;
+                jQuery.post(
+                    ajaxurl, {
+                    'action': 'idx_update_database',
+                    'toUpdate': toUpdate
+                }, function() { window.location.reload(); } );
+
+                runningTotal = 0;
+                addressDataChanged = 0;
             }
         }
     }

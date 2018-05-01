@@ -1,38 +1,39 @@
 <?php
 namespace IDX\Widgets\Omnibar;
 
-class Get_Locations
-{
-	public function __construct($disable_address_update = false)
-	{
+class Get_Locations {
+	public function __construct( $update = 'all' ) {
 
-		$api = get_option('idx_broker_apikey');
-		if (empty($api)) {
-		 	return;
+		$api = get_option( 'idx_broker_apikey' );
+		if ( empty( $api ) ) {
+			return;
 		}
 		$this->idx_api = new \IDX\Idx_Api();
-		if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
+		if ( isset( $this->idx_api->idx_api_get_systemlinks()->errors ) ) {
 			return;
 		}
 
 		$this->mls_list = $this->idx_api->approved_mls();
 
-		$this->address_mls = get_option('idx_broker_omnibar_address_mls', []);
+		$this->address_mls = get_option( 'idx_broker_omnibar_address_mls', [] );
 		if ( ! is_array( $this->address_mls ) ) {
 			$this->address_mls = [];
 		}
 
-		$this->property_types = get_option('idx_default_property_types');
+		$this->property_types = get_option( 'idx_default_property_types' );
 
-		$this->initiate_get_locations();
-
-
-		if( $disable_address_update ) {
-			return;
+		switch ( $update ) {
+			case 'address':
+				$this->create_autocomplete_table();
+				break;
+			case 'custom':
+				$this->initiate_get_locations();
+				break;
+			case 'all':
+				$this->initiate_get_locations();
+				$this->create_autocomplete_table();
+				break;
 		}
-
-
-		$this->create_autocomplete_table();
 	}
 
     public $idx_api;

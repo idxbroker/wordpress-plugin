@@ -425,7 +425,8 @@ EOT;
 
 	// wp_schedule_single_event() allows us to run tasks in the background
 	public function idx_update_database() {
-		wp_schedule_single_event( time(), 'idx_get_new_location_data', [ false ] );
+		$to_update = $_POST['toUpdate'];
+		wp_schedule_single_event( time(), 'idx_get_new_location_data', [ $to_update ] );
 		wp_die();
 	}
 
@@ -461,8 +462,8 @@ EOT;
 		return 1;
 	}
 
-	public function get_locations( $disable_address_update = false ) {
-		new \IDX\Widgets\Omnibar\Get_Locations( $disable_address_update );
+	public function get_locations( $update = 'all' ) {
+		new \IDX\Widgets\Omnibar\Get_Locations( $update );
 	}
 
 }
