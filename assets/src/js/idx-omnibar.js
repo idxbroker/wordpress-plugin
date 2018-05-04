@@ -129,6 +129,11 @@ var idxOmnibar = function(jsonData){
 	function debounceAjax() {
 		var prevDataLength = 0;
 		return debounce(function(a, value) {
+			if(value.value.length < 1) {
+				a.list = a._list.slice(0, a._list.length - prevDataLength);
+				prevDataLength = 0;
+				return;
+			}
 			var nonceParam = '_wpnonce=';
 			if( ~idxAutocompleteServerObj.url.indexOf('?') ) {
 				nonceParam = '&' + nonceParam;
@@ -147,7 +152,7 @@ var idxOmnibar = function(jsonData){
 
 				data = data.map(function(x){return x.value});
 				// a.list is a setter with a._list being the actual data array
-				// We want to remove the last address entries and add the news ones (mostly to remove duplicates)
+				// We want to remove the last address entries and add the news ones
 				a.list = a._list.slice(0, a._list.length - prevDataLength).concat(data);
 
 				prevDataLength = data.length;
