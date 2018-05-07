@@ -247,7 +247,7 @@ class Get_Locations {
 			$insert_values[] = $val;
 			$query .= '(%s,%s,%s)';
 			$it++;
-			if ($it >= 30000) {
+			if ($it >= 100) {
 				$wpdb->query(
 					$wpdb->prepare($query, $insert_values)
 				);
