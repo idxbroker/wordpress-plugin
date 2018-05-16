@@ -126,35 +126,35 @@ class IDX_Leads_GF
 
 				$fields = self::get_all_form_fields( $form_id );
 
-				$code_firstname = (string)self::find_field($fields, 'Name (First)');
+				$code_firstname = (string) self::find_field( $fields, 'First', 'name' );
 				$firstname = filter_var($entry[$code_firstname],FILTER_SANITIZE_STRING);
 
-				$code_lastname = (string)self::find_field($fields, 'Name (Last)');
+				$code_lastname = (string) self::find_field( $fields, 'Last', 'name' );
 				$lastname = filter_var($entry[$code_lastname],FILTER_SANITIZE_STRING);
 
-				$code_email = (string)self::find_field($fields, 'Email');
+				$code_email = (string) self::find_field( $fields, 'Email', 'email' );
 				$email = filter_var($entry[$code_email],FILTER_SANITIZE_STRING);
 
-				$code_phone = (string)self::find_field($fields, 'Phone');
-				if($code_phone) {$phone = filter_var($entry[$code_phone],FILTER_SANITIZE_STRING);}
+				$code_phone = (string) self::find_field( $fields, 'Phone', 'phone' );
+				if ( $code_phone) {$phone = filter_var($entry[$code_phone],FILTER_SANITIZE_STRING);}
 
-				$code_streetAddress = (string)self::find_field($fields, 'Address (Street Address)');
-				if($code_streetAddress) {$streetAddress = filter_var($entry[$code_streetAddress],FILTER_SANITIZE_STRING);}
+				$code_streetAddress = (string) self::find_field( $fields, 'Address (Street Address)' );
+				if ( $code_streetAddress) {$streetAddress = filter_var($entry[$code_streetAddress],FILTER_SANITIZE_STRING);}
 
-				$code_addressLine = (string)self::find_field($fields, 'Address (Address Line 2)');
-				if($code_addressLine) {$addressLine = filter_var($entry[$code_addressLine],FILTER_SANITIZE_STRING);}
+				$code_addressLine = (string) self::find_field( $fields, 'Address (Address Line 2)' );
+				if ( $code_addressLine) {$addressLine = filter_var($entry[$code_addressLine],FILTER_SANITIZE_STRING);}
 
-				$code_city = (string)self::find_field($fields, 'Address (City)');
-				if($code_city) {$city = filter_var($entry[$code_city],FILTER_SANITIZE_STRING);}
+				$code_city = (string) self::find_field( $fields, 'Address (City)' );
+				if ( $code_city) {$city = filter_var($entry[$code_city],FILTER_SANITIZE_STRING);}
 
-				$code_state = (string)self::find_field($fields, 'Address (State / Province)');
-				if($code_state) {$state = filter_var($entry[$code_state],FILTER_SANITIZE_STRING);}
+				$code_state = (string) self::find_field( $fields, 'Address (State / Province)' );
+				if ( $code_state) {$state = filter_var($entry[$code_state],FILTER_SANITIZE_STRING);}
 
-				$code_zip = (string)self::find_field($fields, 'Address (ZIP / Postal Code)');
-				if($code_zip) {$zip = filter_var($entry[$code_zip],FILTER_SANITIZE_STRING);}
+				$code_zip = (string) self::find_field( $fields, 'Address (ZIP / Postal Code)' );
+				if ( $code_zip) {$zip = filter_var($entry[$code_zip],FILTER_SANITIZE_STRING);}
 
-				$code_country = (string)self::find_field($fields, 'Address (Country)');
-				if($code_country) {$country = filter_var($entry[$code_country],FILTER_SANITIZE_STRING);}
+				$code_country = (string) self::find_field( $fields, 'Address (Country)' );
+				if ( $code_country) {$country = filter_var($entry[$code_country],FILTER_SANITIZE_STRING);}
 
 				// Get agent ID from form field if it exists
 				// otherwise get from form settings
@@ -178,7 +178,6 @@ class IDX_Leads_GF
 					'actualCategory' => ( isset( $form_options['category'] ) ) ? $form_options['category'] : '',
 					'agentOwner' => $agent_owner,
 				);
-
 				$api_url = 'https://api.idxbroker.com/leads/lead';
 				$args = array(
 					'method' => 'PUT',
@@ -244,24 +243,50 @@ class IDX_Leads_GF
 		$form = RGFormsModel::get_form_meta( $form_id );
 		$fields = array();
 
-		if ( is_array( $form["fields"] ) ) {
-			foreach ( $form["fields"] as $field ) {
-				if( isset( $field["inputs"] ) && is_array( $field["inputs"] ) ) {
+		if ( is_array( $form['fields'] ) ) {
+			foreach ( $form['fields'] as $field ) {
+				if ( isset( $field['inputs'] ) && is_array( $field['inputs'] ) ) {
 
-					foreach( $field["inputs"] as $input )
-						$fields[] =  array('id' => $input["id"], 'name' => GFCommon::get_label( $field, $input["id"] ) );
-				}
-				else if ( !rgar( $field, 'displayOnly') ) {
-					$fields[] =  array( 'id' => $field["id"], 'name' => GFCommon::get_label( $field ) );
+					foreach ( $field['inputs'] as $input ) {
+						$fields[] = array(
+							'id' => $input['id'],
+							'name' => GFCommon::get_label( $field, $input['id'] ),
+							'type' => $field['type'],
+						);
+					}
+				} elseif ( ! rgar( $field, 'displayOnly' ) ) {
+					$fields[] = array(
+						'id' => $field['id'],
+						'name' => GFCommon::get_label( $field ),
+						'type' => $field['type'],
+					);
 				}
 			}
-		}        
+		}
 		return $fields;
 	}
 
-	private static function find_field( $fields, $fid ) {
-		foreach( $fields as $field ) {              
-			if( $field['name'] == $fid ) return $field['id'];
+	/**
+	 * Finds the field ID given the label or optional advanced field type.
+	 *
+	 * @param  array $fields Array of fields from get_all_form_fields()
+	 * @param  string $label The field label or piece of label if type is name (i.e. first)
+	 * @param  string $type   Optional. Advanced field type (name and email)
+	 * @uses   self::get_all_form_fields()
+	 *
+	 * @return int|false      Field ID or false
+	 */
+	private static function find_field( $fields, $label, $type = null ) {
+		foreach ( $fields as $field ) {
+			if ( null !== $type && $type === $field['type'] ) {
+				if ( 'name' === $type && is_int( strpos( $field['name'], $label ) ) ) {
+					return $field['id'];
+				} elseif ( 'email' === $type || 'phone' === $type ) {
+					return $field['id'];
+				}
+			} elseif ( $field['name'] === $label ) {
+				return $field['id'];
+			}
 		}
 		return false;
 	}
@@ -269,12 +294,13 @@ class IDX_Leads_GF
 	private static function output_form_fields( $entry, $form_id ) {
 		$fields = self::get_all_form_fields( $form_id );
 		$output = '';
-		foreach($fields as $field) {
+		foreach ( $fields as $field ) {
 			$field_id = $field['id'];
-			$field_entry = filter_var( $entry[$field_id], FILTER_SANITIZE_STRING );
+			$field_entry = filter_var( $entry[ $field_id ], FILTER_SANITIZE_STRING );
 
-			if( $field_entry )
+			if ( $field_entry ) {
 				$output .= $field['name'] . ":\r\n" . $field_entry . "\r\n\r\n";
+			}
 		}
 
 		return $output;
