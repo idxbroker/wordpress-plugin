@@ -37,7 +37,7 @@ class Migrate_Legacy_Widgets {
 			}
 		}
 
-		if ( $widgets_converted ) {
+		if ( $widgets_converted || false === $active_widgets ) {
 			update_option( 'idx_migrated_old_mw_widgets', true, false );
 		}
 	}
