@@ -35,14 +35,16 @@ class Register_Idx_Shortcodes
 
         if (!is_null($id)) {
             $url = $this->get_widget_url( $id );
+            $widget = '';
+            // This is dumb. Don't ever do this. But we have weird conflicts and issues if we don't do this.
             if ( strpos( $url, 'mapwidgetjs.php' ) ) {
-                wp_enqueue_script( 'custom-scriptLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', __FILE__ );
-                wp_enqueue_script( 'custom-scriptLeafDraw', 'https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', __FILE__ );
-                wp_enqueue_script( 'custom-scriptMQ', 'https://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
+                $widget .= '<script type="text/javascript" data-name="custom-scriptLeaf" src="https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js"></script>';
+                $widget .= '<script type="text/javascript" data-name="custom-scriptLeafDraw" src="https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js"></script>';
+                $widget .= '<script type="text/javascript" data-name="custom-scriptMQ" src="https://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh"></script>';
                 wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.css' );
                 wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
             }
-            $widget = '<script type="text/javascript" src="' . $url . '"></script>';
+            $widget .= '<script type="text/javascript" src="' . $url . '"></script>';
             return $widget;
         } else {
             return false;
