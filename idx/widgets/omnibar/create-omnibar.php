@@ -75,7 +75,7 @@ EOD;
         if (!empty($styles)) {
             wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
         }
-        wp_register_script('idx-omnibar-js', plugins_url('../../assets/src/js/idx-omnibar.js', dirname(__FILE__)), array(), false, true);
+        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)), array(), false, true);
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
