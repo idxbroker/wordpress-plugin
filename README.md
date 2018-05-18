@@ -112,7 +112,7 @@ When you sign up for a new account our MLS team will send you a Docusign email (
 Features provided by this Plugin - Widgets, links, and custom links may be placed onto any WordPress website or blog. The reason for this is because all Widgets, links, and custom links point back to the original IDX-approved website. Note that using iframes to display this same content is prohibited and may result in account termination due to MLS rules. 
  
 ### What are Other Requirements for this Plugin? ###
-This plugin requires a PHP version higher than 5.4. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
+This plugin requires a PHP version higher than 5.6. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
 
 ## Changelog ##
 
