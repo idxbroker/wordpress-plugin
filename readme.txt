@@ -3,9 +3,9 @@ Author: IDX, LLC
 Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
-Requires at least: 3.7
-Tested up to: 4.9.2
-Stable tag: 2.5.0
+Requires at least: 4.6
+Tested up to: 4.9.6
+Stable tag: 2.5.1
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -132,6 +132,12 @@ This plugin requires a PHP version higher than 5.4. For security reasons, we rec
 14. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+
+= 2.5.1 =
+* New: Omnibar now supports address autocomplete by default.
+* New: Middleware widgets are no longer individually imported. A single IMPress - IDX Dashboard Widget is available to use instead. Migration script will replace any old widgets in use upon upgrade.
+* Fix: Gravity forms lead push failing when default labels of required fields are changed.
+* Fix: Deprecated warning on PHP 7.2+ for Middlware widgets.
 
 = 2.5.0 =
 * New: Display saved links in property showcase and carousel widgets and shortcodes!

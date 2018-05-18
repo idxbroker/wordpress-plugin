@@ -23,6 +23,9 @@ function idx_delete_plugin_data() {
 	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s", '%idx-notice-dismissed%' ) );
 	// Delete any other idx_ prefixed options. *Excludes API key
 	$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s AND option_name NOT LIKE %s", 'idx_%', 'idx_broker_apikey' ) );
+	// Delete the autocomplete table (new rest api autcomplete)
+	$autocomplete_table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
+	$wpdb->query( "DROP TABLE IF EXISTS $autocomplete_table_name" );
 
 	// Delete all IDX page posts.
 	$idx_pages = get_posts(

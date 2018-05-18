@@ -41,7 +41,7 @@ label {
 .select-div {
     margin: .5rem 0;
 }
-.omnibar-additional-custom-field {
+.omnibar-additional-custom-field, #omnibar-address-mls {
     max-width: 640px;
     width: 100%;
 }

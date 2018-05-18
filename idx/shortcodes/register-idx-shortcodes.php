@@ -21,8 +21,8 @@ class Register_Idx_Shortcodes
     const SHORTCODE_WIDGET = 'idx-platinum-widget';
 
     /**
-     * Function to show a idx link with shortcode of type:
-     * [idx-platinum-link title="widget title here"]
+     * Function to show a idx widget with shortcode of type:
+     * [idx-platinum-widget id="widget-id"]
      *
      * @param array $atts
      * @return html code for showing the widget/ bool false
@@ -34,7 +34,18 @@ class Register_Idx_Shortcodes
         ), $atts));
 
         if (!is_null($id)) {
-            return \IDX\Widgets\Create_Idx_Widgets::get_widget_by_uid($id);
+            $url = $this->get_widget_url( $id );
+            $widget = '';
+            // This is dumb. Don't ever do this. But we have weird conflicts and issues if we don't do this.
+            if ( strpos( $url, 'mapwidgetjs.php' ) ) {
+                $widget .= '<script type="text/javascript" data-name="custom-scriptLeaf" src="https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js"></script>';
+                $widget .= '<script type="text/javascript" data-name="custom-scriptLeafDraw" src="https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js"></script>';
+                $widget .= '<script type="text/javascript" data-name="custom-scriptMQ" src="https://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh"></script>';
+                wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.css' );
+                wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
+            }
+            $widget .= '<script type="text/javascript" src="' . $url . '"></script>';
+            return $widget;
         } else {
             return false;
         }
@@ -140,6 +151,22 @@ class Register_Idx_Shortcodes
     public function wrapper_tags()
     {
         return "\r\n<div id=\"idxStart\"></div>\r\n<div id=\"idxStop\"></div>\r\n";
+    }
+
+    /**
+     * Returns the widget URL given a widget UID.
+     *
+     * @param  string $widget_uid The IDX assigned widget UID.
+     * @return string | false     Widget or URL or false if none found.
+     */
+    public function get_widget_url( $widget_uid ) {
+        $idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
+        foreach ( $idx_widgets as $widget ) {
+            if ( $widget_uid === $widget->uid ) {
+                return $widget->url;
+            }
+        }
+        return false;
     }
 
 }

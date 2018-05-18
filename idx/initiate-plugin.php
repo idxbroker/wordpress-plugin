@@ -42,7 +42,6 @@ class Initiate_Plugin
     {
         new Wrappers();
         new Idx_Pages();
-        new Widgets\Create_Idx_Widgets();
         new Shortcodes\Register_Idx_Shortcodes();
         new Widgets\Create_Impress_Widgets();
         new Shortcodes\Register_Impress_Shortcodes();
@@ -52,6 +51,7 @@ class Initiate_Plugin
         new \IDX\Views\Omnibar_Settings();
         new Dashboard_Widget();
         new Backward_Compatibility\Add_Uid_To_Idx_Pages();
+        new Backward_Compatibility\Migrate_Legacy_Widgets();
         new \IDX\Views\Lead_Management();
         new \IDX\Views\Search_Management();
         if ( is_multisite() ) {
@@ -196,7 +196,7 @@ class Initiate_Plugin
         $this->idx_api->idx_clean_transients();
         update_option('idx_broker_apikey', $_REQUEST['idx_broker_apikey'], false);
         setcookie("api_refresh", 1, time() + 20);
-        new \IDX\Widgets\Omnibar\Get_Locations();
+        wp_schedule_single_event( time(), 'idx_omnibar_get_locations' );
         wp_die();
     }
 

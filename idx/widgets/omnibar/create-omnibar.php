@@ -7,6 +7,7 @@ class Create_Omnibar
     {
         $this->register_shortcodes();
         $this->register_widgets();
+        $this->register_rest_endpoint();
 
     }
 
@@ -27,7 +28,7 @@ class Create_Omnibar
         if (!empty($styles)) {
             wp_enqueue_style('idx-omnibar', plugins_url('../../assets/css/widgets/idx-omnibar.min.css', dirname(__FILE__)));
         }
-        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)), array(), false, true);
+        wp_register_script('idx-omnibar-js', plugins_url('../../assets/js/idx-omnibar.min.js', dirname(__FILE__)), array('wp-api'), false, true);
         //inserts inline variable for the results page url
         wp_localize_script('idx-omnibar-js', 'idxUrl', $idx_url);
         wp_localize_script('idx-omnibar-js', 'sortOrder', $sort_order);
@@ -40,8 +41,13 @@ class Create_Omnibar
                 wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
             }
         }
-        wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
+		$server_obj = array(
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'url'   => get_rest_url() . 'idxbroker/v1/omnibar/autocomplete/',
+		);
+		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj );
+		wp_enqueue_script( 'idx-omnibar-js' );
+		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), false, true );
 
         return <<<EOD
         <form class="idx-omnibar-form idx-omnibar-original-form">
@@ -82,8 +88,14 @@ EOD;
                 wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
             }
         }
-        wp_enqueue_script('idx-omnibar-js');
-        wp_enqueue_script('idx-location-list', $idx_dir_url . '/locationlist.js', array('idx-omnibar-js'), false, true);
+
+		$server_obj = array(
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'url'   => get_rest_url() . 'idxbroker/v1/omnibar/autocomplete/',
+		);
+		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj );
+		wp_enqueue_script( 'idx-omnibar-js' );
+		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), false, true );
 
         $price_field = $this->price_field($min_price);
 
@@ -185,4 +197,14 @@ EOD;
 
     }
 
+    // Registers the endpoint, the logic is in Omnibar\Autocomplete
+    public function register_rest_endpoint() {
+        add_action( 'rest_api_init', function() {
+        	// Query string can be anything
+            register_rest_route( 'idxbroker/v1', '/omnibar/autocomplete/(?P<query>.*+)', array(
+                'methods' => 'GET',
+                'callback' => [new \IDX\Widgets\Omnibar\Autocomplete(), 'get_autocomplete_data'],
+            ) );
+        });
+    }
 }

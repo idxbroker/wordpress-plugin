@@ -1,23 +1,45 @@
 <?php
 namespace IDX\Widgets\Omnibar;
 
-class Get_Locations
-{
-    public function __construct()
-    {
-        $api = get_option('idx_broker_apikey');
-        if (empty($api)) {
-            return;
-        } else {
-            $this->idx_api = new \IDX\Idx_Api();
-            if (isset($this->idx_api->idx_api_get_systemlinks()->errors)) {
-                return;
-            }
-            $this->initiate_get_locations();
-        }
-    }
+class Get_Locations {
+	public function __construct( $update = 'all' ) {
+
+		$api = get_option( 'idx_broker_apikey' );
+		if ( empty( $api ) ) {
+			return;
+		}
+		$this->idx_api = new \IDX\Idx_Api();
+		if ( isset( $this->idx_api->idx_api_get_systemlinks()->errors ) ) {
+			return;
+		}
+
+		$this->mls_list = $this->idx_api->approved_mls();
+
+		$this->address_mls = get_option( 'idx_broker_omnibar_address_mls', [] );
+		if ( ! is_array( $this->address_mls ) ) {
+			$this->address_mls = [];
+		}
+
+		$this->property_types = get_option( 'idx_default_property_types' );
+
+		switch ( $update ) {
+			case 'address':
+				$this->create_autocomplete_table();
+				break;
+			case 'custom':
+				$this->initiate_get_locations();
+				break;
+			case 'all':
+				$this->initiate_get_locations();
+				$this->create_autocomplete_table();
+				break;
+		}
+	}
 
     public $idx_api;
+    private $address_mls;
+    private $mls_list;
+    private $property_types;
 
     /*
      * Custom Advanced Fields added via admin
@@ -116,6 +138,129 @@ class Get_Locations
         $zipcodes = ', "zipcodes" : ' . json_encode($this->idx_api->idx_api("postalcodes/$omnibar_zipcode"));
         return $cities . $counties . $zipcodes;
     }
+    
+    // Drops the table on each new data fetch.
+    // This is super inefficient, but not going to bother optimizing with elastic search
+    // around the corner.
+	private function drop_autocomplete_table() {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
+
+		$sql = "DROP TABLE IF EXISTS $table_name";
+
+		return $wpdb->query( $sql );
+	}
+
+	// Creates our table
+	public function create_autocomplete_table() {
+		$drop_result = $this->drop_autocomplete_table();
+
+		// Table failed to drop
+		if ( $drop_result === false ) {
+			// Return so we don't get duplicate entries in the table
+			// We should probably set an alert for the user when this fails
+			return;
+		}
+
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
+
+		$charset_collate = $wpdb->get_charset_collate();
+		$sql = "CREATE TABLE $table_name (
+			mls varchar(4) NOT NULL,
+			field text NOT NULL,
+			value text NOT NULL 
+		) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+		dbDelta( $sql );
+
+		// TODO: Remove this option on uninstall
+		add_option( 'idx_broker_autocomplete_values_version', '1.0' );
+
+		$this->populate_table();
+	}
+
+	// Loops through all selected address autofill MLSs & takes the property type
+	// selection to insert the correct addresses into the db.
+	private function populate_table() {
+		foreach ( $this->address_mls as $mls ) {
+			$pt_arr_id = array_search(
+				$mls,
+				array_column( $this->property_types, 'idxID' )
+			);
+			$this->address_table_insert( $mls, $this->property_types[ $pt_arr_id ]['mlsPtID'] );
+		}
+	}
+
+	// Performs a wp_remote_get then does the database insert. Should do one huge insert.
+	private function address_table_insert( $mls, $parent_id ) {
+
+		$args = array(
+			'headers' => array(
+				'Content-Type' => 'application/x-www-form-urlencoded',
+				'accesskey' => get_option('idx_broker_apikey'),
+				'apiversion' => \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+				'outputtype' => 'json',
+			),
+			'timeout' => 120,
+		);
+
+		$response = wp_remote_get("https://api.idxbroker.com/mls/searchfieldvalues/$mls?mlsPtID=$parent_id&name=address", $args);
+
+		if ( is_wp_error($response) || ! isset($response['body']) ) {
+			return;
+		}
+
+		$field_values = json_decode( $response['body'] );
+
+		// Make sure we have a nonempty array
+		if (! is_array( $field_values ) || empty( $field_values ) ) {
+			return;
+		}
+
+		$field = 'address';
+
+		$this->run_insert_query( $mls, $field_values, $field );
+	}
+
+	private function run_insert_query( $mls, $field_values, $field ) {
+		global $wpdb;
+		$wpdb->show_errors();
+
+		$insert_values = [];
+
+		$table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
+
+		$query = "INSERT INTO $table_name (mls, field, value) VALUES ";
+
+		$it = 0;
+		foreach ( $field_values as $val ) {
+			if ( $it > 0 ) {
+				$query .= ',';
+			}
+			$insert_values[] = $mls;
+			$insert_values[] = $field;
+			$insert_values[] = $val;
+			$query .= '(%s,%s,%s)';
+			$it++;
+			if ($it >= 100) {
+				$wpdb->query(
+					$wpdb->prepare($query, $insert_values)
+				);
+				$it = 0;
+				$insert_values = [];
+				$query = "INSERT INTO $table_name (mls, field, value) VALUES ";
+			}
+		}
+
+		$wpdb->query(
+			$wpdb->prepare($query, $insert_values)
+		);
+	}
 
     private function initiate_get_locations()
     {
