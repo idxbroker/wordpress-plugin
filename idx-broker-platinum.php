@@ -3,7 +3,7 @@
 Plugin Name: IMPress for IDX Broker
 Plugin URI: http://www.idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 2.5.1
+Version: 2.5.2
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: http://www.idxbroker.com/
@@ -18,7 +18,7 @@ new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
 {
     //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '2.5.1';
+    const IDX_WP_PLUGIN_VERSION = '2.5.2';
 
     public function __construct()
     {
@@ -43,7 +43,7 @@ class Idx_Broker_Plugin
      */
     public function php_version_check()
     {
-        if (PHP_VERSION < 5.4) {
+        if (PHP_VERSION < 5.6) {
             add_action('admin_init', array($this, 'idx_deactivate_plugin'));
             add_action('admin_notices', array($this, 'incompatible_message'));
             return false;
@@ -58,7 +58,7 @@ class Idx_Broker_Plugin
             of PHP. This is incompatable with the IDX Broker plugin.
             For security reasons, please contact your host and upgrade to the
             latest stable version of PHP they offer. We recommend a minimum
-            of PHP 5.5.<br>For more information on what versions of PHP are
+            of PHP 5.6.<br>For more information on what versions of PHP are
             supported with security updates, see <a
             href=\"http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin\">
             this knowledgebase article</a> and PHP.net's
