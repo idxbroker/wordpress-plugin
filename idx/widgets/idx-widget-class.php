@@ -1,7 +1,7 @@
 <?php
 namespace IDX\Widgets;
-
 /**
+ * DEPRECATED as of 2.5.1
  * File to manpulate IDX widgets. Create widgets based upon IDX widget API.
  * Based upon API response, iterate through array and create classes for widgets.
  * @author IDX, LLC

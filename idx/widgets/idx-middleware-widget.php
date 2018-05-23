@@ -50,7 +50,7 @@ class Idx_Middleware_Widget extends \WP_Widget {
 				echo '<script type="text/javascript" name="custom-scriptLeaf" src="https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js"></script>';
 				echo '<script type="text/javascript" name="custom-scriptLeafDraw" src="https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js"></script>';
 				echo '<script type="text/javascript" name="custom-scriptMQ" src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh"></script>';
-				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.css' );
+				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
 				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
 			}
 			echo '<script type="text/javascript" src="' . $instance['widget'] . '"></script>';
