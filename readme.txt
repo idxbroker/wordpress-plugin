@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 4.6
 Tested up to: 4.9.6
-Stable tag: 2.5.2
+Stable tag: 2.5.3
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -132,6 +132,10 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 14. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+
+= 2.5.3 =
+* Fix: Javascript error with map search widget when using IMPress - IDX Middleware widget.
+* Fix: Invalid regex in omnibar autocomplete API. 
 
 = 2.5.2 =
 * Fix: Fatal error on PHP < 5.5. Minimum required PHP version increased to 5.6.

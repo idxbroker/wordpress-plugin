@@ -40,8 +40,8 @@ class Register_Idx_Shortcodes
             if ( strpos( $url, 'mapwidgetjs.php' ) ) {
                 $widget .= '<script type="text/javascript" data-name="custom-scriptLeaf" src="https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js"></script>';
                 $widget .= '<script type="text/javascript" data-name="custom-scriptLeafDraw" src="https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js"></script>';
-                $widget .= '<script type="text/javascript" data-name="custom-scriptMQ" src="https://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh"></script>';
-                wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.css' );
+                $widget .= '<script type="text/javascript" data-name="custom-scriptMQ" src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh"></script>';
+                wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
                 wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
             }
             $widget .= '<script type="text/javascript" src="' . $url . '"></script>';

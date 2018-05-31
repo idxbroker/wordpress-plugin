@@ -1,4 +1,7 @@
 <?php
+/**
+ * DEPRECATED as of 2.5.1
+ */
 namespace IDX\Widgets;
 
 class Create_Idx_Widgets
