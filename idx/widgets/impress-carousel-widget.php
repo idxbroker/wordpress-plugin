@@ -30,7 +30,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         'agentID'       => '',
         'display'       => 3,
         'max'           => 15,
-        'order'         => 'high-low',
+        'order'         => 'default',
         'autoplay'      => 1,
         'styles'        => 1,
         'new_window'    => 0,
@@ -129,10 +129,13 @@ class Impress_Carousel_Widget extends \WP_Widget
         </script>
         ';
 
-        // sort low to high
-        usort($properties, array($this, 'price_cmp'));
+        if ('low-high' == $instance['order']) {
+            // sort low to high
+            usort($properties, array($this, 'price_cmp'));
+        }
 
         if ('high-low' == $instance['order']) {
+            usort($properties, array($this, 'price_cmp'));
             $properties = array_reverse($properties);
         }
 
@@ -454,6 +457,7 @@ class Impress_Carousel_Widget extends \WP_Widget
         <p>
             <label for="<?php echo $this->get_field_id('order');?>"><?php _e('Sort order:', 'idxbroker');?></label>
             <select class="widefat" id="<?php echo $this->get_field_id('order');?>" name="<?php echo $this->get_field_name('order')?>">
+                <option <?php selected($instance['order'], 'default');?> value="default"><?php _e('Default', 'idxbroker');?></option>
                 <option <?php selected($instance['order'], 'high-low');?> value="high-low"><?php _e('Highest to Lowest Price', 'idxbroker');?></option>
                 <option <?php selected($instance['order'], 'low-high');?> value="low-high"><?php _e('Lowest to Highest Price', 'idxbroker');?></option>
             </select>

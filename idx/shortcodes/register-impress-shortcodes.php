@@ -68,7 +68,7 @@ class Register_Impress_Shortcodes
             'use_rows'      => 1,
             'num_per_row'   => 4,
             'show_image'    => 1,
-            'order'         => 'high-low',
+            'order'         => 'default',
             'property_type' => 'featured',
             'saved_link_id' => '',
             'agent_id'      => '',
@@ -137,10 +137,13 @@ class Register_Impress_Shortcodes
 
         $target = $this->target( $new_window );
 
-        // sort low to high
-        usort( $properties, array( $this->idx_api, 'price_cmp' ) );
+        if ('low-high' == $order) {
+            // sort low to high
+            usort($properties, array($this->idx_api, 'price_cmp'));
+        }
 
-        if ( 'high-low' == $order ) {
+        if ('high-low' == $order) {
+            usort($properties, array($this->idx_api, 'price_cmp'));
             $properties = array_reverse($properties);
         }
 
@@ -403,7 +406,7 @@ class Register_Impress_Shortcodes
             'max'           => 4,
             'display'       => 3,
             'autoplay'      => 1,
-            'order'         => 'high-low',
+            'order'         => 'default',
             'property_type' => 'featured',
             'saved_link_id' => '',
             'agent_id'      => '',
@@ -449,10 +452,13 @@ class Register_Impress_Shortcodes
             }
         }
 
-        // sort low to high
-        usort($properties, array($this->idx_api, 'price_cmp'));
+        if ('low-high' == $order) {
+            // sort low to high
+            usort($properties, array($this->idx_api, 'price_cmp'));
+        }
 
         if ('high-low' == $order) {
+            usort($properties, array($this->idx_api, 'price_cmp'));
             $properties = array_reverse($properties);
         }
 
