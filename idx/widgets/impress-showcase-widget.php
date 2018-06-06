@@ -34,7 +34,7 @@ class Impress_Showcase_Widget extends \WP_Widget
         'use_rows'         => '1',
         'listings_per_row' => 4,
         'max'              => '',
-        'order'            => 'high-low',
+        'order'            => 'default',
         'styles'           => 1,
         'new_window'       => 0,
     );
@@ -77,10 +77,13 @@ class Impress_Showcase_Widget extends \WP_Widget
             }
         }
 
-        //Sort low to high.
-        usort($properties, array($this, 'price_cmp'));
+        if ('low-high' == $instance['order']) {
+            // sort low to high
+            usort($properties, array($this, 'price_cmp'));
+        }
 
         if ('high-low' == $instance['order']) {
+            usort($properties, array($this, 'price_cmp'));
             $properties = array_reverse($properties);
         }
 
@@ -539,6 +542,7 @@ class Impress_Showcase_Widget extends \WP_Widget
 		<p>
 			<label for="<?php echo $this->get_field_id('order');?>"><?php echo 'Sort order:';?></label>
 			<select class="widefat" id="<?php echo $this->get_field_id('order');?>" name="<?php echo $this->get_field_name('order')?>">
+                <option <?php selected($instance['order'], 'default');?> value="default"><?php echo 'Default';?></option>
 				<option <?php selected($instance['order'], 'high-low');?> value="high-low"><?php echo 'Highest to Lowest Price';?></option>
 				<option <?php selected($instance['order'], 'low-high');?> value="low-high"><?php echo 'Lowest to Highest Price';?></option>
 			</select>
