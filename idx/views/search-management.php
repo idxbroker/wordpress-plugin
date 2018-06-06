@@ -627,15 +627,15 @@ class Search_Management {
 	/**
 	 * Output Agents as select options
 	 */
-	private function agents_select_list($agent_id = null) {
+	private function agents_select_list( $agent_id = null ) {
 		$agents_array = $this->idx_api->idx_api('agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true);
 
-		if($agent_id != null) {
+		if ( null !== $agent_id && ! is_wp_error( $agents_array ) ) {
 			$agents_list = '<option value="0" '. selected($agent_id, '0', 0) . '>None</option>';
 			foreach($agents_array['agent'] as $agent) {
 				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected($agent_id, $agent['agentID'], 0) . '>' . $agent['agentDisplayName'] . '</option>'; 
 			}
-		} else {
+		} elseif ( ! is_wp_error( $agents_array ) ) {
 			$agents_list = '<option value="0">None</option>';
 			foreach($agents_array['agent'] as $agent) {
 				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>'; 
@@ -644,5 +644,4 @@ class Search_Management {
 
 		return $agents_list;
 	}
-
 }
