@@ -374,7 +374,7 @@ class Register_Shortcode_For_Ui
             'use_rows' => 1,
             'num_per_row' => 4,
             'show_image' => 1,
-            'order' => 'high-low',
+            'order' => 'default',
             'property_type' => 'featured',
             'saved_link_id' => '',
             'agent_id'      => '',
@@ -438,7 +438,8 @@ class Register_Shortcode_For_Ui
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"order\">Sort order</label>";
         $output .= "<select id=\"order\" data-short-name=\"order\">";
-        $output .= "<option value=\"high-low\" selected=\"selected\">Highest to Lowest Price</option>";
+        $output .= "<option value=\"default\" selected=\"selected\">Default</option>";
+        $output .= "<option value=\"high-low\">Highest to Lowest Price</option>";
         $output .= "<option value=\"low-high\">Lowest to Highest Price</option>";
         $output .= "</select>";
         $output .= "</div>";
@@ -467,7 +468,7 @@ class Register_Shortcode_For_Ui
             'max' => 15,
             'display' => 3,
             'autoplay' => 1,
-            'order' => 'high-low',
+            'order' => 'default',
             'property_type' => 'featured',
             'saved_link_id' => '',
             'agent_id'      => '',
@@ -517,7 +518,8 @@ class Register_Shortcode_For_Ui
         $output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
         $output .= "<label for\"order\">Sort order</label>";
         $output .= "<select id=\"order\" data-short-name=\"order\">";
-        $output .= "<option value=\"high-low\" selected=\"selected\">Highest to Lowest Price</option>";
+        $output .= "<option value=\"default\" selected=\"selected\">Default</option>";
+        $output .= "<option value=\"high-low\">Highest to Lowest Price</option>";
         $output .= "<option value=\"low-high\">Lowest to Highest Price</option>";
         $output .= "</select>";
         $output .= "</div>";

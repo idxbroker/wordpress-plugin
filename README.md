@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 4.6
 **Tested up to:** 4.9.6
-**Stable tag:** 2.5.3
+**Stable tag:** 2.5.4
 **Minimum PHP:** 5.6
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -115,6 +115,10 @@ Features provided by this Plugin - Widgets, links, and custom links may be place
 This plugin requires a PHP version higher than 5.6. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
 
 ## Changelog ##
+
+### 2.5.4 ###
+* Fix: Property widgets and shortcodes now have a default sort option that respects a saved link's sorting method.
+* Fix: Fatal error on API exhaustion.
 
 ### 2.5.3 ###
 * Fix: Javascript error with map search widget when using IMPress - IDX Middleware widget.
