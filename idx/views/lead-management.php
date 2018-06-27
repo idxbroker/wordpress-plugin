@@ -149,7 +149,7 @@ class Lead_Management {
 				echo 'Lead already exists.';
 			} elseif(wp_remote_retrieve_response_code($response) == '200') {
 				// Delete lead cache so new lead will show in list views immediately
-				delete_option('idx_lead_cache');
+				delete_option('idx_leads_lead_cache');
 				// return new lead ID to script
 				echo $decoded_response['newID'];
 			} else {
@@ -186,7 +186,7 @@ class Lead_Management {
 			$response = wp_remote_request($api_url, $args);
 
 			if(wp_remote_retrieve_response_code($response) == '204') {
-				delete_option('idx_lead/' . $_POST['leadID'] . '_cache');
+				delete_option('idx_leads_lead/' . $_POST['leadID'] . '_cache');
 				echo 'success';
 			} else {
 				echo 'error';
@@ -224,7 +224,7 @@ class Lead_Management {
 			$decoded_response = json_decode($response['body'], 1);
 
 			if(wp_remote_retrieve_response_code($response) == '200') {
-				delete_option('idx_note/' . $_POST['id'] . '_cache');
+				delete_option('idx_leads_note/' . $_POST['id'] . '_cache');
 				echo $decoded_response['newID'];
 			} else {
 				echo 'error';
@@ -262,7 +262,7 @@ class Lead_Management {
 			$decoded_response = json_decode($response['body'], 1);
 
 			if(wp_remote_retrieve_response_code($response) == '204') {
-				delete_option('idx_note/' . $_POST['id'] . '_cache');
+				delete_option('idx_leads_note/' . $_POST['id'] . '_cache');
 				echo 'success';
 			} else {
 				echo 'error';
@@ -309,7 +309,7 @@ class Lead_Management {
 			$decoded_response = json_decode($response['body'], 1);
 
 			if(wp_remote_retrieve_response_code($response) == '200') {
-				delete_option('idx_property/' . $_POST['id'] . '_cache');
+				delete_option('idx_leads_property/' . $_POST['id'] . '_cache');
 				echo $decoded_response['newID'];
 			} else {
 				echo 'error';
@@ -356,7 +356,7 @@ class Lead_Management {
 			$decoded_response = json_decode($response['body'], 1);
 
 			if(wp_remote_retrieve_response_code($response) == '204') {
-				delete_option('idx_property/' . $_POST['id'] . '_cache');
+				delete_option('idx_leads_property/' . $_POST['id'] . '_cache');
 				echo 'success';
 			} else {
 				echo 'error';
@@ -391,8 +391,8 @@ class Lead_Management {
 			$response = wp_remote_request($api_url, $args);
 
 			if(wp_remote_retrieve_response_code($response) == '204') {
-				delete_option('idx_lead_cache');
-				delete_option('idx_lead/' . $_POST['id'] . '_cache');
+				delete_option('idx_leads_lead_cache');
+				delete_option('idx_leads_lead/' . $_POST['id'] . '_cache');
 				echo 'success';
 			} else {
 				echo 'error';
@@ -427,7 +427,7 @@ class Lead_Management {
 			$response = wp_remote_request($api_url, $args);
 
 			if(wp_remote_retrieve_response_code($response) == '204') {
-				delete_option('idx_note/' . $_POST['id'] . '_cache');
+				delete_option('idx_leads_note/' . $_POST['id'] . '_cache');
 				echo 'success';
 			} else {
 				echo 'error';
@@ -462,7 +462,7 @@ class Lead_Management {
 			$response = wp_remote_request($api_url, $args);
 
 			if(wp_remote_retrieve_response_code($response) == '204') {
-				delete_option('idx_property/' . $_POST['id'] . '_cache');
+				delete_option('idx_leads_property/' . $_POST['id'] . '_cache');
 				echo 'success';
 			} else {
 				echo 'error';
@@ -497,7 +497,7 @@ class Lead_Management {
 			$response = wp_remote_request($api_url, $args);
 
 			if(wp_remote_retrieve_response_code($response) == '204') {
-				delete_option('idx_search/' . $_POST['id'] . '_cache');
+				delete_option('idx_leads_search/' . $_POST['id'] . '_cache');
 				echo 'success';
 			} else {
 				echo 'error';

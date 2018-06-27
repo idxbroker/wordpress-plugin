@@ -1,7 +1,7 @@
 html,
 body.toplevel_page_leads,
 body.leads_page_edit-lead,
-body.impress_page_searches {
+body.impress_page_idx-searches {
 	font-family: 'Roboto', sans-serif;
 }
 #wpwrap {
@@ -18,7 +18,7 @@ a:focus {
 .hide {display: none;}
 .toplevel_page_leads table.mdl-data-table,
 .leads_page_edit-lead table.mdl-data-table,
-.impress_page_searches table.mdl-data-table {
+.impress_page_idx-searches table.mdl-data-table {
 	width: 98% !important;
 }
 .dataTables_scrollHeadInner {
@@ -30,7 +30,7 @@ a:focus {
 .material-icons.md-48 { font-size: 48px; }
 .toplevel_page_leads a,
 .leads_page_edit-lead a,
-.impress_page_searches a, {
+.impress_page_idx-searches a, {
 	text-decoration: none;
 	font-weight: 400;
 }
@@ -43,7 +43,7 @@ a:focus {
 }
 .toplevel_page_leads .mdl-button--fab,
 .leads_page_edit-lead .mdl-button--fab,
-.impress_page_searches .mdl-button--fab {
+.impress_page_idx-searches .mdl-button--fab {
 	float: right;
 	right: 2.5%;
 	top: -1em;
@@ -85,8 +85,8 @@ a:focus {
 /* Material Design select field */
 .toplevel_page_leads select,
 .leads_page_edit-lead select,
-.impress_page_searches select,
-.impress_page_edit-search select {
+.impress_page_idx-searches select,
+.impress_page_edit-idx-search select {
 	font-family: 'Roboto','Helvetica','Arial',sans-serif;
 	background-color: transparent;
 	height: auto;
@@ -100,8 +100,8 @@ a:focus {
 /* Remove focus */
 .toplevel_page_leads select:focus,
 .leads_page_edit-lead select:focus,
-.impress_page_searches select:focus,
-.impress_page_edit-search select:focus {
+.impress_page_idx-searches select:focus,
+.impress_page_edit-idx-search select:focus {
 	border: none;
 	box-shadow: none;
 	outline: none;
@@ -149,7 +149,7 @@ a:focus {
 #add-lead .mdl-selectfield select,
 #edit-lead .mdl-selectfield select,
 .add-search .mdl-selectfield select,
-.impress_page_edit-search .mdl-selectfield select,
+.impress_page_edit-idx-search .mdl-selectfield select,
 #TB_window .mdl-selectfield select {
 	width: 100%;
 }
