@@ -241,7 +241,7 @@ class Register_Impress_Shortcodes
                     $this->maybe_add_disclaimer_and_courtesy($prop),
                     $column_class,
                     $target
-                ), $prop, $instance, $url, $this->maybe_add_disclaimer_and_courtesy($prop) );
+                ), $prop, $instance, $url, $prop_image_url, $this->maybe_add_disclaimer_and_courtesy($prop), $column_class, $target );
             } else {
                 $output .= apply_filters( 'impress_showcase_property_list_html', sprintf(
                     '<li class="impress-showcase-property-list %13$s">
@@ -276,7 +276,7 @@ class Register_Impress_Shortcodes
                     $this->hide_empty_fields('acres', 'Acres', $prop['acres']),
                     $column_class,
                     $target
-                ), $prop, $instance, $url );
+                ), $prop, $instance, $url, $column_class, $target );
             }
 
             if (1 == $use_rows && $count != 1) {
