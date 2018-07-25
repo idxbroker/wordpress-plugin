@@ -42,7 +42,7 @@ class Search_Management {
 			'Searches',
 			'Saved Searches',
 			'manage_options',
-			'searches',
+			'idx-searches',
 			array(
 				$this,
 				'idx_searches_list'
@@ -55,7 +55,7 @@ class Search_Management {
 			'Add/Edit Search',
 			'Add Search',
 			'manage_options',
-			'edit-search',
+			'edit-idx-search',
 			array(
 				$this,
 				'idx_searches_edit'
@@ -74,12 +74,12 @@ class Search_Management {
 
 		// Only load on searches pages
 		$screen_id = get_current_screen();
-		if($screen_id->id === 'impress_page_searches' || $screen_id->id === 'impress_page_edit-search' || $screen_id->id === 'searches_page_edit-search' || $screen_id->id === 'toplevel_page_searches') {
+		if($screen_id->id === 'impress_page_idx-searches' || $screen_id->id === 'impress_page_edit-idx-search' || $screen_id->id === 'searches_page_edit-idx-search' || $screen_id->id === 'toplevel_page_idx-searches') {
 
 			wp_enqueue_script( 'idx_search_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-searches.js', array( 'jquery' ), true );
 			wp_localize_script( 'idx_search_ajax_script', 'IDXSearchAjax', array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'searchesurl' => admin_url( 'admin.php?page=searches' ),
+				'searchesurl' => admin_url( 'admin.php?page=idx-searches' ),
 				'leadurl' => admin_url( 'admin.php?page=edit-lead&leadID=' ),
 				'detailsurl' => $this->idx_api->details_url()
 				)
@@ -166,14 +166,13 @@ class Search_Management {
 
 			$decoded_response = json_decode($response['body'], 1);
 
-			if ( !is_wp_error( $response ) ) {
+			if ( ! is_wp_error( $response ) ) {
 				// Delete search cache so new search will show in list views immediately.
-				delete_option( 'idx_savedlinks_cache' );
+				delete_option( 'idx_clients_savedlinks_cache' );
 				// return new search ID to script.
 				echo $decoded_response['newID'];
 			} else {
 				echo $response->get_error_message();
-				//echo 'error code: ' . wp_remote_retrieve_response_code( $response );
 			}
 		}
 		die();
@@ -238,7 +237,7 @@ class Search_Management {
 
 			if ( !is_wp_error( $response ) ) {
 				// Delete search cache so new search will show in list views immediately.
-				delete_option( 'idx_search/' . $_POST['leadID'] . '_cache' );
+				delete_option( 'idx_leads_search/' . $_POST['leadID'] . '_cache' );
 				// return new search ID to script.
 				echo $decoded_response['newID'];
 			} else {
@@ -274,7 +273,7 @@ class Search_Management {
 			$response = wp_remote_request($api_url, $args);
 
 			if(wp_remote_retrieve_response_code($response) == '204') {
-				delete_option('idx_savedlinks_cache');
+				delete_option('idx_clients_savedlinks_cache');
 				echo 'success';
 			} else {
 				echo 'error';
@@ -341,7 +340,7 @@ class Search_Management {
 				</form>
 			</dialog>';
 		echo '
-			<a href="' . admin_url('admin.php?page=edit-search') . '" id="add-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+			<a href="' . admin_url('admin.php?page=edit-idx-search') . '" id="add-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 				<i class="material-icons">add</i>
 				<div class="mdl-tooltip" data-mdl-for="add-search">Add New Search</div>
 			</a>
