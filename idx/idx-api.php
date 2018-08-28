@@ -35,6 +35,7 @@ class Idx_Api
                 case 406:$err_message = 'Access key is missing. To obtain an access key, please visit your <a href="https://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control">IDX Broker Dashboard</a>.';
                     break;
                 case 412:$err_message = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the <a href="https://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control">IDX Broker Dashboard</a>, or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 412">help@idxbroker.com</a>';
+                    update_option( 'idx_api_limit_exceeded', time() );
                     break;
                 case 500:$err_message = 'General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 500">help@idxbroker.com</a> if the problem persists.';
                     break;
@@ -58,6 +59,7 @@ class Idx_Api
         $json_decode_type = false
     ) {
         $cache_key = 'idx_' . $level . '_' . $method . '_cache';
+
         if ($this->get_transient($cache_key) !== false) {
             $data = $this->get_transient($cache_key);
             return $data;
@@ -92,6 +94,8 @@ class Idx_Api
             if ($request_type !== 'POST') {
                 $this->set_transient($cache_key, $data, $expiration);
             }
+            // API call was successful, delete this option if it exists.
+            delete_option( 'idx_api_limit_exceeded' ); 
             return $data;
         }
     }
@@ -114,7 +118,14 @@ class Idx_Api
         }
         $data = unserialize($data);
         $expiration = $data['expiration'];
-        if ($expiration < time()) {
+        $api_maybe_exceeded = get_option( 'idx_api_limit_exceeded' );
+
+        // If the data is past expiration, but we've currently exceeded the API limit,
+        // let's return the cached data so we don't continue to call the API until
+        // after one hour since the first 412 error.
+        if ( $api_maybe_exceeded && time() <= $api_maybe_exceeded + ( 60 * 60 ) && $expiration < time() ) {
+            return $data['data'];
+        } else if ( $expiration < time() ) {
             return false;
         }
         return $data['data'];

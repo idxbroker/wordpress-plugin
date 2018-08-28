@@ -211,7 +211,7 @@ class Impress_Showcase_Widget extends \WP_Widget
                     $this->maybe_add_disclaimer_and_courtesy($prop),
                     $column_class,
                     $target
-                ), $prop, $instance, $url, $this->maybe_add_disclaimer_and_courtesy($prop) );
+                ), $prop, $instance, $url, $prop_image_url, $this->maybe_add_disclaimer_and_courtesy($prop), $column_class, $target );
             } else {
                 $output .= apply_filters( 'impress_showcase_property_list_html', sprintf(
                     '<li class="impress-showcase-property-list %13$s">
@@ -246,7 +246,7 @@ class Impress_Showcase_Widget extends \WP_Widget
                     $this->hide_empty_fields('acres', 'Acres', $prop['acres']),
                     $column_class,
                     $target
-                ), $prop, $instance, $url );
+                ), $prop, $instance, $url, $column_class, $target );
 
             }
 
