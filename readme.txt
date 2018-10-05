@@ -132,7 +132,7 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 14. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
-= 2.5.5 =
+= 2.5.6 =
 * Fix: Now uses IDX api version 1.6.0.
 
 = 2.5.5 =
