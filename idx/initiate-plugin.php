@@ -35,7 +35,7 @@ class Initiate_Plugin
         $this->instantiate_classes();
     }
 
-    const IDX_API_DEFAULT_VERSION = '1.5.0';
+    const IDX_API_DEFAULT_VERSION = '1.6.0';
     const IDX_API_URL = 'https://api.idxbroker.com';
 
     public function instantiate_classes()
