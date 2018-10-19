@@ -661,7 +661,7 @@ class Idx_Api
         } else {
             $leads = $this->idx_api('lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads');
         }
-        return $leads["data"];
+        return $leads;
     }
     
     public function get_featured_listings($listing_type = 'featured', $timeframe = null)
