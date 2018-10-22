@@ -32,6 +32,12 @@ if ($wrapper_page_id) {
         $wrapper_page_url = get_page_link($wrapper_page_id);
     }
 }
+
+
+if ( isset( $_POST['my_options'] ) ) {
+	update_option( 'idx_cron_schedule', sanitize_text_field( wp_unslash( $_POST['idx_cron_save'] ) ) );
+}
+
 ?>
 
 <div id="idxPluginWrap" class="wrap">
@@ -67,6 +73,25 @@ if ($api_error) {
 ?>
                     </div>
                 </div>
+				<div id="refresh-cron-schedule" class="inlineBlock">
+					<h3>Background Cron:</h3>
+					<p>Choose how often the background refresh runs:</p>
+					<?php $schedules = wp_get_schedules(); 
+					
+						
+						$idx_cron_setting = get_option( 'idx_cron_schedule' );
+					?>
+				  <label for="idx_cron_schedule">Choose Schedule: </label>
+					<select id="idx-cron-schedule" name="idx_cron_schedule">
+					<?php
+					foreach ( $schedules as $schedule_name => $schedule ) {
+						echo '<option value="' . __( $schedule_name ) . '"' . selected( $idx_cron_setting, $schedule_name ) . '>' . __( $schedule['display'] ) . '</option>';
+					}
+					?>
+						<option value="disabled" <?php selected( $idx_cron_setting, 'disabled' ); ?>>Disabled</option>
+					</select>
+				  <?php submit_button('Update Schedule'); ?>
+				</div>
                 <!-- dynamic wrapper page -->
                 <div id="dynamic_page">
                     <h3>Create the Global Wrapper<a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank"><img class="help-icon" src="<?php echo plugins_url('../../assets/images/helpIcon.svg', __FILE__);?>" alt="help"></a></h3>

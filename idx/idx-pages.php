@@ -9,7 +9,8 @@ class Idx_Pages
         $this->idx_api = new Idx_Api();
         //deletes all IDX pages for troubleshooting purposes
         // $this->delete_all_idx_pages();
-
+		add_option( 'idx_cron_schedule', 'threeminutes' );
+		register_setting( 'idx-platinum-settings-group', 'idx_cron_schedule' );
         add_action('admin_init', array($this, 'show_idx_pages_metabox_by_default'));
         add_filter('post_type_link', array($this, 'post_type_link_filter_func'), 10, 2);
         add_filter('cron_schedules', array($this, 'add_custom_schedule'));
@@ -43,18 +44,31 @@ class Idx_Pages
         return $schedules;
     }
 
-    //Schedule IDX Page update regularly.
-    public function schedule_idx_page_update()
-    {
-        
-        if (!wp_next_scheduled('idx_create_idx_pages')) {
-           wp_schedule_event(time(), 'threeminutes', 'idx_create_idx_pages');
-        }
-        if(!wp_next_scheduled('idx_delete_idx_pages')) {
-           wp_schedule_event(time(), 'threeminutes', 'idx_delete_idx_pages');
-        }
-    }
+    /** Schedule IDX Page update regularly. **/
+	public function schedule_idx_page_update() {
+		$idx_cron_schedule = get_option( 'idx_cron_schedule' );
+		$next_create_event = wp_next_scheduled( 'idx_create_idx_pages' );
+		$next_delete_event = wp_next_scheduled( 'idx_delete_idx_pages' );
 
+		if ( wp_next_scheduled( 'idx_create_idx_pages' ) !== $idx_cron_schedule ) {
+			wp_clear_scheduled_hook( 'idx_create_idx_pages' );
+			wp_clear_scheduled_hook( 'idx_delete_idx_pages' );
+			wp_unschedule_event( $next_create_event, 'idx_create_idx_pages' );
+			wp_unschedule_event( $next_delete_event, 'idx_delete_idx_pages' );
+		}
+
+		if ( 'disabled' === $idx_cron_schedule ) {
+			wp_unschedule_event( $next_create_event, 'idx_create_idx_pages' );
+			wp_unschedule_event( $next_delete_event, 'idx_delete_idx_pages' );
+			return;
+		}
+		if ( ! wp_next_scheduled( 'idx_create_idx_pages' ) ) {
+			wp_schedule_event( time(), $idx_cron_schedule, 'idx_create_idx_pages' );
+		}
+		if ( ! wp_next_scheduled( 'idx_delete_idx_pages' ) ) {
+			wp_schedule_event( time(), $idx_cron_schedule, 'idx_delete_idx_pages' );
+		}
+	}
     //to be called on plugin deactivation
     public static function unschedule_idx_page_update()
     {
