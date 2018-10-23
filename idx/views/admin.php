@@ -33,10 +33,6 @@ if ($wrapper_page_id) {
     }
 }
 
-if ( isset( $_POST['idx_cron_save'] ) ) {
-	update_option( 'idx_cron_schedule', sanitize_text_field( wp_unslash( $_POST['idx_cron_save'] ) ) );
-}
-
 ?>
 
 <div id="idxPluginWrap" class="wrap">
