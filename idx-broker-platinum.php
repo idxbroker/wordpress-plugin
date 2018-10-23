@@ -18,7 +18,7 @@ new Idx_Broker_Plugin();
 class Idx_Broker_Plugin
 {
     //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '2.5.6';
+    const IDX_WP_PLUGIN_VERSION = '2.5.7';
 
     public function __construct()
     {
