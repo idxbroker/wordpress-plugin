@@ -1,8 +1,10 @@
 <?php
 namespace IDX\Widgets;
 
+/**
+ * Impress_Showcase_Widget class.
+ */
 class Impress_Showcase_Widget extends \WP_Widget {
-
 
 	/**
 	 * Register widget with WordPress.
@@ -22,8 +24,20 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		);
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * defaults
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $defaults = array(
 		'title'            => 'Properties',
 		'properties'       => 'featured',
@@ -462,17 +476,17 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance                     = array();
-		$instance['title']            = strip_tags( $new_instance['title'] );
-		$instance['properties']       = strip_tags( $new_instance['properties'] );
+		$instance['title']            = wp_strip_all_tags( $new_instance['title'] );
+		$instance['properties']       = wp_strip_all_tags( $new_instance['properties'] );
 		$instance['saved_link_id']    = (int) ( $new_instance['saved_link_id'] );
 		$instance['agentID']          = (int) $new_instance['agentID'];
 		$instance['show_image']       = (bool) $new_instance['show_image'];
 		$instance['listings_per_row'] = (int) $new_instance['listings_per_row'];
-		$instance['max']              = strip_tags( $new_instance['max'] );
-		$instance['order']            = strip_tags( $new_instance['order'] );
+		$instance['max']              = wp_strip_all_tags( $new_instance['max'] );
+		$instance['order']            = wp_strip_all_tags( $new_instance['order'] );
 		$instance['use_rows']         = (bool) $new_instance['use_rows'];
-		$instance['styles']           = strip_tags( $new_instance['styles'] );
-		$instance['new_window']       = strip_tags( $new_instance['new_window'] );
+		$instance['styles']           = wp_strip_all_tags( $new_instance['styles'] );
+		$instance['new_window']       = wp_strip_all_tags( $new_instance['new_window'] );
 
 		return $instance;
 	}
@@ -506,7 +520,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				<option <?php selected( $instance['properties'], 'savedlinks' ); ?> value="savedlinks"><?php echo 'Use Saved Link'; ?></option>
 			</select>
 		</p>
-		
+
 		<p>
 			<label for="<?php echo $this->get_field_id( 'saved_link_id' ); ?>">Choose a saved link (if selected above):</label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'saved_link_id' ); ?>" name="<?php echo $this->get_field_name( 'saved_link_id' ); ?>">

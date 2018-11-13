@@ -1,10 +1,25 @@
 <?php
 namespace IDX\Shortcodes;
 
+/**
+ * Register_Impress_Shortcodes class.
+ */
 class Register_Impress_Shortcodes {
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 		add_shortcode( 'impress_lead_login', array( $this, 'lead_login_shortcode' ) );
@@ -18,6 +33,13 @@ class Register_Impress_Shortcodes {
 	}
 
 
+	/**
+	 * lead_login_shortcode function.
+	 *
+	 * @access public
+	 * @param mixed $atts
+	 * @return void
+	 */
 	public function lead_login_shortcode( $atts ) {
 		extract(
 			shortcode_atts(
@@ -64,11 +86,24 @@ class Register_Impress_Shortcodes {
 		return $widget;
 	}
 
+	/**
+	 * lead_signup_shortcode function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function lead_signup_shortcode() {
 		new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
 
 	}
 
+	/**
+	 * property_showcase_shortcode function.
+	 *
+	 * @access public
+	 * @param array $atts (default: array())
+	 * @return void
+	 */
 	public function property_showcase_shortcode( $atts = array() ) {
 		extract(
 			shortcode_atts(
@@ -342,6 +377,13 @@ class Register_Impress_Shortcodes {
 		}
 	}
 
+	/**
+	 * set_missing_core_fields function.
+	 *
+	 * @access public
+	 * @param mixed $prop
+	 * @return void
+	 */
 	public function set_missing_core_fields( $prop ) {
 		$name_values   = array(
 			'image',
@@ -374,6 +416,13 @@ class Register_Impress_Shortcodes {
 
 	}
 
+	/**
+	 * target function.
+	 *
+	 * @access public
+	 * @param mixed $new_window
+	 * @return void
+	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
 			// if enabled, open links in new tab/window
@@ -425,6 +474,13 @@ class Register_Impress_Shortcodes {
 		}
 	}
 
+	/**
+	 * property_carousel_shortcode function.
+	 *
+	 * @access public
+	 * @param array $atts (default: array())
+	 * @return void
+	 */
 	public function property_carousel_shortcode( $atts = array() ) {
 		wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
 
@@ -520,7 +576,7 @@ class Register_Impress_Shortcodes {
                         0:{
                             items: 1,
                             nav: true,
-                            margin: 0 
+                            margin: 0
                         },
                         450:{
                             items: ' . round( $display / 2 ) . '
@@ -623,6 +679,13 @@ class Register_Impress_Shortcodes {
 		return $output;
 	}
 
+	/**
+	 * city_links_shortcode function.
+	 *
+	 * @access public
+	 * @param array $atts (default: array())
+	 * @return void
+	 */
 	public function city_links_shortcode( $atts = array() ) {
 		extract(
 			shortcode_atts(

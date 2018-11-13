@@ -4,6 +4,9 @@ namespace IDX;
 use \Carbon\Carbon;
 use \Exception;
 
+/**
+ * Dashboard_Widget class.
+ */
 class Dashboard_Widget {
 	public function __construct() {
 		$this->idx_api = new Idx_Api();
@@ -14,17 +17,41 @@ class Dashboard_Widget {
 
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * add_dashboard_widget function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function add_dashboard_widget() {
 		add_meta_box( 'idx_dashboard_widget', 'IMPress for IDX Broker', array( $this, 'compile_dashboard_widget' ), 'dashboard', 'normal', 'high' );
 	}
 
+	/**
+	 * compile_dashboard_widget function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function compile_dashboard_widget() {
 		echo $this->dashboard_widget_html();
 		$this->load_scripts();
 	}
 
+	/**
+	 * dashboard_widget_html function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function dashboard_widget_html() {
 		$output  = '<div class="widget-header">';
 		$output .= '<button class="button leads" disabled="disabled">Lead Overview</button>';
@@ -47,6 +74,12 @@ class Dashboard_Widget {
 		return $output;
 	}
 
+	/**
+	 * leads_overview function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function leads_overview() {
 		$interval  = sanitize_text_field( $_POST['timeframe'] );
 		$timeframe = null;
@@ -61,6 +94,12 @@ class Dashboard_Widget {
 		}
 	}
 
+	/**
+	 * listings_overview function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function listings_overview() {
 		$interval = sanitize_text_field( $_POST['timeframe'] );
 
@@ -74,6 +113,12 @@ class Dashboard_Widget {
 		}
 	}
 
+	/**
+	 * side_overview function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function side_overview() {
 		try {
 			$leads = $this->new_leads();
@@ -92,6 +137,12 @@ class Dashboard_Widget {
 		return $output;
 	}
 
+	/**
+	 * load_scripts function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function load_scripts() {
 		wp_enqueue_style( 'idx-dashboard-widget', plugins_url( '/assets/css/idx-dashboard-widget.css', dirname( __FILE__ ) ) );
 		wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js' );
@@ -99,6 +150,14 @@ class Dashboard_Widget {
 		wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
 	}
 
+	/**
+	 * leads_json function.
+	 *
+	 * @access public
+	 * @param mixed $timeframe
+	 * @param mixed $interval
+	 * @return void
+	 */
 	public function leads_json( $timeframe, $interval ) {
 		try {
 			$interval_array = $this->get_interval_data( $timeframe, $interval );
@@ -117,6 +176,13 @@ class Dashboard_Widget {
 		return $data;
 	}
 
+	/**
+	 * listings_json function.
+	 *
+	 * @access public
+	 * @param mixed $interval
+	 * @return void
+	 */
 	public function listings_json( $interval ) {
 		$data = array();
 		if ( $interval === 'day' ) {
@@ -132,6 +198,12 @@ class Dashboard_Widget {
 		return $listings;
 	}
 
+	/**
+	 * new_leads function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function new_leads() {
 		// order newest first
 		$leads_array = $this->idx_api->get_leads();
@@ -156,6 +228,12 @@ class Dashboard_Widget {
 		return $leads;
 	}
 
+	/**
+	 * popular_listings function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function popular_listings() {
 		$listings_array = $this->idx_api->get_featured_listings();
 		if ( is_wp_error( $listings_array ) || empty( $listings_array ) ) {
@@ -178,6 +256,14 @@ class Dashboard_Widget {
 		return $listings;
 	}
 
+	/**
+	 * leads_month_interval function.
+	 *
+	 * @access public
+	 * @param mixed $interval_data
+	 * @param mixed $min_max
+	 * @return void
+	 */
 	public function leads_month_interval( $interval_data, $min_max ) {
 		$data          = array();
 		$unique_months = array();
@@ -218,6 +304,14 @@ class Dashboard_Widget {
 		return $data;
 	}
 
+	/**
+	 * leads_day_interval function.
+	 *
+	 * @access public
+	 * @param mixed $interval_data
+	 * @param mixed $min_max
+	 * @return void
+	 */
 	public function leads_day_interval( $interval_data, $min_max ) {
 		$data   = array();
 		$data[] = array(
@@ -269,6 +363,14 @@ class Dashboard_Widget {
 		return $data;
 	}
 
+	/**
+	 * create_year function.
+	 *
+	 * @access public
+	 * @param mixed $min
+	 * @param mixed $max
+	 * @return void
+	 */
 	public function create_year( $min, $max ) {
 		$year_array      = array();
 		$month_timestamp = $min;
@@ -289,6 +391,14 @@ class Dashboard_Widget {
 		return $year_array;
 	}
 
+	/**
+	 * create_week function.
+	 *
+	 * @access public
+	 * @param mixed $min
+	 * @param mixed $max
+	 * @return void
+	 */
 	public function create_week( $min, $max ) {
 		$week_array = array();
 		$day        = $min;
@@ -305,6 +415,14 @@ class Dashboard_Widget {
 		return $week_array;
 	}
 
+	/**
+	 * get_interval_data function.
+	 *
+	 * @access public
+	 * @param mixed $timeframe
+	 * @param mixed $interval
+	 * @return void
+	 */
 	public function get_interval_data( $timeframe, $interval ) {
 		$leads_array = array();
 		$min_max     = $this->min_max_intervals( $interval );
@@ -339,6 +457,13 @@ class Dashboard_Widget {
 
 	}
 
+	/**
+	 * min_max_intervals function.
+	 *
+	 * @access public
+	 * @param mixed $interval
+	 * @return void
+	 */
 	public function min_max_intervals( $interval ) {
 		if ( $interval === 'month' ) {
 			$min = Carbon::parse( '5 months ago' )->timestamp;
@@ -368,6 +493,13 @@ class Dashboard_Widget {
 		return $interval_data;
 	}
 
+	/**
+	 * all_listings_numbers function.
+	 *
+	 * @access public
+	 * @param mixed $timeframe
+	 * @return void
+	 */
 	public function all_listings_numbers( $timeframe ) {
 
 		$featured = $this->idx_api->get_featured_listings( 'featured', $timeframe );
@@ -383,6 +515,14 @@ class Dashboard_Widget {
 
 	}
 
+	/**
+	 * get_listings_number function.
+	 *
+	 * @access public
+	 * @param mixed $listings
+	 * @param mixed $status_type
+	 * @return void
+	 */
 	public function get_listings_number( $listings, $status_type ) {
 		// if no listings, throw exception
 		if ( empty( $listings ) ) {
@@ -425,6 +565,13 @@ class Dashboard_Widget {
 		return $listings;
 	}
 
+	/**
+	 * sort_listings_by_views function.
+	 *
+	 * @access public
+	 * @param mixed $listings
+	 * @return void
+	 */
 	public function sort_listings_by_views( $listings ) {
 		usort(
 			$listings,

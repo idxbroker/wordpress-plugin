@@ -1,8 +1,17 @@
 <?php
 namespace IDX\Shortcodes;
 
+/**
+ * Register_Idx_Shortcodes class.
+ */
 class Register_Idx_Shortcodes {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 		// Adding shortcodes
@@ -13,6 +22,12 @@ class Register_Idx_Shortcodes {
 		add_shortcode( 'idx-wrapper-tags', array( $this, 'wrapper_tags' ) );
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
 	const SHORTCODE_SYSTEM_LINK = 'idx-platinum-system-link';
@@ -142,6 +157,14 @@ class Register_Idx_Shortcodes {
 		}
 	}
 
+	/**
+	 * idx_get_link_by_uid function.
+	 *
+	 * @access public
+	 * @param mixed $uid
+	 * @param int $type (default: 0)
+	 * @return void
+	 */
 	public function idx_get_link_by_uid( $uid, $type = 0 ) {
 		if ( $type == 0 ) {
 			// if the cache has expired, send an API request to update them. Cache expires after 2 hours.
@@ -162,6 +185,12 @@ class Register_Idx_Shortcodes {
 		return $selected_link;
 	}
 
+	/**
+	 * wrapper_tags function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function wrapper_tags() {
 		return "\r\n<div id=\"idxStart\"></div>\r\n<div id=\"idxStop\"></div>\r\n";
 	}

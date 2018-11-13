@@ -1,9 +1,19 @@
 <?php
 namespace IDX;
 
+/**
+ * Initiate_Plugin class.
+ */
 class Initiate_Plugin {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
+
 		$this->idx_api = new Idx_Api();
 
 		$this->set_defaults();
@@ -37,26 +47,38 @@ class Initiate_Plugin {
 	const IDX_API_DEFAULT_VERSION = '1.6.0';
 	const IDX_API_URL             = 'https://api.idxbroker.com';
 
+	/**
+	 * instantiate_classes function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function instantiate_classes() {
-		new Wrappers();
-		new Idx_Pages();
-		new Shortcodes\Register_Idx_Shortcodes();
-		new Widgets\Create_Impress_Widgets();
-		new Shortcodes\Register_Impress_Shortcodes();
-		new Widgets\Omnibar\Create_Omnibar();
-		new Shortcodes\Shortcode_Ui();
-		new Help();
-		new \IDX\Views\Omnibar_Settings();
-		new Dashboard_Widget();
-		new Backward_Compatibility\Add_Uid_To_Idx_Pages();
-		new Backward_Compatibility\Migrate_Legacy_Widgets();
-		new \IDX\Views\Lead_Management();
-		new \IDX\Views\Search_Management();
-		if ( is_multisite() ) {
-			 new \IDX\Views\Multisite();
-		}
+        new Wrappers();
+        new Idx_Pages();
+        new Shortcodes\Register_Idx_Shortcodes();
+        new Widgets\Create_Impress_Widgets();
+        new Shortcodes\Register_Impress_Shortcodes();
+        new Widgets\Omnibar\Create_Omnibar();
+        new Shortcodes\Shortcode_Ui();
+        new Help();
+        new \IDX\Views\Omnibar_Settings();
+        new Dashboard_Widget();
+        new Backward_Compatibility\Add_Uid_To_Idx_Pages();
+        new Backward_Compatibility\Migrate_Legacy_Widgets();
+        new \IDX\Views\Lead_Management();
+        new \IDX\Views\Search_Management();
+        if ( is_multisite() ) {
+             new \IDX\Views\Multisite();
+        }
 	}
 
+	/**
+	 * idx_extensions function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function idx_extensions() {
 		if ( class_exists( 'NF_Abstracts_Action' ) ) {
 			require_once dirname( __FILE__ ) . '/leads/class-ninja-forms.php';
@@ -69,6 +91,12 @@ class Initiate_Plugin {
 		}
 	}
 
+	/**
+	 * set_defaults function.
+	 *
+	 * @access private
+	 * @return void
+	 */
 	private function set_defaults() {
 		// Prevent script timeout when API response is slow
 		set_time_limit( 0 );
@@ -78,6 +106,12 @@ class Initiate_Plugin {
 		$api_error = false;
 	}
 
+	/**
+	 * schedule_migrate_old_table function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function schedule_migrate_old_table() {
 		global $wpdb;
 		if ( $wpdb->get_var( 'SELECT post_id FROM ' . $wpdb->prefix . "postmeta WHERE meta_key = '_links_to'" ) !== null ) {
@@ -90,16 +124,34 @@ class Initiate_Plugin {
 		}
 	}
 
+	/**
+	 * migrate_old_table function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function migrate_old_table() {
 		new \IDX\Backward_Compatibility\Migrate_Old_Table();
 	}
 
+	/**
+	 * plugin_updated function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function plugin_updated() {
 		if ( ! get_option( 'idx_plugin_version' ) || get_option( 'idx_plugin_version' ) < \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION ) {
 			return true;
 		}
 	}
 
+	/**
+	 * update_triggered function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function update_triggered() {
 		if ( $this->plugin_updated() ) {
 			// update db option and update omnibar data
@@ -111,6 +163,12 @@ class Initiate_Plugin {
 		}
 	}
 
+	/**
+	 * schedule_omnibar_update function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function schedule_omnibar_update() {
 		if ( ! wp_get_schedule( 'idx_omnibar_get_locations' ) ) {
 			// refresh omnibar fields once a day
@@ -118,6 +176,12 @@ class Initiate_Plugin {
 		}
 	}
 
+	/**
+	 * idx_omnibar_get_locations function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function idx_omnibar_get_locations() {
 		new \IDX\Widgets\Omnibar\Get_Locations();
 	}
@@ -142,6 +206,13 @@ class Initiate_Plugin {
 		}
 	}
 
+	/**
+	 * idx_broker_platinum_plugin_actlinks function.
+	 *
+	 * @access public
+	 * @param mixed $links
+	 * @return void
+	 */
 	public function idx_broker_platinum_plugin_actlinks( $links ) {
 		// Add a link to this plugin's settings page
 		$settings_link = '<a href="admin.php?page=idx-broker">Settings</a>';
@@ -149,6 +220,12 @@ class Initiate_Plugin {
 		return $links;
 	}
 
+	/**
+	 * idx_broker_platinum_options_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function idx_broker_platinum_options_init() {
 		global $api_error;
 		// register our settings
@@ -201,6 +278,12 @@ class Initiate_Plugin {
 		die();
 	}
 
+	/**
+	 * load_admin_menu_styles function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function load_admin_menu_styles() {
 		wp_enqueue_style( 'properticons', 'https://s3.amazonaws.com/properticons/css/properticons.css' );
 		return wp_enqueue_style( 'idx-menus', plugins_url( '/assets/css/idx-menus.css', dirname( __FILE__ ) ) );
@@ -211,7 +294,6 @@ class Initiate_Plugin {
 	 * @params void
 	 * @return Admin Menu
 	 */
-
 	public function add_menu() {
 		$notice_num = count( $this->notices );
 		add_menu_page(
@@ -320,11 +402,23 @@ class Initiate_Plugin {
 		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.css', dirname( __FILE__ ) ) );
 	}
 
+	/**
+	 * legacy_functions function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function legacy_functions() {
 		// add legacy idx-start functions for older themes
 		include 'backward-compatibility' . DIRECTORY_SEPARATOR . 'legacy-functions.php';
 	}
 
+	/**
+	 * disable_original_plugin function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function disable_original_plugin() {
 		// disable IDX Original Plugin if enabled
 		if ( is_plugin_active( 'idx-broker-wordpress-plugin/idx_broker.php' ) ) {
@@ -342,6 +436,12 @@ class Initiate_Plugin {
 		include plugin_dir_path( __FILE__ ) . 'views/admin.php';
 	}
 
+	/**
+	 * idx_omnibar_settings_interface function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function idx_omnibar_settings_interface() {
 		$omnibar_settings = new \IDX\Views\Omnibar_Settings();
 		// preload current cczs for omnibar settings
@@ -367,7 +467,12 @@ EOD;
 		}
 	}
 
-	// Adds notices property and adds actions for the admin notices and ajax call
+	/**
+	 * Adds notices property and adds actions for the admin notices and ajax call.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function add_notices() {
 		if ( ! is_admin() ) {
 			return;

@@ -1,8 +1,17 @@
 <?php
 namespace IDX;
 
+/**
+ * Help class.
+ */
 class Help {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		add_action( 'load-post.php', array( $this, 'add_pages_help_tabs' ), 20 );
 		add_action( 'load-post-new.php', array( $this, 'add_pages_help_tabs' ), 20 );
@@ -13,6 +22,12 @@ class Help {
 		add_action( 'wp_ajax_idx_disable_glow', array( $this, 'disable_glow' ) );
 	}
 
+	/**
+	 * settings_help function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function settings_help() {
 		// Display Help on Settings Pages
 		if ( ! empty( $_GET['page'] ) && ( $_GET['page'] === 'idx-broker' || $_GET['page'] === 'idx-omnibar-settings' ) ) {
@@ -20,6 +35,12 @@ class Help {
 		}
 	}
 
+	/**
+	 * add_wrappers_help function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function add_wrappers_help() {
 		// Display Help on Post Type UIs
 		if ( ! empty( $_GET['post_type'] ) && ( $_GET['post_type'] === 'idx-wrapper' || $_GET['post_type'] === 'idx_page' ) ) {
@@ -27,6 +48,12 @@ class Help {
 		}
 	}
 
+	/**
+	 * tabs
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $tabs = array(
 		// The assoc key represents the ID
 		// It is NOT allowed to contain spaces
@@ -96,6 +123,12 @@ class Help {
 		),
 	);
 
+	/**
+	 * add_pages_help_tabs function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function add_pages_help_tabs() {
 		$id     = 'idx_shortcodes';
 		$data   = $this->tabs['idx_shortcodes'];
@@ -111,6 +144,12 @@ class Help {
 		);
 	}
 
+	/**
+	 * add_settings_help_tabs function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function add_settings_help_tabs() {
 		$tabs = $this->tabs;
 		foreach ( $tabs as $id => $data ) {
@@ -132,6 +171,14 @@ class Help {
 		}
 	}
 
+	/**
+	 * prepare function.
+	 *
+	 * @access public
+	 * @param mixed $screen
+	 * @param mixed $tab
+	 * @return void
+	 */
 	public function prepare( $screen, $tab ) {
 		printf(
 			'<p>%s</p>',
@@ -142,6 +189,12 @@ class Help {
 		);
 	}
 
+	/**
+	 * impress_settings_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function impress_settings_page() {
 		if ( ( ! empty( $_GET['page'] ) &&
 			( $_GET['page'] === 'idx-broker' ||
@@ -155,6 +208,12 @@ class Help {
 		}
 	}
 
+	/**
+	 * glow function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function glow() {
 		// Make Help Button Glow for IMPress pages
 		if ( ! get_option( 'idx_disable_glow' ) && $this->impress_settings_page() ) {

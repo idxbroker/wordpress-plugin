@@ -1,8 +1,17 @@
 <?php
 namespace IDX;
 
+/**
+ * Wrappers class.
+ */
 class Wrappers {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->idx_api = new Idx_Api();
 		add_action( 'wp_ajax_create_dynamic_page', array( $this, 'idx_ajax_create_dynamic_page' ) );
@@ -15,8 +24,20 @@ class Wrappers {
 		add_action( 'save_post', array( $this, 'set_wrapper_page' ) );
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * register_wrapper_post_type function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function register_wrapper_post_type() {
 		$labels       = array(
 			'name'               => 'Wrappers',
@@ -77,6 +98,12 @@ class Wrappers {
 		register_post_type( 'idx-wrapper', $args );
 	}
 
+	/**
+	 * wrapper_styles function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function wrapper_styles() {
 		// Add styles hiding the post title and previous/next links via the stylesheet
 		global $post;
@@ -91,6 +118,12 @@ class Wrappers {
 		}
 	}
 
+	/**
+	 * manage_idx_wrapper_capabilities function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function manage_idx_wrapper_capabilities() {
 		// gets the role to add capabilities to
 		if ( current_user_can( 'edit_others_posts' ) ) {
@@ -142,6 +175,14 @@ class Wrappers {
 		return $post_content;
 	}
 
+	/**
+	 * idx_wrapper_content function.
+	 *
+	 * @access public
+	 * @param mixed $content
+	 * @param mixed $post
+	 * @return void
+	 */
 	public function idx_wrapper_content( $content, $post ) {
 		if ( $post->post_type === 'idx-wrapper' ) {
 			$content = $this->does_theme_include_idx_tag();
@@ -149,6 +190,12 @@ class Wrappers {
 		}
 	}
 
+	/**
+	 * idx_ajax_create_dynamic_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function idx_ajax_create_dynamic_page() {
 
 		// default page content
@@ -182,6 +229,12 @@ class Wrappers {
 		);
 	}
 
+	/**
+	 * idx_ajax_delete_dynamic_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function idx_ajax_delete_dynamic_page() {
 		if ( $_POST['wrapper_page_id'] ) {
 			wp_delete_post( $_POST['wrapper_page_id'], true );
@@ -195,6 +248,13 @@ class Wrappers {
 		return substr( $uid, strpos( $uid, '-' ) + 1 );
 	}
 
+	/**
+	 * is_selected function.
+	 *
+	 * @access public
+	 * @param mixed $value
+	 * @return void
+	 */
 	public function is_selected( $value ) {
 		$post_id            = get_the_ID();
 		$saved_wrapper_page = get_post_meta( $post_id, 'idx-wrapper-page', true );
@@ -206,6 +266,14 @@ class Wrappers {
 		}
 	}
 
+	/**
+	 * wrapper_page_dropdown function.
+	 *
+	 * @access public
+	 * @param mixed $system_links
+	 * @param mixed $saved_links
+	 * @return void
+	 */
 	public function wrapper_page_dropdown( $system_links, $saved_links ) {
 		echo '<select class="idx-wrapper-page" name="idx-wrapper-page" style="width: 100%;">';
 		echo "<option value=\"none\" {$this->is_selected('none')}>None</option>";
@@ -227,6 +295,12 @@ class Wrappers {
 		echo '</select>';
 	}
 
+	/**
+	 * wrapper_page_ui function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function wrapper_page_ui() {
 		// add metabox interface when editing a wrapper page (with none and global options)
 		// This UI should display the current page set
@@ -241,6 +315,13 @@ class Wrappers {
 
 	}
 
+	/**
+	 * add_meta_box function.
+	 *
+	 * @access public
+	 * @param mixed $post_type
+	 * @return void
+	 */
 	public function add_meta_box( $post_type ) {
 		$post_types = array( 'idx-wrapper' ); // limit meta box to certain post types
 		if ( in_array( $post_type, $post_types ) ) {
@@ -255,6 +336,13 @@ class Wrappers {
 		}
 	}
 
+	/**
+	 * set_wrapper_page function.
+	 *
+	 * @access public
+	 * @param mixed $post_id
+	 * @return void
+	 */
 	public function set_wrapper_page( $post_id ) {
 		$post_id          = get_the_ID();
 		$wrapper_page_url = get_permalink( $post_id );
@@ -276,6 +364,12 @@ class Wrappers {
 		update_post_meta( $post_id, 'idx-wrapper-page', $meta_value );
 	}
 
+	/**
+	 * verify_permissions function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function verify_permissions() {
 		// Check if our nonce is set.
 		if ( ! isset( $_POST['idx-wrapper-page-nonce'] ) ) {

@@ -1,12 +1,28 @@
 <?php
 namespace IDX;
 
+
+/**
+ * Idx_Api class.
+ */
 class Idx_Api {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->api_key = get_option( 'idx_broker_apikey' );
 	}
 
+	/**
+	 * api_key
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $api_key;
 	/**
 	 * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
@@ -151,6 +167,15 @@ class Idx_Api {
 		return $data['data'];
 	}
 
+	/**
+	 * set_transient function.
+	 *
+	 * @access public
+	 * @param mixed $name
+	 * @param mixed $data
+	 * @param mixed $expiration
+	 * @return void
+	 */
 	public function set_transient( $name, $data, $expiration ) {
 		$expiration = time() + $expiration;
 		$data       = array(
@@ -165,6 +190,13 @@ class Idx_Api {
 		}
 	}
 
+	/**
+	 * delete_transient function.
+	 *
+	 * @access public
+	 * @param mixed $name
+	 * @return void
+	 */
 	public function delete_transient( $name ) {
 		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
 			delete_blog_option( get_main_site_id(), $name );
@@ -250,6 +282,12 @@ class Idx_Api {
 		}
 	}
 
+	/**
+	 * system_results_url function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function system_results_url() {
 
 		$links = $this->idx_api_get_systemlinks();
@@ -362,6 +400,12 @@ class Idx_Api {
 		return $system_link_names;
 	}
 
+	/**
+	 * all_saved_link_urls function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function all_saved_link_urls() {
 
 		$links = $this->idx_api_get_savedlinks();
@@ -379,6 +423,12 @@ class Idx_Api {
 		return $system_link_urls;
 	}
 
+	/**
+	 * all_saved_link_names function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function all_saved_link_names() {
 
 		$links = $this->idx_api_get_savedlinks();
@@ -396,6 +446,13 @@ class Idx_Api {
 		return $system_link_names;
 	}
 
+	/**
+	 * find_idx_page_type function.
+	 *
+	 * @access public
+	 * @param mixed $idx_page
+	 * @return void
+	 */
 	public function find_idx_page_type( $idx_page ) {
 		// if it is a saved linke, return saved_link otherwise it is a system page
 		$saved_links = $this->idx_api_get_savedlinks();
@@ -407,6 +464,14 @@ class Idx_Api {
 		}
 	}
 
+	/**
+	 * set_wrapper function.
+	 *
+	 * @access public
+	 * @param mixed $idx_page
+	 * @param mixed $wrapper_url
+	 * @return void
+	 */
 	public function set_wrapper( $idx_page, $wrapper_url ) {
 		// if none, quit process
 		if ( $idx_page === 'none' ) {
@@ -452,6 +517,13 @@ class Idx_Api {
 		return true;
 	}
 
+	/**
+	 * saved_link_properties function.
+	 *
+	 * @access public
+	 * @param mixed $saved_link_id
+	 * @return void
+	 */
 	public function saved_link_properties( $saved_link_id ) {
 
 		$saved_link_properties = $this->idx_api( 'savedlinks/' . $saved_link_id . '/results?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
@@ -459,6 +531,13 @@ class Idx_Api {
 		return $saved_link_properties;
 	}
 
+	/**
+	 * client_properties function.
+	 *
+	 * @access public
+	 * @param mixed $type
+	 * @return void
+	 */
 	public function client_properties( $type ) {
 		$properties = $this->idx_api( $type . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
@@ -627,6 +706,12 @@ class Idx_Api {
 		return $price;
 	}
 
+	/**
+	 * platinum_account_type function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function platinum_account_type() {
 		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
 		if ( gettype( $account_type ) !== 'object' && $account_type[0] === 'IDX Broker Platinum' ) {
@@ -635,6 +720,14 @@ class Idx_Api {
 		return false;
 	}
 
+	/**
+	 * get_leads function.
+	 *
+	 * @access public
+	 * @param mixed $timeframe (default: null)
+	 * @param string $start_date (default: '')
+	 * @return void
+	 */
 	public function get_leads( $timeframe = null, $start_date = '' ) {
 		if ( ! empty( $start_date ) ) {
 			$start_date = "&startDatetime=$start_date";

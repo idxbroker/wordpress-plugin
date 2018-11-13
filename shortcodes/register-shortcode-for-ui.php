@@ -1,17 +1,38 @@
 <?php
 namespace IDX\Shortcodes;
 
+/**
+ * Register_Shortcode_For_Ui class.
+ */
 class Register_Shortcode_For_Ui {
 
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 		add_action( 'wp_ajax_idx_shortcode_options', array( $this, 'get_shortcode_options' ) );
 		add_action( 'wp_ajax_idx_shortcode_preview', array( $this, 'shortcode_preview' ) );
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * default_shortcodes function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function default_shortcodes() {
 		$shortcode_types = array(
 			'system_links'              => array(
@@ -72,6 +93,12 @@ class Register_Shortcode_For_Ui {
 		return $shortcode_types;
 	}
 
+	/**
+	 * get_shortcode_options function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function get_shortcode_options() {
 		$shortcode_type     = sanitize_text_field( $_POST['idx_shortcode_type'] );
 		$system_links_check = $this->idx_api->idx_api_get_systemlinks();
@@ -124,6 +151,12 @@ class Register_Shortcode_For_Ui {
 		wp_die();
 	}
 
+	/**
+	 * shortcode_preview function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function shortcode_preview() {
 		// output shortcode for shortcode preview
 		$shortcode = sanitize_text_field( $_POST['idx_shortcode'] );
@@ -131,12 +164,25 @@ class Register_Shortcode_For_Ui {
 		wp_die();
 	}
 
+	/**
+	 * idx_wrapper_tags function.
+	 *
+	 * @access public
+	 * @param mixed $shortcode
+	 * @return void
+	 */
 	public function idx_wrapper_tags( $shortcode ) {
 		$output = '<div class="idx-modal-shortcode-field" data-shortcode="idx-wrapper-tags"></div>';
 
 		return $output;
 	}
 
+	/**
+	 * get_shortcodes_for_ui function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function get_shortcodes_for_ui() {
 		// add any other types from 3rd party plugins to this interface
 		// mimic the default_shortcodes array to make it work.
@@ -148,6 +194,13 @@ class Register_Shortcode_For_Ui {
 
 	}
 
+	/**
+	 * show_link_short_codes function.
+	 *
+	 * @access public
+	 * @param int $link_type (default: 0)
+	 * @return void
+	 */
 	public function show_link_short_codes( $link_type = 0 ) {
 		$available_shortcodes = '';
 
@@ -179,6 +232,13 @@ class Register_Shortcode_For_Ui {
 		return $available_shortcodes;
 	}
 
+	/**
+	 * get_system_link_html function.
+	 *
+	 * @access public
+	 * @param mixed $idx_link
+	 * @return void
+	 */
 	public function get_system_link_html( $idx_link ) {
 		$available_shortcodes = '';
 
@@ -190,6 +250,13 @@ class Register_Shortcode_For_Ui {
 		return $available_shortcodes;
 	}
 
+	/**
+	 * get_saved_link_html function.
+	 *
+	 * @access public
+	 * @param mixed $idx_link
+	 * @return void
+	 */
 	public function get_saved_link_html( $idx_link ) {
 		$available_shortcodes  = '';
 		$link_short_code       = Register_Idx_Shortcodes::SHORTCODE_SAVED_LINK;
@@ -198,6 +265,12 @@ class Register_Shortcode_For_Ui {
 		return $available_shortcodes;
 	}
 
+	/**
+	 * get_widget_html function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function get_widget_html() {
 		$idx_widgets          = $this->idx_api->idx_api_get_widgetsrc();
 		$available_shortcodes = '';
@@ -216,6 +289,13 @@ class Register_Shortcode_For_Ui {
 		return $available_shortcodes;
 	}
 
+	/**
+	 * get_omnibar function.
+	 *
+	 * @access public
+	 * @param mixed $shortcode
+	 * @return void
+	 */
 	public function get_omnibar( $shortcode ) {
 		// Default Styles
 		$output  = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
@@ -239,6 +319,13 @@ class Register_Shortcode_For_Ui {
 		return $output;
 	}
 
+	/**
+	 * get_lead_login function.
+	 *
+	 * @access public
+	 * @param mixed $shortcode
+	 * @return void
+	 */
 	public function get_lead_login( $shortcode ) {
 		$defaults = array(
 			'styles'         => 1,
@@ -270,6 +357,13 @@ class Register_Shortcode_For_Ui {
 		return $output;
 	}
 
+	/**
+	 * get_lead_signup function.
+	 *
+	 * @access public
+	 * @param mixed $shortcode
+	 * @return void
+	 */
 	public function get_lead_signup( $shortcode ) {
 		$defaults = array(
 			'phone'          => 0,
@@ -326,6 +420,13 @@ class Register_Shortcode_For_Ui {
 		return $output;
 	}
 
+	/**
+	 * get_city_links function.
+	 *
+	 * @access public
+	 * @param mixed $shortcode
+	 * @return void
+	 */
 	public function get_city_links( $shortcode ) {
 		$defaults = array(
 			'city_list'      => 'combinedActiveMLS',
@@ -394,6 +495,13 @@ class Register_Shortcode_For_Ui {
 		return $output;
 	}
 
+	/**
+	 * get_property_showcase function.
+	 *
+	 * @access public
+	 * @param mixed $shortcode
+	 * @return void
+	 */
 	public function get_property_showcase( $shortcode ) {
 		$defaults = array(
 			'max'           => 4,
@@ -488,6 +596,13 @@ class Register_Shortcode_For_Ui {
 		return $output;
 	}
 
+	/**
+	 * get_property_carousel function.
+	 *
+	 * @access public
+	 * @param mixed $shortcode
+	 * @return void
+	 */
 	public function get_property_carousel( $shortcode ) {
 		$defaults = array(
 			'max'           => 15,
@@ -576,6 +691,13 @@ class Register_Shortcode_For_Ui {
 	}
 
 
+	/**
+	 * get_agents_select_list function.
+	 *
+	 * @access public
+	 * @param mixed $agent_id
+	 * @return void
+	 */
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
