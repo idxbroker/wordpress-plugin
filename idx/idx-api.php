@@ -1,7 +1,6 @@
 <?php
 namespace IDX;
 
-
 /**
  * Idx_Api class.
  */
@@ -724,7 +723,7 @@ class Idx_Api {
 	 * get_leads function.
 	 *
 	 * @access public
-	 * @param mixed $timeframe (default: null)
+	 * @param mixed  $timeframe (default: null)
 	 * @param string $start_date (default: '')
 	 * @return void
 	 */

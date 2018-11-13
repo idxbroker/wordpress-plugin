@@ -162,7 +162,7 @@ class Register_Idx_Shortcodes {
 	 *
 	 * @access public
 	 * @param mixed $uid
-	 * @param int $type (default: 0)
+	 * @param int   $type (default: 0)
 	 * @return void
 	 */
 	public function idx_get_link_by_uid( $uid, $type = 0 ) {
