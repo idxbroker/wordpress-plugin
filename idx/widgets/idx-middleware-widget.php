@@ -16,8 +16,8 @@ class Idx_Middleware_Widget extends \WP_Widget {
 			'impress_idx_dashboard_widget', // Base ID
 			__( 'IMPress - IDX Dashboard Widget', 'idx-broker' ), // Name
 			array(
-				'description' => __( 'Embed an IDX widget created in the IDX Middleware dashboard.', 'idx-broker' ),
-				'classname'   => 'impress-idx-dashboard-widget',
+				'description'                 => __( 'Embed an IDX widget created in the IDX Middleware dashboard.', 'idx-broker' ),
+				'classname'                   => 'impress-idx-dashboard-widget',
 				'customize_selective_refresh' => true,
 			)
 		);
@@ -69,7 +69,7 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance = array();
+		$instance           = array();
 		$instance['title']  = strip_tags( $new_instance['title'] );
 		$instance['widget'] = esc_url_raw( $new_instance['widget'] );
 
@@ -84,8 +84,8 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 */
 	public function form( $instance ) {
 		$defaults = array(
-			'title'   => '',
-			'widget'  => '',
+			'title'  => '',
+			'widget' => '',
 		);
 
 		$instance = wp_parse_args( (array) $instance, $defaults );
@@ -100,7 +100,7 @@ class Idx_Middleware_Widget extends \WP_Widget {
 		</p>
 
 		<p>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'widget' ); ?>" name="<?php echo $this->get_field_name( 'widget' ) ?>">
+			<select class="widefat" id="<?php echo $this->get_field_id( 'widget' ); ?>" name="<?php echo $this->get_field_name( 'widget' ); ?>">
 				<option <?php selected( $instance['widget'], '' ); ?> value=""><?php _e( 'Select a widget', 'idx-broker' ); ?></option>
 				<?php $this->widget_options( $instance ); ?>
 			</select>

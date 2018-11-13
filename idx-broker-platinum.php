@@ -11,50 +11,45 @@ License: GPLv2 or later
  */
 
 // Report all errors during development. Remember to hash out when sending to production.
-
 // error_reporting(E_ALL);
-
 new Idx_Broker_Plugin();
-class Idx_Broker_Plugin
-{
-    //placed here for convenient updating
-    const IDX_WP_PLUGIN_VERSION = '2.5.7';
+class Idx_Broker_Plugin {
 
-    public function __construct()
-    {
-        define( 'IMPRESS_IDX_URL', plugin_dir_url( __FILE__ ) );
-        define( 'IMPRESS_IDX_DIR', plugin_dir_path( __FILE__ ) );
+	// placed here for convenient updating
+	const IDX_WP_PLUGIN_VERSION = '2.5.7';
 
-        if ($this->php_version_check()) {
-            //idx autoloader
-            require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
-            //composer autoload classes
-            require_once 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-            
-            new IDX\Initiate_Plugin();
-            /** Function that is executed when plugin is activated. **/
-            register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
-            register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
-        }
-    }
+	public function __construct() {
+		define( 'IMPRESS_IDX_URL', plugin_dir_url( __FILE__ ) );
+		define( 'IMPRESS_IDX_DIR', plugin_dir_path( __FILE__ ) );
 
-    /*
-     * Check for versions less than PHP5.3 and display error
-     */
-    public function php_version_check()
-    {
-        if (PHP_VERSION < 5.6) {
-            add_action('admin_init', array($this, 'idx_deactivate_plugin'));
-            add_action('admin_notices', array($this, 'incompatible_message'));
-            return false;
-        } else {
-            return true;
-        }
-    }
+		if ( $this->php_version_check() ) {
+			// idx autoloader
+			require_once 'idx' . DIRECTORY_SEPARATOR . 'autoloader.php';
+			// composer autoload classes
+			require_once 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-    public static function incompatible_message()
-    {
-        echo "<div class=\"error\"><br><div>You are using a deprecated version
+			new IDX\Initiate_Plugin();
+			/** Function that is executed when plugin is activated. */
+			register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
+			register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
+		}
+	}
+
+	/*
+	 * Check for versions less than PHP5.3 and display error
+	 */
+	public function php_version_check() {
+		if ( PHP_VERSION < 5.6 ) {
+			add_action( 'admin_init', array( $this, 'idx_deactivate_plugin' ) );
+			add_action( 'admin_notices', array( $this, 'incompatible_message' ) );
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public static function incompatible_message() {
+		echo "<div class=\"error\"><br><div>You are using a deprecated version
             of PHP. This is incompatable with the IDX Broker plugin.
             For security reasons, please contact your host and upgrade to the
             latest stable version of PHP they offer. We recommend a minimum
@@ -65,42 +60,39 @@ class Idx_Broker_Plugin
             <a href=\"http://php.net/supported-versions.php\"
             target=\"_blank\">supported versions page.</a>
             </div><br></div>";
-    }
+	}
 
-    public static function idx_deactivate_plugin()
-    {
-        deactivate_plugins(plugin_basename(__FILE__));
-    }
+	public static function idx_deactivate_plugin() {
+		deactivate_plugins( plugin_basename( __FILE__ ) );
+	}
 
-    public static function idx_activate()
-    {
-        if (!get_option('idx_results_url')) {
-            add_option('idx_results_url');
-        }
+	public static function idx_activate() {
+		if ( ! get_option( 'idx_results_url' ) ) {
+			add_option( 'idx_results_url' );
+		}
 
-        if (get_site_option('idx_dismiss_review_prompt') != false) {
-            delete_option('idx_dismiss_review_prompt');
-        }
+		if ( get_site_option( 'idx_dismiss_review_prompt' ) != false ) {
+			delete_option( 'idx_dismiss_review_prompt' );
+		}
 
-        if (get_site_option('idx_review_prompt_time') != false) {
-            delete_option('idx_review_prompt_time');
-        }
+		if ( get_site_option( 'idx_review_prompt_time' ) != false ) {
+			delete_option( 'idx_review_prompt_time' );
+		}
 
-        //avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
-        $idx_api = new \IDX\Idx_Api();
-        $wrappers = new \IDX\Wrappers($idx_api);
-        $wrappers->register_wrapper_post_type();
+		// avoid 404 errors on custom posts such as wrappers by registering them then refreshing the permalink rules
+		$idx_api  = new \IDX\Idx_Api();
+		$wrappers = new \IDX\Wrappers( $idx_api );
+		$wrappers->register_wrapper_post_type();
 
-        flush_rewrite_rules();
-    } // end idx_activate fn
+		flush_rewrite_rules();
+	} // end idx_activate fn
 
-    //deactivate hook
-    public static function idx_deactivate()
-    {
-        //disable scheduled update for omnibar
-        wp_clear_scheduled_hook('idx_omnibar_get_locations');
+	// deactivate hook
+	public static function idx_deactivate() {
+		// disable scheduled update for omnibar
+		wp_clear_scheduled_hook( 'idx_omnibar_get_locations' );
 
-        //disable scheduled IDX Page Update as well
-        \IDX\Idx_Pages::unschedule_idx_page_update();
-    }
+		// disable scheduled IDX Page Update as well
+		\IDX\Idx_Pages::unschedule_idx_page_update();
+	}
 }
