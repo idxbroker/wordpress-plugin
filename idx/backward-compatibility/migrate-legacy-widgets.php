@@ -84,11 +84,11 @@ class Migrate_Legacy_Widgets {
 
 					// Retrieve the key of the next new widget instance.
 					$numeric_keys = array_filter( array_keys( $new_widget_instances ), 'is_int' );
-					$next_key     = $numeric_keys ? max( $numeric_keys ) + 1 : 2;
+					$next_key = $numeric_keys ? max( $numeric_keys ) + 1 : 2;
 
 					// Merge our new widget data into the new widget instance.
 					$new_widget_instance[ $next_key ] = $new_widget_data;
-					$new_widget_instances             = array_replace( $new_widget_instance, $new_widget_instances );
+					$new_widget_instances = array_replace( $new_widget_instance, $new_widget_instances );
 
 					// Update the widget option with the new widget instance data and delete the old one.
 					update_option( 'widget_impress_idx_dashboard_widget', $new_widget_instances );
