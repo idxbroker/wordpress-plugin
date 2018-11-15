@@ -1,93 +1,88 @@
 <?php
-add_action( 'init', array( 'IDX_Leads_CF7', 'init' ) );
+add_action('init', array('IDX_Leads_CF7', 'init'));
 
-class IDX_Leads_CF7 {
-
+class IDX_Leads_CF7
+{
 	public function __construct() {
-		if ( ! class_exists( 'WPCF7' ) ) {
+		if(!class_exists('WPCF7'))
 			exit;
-		}
 
 		$this->idx_api = new \IDX\Idx_Api();
 	}
 
 	public static function init() {
 
-		add_filter( 'wpcf7_editor_panels', array( 'IDX_Leads_CF7', 'idx_add_settings_panel' ) );
-		add_action( 'wpcf7_before_send_mail', array( 'IDX_Leads_CF7', 'idx_put_lead' ) );
-		add_action( 'wpcf7_after_save', array( 'IDX_Leads_CF7', 'idx_save_lead_settings' ) );
+		add_filter( 'wpcf7_editor_panels', array('IDX_Leads_CF7', 'idx_add_settings_panel') );
+		add_action( 'wpcf7_before_send_mail', array('IDX_Leads_CF7', 'idx_put_lead') );
+		add_action( 'wpcf7_after_save', array('IDX_Leads_CF7', 'idx_save_lead_settings') );
 
-		add_action( 'admin_enqueue_scripts', array( 'IDX_Leads_CF7', 'load_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array('IDX_Leads_CF7', 'load_scripts') );
 	}
 
 	public $idx_api;
 
 	public static function idx_add_settings_panel( $panels ) {
-
-		$panels = array_merge(
-			$panels,
-			array(
-				'idx-panel' => array(
-					'title'    => __( 'IDX Broker', 'contact-form-7' ),
-					'callback' => array( 'IDX_Leads_CF7', 'idx_cf7_settings' ),
-				),
-			)
+		
+		$panels = array_merge($panels,
+			array('idx-panel' => array(
+				'title' => __( 'IDX Broker', 'contact-form-7' ),
+				'callback' => array('IDX_Leads_CF7', 'idx_cf7_settings')
+			) )
 		);
-
+		
 		return $panels;
 	}
 
 	public static function load_scripts() {
-		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery-ui-tooltip' );
-		wp_enqueue_script( 'idx-tooltip', IMPRESS_IDX_URL . 'assets/js/tooltip.js' );
-		wp_enqueue_style( 'idx-tooltip-css', IMPRESS_IDX_URL . 'assets/css/tooltip.css' );
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('jquery-ui-tooltip');
+		wp_enqueue_script('idx-tooltip', IMPRESS_IDX_URL . 'assets/js/tooltip.js');
+		wp_enqueue_style('idx-tooltip-css', IMPRESS_IDX_URL . 'assets/css/tooltip.css');
 	}
 
 	public function idx_save_lead_settings( $args ) {
-
-		if ( ! empty( $_POST ) ) {
+		
+		if (!empty($_POST)){
 
 			$option_name = 'idx_lead_form_' . $args->id;
 
-			$new_value                  = array();
-			$new_value['enable_lead']   = isset( $_POST['enable_lead'] ) ? (int) stripslashes( $_POST['enable_lead'] ) : 0;
-			$new_value['category']      = isset( $_POST['category'] ) ? stripslashes( $_POST['category'] ) : null;
-			$new_value['firstName']     = isset( $_POST['firstName'] ) ? stripslashes( $_POST['firstName'] ) : null;
-			$new_value['lastName']      = isset( $_POST['lastName'] ) ? stripslashes( $_POST['lastName'] ) : null;
-			$new_value['email']         = isset( $_POST['email'] ) ? stripslashes( $_POST['email'] ) : null;
-			$new_value['email2']        = isset( $_POST['email2'] ) ? stripslashes( $_POST['email2'] ) : null;
-			$new_value['phone']         = isset( $_POST['phone'] ) ? stripslashes( $_POST['phone'] ) : null;
-			$new_value['address']       = isset( $_POST['address'] ) ? stripslashes( $_POST['address'] ) : null;
-			$new_value['city']          = isset( $_POST['city'] ) ? stripslashes( $_POST['city'] ) : null;
-			$new_value['stateProvince'] = isset( $_POST['stateProvince'] ) ? stripslashes( $_POST['stateProvince'] ) : null;
-			$new_value['zipCode']       = isset( $_POST['zipCode'] ) ? stripslashes( $_POST['zipCode'] ) : null;
-			$new_value['country']       = isset( $_POST['country'] ) ? stripslashes( $_POST['country'] ) : null;
-
-			update_option( $option_name, $new_value, false );
+		    $new_value = array();
+			$new_value['enable_lead'] = isset($_POST["enable_lead"]) ? (int)stripslashes($_POST["enable_lead"]) : 0;
+			$new_value['category'] = isset($_POST["category"]) ? stripslashes($_POST["category"]) : null;
+			$new_value['firstName'] = isset($_POST["firstName"]) ? stripslashes($_POST["firstName"]) : null;
+			$new_value['lastName'] = isset($_POST["lastName"]) ? stripslashes($_POST["lastName"]) : null;
+			$new_value['email'] = isset($_POST["email"]) ? stripslashes($_POST["email"]) : null;
+			$new_value['email2'] = isset($_POST["email2"]) ? stripslashes($_POST["email2"]) : null;
+			$new_value['phone'] = isset($_POST["phone"]) ? stripslashes($_POST["phone"]) : null;
+			$new_value['address'] = isset($_POST["address"]) ? stripslashes($_POST["address"]) : null;
+			$new_value['city'] = isset($_POST["city"]) ? stripslashes($_POST["city"]) : null;
+			$new_value['stateProvince'] = isset($_POST["stateProvince"]) ? stripslashes($_POST["stateProvince"]) : null;
+			$new_value['zipCode'] = isset($_POST["zipCode"]) ? stripslashes($_POST["zipCode"]) : null;
+			$new_value['country'] = isset($_POST["country"]) ? stripslashes($_POST["country"]) : null;
+			
+			update_option($option_name, $new_value, false);
 		}
 	}
 
 	public static function idx_cf7_settings() {
 
 		// Get the form object
-		$form    = wpcf7_get_current_contact_form();
+		$form = wpcf7_get_current_contact_form();
 		$form_id = $form->id();
 
 		// Set the form option name
-		$option_name  = 'idx_lead_form_' . $form_id;
-		$form_options = get_option( $option_name );
+		$option_name = 'idx_lead_form_' . $form_id;
+		$form_options = get_option($option_name);
 
 		$checked = $form_options['enable_lead'];
-		if ( ! isset( $form_options['category'] ) ) {
+		if(!isset($form_options['category'])) {
 			$form_options['category'] = '';
 		}
 
 		// Instantiate ContactForm class and get tags for form fields
-		$cf7 = WPCF7_ContactForm::get_instance( get_post( $form->id() ) );
-
-		if ( is_object( $cf7 ) ) {
-			$mail_tags = $cf7->collect_mail_tags( get_post( $form->id() ) );}
+		$cf7 = WPCF7_ContactForm::get_instance(get_post($form->id()));
+		
+		if(is_object($cf7)) {$mail_tags = $cf7->collect_mail_tags(get_post($form->id()));}
 		?>
 			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
 			<form action="" method="post" id="cf7_form_settings">
@@ -99,7 +94,7 @@ class IDX_Leads_CF7 {
 								<a href="#" onclick="return false;" onkeypress="return false;" class="idx_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;''>This requires that your form have a required First and Last Name field and required Email field.</strong>"><i class="fa fa-question-circle"></i></a>
 							</th>
 							<td>
-								<input id="enable_lead" name="enable_lead"  value="1" type="checkbox" <?php checked( $checked, 1, true ); ?>>
+								<input id="enable_lead" name="enable_lead"  value="1" type="checkbox" <?php checked($checked, 1, true); ?>>
 								<label for="enable_lead">Import Leads</label>
 							</td>
 						</tr>
@@ -134,7 +129,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="firstName">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'firstName' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'firstName'); ?>
 								</select>
 							</td>
 						</tr>
@@ -144,7 +139,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="lastName">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'lastName' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'lastName'); ?>
 								</select>
 							</td>
 						</tr>
@@ -154,7 +149,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="email">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'email' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'email'); ?>
 								</select>
 							</td>
 						</tr>
@@ -164,7 +159,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="email2">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'email2' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'email2'); ?>
 								</select>
 							</td>
 						</tr>
@@ -174,7 +169,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="phone">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'phone' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'phone'); ?>
 								</select>
 							</td>
 						</tr>
@@ -184,7 +179,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="address">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'address' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'address'); ?>
 								</select>
 							</td>
 						</tr>
@@ -194,7 +189,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="city">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'city' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'city'); ?>
 								</select>
 							</td>
 						</tr>
@@ -204,7 +199,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="stateProvince">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'stateProvince' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'stateProvince'); ?>
 								</select>
 							</td>
 						</tr>
@@ -214,7 +209,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="zipCode">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'zipCode' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'zipCode'); ?>
 								</select>
 							</td>
 						</tr>
@@ -224,7 +219,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="country">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'country' ); ?>
+									<?php echo self::output_tag_options($mail_tags, $form_options, 'country'); ?>
 								</select>
 							</td>
 						</tr>
@@ -234,16 +229,16 @@ class IDX_Leads_CF7 {
 		<?php
 	}
 
-	public function idx_put_lead( $contact_form ) {
+	public function idx_put_lead( $contact_form ) {      
 		$form_id = $contact_form->id;
 
 		$option_name = 'idx_lead_form_' . $form_id;
 
-		$form_options = get_option( $option_name );
-
+		$form_options = get_option($option_name);
+		 
 		$checked = $form_options['enable_lead'];
 
-		$apikey = get_option( 'idx_broker_apikey' );
+		$apikey = get_option('idx_broker_apikey');
 
 		// Instantiate Submission class and get posted data
 		// return early if no posted data
@@ -252,119 +247,106 @@ class IDX_Leads_CF7 {
 			return;
 		}
 
-		if ( $checked && ! empty( $apikey ) ) {
-			if ( ! empty( $form_options['firstName'] ) && ! empty( $form_options['lastName'] ) && ! empty( $form_options['email'] ) ) {
+		if ($checked && !empty($apikey)) {
+			if (!empty($form_options['firstName']) && !empty($form_options['lastName']) && !empty($form_options['email'])) {
 
 				$lead_data = array(
-					'firstName'      => $posted_data[ $form_options['firstName'] ],
-					'lastName'       => $posted_data[ $form_options['lastName'] ],
-					'email'          => $posted_data[ $form_options['email'] ],
-					'phone'          => ( ! empty( $form_options['phone'] ) ) ? $posted_data[ $form_options['phone'] ] : '',
-					'address'        => ( ! empty( $form_options['address'] ) ) ? $posted_data[ $form_options['address'] ] : '',
-					'city'           => ( ! empty( $form_options['city'] ) ) ? $posted_data[ $form_options['city'] ] : '',
-					'stateProvince'  => ( ! empty( $form_options['stateProvince'] ) ) ? $posted_data[ $form_options['stateProvince'] ] : '',
-					'zipCode'        => ( ! empty( $form_options['zipCode'] ) ) ? $posted_data[ $form_options['zipCode'] ] : '',
-					'country'        => ( ! empty( $form_options['country'] ) ) ? $posted_data[ $form_options['country'] ] : '',
-					'actualCategory' => ( ! empty( $form_options['category'] ) ) ? $form_options['category'] : '',
+					'firstName' => $posted_data[$form_options['firstName']], 
+					'lastName' => $posted_data[$form_options['lastName']], 
+					'email' => $posted_data[$form_options['email']],
+					'phone' => (!empty($form_options['phone'])) ? $posted_data[$form_options['phone']] : '',
+					'address' => (!empty($form_options['address'])) ? $posted_data[$form_options['address']] : '',
+					'city' => (!empty($form_options['city'])) ? $posted_data[$form_options['city']] : '',
+					'stateProvince' => (!empty($form_options['stateProvince'])) ? $posted_data[$form_options['stateProvince']] : '',
+					'zipCode' => (!empty($form_options['zipCode'])) ? $posted_data[$form_options['zipCode']] : '',
+					'country' => (!empty($form_options['country'])) ? $posted_data[$form_options['country']] : '',
+					'actualCategory' => (!empty($form_options['category'])) ? $form_options['category'] : ''
 				);
 
-				$api_url  = 'https://api.idxbroker.com/leads/lead';
-				$args     = array(
-					'method'    => 'PUT',
-					'headers'   => array(
+				$api_url = 'https://api.idxbroker.com/leads/lead';
+				$args = array(
+					'method' => 'PUT',
+					'headers' => array(
 						'content-type' => 'application/x-www-form-urlencoded',
-						'accesskey'    => get_option( 'idx_broker_apikey' ),
-						'outputtype'   => 'json',
+						'accesskey'    => get_option('idx_broker_apikey'),
+						'outputtype'   => 'json'
 					),
 					'sslverify' => false,
-					'body'      => http_build_query( $lead_data ),
+					'body'		=> http_build_query($lead_data)
 				);
-				$response = wp_remote_request( $api_url, $args );
+				$response = wp_remote_request($api_url, $args);
 
 				// Check for error then add note
-				if ( is_wp_error( $response ) ) {
+				if (is_wp_error($response)) {
 					return;
 				} else {
 
-					$decoded_response = json_decode( $response['body'] );
+					$decoded_response = json_decode($response['body']);
 
 					$note = array(
-						'note' => self::output_form_fields( $posted_data ),
+						'note' => self::output_form_fields($posted_data)
 					);
 
 					// Add note if lead already exists
-					if ( $decoded_response == 'Lead already exists.' ) {
-						$args = array_replace(
-							$args,
-							array(
-								'method' => 'GET',
-								'body'   => null,
-							)
-						);
+					if($decoded_response == 'Lead already exists.') {
+						$args = array_replace($args, array('method' => 'GET', 'body' => null));
 
 						// Get leads
-						if ( false === ( $all_leads = get_transient( 'idx_leads' ) ) ) {
-							$response  = wp_remote_request( $api_url, $args );
-							$all_leads = json_decode( $response['body'], 1 );
-							set_transient( 'idx_leads', $all_leads, 60 * 60 * 1 );
+						if ( false === ( $all_leads = get_transient('idx_leads') ) ) {
+							$response = wp_remote_request($api_url, $args);
+							$all_leads = json_decode($response['body'], 1);
+							set_transient('idx_leads', $all_leads, 60*60*1);
 						}
 
 						// Loop through leads to match email address
-						foreach ( $all_leads as $leads => $lead ) {
-							if ( $lead['email'] == $posted_data[ $form_options['email'] ] ) {
-								$api_url  = 'https://api.idxbroker.com/leads/note/' . $lead['id'];
-								$args     = array_replace(
-									$args,
-									array(
-										'method' => 'PUT',
-										'body'   => http_build_query( $note ),
-									)
-								);
-								$response = wp_remote_request( $api_url, $args );
-								if ( is_wp_error( $response ) ) {
+						foreach($all_leads as $leads => $lead) {
+							if($lead['email'] == $posted_data[$form_options['email']]) {
+								$api_url = 'https://api.idxbroker.com/leads/note/' . $lead['id'];
+								$args = array_replace($args, array('method' => 'PUT', 'body' => http_build_query($note)));
+								$response = wp_remote_request($api_url, $args);
+								if (is_wp_error($response)) {
 									return;
 								}
 							}
 						}
 					} else {
 						// Add note for new lead
-						$lead_id  = $decoded_response->newID;
-						$api_url  = 'https://api.idxbroker.com/leads/note/' . $lead_id;
-						$args     = array_replace( $args, array( 'body' => http_build_query( $note ) ) );
-						$response = wp_remote_request( $api_url, $args );
-						if ( is_wp_error( $response ) ) {
+						$lead_id = $decoded_response->newID;
+						$api_url = 'https://api.idxbroker.com/leads/note/' . $lead_id;
+						$args = array_replace($args, array('body' => http_build_query($note)));
+						$response = wp_remote_request($api_url, $args);
+						if (is_wp_error($response)) {
 							return;
 						}
 					}
 				}
 			}
-		}
+		}   
 	}
 
 	/**
 	 * Output form tags as HTML options
-	 *
-	 * @param  array                the tags of the current form fields
-	 * @param  array                                                    $form_options the form options containing the map keys => values
-	 * @param  string                                                   $mapped       the field being mapped
+	 * 
+	 * @param  array 				the tags of the current form fields
+	 * @param  array $form_options the form options containing the map keys => values
+	 * @param  string $mapped       the field being mapped
 	 * @return string               HTML options
 	 */
-	private static function output_tag_options( $mail_tags, $form_options, $mapped ) {
+	private static function output_tag_options($mail_tags, $form_options, $mapped) {
 		$output = '<option value="">-- Not Mapped --</option>';
-		foreach ( $mail_tags as $tag ) {
-			$output .= '<option value="' . esc_html( $tag ) . '" ' . selected( $form_options[ $mapped ], $tag, 1 ) . '>' . esc_html( $tag ) . '</option>';
+		foreach ($mail_tags as $tag) {
+			$output .= '<option value="'. esc_html($tag) .'" ' . selected( $form_options[$mapped], $tag, 1) . '>'. esc_html($tag) .'</option>';
 		}
 		return $output;
 	}
 
-	private static function output_form_fields( $posted_data ) {
+	private static function output_form_fields($posted_data) {
 
 		$output = '';
-		foreach ( $posted_data as $key => $value ) {
+		foreach($posted_data as $key => $value) {
 
-			if ( ! preg_match( '/_wpcf7/', $key ) ) {
+			if(!preg_match("/_wpcf7/", $key))
 				$output .= $key . ":\r\n" . $value . "\r\n\r\n";
-			}
 		}
 
 		return $output;
