@@ -22,7 +22,8 @@ class Autocomplete {
 		// It is safe though, since we are deriving the table name from $wpdb->prefix.
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT DISTINCT value, field, mls FROM $table_name WHERE value LIKE %s LIMIT 10", $like_query
+				"SELECT DISTINCT value, field, mls FROM $table_name WHERE value LIKE %s LIMIT 10",
+				$like_query
 			)
 		);
 

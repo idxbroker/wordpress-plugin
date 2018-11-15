@@ -1,6 +1,7 @@
 <?php
 namespace IDX\Views;
-/** 
+
+/**
  * Multisite settings page.
  */
 class Multisite {
@@ -50,15 +51,17 @@ class Multisite {
 		}
 
 		echo '<form action="options.php" method="post" id="impress-multisite-settings-form">';
-			settings_fields('impress_multisite_options');
+			settings_fields( 'impress_multisite_options' );
 
-			_e('<h3>Agent ID</h3>', 'idx-broker-platinum');
-			_e('<p><label for="impress_multisite_settings[agent_id]">Select the Agent ID for leads from this site to be attributed to.</p> <p><strong>Note: Selecting none will use default rules and no agent ID will be appended to any IMPress widgets or forms.</strong></label><br />
-				<select name="impress_multisite_settings[agent_id]" id="agent_id" class="agent-id">');
+			_e( '<h3>Agent ID</h3>', 'idx-broker-platinum' );
+			_e(
+				'<p><label for="impress_multisite_settings[agent_id]">Select the Agent ID for leads from this site to be attributed to.</p> <p><strong>Note: Selecting none will use default rules and no agent ID will be appended to any IMPress widgets or forms.</strong></label><br />
+				<select name="impress_multisite_settings[agent_id]" id="agent_id" class="agent-id">'
+			);
 			echo $this->get_agent_select_options( $options['agent_id'] );
-			_e('</select></p>', 'idx-broker-platinum' );
+			_e( '</select></p>', 'idx-broker-platinum' );
 
-			submit_button( __('Save Settings', 'idx-broker-platinum') );
+			submit_button( __( 'Save Settings', 'idx-broker-platinum' ) );
 
 		echo '</form>';
 	}
@@ -136,7 +139,7 @@ class Multisite {
 	/**
 	 * Returns any URL with agentHeaderID param appended
 	 *
-	 * @param  string  $url  The IDX page URL. required
+	 * @param  string $url  The IDX page URL. required
 	 * @param  array  $link  The IDX page data. (optional)
 	 * @return string        The modified URL.
 	 */
