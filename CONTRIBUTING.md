@@ -2,7 +2,7 @@
 
 👍🎉⭐️ Thank you for any and all contributions! 👍🎉⭐️
 
-When contributing to this repository, please first address the change you wish to make via issue. Pull Requests with out an issue will not be accepted.
+When contributing to this repository, please first address the change you wish to make via issue. Pull Requests without an issue will not be accepted.
 
 Please note we have a code of conduct, please follow it in all your interactions with the project. 💖
 
