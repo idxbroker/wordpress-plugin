@@ -14,7 +14,7 @@ You can always open issues or submit code to improve this project. Read the guid
 
 🐛 Bugs are tracked as GitHub issues. After you've determined which repository your bug is related to, create an issue on that repository and provide the following information using the [ISSUE TEMPLATE](/.github).
 
-#### Before Submitting An Issue Please Read These Helpful Tips. 👀
+#### Before Submitting an Issue Please Read These Helpful Tips. 👀
 
 * Use a clear and descriptive title for the issue to identify the problem.
 * Describe the exact steps which reproduce the problem in as many details as possible. When listing steps, don't just say what you did, but also explain how you did it.
