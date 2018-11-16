@@ -2,62 +2,62 @@
 All notable changes to this project will be documented in this file.
 
 
-## [2.5.7]
+## [2.5.7] - 2018-10-23
 * Fix: Leads not tracking correctly with the new 1.6.0 api.
 * Fix: Added support to set custom intervals for cron jobs.
 
-## [2.5.6]
+## [2.5.6] - 2018-10-09
 * Fix: Now uses IDX api version 1.6.0.
 
-## [2.5.5]
+## [2.5.5] - 2018-08-02
 * Fix: Dev feature impress_showcase_property_html filter fixed
 * Fix: Cache option names updated so changes made on Leads and Searches page display immediately.
 * Fix: Option set when API limit exceeded to prevent additional API calls until limit is reset.
 
-## [2.5.4]
+## [2.5.4] - 2018-06-28
 * Fix: Property widgets and shortcodes now have a default sort option that respects a saved link's sorting method.
 * Fix: Fatal error on API exhaustion.
 
-## [2.5.3]
+## [2.5.3] - 2018-05-24
 * Fix: Javascript error with map search widget when using IMPress - IDX Middleware widget.
 * Fix: Invalid regex in omnibar autocomplete API.
 
-## [2.5.2]
+## [2.5.2] - 2018-05-18
 * Fix: Fatal error on PHP < 5.5. Minimum required PHP version increased to 5.6.
 
-## [2.5.1]
+## [2.5.1] - 2018-05-18
 * New: Omnibar now supports address autocomplete by default.
 * New: Middleware widgets are no longer individually imported. A single IMPress - IDX Dashboard Widget is available to use instead. Migration script will replace any old widgets in use upon upgrade.
 * Fix: Gravity forms lead push failing when default labels of required fields are changed.
 * Fix: Deprecated warning on PHP 7.2+ for Middlware widgets.
 
-## [2.5.0]
+## [2.5.0] - 2018-04-19
 * New: Display saved links in property showcase and carousel widgets and shortcodes!
 * Fix: City links widget with property count uses single API call per MLS to get count.
 * Fix: Uninstall hook moved to separate uninstall.php file and cleanup routines more thorough.
 
-## [2.4.5]
+## [2.4.5] - 2018-03-14
 * Fix: Yoast SEO noindex detection
 
-## [2.4.4]
+## [2.4.4] - 2018-03-07
 * New: Can now add password field to lead sign up widget and shortcode
 * New: Now notifies you if Yoast SEO is causing your pages to not be indexed by search engines
 * Fix: No longer loads multiple versions of Font Awesome
 * Fix: City Links now show 0 when there are no properties in those cities
 * Fix: Error when using Carousel shortcode with impress_carousel_property_html filter
 
-## [2.4.3]
+## [2.4.3] - 2018-02-08
 * New: Lead Sign Up widget button text is now customizable
 * New: Lead Login widget can now have a password field
 * New: Agent routing now possible with Gravity Forms
 * Fix: Adding custom fields to Omnibar in Firefox no longer errors
 * Fix: Removed cURL dependency
 
-## [2.4.2]
+## [2.4.2] - 2018-01-24
 * Fix: Permissions issue with adding/editing/deleting wrappers
 * Fix: Update Carousel script to v2 for compatibility issues
 
-## [2.4.1]
+## [2.4.1] - 2018-01-23
 * New: For multi-user IDX accounts, now you can filter property widgets by agent.
 * New: Multisite feature: Assign agents to sites on a network to have their agentHeaderID added to widgets and IDX url's for lead tracking.
 * New: Developer feature: Added filters (impress_carousel_property_html and impress_carousel_property_html) to modify property widget/shortcode HTML output.
@@ -146,7 +146,7 @@ All notable changes to this project will be documented in this file.
 * The styling was updated for the IDX icon where it was misaligned in the admin bar on the front end.
 * Courtesies are now displayed on IMPress Showcases and Carousels when required by MLS rules.
 
-## [2.1.0]
+## [2.1.0] - 2016-04-14
 * Adds Min Price option for the IMPress Omnibar Widget and Shortcode.
 * IMPress Showcase and Carousels now use the address for the image title attribute for better SEO.
 * The Omnibar main input has been updated for better accessibility with screen readers.
@@ -159,10 +159,10 @@ All notable changes to this project will be documented in this file.
 * A new Dashboard widget has been added for a convenient overview of Leads and Listings.
 * Fixed an issue where IDX pages were not imported at all and caused slow downs on slower servers.
 
-## [2.0.3]
+## [2.0.3] - 2016-03-25
 * Fixed an issue where plugin review prompt could not be dismissed.
 
-## [2.0.2]
+## [2.0.2] - 2016-03-11
 * Fixed an issue where a saved links field was incorrectly displaying on Carousel and Showcase shortcodes for Lite accounts (This only works for Platinum accounts).
 * Fixed a similar issue where saved links were displaying a UI to apply page level wrappers to them for Lite accounts.
 * Incorporated an IoC Container into the plugin for a cleaner coding structure.
