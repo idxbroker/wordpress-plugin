@@ -18,7 +18,7 @@
 
 ## Versions
 
-Please fill out the follow version information:
+Please fill out the following version information:
 WordPress version:
 PHP version:
 IMPress plugin version:
