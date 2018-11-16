@@ -18,7 +18,12 @@
 
 ## Versions
 
-You can get this information from WordPress. Also, please include the WP Version and what version of the PHP you're running.
+Please fill out the follow version information:
+WordPress version:
+PHP version:
+IMPress plugin version:
+
+You can get this information from WordPress.
 
 ## Additional Information
 
