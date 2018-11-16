@@ -49,5 +49,5 @@ Please check all :octocat: issues as you might find out that you don't need to c
 
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
 
-This Contributing is adapted from the [Atom] doc,
+This Contributing is adapted from the :atom: doc,
 available [here](https://github.com/atom/atom)
