@@ -8,7 +8,7 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 ## How Can I Contribute?
 
-You can always open issues or submit code to improve this project. Read the guidlines below.
+You can always open issues or submit code to improve this project. Read the guidelines below.
 
 ### Reporting Bugs
 
