@@ -5,7 +5,9 @@
 Please exaplin the intent of your Pull Request.
 
 🐛 Are you fixing a bug?
+
 📝 Are you updating documentation?
+
 💻 Are you changing functionality?
 
 Rememebr to state clearly and in detail, leaving no room for confusion about the intent oif your Pull Request
