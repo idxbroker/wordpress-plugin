@@ -1,6 +1,6 @@
 # Opening Issues
 
-👋 Hello there! Welcome. Pleasethe template below to tell us about your issue.
+👋 Hello there! Welcome. Please use the template below to tell us about your issue.
 
 ## Description
 
