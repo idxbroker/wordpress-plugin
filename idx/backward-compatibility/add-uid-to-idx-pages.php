@@ -1,10 +1,34 @@
 <?php
+/**
+ * UID to IDX Pages.
+ *
+ * @package idxbroker-platinum
+ */
+
+/* Exit if accessed directly. */
+defined( 'ABSPATH' ) || exit;
+
 namespace IDX\Backward_Compatibility;
 
+/**
+ * Add_Uid_To_Idx_Pages class.
+ */
 class Add_Uid_To_Idx_Pages {
 
+	/**
+	 * IDX API.
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 
@@ -17,11 +41,14 @@ class Add_Uid_To_Idx_Pages {
 		// Run Scheduled Addng of UID.
 		add_action( 'idx_add_uid_to_idx_pages', array( $this, 'add_uid' ) );
 
-		// For testing:
-		// return $this->add_uid();
 	}
 
-	// Add UID to all IDX pages as the unique identifier.
+	/**
+	 * Add UID to all IDX pages as the unique identifier.
+	 *
+	 * @access public
+	 * @return Updated Option idx_added_uid_to_idx_pages.
+	 */
 	public function add_uid() {
 		$wp_idx_pages = get_posts(
 			array(
@@ -44,13 +71,18 @@ class Add_Uid_To_Idx_Pages {
 			}
 			// Add UID to post meta.
 			update_post_meta( $id, 'idx_uid', $uid );
-			// For Testing:
-			// delete_post_meta($id, 'idx_uid');
+
 		}
 		return update_option( 'idx_added_uid_to_idx_pages', true, false );
 	}
 
-	// Find the IDX page with matching URL.
+	/**
+	 * Find the IDX page with matching URL.
+	 *
+	 * @access public
+	 * @param mixed $url URL.
+	 * @return bool Matched IDX Page.
+	 */
 	public function matched_idx_page( $url ) {
 		$saved_links  = $this->idx_api->idx_api_get_savedlinks();
 		$system_links = $this->idx_api->idx_api_get_systemlinks();
