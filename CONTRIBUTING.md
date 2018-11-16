@@ -17,7 +17,7 @@ You can always open issues or submit code to improve this project. Read the guid
 #### Before Submitting an Issue Please Read These Helpful Tips. 👀
 
 * Use a clear and descriptive title for the issue to identify the problem.
-* Describe the exact steps which reproduce the problem in as many details as possible. When listing steps, don't just say what you did, but also explain how you did it.
+* Describe the exact steps which reproduce the problem in as much detail as possible. When listing steps, don't just say what you did, but also explain how you did it.
 * Provide specific examples to demonstrate the steps. Include links to files or GitHub projects, or copy/pasteable snippets, which you use in those examples. If you're providing snippets in the issue, use Markdown code blocks.
 * Describe the behavior you observed after following the steps and point out what exactly is the problem with that behavior.
 * Explain which behavior you expected to see instead and why.
@@ -30,7 +30,7 @@ This section guides you through submitting an enhancement suggestion, including 
 
 #### Before Submitting An Enhancement Suggestion 👀
 
-Please check all :octocat: issues as you might find out that you don't need to create one. When you are creating an enhancement suggestion and please include as many details as possible.
+Please check all :octocat: issues as you might find out that you don't need to create one. When you are creating an enhancement suggestion and please include as much detail as possible.
 
 * Check if there's already an issue which suggests that enhancement. If there is, add a comment to the existing issue instead of opening a new one.
 * Submit using the [ISSUE TEMPLATE](/.github)
