@@ -28,7 +28,7 @@ You can always open issues or submit code to improve this project. Read the guid
 
 This section guides you through submitting an enhancement suggestion, including completely new features and minor improvements to existing functionality. Following these guidelines helps maintainers and the community understand your suggestion 📝 and find related suggestions 🔎.
 
-#### Before Submitting An Enhancement Suggestion 👀
+#### Before Submitting an Enhancement Suggestion 👀
 
 Please check all :octocat: issues as you might find out that you don't need to create one. When you are creating an enhancement suggestion and please include as much detail as possible.
 
@@ -39,7 +39,7 @@ Please check all :octocat: issues as you might find out that you don't need to c
 
 ### Pull Requests
 
-#### Before Submitting A Pull Request 👀
+#### Before Submitting a Pull Request 👀
 
 1. Ensure any install or build dependencies are removed before the end of the layer when doing a build.
 2. Update the README.md with details of changes to the interface, this includes new environment variables, exposed ports, useful file locations and container parameters.
