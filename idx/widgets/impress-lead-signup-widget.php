@@ -1,8 +1,10 @@
 <?php
 namespace IDX\Widgets;
 
+/**
+ * Impress_Lead_Signup_Widget class.
+ */
 class Impress_Lead_Signup_Widget extends \WP_Widget {
-
 
 	/**
 	 * Register widget with WordPress.
@@ -28,8 +30,28 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		);
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
+
+	/**
+	 * error_message
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $error_message;
+
+	/**
+	 * defaults
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $defaults = array(
 		'title'          => 'Lead Sign Up',
 		'custom_text'    => '',
@@ -70,7 +92,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 
 		$target = $this->target( $instance['new_window'] );
 
-		$title       = $instance['title'];
+		$title       = apply_filters( 'widget_title', $instance['title'] );
 		$custom_text = $instance['custom_text'];
 
 		$wpl_options = get_option( 'plugin_wp_listings_settings' );
@@ -146,6 +168,13 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		echo $after_widget;
 	}
 
+	/**
+	 * target function.
+	 *
+	 * @access public
+	 * @param mixed $new_window
+	 * @return void
+	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
 			// if enabled, open links in new tab/window
@@ -232,6 +261,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 
 	}
 
+	/**
+	 * lead_login_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function lead_login_page() {
 		$links = $this->idx_api->idx_api_get_systemlinks();
 		if ( empty( $links ) ) {
@@ -244,7 +279,13 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		}
 	}
 
-	// For error handling since this is a cross domain request.
+	/**
+	 * For error handling since this is a cross domain request.
+	 *
+	 * @access public
+	 * @param mixed $error Error.
+	 * @return void
+	 */
 	public function handle_errors( $error ) {
 		$output = '';
 

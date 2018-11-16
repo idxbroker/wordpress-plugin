@@ -1,6 +1,9 @@
 <?php
 namespace IDX\Widgets;
 
+/**
+ * IMPress_Lead_Login_Widget class.
+ */
 class IMPress_Lead_Login_Widget extends \WP_Widget {
 
 	/**
@@ -21,7 +24,20 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 		);
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
+
+	/**
+	 * defaults
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $defaults = array(
 		'title'       => 'Account Login',
 		'custom_text' => '',
@@ -58,7 +74,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 
 		$target = $this->target( $instance['new_window'] );
 
-		$title          = $instance['title'];
+		$title          = apply_filters( 'widget_title', $instance['title'] );
 		$custom_text    = $instance['custom_text'];
 		$password_field = $instance['password_field'];
 
@@ -92,6 +108,13 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 		echo $after_widget;
 	}
 
+	/**
+	 * target function.
+	 *
+	 * @access public
+	 * @param mixed $new_window
+	 * @return void
+	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
 			// if enabled, open links in new tab/window

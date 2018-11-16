@@ -1,8 +1,17 @@
 <?php
 namespace IDX\Widgets\Omnibar;
 
+/**
+ * IDX_Omnibar_Widget class.
+ */
 class IDX_Omnibar_Widget extends \WP_Widget {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->create_omnibar = new \IDX\Widgets\Omnibar\Create_Omnibar();
 		$widget_ops           = array(
@@ -13,8 +22,20 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 		parent::__construct( 'IDX_Omnibar_Widget', 'IMPress Omnibar Search', $widget_ops );
 	}
 
+	/**
+	 * create_omnibar
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $create_omnibar;
 
+	/**
+	 * defaults
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $defaults = array(
 		'title'     => '',
 		'min_price' => 0,
@@ -22,6 +43,13 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 		'extra'     => 0,
 	);
 
+	/**
+	 * form function.
+	 *
+	 * @access public
+	 * @param mixed $instance
+	 * @return void
+	 */
 	public function form( $instance ) {
 		$defaults = $this->defaults;
 		$instance = wp_parse_args( (array) $instance, $this->defaults );
@@ -43,6 +71,14 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 		<?php
 	}
 
+	/**
+	 * update function.
+	 *
+	 * @access public
+	 * @param mixed $new_instance
+	 * @param mixed $old_instance
+	 * @return void
+	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance              = $old_instance;
 		$instance['title']     = $new_instance['title'];
@@ -52,6 +88,14 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 		return $instance;
 	}
 
+	/**
+	 * widget function.
+	 *
+	 * @access public
+	 * @param mixed $args
+	 * @param mixed $instance
+	 * @return void
+	 */
 	public function widget( $args, $instance ) {
 		$defaults = $this->defaults;
 

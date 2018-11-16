@@ -1,17 +1,38 @@
 <?php
 namespace IDX\Widgets;
 
+/**
+ * Create_Impress_Widgets class.
+ */
 class Create_Impress_Widgets {
 
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 		add_action( 'widgets_init', array( $this, 'register_impress_widgets' ) );
 
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * register_impress_widgets function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function register_impress_widgets() {
 		register_widget( '\IDX\Widgets\Impress_Showcase_Widget' );
 		register_widget( '\IDX\Widgets\Impress_Carousel_Widget' );
@@ -23,6 +44,12 @@ class Create_Impress_Widgets {
 		}
 	}
 
+	/**
+	 * lead_login_shortcode function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function lead_login_shortcode() {
 		$widget = sprintf(
 			'
@@ -40,6 +67,13 @@ class Create_Impress_Widgets {
 		return $widget;
 	}
 
+	/**
+	 * lead_signup_shortcode function.
+	 *
+	 * @access public
+	 * @param mixed $atts
+	 * @return void
+	 */
 	public function lead_signup_shortcode( $atts ) {
 
 		extract(
@@ -85,6 +119,13 @@ class Create_Impress_Widgets {
 		return $widget;
 	}
 
+	/**
+	 * property_showcase_shortcode function.
+	 *
+	 * @access public
+	 * @param array $atts (default: array())
+	 * @return void
+	 */
 	public function property_showcase_shortcode( $atts = array() ) {
 
 		extract(
@@ -268,6 +309,13 @@ class Create_Impress_Widgets {
 
 	}
 
+	/**
+	 * property_carousel_shortcode function.
+	 *
+	 * @access public
+	 * @param array $atts (default: array())
+	 * @return void
+	 */
 	public function property_carousel_shortcode( $atts = array() ) {
 
 		extract(
@@ -408,6 +456,13 @@ class Create_Impress_Widgets {
 		return $output;
 	}
 
+	/**
+	 * city_links_shortcode function.
+	 *
+	 * @access public
+	 * @param array $atts (default: array())
+	 * @return void
+	 */
 	public function city_links_shortcode( $atts = array() ) {
 
 		extract(

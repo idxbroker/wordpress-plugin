@@ -4,15 +4,36 @@
  */
 namespace IDX\Widgets;
 
+/**
+ * Create_Idx_Widgets class.
+ */
 class Create_Idx_Widgets {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 		$this->create_widgets();
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * create_widgets function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function create_widgets() {
 
 		$widget_cache = $this->idx_api->get_transient( 'idx_widgetsrc_cache' );

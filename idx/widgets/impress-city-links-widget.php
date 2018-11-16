@@ -1,8 +1,10 @@
 <?php
 namespace IDX\Widgets;
 
+/**
+ * Impress_City_Links_Widget class.
+ */
 class Impress_City_Links_Widget extends \WP_Widget {
-
 
 	/**
 	 * Register widget with WordPress.
@@ -22,7 +24,20 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		);
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
+
+	/**
+	 * defaults
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $defaults = array(
 		'title'          => 'Explore Cities',
 		'city_list'      => 'combinedActiveMLS',
@@ -62,7 +77,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 
 		$target = $this->target( $instance['new_window'] );
 
-		$title = $instance['title'];
+		$title = apply_filters( 'widget_title', $instance['title'] );
 
 		echo $before_widget;
 
@@ -217,6 +232,13 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		return $output;
 	}
 
+	/**
+	 * target function.
+	 *
+	 * @access public
+	 * @param mixed $new_window
+	 * @return void
+	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
 			// if enabled, open links in new tab/window

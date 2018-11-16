@@ -1,6 +1,9 @@
 <?php
 namespace IDX\Widgets;
 
+/**
+ * Impress_Carousel_Widget class.
+ */
 class Impress_Carousel_Widget extends \WP_Widget {
 
 	/**
@@ -21,7 +24,20 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		);
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
+
+	/**
+	 * defaults
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $defaults = array(
 		'title'         => 'Properties',
 		'properties'    => 'featured',
@@ -113,7 +129,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
                     0:{
                         items: 1,
                         nav: true,
-                        margin: 0 
+                        margin: 0
                     },
                     450:{
                         items: ' . round( $display / 2 ) . '
@@ -235,6 +251,13 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		}
 	}
 
+	/**
+	 * target function.
+	 *
+	 * @access public
+	 * @param mixed $new_window
+	 * @return void
+	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
 			// if enabled, open links in new tab/window
@@ -244,6 +267,13 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		}
 	}
 
+	/**
+	 * set_missing_core_fields function.
+	 *
+	 * @access public
+	 * @param mixed $prop
+	 * @return void
+	 */
 	public function set_missing_core_fields( $prop ) {
 		$name_values   = array(
 			'image',
@@ -358,7 +388,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			$instance = $this->defaults;
 		}
 
-		$title = $instance['title'];
+		$title = apply_filters( 'widget_title', $instance['title'] );
 
 		echo $before_widget;
 
