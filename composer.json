@@ -28,7 +28,6 @@
         "psr-4": {"IDX\\": "idx/"}
     },
     "require-dev": {
-        "wpreadme2markdown/wpreadme2markdown": "*",
         "stevegrunwell/wp-enforcer": "^0.5.0"
     }
 }
