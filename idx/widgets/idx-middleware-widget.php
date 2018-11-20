@@ -1,8 +1,17 @@
 <?php
 namespace IDX\Widgets;
 
+/**
+ * Idx_Middleware_Widget class.
+ */
 class Idx_Middleware_Widget extends \WP_Widget {
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
 	/**

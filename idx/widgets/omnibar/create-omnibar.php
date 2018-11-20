@@ -1,8 +1,17 @@
 <?php
 namespace IDX\Widgets\Omnibar;
 
+/**
+ * Create_Omnibar class.
+ */
 class Create_Omnibar {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->register_shortcodes();
 		$this->register_widgets();
@@ -10,6 +19,15 @@ class Create_Omnibar {
 
 	}
 
+	/**
+	 * idx_omnibar_basic function.
+	 *
+	 * @access public
+	 * @param mixed $plugin_dir
+	 * @param mixed $idx_url
+	 * @param int $styles (default: 1)
+	 * @return void
+	 */
 	public function idx_omnibar_basic( $plugin_dir, $idx_url, $styles = 1 ) {
 		$mlsPtIDs    = $this->idx_omnibar_default_property_types();
 		$placeholder = get_option( 'idx_omnibar_placeholder' );
@@ -56,6 +74,16 @@ class Create_Omnibar {
 EOD;
 	}
 
+	/**
+	 * idx_omnibar_extra function.
+	 *
+	 * @access public
+	 * @param mixed $plugin_dir
+	 * @param mixed $idx_url
+	 * @param int $styles (default: 1)
+	 * @param int $min_price (default: 0)
+	 * @return void
+	 */
 	public function idx_omnibar_extra( $plugin_dir, $idx_url, $styles = 1, $min_price = 0 ) {
 		$mlsPtIDs    = $this->idx_omnibar_default_property_types();
 		$placeholder = get_option( 'idx_omnibar_placeholder' );
@@ -106,6 +134,13 @@ EOD;
 EOD;
 	}
 
+	/**
+	 * price_field function.
+	 *
+	 * @access public
+	 * @param mixed $min_price
+	 * @return void
+	 */
 	public function price_field( $min_price ) {
 		if ( empty( $min_price ) ) {
 			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
@@ -116,6 +151,12 @@ EOD;
 		return $price_field;
 	}
 
+	/**
+	 * idx_omnibar_default_property_types function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function idx_omnibar_default_property_types() {
 		$mlsPtIDs = get_option( 'idx_default_property_types' );
 		// if no default pts have been set, add dummy values to prevent js errors
@@ -130,6 +171,13 @@ EOD;
 		return $mlsPtIDs;
 	}
 
+	/**
+	 * add_omnibar_shortcode function.
+	 *
+	 * @access public
+	 * @param mixed $atts
+	 * @return void
+	 */
 	public function add_omnibar_shortcode( $atts ) {
 		extract(
 			shortcode_atts(
@@ -152,6 +200,13 @@ EOD;
 		}
 	}
 
+	/**
+	 * add_omnibar_extra_shortcode function.
+	 *
+	 * @access public
+	 * @param mixed $atts
+	 * @return void
+	 */
 	public function add_omnibar_extra_shortcode( $atts ) {
 		extract(
 			shortcode_atts(
@@ -169,6 +224,15 @@ EOD;
 		return $this->idx_omnibar_extra( $plugin_dir, $idx_url, $styles, $min_price );
 	}
 
+	/**
+	 * show_omnibar_shortcodes function.
+	 *
+	 * @access public
+	 * @static
+	 * @param mixed $type
+	 * @param mixed $name
+	 * @return void
+	 */
 	public static function show_omnibar_shortcodes( $type, $name ) {
 		$widget_shortcode      = '[' . $type . ']';
 		$available_shortcodes  = '<div class="each_shortcode_row">';
@@ -179,15 +243,33 @@ EOD;
 		echo $available_shortcodes;
 	}
 
+	/**
+	 * register_shortcodes function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function register_shortcodes() {
 		add_shortcode( 'idx-omnibar', array( $this, 'add_omnibar_shortcode' ) );
 		add_shortcode( 'idx-omnibar-extra', array( $this, 'add_omnibar_extra_shortcode' ) );
 	}
 
+	/**
+	 * register_impress_omnibar_widgets function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function register_impress_omnibar_widgets() {
 		register_widget( '\IDX\Widgets\Omnibar\IDX_Omnibar_Widget' );
 	}
 
+	/**
+	 * register_widgets function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function register_widgets() {
 		// for PHP5.3 compatibility
 		$scope = $this;
@@ -201,7 +283,12 @@ EOD;
 
 	}
 
-	// Registers the endpoint, the logic is in Omnibar\Autocomplete
+	/**
+	 * Registers the endpoint, the logic is in Omnibar\Autocomplete
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function register_rest_endpoint() {
 		add_action(
 			'rest_api_init',

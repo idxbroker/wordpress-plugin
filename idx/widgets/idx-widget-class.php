@@ -12,10 +12,38 @@ namespace IDX\Widgets;
 // Doing it this way allows us to give the dynamic class access to all of WP_Widget's methods
 class Idx_Widget_Class extends \WP_Widget {
 
+	/**
+	 * widget_class
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $widget_class; // holds name of widget's class, ex: widget_596_12345
+
+	/**
+	 * widget_url
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $widget_url; // URL location of widget's JS file in IDX MW
+
+	/**
+	 * widget_id
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $widget_id; // id of widget, ex: idx596_12345
 
+	/**
+	 * widget function.
+	 *
+	 * @access public
+	 * @param mixed $args
+	 * @param mixed $instance
+	 * @return void
+	 */
 	public function widget( $args, $instance ) {
 		/**
 		 * vars contained in $args:

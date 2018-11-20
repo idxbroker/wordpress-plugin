@@ -303,6 +303,13 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		return $output;
 	}
 
+	/**
+	 * target function.
+	 *
+	 * @access public
+	 * @param mixed $new_window
+	 * @return void
+	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
 			// if enabled, open links in new tab/window
@@ -321,6 +328,13 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		}
 	}
 
+	/**
+	 * set_missing_core_fields function.
+	 *
+	 * @access public
+	 * @param mixed $prop
+	 * @return void
+	 */
 	public function set_missing_core_fields( $prop ) {
 		$name_values   = array(
 			'image',
@@ -451,7 +465,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		if ( empty( $instance ) ) {
 			$instance = $this->defaults;
 		}
-		$title = $instance['title'];
+		$title = apply_filters( 'widget_title', $instance['title'] );
 
 		echo $before_widget;
 

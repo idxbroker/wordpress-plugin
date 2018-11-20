@@ -1,7 +1,18 @@
 <?php
 namespace IDX\Widgets\Omnibar;
 
+/**
+ * Get_Locations class.
+ */
 class Get_Locations {
+
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @param string $update (default: 'all')
+	 * @return void
+	 */
 	public function __construct( $update = 'all' ) {
 
 		$api = get_option( 'idx_broker_apikey' );
@@ -36,15 +47,49 @@ class Get_Locations {
 		}
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
+
+	/**
+	 * address_mls
+	 *
+	 * @var mixed
+	 * @access private
+	 */
 	private $address_mls;
+
+	/**
+	 * mls_list
+	 *
+	 * @var mixed
+	 * @access private
+	 */
 	private $mls_list;
+
+	/**
+	 * property_types
+	 *
+	 * @var mixed
+	 * @access private
+	 */
 	private $property_types;
 
 	/*
 	 * Custom Advanced Fields added via admin
 	 */
-	// used in get_additional_fields function
+
+	/**
+	 * get_idxIDs function.
+	 *
+	 * @access public
+	 * @param mixed $array
+	 * @return void
+	 */
 	public function get_idxIDs( $array ) {
 		$idxIDs = array();
 		foreach ( $array as $field ) {
@@ -56,7 +101,15 @@ class Get_Locations {
 		return $idxIDs;
 	}
 
-	// used in get_additional_fields function
+
+	/**
+	 * fields_in_idxID function.
+	 *
+	 * @access public
+	 * @param mixed $idxIDMatch
+	 * @param mixed $fields
+	 * @return void
+	 */
 	public function fields_in_idxID( $idxIDMatch, $fields ) {
 		$output              = '';
 		$first_run_for_idxID = true;
@@ -109,6 +162,12 @@ class Get_Locations {
 		return 'var customFieldsKey = ' . json_encode( $custom_fields_key ) . '; ';
 	}
 
+	/**
+	 * get_cczs function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function get_cczs() {
 		// Get correct CCZ List set in admin
 		$omnibar_city    = get_option( 'idx_omnibar_current_city_list' );
@@ -166,7 +225,7 @@ class Get_Locations {
 		$sql             = "CREATE TABLE $table_name (
 			mls varchar(4) NOT NULL,
 			field text NOT NULL,
-			value text NOT NULL 
+			value text NOT NULL
 		) $charset_collate;";
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -222,6 +281,15 @@ class Get_Locations {
 		$this->run_insert_query( $mls, $field_values, $field );
 	}
 
+	/**
+	 * run_insert_query function.
+	 *
+	 * @access private
+	 * @param mixed $mls
+	 * @param mixed $field_values
+	 * @param mixed $field
+	 * @return void
+	 */
 	private function run_insert_query( $mls, $field_values, $field ) {
 		global $wpdb;
 		$wpdb->show_errors();
@@ -257,6 +325,12 @@ class Get_Locations {
 		);
 	}
 
+	/**
+	 * initiate_get_locations function.
+	 *
+	 * @access private
+	 * @return void
+	 */
 	private function initiate_get_locations() {
 		$cczs = $this->get_cczs();
 
