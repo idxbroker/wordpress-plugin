@@ -90,14 +90,14 @@ class Search_Management {
 			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
 			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
 			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array( 'jquery' ), '4.0.3', true );
+			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 
 			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.css' );
 			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
 			wp_enqueue_style( 'idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons' );
 			wp_enqueue_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css' );
 			wp_enqueue_style( 'idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css' );
-			wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' );
+			wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
 		}
 	}
 
@@ -600,7 +600,7 @@ class Search_Management {
 		} elseif ( $_GET['searchID'] && is_numeric( $_GET['searchID'] ) ) {
 			?>
 			<h3>Edit Saved Search</h3>
-			
+
 			<?php
 		}
 	}

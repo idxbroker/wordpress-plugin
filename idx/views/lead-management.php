@@ -111,7 +111,7 @@ class Lead_Management {
 			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
 			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
 			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array( 'jquery' ), '4.0.3', true );
+			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 
 			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.css' );
 			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
@@ -647,7 +647,7 @@ class Lead_Management {
 		} elseif ( empty( $_GET['leadID'] ) ) { ?>
 
 			<h3>Add Lead</h3>
-			
+
 			<form id="add-lead" action="" method="post">
 				<h6>Account Information</h6>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-required">
@@ -934,7 +934,7 @@ class Lead_Management {
 						<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 
 					</form>
-					
+
 
 					<a href="<?php echo admin_url( 'admin.php?page=edit-lead' ); ?>" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 						<i class="material-icons">add</i>
@@ -1116,7 +1116,7 @@ class Lead_Management {
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 						</form>
 					</div>
-					
+
 					<div id="edit-lead-property" style="display: none;">
 						<h5>Edit Property</h5>
 						<form action="" method="post" class="edit-lead-property">
@@ -1254,7 +1254,7 @@ class Lead_Management {
 				?>
 				</div>
 			</div>
-		
+
 			<?php
 		}
 	}

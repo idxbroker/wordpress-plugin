@@ -41,8 +41,8 @@ class Omnibar_Settings {
 			// Tell JS to reload page when ready.
 			wp_localize_script( 'idx-omnibar-settings', 'loadOmnibarView', 'true' );
 		}
-		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css' );
-		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js', array( 'jquery' ), '4.0.3', true );
+		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
+		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 
 		return wp_enqueue_script( 'idx-omnibar-settings' );
 	}
@@ -152,7 +152,7 @@ class Omnibar_Settings {
 		<div class="select-div">
 			<label for="basic">Default Property Type:</label><select class="omnibar-mlsPtID" name="basic">
 			<option <?php selected( 'all', $this->idx_in_saved_array( 'all', $default_property_type, 'basic' ) ); ?> value="all">All Property Types</option>
-		
+
 				<option <?php selected( 'sfr', $this->idx_in_saved_array( 'sfr', $default_property_type, 'basic' ) ); ?> value="sfr">Single Family Residential</option>
 				<option <?php selected( 'com', $this->idx_in_saved_array( 'com', $default_property_type, 'basic' ) ); ?> value="com">Commercial</option>
 				<option <?php selected( 'ld', $this->idx_in_saved_array( 'ld', $default_property_type, 'basic' ) ); ?> value="ld">Lots and Land</option>
