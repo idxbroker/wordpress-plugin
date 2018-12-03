@@ -309,7 +309,7 @@ class Wrappers {
 		$saved_links  = $this->idx_api->idx_api_get_savedlinks();
 		wp_nonce_field( 'idx-wrapper-page', 'idx-wrapper-page-nonce' );
 		$this->wrapper_page_dropdown( $system_links, $saved_links );
-		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
+		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all' );
 		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 		wp_enqueue_script( 'idx-wrapper', plugins_url( '../assets/js/idx-wrappers.min.js', __FILE__ ) );
 

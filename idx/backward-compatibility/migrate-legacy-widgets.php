@@ -5,10 +5,10 @@
  * @package idxbroker-platinum
  */
 
+namespace IDX\Backward_Compatibility;
+
 /* Exit if accessed directly. */
 defined( 'ABSPATH' ) || exit;
-
-namespace IDX\Backward_Compatibility;
 
 /**
  * Migrate_Legacy_Widgets class.
