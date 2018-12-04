@@ -22,7 +22,7 @@ class Initiate_Plugin {
 		add_action( 'wp_head', array( $this, 'display_wpversion' ) );
 		add_action( 'wp_head', array( $this, 'idx_broker_activated' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( dirname( dirname( __FILE__ ) ) ) . '/idx-broker-platinum.php', array( $this, 'idx_broker_platinum_plugin_actlinks' ) );
-		// Setting the priority to 9 for admin_menu makes the Wrappers post type UI below the Settings link
+		// Setting the priority to 9 for admin_menu makes the Wrappers post type UI below the Settings link.
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 9 );
 		add_action( 'admin_menu', array( $this, 'idx_broker_platinum_options_init' ) );
 		add_action( 'admin_bar_init', array( $this, 'load_admin_menu_styles' ) );
@@ -48,7 +48,7 @@ class Initiate_Plugin {
 	const IDX_API_URL             = 'https://api.idxbroker.com';
 
 	/**
-	 * instantiate_classes function.
+	 * Instantiate Classes.
 	 *
 	 * @access public
 	 * @return void
@@ -74,7 +74,7 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * idx_extensions function.
+	 * IDX Extensions.
 	 *
 	 * @access public
 	 * @return void
@@ -92,13 +92,13 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * set_defaults function.
+	 * Set Defaults.
 	 *
 	 * @access private
 	 * @return void
 	 */
 	private function set_defaults() {
-		// Prevent script timeout when API response is slow
+		// Prevent script timeout when API response is slow.
 		set_time_limit( 0 );
 
 		// The function below adds a settings link to the plugin page.
@@ -107,7 +107,7 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * schedule_migrate_old_table function.
+	 * Schedule Migrate Old Table.
 	 *
 	 * @access public
 	 * @return void
@@ -125,7 +125,7 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * migrate_old_table function.
+	 * Migrate Old Table.
 	 *
 	 * @access public
 	 * @return void
@@ -135,10 +135,10 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * plugin_updated function.
+	 * Plugin Updated.
 	 *
 	 * @access public
-	 * @return void
+	 * @return bool
 	 */
 	public function plugin_updated() {
 		if ( ! get_option( 'idx_plugin_version' ) || get_option( 'idx_plugin_version' ) < \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION ) {
@@ -147,16 +147,15 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * update_triggered function.
+	 * Update Triggered.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function update_triggered() {
 		if ( $this->plugin_updated() ) {
-			// update db option and update omnibar data
+			// Update db option and update omnibar data.
 			update_option( 'idx_plugin_version', \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION, false );
-			// clear old api cache
+			// Clear old api cache.
 			$this->idx_api->idx_clean_transients();
 			$this->idx_omnibar_get_locations();
 			return add_action( 'wp_loaded', array( $this, 'schedule_migrate_old_table' ) );
@@ -164,20 +163,20 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * schedule_omnibar_update function.
+	 * Schedule Omnibar Update.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function schedule_omnibar_update() {
 		if ( ! wp_get_schedule( 'idx_omnibar_get_locations' ) ) {
-			// refresh omnibar fields once a day
+			// rRefresh omnibar fields once a day.
 			wp_schedule_event( time(), 'daily', 'idx_omnibar_get_locations' );
 		}
 	}
 
 	/**
-	 * idx_omnibar_get_locations function.
+	 * IDX Omnibar Get Locations.
 	 *
 	 * @access public
 	 * @return void
@@ -186,49 +185,60 @@ class Initiate_Plugin {
 		new \IDX\Widgets\Omnibar\Get_Locations();
 	}
 
-	// Adds a comment declaring the version of the WordPress.
+	/**
+	 * Display WP Version.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function display_wpversion() {
 		echo "\n\n<!-- WordPress Version ";
 		echo bloginfo( 'version' );
 		echo ' -->';
 	}
 
-	// Adds a comment declaring the version of the IDX Broker plugin if it is activated.
+
+	/**
+	 * IDX Broker Activated.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function idx_broker_activated() {
 		echo "\n<!-- IDX Broker WordPress Plugin " . \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION . " Activated -->\n";
 
 		echo "<!-- IDX Broker WordPress Plugin Wrapper Meta-->\n\n";
 		global $post;
-		// If wrapper, add noindex tag which is stripped out by our system
-		if ( $post && $post->post_type === 'idx-wrapper' ) {
+		// If wrapper, add noindex tag which is stripped out by our system.
+		if ( $post && 'idx-wrapper' === $post->post_type ) {
 			// If html is being modified we offer filters for developers to modify this tag as needed.
 			echo apply_filters( 'idx_activation_meta_tags', "<meta name='idx-robot'>\n<meta name='robots' content='noindex,nofollow'>\n" );
 		}
 	}
 
 	/**
-	 * idx_broker_platinum_plugin_actlinks function.
+	 * IDX Broker Platinum Plugin Act Links.
 	 *
 	 * @access public
-	 * @param mixed $links
-	 * @return void
+	 * @param mixed $links Links.
+	 * @return Links.
 	 */
 	public function idx_broker_platinum_plugin_actlinks( $links ) {
-		// Add a link to this plugin's settings page
+		// Add a link to this plugin's settings page.
 		$settings_link = '<a href="admin.php?page=idx-broker">Settings</a>';
 		array_unshift( $links, $settings_link );
 		return $links;
 	}
 
 	/**
-	 * idx_broker_platinum_options_init function.
+	 * IDX Broker Platinum Options Init.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function idx_broker_platinum_options_init() {
 		global $api_error;
-		// register our settings
+		// Register our settings.
 		register_setting( 'idx-platinum-settings-group', 'idx_broker_apikey' );
 		register_setting( 'idx-platinum-settings-group', 'idx_broker_dynamic_wrapper_page_name' );
 		register_setting( 'idx-platinum-settings-group', 'idx_broker_dynamic_wrapper_page_id' );
@@ -239,7 +249,7 @@ class Initiate_Plugin {
 		 *  to control them here.  First let's grab them, if the API is not blank.
 		 */
 
-		if ( get_option( 'idx_broker_apikey' ) != '' ) {
+		if ( get_option( 'idx_broker_apikey' ) !== '' ) {
 			$systemlinks = $this->idx_api->idx_api_get_systemlinks();
 			if ( is_wp_error( $systemlinks ) ) {
 				$api_error = $systemlinks->get_error_message();
@@ -247,10 +257,11 @@ class Initiate_Plugin {
 		}
 	}
 
+
 	/**
-	 * Function to delete existing cache. So API response in cache will be deleted
+	 * IDX Refresh API. Function to delete existing cache. So API response in cache will be deleted.
 	 *
-	 * @param void
+	 * @access public
 	 * @return void
 	 */
 	public function idx_refreshapi() {
@@ -279,14 +290,18 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * load_admin_menu_styles function.
+	 * Load Admin Menu Styles.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function load_admin_menu_styles() {
-		wp_enqueue_style( 'properticons', 'https://s3.amazonaws.com/properticons/css/properticons.css' );
-		return wp_enqueue_style( 'idx-menus', plugins_url( '/assets/css/idx-menus.css', dirname( __FILE__ ) ) );
+
+		$idx_plugin_version = \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION;
+
+		// TODO: IDX Team Please offer minified version.
+		wp_enqueue_style( 'properticons', 'https://s3.amazonaws.com/properticons/css/properticons.css', array(), '1.0.0', 'all' );
+		wp_enqueue_style( 'idx-menus', plugins_url( '/assets/css/idx-menus.css', dirname( __FILE__ ) ), array(), $idx_plugin_version, 'all' );
 	}
 	/**
 	 * This adds the options page to the WP admin.
@@ -306,7 +321,7 @@ class Initiate_Plugin {
 			55.572
 		);
 		add_submenu_page( 'idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array( $this, 'idx_broker_platinum_admin_page' ) );
-		// Only add Omnibar page if no errors in API
+		// Only add Omnibar page if no errors in API.
 		$systemlinks = $this->idx_api->idx_api_get_systemlinks();
 		if ( ! is_object( $systemlinks ) && ! empty( $systemlinks ) ) {
 			add_submenu_page( 'idx-broker', 'Omnibar Settings', 'Omnibar Settings', 'administrator', 'idx-omnibar-settings', array( $this, 'idx_omnibar_settings_interface' ) );
@@ -314,11 +329,13 @@ class Initiate_Plugin {
 		add_action( 'admin_footer', array( $this, 'add_upgrade_center_link' ) );
 	}
 
+
 	/**
-	 * This adds the idx menu items to the admin bar for quick access.
+	 * This adds the idx menu items to the admin bar for quick access..
 	 *
-	 * @params void
-	 * @return Admin Menu
+	 * @access public
+	 * @param mixed $wp_admin_bar WordPress Admin Bar.
+	 * @return void
 	 */
 	public function add_admin_bar_menu( $wp_admin_bar ) {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -360,7 +377,7 @@ class Initiate_Plugin {
 			'parent' => 'idx_admin_bar_menu',
 			'href'   => admin_url( 'admin.php?page=idx-omnibar-settings' ),
 		);
-		// Only add Omnibar page if no errors in API
+		// Only add Omnibar page if no errors in API.
 		$systemlinks = $this->idx_api->idx_api_get_systemlinks();
 		if ( ! is_object( $systemlinks ) && ! empty( $systemlinks ) ) {
 			$wp_admin_bar->add_node( $args );
@@ -380,18 +397,22 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 *  Function to add javascript and css into idx setting page
+	 * Function to add javascript and css into idx setting page..
 	 *
-	 *  @param string $page: the current page
+	 * @access public
+	 * @param mixed $page The Current Page.
+	 * @return void
 	 */
 	public function idx_inject_script_and_style( $page ) {
 
-		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.css' );
+		$idx_plugin_version = \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION;
+
+		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.css', array(), $idx_plugin_version, 'all' );
 
 		if ( 'toplevel_page_idx-broker' !== $page ) {
 			return;
 		}
-		wp_enqueue_script( 'idxjs', plugins_url( '/assets/js/idx-broker.min.js', dirname( __FILE__ ) ), 'jquery' );
+		wp_enqueue_script( 'idxjs', plugins_url( '/assets/js/idx-broker.min.js', dirname( __FILE__ ) ), 'jquery', $idx_plugin_version, true );
 		wp_localize_script(
 			'idxjs',
 			'IDXAdminAjax',
@@ -399,28 +420,27 @@ class Initiate_Plugin {
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			)
 		);
-		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.css', dirname( __FILE__ ) ) );
+		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.css', dirname( __FILE__ ) ), array(), $idx_plugin_version, 'all' );
 	}
 
 	/**
-	 * legacy_functions function.
+	 * Legacy Functions.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function legacy_functions() {
-		// add legacy idx-start functions for older themes
+		// Add legacy idx-start functions for older themes.
 		include 'backward-compatibility' . DIRECTORY_SEPARATOR . 'legacy-functions.php';
 	}
 
 	/**
-	 * disable_original_plugin function.
+	 * Disable Original Plugin if Enabled.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function disable_original_plugin() {
-		// disable IDX Original Plugin if enabled
 		if ( is_plugin_active( 'idx-broker-wordpress-plugin/idx_broker.php' ) ) {
 			deactivate_plugins( 'idx-broker-wordpress-plugin/idx_broker.php' );
 		}
@@ -429,7 +449,6 @@ class Initiate_Plugin {
 	/**
 	 * This is tiggered and is run by idx_broker_menu, it's the actual IDX Broker Admin page and display.
 	 *
-	 * @params void
 	 * @return void
 	 */
 	public function idx_broker_platinum_admin_page() {
@@ -437,14 +456,14 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * idx_omnibar_settings_interface function.
+	 * IDX Omnibar Settings Interface.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function idx_omnibar_settings_interface() {
 		$omnibar_settings = new \IDX\Views\Omnibar_Settings();
-		// preload current cczs for omnibar settings
+		// Preload current cczs for omnibar settings.
 		$omnibar_settings->idx_omnibar_settings_interface();
 	}
 
@@ -455,7 +474,7 @@ class Initiate_Plugin {
 	 * @return void
 	 */
 	public function add_upgrade_center_link() {
-		// Only load if account is not Platinum level
+		// Only load if account is not Platinum level.
 		if ( ! $this->idx_api->platinum_account_type() ) {
 			wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
 			$html = '<li><a href="https://middleware.idxbroker.com/mgmt/upgrade" target="_blank">Upgrade Account<i class="fa fa-arrow-up update-plugins"></i></a>';
@@ -478,15 +497,15 @@ EOD;
 			return;
 		}
 
-		// Get all active notices and store in object, need this state for the sidebar notice icon
+		// Get all active notices and store in object, need this state for the sidebar notice icon.
 		$this->notices = Notice\Notice_Handler::get_all_notices();
 
-		// If no notices, return
+		// If no notices, return.
 		if ( count( $this->notices ) < 1 ) {
 			return;
 		}
 
-		// Create admin_notice box for each notice
+		// Create admin_notice box for each notice.
 		foreach ( $this->notices as $notice ) {
 			add_action( 'admin_notices', array( $notice, 'create_notice' ) );
 		}

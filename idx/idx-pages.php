@@ -14,7 +14,8 @@ class Idx_Pages {
 	 */
 	public function __construct() {
 		$this->idx_api = new Idx_Api();
-		// deletes all IDX pages for troubleshooting purposes
+
+		// Deletes all IDX pages for troubleshooting purposes.
 		// $this->delete_all_idx_pages();
 		add_option( 'idx_cron_schedule', 'threeminutes' );
 		register_setting( 'idx-platinum-settings-group', 'idx_cron_schedule' );
@@ -22,7 +23,7 @@ class Idx_Pages {
 		add_filter( 'post_type_link', array( $this, 'post_type_link_filter_func' ), 10, 2 );
 		add_filter( 'cron_schedules', array( $this, 'add_custom_schedule' ) );
 
-		// register hooks for WP Cron to use to update IDX Pages
+		// Register hooks for WP Cron to use to update IDX Pages.
 		add_action( 'idx_create_idx_pages', array( $this, 'create_idx_pages' ) );
 		add_action( 'idx_delete_idx_pages', array( $this, 'delete_idx_pages' ) );
 
@@ -32,15 +33,15 @@ class Idx_Pages {
 		add_action( 'save_post', array( $this, 'set_wrapper_page' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 
-		// schedule an IDX page update via WP cron
+		// Schedule an IDX page update via WP cron.
 		$this->schedule_idx_page_update();
 
-		// for testing
+		// For testing.
 		// add_action('wp_loaded', array($this, 'create_idx_pages'));
 	}
 
 	/**
-	 * idx_api
+	 * IDX API.
 	 *
 	 * @var mixed
 	 * @access public
@@ -48,22 +49,28 @@ class Idx_Pages {
 	public $idx_api;
 
 	/**
-	 * add_custom_schedule function.
+	 * Add custom Schedule.
 	 *
 	 * @access public
-	 * @param mixed $schedules
+	 * @param mixed $schedules Schedules.
 	 * @return void
 	 */
 	public function add_custom_schedule( $schedules ) {
 		$schedules['threeminutes'] = array(
-			'interval' => 60 * 3, // three minutes in seconds
+			'interval' => 60 * 3, // Three minutes in seconds.
 			'display'  => 'Three Minutes',
 		);
 
 		return $schedules;
 	}
 
-	/** Schedule IDX Page update regularly. **/
+
+	/**
+	 * Schedule IDX Page update regularly.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function schedule_idx_page_update() {
 		$idx_cron_schedule = get_option( 'idx_cron_schedule' );
 		$next_create_event = wp_next_scheduled( 'idx_create_idx_pages' );
@@ -88,21 +95,29 @@ class Idx_Pages {
 			wp_schedule_event( time(), $idx_cron_schedule, 'idx_delete_idx_pages' );
 		}
 	}
-	// to be called on plugin deactivation
+
+
+	/**
+	 * Unscchedule IDX Page Update.
+	 *
+	 * @access public
+	 * @static
+	 * @return void
+	 */
 	public static function unschedule_idx_page_update() {
 		wp_clear_scheduled_hook( 'idx_create_idx_pages' );
 		wp_clear_scheduled_hook( 'idx_delete_idx_pages' );
 	}
 
 	/**
-	 * register_idx_page_type function.
+	 * Register IDX Page CPT.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function register_idx_page_type() {
 
-		// post_type labels
+		// labels.
 		$labels = array(
 			'name'               => 'IDX Pages',
 			'singular_name'      => 'IDX Page',
@@ -118,7 +133,7 @@ class Idx_Pages {
 			'parent'             => 'Parent IDX Page',
 		);
 
-		// disable ability to add new or delete IDX Pages
+		// Disable ability to add new or delete IDX Pages.
 		$capabilities = array(
 			'publish_posts'       => false,
 			'edit_posts'          => 'edit_idx_pages',
@@ -143,22 +158,20 @@ class Idx_Pages {
 			'capability_type'   => array( 'idx_page', 'idx_pages' ),
 			'supports'          => array( 'excerpt', 'thumbnail' ),
 		);
-		// register IDX Pages Post Type
 		register_post_type( 'idx_page', $args );
-
 	}
 
 	/**
-	 * manage_idx_page_capabilities function.
+	 * Manage IDX Page Capabilities.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function manage_idx_page_capabilities() {
-		// gets the role to add capabilities to
+		// Gets the role to add capabilities to.
 		if ( current_user_can( 'edit_others_posts' ) ) {
 			$current_user = wp_get_current_user();
-			// replicate all the remapped capabilites from the custom post type
+			// Replicate all the remapped capabilites from the custom post type.
 			$caps = array(
 				'edit_idx_page',
 				'edit_idx_pages',
@@ -166,7 +179,7 @@ class Idx_Pages {
 				'publish_idx_pages',
 				'read_idx_pages',
 			);
-			// give all the capabilities to the administrator
+			// Give all the capabilities to the administrator.
 			foreach ( $caps as $cap ) {
 				$current_user->add_cap( $cap );
 			}
@@ -174,13 +187,13 @@ class Idx_Pages {
 	}
 
 	/**
-	 * create_idx_pages function.
+	 * Create IDX Pages.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function create_idx_pages() {
-		// Only schedule update once IDX pages have UID
+		// Only schedule update once IDX pages have UID.
 		$uid_added = get_option( 'idx_added_uid_to_idx_pages' );
 		if ( empty( $uid_added ) ) {
 			return wp_schedule_single_event( time(), 'idx_add_uid_to_idx_pages' );
@@ -196,12 +209,20 @@ class Idx_Pages {
 		$existing_page_ids = $this->get_existing_idx_page_ids();
 
 		foreach ( $idx_page_chunks as $idx_page_chunk ) {
-			// for each chunk, create all idx pages within
+			// For each chunk, create all idx pages within.
 			$this->create_pages_from_chunk( $idx_page_chunk, $existing_page_ids );
 		}
 	}
 
-	// use the chunk to create all the pages within (chunk is 200)
+
+	/**
+	 * Create Pages from Chunk.
+	 *
+	 * @access public
+	 * @param mixed $idx_page_chunk IDX Page Chunk.
+	 * @param mixed $existing_page_ids Existing Page IDs.
+	 * @return void
+	 */
 	public function create_pages_from_chunk( $idx_page_chunk, $existing_page_ids ) {
 		foreach ( $idx_page_chunk as $link ) {
 			if ( ! empty( $link->name ) ) {
@@ -224,7 +245,7 @@ class Idx_Pages {
 					'post_type'      => 'idx_page',
 				);
 
-				// filter sanitize_tite so it returns the raw title
+				// Filter sanitize_tite so it returns the raw title.
 				add_filter( 'sanitize_title', array( $this, 'sanitize_title_filter' ), 10, 2 );
 				$wp_id = wp_insert_post( $post_info );
 
@@ -236,11 +257,11 @@ class Idx_Pages {
 	}
 
 	/**
-	 * find_and_update_post function.
+	 * Find and Update Post.
 	 *
 	 * @access public
-	 * @param mixed $link
-	 * @param mixed $name
+	 * @param mixed $link Link.
+	 * @param mixed $name Name.
 	 * @return void
 	 */
 	public function find_and_update_post( $link, $name ) {
@@ -258,7 +279,7 @@ class Idx_Pages {
 		}
 	}
 
-	// update the wp post info if it does not match api
+	// Update the wp post info if it does not match api.
 	public function update_post( $id, $link, $name ) {
 		$post = get_post( $id );
 		// If name or URL are different, update them.
@@ -294,7 +315,7 @@ class Idx_Pages {
 	}
 
 	/**
-	 * get_all_api_idx_pages function.
+	 * Get all API IDX Pages.
 	 *
 	 * @access public
 	 * @return void
@@ -312,10 +333,10 @@ class Idx_Pages {
 	}
 
 	/**
-	 * get_all_api_idx_uids function.
+	 * Get all API IDX UIDs.
 	 *
 	 * @access public
-	 * @param mixed $idx_pages
+	 * @param mixed $idx_pages IDX Pages.
 	 * @return void
 	 */
 	public function get_all_api_idx_uids( $idx_pages ) {
@@ -330,7 +351,7 @@ class Idx_Pages {
 	 * Deletes IDX pages that dont have a url or title matching a systemlink url or title
 	 */
 	public function delete_idx_pages() {
-		// Only schedule update once IDX pages have UID
+		// Only schedule update once IDX pages have UID.
 		$uid_added = get_option( 'idx_added_uid_to_idx_pages' );
 		if ( empty( $uid_added ) ) {
 			return $this->app->make( '\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages' );
@@ -366,31 +387,40 @@ class Idx_Pages {
 		}
 	}
 
-	// Keep post name (the idx url) from having slashes stripped out on save in UI
+	/**
+	 * Save IDX Page.
+	 *
+	 * @access public
+	 * @param mixed $post_id Post ID.
+	 * @return void
+	 */
 	public function save_idx_page( $post_id ) {
 		$post = get_post( $post_id );
-		// only affect idx_page post type
+		// Only affect idx_page post type.
 		if ( $post->post_type !== 'idx_page' ) {
 			return;
 		}
-		// prevent infinite loop
+		// Prevent infinite loop.
 		remove_action( 'save_post', array( $this, 'save_idx_page' ), 1 );
-		// force post_name to not lose slashes
+		// Force post_name to not lose slashes.
 		$update_to_post = array(
 			'ID'        => $post_id,
 			'post_name' => $post->guid,
 		);
 
 		add_filter( 'sanitize_title', array( $this, 'sanitize_title_filter' ), 10, 2 );
-		// manually save post
+		// Manually save post.
 		wp_update_post( $update_to_post );
 
 	}
 
 	/**
-	 * Disables appending of the site url to the post permalink
+	 * Disables appending of the site url to the post permalink.
 	 *
-	 * @return string $post_link
+	 * @access public
+	 * @param mixed $post_link Post Link.
+	 * @param mixed $post Post.
+	 * @return void
 	 */
 	public function post_type_link_filter_func( $post_link, $post ) {
 
@@ -456,7 +486,7 @@ class Idx_Pages {
 	}
 
 	/**
-	 * show_idx_pages_metabox_by_default function.
+	 * Show IDX Pages Metabox by Default.
 	 *
 	 * @access public
 	 * @return void
@@ -484,12 +514,12 @@ class Idx_Pages {
 
 		update_user_meta( $user->ID, 'metaboxhidden_nav-menus', $hidden_metaboxes_on_nav_menus_page );
 
-		// add a meta field to keep track of the first login
+		// Add a meta field to keep track of the first login.
 		update_user_meta( $user->ID, 'idx_user_first_login', 'user_first_login_false' );
 	}
 
 	/**
-	 * display_wrapper_dropdown function.
+	 * Display Wrapper Dropdown.
 	 *
 	 * @access public
 	 * @return void
@@ -504,7 +534,7 @@ class Idx_Pages {
 	}
 
 	/**
-	 * wrapper_page_dropdown function.
+	 * Wrapper Page Dropdown.
 	 *
 	 * @access public
 	 * @return void
@@ -530,22 +560,28 @@ class Idx_Pages {
 		echo '</select>';
 	}
 
-	// dynamic wrapper requires the pageID, not the UID,
-	// so we must strip out the account number from the UID
+
+	/**
+	 * Convert UID to ID.
+	 *
+	 * @access public
+	 * @param mixed $uid UID.
+	 * @return void
+	 */
 	public function convert_uid_to_id( $uid ) {
 		return substr( $uid, strpos( $uid, '-' ) + 1 );
 	}
 
 	/**
-	 * wrapper_page_ui function.
+	 * Wrapper Page UI.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function wrapper_page_ui() {
-		// add metabox interface when editing an IDX page (with none as an option)
-		// This UI should display the current wrapper set
-		// when saving a post, save the meta of which wrapper is set
+		// Add metabox interface when editing an IDX page (with none as an option).
+		// This UI should display the current wrapper set.
+		// When saving a post, save the meta of which wrapper is set.
 		wp_nonce_field( 'idx-wrapper-page', 'idx-wrapper-page-nonce' );
 		$this->wrapper_page_dropdown();
 		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all' );
@@ -554,10 +590,10 @@ class Idx_Pages {
 	}
 
 	/**
-	 * find_idx_url function.
+	 * Find IDX Url.
 	 *
 	 * @access public
-	 * @param mixed $post_id
+	 * @param mixed $post_id Post ID.
 	 * @return void
 	 */
 	public function find_idx_url( $post_id ) {
@@ -583,10 +619,10 @@ class Idx_Pages {
 	}
 
 	/**
-	 * is_saved_link function.
+	 * Is Saved Link.
 	 *
 	 * @access public
-	 * @param mixed $post_id
+	 * @param mixed $post_id Post ID.
 	 * @return void
 	 */
 	public function is_saved_link( $post_id ) {
@@ -601,14 +637,14 @@ class Idx_Pages {
 	}
 
 	/**
-	 * add_meta_box function.
+	 * Add Meta Box.
 	 *
 	 * @access public
-	 * @param mixed $post_type
+	 * @param mixed $post_type Post Type.
 	 * @return void
 	 */
 	public function add_meta_box( $post_type ) {
-		$post_types = array( 'idx_page' ); // limit meta box to certain post types
+		$post_types = array( 'idx_page' ); // Limit meta box to certain post types.
 		if ( in_array( $post_type, $post_types ) && $this->display_wrapper_dropdown() ) {
 			add_meta_box(
 				'set_wrapper_page',
@@ -622,10 +658,10 @@ class Idx_Pages {
 	}
 
 	/**
-	 * set_wrapper_page function.
+	 * Set Wrapper Page.
 	 *
 	 * @access public
-	 * @param mixed $post_id
+	 * @param mixed $post_id Post ID.
 	 * @return void
 	 */
 	public function set_wrapper_page( $post_id ) {
@@ -642,10 +678,10 @@ class Idx_Pages {
 
 		$meta_value = $_POST['idx-wrapper-page'];
 		$meta_value = sanitize_text_field( $meta_value );
-		// Find the IDX Page ID by matching URLs
+		// Find the IDX Page ID by matching URLs.
 		$idx_page_id = $this->find_idx_url( $post_id );
 
-		// do not update wrapper if wrapper is none
+		// Do not update wrapper if wrapper is none.
 		if ( $meta_value === 'none' ) {
 			return;
 		} elseif ( $meta_value === 'global' ) {
@@ -654,13 +690,13 @@ class Idx_Pages {
 
 		$wrapper_page_url = get_permalink( $meta_value );
 
-		// logic for what type of idx page is in Idx_Api class
+		// Logic for what type of idx page is in Idx_Api class
 		$this->idx_api->set_wrapper( $idx_page_id, $wrapper_page_url );
 		update_post_meta( $post_id, 'idx-wrapper-page', $meta_value );
 	}
 
 	/**
-	 * verify_permissions function.
+	 * Verify Permissions.
 	 *
 	 * @access public
 	 * @return void
