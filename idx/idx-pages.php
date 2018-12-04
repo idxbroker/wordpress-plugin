@@ -15,8 +15,6 @@ class Idx_Pages {
 	public function __construct() {
 		$this->idx_api = new Idx_Api();
 
-		// Deletes all IDX pages for troubleshooting purposes.
-		// $this->delete_all_idx_pages();
 		add_option( 'idx_cron_schedule', 'threeminutes' );
 		register_setting( 'idx-platinum-settings-group', 'idx_cron_schedule' );
 		add_action( 'admin_init', array( $this, 'show_idx_pages_metabox_by_default' ) );
@@ -36,8 +34,6 @@ class Idx_Pages {
 		// Schedule an IDX page update via WP cron.
 		$this->schedule_idx_page_update();
 
-		// For testing.
-		// add_action('wp_loaded', array($this, 'create_idx_pages'));
 	}
 
 	/**
@@ -53,7 +49,6 @@ class Idx_Pages {
 	 *
 	 * @access public
 	 * @param mixed $schedules Schedules.
-	 * @return void
 	 */
 	public function add_custom_schedule( $schedules ) {
 		$schedules['threeminutes'] = array(
@@ -190,7 +185,6 @@ class Idx_Pages {
 	 * Create IDX Pages.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function create_idx_pages() {
 		// Only schedule update once IDX pages have UID.
@@ -279,7 +273,16 @@ class Idx_Pages {
 		}
 	}
 
-	// Update the wp post info if it does not match api.
+
+	/**
+	 * Update the wp post info if it does not match api.
+	 *
+	 * @access public
+	 * @param mixed $id ID.
+	 * @param mixed $link Link.
+	 * @param mixed $name Name.
+	 * @return void
+	 */
 	public function update_post( $id, $link, $name ) {
 		$post = get_post( $id );
 		// If name or URL are different, update them.
@@ -304,11 +307,11 @@ class Idx_Pages {
 	}
 
 	/**
-	 * Removes sanitization on the post_name
+	 * Removes sanitization on the post_name.
 	 *
-	 * Without this the ":","/", and "." will be removed from post slugs
-	 *
-	 * @return string $raw_title title without sanitization applied
+	 * @access public
+	 * @param mixed $title Title.
+	 * @param mixed $raw_title Raw Title.
 	 */
 	public function sanitize_title_filter( $title, $raw_title ) {
 		return $raw_title;
@@ -318,7 +321,6 @@ class Idx_Pages {
 	 * Get all API IDX Pages.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function get_all_api_idx_pages() {
 		$saved_links  = $this->idx_api->idx_api_get_savedlinks();
@@ -376,12 +378,14 @@ class Idx_Pages {
 		}
 
 		foreach ( $posts as $post ) {
-			// post_name oddly refers to permalink in the db
-			// if an idx hosted page url or title has been changed,
-			// delete the page from the wpdb
-			// the updated page will be repopulated automatically
+			/*
+			* Post_name oddly refers to permalink in the db
+			* if an idx hosted page url or title has been changed,
+			* delete the page from the wpdb
+			* the updated page will be repopulated automatically.
+			*/
 			$wp_page_uid = get_post_meta( $post->ID, 'idx_uid', true );
-			if ( ! in_array( $wp_page_uid, $idx_page_uids ) ) {
+			if ( ! in_array( $wp_page_uid, $idx_page_uids, true ) ) {
 				wp_delete_post( $post->ID );
 			}
 		}
@@ -397,7 +401,7 @@ class Idx_Pages {
 	public function save_idx_page( $post_id ) {
 		$post = get_post( $post_id );
 		// Only affect idx_page post type.
-		if ( $post->post_type !== 'idx_page' ) {
+		if ( 'idx_page' !== $post->post_type ) {
 			return;
 		}
 		// Prevent infinite loop.
@@ -420,11 +424,10 @@ class Idx_Pages {
 	 * @access public
 	 * @param mixed $post_link Post Link.
 	 * @param mixed $post Post.
-	 * @return void
 	 */
 	public function post_type_link_filter_func( $post_link, $post ) {
 
-		if ( 'idx_page' == $post->post_type ) {
+		if ( 'idx_page' === $post->post_type ) {
 			return $post->post_name;
 		}
 
@@ -498,7 +501,7 @@ class Idx_Pages {
 		$user_first_login = get_user_meta( $user->ID, 'idx_user_first_login', true );
 
 		// Only update the user meta on the first login (after IDX features have been enabled).
-		// This ensures that the user can hide the IDX Pages metabox again if they want
+		// This ensures that the user can hide the IDX Pages metabox again if they want.
 		if ( ! empty( $user_first_login ) ) {
 			return;
 		}
@@ -507,7 +510,7 @@ class Idx_Pages {
 
 		foreach ( $hidden_metaboxes_on_nav_menus_page as $key => $value ) {
 
-			if ( $value == 'add-idx_page' ) {
+			if ( 'add-idx_page' === $value ) {
 				unset( $hidden_metaboxes_on_nav_menus_page[ $key ] );
 			}
 		}
@@ -522,11 +525,10 @@ class Idx_Pages {
 	 * Display Wrapper Dropdown.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function display_wrapper_dropdown() {
-		// only show dropdown if Platinum account or not saved link
-		// (Lite does not support saved link wrappers)
+		// Only show dropdown if Platinum account or not saved link.
+		// (Lite does not support saved link wrappers).
 		if ( $this->idx_api->platinum_account_type() ||
 			! $this->is_saved_link( get_the_ID() ) ) {
 			return true;
@@ -586,7 +588,7 @@ class Idx_Pages {
 		$this->wrapper_page_dropdown();
 		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all' );
 		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
-		wp_enqueue_script( 'idx-wrapper', plugins_url( '../assets/js/idx-wrappers.min.js', __FILE__ ) );
+		wp_enqueue_script( 'idx-wrapper', plugins_url( '../assets/js/idx-wrappers.min.js', __FILE__ ), array( 'jquery' ), \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION, true );
 	}
 
 	/**
@@ -645,7 +647,7 @@ class Idx_Pages {
 	 */
 	public function add_meta_box( $post_type ) {
 		$post_types = array( 'idx_page' ); // Limit meta box to certain post types.
-		if ( in_array( $post_type, $post_types ) && $this->display_wrapper_dropdown() ) {
+		if ( in_array( $post_type, $post_types, true ) && $this->display_wrapper_dropdown() ) {
 			add_meta_box(
 				'set_wrapper_page',
 				'Apply Page Wrapper',
@@ -665,7 +667,7 @@ class Idx_Pages {
 	 * @return void
 	 */
 	public function set_wrapper_page( $post_id ) {
-		// saved idx page ID
+		// Saved idx page ID.
 		if ( empty( $_POST ) ) {
 			return;
 		}
@@ -682,15 +684,15 @@ class Idx_Pages {
 		$idx_page_id = $this->find_idx_url( $post_id );
 
 		// Do not update wrapper if wrapper is none.
-		if ( $meta_value === 'none' ) {
+		if ( 'none' === $meta_value ) {
 			return;
-		} elseif ( $meta_value === 'global' ) {
+		} elseif ( 'global' === $meta_value ) {
 			$this->idx_api->set_wrapper( $idx_page_id, '' );
 		}
 
 		$wrapper_page_url = get_permalink( $meta_value );
 
-		// Logic for what type of idx page is in Idx_Api class
+		// Logic for what type of idx page is in Idx_Api class.
 		$this->idx_api->set_wrapper( $idx_page_id, $wrapper_page_url );
 		update_post_meta( $post_id, 'idx-wrapper-page', $meta_value );
 	}
@@ -699,7 +701,6 @@ class Idx_Pages {
 	 * Verify Permissions.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function verify_permissions() {
 		// Check if our nonce is set.
