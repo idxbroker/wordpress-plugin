@@ -17,19 +17,20 @@ class Idx_Api {
 	}
 
 	/**
-	 * api_key
+	 * API Key.
 	 *
 	 * @var mixed
 	 * @access public
 	 */
 	public $api_key;
+
 	/**
-	 * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
+	 * API Response.
 	 *
 	 * @param  [array] $response [response header from API call]
 	 * @return [array]           [keys: 'code' => response code, 'error' => false (default), or error message if one is found]
 	 */
-	public function apiResponse( $response ) {
+	public function api_response( $response ) {
 		if ( ! $response || ! is_array( $response ) || ! isset( $response['response'] ) ) {
 			return array(
 				'code'  => 'Generic',
@@ -76,17 +77,75 @@ class Idx_Api {
 	}
 
 	/**
-	 * IDX API Request
+	 * IDX API Request.
 	 */
 	public function idx_api(
+
+		/**
+		 * Method.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$method,
-		$apiversion = Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+
+		/**
+		 * API Version.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
+		$api_version = Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+
+		/**
+		 * Level.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$level = 'clients',
+
+		/**
+		 * Params.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$params = array(),
+
+		/**
+		 * expiration.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$expiration = 7200,
+
+		/**
+		 * Request Type.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$request_type = 'GET',
+
+		/**
+		 * JSON Decode Type.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$json_decode_type = false
 	) {
+
+		/**
+		 * Cache Key.
+		 *
+		 * (default value: 'idx_' . $level . '_' . $method . '_cache')
+		 *
+		 * @var string
+		 * @access public
+		 */
 		$cache_key = 'idx_' . $level . '_' . $method . '_cache';
 
 		if ( $this->get_transient( $cache_key ) !== false ) {
@@ -94,14 +153,26 @@ class Idx_Api {
 			return $data;
 		}
 
+		/**
+		 * Headers.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$headers = array(
 			'Content-Type'  => 'application/x-www-form-urlencoded',
 			'accesskey'     => $this->api_key,
 			'outputtype'    => 'json',
-			'apiversion'    => $apiversion,
+			'apiversion'    => $api_version,
 			'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
 		);
 
+		/**
+		 * Params.
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$params = array_merge(
 			array(
 				'timeout'   => 120,
@@ -110,18 +181,36 @@ class Idx_Api {
 			),
 			$params
 		);
-		$url    = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
-		if ( $request_type === 'POST' ) {
+		/**
+		 * URL.
+		 *
+		 * (default value: Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method)
+		 *
+		 * @var string
+		 * @access public
+		 */
+		$url = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
+
+		if ( 'POST' === $request_type ) {
 			$response = wp_safe_remote_post( $url, $params );
 		} else {
 			$response = wp_remote_get( $url, $params );
 		}
+
+		/**
+		 * Response.
+		 *
+		 * (default value: (array) $response)
+		 *
+		 * @var mixed
+		 * @access public
+		 */
 		$response = (array) $response;
 
-		extract( $this->apiResponse( $response ) ); // get code and error message if any, assigned to vars $code and $error
-		if ( isset( $error ) && $error !== false ) {
-			if ( $code == 401 ) {
+		extract( $this->api_response( $response ) ); // Get code and error message if any, assigned to vars $code and $error.
+		if ( isset( $error ) && false !== $error ) {
+			if ( 401 === $code ) {
 				$this->delete_transient( $cache_key );
 			}
 			return new \WP_Error( 'idx_api_error', __( "Error {$code}: $error" ) );
@@ -167,12 +256,12 @@ class Idx_Api {
 	}
 
 	/**
-	 * set_transient function.
+	 * Set Transient.
 	 *
 	 * @access public
-	 * @param mixed $name
-	 * @param mixed $data
-	 * @param mixed $expiration
+	 * @param mixed $name Name.
+	 * @param mixed $data Data.
+	 * @param mixed $expiration Expiration.
 	 * @return void
 	 */
 	public function set_transient( $name, $data, $expiration ) {
@@ -182,7 +271,7 @@ class Idx_Api {
 			'expiration' => $expiration,
 		);
 		$data       = serialize( $data );
-		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+		if ( is_multisite() && get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) === $this->api_key ) {
 			update_blog_option( get_main_site_id(), $name, $data );
 		} else {
 			update_option( $name, $data, false );
@@ -190,14 +279,14 @@ class Idx_Api {
 	}
 
 	/**
-	 * delete_transient function.
+	 * Delete Transient.
 	 *
 	 * @access public
-	 * @param mixed $name
+	 * @param mixed $name Name.
 	 * @return void
 	 */
 	public function delete_transient( $name ) {
-		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+		if ( is_multisite() && get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) === $this->api_key ) {
 			delete_blog_option( get_main_site_id(), $name );
 		} else {
 			delete_option( $name );
@@ -324,7 +413,7 @@ class Idx_Api {
 		}
 
 		foreach ( $links as $link ) {
-			if ( $name == $link->name ) {
+			if ( $name === $link->name ) {
 				return $link->url;
 			}
 		}
@@ -347,7 +436,7 @@ class Idx_Api {
 		}
 
 		foreach ( $links as $link ) {
-			if ( 'details' == $link->category ) {
+			if ( 'details' === $link->category ) {
 				return $link->url;
 			}
 		}
@@ -472,16 +561,16 @@ class Idx_Api {
 	 * @return void
 	 */
 	public function set_wrapper( $idx_page, $wrapper_url ) {
-		// if none, quit process
-		if ( $idx_page === 'none' ) {
+		// if none, quit process.
+		if ( 'none' === $idx_page ) {
 			return;
-		} elseif ( $idx_page === 'global' ) {
-			// set Global Wrapper:
+		} elseif ( 'global' === $idx_page ) {
+			// Set Global Wrapper.
 			$this->idx_api( 'dynamicwrapperurl', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array( 'body' => array( 'dynamicURL' => $wrapper_url ) ), 10, 'POST' );
 		} else {
-			// find what IDX page type then set the page wrapper
+			// Find what IDX page type then set the page wrapper.
 			$page_type = $this->find_idx_page_type( $idx_page );
-			if ( $page_type === 'saved_link' ) {
+			if ( 'saved_link' === $page_type ) {
 				$params = array(
 					'dynamicURL'  => $wrapper_url,
 					'savedLinkID' => $idx_page,
@@ -496,7 +585,11 @@ class Idx_Api {
 		}
 	}
 
-	// Return value not currently checked
+	/**
+	 * Clear Wrapper Cache.
+	 *
+	 * @access public
+	 */
 	public function clear_wrapper_cache() {
 		$idx_broker_key = $this->api_key;
 		$url            = Initiate_Plugin::IDX_API_URL . '/clients/wrappercache';
@@ -517,10 +610,10 @@ class Idx_Api {
 	}
 
 	/**
-	 * saved_link_properties function.
+	 * Saved Link Properties.
 	 *
 	 * @access public
-	 * @param mixed $saved_link_id
+	 * @param mixed $saved_link_id Saved Link ID.
 	 * @return void
 	 */
 	public function saved_link_properties( $saved_link_id ) {
@@ -581,10 +674,10 @@ class Idx_Api {
 	/**
 	 * Returns a property count integer for an id (city, county, or zip)
 	 *
-	 * @param  string $type The count type (city, county or zip)
-	 * @param  string $idx_id The idxID (mlsID)
-	 * @param  string $id The identifier. City id, county id or zip code
-	 * @return array $city_list
+	 * @param  string $type The count type (city, county or zip).
+	 * @param  string $idx_id The idxID (mlsID).
+	 * @param  string $id The identifier. City id, county id or zip code.
+	 * @return array $city_list City List.
 	 */
 	public function property_count_by_id( $type = 'city', $idx_id, $id ) {
 
@@ -656,14 +749,14 @@ class Idx_Api {
 	/**
 	 * Returns search field names for an MLS
 	 */
-	public function searchfields( $idxID ) {
-		$approved_mls = $this->idx_api( "searchfields/$idxID", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array() );
+	public function searchfields( $idx_id ) {
+		$approved_mls = $this->idx_api( "searchfields/$idx_id", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array() );
 
 		return $approved_mls;
 	}
 
-	public function searchfieldvalues( $idxID, $fieldName, $mlsPtID ) {
-		$approved_mls = $this->idx_api( "searchfieldvalues/$idxID?mlsPtID=$mlsPtID&name=$fieldName", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array() );
+	public function searchfieldvalues( $idx_id, $field_name, $mls_pt_id ) {
+		$approved_mls = $this->idx_api( "searchfieldvalues/$idx_id?mlsPtID=$mls_pt_id&name=$field_name", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array() );
 
 		return $approved_mls;
 	}
@@ -688,10 +781,10 @@ class Idx_Api {
 	}
 
 	/**
-	 * Removes the "$" and "," from the price field
+	 * Removes the "$" and "," from the price field.
 	 *
-	 * @param string $price
-	 * @return mixed $price the cleaned price
+	 * @param string $price Price.
+	 * @return mixed $price The cleaned price.
 	 */
 	public function clean_price( $price ) {
 
@@ -706,25 +799,25 @@ class Idx_Api {
 	}
 
 	/**
-	 * platinum_account_type function.
+	 * Platinum Account Type.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function platinum_account_type() {
 		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
-		if ( gettype( $account_type ) !== 'object' && $account_type[0] === 'IDX Broker Platinum' ) {
+		if ( 'object' !== gettype( $account_type ) && 'IDX Broker Platinum' === $account_type[0] ) {
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * get_leads function.
+	 * Get Leads.
 	 *
 	 * @access public
-	 * @param mixed  $timeframe (default: null)
-	 * @param string $start_date (default: '')
+	 * @param mixed  $timeframe (default: null) Timeframe.
+	 * @param string $start_date (default: '') Start Date.
 	 * @return void
 	 */
 	public function get_leads( $timeframe = null, $start_date = '' ) {
@@ -739,6 +832,14 @@ class Idx_Api {
 		return $leads['data'];
 	}
 
+	/**
+	 * Get Featured Listings.
+	 *
+	 * @access public
+	 * @param string $listing_type (default: 'featured') Listing Type.
+	 * @param mixed  $timeframe (default: null) Timeframe.
+	 * @return void
+	 */
 	public function get_featured_listings( $listing_type = 'featured', $timeframe = null ) {
 		// Force type to array.
 		if ( ! empty( $timeframe ) ) {
@@ -751,10 +852,10 @@ class Idx_Api {
 	}
 
 	/**
-	 * Returns agents wrapped in option tags
+	 * Returns agents wrapped in option tags.
 	 *
-	 * @param  int $agent_id Instance agentID if exists
-	 * @return str           HTML options tags of agents ids and names
+	 * @param  int $agent_id Instance agentID if exists.
+	 * @return str           HTML options tags of agents ids and names.
 	 */
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api( 'agents', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
@@ -763,7 +864,7 @@ class Idx_Api {
 			return;
 		}
 
-		if ( $agent_id != null ) {
+		if ( null !== $agent_id ) {
 			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>---</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
 				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';

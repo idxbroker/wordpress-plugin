@@ -91,7 +91,6 @@ class Idx_Pages {
 		}
 	}
 
-
 	/**
 	 * Unscchedule IDX Page Update.
 	 *
