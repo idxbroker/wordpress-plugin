@@ -14,8 +14,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		parent::__construct(
-			'impress_showcase', // Base ID
-			'IMPress Property Showcase', // Name
+			'impress_showcase', // Base ID.
+			'IMPress Property Showcase', // Name.
 			array(
 				'description'                 => 'Displays a showcase of properties',
 				'classname'                   => 'impress-showcase-widget',
@@ -25,7 +25,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * idx_api
+	 * IDX API.
 	 *
 	 * @var mixed
 	 * @access public
@@ -33,7 +33,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	public $idx_api;
 
 	/**
-	 * defaults
+	 * Defaults.
 	 *
 	 * @var mixed
 	 * @access public
@@ -53,10 +53,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	);
 
 	/**
-	 * Returns the markup for the featured properties
+	 * Returns the markup for the featured properties.
 	 *
 	 * @param array $instance Previously saved values from database.
-	 * @return string $output html markup for front end display
+	 * @return string $output html markup for front end display.
 	 */
 	public function body( $instance ) {
 		if ( empty( $instance ) ) {
@@ -68,7 +68,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		}
 
 		$output = '';
-		if ( ( $instance['properties'] ) == 'savedlinks' ) {
+		if ( 'savedlinks' === ( $instance['properties'] ) ) {
 			$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );
 			$output    .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
 		} else {
@@ -77,11 +77,11 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		}
 
 		// Force type as array.
-		$properties = json_encode( $properties );
+		$properties = wp_json_encode( $properties );
 		$properties = json_decode( $properties, true );
 
-		// If no properties or an error, load message
-		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
+		// If no properties or an error, load message.
+		if ( empty( $properties ) || ( isset( $properties[0] ) && 'No results returned' === $properties[0] ) || isset( $properties['errors']['idx_api_error'] ) ) {
 			if ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
 			} else {
@@ -89,12 +89,12 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			}
 		}
 
-		if ( 'low-high' == $instance['order'] ) {
-			// sort low to high
+		if ( 'low-high' === $instance['order'] ) {
+			// Sort low to high.
 			usort( $properties, array( $this, 'price_cmp' ) );
 		}
 
-		if ( 'high-low' == $instance['order'] ) {
+		if ( 'high-low' === $instance['order'] ) {
 			usort( $properties, array( $this, 'price_cmp' ) );
 			$properties = array_reverse( $properties );
 		}
@@ -113,12 +113,12 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 		$target = $this->target( $instance['new_window'] );
 
-		if ( true == $instance['use_rows'] ) {
+		if ( true === $instance['use_rows'] ) {
 
-			// Max of four columns
+			// Max of four columns.
 			$number_columns = ( $num_per_row > 4 ) ? 4 : (int) $num_per_row;
 
-			// column class
+			// Column class.
 			switch ( $number_columns ) {
 				case 0:
 					$column_class = 'columns small-12 large-12';
@@ -146,13 +146,13 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				}
 			}
 
-			if ( ! empty( $max ) && $count == $max ) {
+			if ( ! empty( $max ) && $count === $max ) {
 				return $output;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? esc_url( apply_filters( 'jetpack_photon_url', $prop['image']['0']['url'] ) ) : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 
-			if ( 1 == $instance['use_rows'] && $count == 0 && $max != '1' ) {
+			if ( 1 === $instance['use_rows'] && 0 === $count && '1' !== $max ) {
 				$output .= '<div class="impress-row">';
 			}
 
@@ -160,7 +160,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 			$count++;
 
-			// Get URL and add suffix if one exists
+			// Get URL and add suffix if one exists.
 			if ( isset( $prop['fullDetailsURL'] ) ) {
 				$url = $prop['fullDetailsURL'];
 			} else {
@@ -171,7 +171,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				$url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
 			}
 
-			// Get URL and add suffix if one exists
+			// Get URL and add suffix if one exists.
 			if ( isset( $prop['fullDetailsURL'] ) ) {
 				$url = $prop['fullDetailsURL'];
 			} else {
@@ -280,21 +280,21 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 			}
 
-			if ( 1 == $instance['use_rows'] && $count != 1 ) {
+			if ( 1 === $instance['use_rows'] && 1 !== $count ) {
 
 				// close a row if..
-				// num_per_row is a factor of count OR
-				// count is equal to the max number of listings to show OR
-				// count is equal to the total number of listings available
-				if ( $count % $num_per_row == 0 || $count == $total || $count == $max ) {
+				// num_per_row is a factor of count OR.
+				// count is equal to the max number of listings to show OR.
+				// count is equal to the total number of listings available.
+				if ( $count % 0 === $num_per_row || $count === $total || $count === $max ) {
 					$output .= '</div> <!-- .row -->';
 				}
 
 				// open a new row if..
-				// num per row is a factor of count AND
-				// count is not equal to max AND
-				// count is not equal to total
-				if ( $count % $num_per_row == 0 && $count != $max && $count != $total ) {
+				// num per row is a factor of count AND.
+				// count is not equal to max AND.
+				// count is not equal to total.
+				if ( $count % 0 === $num_per_row && $count !== $max && $count !== $total ) {
 					$output .= '<div class="row">';
 				}
 			}
@@ -304,22 +304,29 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * target function.
+	 * Target.
 	 *
 	 * @access public
-	 * @param mixed $new_window
-	 * @return void
+	 * @param mixed $new_window New Window.
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
-			// if enabled, open links in new tab/window
+			// If enabled, open links in new tab/window.
 			return '_blank';
 		} else {
 			return '_self';
 		}
 	}
 
-	// Hide fields that have no data to avoid fields such as 0 Baths from displaying
+
+	/**
+	 * Hide fields that have no data to avoid fields such as 0 Baths from displaying.
+	 *
+	 * @access public
+	 * @param mixed $field Field.
+	 * @param mixed $display_name Display Name.
+	 * @param mixed $value Value.
+	 */
 	public function hide_empty_fields( $field, $display_name, $value ) {
 		if ( $value <= 0 ) {
 			return '';
@@ -329,11 +336,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * set_missing_core_fields function.
+	 * Set Missing Core Fields.
 	 *
 	 * @access public
-	 * @param mixed $prop
-	 * @return void
+	 * @param mixed $prop Property.
 	 */
 	public function set_missing_core_fields( $prop ) {
 		$name_values   = array(
@@ -368,29 +374,29 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Converts the decimal to a percent
+	 * Converts the decimal to a percent.
 	 *
-	 * @param mixed $num decimal to convert
+	 * @param mixed $num decimal to convert.
 	 */
 	public function calc_percent( $num ) {
 
 		$num = round( $num, 2 );
 		$num = preg_replace( '/0\./', '', $num );
 
-		if ( strlen( (string) $num ) == 1 ) {
+		if ( strlen( (string) $num ) === 1 ) {
 			$num *= 10;
 		}
 
-		$num = ( $num == 100 ) ? 100 : $num -= 4;
+		$num = ( 100 === $num ) ? 100 : $num -= 4;
 
 		return $num;
 	}
 
 	/**
-	 * Compares the price fields of two arrays
+	 * Compares the price fields of two arrays.
 	 *
-	 * @param array $a
-	 * @param array $b
+	 * @param array $a A.
+	 * @param array $b B.
 	 * @return int
 	 */
 	public function price_cmp( $a, $b ) {
@@ -398,7 +404,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		$a = $this->clean_price( $a['listingPrice'] );
 		$b = $this->clean_price( $b['listingPrice'] );
 
-		if ( $a == $b ) {
+		if ( $a === $b ) {
 			return 0;
 		}
 
@@ -406,10 +412,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Removes the "$" and "," from the price field
+	 * Removes the "$" and "," from the price field.
 	 *
-	 * @param string $price
-	 * @return mixed $price the cleaned price
+	 * @param string $price Price.
+	 * @return mixed $price the cleaned price.
 	 */
 	public function clean_price( $price ) {
 
@@ -424,11 +430,11 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Echos saved link names wrapped in option tags
+	 * Echos saved link names wrapped in option tags.
 	 *
-	 * This is just a helper to keep the html clean
+	 * This is just a helper to keep the html clean.
 	 *
-	 * @param var $instance
+	 * @param var $instance Instance.
 	 */
 	public function saved_link_options( $instance ) {
 
@@ -440,7 +446,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 		foreach ( $saved_links as $saved_link ) {
 
-			// display the link name if no link title has been assigned
+			// Display the link name if no link title has been assigned.
 			$link_text = empty( $saved_link->linkTitle ) ? $saved_link->linkName : $saved_link->linkTitle;
 
 			echo '<option ', selected( $instance['saved_link_id'], $saved_link->id, 0 ), ' value="', $saved_link->id, '">', $link_text, '</option>';
@@ -583,12 +589,12 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		</p>
 
 		 <p>
-			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php _e( 'Default Styling?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php esc_html_e( 'Default Styling?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'styles' ); ?>" name="<?php echo $this->get_field_name( 'styles' ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php _e( 'Open Listings in a New Window?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php esc_html_e( 'Open Listings in a New Window?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'new_window' ); ?>" name="<?php echo $this->get_field_name( 'new_window' ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
 		</p>
 
@@ -596,10 +602,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Returns agents wrapped in option tags
+	 * Returns agents wrapped in option tags.
 	 *
-	 * @param  int $agent_id Instance agentID if exists
-	 * @return str           HTML options tags of agents ids and names
+	 * @param  int $agent_id Instance agentID if exists.
+	 * @return str           HTML options tags of agents ids and names.
 	 */
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
@@ -608,7 +614,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			return;
 		}
 
-		if ( $agent_id != null ) {
+		if ( null !== $agent_id ) {
 			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>All</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
 				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
@@ -624,16 +630,16 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Output disclaimer and courtesy if applicable
+	 * Output disclaimer and courtesy if applicable.
 	 *
-	 * @param  array $prop The current property in the loop
-	 * @return string       HTML of disclaimer, logo, and courtesy
+	 * @param  array $prop The current property in the loop.
+	 * @return string HTML of disclaimer, logo, and courtesy.
 	 */
 	public function maybe_add_disclaimer_and_courtesy( $prop ) {
 		// Add Disclaimer when applicable.
 		if ( isset( $prop['disclaimer'] ) && ! empty( $prop['disclaimer'] ) ) {
 			foreach ( $prop['disclaimer'] as $disclaimer ) {
-				if ( in_array( 'widget', $disclaimer ) ) {
+				if ( in_array( 'widget', $disclaimer, true ) ) {
 					$disclaimer_text = $disclaimer['text'];
 					$disclaimer_logo = $disclaimer['logoURL'];
 				}
@@ -642,7 +648,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		// Add Courtesy when applicable.
 		if ( isset( $prop['courtesy'] ) && ! empty( $prop['courtesy'] ) ) {
 			foreach ( $prop['courtesy'] as $courtesy ) {
-				if ( in_array( 'widget', $courtesy ) ) {
+				if ( in_array( 'widget', $courtesy, true ) ) {
 					$courtesy_text = $courtesy['text'];
 				}
 			}
@@ -654,13 +660,13 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			$output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>';
 		}
 		if ( isset( $disclaimer_logo ) ) {
-			$output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />';
+			$output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" alt="" />';
 		}
 		if ( isset( $courtesy_text ) ) {
 			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
 		}
 
-		if ( $output == '' ) {
+		if ( '' === $output ) {
 			return;
 		} else {
 			return '<div class="disclaimer">' . $output . '</div>';

@@ -1,8 +1,17 @@
 <?php
 add_action( 'init', array( 'IDX_Leads_CF7', 'init' ) );
 
+/**
+ * IDX_Leads_CF7 class.
+ */
 class IDX_Leads_CF7 {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		if ( ! class_exists( 'WPCF7' ) ) {
 			exit;
@@ -11,6 +20,13 @@ class IDX_Leads_CF7 {
 		$this->idx_api = new \IDX\Idx_Api();
 	}
 
+	/**
+	 * init function.
+	 *
+	 * @access public
+	 * @static
+	 * @return void
+	 */
 	public static function init() {
 
 		add_filter( 'wpcf7_editor_panels', array( 'IDX_Leads_CF7', 'idx_add_settings_panel' ) );
@@ -20,8 +36,22 @@ class IDX_Leads_CF7 {
 		add_action( 'admin_enqueue_scripts', array( 'IDX_Leads_CF7', 'load_scripts' ) );
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * idx_add_settings_panel function.
+	 *
+	 * @access public
+	 * @static
+	 * @param mixed $panels
+	 * @return void
+	 */
 	public static function idx_add_settings_panel( $panels ) {
 
 		$panels = array_merge(
@@ -37,6 +67,13 @@ class IDX_Leads_CF7 {
 		return $panels;
 	}
 
+	/**
+	 * load_scripts function.
+	 *
+	 * @access public
+	 * @static
+	 * @return void
+	 */
 	public static function load_scripts() {
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-tooltip' );
@@ -44,6 +81,13 @@ class IDX_Leads_CF7 {
 		wp_enqueue_style( 'idx-tooltip-css', IMPRESS_IDX_URL . 'assets/css/tooltip.css' );
 	}
 
+	/**
+	 * idx_save_lead_settings function.
+	 *
+	 * @access public
+	 * @param mixed $args
+	 * @return void
+	 */
 	public function idx_save_lead_settings( $args ) {
 
 		if ( ! empty( $_POST ) ) {
@@ -68,6 +112,13 @@ class IDX_Leads_CF7 {
 		}
 	}
 
+	/**
+	 * idx_cf7_settings function.
+	 *
+	 * @access public
+	 * @static
+	 * @return void
+	 */
 	public static function idx_cf7_settings() {
 
 		// Get the form object
@@ -93,7 +144,7 @@ class IDX_Leads_CF7 {
 			<form action="" method="post" id="cf7_form_settings">
 
 					<table class="form-table" cellpadding="0" cellspacing="0">
-					<tbody>                                     
+					<tbody>
 						<tr>
 							<th>Enable Lead Import?
 								<a href="#" onclick="return false;" onkeypress="return false;" class="idx_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;''>This requires that your form have a required First and Last Name field and required Email field.</strong>"><i class="fa fa-question-circle"></i></a>
@@ -234,6 +285,13 @@ class IDX_Leads_CF7 {
 		<?php
 	}
 
+	/**
+	 * idx_put_lead function.
+	 *
+	 * @access public
+	 * @param mixed $contact_form
+	 * @return void
+	 */
 	public function idx_put_lead( $contact_form ) {
 		$form_id = $contact_form->id;
 
@@ -357,6 +415,14 @@ class IDX_Leads_CF7 {
 		return $output;
 	}
 
+	/**
+	 * output_form_fields function.
+	 *
+	 * @access private
+	 * @static
+	 * @param mixed $posted_data
+	 * @return void
+	 */
 	private static function output_form_fields( $posted_data ) {
 
 		$output = '';

@@ -1,8 +1,17 @@
 <?php
 add_action( 'init', array( 'IDX_Leads_GF', 'init' ) );
 
+/**
+ * IDX_Leads_GF class.
+ */
 class IDX_Leads_GF {
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		if ( ! class_exists( 'GFForms' ) ) {
 			exit;
@@ -11,14 +20,35 @@ class IDX_Leads_GF {
 		$this->idx_api = new \IDX\Idx_Api();
 	}
 
+	/**
+	 * init function.
+	 *
+	 * @access public
+	 * @static
+	 * @return void
+	 */
 	public static function init() {
 		add_action( 'gform_after_submission', array( 'IDX_Leads_GF', 'idx_put_lead' ), 10, 2 );
 		add_filter( 'gform_form_settings_menu', array( 'IDX_Leads_GF', 'idx_leads_gform_settings_menu' ) );
 		add_action( 'gform_form_settings_page_idx_broker_leads_page', array( 'IDX_Leads_GF', 'idx_broker_leads_page' ) );
 	}
 
+	/**
+	 * idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * idx_leads_gform_settings_menu function.
+	 *
+	 * @access public
+	 * @static
+	 * @param mixed $menu_items
+	 * @return void
+	 */
 	public static function idx_leads_gform_settings_menu( $menu_items ) {
 
 		$menu_items[] = array(
@@ -29,6 +59,13 @@ class IDX_Leads_GF {
 		return $menu_items;
 	}
 
+	/**
+	 * idx_broker_leads_page function.
+	 *
+	 * @access public
+	 * @static
+	 * @return void
+	 */
 	public static function idx_broker_leads_page() {
 		$idx_api = new \IDX\Idx_Api();
 
@@ -64,7 +101,7 @@ class IDX_Leads_GF {
 							<td colspan="2">
 								<h4 class="gf_settings_subgroup_title">Lead Capture</h4>
 							</td>
-						</tr>                                       
+						</tr>
 						<tr>
 							<th>Enable Lead Import?
 								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;'>This requires that your form use the advanced &#34;Name&#34; and &#34;Email&#34; fields and those fields be required.</strong>"><i class="fa fa-question-circle"></i></a>
@@ -111,6 +148,15 @@ class IDX_Leads_GF {
 		GFFormSettings::page_footer();
 	}
 
+	/**
+	 * idx_put_lead function.
+	 *
+	 * @access public
+	 * @static
+	 * @param mixed $entry
+	 * @param mixed $form
+	 * @return void
+	 */
 	public static function idx_put_lead( $entry, $form ) {
 		$form_id = $form['id'];
 
@@ -259,6 +305,14 @@ class IDX_Leads_GF {
 		}
 	}
 
+	/**
+	 * get_all_form_fields function.
+	 *
+	 * @access private
+	 * @static
+	 * @param mixed $form_id
+	 * @return void
+	 */
 	private static function get_all_form_fields( $form_id ) {
 		$form   = RGFormsModel::get_form_meta( $form_id );
 		$fields = array();
@@ -311,6 +365,15 @@ class IDX_Leads_GF {
 		return false;
 	}
 
+	/**
+	 * output_form_fields function.
+	 *
+	 * @access private
+	 * @static
+	 * @param mixed $entry
+	 * @param mixed $form_id
+	 * @return void
+	 */
 	private static function output_form_fields( $entry, $form_id ) {
 		$fields = self::get_all_form_fields( $form_id );
 		$output = '';

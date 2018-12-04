@@ -1,5 +1,6 @@
 <?php if ( ! defined( 'ABSPATH' ) || ! class_exists( 'NF_Abstracts_Action' ) ) {
-	exit;}
+	exit;
+}
 /**
  * Class for our Lead POST action type.
  *
@@ -64,6 +65,12 @@ final class NF_IDXLeads {
 		return self::$instance;
 	}
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		/*
 		 * Required for all Extensions.
@@ -89,7 +96,6 @@ final class NF_IDXLeads {
 	/*
 	 * Required methods for all extension.
 	 */
-
 	public function setup_license() {
 		if ( ! class_exists( 'NF_Extension_Updater' ) ) {
 			return;
@@ -115,6 +121,12 @@ function NF_IDXLeads() {
 
 NF_IDXLeads();
 
+/**
+ * Final NF_Lead_Action class.
+ *
+ * @final
+ * @extends NF_Abstracts_Action
+ */
 final class NF_Lead_Action extends NF_Abstracts_Action {
 
 	/**
@@ -209,6 +221,13 @@ final class NF_Lead_Action extends NF_Abstracts_Action {
 
 	}
 
+	/**
+	 * save function.
+	 *
+	 * @access public
+	 * @param mixed $action_settings
+	 * @return void
+	 */
 	public function save( $action_settings ) {
 
 	}
@@ -337,6 +356,14 @@ final class NF_Lead_Action extends NF_Abstracts_Action {
 		}
 	}
 
+	/**
+	 * output_form_fields function.
+	 *
+	 * @access private
+	 * @static
+	 * @param mixed $fields
+	 * @return void
+	 */
 	private static function output_form_fields( $fields ) {
 		$output = '';
 		foreach ( $fields as $field ) {
