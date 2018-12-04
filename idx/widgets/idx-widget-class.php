@@ -123,9 +123,9 @@ class Idx_Widget_Class extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$return             = array();
-		$return['title']    = strip_tags( $new_instance['title'] );
-		$return['text']     = strip_tags( $new_instance['text'] );
-		$return['textarea'] = strip_tags( $new_instance['textarea'] );
+		$return['title']    = wp_strip_all_tags( $new_instance['title'] );
+		$return['text']     = wp_strip_all_tags( $new_instance['text'] );
+		$return['textarea'] = wp_strip_all_tags( $new_instance['textarea'] );
 		return $return;
 	} // end update fn
 

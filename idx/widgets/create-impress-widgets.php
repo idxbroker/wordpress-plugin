@@ -20,7 +20,7 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * idx_api
+	 * IDX API.
 	 *
 	 * @var mixed
 	 * @access public
@@ -28,7 +28,7 @@ class Create_Impress_Widgets {
 	public $idx_api;
 
 	/**
-	 * register_impress_widgets function.
+	 * Register IMPress Widgets.
 	 *
 	 * @access public
 	 * @return void
@@ -45,7 +45,7 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * lead_login_shortcode function.
+	 * Lead Login Shortcode.
 	 *
 	 * @access public
 	 * @return void
@@ -68,10 +68,10 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * lead_signup_shortcode function.
+	 * Lead Signup Shortcode.
 	 *
 	 * @access public
-	 * @param mixed $atts
+	 * @param mixed $atts Attributes.
 	 * @return void
 	 */
 	public function lead_signup_shortcode( $atts ) {
@@ -120,7 +120,7 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * property_showcase_shortcode function.
+	 * Property Showcase Shortcode.
 	 *
 	 * @access public
 	 * @param array $atts (default: array())
@@ -348,7 +348,7 @@ class Create_Impress_Widgets {
 			return 'No properties found';
 		}
 
-		// sort low to high
+		// sort low to high.
 		usort( $properties, array( $this->idx_api, 'price_cmp' ) );
 
 		if ( 'high-low' == $order ) {

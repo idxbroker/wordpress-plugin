@@ -22,8 +22,8 @@ class Idx_Middleware_Widget extends \WP_Widget {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		parent::__construct(
-			'impress_idx_dashboard_widget', // Base ID
-			__( 'IMPress - IDX Dashboard Widget', 'idx-broker' ), // Name
+			'impress_idx_dashboard_widget', // Base ID.
+			__( 'IMPress - IDX Dashboard Widget', 'idx-broker' ), // Name.
 			array(
 				'description'                 => __( 'Embed an IDX widget created in the IDX Middleware dashboard.', 'idx-broker' ),
 				'classname'                   => 'impress-idx-dashboard-widget',
@@ -79,7 +79,7 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance           = array();
-		$instance['title']  = strip_tags( $new_instance['title'] );
+		$instance['title']  = wp_strip_all_tags( $new_instance['title'] );
 		$instance['widget'] = esc_url_raw( $new_instance['widget'] );
 
 		return $instance;

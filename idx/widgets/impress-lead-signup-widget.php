@@ -20,8 +20,8 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		}
 
 		parent::__construct(
-			'impress_lead_signup', // Base ID
-			__( 'IMPress Lead Sign Up', 'idxbroker' ), // Name
+			'impress_lead_signup', // Base ID.
+			__( 'IMPress Lead Sign Up', 'idxbroker' ), // Name.
 			array(
 				'description'                 => __( 'Lead sign up form', 'idxbroker' ),
 				'classname'                   => 'impress-idx-signup-widget',
@@ -31,7 +31,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * idx_api
+	 * IDX API.
 	 *
 	 * @var mixed
 	 * @access public
@@ -39,7 +39,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	public $idx_api;
 
 	/**
-	 * error_message
+	 * Error Message.
 	 *
 	 * @var mixed
 	 * @access public
@@ -47,7 +47,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	public $error_message;
 
 	/**
-	 * defaults
+	 * Defaults.
 	 *
 	 * @var mixed
 	 * @access public
@@ -97,11 +97,13 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 
 		$wpl_options = get_option( 'plugin_wp_listings_settings' );
 
-		// Validate fields
+		$wp_listings_captcha_site_key = $wpl_options['wp_listings_captcha_site_key'] ?? '';
+
+		// Validate fields.
 		wp_register_script( 'impress-lead-signup', plugins_url( '../assets/js/idx-lead-signup.min.js', dirname( __FILE__ ) ) );
 		wp_localize_script( 'impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page() );
 		wp_enqueue_script( 'impress-lead-signup' );
-		if ( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key' ) != '' ) {
+		if ( $wp_listings_captcha_site_key !== '' || get_option( 'idx_recaptcha_site_key' ) !== '' ) {
 			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js' );
 		}
 
@@ -129,17 +131,17 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 			}
 			?>
 
-			<label id="impress-widgetfirstName-label" class="ie-only" for="impress-widgetfirstName"><?php _e( 'First Name:', 'idxbroker' ); ?></label>
+			<label id="impress-widgetfirstName-label" class="ie-only" for="impress-widgetfirstName"><?php esc_html_e( 'First Name:', 'idxbroker' ); ?></label>
 			<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
 
-			<label id="impress-widgetlastName-label" class="ie-only" for="impress-widgetlastName"><?php _e( 'Last Name:', 'idxbroker' ); ?></label>
+			<label id="impress-widgetlastName-label" class="ie-only" for="impress-widgetlastName"><?php esc_html_e( 'Last Name:', 'idxbroker' ); ?></label>
 			<input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name" required>
 
-			<label id="impress-widgetemail-label" class="ie-only" for="impress-widgetemail"><?php _e( 'Email:', 'idxbroker' ); ?></label>
+			<label id="impress-widgetemail-label" class="ie-only" for="impress-widgetemail"><?php esc_html_e( 'Email:', 'idxbroker' ); ?></label>
 			<input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>
 
 			<?php
-			if ( $instance['password_field'] == true ) {
+			if ( true === $instance['password_field'] ) {
 				echo '
 				<label for="impress-widgetPassword">Password:</label>
 				<input id="impress-widgetPassword" type="password" name="password" placeholder="Password">';
@@ -147,7 +149,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 			?>
 
 			<?php
-			if ( $instance['phone_number'] == true ) {
+			if ( true === $instance['phone_number'] ) {
 				echo '
 				<label id="impress-widgetphone-label" class="ie-only" for="impress-widgetphone">' . __( 'Phone:', 'idxbroker' ) . '</label>
 				<input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">';
@@ -155,8 +157,9 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 			?>
 
 			<?php
-			if ( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key' ) != '' ) {
-				$site_key = ( $wpl_options['wp_listings_captcha_site_key'] != '' ) ? $wpl_options['wp_listings_captcha_site_key'] : get_option( 'idx_recaptcha_site_key' );
+
+			if ( '' !== $wp_listings_captcha_site_key || '' !== get_option( 'idx_recaptcha_site_key' ) ) {
+				$site_key = ( '' !== $wp_listings_captcha_site_key ) ? $wp_listings_captcha_site_key : get_option( 'idx_recaptcha_site_key' );
 				echo '<div id="recaptcha" class="g-recaptcha" data-sitekey="' . $site_key . '"></div>';
 			}
 			?>
@@ -169,15 +172,15 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * target function.
+	 * Target.
 	 *
 	 * @access public
-	 * @param mixed $new_window
+	 * @param mixed $new_window New Window.
 	 * @return void
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
-			// if enabled, open links in new tab/window
+			// If enabled, open links in new tab/window.
 			return '_blank';
 		} else {
 			return '_self';
@@ -195,14 +198,14 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance                   = array();
-		$instance['title']          = strip_tags( $new_instance['title'] );
+		$instance['title']          = wp_strip_all_tags( $new_instance['title'] );
 		$instance['custom_text']    = htmlentities( $new_instance['custom_text'] );
 		$instance['phone_number']   = $new_instance['phone_number'];
 		$instance['styles']         = (int) $new_instance['styles'];
-		$instance['new_window']     = strip_tags( $new_instance['new_window'] );
-		$instance['password_field'] = strip_tags( $new_instance['password_field'] );
+		$instance['new_window']     = wp_strip_all_tags( $new_instance['new_window'] );
+		$instance['password_field'] = wp_strip_all_tags( $new_instance['password_field'] );
 		$instance['agentID']        = (int) $new_instance['agentID'];
-		$instance['button_text']    = strip_tags( $new_instance['button_text'] );
+		$instance['button_text']    = wp_strip_all_tags( $new_instance['button_text'] );
 
 		return $instance;
 	}
@@ -223,39 +226,39 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attresc_html_e( $instance['title'] ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'custom_text' ); ?>"><?php _e( 'Custom Text', 'idxbroker' ); ?></label>
-			<textarea class="widefat" id="<?php echo $this->get_field_id( 'custom_text' ); ?>" name="<?php echo $this->get_field_name( 'custom_text' ); ?>" value="<?php esc_attr_e( $instance['custom_text'] ); ?>" rows="5"><?php esc_attr_e( $instance['custom_text'] ); ?></textarea>
+			<label for="<?php echo $this->get_field_id( 'custom_text' ); ?>"><?php esc_html_e( 'Custom Text', 'idxbroker' ); ?></label>
+			<textarea class="widefat" id="<?php echo $this->get_field_id( 'custom_text' ); ?>" name="<?php echo $this->get_field_name( 'custom_text' ); ?>" value="<?php esc_attresc_html_e( $instance['custom_text'] ); ?>" rows="5"><?php esc_attresc_html_e( $instance['custom_text'] ); ?></textarea>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'phone_number' ); ?>"><?php _e( 'Show phone number field?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'phone_number' ); ?>"><?php esc_html_e( 'Show phone number field?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'phone_number' ); ?>" name="<?php echo $this->get_field_name( 'phone_number' ); ?>" value="1" <?php checked( $instance['phone_number'], true ); ?>>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php _e( 'Default Styling?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php esc_html_e( 'Default Styling?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'styles' ); ?>" name="<?php echo $this->get_field_name( 'styles' ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php _e( 'Open in a New Window?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php esc_html_e( 'Open in a New Window?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'new_window' ); ?>" name="<?php echo $this->get_field_name( 'new_window' ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'password_field' ); ?>"><?php _e( 'Add password form field?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'password_field' ); ?>"><?php esc_html_e( 'Add password form field?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'password_field' ); ?>" name="<?php echo $this->get_field_name( 'password_field' ); ?>" value="1" <?php checked( $instance['password_field'], true ); ?>>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Route to Agent:', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php esc_html_e( 'Route to Agent:', 'idxbroker' ); ?></label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
 				<?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'button_text' ); ?>"><?php _e( 'Button text:', 'idxbroker' ); ?></label>
-			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'button_text' ); ?>" name="<?php echo $this->get_field_name( 'button_text' ); ?>" value="<?php esc_attr_e( $instance['button_text'] ); ?>">
+			<label for="<?php echo $this->get_field_id( 'button_text' ); ?>"><?php esc_html_e( 'Button text:', 'idxbroker' ); ?></label>
+			<input class="widefat" type="text" id="<?php echo $this->get_field_id( 'button_text' ); ?>" name="<?php echo $this->get_field_name( 'button_text' ); ?>" value="<?php esc_attresc_html_e( $instance['button_text'] ); ?>">
 		</p>
 		<?php
 
@@ -292,7 +295,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		// User already has an account.
 		if ( stristr( $error, 'lead' ) ) {
 			// Redirect to lead login page.
-			return wp_redirect( $this->lead_login_page() );
+			return wp_safe_redirect( $this->lead_login_page() );
 			// Other form error.
 		} elseif ( stristr( $error, 'true' ) ) {
 			$output .= '<div class="error">';
@@ -304,10 +307,10 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Returns agents wrapped in option tags
+	 * Returns agents wrapped in option tags.
 	 *
-	 * @param  int $agent_id Instance agentID if exists
-	 * @return str           HTML options tags of agents ids and names
+	 * @param  int $agent_id Instance agentID if exists.
+	 * @return str           HTML options tags of agents ids and names.
 	 */
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
@@ -316,7 +319,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 			return;
 		}
 
-		if ( $agent_id != null ) {
+		if ( null !== $agent_id ) {
 			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>All</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
 				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';

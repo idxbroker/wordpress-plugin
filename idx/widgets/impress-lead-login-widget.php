@@ -14,8 +14,8 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		parent::__construct(
-			'impress_lead_login', // Base ID
-			__( 'IMPress Lead Login', 'idxbroker' ), // Name
+			'impress_lead_login', // Base ID.
+			__( 'IMPress Lead Login', 'idxbroker' ), // Name.
 			array(
 				'description'                 => __( 'Lead login form', 'idxbroker' ),
 				'classname'                   => 'impress-idx-login-widget',
@@ -95,7 +95,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 		<form action="<?php echo $this->idx_api->subdomain_url(); ?>ajax/userlogin.php" class="impress-lead-login" method="post" target="<?php echo $target; ?>" name="leadLoginForm">
 			<input type="hidden" name="action" value="login">
 			<input type="hidden" name="loginWidget" value="true">
-			<label for="impress-widgetEmail"><?php _e( 'Email Address:', 'idxbroker' ); ?></label>
+			<label for="impress-widgetEmail"><?php esc_html_e( 'Email Address:', 'idxbroker' ); ?></label>
 			<input id="impress-widgetEmail" type="text" name="email" placeholder="Enter your email address">
 			<?php
 			if ( $password_field_type === 'password' ) {
@@ -135,11 +135,11 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance                   = array();
-		$instance['title']          = strip_tags( $new_instance['title'] );
+		$instance['title']          = wp_strip_all_tags( $new_instance['title'] );
 		$instance['custom_text']    = htmlentities( $new_instance['custom_text'] );
 		$instance['styles']         = (int) $new_instance['styles'];
-		$instance['new_window']     = strip_tags( $new_instance['new_window'] );
-		$instance['password_field'] = strip_tags( $new_instance['password_field'] );
+		$instance['new_window']     = wp_strip_all_tags( $new_instance['new_window'] );
+		$instance['password_field'] = wp_strip_all_tags( $new_instance['password_field'] );
 
 		return $instance;
 	}
@@ -160,26 +160,26 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'idxbroker' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'idxbroker' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attresc_html_e( $instance['title'] ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'custom_text' ); ?>"><?php _e( 'Custom Text', 'idxbroker' ); ?></label>
-			<textarea class="widefat" id="<?php echo $this->get_field_id( 'custom_text' ); ?>" name="<?php echo $this->get_field_name( 'custom_text' ); ?>" value="<?php esc_attr_e( $instance['custom_text'] ); ?>" rows="5"><?php esc_attr_e( $instance['custom_text'] ); ?></textarea>
+			<label for="<?php echo $this->get_field_id( 'custom_text' ); ?>"><?php esc_html_e( 'Custom Text', 'idxbroker' ); ?></label>
+			<textarea class="widefat" id="<?php echo $this->get_field_id( 'custom_text' ); ?>" name="<?php echo $this->get_field_name( 'custom_text' ); ?>" value="<?php esc_attresc_html_e( $instance['custom_text'] ); ?>" rows="5"><?php esc_attresc_html_e( $instance['custom_text'] ); ?></textarea>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php _e( 'Default Styling?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php esc_html_e( 'Default Styling?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'styles' ); ?>" name="<?php echo $this->get_field_name( 'styles' ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php _e( 'Open in a New Window?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php esc_html_e( 'Open in a New Window?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'new_window' ); ?>" name="<?php echo $this->get_field_name( 'new_window' ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'password_field' ); ?>"><?php _e( 'Add password form field?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'password_field' ); ?>"><?php esc_html_e( 'Add password form field?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'password_field' ); ?>" name="<?php echo $this->get_field_name( 'password_field' ); ?>" value="1" <?php checked( $instance['password_field'], true ); ?>>
 		</p>
 
