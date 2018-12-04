@@ -337,7 +337,7 @@ class Wrappers {
 	 */
 	public function add_meta_box( $post_type ) {
 		$post_types = array( 'idx-wrapper' ); // Limit meta box to certain post types.
-		if ( in_array( $post_type, $post_types ) ) {
+		if ( in_array( $post_type, $post_types, true ) ) {
 			add_meta_box(
 				'set_wrapper_page',
 				'Apply Wrapper to IDX Pages',

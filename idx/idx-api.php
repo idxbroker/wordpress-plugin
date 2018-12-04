@@ -24,11 +24,12 @@ class Idx_Api {
 	 */
 	public $api_key;
 
+
 	/**
 	 * API Response.
 	 *
-	 * @param  [array] $response [response header from API call]
-	 * @return [array]           [keys: 'code' => response code, 'error' => false (default), or error message if one is found]
+	 * @access public
+	 * @param mixed $response Response.
 	 */
 	public function api_response( $response ) {
 		if ( ! $response || ! is_array( $response ) || ! isset( $response['response'] ) ) {
@@ -216,7 +217,7 @@ class Idx_Api {
 			return new \WP_Error( 'idx_api_error', __( "Error {$code}: $error" ) );
 		} else {
 			$data = (array) json_decode( (string) $response['body'], $json_decode_type );
-			if ( $request_type !== 'POST' ) {
+			if ( 'POST' !== $request_type ) {
 				$this->set_transient( $cache_key, $data, $expiration );
 			}
 			// API call was successful, delete this option if it exists.
@@ -225,14 +226,19 @@ class Idx_Api {
 		}
 	}
 
-	/*
+	/**
+	 * Get Transient.
+	 *
 	 * If option does not exist or timestamp is old, return false.
 	 * Otherwise return data
 	 * We create our own transient functions to avoid bugs with the object cache
 	 * for caching plugins.
+	 *
+	 * @access public
+	 * @param mixed $name Name.
 	 */
 	public function get_transient( $name ) {
-		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+		if ( is_multisite() && get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) === $this->api_key ) {
 			$data = get_blog_option( get_main_site_id(), $name );
 		} else {
 			$data = get_option( $name );
@@ -294,10 +300,7 @@ class Idx_Api {
 	}
 
 	/**
-	 * Clean IDX cached data
-	 *
-	 * @param void
-	 * @return void
+	 * Clean IDX cached data.
 	 */
 	public function idx_clean_transients() {
 		global $wpdb;
@@ -371,10 +374,9 @@ class Idx_Api {
 	}
 
 	/**
-	 * system_results_url function.
+	 * System Results URL.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function system_results_url() {
 
@@ -399,10 +401,10 @@ class Idx_Api {
 	}
 
 	/**
-	 * Returns the url of the link
+	 * Returns the url of the link.
 	 *
-	 * @param string $name name of the link to return the url of
-	 * @return bool|string
+	 * @access public
+	 * @param mixed $name Name.
 	 */
 	public function system_link_url( $name ) {
 
@@ -489,10 +491,9 @@ class Idx_Api {
 	}
 
 	/**
-	 * all_saved_link_urls function.
+	 * All Saved Link URLS.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function all_saved_link_urls() {
 
@@ -512,10 +513,9 @@ class Idx_Api {
 	}
 
 	/**
-	 * all_saved_link_names function.
+	 * All Saved Link Names.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function all_saved_link_names() {
 
@@ -535,14 +535,13 @@ class Idx_Api {
 	}
 
 	/**
-	 * find_idx_page_type function.
+	 * Find IDX Page Type.
 	 *
 	 * @access public
-	 * @param mixed $idx_page
-	 * @return void
+	 * @param mixed $idx_page IDX Page.
 	 */
 	public function find_idx_page_type( $idx_page ) {
-		// if it is a saved linke, return saved_link otherwise it is a system page
+		// if it is a saved linke, return saved_link otherwise it is a system page.
 		$saved_links = $this->idx_api_get_savedlinks();
 		foreach ( $saved_links as $saved_link ) {
 			$id = $saved_link->id;
@@ -553,12 +552,11 @@ class Idx_Api {
 	}
 
 	/**
-	 * set_wrapper function.
+	 * Set Wrapper.
 	 *
 	 * @access public
-	 * @param mixed $idx_page
-	 * @param mixed $wrapper_url
-	 * @return void
+	 * @param mixed $idx_page IDX Page.
+	 * @param mixed $wrapper_url Wrapper URL.
 	 */
 	public function set_wrapper( $idx_page, $wrapper_url ) {
 		// if none, quit process.
@@ -603,7 +601,7 @@ class Idx_Api {
 		);
 		$response       = wp_remote_request( $url, $args );
 		$response_code  = wp_remote_retrieve_response_code( $response );
-		if ( $response_code !== 204 ) {
+		if ( 204 !== $response_code ) {
 			return false;
 		}
 		return true;
@@ -614,7 +612,6 @@ class Idx_Api {
 	 *
 	 * @access public
 	 * @param mixed $saved_link_id Saved Link ID.
-	 * @return void
 	 */
 	public function saved_link_properties( $saved_link_id ) {
 
@@ -624,11 +621,10 @@ class Idx_Api {
 	}
 
 	/**
-	 * client_properties function.
+	 * Client Properties.
 	 *
 	 * @access public
-	 * @param mixed $type
-	 * @return void
+	 * @param mixed $type Type.
 	 */
 	public function client_properties( $type ) {
 		$properties = $this->idx_api( $type . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
@@ -637,9 +633,9 @@ class Idx_Api {
 	}
 
 	/**
-	 * Returns an array of city objects for the agents mls area
+	 * Returns an array of city objects for the agents mls area.
 	 *
-	 * @return array $default_cities
+	 * @return array $default_cities Default Cities.
 	 */
 	public function default_cities() {
 
@@ -648,10 +644,11 @@ class Idx_Api {
 		return $default_cities;
 	}
 
+
 	/**
-	 * Returns an array of city list ids
+	 * Returns an array of city list ids.
 	 *
-	 * @return array $list_ids
+	 * @access public
 	 */
 	public function city_list_ids() {
 
@@ -660,9 +657,10 @@ class Idx_Api {
 	}
 
 	/**
-	 * Returns a list of cities
+	 * Get City List.
 	 *
-	 * @return array $city_list
+	 * @access public
+	 * @param mixed $list_id List ID.
 	 */
 	public function city_list( $list_id ) {
 
@@ -723,9 +721,9 @@ class Idx_Api {
 	}
 
 	/**
-	 * Returns the subdomain url WITH trailing slash
+	 * Returns the subdomain url WITH trailing slash.
 	 *
-	 * @return string $url
+	 * @return string $url URL.
 	 */
 	public function subdomain_url() {
 
@@ -736,8 +734,7 @@ class Idx_Api {
 	}
 
 	/**
-	 * Returns the IDX IDs and names for all of the paper work approved MLSs
-	 * on the client's account
+	 * Returns the IDX IDs and names for all of the paper work approved MLSs on the client's account.
 	 */
 	public function approved_mls() {
 
@@ -746,8 +743,12 @@ class Idx_Api {
 		return $approved_mls;
 	}
 
+
 	/**
-	 * Returns search field names for an MLS
+	 * Returns search field names for an MLS.
+	 *
+	 * @access public
+	 * @param mixed $idx_id IDX ID.
 	 */
 	public function searchfields( $idx_id ) {
 		$approved_mls = $this->idx_api( "searchfields/$idx_id", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array() );
@@ -755,6 +756,14 @@ class Idx_Api {
 		return $approved_mls;
 	}
 
+	/**
+	 * Search Field Values.
+	 *
+	 * @access public
+	 * @param mixed $idx_id IDX ID.
+	 * @param mixed $field_name Field Name.
+	 * @param mixed $mls_pt_id MLS Property Type ID.
+	 */
 	public function searchfieldvalues( $idx_id, $field_name, $mls_pt_id ) {
 		$approved_mls = $this->idx_api( "searchfieldvalues/$idx_id?mlsPtID=$mls_pt_id&name=$field_name", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array() );
 
@@ -762,10 +771,10 @@ class Idx_Api {
 	}
 
 	/**
-	 * Compares the price fields of two arrays
+	 * Compares the price fields of two arrays.
 	 *
-	 * @param array $a
-	 * @param array $b
+	 * @param array $a A.
+	 * @param array $b B.
 	 * @return int
 	 */
 	public function price_cmp( $a, $b ) {
@@ -802,7 +811,6 @@ class Idx_Api {
 	 * Platinum Account Type.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function platinum_account_type() {
 		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
@@ -818,7 +826,6 @@ class Idx_Api {
 	 * @access public
 	 * @param mixed  $timeframe (default: null) Timeframe.
 	 * @param string $start_date (default: '') Start Date.
-	 * @return void
 	 */
 	public function get_leads( $timeframe = null, $start_date = '' ) {
 		if ( ! empty( $start_date ) ) {
@@ -838,7 +845,6 @@ class Idx_Api {
 	 * @access public
 	 * @param string $listing_type (default: 'featured') Listing Type.
 	 * @param mixed  $timeframe (default: null) Timeframe.
-	 * @return void
 	 */
 	public function get_featured_listings( $listing_type = 'featured', $timeframe = null ) {
 		// Force type to array.
