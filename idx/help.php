@@ -10,53 +10,50 @@ class Help {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct() {
 		add_action( 'load-post.php', array( $this, 'add_pages_help_tabs' ), 20 );
 		add_action( 'load-post-new.php', array( $this, 'add_pages_help_tabs' ), 20 );
 		add_action( 'load-edit.php', array( $this, 'add_wrappers_help' ), 20 );
 		add_action( 'current_screen', array( $this, 'settings_help' ) );
-		// Glow Help Button
+		// Glow Help Button.
 		add_action( 'admin_enqueue_scripts', array( $this, 'glow' ) );
 		add_action( 'wp_ajax_idx_disable_glow', array( $this, 'disable_glow' ) );
 	}
 
 	/**
-	 * settings_help function.
+	 * Settings Help.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function settings_help() {
-		// Display Help on Settings Pages
-		if ( ! empty( $_GET['page'] ) && ( $_GET['page'] === 'idx-broker' || $_GET['page'] === 'idx-omnibar-settings' ) ) {
+		// Display Help on Settings Pages.
+		if ( ! empty( $_GET['page'] ) && ( 'idx-broker' === $_GET['page'] || 'idx-omnibar-settings' === $_GET['page'] ) ) {
 			$this->add_settings_help_tabs();
 		}
 	}
 
 	/**
-	 * add_wrappers_help function.
+	 * Add Wrappers Help.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function add_wrappers_help() {
-		// Display Help on Post Type UIs
-		if ( ! empty( $_GET['post_type'] ) && ( $_GET['post_type'] === 'idx-wrapper' || $_GET['post_type'] === 'idx_page' ) ) {
+		// Display Help on Post Type UIs.
+		if ( ! empty( $_GET['post_type'] ) && ( 'idx-wrapper' === $_GET['post_type'] || 'idx_page' === $_GET['post_type'] ) ) {
 			$this->add_settings_help_tabs();
 		}
 	}
 
 	/**
-	 * tabs
+	 * Tabs.
 	 *
 	 * @var mixed
 	 * @access public
 	 */
 	public $tabs = array(
-		// The assoc key represents the ID
-		// It is NOT allowed to contain spaces
+		// The assoc key represents the ID.
+		// It is NOT allowed to contain spaces.
 		'idx_walkthrough_video' => array(
 			'title'   => 'Walkthrough',
 			'content' => '
@@ -124,10 +121,9 @@ class Help {
 	);
 
 	/**
-	 * add_pages_help_tabs function.
+	 * Add Pages Help Tabs.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function add_pages_help_tabs() {
 		$id     = 'idx_shortcodes';
@@ -137,18 +133,17 @@ class Help {
 			array(
 				'id'    => $id,
 				'title' => __( $data['title'], 'idxbroker' ),
-				// Use the content only if you want to add something
-					// static on every help tab. Example: Another title inside the tab
+				// Use the content only if you want to add something.
+				// Static on every help tab. Example: Another title inside the tab.
 			'callback'  => array( $this, 'prepare' ),
 			)
 		);
 	}
 
 	/**
-	 * add_settings_help_tabs function.
+	 * Add Settings Help Tab.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function add_settings_help_tabs() {
 		$tabs = $this->tabs;
@@ -158,8 +153,8 @@ class Help {
 				array(
 					'id'    => $id,
 					'title' => __( $data['title'], 'idxbroker' ),
-					// Use the content only if you want to add something
-						// static on every help tab. Example: Another title inside the tab
+					// Use the content only if you want to add something.
+					// static on every help tab. Example: Another title inside the tab.
 				'callback'  => array( $this, 'prepare' ),
 				)
 			);
@@ -172,12 +167,11 @@ class Help {
 	}
 
 	/**
-	 * prepare function.
+	 * Prepare Function.
 	 *
 	 * @access public
-	 * @param mixed $screen
-	 * @param mixed $tab
-	 * @return void
+	 * @param mixed $screen Screen.
+	 * @param mixed $tab Tab.
 	 */
 	public function prepare( $screen, $tab ) {
 		printf(
@@ -190,39 +184,41 @@ class Help {
 	}
 
 	/**
-	 * impress_settings_page function.
+	 * IMPress Settings Page.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function impress_settings_page() {
 		if ( ( ! empty( $_GET['page'] ) &&
-			( $_GET['page'] === 'idx-broker' ||
-				$_GET['page'] === 'idx-omnibar-settings' )
+			( 'idx-broker' === $_GET['page'] ||
+				'idx-omnibar-settings' === $_GET['page'] )
 		) ||
 			( ! empty( $_GET['post_type'] ) &&
-				( $_GET['post_type'] === 'idx-wrapper' ||
-					$_GET['post_type'] === 'idx_page'
+				( 'idx-wrapper' === $_GET['post_type'] ||
+					'idx_page' === $_GET['post_type']
 				) ) ) {
 			return true;
 		}
 	}
 
 	/**
-	 * glow function.
+	 * Glow.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function glow() {
-		// Make Help Button Glow for IMPress pages
+		// Make Help Button Glow for IMPress pages.
 		if ( ! get_option( 'idx_disable_glow' ) && $this->impress_settings_page() ) {
-
-			wp_enqueue_script( 'idxhelpglow', plugins_url( '/assets/js/idx-help-menu.min.js', dirname( __FILE__ ) ), 'jquery' );
+			wp_enqueue_script( 'idxhelpglow', plugins_url( '/assets/js/idx-help-menu.min.js', dirname( __FILE__ ) ), 'jquery', null, true );
 		}
 	}
 
-	// Disable the help button glowing via AJAX
+
+	/**
+	 * Disable the help button glowing via AJAX.
+	 *
+	 * @access public
+	 */
 	public function disable_glow() {
 		update_option( 'idx_disable_glow', '1', false );
 		wp_die();
