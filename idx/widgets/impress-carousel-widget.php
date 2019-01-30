@@ -95,10 +95,12 @@ class Impress_Carousel_Widget extends \WP_Widget
 
         $target = $this->target($instance['new_window']);
 
+        $widgetUUID = uniqid();
+
         $output .= '
         <script>
         jQuery(document).ready(function( $ ){
-            $(".impress-listing-carousel-' . $display . '").owlCarousel({
+            $(".impress-listing-carousel-' . $widgetUUID . '").owlCarousel({
                 items: ' . $display . ',
                 ' . $autoplay . '
                 nav: true,
@@ -118,10 +120,12 @@ class Impress_Carousel_Widget extends \WP_Widget
                         margin: 0 
                     },
                     450:{
-                        items: ' . round( $display / 2 ) . '
+                      items: '. (round( $display / 2 ) > count($properties) ? count($properties) : round( $display / 2 )) .',
+                      loop: '. (round( $display / 2 ) < count($properties) ? 'true' : 'false') .'
                     },
                     800:{
-                        items: ' . $display . '
+                      items: '. ($display > count($properties) ? count($properties) : $display) .',
+                      loop: '. ($display < count($properties) ? 'true' : 'false') .'
                     }
                 }
             });
