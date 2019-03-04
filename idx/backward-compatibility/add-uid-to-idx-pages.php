@@ -6,9 +6,10 @@
  */
 
 /* Exit if accessed directly. */
+namespace IDX\Backward_Compatibility;
+
 defined( 'ABSPATH' ) || exit;
 
-namespace IDX\Backward_Compatibility;
 
 /**
  * Add_Uid_To_Idx_Pages class.
