@@ -4,8 +4,6 @@
  *
  * @package idxbroker-platinum
  */
-
-/* Exit if accessed directly. */
 namespace IDX\Backward_Compatibility;
 
 defined( 'ABSPATH' ) || exit;
