@@ -6,9 +6,10 @@
  */
 
 /* Exit if accessed directly. */
+namespace IDX\Backward_Compatibility;
+
 defined( 'ABSPATH' ) || exit;
 
-namespace IDX\Backward_Compatibility;
 
 /**
  * Migrate_Legacy_Widgets class.

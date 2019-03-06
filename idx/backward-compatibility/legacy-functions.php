@@ -4,10 +4,6 @@
  *
  * @package idxbroker-platinum
  */
-
-/* Exit if accessed directly. */
-defined( 'ABSPATH' ) || exit;
-
 namespace {
 	/*
 	* global namespace for legacy start and stop functions from IDX Broker Original
