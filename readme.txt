@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 4.6
 Tested up to: 4.9.6
-Stable tag: 2.5.7
+Stable tag: 2.5.8
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -132,6 +132,10 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 14. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+
+= 2.5.8 =
+* Fix: IDX Broker HOME accounts now have access to Platinum features.
+* Fix: Carousel and Showcase widgets/shortcodes now show street direction in the correct place.
 
 = 2.5.7 =
 * Fix: Leads not tracking correctly with the new 1.6.0 api.
@@ -412,9 +416,6 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 * Cleaned up various CSS issues and removed excess button options from spec.
 
 == Upgrade Notice ==
-
-= 2.2.0 =
-
 
 = 1.3.0 =
 Version 1.2.2 and higher drop support for PHP 5.2 as it is deprecated and no longer receives security updates. Before updating, please contact your host to upgrade to the latest stable version of PHP (we recommend a minimum of 5.5 for security reasons): http://php.net/supported-versions.php
