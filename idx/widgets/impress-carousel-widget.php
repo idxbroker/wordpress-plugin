@@ -213,7 +213,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
                     </p>
                     %15$s
                     </div><!-- end .impress-carousel-property -->',
-					$prop['listingPrice'],
+					$this->display_price($prop),
 					$url,
 					$prop_image_url,
 					$image_alt_tag,
@@ -240,6 +240,46 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$output .= '</div><!-- end .impress-carousel -->';
 
 		return $output;
+	}
+
+	/**
+	 * Returns listing price, accounts for rentals and sold listings.
+	 *
+	 * @access public
+	 * @param mixed $prop - The current property in the loop.
+	 * @return string
+	 */
+	public function display_price( $prop ) {
+		$display_price = '';
+		// Rental listings.
+		if ( 'Rental' === $prop['idxPropType'] ) {
+			// handle 'sold' rental listings. Price priority: sold price -> rent/lease price -> listing price.
+			if ( 'Sold' === $prop['status'] ) {
+				if ( null !== $prop['soldPrice'] ) {
+					$display_price = '$' . $prop['soldPrice'];
+				} elseif ( null !== $prop['rntLsePrice'] ) {
+					$display_price = '$' . $prop['rntLsePrice'];
+				} else {
+					$display_price = $prop['listingPrice'];
+				}
+			} else {
+				// For non-sold rentals, check if rental price is available, use listing price if not.
+				if ( null !== $prop['rntLsePrice'] ) {
+					$display_price = '$' . $prop['rntLsePrice'];
+				} else {
+					$display_price = $prop['listingPrice'];
+				}
+			}
+		} else {
+			// Non-rental listings.
+			if ( 'Sold' === $prop['status'] && null !== $prop['soldPrice'] ) {
+				$display_price = '$' . $prop['soldPrice'];
+			} else {
+				$display_price = $prop['listingPrice'];
+			}
+		}
+
+		return $display_price;
 	}
 
 	// Hide fields that have no data to avoid fields such as 0 Baths from displaying
