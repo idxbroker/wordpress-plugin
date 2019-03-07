@@ -272,7 +272,7 @@ class Register_Impress_Shortcodes {
                         </p>
                         %16$s
                         </div>',
-						$prop['listingPrice'],
+						$this->display_price($prop),
 						$prop['propStatus'],
 						$url,
 						$prop_image_url,
@@ -321,7 +321,7 @@ class Register_Impress_Shortcodes {
                             </p>
                         </a>
                     </li>',
-						$prop['listingPrice'],
+						$this->display_price($prop),
 						$url,
 						$prop['streetNumber'],
 						$prop['streetDirection'],
@@ -368,6 +368,47 @@ class Register_Impress_Shortcodes {
 
 	}
 
+
+	/**
+	 * Returns listing price, accounts for rentals and sold listings.
+	 *
+	 * @access public
+	 * @param mixed $prop - The current property in the loop.
+	 * @return string
+	 */
+	public function display_price( $prop ) {
+		$display_price = '';
+		// Rental listings.
+		if ( 'Rental' === $prop['idxPropType'] ) {
+			// handle 'sold' rental listings. Price priority: sold price -> rent/lease price -> listing price.
+			if ( 'Sold' === $prop['status'] ) {
+				if ( null !== $prop['soldPrice'] ) {
+					$display_price = '$' . $prop['soldPrice'];
+				} elseif ( null !== $prop['rntLsePrice'] ) {
+					$display_price = '$' . $prop['rntLsePrice'];
+				} else {
+					$display_price = $prop['listingPrice'];
+				}
+			} else {
+				// For non-sold rentals, check if rental price is available, use listing price if not.
+				if ( null !== $prop['rntLsePrice'] ) {
+					$display_price = '$' . $prop['rntLsePrice'];
+				} else {
+					$display_price = $prop['listingPrice'];
+				}
+			}
+		} else {
+			// Non-rental listings.
+			if ( 'Sold' === $prop['status'] && null !== $prop['soldPrice'] ) {
+				$display_price = '$' . $prop['soldPrice'];
+			} else {
+				$display_price = $prop['listingPrice'];
+			}
+		}
+
+		return $display_price;
+	}
+
 	// Hide fields that have no data to avoid fields such as 0 Baths from displaying
 	public function hide_empty_fields( $field, $display_name, $value ) {
 		if ( $value <= 0 ) {
@@ -381,7 +422,7 @@ class Register_Impress_Shortcodes {
 	 * set_missing_core_fields function.
 	 *
 	 * @access public
-	 * @param mixed $prop
+	 * @param mixed $prop 
 	 * @return void
 	 */
 	public function set_missing_core_fields( $prop ) {
