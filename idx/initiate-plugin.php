@@ -170,8 +170,8 @@ class Initiate_Plugin {
 	 * @return void
 	 */
 	public function schedule_omnibar_update() {
-		if ( ! wp_get_schedule( 'idx_omnibar_get_locations' ) ) {
-			// refresh omnibar fields once a day
+		if ( null === wp_get_schedule( 'idx_omnibar_get_locations' ) ) {
+			// refresh omnibar fields once a day.
 			wp_schedule_event( time(), 'daily', 'idx_omnibar_get_locations' );
 		}
 	}
