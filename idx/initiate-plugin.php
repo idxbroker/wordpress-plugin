@@ -258,7 +258,7 @@ class Initiate_Plugin {
 		$this->idx_api->idx_clean_transients();
 		update_option( 'idx_broker_apikey', $_REQUEST['idx_broker_apikey'], false );
 		setcookie( 'api_refresh', 1, time() + 20 );
-		wp_schedule_single_event( time(), 'idx_omnibar_get_locations' );
+		$this->schedule_omnibar_update();
 		wp_die();
 	}
 
