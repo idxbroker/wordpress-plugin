@@ -132,10 +132,12 @@ class Impress_Carousel_Widget extends \WP_Widget {
                         margin: 0
                     },
                     450:{
-                        items: ' . round( $display / 2 ) . '
+                        items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+                      	loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
                     },
                     800:{
-                        items: ' . $display . '
+                        items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+                      	loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
                     }
                 }
             });
