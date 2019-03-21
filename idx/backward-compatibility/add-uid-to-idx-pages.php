@@ -4,12 +4,10 @@
  *
  * @package idxbroker-platinum
  */
-
 namespace IDX\Backward_Compatibility;
 
 /* Exit if accessed directly. */
 defined( 'ABSPATH' ) || exit;
-
 
 /**
  * Add_Uid_To_Idx_Pages class.

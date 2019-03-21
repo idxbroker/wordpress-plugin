@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 use \IDX\Idx_Api;
 
 /**
- * igrate Legacy Plugin Pages from version <1.3
+ * Migrate Legacy Plugin Pages from version <1.3
  */
 class Migrate_Old_Table {
 

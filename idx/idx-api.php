@@ -814,7 +814,7 @@ class Idx_Api {
 	 */
 	public function platinum_account_type() {
 		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
-		if ( 'object' !== gettype( $account_type ) && 'IDX Broker Platinum' === $account_type[0] ) {
+		if ( gettype( 'object' !== $account_type ) && ( 'IDX Broker Platinum' === $account_type[0] || 'IDX Broker HOME' === $account_type[0] ) ) {
 			return true;
 		}
 		return false;
