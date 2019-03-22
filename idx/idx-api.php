@@ -6,6 +6,7 @@ namespace IDX;
  */
 class Idx_Api {
 
+
 	/**
 	 * __construct function.
 	 *
