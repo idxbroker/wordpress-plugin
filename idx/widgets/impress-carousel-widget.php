@@ -59,7 +59,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	 */
 	public function body( $instance ) {
 		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script( 'owl2', plugins_url( '../assets/js/owl2.carousel.min.js', dirname( __FILE__ ) ) );
+		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
 
 		if ( empty( $instance ) ) {
 			$instance = $this->defaults;
@@ -111,8 +111,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		$output .= '
         <script>
-        jQuery(document).ready(function( $ ){
-            $(".impress-listing-carousel-' . $display . '").owlCarousel({
+          window.onload = function(){
+            jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
                 items: ' . $display . ',
                 ' . $autoplay . '
                 nav: true,
@@ -139,7 +139,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
                     }
                 }
             });
-        });
+          }
         </script>
         ';
 
