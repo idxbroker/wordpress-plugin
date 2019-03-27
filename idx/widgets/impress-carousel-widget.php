@@ -111,7 +111,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		$output .= '
         <script>
-          window.onload = function(){
+          window.addEventListener("DOMContentLoaded", (event) => {
             jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
                 items: ' . $display . ',
                 ' . $autoplay . '
@@ -139,7 +139,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
                     }
                 }
             });
-          }
+          });
         </script>
         ';
 
