@@ -10,11 +10,10 @@ use \Exception;
 class Dashboard_Widget {
 	public function __construct() {
 		$this->idx_api = new Idx_Api();
-
+		$this->api_key_validator();
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 		add_action( 'wp_ajax_idx_dashboard_leads', array( $this, 'leads_overview' ) );
 		add_action( 'wp_ajax_idx_dashboard_listings', array( $this, 'listings_overview' ) );
-
 	}
 
 	/**
@@ -24,6 +23,27 @@ class Dashboard_Widget {
 	 * @access public
 	 */
 	public $idx_api;
+
+	/**
+	 * api_error
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $api_error;
+
+	/**
+	 * api_key_validator function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function api_key_validator() {
+		$system_links = $this->idx_api->idx_api_get_systemlinks();
+		if ( is_wp_error( $system_links ) ) {
+			$this->api_error = $system_links->get_error_message();
+		}
+	}
 
 	/**
 	 * add_dashboard_widget function.
@@ -42,8 +62,22 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function compile_dashboard_widget() {
-		echo $this->dashboard_widget_html();
-		$this->load_scripts();
+		$allowed_html = [
+			'a' => [
+				'href'  => [],
+				'title' => [],
+			],
+		];
+		if ( $this->api_error ) {
+			echo wp_kses( $this->api_error, $allowed_html );
+			// Provide link to IDX IMPress > Initial Settings page if API key is missing/invalid.
+			if ( strpos( $this->api_error, 'Error 406' ) !== false ) {
+				echo '<hr><a href="' . esc_url( admin_url() ) . 'admin.php?page=idx-broker">Enter your IDX Broker API key to get started</a>';
+			}
+		} else {
+			echo $this->dashboard_widget_html();
+			$this->load_scripts();
+		}
 	}
 
 	/**
