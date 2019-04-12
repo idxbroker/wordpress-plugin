@@ -691,7 +691,7 @@ class Register_Impress_Shortcodes {
                     </p>
                     %15$s
                     </div><!-- end .impress-carousel-property -->',
-					$prop['listingPrice'],
+					$this->display_price($prop),
 					$url,
 					$prop_image_url,
 					$image_alt_tag,
