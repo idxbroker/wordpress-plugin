@@ -10,7 +10,7 @@ use \Exception;
 class Dashboard_Widget {
 	public function __construct() {
 		$this->idx_api = new Idx_Api();
-		$this->api_key_validator();
+
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 		add_action( 'wp_ajax_idx_dashboard_leads', array( $this, 'leads_overview' ) );
 		add_action( 'wp_ajax_idx_dashboard_listings', array( $this, 'listings_overview' ) );
@@ -35,10 +35,10 @@ class Dashboard_Widget {
 	/**
 	 * api_key_validator function.
 	 *
-	 * @access public
+	 * @access private
 	 * @return void
 	 */
-	public function api_key_validator() {
+	private function api_key_validator() {
 		$system_links = $this->idx_api->idx_api_get_systemlinks();
 		if ( is_wp_error( $system_links ) ) {
 			$this->api_error = $system_links->get_error_message();
@@ -62,21 +62,28 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function compile_dashboard_widget() {
-		$allowed_html = [
-			'a' => [
-				'href'  => [],
-				'title' => [],
-			],
-		];
-		if ( $this->api_error ) {
-			echo wp_kses( $this->api_error, $allowed_html );
-			// Provide link to IDX IMPress > Initial Settings page if API key is missing/invalid.
-			if ( strpos( $this->api_error, 'Error 406' ) !== false ) {
-				echo '<hr><a href="' . esc_url( admin_url() ) . 'admin.php?page=idx-broker">Enter your IDX Broker API key to get started</a>';
-			}
-		} else {
+		$this->api_key_validator();
+
+		// API key is present and there are no errors.
+		if ( get_option( 'idx_broker_apikey' ) && null === $this->api_error ) {
 			echo $this->dashboard_widget_html();
 			$this->load_scripts();
+		}
+
+		// API key is present and there is an error.
+		if ( get_option( 'idx_broker_apikey' ) && $this->api_error ) {
+			$allowed_html = [
+				'a' => [
+					'href'  => [],
+					'title' => [],
+				],
+			];
+			echo wp_kses( $this->api_error, $allowed_html );
+		}
+		
+		// No key and no error (initial state of plugin after install but before API key is added).
+		if ( ! get_option( 'idx_broker_apikey' ) && null === $this->api_error ) {
+			echo '<a href="' . esc_url( admin_url() ) . 'admin.php?page=idx-broker">Enter your IDX Broker API key to get started</a>';
 		}
 	}
 
