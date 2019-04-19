@@ -708,12 +708,12 @@ class Register_Shortcode_For_Ui {
 		if ( $agent_id != null ) {
 			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>Use default routing</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agent_id'] . '" ' . selected( $agent_id, $agent['agent_id'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
+				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
 			}
 		} else {
 			$agents_list = '<option value="">All</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agent_id'] . '">' . $agent['agentDisplayName'] . '</option>';
+				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
 			}
 		}
 
