@@ -502,7 +502,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script( 'owl2', plugins_url( '../assets/js/owl2.carousel.min.js', dirname( __FILE__ ) ) );
+		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
 
 		if ( $styles ) {
 			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
@@ -558,8 +558,8 @@ class Register_Impress_Shortcodes {
 		// All Instance Values are strings for shortcodes but not widgets.
 		$output .= '
             <script>
-            jQuery(document).ready(function( $ ){
-                $(".impress-listing-carousel-' . $display . '").owlCarousel({
+              window.addEventListener("DOMContentLoaded", (event) => {
+                jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
                     items: ' . $display . ',
                     ' . $autoplay_param . '
                     nav: true,
@@ -588,7 +588,7 @@ class Register_Impress_Shortcodes {
 						}
                     }
                 });
-            });
+              });
             </script>
             ';
 
