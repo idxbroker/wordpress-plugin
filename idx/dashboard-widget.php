@@ -14,7 +14,6 @@ class Dashboard_Widget {
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
 		add_action( 'wp_ajax_idx_dashboard_leads', array( $this, 'leads_overview' ) );
 		add_action( 'wp_ajax_idx_dashboard_listings', array( $this, 'listings_overview' ) );
-
 	}
 
 	/**
@@ -24,6 +23,27 @@ class Dashboard_Widget {
 	 * @access public
 	 */
 	public $idx_api;
+
+	/**
+	 * api_error
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $api_error;
+
+	/**
+	 * api_key_validator function.
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function api_key_validator() {
+		$system_links = $this->idx_api->idx_api_get_systemlinks();
+		if ( is_wp_error( $system_links ) ) {
+			$this->api_error = $system_links->get_error_message();
+		}
+	}
 
 	/**
 	 * add_dashboard_widget function.
@@ -42,8 +62,29 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function compile_dashboard_widget() {
-		echo $this->dashboard_widget_html();
-		$this->load_scripts();
+		$this->api_key_validator();
+
+		// API key is present and there are no errors.
+		if ( get_option( 'idx_broker_apikey' ) && null === $this->api_error ) {
+			echo $this->dashboard_widget_html();
+			$this->load_scripts();
+		}
+
+		// API key is present and there is an error.
+		if ( get_option( 'idx_broker_apikey' ) && $this->api_error ) {
+			$allowed_html = [
+				'a' => [
+					'href'  => [],
+					'title' => [],
+				],
+			];
+			echo wp_kses( $this->api_error, $allowed_html );
+		}
+		
+		// No key and no error (initial state of plugin after install but before API key is added).
+		if ( ! get_option( 'idx_broker_apikey' ) && null === $this->api_error ) {
+			echo '<a href="' . esc_url( admin_url() ) . 'admin.php?page=idx-broker">Enter your IDX Broker API key to get started</a>';
+		}
 	}
 
 	/**
