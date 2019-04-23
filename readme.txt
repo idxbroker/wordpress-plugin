@@ -48,7 +48,7 @@ Use powerful lead capture tools to generate new leads. Go beyond and customize y
 The IMPress for IDX Broker plugin links to pages on your site including your IDX Broker custom subdomain. This allows multiple unique URL results for each specific search engine query, leading to the best possible SEO results and more traffic from search engines. Don’t be fooled by the scare tactics used by those who suggest that IDX pages must always appear on your root WordPress domain.
 
 <h4>Design Community</h4>
-Only IMPress for IDX Broker gives you the ability to choose premium IMPress WordPress themes designed specifically around use with your IDX Broker account. [Agent Evolution](http://www.agentevolution.com/) (a division of IDX Broker) and other [Premium Real Estate Theme Designers](http://www.idxbroker.com/wordpress-idx-themes) offer deep integration with the IMPress plugin suite.
+Only IMPress for IDX Broker gives you the ability to choose premium IMPress WordPress themes designed specifically around use with your IDX Broker account. [IDX Broker HOME](https://www.idxbroker.com/idx-broker-home/) and other [Premium Real Estate Theme Designers](http://www.idxbroker.com/wordpress-idx-themes) offer deep integration with the IMPress plugin suite.
 
 <h4>Map Search Widget</h4>
 Add a full-sized [map search widget](http://www.idxbroker.com/features/map-search-widget) to ANY page on your domain. Create your own custom polygon searches with your IDX Broker Platinum account and allow visitors the ability to search within popular neighborhoods in your area.
@@ -60,9 +60,9 @@ Back up your expertise with neighborhood and community pages. Write a story, or 
 Assign leads to your agents exactly the way you want. Choose from multiple lead routing options, including [round robin](http://www.idxbroker.com/features/round-robin-and-core-fields-lead-routing), custom assignments for neighborhood pages, using a [showcase widget](https://www.idxbroker.com/features/listing-showcase-and-slideshow-widget), or by creating a unique [bio page](http://www.idxbroker.com/features/agent-bio-page-wrapper) for each agent!
 
 <h4>Affordable Pricing</h4>
-IMPress for IDX Broker requires an IDX Broker account. Plans start at $39.99 for IDX Broker Lite and $59.99 for IDX Broker Platinum. [View all features now](http://www.idxbroker.com/compare-idx).
+IMPress for IDX Broker requires an IDX Broker account. Plans start at $50/mo for IDX Broker Lite and $70/mo for IDX Broker Platinum. [View all features now](http://www.idxbroker.com/compare-idx).
 
-Agent Evolution offers fully-hosted, chat-supported [WordPress Plans](http://www.agentevolution.com/realtor-websites/) that include IDX Broker Platinum ($59.99 value) starting at $99.99 per month.
+IDX Broker also offers fully-hosted real estate websites – IDX Broker HOME – which include IDX Broker Platinum and live support starting at $150 per month.
 
 <h4>General Terms of Use</h4>
 IMPress for IDX Broker uses the MLS/IDX feeds provided by your IDX Broker account. This means your MLS governs the display and disclaimers on your IDX results and details pages. IDX, LLC manages all the necessary MLS paperwork. The IMPress for IDX Broker plugin will automatically display the correct MLS/IDX disclaimers to ensure compliance with the MLS(s) & Board(s) that provides you with your IDX feed.
@@ -124,12 +124,11 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 6. IMPress Listings (a separate plugin, part of the IMPress Suite) will pull all of your featured listing data into WordPress so that you can host the content on your root domain. Note: At this time this feature is limited to only your Featured listings.
 7. The Omnibar Search Widget allows your visitors to view a live search of City, State, Subdivision, Area, and more.
 8. With the IDX shortcode interface, you can easily add shortcodes to your posts and pages.
-9. Combine the Widget Customizer with an Equity license provided by Agent Evolution and easily add Widgets to any Equity child theme. 
-10. Simply add your API key and click a button to auto-generate a wrapper page to ensure that your IDX Broker pages synchronize with the header, sidebar, and footer of your WordPress website. Note: IDX content is co-brandable, and hosted on a subdomain of your primary domain. IDX content is integrated, not framed. 
-11. Pull or reset your API key from within your IDX Broker Dashboard.
-12. View all the IDX Broker page traffic history for each of your leads. One-click access to the IDX Broker Dashboard to create a new saved search or property for the lead based on traffic history.
-13. View Saved Searches created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved searches, toggle emails on, or edit an existing search.
-14. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
+9. Simply add your API key and click a button to auto-generate a wrapper page to ensure that your IDX Broker pages synchronize with the header, sidebar, and footer of your WordPress website. Note: IDX content is co-brandable, and hosted on a subdomain of your primary domain. IDX content is integrated, not framed. 
+10. Pull or reset your API key from within your IDX Broker Dashboard.
+11. View all the IDX Broker page traffic history for each of your leads. One-click access to the IDX Broker Dashboard to create a new saved search or property for the lead based on traffic history.
+12. View Saved Searches created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved searches, toggle emails on, or edit an existing search.
+13. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
 
