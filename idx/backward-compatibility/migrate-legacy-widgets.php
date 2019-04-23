@@ -1,10 +1,35 @@
 <?php
+/**
+ * Migrate Legacy Widgets.
+ *
+ * @package idxbroker-platinum
+ */
+
+/* Exit if accessed directly. */
 namespace IDX\Backward_Compatibility;
 
+defined( 'ABSPATH' ) || exit;
+
+
+/**
+ * Migrate_Legacy_Widgets class.
+ */
 class Migrate_Legacy_Widgets {
 
+	/**
+	 * IDX API.
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 
@@ -54,7 +79,7 @@ class Migrate_Legacy_Widgets {
 			return false;
 		}
 
-		// Get sidebar widgets
+		// Get sidebar widgets.
 		$sidebar_widgets = get_option( 'sidebars_widgets' );
 
 		// Make sure $sidebar_widgets is an array.
@@ -122,10 +147,10 @@ class Migrate_Legacy_Widgets {
 		}
 
 		foreach ( $idx_widgets as $widget ) {
-			// Build our widget_base_id
+			// Build our widget_base_id.
 			$widget_base_id = 'idx' . str_replace( '-', '_', $widget->uid );
 
-			// Get our widget instances based on the option name widget_{widget_base_id}
+			// Get our widget instances based on the option name widget_{widget_base_id}.
 			$widget_instances = get_option( 'widget_' . $widget_base_id );
 
 			// If there are instances, then loop through them instances and find actives.

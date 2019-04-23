@@ -1,12 +1,28 @@
 <?php
 namespace IDX\Widgets\Omnibar;
 
-// Draws data from our autocomplete table (currently only addresses)
+/**
+ * Draws data from our autocomplete table (currently only addresses)
+ */
 class Autocomplete {
+
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 
 	}
 
+	/**
+	 * get_autocomplete_data function.
+	 *
+	 * @access public
+	 * @param mixed $data
+	 * @return void
+	 */
 	public function get_autocomplete_data( $data ) {
 
 		check_ajax_referer( 'wp_rest', '_wpnonce' );
