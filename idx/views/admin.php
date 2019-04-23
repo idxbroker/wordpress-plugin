@@ -109,11 +109,11 @@ if ( $wrapper_page_id ) {
 					<input id="page_link" class="hidden" type="text" value="<?php echo $wrapper_page_url; ?>" readonly>
 				</div>
 
-				<!-- Add ReCaptcha field if a key has not already been entered in WP Listings settings -->
+				<!-- Add reCAPTCHA field if a key has not already been entered in WP Listings settings -->
 				<?php if ( $wpl_options['wp_listings_captcha_site_key'] == '' || $wpl_options['wp_listings_captcha_site_key'] == null ) { ?>
 					<div id="recaptcha-key">
-						<h3>Add Google ReCaptcha</h3>
-						<div class="help-text">You can choose to add Google ReCaptcha to prevent spam lead signups. To use Google ReCaptcha, you must first <a href="https://www.google.com/recaptcha/admin" target="_blank">sign up for a key</a>, then enter the site key below:</div>
+						<h3>Add Google reCAPTCHA</h3>
+						<div class="help-text">You can choose to add Google reCAPTCHA v2 to prevent spam lead signups. To use Google reCAPTCHA, you must first <a href="https://www.google.com/recaptcha/admin" target="_blank">sign up for a v2 key</a>, then enter the site key below:</div>
 						<label for="idx_recaptcha_site_key">Site Key:</label>
 						<input name="idx_recaptcha_site_key" type="text" id="idx_recaptcha_site_key" size="40" value="<?php echo get_option( 'idx_recaptcha_site_key' ); ?>" />
 						<input type="button" class="button-primary" id="idx_update_recaptcha_key" value="Update" />
