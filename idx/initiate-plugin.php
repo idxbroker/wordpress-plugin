@@ -59,6 +59,9 @@ class Initiate_Plugin {
 		new Shortcodes\Register_Idx_Shortcodes();
 		new Widgets\Create_Impress_Widgets();
 		new Shortcodes\Register_Impress_Shortcodes();
+		// WP-917 new includes
+		new Shortcodes\Impress_Lead_Login_Shortcode();
+		// end new includes
 		new Widgets\Omnibar\Create_Omnibar();
 		new Shortcodes\Shortcode_Ui();
 		new Help();
