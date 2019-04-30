@@ -47,8 +47,6 @@
 					onChange: setStars } )
 			);
 
-			
-
 			return el( 'div', { onSubmit: setStars }, children );
 		},
 

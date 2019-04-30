@@ -23,11 +23,6 @@ class Impress_Lead_Login_Shortcode {
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 		add_shortcode( 'impress_lead_login', array( $this, 'lead_login_shortcode' ) );
-		// if (function_exists( 'is_gutenberg_page' ) && is_gutenberg_page() ) {
-		// 	echo "omg";
-		// } else {
-		// 	echo "chalula";
-		// }
 	}
 
 	/**

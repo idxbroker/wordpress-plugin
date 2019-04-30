@@ -77,6 +77,8 @@ class Initiate_Plugin {
 
 		//$this->register_impress_login_block();
 		add_action('init', array( $this, 'register_impress_login_block') );
+
+		add_action( 'init', array( $this, 'php_block_init') );
 	}
 
 
@@ -110,6 +112,40 @@ class Initiate_Plugin {
 			)
 		);
 	}
+
+	function php_block_init() {
+		// Register our block editor script.
+		wp_register_script(
+			'php-block',
+			plugins_url( '/blocks/impress-lead-signup/editor-script.js', __FILE__ ),
+			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' )
+		);
+		// Register our block, and explicitly define the attributes we accept.
+		register_block_type( 'pento/php-block', array(
+			'attributes'      => array(
+				'foo' => array(
+					'type' => 'string',
+				),
+			),
+			'editor_script'   => 'php-block', // The script name we gave in the wp_register_script() call.
+			'render_callback' => array($this, 'php_block_render'),
+		) );
+		// Define our shortcode, too, using the same render function as the block.
+		add_shortcode( 'php_block', array($this, 'php_block_render') );
+	}
+	
+
+	/**
+ * Our combined block and shortcode renderer.
+ *
+ * For more complex shortcodes, this would naturally be a much bigger function, but
+ * I've kept it brief for the sake of focussing on how to use it for block rendering.
+ *
+ * @param array $attributes The attributes that were set on the block or shortcode.
+ */
+function php_block_render( $attributes ) {
+	return '<p>Gheedora</p>';
+}
 
 	/**
 	 * idx_extensions function.
