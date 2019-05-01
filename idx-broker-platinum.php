@@ -1,19 +1,26 @@
 <?php
 /**
-Plugin Name: IMPress for IDX Broker
-Plugin URI: http://www.idxbroker.com
-Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 2.5.10
-Author: IDX Broker
-Contributors: IDX, LLC
-Author URI: http://www.idxbroker.com/
-License: GPLv2 or later
+ * Plugin Name: IMPress for IDX Broker
+ * Plugin URI: http://www.idxbroker.com
+ * Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
+ * Version: 2.5.10
+ * Author: IDX Broker
+ * Contributors: IDX, LLC
+ * Author URI: http://www.idxbroker.com/
+ * License: GPLv2 or later
+ *
+ * @since 2.5.10
+ * @package idx-broker-platinum
  */
 
 new Idx_Broker_Plugin();
 
 /**
  * Idx_Broker_Plugin class.
+ *
+ * Class filenames should begin with class- instead this class is used as an autolauncher.
+ *
+ * @since 2.5.10
  */
 class Idx_Broker_Plugin {
 
@@ -24,7 +31,7 @@ class Idx_Broker_Plugin {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function __construct() {
 		define( 'IMPRESS_IDX_URL', plugin_dir_url( __FILE__ ) );
@@ -37,7 +44,11 @@ class Idx_Broker_Plugin {
 			require_once 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 			new IDX\Initiate_Plugin();
-			/** Function that is executed when plugin is activated. */
+			/**
+			 * Function that is executed when plugin is activated.
+			 *
+			 * @since 2.5.10
+			*/
 			register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
 			register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
 		}
@@ -45,6 +56,9 @@ class Idx_Broker_Plugin {
 
 	/**
 	 * Check for versions less than PHP5.3 and display error.
+	 *
+	 * @since 2.5.10
+	 * @return Boolean value
 	 */
 	public function php_version_check() {
 		if ( PHP_VERSION < 5.6 ) {
@@ -61,7 +75,7 @@ class Idx_Broker_Plugin {
 	 *
 	 * @access public
 	 * @static
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public static function incompatible_message() {
 		echo "<div class=\"error\"><br><div>You are using a deprecated version
@@ -82,7 +96,7 @@ class Idx_Broker_Plugin {
 	 *
 	 * @access public
 	 * @static
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public static function idx_deactivate_plugin() {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
@@ -93,7 +107,7 @@ class Idx_Broker_Plugin {
 	 *
 	 * @access public
 	 * @static
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public static function idx_activate() {
 		if ( ! get_option( 'idx_results_url' ) ) {
@@ -122,7 +136,7 @@ class Idx_Broker_Plugin {
 	 *
 	 * @access public
 	 * @static
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public static function idx_deactivate() {
 		// Disable scheduled update for omnibar.
