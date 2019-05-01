@@ -3,6 +3,7 @@
  * Migrate Legacy Widgets.
  *
  * @package idxbroker-platinum
+ * @since 2.5.10
  */
 
 /* Exit if accessed directly. */
@@ -13,6 +14,8 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Migrate_Legacy_Widgets class.
+ *
+ * @since 2.5.10
  */
 class Migrate_Legacy_Widgets {
 
@@ -21,6 +24,7 @@ class Migrate_Legacy_Widgets {
 	 *
 	 * @var mixed
 	 * @access public
+	 * @since 2.5.10
 	 */
 	public $idx_api;
 
@@ -28,7 +32,8 @@ class Migrate_Legacy_Widgets {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @return void
+	 * @since 2.5.10
+	 * @return null
 	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
@@ -52,7 +57,7 @@ class Migrate_Legacy_Widgets {
 	/**
 	 * Gets all active widgets and converts them. Updates migrated option on completion.
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function convert_mw_widgets() {
 		$active_widgets = $this->get_active_mw_widgets();
@@ -70,6 +75,7 @@ class Migrate_Legacy_Widgets {
 	/**
 	 * Converts the active legacy widget to the new widget.
 	 *
+	 * @since 2.5.10
 	 * @param  array $active_widget The active widget data.
 	 * @return bool                 True if successful, else false.
 	 */
@@ -120,7 +126,7 @@ class Migrate_Legacy_Widgets {
 					delete_option( 'widget_' . $active_widget['widget_base_id'] );
 
 					// Set $new_widget id with appended next key.
-					$new_widget = 'impress_idx_dashboard_widget' . '-' . $next_key;
+					$new_widget = "impress_idx_dashboard_widget - $next_key";
 
 					// Finally, update the sidebar widget options with new widget id,
 					// maintaining the position of the widget in the sidebar array.
@@ -137,6 +143,7 @@ class Migrate_Legacy_Widgets {
 	/**
 	 * Get all the active MW widgets.
 	 *
+	 * @since 2.5.10
 	 * @return array|false  array of active widget data, or false if none active
 	 */
 	public function get_active_mw_widgets() {
@@ -180,6 +187,7 @@ class Migrate_Legacy_Widgets {
 	/**
 	 * Returns the widget URL given a widget UID.
 	 *
+	 * @since 2.5.10
 	 * @param  string $widget_uid The IDX assigned widget UID.
 	 * @return string | false     Widget or URL or false if none found.
 	 */

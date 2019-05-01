@@ -3,6 +3,7 @@
  * Migrate Old Tables.
  *
  * @package idxbroker-platinum
+ * @since 2.5.10
  */
 
 /* Exit if accessed directly. */
@@ -14,6 +15,8 @@ use \IDX\Idx_Api;
 
 /**
  * Migrate Legacy Plugin Pages from version <1.3
+ *
+ * @since 2.5.10
  */
 class Migrate_Old_Table {
 
@@ -21,6 +24,7 @@ class Migrate_Old_Table {
 	 * __construct function.
 	 *
 	 * @access public
+	 * @since 2.5.10
 	 * @return void
 	 */
 	public function __construct() {
@@ -40,7 +44,8 @@ class Migrate_Old_Table {
 	 * Grab Post IDs.
 	 *
 	 * @access public
-	 * @return void
+	 * @since 2.5.10
+	 * @return array of post id's and links.
 	 */
 	public function grab_post_ids() {
 		global $wpdb;
@@ -56,10 +61,10 @@ class Migrate_Old_Table {
 	 * Update Post Type.
 	 *
 	 * @access public
+	 * @since 2.5.10
 	 * @param mixed $post_id Post ID.
 	 * @param mixed $link Link.
 	 * @param mixed $post_type Post Type.
-	 * @return void
 	 */
 	public function update_post_type( $post_id, $link, $post_type ) {
 		if ( 'idx_page' === $post_type ) {
@@ -85,8 +90,8 @@ class Migrate_Old_Table {
 	 * Migrate Old Pages.
 	 *
 	 * @access public
+	 * @since 2.5.10
 	 * @param mixed $post_info Post Info.
-	 * @return void
 	 */
 	public function migrate_old_pages( $post_info ) {
 		$post_ids           = $post_info['post_ids'];
@@ -110,7 +115,8 @@ class Migrate_Old_Table {
 	 * Drop Old Table.
 	 *
 	 * @access public
-	 * @return void
+	 * @since 2.5.10
+	 * @return update the idx migrated old table option.
 	 */
 	public function drop_old_table() {
 		global $wpdb;
@@ -130,8 +136,8 @@ class Migrate_Old_Table {
 	 * Remove Duplicate Posts.
 	 *
 	 * @access public
+	 * @since 2.5.10
 	 * @param mixed $page_id Page ID.
-	 * @return void
 	 */
 	public function remove_duplicate_posts( $page_id ) {
 		wp_delete_post( $page_id, true );
@@ -142,9 +148,9 @@ class Migrate_Old_Table {
 	 * Find and Remove Duplicate Posts.
 	 *
 	 * @access public
+	 * @since 2.5.10
 	 * @param mixed $link Link.
 	 * @param mixed $custom_posts_array Custom Posts Array.
-	 * @return void
 	 */
 	public function find_and_remove_duplicate_posts( $link, $custom_posts_array ) {
 		foreach ( $custom_posts_array as $post ) {
@@ -159,7 +165,7 @@ class Migrate_Old_Table {
 	 * Migrate Old Wrappers..
 	 *
 	 * @access public
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function migrate_old_wrapper() {
 		$page_id = get_option( 'idx_broker_dynamic_wrapper_page_id' );

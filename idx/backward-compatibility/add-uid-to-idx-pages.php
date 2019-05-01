@@ -3,7 +3,9 @@
  * UID to IDX Pages.
  *
  * @package idxbroker-platinum
+ * @since 2.5.10
  */
+
 namespace IDX\Backward_Compatibility;
 
 defined( 'ABSPATH' ) || exit;
@@ -11,6 +13,8 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Add_Uid_To_Idx_Pages class.
+ *
+ * @since 2.5.10
  */
 class Add_Uid_To_Idx_Pages {
 
@@ -19,6 +23,7 @@ class Add_Uid_To_Idx_Pages {
 	 *
 	 * @var mixed
 	 * @access public
+	 * @since 2.5.10
 	 */
 	public $idx_api;
 
@@ -26,7 +31,8 @@ class Add_Uid_To_Idx_Pages {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @return void
+	 * @since 2.5.10
+	 * @return null
 	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
@@ -46,6 +52,7 @@ class Add_Uid_To_Idx_Pages {
 	 * Add UID to all IDX pages as the unique identifier.
 	 *
 	 * @access public
+	 * @since 2.5.10
 	 * @return Updated Option idx_added_uid_to_idx_pages.
 	 */
 	public function add_uid() {
@@ -80,6 +87,7 @@ class Add_Uid_To_Idx_Pages {
 	 *
 	 * @access public
 	 * @param mixed $url URL.
+	 * @since 2.5.10
 	 * @return bool Matched IDX Page.
 	 */
 	public function matched_idx_page( $url ) {
