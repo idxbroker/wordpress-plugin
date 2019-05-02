@@ -15,24 +15,15 @@
 		category: 'widgets',
 
 		attributes: {
-			phone: {
-				type: 'int'
-			},
 			styles: {
 				type: 'int'
 			},
 			new_window: {
 				type: 'int'
 			},
-			agent_id: {
-				type: 'string'
-			},
 			password_field: {
 				type: 'bool'
 			},
-			button_text: {
-				type: 'string'
-			}
 		},
 
 		edit: function( props ) {

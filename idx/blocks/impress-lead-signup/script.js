@@ -1,13 +1,10 @@
 ( function( blocks, element ) {
 	var el = wp.element.createElement
 	var ServerSideRender = wp.components.ServerSideRender
+	var InspectorControls = wp.editor.InspectorControls
+	var TextControl = wp.components.TextControl
+	var Checkbox = wp.components.Checkbox
 	var registerBlockType = wp.blocks.registerBlockType
-
-	function Stars( { stars } ) {
-		return el( 'div', { key: 'stars' },
-			'★'.repeat( stars ),
-			( ( stars * 2 ) % 2 ) ? '½' : '' );
-	}
 
 	blocks.registerBlockType( 'idx-broker-platinum/impress-lead-signup-block', {
 		title: 'IMPress Lead Signup',
@@ -36,11 +33,42 @@
 		},
 
 		edit: function( props ) {
-			return el( ServerSideRender, {
-				block: 'idx-broker-platinum/impress-lead-signup-block',
-				attributes: props.attributes,
-			} );
+			return [
+				el( ServerSideRender, {
+					block: 'idx-broker-platinum/impress-lead-signup-block',
+					attributes: props.attributes,
+				} ),
+
+				el( InspectorControls, {},
+					el( TextControl, {
+						label: 'Sign up button text:',
+						value: props.attributes.button_text,
+						onChange: ( value ) => { props.setAttributes( { button_text: value } ); },
+					} )
+				),
+
+				// el( InspectorControls, {},
+				// 	el( RadioControl, {
+				// 		label: 'Foo1',
+				// 		value: props.attributes.foo1,
+				// 		onChange: ( value ) => { props.setAttributes( { foo1: value } ); },
+				// 	} )
+				// )
+			]
 		},
+
+		/**
+		 * 
+		 * RadioControl
+		label="User type"
+		help="The type of the current user"
+		selected={ option }
+		options={ [
+			{ label: 'Author', value: 'a' },
+			{ label: 'Editor', value: 'e' },
+		] }
+		onChange={ ( option ) => { setState( { option } ) } }
+		 */
 
 		save: function() {
 			// We don't want to save any HTML in post_content, as the value will be in postmeta

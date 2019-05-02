@@ -59,10 +59,8 @@ class Initiate_Plugin {
 		new Shortcodes\Register_Idx_Shortcodes();
 		new Widgets\Create_Impress_Widgets();
 		new Shortcodes\Register_Impress_Shortcodes();
-		// WP-917 new includes
 		new Shortcodes\Impress_Lead_Login_Shortcode();
 		new Blocks\Register_Blocks();
-		// end new includes
 		new Widgets\Omnibar\Create_Omnibar();
 		new Shortcodes\Shortcode_Ui();
 		new Help();
@@ -75,78 +73,7 @@ class Initiate_Plugin {
 		if ( is_multisite() ) {
 			 new \IDX\Views\Multisite();
 		}
-
-		// //$this->register_impress_login_block();
-		// add_action('init', array( $this, 'register_impress_login_block') );
-
-		// add_action( 'init', array( $this, 'php_block_init') );
 	}
-
-
-// 	public function register_impress_login_block() {
-// 		wp_register_script(
-// 			'idx-impress-lead-login',
-// 			plugins_url('/blocks/impress-lead-login/editor-script.js', __FILE__),
-// 			array('wp-blocks', 'wp-element')
-// 		);
-
-// 		wp_register_style(
-// 			'idx-impress-lead-login-style',
-// 			plugins_url( '/blocks/impress-lead-login/style.css', __FILE__ ),
-// 			array( 'wp-edit-blocks' ),
-// 			filemtime( plugin_dir_path( __FILE__ ) . 'blocks/impress-lead-login/style.css' )
-// 		);
-
-// 		wp_register_style(
-// 			'idx-impress-lead-login-editor-style',
-// 			plugins_url( '/blocks/impress-lead-login/editor-style.css', __FILE__ ),
-// 			array( 'wp-edit-blocks' ),
-// 			filemtime( plugin_dir_path( __FILE__ ) . 'blocks/impress-lead-login/editor-style.css' )
-// 		);
-
-// 		register_block_type(
-// 			'idx-broker-platinum/impress-lead-login',
-// 			array(
-// 				'editor_script' => 'idx-impress-lead-login',
-// 				'editor_style' => 'idx-impress-lead-login-editor-style',
-// 				'style' => 'idx-impress-lead-login-style',
-// 			)
-// 		);
-// 	}
-
-// 	function php_block_init() {
-// 		// Register our block editor script.
-// 		wp_register_script(
-// 			'php-block',
-// 			plugins_url( '/blocks/impress-lead-signup/editor-script.js', __FILE__ ),
-// 			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' )
-// 		);
-// 		// Register our block, and explicitly define the attributes we accept.
-// 		register_block_type( 'idx-broker-platinum/impress-lead-signup-block', array(
-// 			'attributes'      => array(
-// 				'foo' => array(
-// 					'type' => 'string',
-// 				),
-// 			),
-// 			'editor_script'   => 'php-block', // The script name we gave in the wp_register_script() call.
-// 			'render_callback' => array($this, 'php_block_render'),
-// 		) );
-// 		// Define our shortcode, too, using the same render function as the block.
-// 		add_shortcode( 'php_block', array($this, 'php_block_render') );
-// 	}
-	
-
-// 	/**
-//  * Our combined block and shortcode renderer.
-//  *
-//  * For more complex shortcodes, this would naturally be a much bigger function, but
-//  * I've kept it brief for the sake of focussing on how to use it for block rendering.
-//  *
-//  * @param array $attributes The attributes that were set on the block or shortcode.
-//  */
-// function php_block_render( $attributes ) {
-// 	return '<p>Gheedora</p>';
-// }
 
 	/**
 	 * idx_extensions function.
