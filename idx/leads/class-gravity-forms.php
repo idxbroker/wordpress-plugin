@@ -1,33 +1,60 @@
 <?php
 add_action( 'init', array( 'IDX_Leads_GF', 'init' ) );
-
-class IDX_Leads_GF
-{
+/**
+ * Begin IDX_Leads_GF class
+ *
+ * @since 2.5.10
+ */
+class IDX_Leads_GF {
+	/**
+	 * Begin construct function
+	 *
+	 * @since 2.5.10
+	 */
 	public function __construct() {
-		if( ! class_exists( 'GFForms' ) )
+		if ( ! class_exists( 'GFForms' ) ) {
 			exit;
-
+		}
 		$this->idx_api = new \IDX\Idx_Api();
 	}
-
+	/**
+	 * Begin init function
+	 *
+	 * @since 2.5.10
+	 */
 	public static function init() {
 		add_action( 'gform_after_submission', array( 'IDX_Leads_GF', 'idx_put_lead' ), 10, 2 );
 		add_filter( 'gform_form_settings_menu', array( 'IDX_Leads_GF', 'idx_leads_gform_settings_menu' ) );
 		add_action( 'gform_form_settings_page_idx_broker_leads_page', array( 'IDX_Leads_GF', 'idx_broker_leads_page' ) );
 	}
-
+	/**
+	 * Begin idx_api
+	 *
+	 * @since 2.5.10
+	 * @var $idx_api contains the idx_api class
+	 */
 	public $idx_api;
-
+	/**
+	 * Begin idx_leads_gform_settings_menu function
+	 *
+	 * @since 2.5.10
+	 * @param array $menu_items contains an array of menu items.
+	 * @return menu items array.
+	 */
 	public static function idx_leads_gform_settings_menu( $menu_items ) {
 
 		$menu_items[] = array(
-			'name' => 'idx_broker_leads_page',
+			'name'  => 'idx_broker_leads_page',
 			'label' => __( 'IDX Broker' ),
 		);
 
 		return $menu_items;
 	}
-
+	/**
+	 * Begin idx_broker_leads_page function
+	 *
+	 * @since 2.5.10
+	 */
 	public static function idx_broker_leads_page() {
 		$idx_api = new \IDX\Idx_Api();
 
@@ -45,11 +72,11 @@ class IDX_Leads_GF
 		}
 
 		if ( isset( $_POST['submit'] ) ) {
-
-			$new_value = array();
+			// Processing form data without nonce verification.
+			$new_value                = array();
 			$new_value['enable_lead'] = isset( $_POST['enable_lead'] ) ? (int) stripslashes( $_POST['enable_lead'] ) : 0;
-			$new_value['category'] = isset( $_POST['category'] ) ? stripslashes( $_POST['category'] ) : 0;
-			$new_value['agent_id'] = isset( $_POST['agent_id'] ) ? (int) stripslashes( $_POST['agent_id'] ) : 0;
+			$new_value['category']    = isset( $_POST['category'] ) ? stripslashes( $_POST['category'] ) : 0;
+			$new_value['agent_id']    = isset( $_POST['agent_id'] ) ? (int) stripslashes( $_POST['agent_id'] ) : 0;
 
 			update_option( $option_name, $new_value, false );
 		}
@@ -79,7 +106,7 @@ class IDX_Leads_GF
 							</th>
 							<td>
 								<select name="agent_id">
-									<?php echo $idx_api->get_agents_select_list( $form_options['agent_id'] ); ?>
+									<?php echo esc_html( $idx_api->get_agents_select_list( $form_options['agent_id'] ) ); ?>
 								</select>
 							</td>
 						</tr>
@@ -102,14 +129,21 @@ class IDX_Leads_GF
 								</select>
 							</td>
 						</tr>
-					 </tbody>
-				   </table>
+					</tbody>
+				</table>
 					<button type="submit" name="submit" class="btn button-primary gfbutton">Update Settings</button>
 				</form>
 		<?php
 		GFFormSettings::page_footer();
 	}
-
+	/**
+	 * Begin idx_put_lead function
+	 *
+	 * @since 2.5.10
+	 * @param mixed $entry contains the entry for the form.
+	 * @param mixed $form contains the entries of the form.
+	 * @return null
+	 */
 	public static function idx_put_lead( $entry, $form ) {
 		$form_id = $form['id'];
 
@@ -127,37 +161,51 @@ class IDX_Leads_GF
 				$fields = self::get_all_form_fields( $form_id );
 
 				$code_firstname = (string) self::find_field( $fields, 'First', 'name' );
-				$firstname = filter_var($entry[$code_firstname],FILTER_SANITIZE_STRING);
+				$firstname      = filter_var( $entry [ $code_firstname ], FILTER_SANITIZE_STRING );
 
 				$code_lastname = (string) self::find_field( $fields, 'Last', 'name' );
-				$lastname = filter_var($entry[$code_lastname],FILTER_SANITIZE_STRING);
+				$lastname      = filter_var( $entry [ $code_lastname ], FILTER_SANITIZE_STRING );
 
 				$code_email = (string) self::find_field( $fields, 'Email', 'email' );
-				$email = filter_var($entry[$code_email],FILTER_SANITIZE_STRING);
+				$email      = filter_var( $entry [ $code_email ], FILTER_SANITIZE_STRING );
 
 				$code_phone = (string) self::find_field( $fields, 'Phone', 'phone' );
-				if ( $code_phone) {$phone = filter_var($entry[$code_phone],FILTER_SANITIZE_STRING);}
+				if ( $code_phone ) {
+					$phone = filter_var( $entry [ $code_phone ], FILTER_SANITIZE_STRING );
+				}
 
 				$code_streetAddress = (string) self::find_field( $fields, 'Address (Street Address)' );
-				if ( $code_streetAddress) {$streetAddress = filter_var($entry[$code_streetAddress],FILTER_SANITIZE_STRING);}
+				if ( $code_streetAddress ) {
+					$streetAddress = filter_var( $entry[ $code_streetAddress ], FILTER_SANITIZE_STRING ); // code_streetAddress is not in valid snake_case format.
+				}
 
 				$code_addressLine = (string) self::find_field( $fields, 'Address (Address Line 2)' );
-				if ( $code_addressLine) {$addressLine = filter_var($entry[$code_addressLine],FILTER_SANITIZE_STRING);}
+				if ( $code_addressLine ) {
+					$addressLine = filter_var( $entry[ $code_addressLine ], FILTER_SANITIZE_STRING ); // code_addressLine is not in valid snake_case format.
+				}
 
 				$code_city = (string) self::find_field( $fields, 'Address (City)' );
-				if ( $code_city) {$city = filter_var($entry[$code_city],FILTER_SANITIZE_STRING);}
+				if ( $code_city) {
+					$city = filter_var( $entry[ $code_city ], FILTER_SANITIZE_STRING );
+				}
 
 				$code_state = (string) self::find_field( $fields, 'Address (State / Province)' );
-				if ( $code_state) {$state = filter_var($entry[$code_state],FILTER_SANITIZE_STRING);}
+				if ( $code_state ) {
+					$state = filter_var( $entry[ $code_state ], FILTER_SANITIZE_STRING );
+				}
 
 				$code_zip = (string) self::find_field( $fields, 'Address (ZIP / Postal Code)' );
-				if ( $code_zip) {$zip = filter_var($entry[$code_zip],FILTER_SANITIZE_STRING);}
+				if ( $code_zip ) { 
+					$zip = filter_var( $entry[ $code_zip ], FILTER_SANITIZE_STRING );
+				}
 
 				$code_country = (string) self::find_field( $fields, 'Address (Country)' );
-				if ( $code_country) {$country = filter_var($entry[$code_country],FILTER_SANITIZE_STRING);}
+				if ( $code_country ) {
+					$country = filter_var( $entry[ $code_country ], FILTER_SANITIZE_STRING );
+				}
 
 				// Get agent ID from form field if it exists
-				// otherwise get from form settings
+				// otherwise get from form settings.
 				$code_agent_id = (string) self::find_field( $fields, 'Agent ID' );
 				if ( $code_agent_id ) {
 					$agent_owner = filter_var( $entry[ $code_agent_id ], FILTER_SANITIZE_STRING );
@@ -166,22 +214,22 @@ class IDX_Leads_GF
 				}
 
 				$lead_data = array(
-					'firstName' => $firstname,
-					'lastName' => $lastname,
-					'email' => $email,
-					'phone' => ( isset( $phone ) ) ? $phone : '',
-					'address' => ( isset( $streetAddress ) ) ? $streetAddress : '',
-					'city' => ( isset( $city ) ) ? $city : '',
-					'stateProvince' => ( isset( $state ) ) ? $state : '',
-					'zipCode' => ( isset( $zip ) ) ? $zip : '',
-					'country' => ( isset( $country ) ) ? $country : '',
+					'firstName'      => $firstname,
+					'lastName'       => $lastname,
+					'email'          => $email,
+					'phone'          => ( isset( $phone ) ) ? $phone : '',
+					'address'        => ( isset( $streetAddress ) ) ? $streetAddress : '', // streetAddress is not in valid snake_case format.
+					'city'           => ( isset( $city ) ) ? $city : '',
+					'stateProvince'  => ( isset( $state ) ) ? $state : '',
+					'zipCode'        => ( isset( $zip ) ) ? $zip : '',
+					'country'        => ( isset( $country ) ) ? $country : '',
 					'actualCategory' => ( isset( $form_options['category'] ) ) ? $form_options['category'] : '',
-					'agentOwner' => $agent_owner,
+					'agentOwner'     => $agent_owner,
 				);
-				$api_url = 'https://api.idxbroker.com/leads/lead';
-				$args = array(
-					'method' => 'PUT',
-					'headers' => array(
+				$api_url   = 'https://api.idxbroker.com/leads/lead';
+				$args      = array(
+					'method'    => 'PUT',
+					'headers'   => array(
 						'content-type' => 'application/x-www-form-urlencoded',
 						'accesskey'    => get_option( 'idx_broker_apikey' ),
 						'outputtype'   => 'json',
@@ -189,9 +237,9 @@ class IDX_Leads_GF
 					'sslverify' => false,
 					'body'      => http_build_query( $lead_data ),
 				);
-				$response = wp_remote_request( $api_url, $args );
+				$response  = wp_remote_request( $api_url, $args );
 
-				// Check for error then add note
+				// Check for error then add note.
 				if ( is_wp_error( $response ) ) {
 					return;
 				} else {
@@ -202,22 +250,28 @@ class IDX_Leads_GF
 						'note' => self::output_form_fields( $entry, $form_id ),
 					);
 
-					// Add note if lead already exists
+					// Add note if lead already exists.
 					if ( 'Lead already exists.' === $decoded_response ) {
-						$args = array_replace( $args, array( 'method' => 'GET', 'body' => null ) );
+						$args = array_replace( $args, array(
+							'method' => 'GET',
+							'body' => null ),
+						);
 
-						// Get leads
+						// Get leads.
 						if ( false === ( $all_leads = get_transient( 'idx_leads' ) ) ) {
-							$response = wp_remote_request( $api_url, $args );
+							$response  = wp_remote_request( $api_url, $args );
 							$all_leads = json_decode( $response['body'], 1 );
 							set_transient( 'idx_leads', $all_leads, 60*60*1 );
 						}
 
-						// Loop through leads to match email address
+						// Loop through leads to match email address.
 						foreach ( $all_leads as $leads => $lead ) {
 							if ( $lead['email'] === $email ) {
-								$api_url = 'https://api.idxbroker.com/leads/note/' . $lead['id'];
-								$args = array_replace( $args, array( 'method' => 'PUT', 'body' => http_build_query( $note ) ) );
+								$api_url  = 'https://api.idxbroker.com/leads/note/' . $lead['id'];
+								$args     = array_replace( $args, array(
+									'method' => 'PUT',
+									'body'   => http_build_query( $note ),
+								), );
 								$response = wp_remote_request( $api_url, $args );
 								if ( is_wp_error( $response ) ) {
 									return;
@@ -225,10 +279,10 @@ class IDX_Leads_GF
 							}
 						}
 					} else {
-						// Add note for new lead
-						$lead_id = $decoded_response->newID;
-						$api_url = 'https://api.idxbroker.com/leads/note/' . $lead_id;
-						$args = array_replace( $args, array( 'body' => http_build_query( $note ) ) );
+						// Add note for new lead.
+						$lead_id  = $decoded_response->newID; // newID is not in valid snake_case.
+						$api_url  = 'https://api.idxbroker.com/leads/note/' . $lead_id;
+						$args     = array_replace( $args, array( 'body' => http_build_query( $note ) ) );
 						$response = wp_remote_request( $api_url, $args );
 						if ( is_wp_error( $response ) ) {
 							return;
@@ -238,9 +292,15 @@ class IDX_Leads_GF
 			}
 		}
 	}
-
+	/**
+	 * Begin get_all_form_fields function
+	 *
+	 * @since 2.5.10
+	 * @param mixed $form_id of the form.
+	 * @return array fields for form.
+	 */
 	private static function get_all_form_fields( $form_id ) {
-		$form = RGFormsModel::get_form_meta( $form_id );
+		$form   = RGFormsModel::get_form_meta( $form_id );
 		$fields = array();
 
 		if ( is_array( $form['fields'] ) ) {
@@ -269,9 +329,10 @@ class IDX_Leads_GF
 	/**
 	 * Finds the field ID given the label or optional advanced field type.
 	 *
-	 * @param  array $fields Array of fields from get_all_form_fields()
-	 * @param  string $label The field label or piece of label if type is name (i.e. first)
-	 * @param  string $type   Optional. Advanced field type (name and email)
+	 * @since 2.5.10
+	 * @param  array  $fields Array of fields from get_all_form_fields().
+	 * @param  string $label The field label or piece of label if type is name (i.e. first).
+	 * @param  string $type   Optional. Advanced field type (name and email).
 	 * @uses   self::get_all_form_fields()
 	 *
 	 * @return int|false      Field ID or false
@@ -290,12 +351,19 @@ class IDX_Leads_GF
 		}
 		return false;
 	}
-
+	/**
+	 * Begin output_form_fields function
+	 *
+	 * @since 2.5.10
+	 * @param mixed   $entry contains the entry for the form.
+	 * @param integer $form_id contains the id for the form.
+	 * @return array $output of form fields.
+	 */
 	private static function output_form_fields( $entry, $form_id ) {
 		$fields = self::get_all_form_fields( $form_id );
 		$output = '';
 		foreach ( $fields as $field ) {
-			$field_id = $field['id'];
+			$field_id    = $field['id'];
 			$field_entry = filter_var( $entry[ $field_id ], FILTER_SANITIZE_STRING );
 
 			if ( $field_entry ) {

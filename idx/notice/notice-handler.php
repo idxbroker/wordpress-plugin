@@ -2,20 +2,33 @@
 
 namespace IDX\Notice;
 
-/* Has a bulk add notice method and holds all notice conditions.
+/** Has a bulk add notice method and holds all notice conditions.
  *
  * Currently supports detection and creation of specific plugins notices:
  *   Yoast,
+ *
+ * @since 2.5.10
  */
 class Notice_Handler {
-	// We don't want anyone instantiating this class
+	/**
+	 * Begin construct function
+	 * We don't want anyone instantiating this class
+	 *
+	 * @since 2.5.10
+	 */
 	private function __construct() {}
 
-	// Returns array of all non-dismissed notices
+	/**
+	 * Begin get_all_notices function
+	 * Returns array of all non-dismissed notices
+	 *
+	 * @since 2.5.10
+	 * @return array of notices.
+	 */
 	public static function get_all_notices() {
 		$notices = [];
 
-		// Always use the name returned from the notice function to avoid mistyping
+		// Always use the name returned from the notice function to avoid mistyping.
 		$name = self::yoast();
 		if ( $name ) {
 			$notices[] = new Notice(
@@ -27,14 +40,19 @@ class Notice_Handler {
 			);
 		}
 
-		if (count($notices) > 0) {
-       		add_action('admin_enqueue_scripts', ['\IDX\Notice\Notice_Handler', 'notice_script_styles']);
+		if ( count( $notices ) > 0 ) {
+			add_action( 'admin_enqueue_scripts', [ '\IDX\Notice\Notice_Handler', 'notice_script_styles' ] );
 		}
 
 		return $notices;
 	}
 
-	// Function called via ajax to dismiss the notice
+	/**
+	 * Begin dismissed function
+	 * Function called via ajax to dismiss the notice
+	 *
+	 * @since 2.5.10
+	 */
 	public static function dismissed() {
 		check_ajax_referer( 'idx-notice-nonce' );
 		$post = filter_input_array( INPUT_POST );
@@ -45,12 +63,17 @@ class Notice_Handler {
 		wp_die();
 	}
 
-	// Checks if Yoast is noindexing our custom page types
-	//
-	// Returns the unique notice name if notice needs to be displayed, false otherwise
+	/**
+	 * Begin yoast function
+	 * Checks if Yoast is noindexing our custom page types
+	 * Returns the unique notice name if notice needs to be displayed, false otherwise
+	 *
+	 * @since 2.5.10
+	 * @return Boolean value
+	 */
 	private static function yoast() {
 		$name = 'yoast';
-		// If Yoast not active, return
+		// If Yoast not active, return.
 		if ( is_plugin_inactive( 'wordpress-seo/wp-seo.php' ) ) {
 			// Deletes the notice option is the notice now that the problem is resolved.
 			// The user should be notified if they dismissed an option, fixed the problem,
@@ -59,7 +82,7 @@ class Notice_Handler {
 			return false;
 		}
 
-		// Yoast stores their noindex flag for page types in wpseo_titles
+		// Yoast stores their noindex flag for page types in wpseo_titles.
 		$data = get_option( 'wpseo_titles' );
 
 		$wrapper_no_index   = (boolean) $data['noindex-idx-wrapper'];
@@ -76,11 +99,25 @@ class Notice_Handler {
 	}
 
 	// $name should only be passed in from the returned notice functions
+	/**
+	 * Begin delete_dismissed_option function
+	 * $name should only be passed in from the returned notice functions
+	 *
+	 * @since 2.5.10
+	 * @param mixed $name contains the name of the notice.
+	 */
 	private static function delete_dismissed_option( $name ) {
 		delete_option( "idx-notice-dismissed-$name" );
 	}
 
-	// Checks wp_options if a specific notice has been dismissed
+	/**
+	 * Begin is_dismissed function
+	 * Checks wp_options if a specific notice has been dismissed
+	 *
+	 * @since 2.5.10
+	 * @param mixed $name is the name of the notice.
+	 * @return option
+	 */
 	private static function is_dismissed( $name ) {
 		return get_option( "idx-notice-dismissed-$name" );
 	}
@@ -88,7 +125,7 @@ class Notice_Handler {
 	/**
 	 * Adds scripts and localizes AJAX variables
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public static function notice_script_styles() {
 		$ajax_nonce = wp_create_nonce( 'idx-notice-nonce' );
