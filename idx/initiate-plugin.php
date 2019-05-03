@@ -60,7 +60,6 @@ class Initiate_Plugin {
 		new Widgets\Create_Impress_Widgets();
 		new Shortcodes\Register_Impress_Shortcodes();
 		new Shortcodes\Impress_Lead_Login_Shortcode();
-		new Blocks\Register_Blocks();
 		new Widgets\Omnibar\Create_Omnibar();
 		new Shortcodes\Shortcode_Ui();
 		new Help();
@@ -72,6 +71,10 @@ class Initiate_Plugin {
 		new \IDX\Views\Search_Management();
 		if ( is_multisite() ) {
 			 new \IDX\Views\Multisite();
+		}
+		// Register blocks if Gutenberg is present.
+		if ( function_exists( 'register_block_type' ) ) {
+			new Blocks\Register_Blocks();
 		}
 	}
 
