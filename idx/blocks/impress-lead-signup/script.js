@@ -5,10 +5,11 @@
 	var TextControl = wp.components.TextControl
 	var Checkbox = wp.components.CheckboxControl
 	var registerBlockType = wp.blocks.registerBlockType
+	var icon = el('i', {class: "fa fa-user-plus fa-2x"}, null )  
 
 	blocks.registerBlockType( 'idx-broker-platinum/impress-lead-signup-block', {
 		title: 'IMPress Lead Signup',
-		icon: 'welcome-write-blog',
+		icon: icon,
 		category: 'widgets',
 
 		attributes: {

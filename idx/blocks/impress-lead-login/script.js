@@ -4,10 +4,11 @@
 	var registerBlockType = wp.blocks.registerBlockType
 	var InspectorControls = wp.editor.InspectorControls
 	var Checkbox = wp.components.CheckboxControl
+	var icon = el('i', {class: "fa fa-users fa-2x"}, null )  
 
 	blocks.registerBlockType( 'idx-broker-platinum/impress-lead-login-block', {
 		title: 'IMPress Lead Login',
-		icon: 'admin-network',
+		icon: icon,
 		category: 'widgets',
 
 		attributes: {
