@@ -40,7 +40,8 @@ class Create_Omnibar {
 		$idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
 
 		// css and js have been minified and combined to help performance
-		wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
 		}
@@ -96,7 +97,8 @@ EOD;
 		$idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
 
 		// css and js have been minified and combined to help performance
-		wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
 		}

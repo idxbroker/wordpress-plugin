@@ -59,7 +59,8 @@ class Shortcode_Ui {
 		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 		wp_enqueue_script( 'idx-shortcode', plugins_url( '../assets/js/idx-shortcode.min.js', dirname( __FILE__ ) ), array( 'jquery' ) );
 		wp_enqueue_style( 'idx-shortcode', plugins_url( '../assets/css/idx-shortcode.css', dirname( __FILE__ ) ) );
-		wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		// scripts and styles for map search widget preview
 		wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', array() );
 		wp_enqueue_script( 'custom-scriptLeafDraw', '//d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', array( 'custom-scriptLeaf' ) );

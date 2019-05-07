@@ -70,7 +70,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		if ( $instance['styles'] ) {
 			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
-			wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+			wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		}
 
 		$output = '';

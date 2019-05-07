@@ -457,7 +457,9 @@ class Initiate_Plugin {
 	public function add_upgrade_center_link() {
 		// Only load if account is not Platinum level
 		if ( ! $this->idx_api->platinum_account_type() ) {
-			wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+			wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
+
 			$html = '<li><a href="https://middleware.idxbroker.com/mgmt/upgrade" target="_blank">Upgrade Account<i class="fa fa-arrow-up update-plugins"></i></a>';
 			echo <<<EOD
             <script>window.addEventListener('DOMContentLoaded',function(){
