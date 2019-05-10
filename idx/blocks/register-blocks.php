@@ -62,6 +62,12 @@ class Register_Blocks {
 	}
 
 	function impress_lead_signup_block_render( $attributes ) {
+		$translation_array = array(
+			'agents_list' => $this->lead_signup_shortcode->get_agents_select_list(),
+		);
+		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $translation_array );
+		wp_enqueue_script( 'impress-lead-signup-block' );
+
 		return $this->lead_signup_shortcode->shortcode_output( $attributes );
 	}
 

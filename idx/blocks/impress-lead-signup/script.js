@@ -4,6 +4,7 @@
 	var InspectorControls = wp.editor.InspectorControls
 	var TextControl = wp.components.TextControl
 	var Checkbox = wp.components.CheckboxControl
+	var SelectControl = wp.components.SelectControl
 	var registerBlockType = wp.blocks.registerBlockType
 	var icon = el('i', {class: "fa fa-user-plus fa-2x"}, null )  
 
@@ -82,6 +83,15 @@
 						label: 'Sign up button text:',
 						value: props.attributes.button_text,
 						onChange: ( value ) => { props.setAttributes( { button_text: value } ); },
+					} )
+				),
+
+				el( InspectorControls, {},
+					el( SelectControl, {
+						label: 'Route to Agent:',
+						value: props.attributes.agent_id,
+						options: lead_signup_agent_list.agents_list,
+						onChange: ( value ) => { props.setAttributes( { agent_id: value } ); },
 					} )
 				),
 
