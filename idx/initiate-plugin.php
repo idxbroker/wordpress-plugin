@@ -460,7 +460,7 @@ class Initiate_Plugin {
 			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
 			wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 
-			$html = '<li><a href="https://middleware.idxbroker.com/mgmt/upgrade" target="_blank">Upgrade Account<i class="fa fa-arrow-up update-plugins"></i></a>';
+			$html = '<li><a href="https://middleware.idxbroker.com/mgmt/upgrade" target="_blank">Upgrade Account<div class="update-plugins"><i class="fas fa-arrow-up"></i></div></a></li>';
 			echo <<<EOD
             <script>window.addEventListener('DOMContentLoaded',function(){
                 document.querySelector('#toplevel_page_idx-broker ul').innerHTML += '$html';
