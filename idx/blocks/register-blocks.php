@@ -48,7 +48,7 @@ class Register_Blocks {
 						'type' => 'string',
 					),
 					'password_field' => array(
-						'type' => 'string',
+						'type' => 'bool',
 					),
 					'button_text' => array(
 						'type' => 'string',

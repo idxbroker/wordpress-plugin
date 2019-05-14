@@ -60,11 +60,7 @@
 		},
 
 		save: function(props) {
-			return el(
-				null,
-				null,
-				props.attributes.content
-			);
+			return null
 		}
 
 	} );
