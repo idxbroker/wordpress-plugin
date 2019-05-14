@@ -7,7 +7,7 @@ namespace IDX\Shortcodes;
 class Impress_Lead_Login_Shortcode {
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -26,27 +26,27 @@ class Impress_Lead_Login_Shortcode {
 	}
 
 	/**
-	 * target function.
+	 * Target function.
 	 *
 	 * @access public
-	 * @param mixed $new_window
-	 * @return void
+	 * @param mixed $new_window - used to set login form target.
+	 * @return string
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
-			// if enabled, open links in new tab/window
+			// if enabled, open links in new tab/window.
 			return '_blank';
 		} else {
 			return '_self';
 		}
 	}
 
-		/**
-	 * lead_login_shortcode function.
+	/**
+	 * Lead_login_shortcode function.
 	 *
 	 * @access public
-	 * @param mixed $atts
-	 * @return void
+	 * @param mixed $atts - widget attributes.
+	 * @return string
 	 */
 	public function lead_login_shortcode( $atts ) {
 		extract(
@@ -70,9 +70,9 @@ class Impress_Lead_Login_Shortcode {
 
 		$target = $this->target( $new_window );
 
-		// Returns hidden if false or not set
-		$password_field_type = filter_var($password_field, FILTER_VALIDATE_BOOLEAN) ? 'password' : 'hidden';
-		$password_label      = filter_var($password_field, FILTER_VALIDATE_BOOLEAN) ? '<label for="impress-widgetPassword">Password:</label>' : '';
+		// Returns hidden if false or not set.
+		$password_field_type = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? 'password' : 'hidden';
+		$password_label      = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? '<label for="impress-widgetPassword">Password:</label>' : '';
 
 		$widget = sprintf(
 			'
@@ -90,7 +90,6 @@ class Impress_Lead_Login_Shortcode {
 			$password_label,
 			$password_field_type
 		);
-
 		return $widget;
 	}
 
