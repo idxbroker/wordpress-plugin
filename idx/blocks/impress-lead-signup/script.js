@@ -1,11 +1,11 @@
 ( function( blocks, element ) {
 	var el = wp.element.createElement
+	var registerBlockType = wp.blocks.registerBlockType
 	var ServerSideRender = wp.components.ServerSideRender
 	var InspectorControls = wp.editor.InspectorControls
 	var TextControl = wp.components.TextControl
 	var Checkbox = wp.components.CheckboxControl
 	var SelectControl = wp.components.SelectControl
-	var registerBlockType = wp.blocks.registerBlockType
 	var icon = el('i', {class: "fa fa-user-plus fa-2x"}, null )  
 
 	blocks.registerBlockType( 'idx-broker-platinum/impress-lead-signup-block', {
@@ -15,19 +15,23 @@
 
 		attributes: {
 			phone: {
-				type: 'int'
+				type: 'int',
+				default: 0,
 			},
 			styles: {
-				type: 'int'
+				type: 'int',
+				default: 1,
 			},
 			new_window: {
-				type: 'int'
+				type: 'int',
+				default: 0,
 			},
 			agent_id: {
-				type: 'string'
+				type: 'string',
 			},
 			password_field: {
-				type: 'bool'
+				type: 'bool',
+				default: false,
 			},
 			button_text: {
 				type: 'string',
@@ -90,7 +94,7 @@
 					el( SelectControl, {
 						label: 'Route to Agent:',
 						value: props.attributes.agent_id,
-						options: lead_signup_agent_list.agents_list,
+						options: (lead_signup_agent_list.agents_list ? lead_signup_agent_list.agents_list : [{label: 'All', value: ''}]),
 						onChange: ( value ) => { props.setAttributes( { agent_id: value } ); },
 					} )
 				),

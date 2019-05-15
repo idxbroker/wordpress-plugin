@@ -1,7 +1,7 @@
 ( function( blocks, element ) {
 	var el = wp.element.createElement
-	var ServerSideRender = wp.components.ServerSideRender
 	var registerBlockType = wp.blocks.registerBlockType
+	var ServerSideRender = wp.components.ServerSideRender
 	var InspectorControls = wp.editor.InspectorControls
 	var Checkbox = wp.components.CheckboxControl
 	var icon = el('i', {class: "fa fa-users fa-2x"}, null )  
@@ -13,13 +13,16 @@
 
 		attributes: {
 			styles: {
-				type: 'int'
+				type: 'int',
+				default: 1,
 			},
 			new_window: {
-				type: 'int'
+				type: 'int',
+				default: 0,
 			},
 			password_field: {
-				type: 'bool'
+				type: 'bool',
+				default: false,
 			},
 		},
 
