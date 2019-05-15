@@ -6,7 +6,20 @@ namespace IDX\Blocks;
  */
 class Register_Blocks {
 
+	/**
+	 * Lead_login_shortcode
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $lead_login_shortcode;
+
+	/**
+	 * Lead_signup_shortcode
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $lead_signup_shortcode;
 
 	/**
@@ -19,8 +32,8 @@ class Register_Blocks {
 		$this->lead_login_shortcode = new \IDX\Shortcodes\Impress_Lead_Login_Shortcode();
 		$this->lead_signup_shortcode = new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
 
-		add_action( 'init', array( $this, 'impress_lead_signup_block_init') );
-		add_action( 'init', array( $this, 'impress_lead_login_block_init') );
+		add_action( 'init', array( $this, 'impress_lead_signup_block_init' ) );
+		add_action( 'init', array( $this, 'impress_lead_login_block_init' ) );
 	}
 
 	/**
@@ -40,7 +53,7 @@ class Register_Blocks {
 		);
 		// Register block and attributes.
 		register_block_type(
-			'idx-broker-platinum/impress-lead-signup-block', 
+			'idx-broker-platinum/impress-lead-signup-block',
 			array(
 				'attributes' => array(
 					'phone' => array(
@@ -79,12 +92,19 @@ class Register_Blocks {
 	 * Impress_lead_signup_block_render function.
 	 *
 	 * @access public
-	 * @return void
+	 * @param mixed $attributes - Widget attributes.
+	 * @return string
 	 */
 	public function impress_lead_signup_block_render( $attributes ) {
 		return $this->lead_signup_shortcode->shortcode_output( $attributes );
 	}
 
+	/**
+	 * Impress_lead_login_block_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function impress_lead_login_block_init() {
 		// Register block script.
 		wp_register_script(
@@ -111,7 +131,7 @@ class Register_Blocks {
 				),
 				'editor_script'   => 'impress-lead-login-block',
 				'render_callback' => array( $this, 'impress_lead_login_block_render' ),
-			) 
+			)
 		);
 	}
 
@@ -119,7 +139,8 @@ class Register_Blocks {
 	 * Impress_lead_login_block_render function.
 	 *
 	 * @access public
-	 * @return void
+	 * @param mixed $attributes - Widget attributes.
+	 * @return string
 	 */
 	public function impress_lead_login_block_render( $attributes ) {
 		return $this->lead_login_shortcode->lead_login_shortcode( $attributes );
