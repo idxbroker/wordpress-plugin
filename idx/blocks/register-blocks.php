@@ -7,6 +7,14 @@ namespace IDX\Blocks;
 class Register_Blocks {
 
 	/**
+	 * Idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $idx_api;
+
+	/**
 	 * Lead_login_shortcode
 	 *
 	 * @var mixed
@@ -29,10 +37,12 @@ class Register_Blocks {
 	 * @return void
 	 */
 	public function __construct() {
+		$this->idx_api = new \IDX\Idx_Api();
+		if ( $this->idx_api->platinum_account_type() ) {
+			$this->lead_signup_shortcode = new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
+			add_action( 'init', array( $this, 'impress_lead_signup_block_init' ) );
+		}
 		$this->lead_login_shortcode = new \IDX\Shortcodes\Impress_Lead_Login_Shortcode();
-		$this->lead_signup_shortcode = new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
-
-		add_action( 'init', array( $this, 'impress_lead_signup_block_init' ) );
 		add_action( 'init', array( $this, 'impress_lead_login_block_init' ) );
 	}
 

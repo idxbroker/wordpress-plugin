@@ -22,10 +22,10 @@ class Register_Impress_Shortcodes {
 	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
-		add_action( 'wp_loaded', array( $this, 'lead_login_shortcode' ) );
 		if ( $this->idx_api->platinum_account_type() ) {
 			add_action( 'wp_loaded', array( $this, 'lead_signup_shortcode' ) );
 		}
+		add_action( 'wp_loaded', array( $this, 'lead_login_shortcode' ) );
 		add_shortcode( 'impress_property_showcase', array( $this, 'property_showcase_shortcode' ) );
 		add_shortcode( 'impress_property_carousel', array( $this, 'property_carousel_shortcode' ) );
 		add_shortcode( 'impress_city_links', array( $this, 'city_links_shortcode' ) );
