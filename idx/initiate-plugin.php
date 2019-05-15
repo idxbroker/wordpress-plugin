@@ -59,7 +59,6 @@ class Initiate_Plugin {
 		new Shortcodes\Register_Idx_Shortcodes();
 		new Widgets\Create_Impress_Widgets();
 		new Shortcodes\Register_Impress_Shortcodes();
-		new Shortcodes\Impress_Lead_Login_Shortcode();
 		new Widgets\Omnibar\Create_Omnibar();
 		new Shortcodes\Shortcode_Ui();
 		new Help();
