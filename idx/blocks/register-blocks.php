@@ -23,14 +23,22 @@ class Register_Blocks {
 		add_action( 'init', array( $this, 'impress_lead_login_block_init') );
 	}
 
-	function impress_lead_signup_block_init() {
-		// Register our block editor script.
+	/**
+	 * Impress_lead_signup_block_init function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function impress_lead_signup_block_init() {
+		// Register block script.
 		wp_register_script(
 			'impress-lead-signup-block',
 			plugins_url( '/impress-lead-signup/script.js', __FILE__ ),
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' )
+			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ),
+			'1.0',
+			false
 		);
-		// Register our block, and explicitly define the attributes we accept.
+		// Register block and attributes.
 		register_block_type(
 			'idx-broker-platinum/impress-lead-signup-block', 
 			array(
@@ -54,31 +62,39 @@ class Register_Blocks {
 						'type' => 'string',
 					),
 				),
-				'editor_script'   => 'impress-lead-signup-block', // The script name we gave in the wp_register_script() call.
+				'editor_script'   => 'impress-lead-signup-block',
 				'render_callback' => array( $this, 'impress_lead_signup_block_render' ),
 			)
 		);
 
-	}
-
-	function impress_lead_signup_block_render( $attributes ) {
 		$translation_array = array(
 			'agents_list' => $this->lead_signup_shortcode->get_agents_select_list(),
 		);
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $translation_array );
 		wp_enqueue_script( 'impress-lead-signup-block' );
 
+	}
+
+	/**
+	 * Impress_lead_signup_block_render function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function impress_lead_signup_block_render( $attributes ) {
 		return $this->lead_signup_shortcode->shortcode_output( $attributes );
 	}
 
-	function impress_lead_login_block_init() {
-		// Register our block editor script.
+	public function impress_lead_login_block_init() {
+		// Register block script.
 		wp_register_script(
 			'impress-lead-login-block',
 			plugins_url( '/impress-lead-login/script.js', __FILE__ ),
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' )
+			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ),
+			'1.0',
+			false
 		);
-		// Register our block, and explicitly define the attributes we accept.
+		// Register block and attributes.
 		register_block_type(
 			'idx-broker-platinum/impress-lead-login-block',
 			array(
@@ -93,13 +109,19 @@ class Register_Blocks {
 						'type' => 'bool',
 					),
 				),
-				'editor_script'   => 'impress-lead-login-block', // The script name we gave in the wp_register_script() call.
+				'editor_script'   => 'impress-lead-login-block',
 				'render_callback' => array( $this, 'impress_lead_login_block_render' ),
 			) 
 		);
 	}
 
-	function impress_lead_login_block_render( $attributes ) {
+	/**
+	 * Impress_lead_login_block_render function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function impress_lead_login_block_render( $attributes ) {
 		return $this->lead_login_shortcode->lead_login_shortcode( $attributes );
 	}
 }
