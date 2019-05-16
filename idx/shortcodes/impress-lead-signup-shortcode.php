@@ -161,8 +161,8 @@ class Impress_Lead_Signup_Shortcode {
 			)
 		);
 
-		foreach ( $agent_api_data['agent'] as $agent_boi ) {
-			array_push( $agents_array, array( 'label' => $agent_boi['agentDisplayName'], 'value' => $agent_boi['agentID'] ) );
+		foreach ( $agent_api_data['agent'] as $current_agent ) {
+			array_push( $agents_array, array( 'label' => $current_agent['agentDisplayName'], 'value' => $agent_boi['agentID'] ) );
 		}
 
 		if ( ! is_array( $agents_array ) ) {
