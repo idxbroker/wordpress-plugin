@@ -94,7 +94,7 @@
 					el( SelectControl, {
 						label: 'Route to Agent:',
 						value: props.attributes.agent_id,
-						options: (lead_signup_agent_list.agents_list ? lead_signup_agent_list.agents_list : [{label: 'All', value: ''}]),
+						options: ( lead_signup_agent_list.agents_list ? lead_signup_agent_list.agents_list : [ { label: 'All', value: '' } ] ),
 						onChange: ( value ) => { props.setAttributes( { agent_id: value } ); },
 					} )
 				),
