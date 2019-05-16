@@ -40,10 +40,10 @@ class Register_Blocks {
 		$this->idx_api = new \IDX\Idx_Api();
 		if ( $this->idx_api->platinum_account_type() ) {
 			$this->lead_signup_shortcode = new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
-			add_action( 'init', array( $this, 'impress_lead_signup_block_init' ) );
+			add_action( 'init', [ $this, 'impress_lead_signup_block_init' ] );
 		}
 		$this->lead_login_shortcode = new \IDX\Shortcodes\Impress_Lead_Login_Shortcode();
-		add_action( 'init', array( $this, 'impress_lead_login_block_init' ) );
+		add_action( 'init', [ $this, 'impress_lead_login_block_init' ] );
 	}
 
 	/**
@@ -57,43 +57,41 @@ class Register_Blocks {
 		wp_register_script(
 			'impress-lead-signup-block',
 			plugins_url( '/impress-lead-signup/script.js', __FILE__ ),
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ),
+			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
 		);
 		// Register block and attributes.
 		register_block_type(
 			'idx-broker-platinum/impress-lead-signup-block',
-			array(
-				'attributes' => array(
-					'phone' => array(
+			[
+				'attributes' => [
+					'phone' => [
 						'type' => 'int',
-					),
-					'styles' => array(
+					],
+					'styles' => [
 						'type' => 'int',
-					),
-					'new_window' => array(
+					],
+					'new_window' => [
 						'type' => 'int',
-					),
-					'agent_id' => array(
+					],
+					'agent_id' => [
 						'type' => 'string',
-					),
-					'password_field' => array(
+					],
+					'password_field' => [
 						'type' => 'bool',
-					),
-					'button_text' => array(
+					],
+					'button_text' => [
 						'type' => 'string',
-					),
-				),
+					],
+				],
 				'editor_script'   => 'impress-lead-signup-block',
-				'render_callback' => array( $this, 'impress_lead_signup_block_render' ),
-			)
+				'render_callback' => [ $this, 'impress_lead_signup_block_render' ],
+			]
 		);
 
-		$translation_array = array(
-			'agents_list' => $this->lead_signup_shortcode->get_agents_select_list(),
-		);
-		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $translation_array );
+		$available_agents = [ 'agents_list' => $this->lead_signup_shortcode->get_agents_select_list() ];
+		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $available_agents );
 		wp_enqueue_script( 'impress-lead-signup-block' );
 
 	}
@@ -120,28 +118,28 @@ class Register_Blocks {
 		wp_register_script(
 			'impress-lead-login-block',
 			plugins_url( '/impress-lead-login/script.js', __FILE__ ),
-			array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ),
+			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
 		);
 		// Register block and attributes.
 		register_block_type(
 			'idx-broker-platinum/impress-lead-login-block',
-			array(
-				'attributes'      => array(
-					'styles' => array(
+			[
+				'attributes' => [
+					'styles' => [
 						'type' => 'int',
-					),
-					'new_window' => array(
+					],
+					'new_window' => [
 						'type' => 'int',
-					),
-					'password_field' => array(
+					],
+					'password_field' => [
 						'type' => 'bool',
-					),
-				),
+					],
+				],
 				'editor_script'   => 'impress-lead-login-block',
-				'render_callback' => array( $this, 'impress_lead_login_block_render' ),
-			)
+				'render_callback' => [ $this, 'impress_lead_login_block_render' ],
+			]
 		);
 	}
 
