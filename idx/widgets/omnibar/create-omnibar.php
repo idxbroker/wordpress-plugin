@@ -37,7 +37,13 @@ class Create_Omnibar {
 		$sort_order = get_option( 'idx_omnibar_sort', 'newest' );
 
 		$upload_dir  = wp_upload_dir();
-		$idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
+		$idx_dir_url;
+        
+        if ( is_ssl() ) {
+            $idx_dir_url = str_replace( 'http://', 'https://', $upload_dir['baseurl'] ) . '/idx_cache';
+        } else {
+            $idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
+        }
 
 		// css and js have been minified and combined to help performance
 		wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
