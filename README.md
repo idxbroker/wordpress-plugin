@@ -4,8 +4,8 @@ Author: IDX, LLC
 Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 4.6
-**Tested up to:** 4.9.6
-**Stable tag:** 2.5.10
+**Tested up to:** 5.2
+**Stable tag:** 2.5.11
 **Minimum PHP:** 5.6
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -73,7 +73,7 @@ IMPress for IDX Broker uses the MLS/IDX feeds provided by your IDX Broker accoun
 1. Download and extract the IMPress for IDX Broker plugin. You may also install directly by going to your WP-Admin page and then Plugins > Add New. Search for 'IMPress for IDX Broker' under new plugins and click to install directly.
 2. Upload the uncompressed folder to your `/wp-content/plugins/` directory.
 3. Activate the plugin through the Plugins menu in WordPress.
-4. Confirm you are using a version of PHP later than 5.2. You will also need to have an active IDX Broker account for the plugin to work. If you have an account, simply go to the IMPress for IDX Broker plugin page within WordPress, enter the API key provided via your setup email, and click the 'Save Changes' button.
+4. Confirm you are using a version of PHP later than 5.6. You will also need to have an active IDX Broker account for the plugin to work. If you have an account, simply go to the IMPress for IDX Broker plugin page within WordPress, enter the API key provided via your setup email, and click the 'Save Changes' button.
 5. Your plugin will now pull your IDX Broker account information into Wordpress.
 
 ## Frequently Asked Questions ##
@@ -115,6 +115,9 @@ Features provided by this Plugin - Widgets, links, and custom links may be place
 This plugin requires a PHP version higher than 5.6. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
 
 ## Changelog ##
+
+### 2.5.11 ###
+* New: Font Awesome 5 Support
 
 ### 2.5.10 ###
 * Fix: IMPress Carousel and Showcase widgets no longer show duplicate entries.
