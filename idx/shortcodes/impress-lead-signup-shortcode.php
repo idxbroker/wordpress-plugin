@@ -79,7 +79,7 @@ class Impress_Lead_Signup_Shortcode {
 			$hidden_fields
 		);
 
-		if ( filter_var($password_field, FILTER_VALIDATE_BOOLEAN) ) {
+		if ( $password_field ) {
 			$widget .= sprintf(
 				'
 				<label for="impress-widgetPassword">Password:</label>
@@ -148,28 +148,6 @@ class Impress_Lead_Signup_Shortcode {
 		} else {
 			return '_self';
 		}
-	}
-
-	public function get_agents_select_list() {
-		$agent_api_data = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-		$agents_array = array();
-		array_push(
-			$agents_array,
-			array(
-				'label' => 'All',
-				'value' => '',
-			)
-		);
-
-		foreach ( $agent_api_data['agent'] as $current_agent ) {
-			array_push( $agents_array, array( 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ) );
-		}
-
-		if ( ! is_array( $agents_array ) ) {
-			return;
-		}
-
-		return $agents_array;
 	}
 
 }
