@@ -71,10 +71,6 @@ class Initiate_Plugin {
 		if ( is_multisite() ) {
 			 new \IDX\Views\Multisite();
 		}
-		// Register blocks if Gutenberg is present.
-		if ( function_exists( 'register_block_type' ) ) {
-			new Blocks\Register_Blocks();
-		}
 	}
 
 	/**
