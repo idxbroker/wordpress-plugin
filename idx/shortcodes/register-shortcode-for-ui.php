@@ -408,19 +408,22 @@ class Register_Shortcode_For_Ui {
 		$output .= '</div>';
 
 		// Button text.
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for\"button_text\">Sign up button text:</label>';
-		$output .= '<input type=\"text\" id=\"button_text\" data-short-name=\"button_text\" value=\"" . $defaults['button_text'] . "\">';
+		$output .= '<div class="idx-modal-shortcode-field" data=shortcode="' . $shortcode . '">';
+		$output .= '<label for "button_text">Sign up button text:</label>';
+		$output .= '<input type="text" id="button_text" data-short-name="button_text" value=""' . $defaults['button_text'] . '">';
 		$output .= '</div>';
 
 		return $output;
 	}
 
 	/**
-	 * 
+	 * Begin get_city_links function.
+	 *
+	 * @since 2.5.10
+	 * @param text $shortcode contains the name of the shortcode.
+	 * @return html $output Generated html for the widget.
 	 */
-	public function get_city_links($shortcode)
-	{
+	public function get_city_links( $shortcode ) {
 		$defaults = array(
 			'city_list' => 'combinedActiveMLS',
 			'mls' => '',
