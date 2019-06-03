@@ -9,8 +9,8 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	/**
 	 * __construct function.
 	 *
+	 * @since 2.5.10
 	 * @access public
-	 * @return void
 	 */
 	public function __construct() {
 		$this->create_omnibar = new \IDX\Widgets\Omnibar\Create_Omnibar();
@@ -23,16 +23,18 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * create_omnibar
+	 * Begin create_omnibar.
 	 *
+	 * @since 2.5.10
 	 * @var mixed
 	 * @access public
 	 */
 	public $create_omnibar;
 
 	/**
-	 * defaults
+	 * Begin defaults.
 	 *
+	 * @since 2.5.10
 	 * @var mixed
 	 * @access public
 	 */
@@ -44,16 +46,17 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	);
 
 	/**
-	 * form function.
+	 * The form function.
 	 *
+	 * @since 2.5.10
 	 * @access public
-	 * @param mixed $instance
-	 * @return void
+	 * @param mixed $instance containst the instance information.
 	 */
 	public function form( $instance ) {
 		$defaults = $this->defaults;
 		$instance = wp_parse_args( (array) $instance, $this->defaults );
 		$title    = $instance['title'];
+		// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$this'.
 		?>
 		<p><label for="<?php echo esc_attr( $title ); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
 		<p>
@@ -72,12 +75,13 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * update function.
+	 * The update function.
 	 *
+	 * @since 2.5.10
 	 * @access public
-	 * @param mixed $new_instance
-	 * @param mixed $old_instance
-	 * @return void
+	 * @param mixed $new_instance contains information from the new instance.
+	 * @param mixed $old_instance contains information from the old instance.
+	 * @return mixed $instance contains information for the updated instance.
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance              = $old_instance;
@@ -89,18 +93,18 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * widget function.
+	 * The widget function.
 	 *
+	 * @since 2.5.10
 	 * @access public
-	 * @param mixed $args
-	 * @param mixed $instance
-	 * @return void
+	 * @param mixed $args contains arguments.
+	 * @param mixed $instance contains the information for the instance.
 	 */
 	public function widget( $args, $instance ) {
 		$defaults = $this->defaults;
 
 		$instance = wp_parse_args( (array) $instance, $defaults );
-
+		// extract() usage is highly discouraged, due to the complexity and unintended issues it might cause.
 		extract( $args, EXTR_SKIP );
 
 		if ( empty( $instance ) ) {
@@ -110,24 +114,28 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 			$instance['styles'] = $this->defaults['styles'];
 		}
 
+		//All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$before_widget'.
 		echo $before_widget;
 		$title = empty( $instance['title'] ) ? '' : apply_filters( 'widget_title', $instance['title'] );
 
 		if ( ! empty( $title ) ) {
+			// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$before_widget'.
 			echo $before_title . $title . $after_title;
 		}
 
 		$plugin_dir = plugins_url();
 
-		// grab url from database set from get-locations.php
+		// grab url from database set from get-locations.php.
 		$idx_url = get_option( 'idx_results_url' );
 
 		// Widget HTML:
+		// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$before_widget'.
 		if ( ! empty( $instance['extra'] ) ) {
 			echo $this->create_omnibar->idx_omnibar_extra( $plugin_dir, $idx_url, $instance['styles'], $instance['min_price'] );
 		} else {
 			echo $this->create_omnibar->idx_omnibar_basic( $plugin_dir, $idx_url, $instance['styles'] );
 		}
+		// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$before_widget'.
 		echo $after_widget;
 	}
 }
