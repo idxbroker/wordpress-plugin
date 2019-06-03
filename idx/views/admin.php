@@ -2,13 +2,13 @@
 namespace IDX\Views;
 
 if ( ! current_user_can( 'manage_options' ) ) {
-	wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	wp_die( __( 'You do not have sufficient permissions to access this page.' ) ); // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
 }
 
 global $api_error;
 $idx_api = new \IDX\Idx_Api();
 
-// get wpl options if they exist
+// Get wpl options if they exist.
 $wpl_options = get_option( 'plugin_wp_listings_settings' );
 
 if ( ! $api_error ) {
@@ -18,7 +18,7 @@ if ( ! $api_error ) {
 	}
 }
 /**
- * check wrapper page exist or not
+ * Check wrapper page exist or not.
  */
 $wrapper_page_id  = get_option( 'idx_broker_dynamic_wrapper_page_id' );
 $post_title       = '';
@@ -48,11 +48,13 @@ if ( $wrapper_page_id ) {
 				<div id="genSettings">
 					<h3 class="hndle">
 						Get an API Key<a href="https://middleware.idxbroker.com/mgmt/apikey.php" target="_blank"><img class="help-icon" src="<?php echo plugins_url( '../../assets/images/helpIcon.svg', __FILE__ ); ?>" alt="help"></a>
+						<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'plugins_url'. ?>
 					</h3>
 					<div class="inlineBlock">
 						<div>
 							<label for="idx_broker_apikey">Enter Your API Key: </label>
 							<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option( 'idx_broker_apikey' ); ?>" />
+							<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'get_option'. ?>
 							<input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" />
 							<span class="refresh_status"></span>
 						</div>
@@ -82,6 +84,8 @@ if ( $wrapper_page_id ) {
 					<?php
 					foreach ( $schedules as $schedule_name => $schedule ) {
 						echo '<option value="' . __( $schedule_name ) . '"' . selected( $idx_cron_setting, $schedule_name ) . '>' . __( $schedule['display'] ) . '</option>';
+						// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+						// The $text arg must be a single string literal, not "$schedule['display']".
 					}
 					?>
 						<option value="disabled" <?php selected( $idx_cron_setting, 'disabled' ); ?>>Disabled</option>
@@ -91,13 +95,15 @@ if ( $wrapper_page_id ) {
 				<!-- dynamic wrapper page -->
 				<div id="dynamic_page">
 					<h3>Create the Global Wrapper<a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank"><img class="help-icon" src="<?php echo plugins_url( '../../assets/images/helpIcon.svg', __FILE__ ); ?>" alt="help"></a></h3>
+					<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'plugins_url'. ?>
 					<div class="help-text">Setting this up will match the IDX pages to your website design automatically every few hours.<div>Example: Properties</div></div>
 					<label for="idx_broker_dynamic_wrapper_page_name">Page Name:</label>
 					<input name="idx_broker_dynamic_wrapper_page_name" type="text" id="idx_broker_dynamic_wrapper_page_name" value="<?php echo $post_title; ?>" />
 					<input name="idx_broker_dynamic_wrapper_page_id" type="hidden" id="idx_broker_dynamic_wrapper_page_id" value="<?php echo get_option( 'idx_broker_dynamic_wrapper_page_id' ); ?>" />
+					<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'get_option'. ?>
 					<input type="button" class="button-primary" id="idx_broker_create_wrapper_page" value="<?php echo $post_title ? 'Update' : 'Create'; ?>" />
 					<?php
-					if ( $wrapper_page_id != '' ) {
+					if ( '' !== $wrapper_page_id ) {
 						?>
 						<input type="button" class="button-secondary" id="idx_broker_delete_wrapper_page" value="Delete" />
 										<?php
@@ -107,15 +113,17 @@ if ( $wrapper_page_id ) {
 					<p class="error hidden">Please enter a page title</p>
 					<span id="protocol" class="label hidden"></span>
 					<input id="page_link" class="hidden" type="text" value="<?php echo $wrapper_page_url; ?>" readonly>
+					<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$wrapper_page_url'. ?>
 				</div>
 
 				<!-- Add reCAPTCHA field if a key has not already been entered in WP Listings settings -->
-				<?php if ( $wpl_options['wp_listings_captcha_site_key'] == '' || $wpl_options['wp_listings_captcha_site_key'] == null ) { ?>
+				<?php if ( '' === $wpl_options['wp_listings_captcha_site_key'] || null === $wpl_options['wp_listings_captcha_site_key'] ) { ?>
 					<div id="recaptcha-key">
 						<h3>Add Google reCAPTCHA</h3>
 						<div class="help-text">You can choose to add Google reCAPTCHA v2 to prevent spam lead signups. To use Google reCAPTCHA, you must first <a href="https://www.google.com/recaptcha/admin" target="_blank">sign up for a v2 key</a>, then enter the site key below:</div>
 						<label for="idx_recaptcha_site_key">Site Key:</label>
 						<input name="idx_recaptcha_site_key" type="text" id="idx_recaptcha_site_key" size="40" value="<?php echo get_option( 'idx_recaptcha_site_key' ); ?>" />
+						<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'get_option'. ?>
 						<input type="button" class="button-primary" id="idx_update_recaptcha_key" value="Update" />
 					</div>
 					<?php
