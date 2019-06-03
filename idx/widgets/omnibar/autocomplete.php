@@ -3,25 +3,28 @@ namespace IDX\Widgets\Omnibar;
 
 /**
  * Draws data from our autocomplete table (currently only addresses)
+ *
+ * @since 2.5.10
  */
 class Autocomplete {
 
 	/**
 	 * __construct function.
 	 *
+	 * @since 2.5.10
 	 * @access public
-	 * @return void
 	 */
 	public function __construct() {
 
 	}
 
 	/**
-	 * get_autocomplete_data function.
+	 * Begin get_autocomplete_data function.
 	 *
+	 * @since 2.5.10
 	 * @access public
-	 * @param mixed $data
-	 * @return void
+	 * @param mixed $data .
+	 * @return array returns and array.
 	 */
 	public function get_autocomplete_data( $data ) {
 
@@ -40,6 +43,7 @@ class Autocomplete {
 			$wpdb->prepare(
 				"SELECT DISTINCT value, field, mls FROM $table_name WHERE value LIKE %s LIMIT 10", $like_query
 			)
+			// Use placeholders and $wpdb->prepare(); found interpolated variable $table_name at "SELECT DISTINCT value, field, mls FROM $table_name WHERE value LIKE %s LIMIT 10"
 		);
 
 		if ( ! is_array( $results ) ) {
