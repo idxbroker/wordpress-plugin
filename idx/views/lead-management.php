@@ -4,10 +4,27 @@ namespace IDX\Views;
 use \Carbon\Carbon;
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
+/**
+ * Begin Lead_Management class.
+ *
+ * @since 2.5.10
+ */
 class Lead_Management {
 
+	/**
+	 * Begin declaring the instance.
+	 *
+	 * @var $instance
+	 * @since 2.5.10
+	 */
 	private static $instance;
 
+	/**
+	 * Begin instance function
+	 *
+	 * @since 2.5.10
+	 * @return mixed $instance
+	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof Lead_Management ) ) {
 			self::$instance = new Lead_Management();
@@ -16,6 +33,11 @@ class Lead_Management {
 		return self::$instance;
 	}
 
+	/**
+	 * Begin __construct function.
+	 *
+	 * @since 2.5.10
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 
@@ -24,11 +46,22 @@ class Lead_Management {
 		add_action( 'init', array( $this, 'idx_ajax_actions' ) );
 	}
 
+	/**
+	 * Begin declaring the $idx_api class.
+	 *
+	 * @since 2.5.10
+	 * @var class $idx_api
+	 */
 	public $idx_api;
 
+	/**
+	 * Begin adD_lead_pages funciton.
+	 *
+	 * @since 2.5.10
+	 */
 	public function add_lead_pages() {
 
-		// Add Leads menu page
+		// Add Leads menu page.
 		$this->page = add_menu_page(
 			'Leads',
 			'Leads',
@@ -45,7 +78,7 @@ class Lead_Management {
 		/* Add callbacks for this screen only */
 		add_action( 'load-' . $this->page, array( $this, 'lead_list_actions' ), 9 );
 
-		// Add Leads as submenu page also
+		// Add Leads as submenu page also.
 		$this->page = add_submenu_page(
 			'leads',
 			'Leads',
@@ -61,7 +94,7 @@ class Lead_Management {
 		/* Add callbacks for this screen only */
 		add_action( 'load-' . $this->page, array( $this, 'lead_list_actions' ), 9 );
 
-		// Add Add Lead submenu page
+		// Add Add Lead submenu page.
 		$this->page = add_submenu_page(
 			'leads',
 			'Add/Edit Lead',
@@ -79,6 +112,11 @@ class Lead_Management {
 
 	}
 
+	/**
+	 * Begin idx_ajax_actions function.
+	 *
+	 * @since 2.5.10
+	 */
 	public function idx_ajax_actions() {
 		add_action( 'wp_ajax_idx_lead_add', array( $this, 'idx_lead_add' ) );
 		add_action( 'wp_ajax_idx_lead_edit', array( $this, 'idx_lead_edit' ) );
@@ -92,13 +130,19 @@ class Lead_Management {
 		add_action( 'wp_ajax_idx_lead_search_delete', array( $this, 'idx_lead_search_delete' ) );
 	}
 
+	/**
+	 * Begin idx_lead_scripts function.
+	 *
+	 * @since 2.5.10
+	 */
 	public function idx_lead_scripts() {
 
-		// Only load on leads pages
+		// Only load on leads pages.
 		$screen_id = get_current_screen();
-		if ( $screen_id->id === 'leads_page_edit-lead' || $screen_id->id === 'toplevel_page_leads' ) {
+		if ( 'leads_page_edit-lead' === $screen_id->id || 'toplevel_page_leads' === $screen_id->id ) {
 
 			wp_enqueue_script( 'idx_lead_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-leads.js', array( 'jquery' ), true );
+			// In footer ($in_footer) is not set explicitly wp_enqueue_script; It is recommended to load scripts in the footer. Please set this value to `true` to load it in the footer, or explicitly `false` if it should be loaded in the header.
 			wp_localize_script(
 				'idx_lead_ajax_script',
 				'IDXLeadAjax',
@@ -109,15 +153,23 @@ class Lead_Management {
 				)
 			);
 			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
+			// In footer ($in_footer) is not set explicitly wp_enqueue_script; It is recommended to load scripts in the footer. Please set this value to `true` to load it in the footer, or explicitly `false` if it should be loaded in the header.
 			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
+			// In footer ($in_footer) is not set explicitly wp_enqueue_script; It is recommended to load scripts in the footer. Please set this value to `true` to load it in the footer, or explicitly `false` if it should be loaded in the header.
 			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
+			// In footer ($in_footer) is not set explicitly wp_enqueue_script; It is recommended to load scripts in the footer. Please set this value to `true` to load it in the footer, or explicitly `false` if it should be loaded in the header.
 			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 
 			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.css' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 		}
 	}
 
@@ -125,16 +177,16 @@ class Lead_Management {
 	 * Add a lead via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_add_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['fields'] ) ) {
+		if ( false === $permission || ! isset( $_POST['fields'] ) ) {
 			echo 'error';
 		} else {
 
-			// Add lead via API
+			// Add lead via API.
 			$api_url  = 'https://api.idxbroker.com/leads/lead';
 			$args     = array(
 				'method'    => 'PUT',
@@ -150,13 +202,14 @@ class Lead_Management {
 
 			$decoded_response = json_decode( $response['body'], 1 );
 
-			if ( $decoded_response == 'Lead already exists.' ) {
+			if ( 'Lead already exists.' === $decoded_response ) {
 				echo 'Lead already exists.';
 			} elseif ( wp_remote_retrieve_response_code( $response ) == '200' ) {
-				// Delete lead cache so new lead will show in list views immediately
+				// Delete lead cache so new lead will show in list views immediately.
 				delete_option( 'idx_leads_lead_cache' );
-				// return new lead ID to script
+				// return new lead ID to script.
 				echo $decoded_response['newID'];
+				// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$decoded_response'.
 			} else {
 				echo 'error';
 			}
@@ -168,16 +221,16 @@ class Lead_Management {
 	 * Edit a lead via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_edit() {
 
 		$permission = check_ajax_referer( 'idx_lead_edit_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['fields'] ) || ! isset( $_POST['leadID'] ) ) {
+		if ( false === $permission || ! isset( $_POST['fields'] ) || ! isset( $_POST['leadID'] ) ) {
 			echo 'error';
 		} else {
 
-			// Edit lead via API
+			// Edit lead via API.
 			$api_url  = 'https://api.idxbroker.com/leads/lead/' . $_POST['leadID'];
 			$args     = array(
 				'method'    => 'POST',
@@ -205,16 +258,16 @@ class Lead_Management {
 	 * Post a lead note via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_note_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_note_add_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['note'] ) || ! isset( $_POST['id'] ) ) {
+		if ( false === $permission || ! isset( $_POST['note'] ) || ! isset( $_POST['id'] ) ) {
 			echo 'error';
 		} else {
 
-			// Add lead note via API
+			// Add lead note via API.
 			$api_url  = 'https://api.idxbroker.com/leads/note/' . $_POST['id'];
 			$args     = array(
 				'method'    => 'PUT',
@@ -233,6 +286,7 @@ class Lead_Management {
 			if ( wp_remote_retrieve_response_code( $response ) == '200' ) {
 				delete_option( 'idx_leads_note/' . $_POST['id'] . '_cache' );
 				echo $decoded_response['newID'];
+				// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$decoded_response'.
 			} else {
 				echo 'error';
 			}
@@ -244,16 +298,16 @@ class Lead_Management {
 	 * Update a lead note via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_note_edit() {
 
 		$permission = check_ajax_referer( 'idx_lead_note_edit_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['note'] ) || ! isset( $_POST['id'] ) || ! isset( $_POST['noteid'] ) ) {
+		if ( false === $permission || ! isset( $_POST['note'] ) || ! isset( $_POST['id'] ) || ! isset( $_POST['noteid'] ) ) {
 			echo 'not set';
 		} else {
 
-			// Update lead note via API
+			// Update lead note via API.
 			$api_url  = 'https://api.idxbroker.com/leads/note/' . $_POST['id'] . '/' . $_POST['noteid'];
 			$args     = array(
 				'method'    => 'POST',
@@ -283,12 +337,12 @@ class Lead_Management {
 	 * Post a lead property via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_property_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_property_add_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) ) {
+		if ( false === $permission || ! isset( $_POST['id'] ) ) {
 			echo 'error';
 		} else {
 
@@ -301,7 +355,7 @@ class Lead_Management {
 				),
 			);
 
-			// Add lead property via API
+			// Add lead property via API.
 			$api_url  = 'https://api.idxbroker.com/leads/property/' . $_POST['id'];
 			$args     = array(
 				'method'    => 'PUT',
@@ -320,6 +374,7 @@ class Lead_Management {
 			if ( wp_remote_retrieve_response_code( $response ) == '200' ) {
 				delete_option( 'idx_leads_property/' . $_POST['id'] . '_cache' );
 				echo $decoded_response['newID'];
+				// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$decoded_response'.
 			} else {
 				echo 'error';
 			}
@@ -331,12 +386,12 @@ class Lead_Management {
 	 * Edit a lead property via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_property_edit() {
 
 		$permission = check_ajax_referer( 'idx_lead_property_edit_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) ) {
+		if ( false === $permission || ! isset( $_POST['id'] ) ) {
 			echo 'error';
 		} else {
 
@@ -349,7 +404,7 @@ class Lead_Management {
 				),
 			);
 
-			// Add lead property via API
+			// Add lead property via API.
 			$api_url  = 'https://api.idxbroker.com/leads/property/' . $_POST['id'] . '/' . $_POST['spid'];
 			$args     = array(
 				'method'    => 'POST',
@@ -379,15 +434,15 @@ class Lead_Management {
 	 * Delete a lead via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_delete() {
 
 		$permission = check_ajax_referer( 'idx_lead_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) ) {
+		if ( false === $permission || ! isset( $_POST['id'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead via API
+			// Delete lead via API.
 			$api_url  = 'https://api.idxbroker.com/leads/lead/' . $_POST['id'];
 			$args     = array(
 				'method'    => 'DELETE',
@@ -416,15 +471,15 @@ class Lead_Management {
 	 * Delete a lead note via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_note_delete() {
 
 		$permission = check_ajax_referer( 'idx_lead_note_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) || ! isset( $_POST['noteid'] ) ) {
+		if ( false === $permission || ! isset( $_POST['id'] ) || ! isset( $_POST['noteid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead note via API
+			// Delete lead note via API.
 			$api_url  = 'https://api.idxbroker.com/leads/note/' . $_POST['id'] . '/' . $_POST['noteid'];
 			$args     = array(
 				'method'    => 'DELETE',
@@ -452,15 +507,15 @@ class Lead_Management {
 	 * Delete a lead saved property via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_property_delete() {
 
 		$permission = check_ajax_referer( 'idx_lead_property_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) || ! isset( $_POST['spid'] ) ) {
+		if ( false === $permission || ! isset( $_POST['id'] ) || ! isset( $_POST['spid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead saved property via API
+			// Delete lead saved property via API.
 			$api_url  = 'https://api.idxbroker.com/leads/property/' . $_POST['id'] . '/' . $_POST['spid'];
 			$args     = array(
 				'method'    => 'DELETE',
@@ -488,15 +543,15 @@ class Lead_Management {
 	 * Delete a lead saved search via API
 	 * echoes response to /assets/js/idx-leads.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_search_delete() {
 
 		$permission = check_ajax_referer( 'idx_lead_search_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) || ! isset( $_POST['ssid'] ) ) {
+		if ( false === $permission || ! isset( $_POST['id'] ) || ! isset( $_POST['ssid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead saved search via API
+			// Delete lead saved search via API.
 			$api_url  = 'https://api.idxbroker.com/leads/search/' . $_POST['id'] . '/' . $_POST['ssid'];
 			$args     = array(
 				'method'    => 'DELETE',
@@ -526,7 +581,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_leads_list() {
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
@@ -543,16 +598,18 @@ class Lead_Management {
 
 		$offset = get_option( 'gmt_offset', 0 );
 
-		// prepare leads for display
+		// Prepare leads for display.
 		foreach ( $leads_array as $lead ) {
 
-			$last_active = Carbon::parse( ( $lead->lastActivityDate === '0000-00-00 00:00:00' ) ? $lead->subscribeDate : $lead->lastActivityDate )->addHours( $offset )->toDayDateTimeString();
-
+			$last_active = Carbon::parse( ( '0000-00-00 00:00:00' === $lead->lastActivityDate ) ? $lead->subscribeDate : $lead->lastActivityDate )->addHours( $offset )->toDayDateTimeString();
+			// Object property "$lastActivityDate" is not in valid snake_case format, try "$last_activity_date".
+			// Object property "$subscribeDate" is not in valid snake_case format, try "$subscribe_date".
+			// Object property "$lastActivityDate" is not in valid snake_case format, try "$last_activity_date".
 			$subscribed_on = Carbon::parse( $lead->subscribeDate )->addHours( $offset )->toDayDateTimeString();
-
-			if ( $lead->agentOwner != '0' ) {
+			// Object property "$subscribeDate" is not in valid snake_case format, try "$subscribe_date".
+			if ( '0' !== $lead->agentOwner ) { // Object property "$agentOwner" is not in valid snake_case format, try "$agent_owner"
 				foreach ( $agents_array['agent'] as $agent ) {
-					if ( $lead->agentOwner == $agent['agentID'] ) {
+					if ( $lead->agentOwner === $agent['agentID'] ) { // Object property "$agentOwner" is not in valid snake_case format, try "$agent_owner".
 						$agent_name = $agent['agentDisplayName'];
 					}
 				}
@@ -572,6 +629,8 @@ class Lead_Management {
 
 			$leads .= '<tr class="lead-row">';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . $lead->firstName . ' ' . $lead->lastName . '</a></td>';
+			// Object property "$firstName" is not in valid snake_case format, try "$first_name".
+			// Object property "$lastName" is not in valid snake_case format, try "$last_name".
 			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . $lead->id . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $lead->phone . '</td>';
 			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $subscribed_on . '</td>';
@@ -599,7 +658,7 @@ class Lead_Management {
 			</thead>
 			<tbody>
 			';
-		echo $leads;
+		echo $leads; // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$leads'.
 		echo '</tbody></table>';
 		echo '<dialog id="dialog-lead-delete">
 				<form method="dialog">
@@ -616,17 +675,20 @@ class Lead_Management {
 			</a>
 			<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 			';
+		// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'admin_url'.
 	}
 
-	/*
-	* Actions to be taken prior to page loading. This is after headers have been set.
-	* call on load-$hook
-	*/
+	/**
+	 * Actions to be taken prior to page loading. This is after headers have been set.
+	 * Call on load-$hook.
+	 *
+	 * @since 2.5.10
+	 */
 	public function lead_list_actions() {
 
 		/* Create an empty post object for dumb plugins like soliloquy */
 		global $post;
-		$post = (object) array(
+		$post === (object) array(
 			'post_type' => null,
 			'ID'        => null,
 		);
@@ -641,9 +703,9 @@ class Lead_Management {
 	 */
 	public function idx_leads_edit() {
 		add_thickbox();
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
-			return;
+			return; // Processing form data without nonce verification.
 		} elseif ( empty( $_GET['leadID'] ) ) { ?>
 
 			<h3>Add Lead</h3>
@@ -706,6 +768,7 @@ class Lead_Management {
 					<div class="mdl-selectfield">
 						<select class="mdl-selectfield__select" id="agentOwner" name="agentOwner">
 							<?php echo self::agents_select_list(); ?>
+							<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'self'. ?>
 						</select>
 					</div>
 				</div>
@@ -782,15 +845,20 @@ class Lead_Management {
 			<?php
 
 		} else {
-			$lead_id = $_GET['leadID'];
+			$lead_id = $_GET['leadID']; // Processing form data without nonce verification.
 			if ( empty( $lead_id ) ) {
 				return;
 			}
 
-			// Get Lead info
+			// Get Lead info.
 			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 			?>
 			<h3>Edit Lead &raquo; <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
+			<?php
+				/**
+				 * All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$lead'.
+				 */
+			?>
 
 			<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 				<div class="mdl-tabs__tab-bar">
@@ -846,7 +914,12 @@ class Lead_Management {
 							<input class="mdl-textfield__input" type="text" id="country" name="country" value="<?php echo ( $lead['country'] ) ? $lead['country'] : ''; ?>">
 							<label class="mdl-textfield__label" for="country">Country</label>
 						</div>
-
+						<?php
+							/**
+							 * All of these input fields:
+							 * All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$lead'.
+							 */
+						?>
 						<h6>Account Settings</h6>
 						<div class="mdl-fieldgroup">
 							<label class="mdl-selectfield__label" for="emailFormat">Email Format</label>
@@ -862,6 +935,7 @@ class Lead_Management {
 							<div class="mdl-selectfield">
 								<select class="mdl-selectfield__select" id="agentOwner" name="agentOwner">
 									<?php echo self::agents_select_list( $lead['agentOwner'] ); ?>
+									<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'self'. ?>
 								</select>
 							</div>
 						</div>
@@ -927,7 +1001,9 @@ class Lead_Management {
 						</div>
 						<br />
 
-						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce( 'idx_lead_edit_nonce' ); ?>" data-lead-id="<?php echo $lead_id; ?>" type="submit">Save Lead</button>
+						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce( 'idx_lead_edit_nonce' ); ?>" 
+						<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'wp_create_nonce'. ?>data-lead-id="<?php echo $lead_id; ?>" type="submit">Save Lead</button>
+						<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$lead_id'. ?>
 						<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 						<div class="error-fail" style="display: none;">Lead update failed. Check all required fields or try again later.</div>
 						<div class="error-invalid-email" style="display: none;">Invalid email address detected. Please enter a valid email.</div>
@@ -937,6 +1013,7 @@ class Lead_Management {
 
 
 					<a href="<?php echo admin_url( 'admin.php?page=edit-lead' ); ?>" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+					<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'admin_url'. ?>
 						<i class="material-icons">add</i>
 						<div class="mdl-tooltip" data-mdl-for="add-lead">Add New Lead</div>
 					</a>
@@ -945,7 +1022,7 @@ class Lead_Management {
 
 				<div class="mdl-tabs__panel" id="lead-notes">
 					<?php
-					// order newest first
+					// Order newest first.
 					$notes_array = $this->idx_api->idx_api( 'note/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$notes_array = array_reverse( $notes_array );
 
@@ -953,7 +1030,7 @@ class Lead_Management {
 
 					$offset = get_option( 'gmt_offset', 0 );
 
-					// prepare notes for display
+					// Prepare notes for display.
 					if ( $notes_array ) {
 						foreach ( $notes_array as $note ) {
 							$nice_date = Carbon::parse( $note['created'] )->addHours( $offset )->toDayDateTimeString();
@@ -981,6 +1058,7 @@ class Lead_Management {
 						<tbody>
 						';
 					echo $notes;
+					// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$notes'.
 					echo '</tbody></table>';
 					echo '<dialog id="dialog-lead-note-delete">
 							<form method="dialog">
@@ -1005,6 +1083,12 @@ class Lead_Management {
 								<label class="mdl-textfield__label" for="note">Note <span class="is-required">(required)</span></label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_note_add_nonce' ); ?>" type="submit">Save Note</button>
+							<?php
+							/**
+							 * All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$lead_id'.
+							 * All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'wp_create_nonce'.
+							 */
+							 ?>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead note addition failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1019,6 +1103,7 @@ class Lead_Management {
 								<label class="mdl-textfield__label" for="note">Note <span class="is-required">(required)</span></label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_note_edit_nonce' ); ?>" type="submit">Save Note</button>
+							<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'wp_create_nonce'. ?>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead note update failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1027,21 +1112,21 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-properties">
 					<?php
-					// order newest first
+					// Order newest first.
 					$properties_array = $this->idx_api->idx_api( 'property/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$properties_array = array_reverse( $properties_array );
 
-					// Get details URL
+					// Get details URL.
 					$details_url = $this->idx_api->details_url();
 
 					$properties = '';
 
 					$offset = get_option( 'gmt_offset', 0 );
 
-					// prepare properties for display
+					// Prepare properties for display.
 					foreach ( $properties_array as $property ) {
 						$nice_created_date = Carbon::parse( $property['created'] )->addHours( $offset )->toDayDateTimeString();
-						$updates           = ( $property['receiveUpdates'] == 'y' ) ? 'Yes' : 'No';
+						$updates           = ( 'y' === $property['receiveUpdates'] ) ? 'Yes' : 'No';
 
 						$properties .= '<tr class="property-row property-id-' . $property['id'] . '">';
 						$properties .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $details_url . '/' . $property['property']['idxID'] . '/' . $property['property']['listingID'] . '" target="_blank" id="view-property-' . $property['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-property-' . $property['id'] . '">View Property</div>' . stripslashes( $property['propertyName'] ) . '</a></td>';
@@ -1069,6 +1154,7 @@ class Lead_Management {
 						<tbody>
 						';
 					echo $properties;
+					// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$properties'.
 					echo '</tbody></table>';
 					echo '<dialog id="dialog-lead-property-delete">
 							<form method="dialog">
@@ -1097,6 +1183,7 @@ class Lead_Management {
 								<div class="mdl-selectfield">
 									<select class="mdl-selectfield__select" id="idxID" name="idxID">
 										<?php echo self::approved_mls_select_list(); ?>
+										<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'self'. ?>
 									</select>
 								</div>
 							</div>
@@ -1111,6 +1198,7 @@ class Lead_Management {
 								</label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-property" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_property_add_nonce' ); ?>" type="submit">Save Property</button>
+							<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'wp_create_nonce'. ?>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead saved property addition failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1129,6 +1217,7 @@ class Lead_Management {
 								<div class="mdl-selectfield">
 									<select class="mdl-selectfield__select" id="idxID" name="idxID">
 										<?php echo self::approved_mls_select_list(); ?>
+										<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'self'. ?>
 									</select>
 								</div>
 							</div>
@@ -1143,6 +1232,7 @@ class Lead_Management {
 								</label>
 							</div><br />
 							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-property" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_property_edit_nonce' ); ?>" type="submit">Save Property</button>
+							<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'wp_create_nonce'. ?>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead saved property update failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1151,7 +1241,7 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-searches">
 					<?php
-					// order newest first
+					// Order newest first.
 					$searches_array = $this->idx_api->idx_api( 'search/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$searches_array = ( isset( $searches_array['searchInformation'] ) ) ? array_reverse( $searches_array['searchInformation'] ) : null;
 
@@ -1161,14 +1251,14 @@ class Lead_Management {
 
 					$offset = get_option( 'gmt_offset', 0 );
 
-					// prepare searches for display
+					// Prepare searches for display.
 					if ( is_array( $searches_array ) && $searches_array != null ) {
 						foreach ( $searches_array as $search ) {
 
 							$search_query = http_build_query( ( $search['search'] ) );
 
 							$nice_created_date = Carbon::parse( $search['created'] )->addHours( $offset )->toDayDateTimeString();
-							$updates           = ( $search['receiveUpdates'] == 'y' ) ? 'Yes' : 'No';
+							$updates           = ( 'y' === $search['receiveUpdates'] ) ? 'Yes' : 'No';
 
 							$searches .= '<tr class="search-row">';
 							$searches .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $results_url . '?' . $search_query . '" target="_blank" id="view-search-' . $search['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-search-' . $search['id'] . '">View Search</div>' . $search['searchName'] . '</a><br /><a href="' . $results_url . '?' . $search_query . '&add=1" target="_blank" id="view-search-today-' . $search['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-search-today-' . $search['id'] . '">View Today\'s Results</div>View Today\'s Results</a></td>';
@@ -1214,11 +1304,12 @@ class Lead_Management {
 							<div class="mdl-tooltip" data-mdl-for="add-lead-search-btn">Add Lead Saved Search</div>
 						</a>
 						';
+						// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'admin_url'.
 					?>
 				</div>
 				<div class="mdl-tabs__panel" id="lead-traffic">
 				<?php
-					// order newest first
+					// Order newest first.
 					$traffic_array = $this->idx_api->idx_api( 'leadtraffic/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$traffic_array = array_reverse( $traffic_array );
 
@@ -1228,7 +1319,7 @@ class Lead_Management {
 
 				if ( is_array( $traffic_array ) ) {
 
-					// prepare traffic for display
+					// Prepare traffic for display.
 					foreach ( $traffic_array as $traffic_entry ) {
 						$nice_date = Carbon::parse( $traffic_entry['date'] )->addHours( $offset )->toDayDateTimeString();
 
@@ -1250,6 +1341,7 @@ class Lead_Management {
 						<tbody>
 						';
 					echo $traffic;
+					// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$traffic'.
 					echo '</tbody></table>';
 				?>
 				</div>
@@ -1259,10 +1351,12 @@ class Lead_Management {
 		}
 	}
 
-	/*
-	* Actions to be taken prior to page loading. This is after headers have been set.
-	* call on load-$hook
-	*/
+	/**
+	 * Actions to be taken prior to page loading. This is after headers have been set.
+	 * Call on load-$hook.
+	 *
+	 * @since 2.5.10
+	 */
 	public function lead_edit_actions() {
 
 		/* Create an empty post object for dumb plugins like soliloquy */
@@ -1272,12 +1366,16 @@ class Lead_Management {
 	}
 
 	/**
-	 * Output Agents as select options
+	 * Output Agents as select options.
+	 *
+	 * @since 2.5.10
+	 * @param int $agent_id is the id of the agent.
+	 * @return html @agents_list is the generated markup for the list of agents to select.
 	 */
 	private function agents_select_list( $agent_id = null ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
-		if ( $agent_id != null ) {
+		if ( null !== $agent_id ) {
 			$agents_list = '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
 				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
@@ -1294,6 +1392,12 @@ class Lead_Management {
 
 	/**
 	 * Output approved MLS's as select options
+	 */
+	/**
+	 * Output approved MLS's as select options
+	 *
+	 * @since 2.5.10
+	 * @return html $mls_list contains generated markup for mls select option.
 	 */
 	private function approved_mls_select_list() {
 		$mls_array = $this->idx_api->approved_mls();
