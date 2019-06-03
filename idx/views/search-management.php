@@ -12,10 +12,24 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 /**
  * Set up the class
+ *
+ * @since 2.5.10
  */
 class Search_Management {
+	/**
+	 * Include instance
+	 *
+	 * @since 2.5.10
+	 * @var $instance
+	 */
 	private static $instance;
 
+	/**
+	 * Begin instance function.
+	 *
+	 * @since 2.5.10
+	 * @return new instance.
+	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof Search_Management ) ) {
 			self::$instance = new Search_Management();
@@ -24,6 +38,11 @@ class Search_Management {
 		return self::$instance;
 	}
 
+	/**
+	 * Begin __construct function.
+	 *
+	 * @since 2.5.10
+	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 
@@ -32,11 +51,22 @@ class Search_Management {
 		add_action( 'init', array( $this, 'idx_ajax_actions' ) );
 	}
 
+	/**
+	 * Include idx api class.
+	 *
+	 * @since 2.5.10
+	 * @var $idx_api
+	 */
 	public $idx_api;
 
+	/**
+	 * Begin add_search_pages function.
+	 *
+	 * @since 2.5.10
+	 */
 	public function add_search_pages() {
 
-		// Add Searches as submenu page
+		// Add Searches as submenu page.
 		$this->page = add_submenu_page(
 			'idx-broker',
 			'Searches',
@@ -49,7 +79,7 @@ class Search_Management {
 			)
 		);
 
-		// Add Add Search submenu page
+		// Add Add Search submenu page.
 		$this->page = add_submenu_page(
 			'idx-broker',
 			'Add/Edit Search',
@@ -64,19 +94,30 @@ class Search_Management {
 
 	}
 
+	/**
+	 * Begin idx_ajax_actions function.
+	 *
+	 * @since 2.5.10
+	 */
 	public function idx_ajax_actions() {
 		add_action( 'wp_ajax_idx_search_add', array( $this, 'idx_search_add' ) );
 		add_action( 'wp_ajax_idx_lead_search_add', array( $this, 'idx_lead_search_add' ) );
 		add_action( 'wp_ajax_idx_search_delete', array( $this, 'idx_search_delete' ) );
 	}
 
+	/**
+	 * Begin idx_search_scripts function.
+	 *
+	 * @since 2.5.10
+	 */
 	public function idx_search_scripts() {
 
-		// Only load on searches pages
+		// Only load on searches pages.
 		$screen_id = get_current_screen();
 		if ( $screen_id->id === 'impress_page_idx-searches' || $screen_id->id === 'impress_page_edit-idx-search' || $screen_id->id === 'searches_page_edit-idx-search' || $screen_id->id === 'toplevel_page_idx-searches' ) {
 
 			wp_enqueue_script( 'idx_search_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-searches.js', array( 'jquery' ), true );
+			// In footer ($in_footer) is not set explicitly wp_enqueue_script; It is recommended to load scripts in the footer. Please set this value to `true` to load it in the footer, or explicitly `false` if it should be loaded in the header.
 			wp_localize_script(
 				'idx_search_ajax_script',
 				'IDXSearchAjax',
@@ -88,16 +129,25 @@ class Search_Management {
 				)
 			);
 			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
+			// In footer ($in_footer) is not set explicitly wp_enqueue_script; It is recommended to load scripts in the footer. Please set this value to `true` to load it in the footer, or explicitly `false` if it should be loaded in the header.
 			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
+			// In footer ($in_footer) is not set explicitly wp_enqueue_script; It is recommended to load scripts in the footer. Please set this value to `true` to load it in the footer, or explicitly `false` if it should be loaded in the header.
 			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
+			// In footer ($in_footer) is not set explicitly wp_enqueue_script; It is recommended to load scripts in the footer. Please set this value to `true` to load it in the footer, or explicitly `false` if it should be loaded in the header.
 			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 
 			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.css' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css' );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 			wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
+			// Resource version not set in call to wp_enqueue_style(). This means new versions of the style will not always be loaded due to browser caching.
 		}
 	}
 
@@ -105,16 +155,16 @@ class Search_Management {
 	 * Add a search via API
 	 * echoes response to /assets/js/idx-searches.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_search_add() {
 
 		$permission = check_ajax_referer( 'idx_search_add_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['pageTitle'] ) || ! isset( $_POST['linkTitle'] ) ) {
+		if ( false === $permission || ! isset( $_POST['pageTitle'] ) || ! isset( $_POST['linkTitle'] ) ) {
 			echo 'missing required fields';
 		} else {
 
-			// Add search via API
+			// Add search via API.
 			$api_url = 'https://api.idxbroker.com/clients/savedlinks';
 
 			$search_query = array(
@@ -129,13 +179,13 @@ class Search_Management {
 				'add'   => $_POST['add'],
 			);
 
-			if ( $_POST['ccz'] === 'city' ) {
+			if ( 'city' === $_POST['ccz'] ) {
 				$city_array   = array( 'city' => $_POST['locations'] );
 				$search_query = $search_query + $city_array;
-			} elseif ( $_POST['ccz'] == 'county' ) {
+			} elseif ( 'county' === $_POST['ccz'] ) {
 				$county_array = array( 'county' => $_POST['locations'] );
 				$search_query = $search_query + $county_array;
-			} elseif ( $_POST['ccz'] == 'zipcode' ) {
+			} elseif ( 'zipcode' === $_POST['ccz'] ) {
 				$zipcode_array = array( 'zipcode' => $_POST['locations'] );
 				$search_query  = $search_query + $zipcode_array;
 			}
@@ -175,8 +225,10 @@ class Search_Management {
 				delete_option( 'idx_clients_savedlinks_cache' );
 				// return new search ID to script.
 				echo $decoded_response['newID'];
+				// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$decoded_response'.
 			} else {
 				echo $response->get_error_message();
+				// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$response'.
 			}
 		}
 		die();
@@ -186,16 +238,16 @@ class Search_Management {
 	 * Add a lead search via API
 	 * echoes response to /assets/js/idx-searches.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_lead_search_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_search_add_nonce', 'nonce', false );
-		if ( $permission == false || empty( $_POST['leadID'] ) ) {
+		if ( false === $permission || empty( $_POST['leadID'] ) ) {
 			echo 'missing required fields';
 		} else {
 
-			// Add search via API
+			// Add search via API.
 			$api_url = 'https://api.idxbroker.com/leads/search/' . $_POST['leadID'];
 
 			$search_query = array(
@@ -210,13 +262,13 @@ class Search_Management {
 				'add'   => $_POST['add'],
 			);
 
-			if ( $_POST['ccz'] === 'city' ) {
+			if ( 'city' === $_POST['ccz'] ) {
 				$city_array   = array( 'city' => $_POST['locations'] );
 				$search_query = $search_query + $city_array;
-			} elseif ( $_POST['ccz'] == 'county' ) {
+			} elseif ( 'county' === $_POST['ccz'] ) {
 				$county_array = array( 'county' => $_POST['locations'] );
 				$search_query = $search_query + $county_array;
-			} elseif ( $_POST['ccz'] == 'zipcode' ) {
+			} elseif ( 'zipcode' === $_POST['ccz'] ) {
 				$zipcode_array = array( 'zipcode' => $_POST['locations'] );
 				$search_query  = $search_query + $zipcode_array;
 			}
@@ -245,8 +297,10 @@ class Search_Management {
 				delete_option( 'idx_leads_search/' . $_POST['leadID'] . '_cache' );
 				// return new search ID to script.
 				echo $decoded_response['newID'];
+				// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$decoded_response'.
 			} else {
 				echo $response->get_error_message();
+				// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$response'.
 			}
 		}
 		die();
@@ -256,15 +310,15 @@ class Search_Management {
 	 * Delete a saved search via API
 	 * echoes response to /assets/js/idx-searches.js
 	 *
-	 * @return void
+	 * @since 2.5.10
 	 */
 	public function idx_search_delete() {
 
 		$permission = check_ajax_referer( 'idx_search_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['ssid'] ) ) {
+		if ( false === $permission || ! isset( $_POST['ssid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead saved search via API
+			// Delete lead saved search via API.
 			$api_url  = 'https://api.idxbroker.com/clients/savedlinks/' . $_POST['ssid'];
 			$args     = array(
 				'method'    => 'DELETE',
@@ -294,7 +348,7 @@ class Search_Management {
 	 * @return void
 	 */
 	public function idx_searches_list() {
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
@@ -309,7 +363,7 @@ class Search_Management {
 
 		$offset = get_option( 'gmt_offset', 0 );
 
-		// prepare searches for display
+		// Prepare searches for display.
 		foreach ( $searches_array as $search ) {
 
 			$nonce = wp_create_nonce( 'idx_search_delete_nonce' );
@@ -318,6 +372,7 @@ class Search_Management {
 			$searches .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $search->url . '" target="_blank">' . $search->linkTitle . '</a></td>';
 			$searches .= '<td class="mdl-data-table__cell--non-numeric">' . Carbon::parse( $search->created )->addHours( $offset )->toDayDateTimeString() . '</td>';
 			$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $search->timesViewed . '</td>';
+			// Object property "$timesViewed" is not in valid snake_case format, try "$times_viewed".
 			$searches .= '<td class="mdl-data-table__cell--non-numeric">
 						<a href="' . admin_url( 'admin-ajax.php?action=idx_search_delete&ssid=' . $search->id . '&nonce=' . $nonce ) . '" id="delete-search-' . $search->id . '" class="delete-search" data-ssid="' . $search->id . '" data-nonce="' . $nonce . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . $search->id . '">Delete Search</div></a>
 						<a href="https://middleware.idxbroker.com/mgmt/addeditsavedlink.php?id=' . $search->id . '" id="edit-mw-' . $search->id . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $search->id . '">Edit Search in Middleware</div></a>
@@ -337,6 +392,7 @@ class Search_Management {
 			<tbody>
 			';
 		echo $searches;
+		// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$searches'.
 		echo '</tbody></table>';
 		echo '<dialog id="dialog-search-delete">
 				<form method="dialog">
@@ -353,12 +409,15 @@ class Search_Management {
 			</a>
 			<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 			';
+			// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'admin_url'.
 	}
 
-	/*
-	* Actions to be taken prior to page loading. This is after headers have been set.
-	* call on load-$hook
-	*/
+	/**
+	 * Actions to be taken prior to page loading. This is after headers have been set.
+	 * Call on load-$hook.
+	 *
+	 * @since 2.5.10
+	 */
 	public function search_list_actions() {
 
 		/* Create an empty post object for dumb plugins like soliloquy */
@@ -367,10 +426,12 @@ class Search_Management {
 
 	}
 
-	/*
-	* Actions to be taken prior to page loading. This is after headers have been set.
-	* call on load-$hook
-	*/
+	/**
+	 * Actions to be taken prior to page loading. This is after headers have been set.
+	 * Call on load-$hook.
+	 *
+	 * @since 2.5.10
+	 */
 	public function search_edit_actions() {
 
 		/* Create an empty post object for dumb plugins like soliloquy */
@@ -382,14 +443,15 @@ class Search_Management {
 	/**
 	 * Output edit search page
 	 *
+	 * @since 2.5.10
 	 * @return void
 	 */
 	public function idx_searches_edit() {
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		} elseif ( empty( $_GET['searchID'] ) && empty( $_GET['leadID'] ) ) { ?>
-
+			<?php // Processing form data without nonce verification. ?>
 			<h3>Add Saved Search</h3>
 			<form action="" method="post" id="add-search" class="add-search">
 				<!-- Search form -->
@@ -411,6 +473,7 @@ class Search_Management {
 					<div class="" style="width: 300px;">
 						<select style="width: 300px;" class="" id="ccz" name="ccz" multiple="multiple">
 							<?php echo self::ccz_select_list(); ?>
+							<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'self'. ?>
 						</select>
 					</div>
 				</div><br />
@@ -518,10 +581,12 @@ class Search_Management {
 			<?php
 		} elseif ( ! empty( $_GET['leadID'] ) && is_numeric( $_GET['leadID'] ) ) {
 			$lead_id = $_GET['leadID'];
-			// Get Lead info
+			// Processing form data without nonce verification.
+			// Get Lead info.
 			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 			?>
 			<h3>Add Lead Saved Search for <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
+			<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$lead'. ?>
 			<form action="" method="post" id="add-lead-search" class="add-lead-search">
 				<!-- Search form -->
 				<div class="mdl-fieldgroup">
@@ -542,6 +607,7 @@ class Search_Management {
 					<div class="" style="width: 300px;">
 						<select style="width: 300px;" class="" id="ccz" name="ccz" multiple="multiple">
 							<?php echo self::ccz_select_list(); ?>
+							<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'self'. ?>
 						</select>
 					</div>
 				</div><br />
@@ -587,10 +653,12 @@ class Search_Management {
 					</label>
 				</div>
 				<input type="hidden" id="leadID" name="leadID" value="<?php echo $lead_id; ?>" />
+				<?php // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$lead_id'. ?>
 				<br />
 
 				<input type="hidden" name="action" value="idx_lead_search_add" />
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead-search" data-nonce="<?php echo wp_create_nonce( 'idx_lead_search_add_nonce' ); ?>" type="submit">Save Search</button>
+				<?php //All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found 'wp_create_nonce'. ?>
 				<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 				<div class="error-fail" style="display: none;">Saved Search addition failed. Check all required fields or try again later.</div>
 				<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -598,6 +666,7 @@ class Search_Management {
 			</form>
 			<?php
 		} elseif ( $_GET['searchID'] && is_numeric( $_GET['searchID'] ) ) {
+			// Processing form data without nonce verification.
 			?>
 			<h3>Edit Saved Search</h3>
 
@@ -608,6 +677,9 @@ class Search_Management {
 	/**
 	 * Get CCZ's for combinedActiveMLS
 	 * and output as options
+	 *
+	 * @since 2.5.10
+	 * @return html $ccz_select generated markup for option group.
 	 */
 	private function ccz_select_list() {
 		$cities = $this->idx_api->idx_api( 'cities/combinedActiveMLS' );
@@ -633,6 +705,10 @@ class Search_Management {
 
 	/**
 	 * Output Agents as select options
+	 *
+	 * @since 2.5.10
+	 * @param int $agent_id contains the id for the agent.
+	 * @return html $agents_list generated markup for agents option group.
 	 */
 	private function agents_select_list( $agent_id = null ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
