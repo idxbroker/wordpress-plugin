@@ -367,7 +367,7 @@ class Initiate_Plugin {
 		}
 		$args = array(
 			'id'     => 'idx_admin_bar_menu_item_5',
-			'title'  => 'Upgrade Account<i class="fa fa-arrow-up update-plugins"></i>',
+			'title'  => 'Upgrade Account<i class="fas fa-arrow-up update-plugins"></i>',
 			'parent' => 'idx_admin_bar_menu',
 			'href'   => 'https://middleware.idxbroker.com/mgmt/upgrade',
 			'meta'   => array(
