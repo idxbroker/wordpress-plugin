@@ -477,15 +477,16 @@ class Initiate_Plugin {
 	 * @since 2.5.10
 	 */
 	public function add_upgrade_center_link() {
-		// Only load if account is not Platinum level.
+		// Only load if account is not Platinum level
 		if ( ! $this->idx_api->platinum_account_type() ) {
 			wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
 			$html = '<li><a href="https://middleware.idxbroker.com/mgmt/upgrade" target="_blank">Upgrade Account<i class="fa fa-arrow-up update-plugins"></i></a>';
-			echo esc_html( "
+			echo <<<EOD
             <script>window.addEventListener('DOMContentLoaded',function(){
                 document.querySelector('#toplevel_page_idx-broker ul').innerHTML += '$html';
             });</script>
-			" );
+EOD;
+			// All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '<<<EOD\n'.
 		}
 	}
 
