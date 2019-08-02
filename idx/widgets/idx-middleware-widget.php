@@ -3,14 +3,19 @@ namespace IDX\Widgets;
 
 /**
  * Idx_Middleware_Widget class.
+ *
+ * @since 8/2/2019
+ * @author shepparddw
  */
 class Idx_Middleware_Widget extends \WP_Widget {
 
 	/**
-	 * idx_api
+	 * Begin using the idx_api class.
 	 *
 	 * @var mixed
 	 * @access public
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public $idx_api;
 
@@ -25,8 +30,8 @@ class Idx_Middleware_Widget extends \WP_Widget {
 			'impress_idx_dashboard_widget', // Base ID
 			__( 'IMPress - IDX Dashboard Widget', 'idx-broker' ), // Name
 			array(
-				'description' => __( 'Embed an IDX widget created in the IDX Middleware dashboard.', 'idx-broker' ),
-				'classname'   => 'impress-idx-dashboard-widget',
+				'description'                 => __( 'Embed an IDX widget created in the IDX Middleware dashboard.', 'idx-broker' ),
+				'classname'                   => 'impress-idx-dashboard-widget',
 				'customize_selective_refresh' => true,
 			)
 		);
@@ -41,12 +46,19 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
+
+		/**
+		 * Best Practices: extract() usage is highly discouraged, due to the complexity and unintended issues it might cause.
+		 *
+		 * @since 8/2/2019
+		 * @author allen-mcnichols
+		 */
 		extract( $args );
 
 		echo $before_widget;
 
 		if ( ! empty( $instance['title'] ) ) {
-			echo $before_title . $instance['title'] . $after_title;
+			echo $before_title . $instance['title'] . $after_title; // All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$before_title', '$instance', '$after_title'.
 		}
 
 		// If we have an ID, this is a shortcode, so we need to get the widget url from the ID.
@@ -62,10 +74,10 @@ class Idx_Middleware_Widget extends \WP_Widget {
 				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
 				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
 			}
-			echo '<script type="text/javascript" src="' . $instance['widget'] . '"></script>';
+			echo '<script type="text/javascript" src="' . $instance['widget'] . '"></script>'; //Scripts must be registered/enqueued via wp_enqueue_script.
 		}
 
-		echo $after_widget;
+		echo $after_widget; //All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$after_widget'.
 	}
 
 	/**
@@ -78,8 +90,8 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title']  = strip_tags( $new_instance['title'] );
+		$instance           = array();
+		$instance['title']  = wp_strip_all_tags( $new_instance['title'] ); // strip_tags() is discouraged. Use the more comprehensive wp_strip_all_tags() instead.
 		$instance['widget'] = esc_url_raw( $new_instance['widget'] );
 
 		return $instance;
@@ -90,6 +102,8 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 *
 	 * @see WP_Widget::form()
 	 * @param array $instance Previously saved values from database.
+	 * @since 8/2/2019
+	 * @author sheparddw
 	 */
 	public function form( $instance ) {
 		$defaults = array(
@@ -102,10 +116,27 @@ class Idx_Middleware_Widget extends \WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'idx-broker' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<?php
+			/**
+			 * All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$this', '_e'.
+			 *
+			 * @since 8/2/2019
+			 * @author allen-mcnichols
+			 */
+			?>
 		</p>
 
 		<p>
 			<?php _e( 'IDX widgets are widgets you have created in your IDX Middleware dashboard. Select one to display here:', 'idx-broker' ); ?>
+		</p>
+		<?php
+			/**
+			 * All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '_e'.
+			 *
+			 * @since 8/2/2019
+			 * @author allen-mcnichols
+			 */
+			?>
 		</p>
 
 		<p>
@@ -115,6 +146,12 @@ class Idx_Middleware_Widget extends \WP_Widget {
 			</select>
 		</p>
 		<?php
+			/**
+			 * All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$this', '_e'.
+			 *
+			 * @since 8/2/2019
+			 * @author allen-mcnichols
+			 */
 	}
 
 	/**
@@ -123,9 +160,12 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 * The option values are the IDX widget source urls.
 	 * They will be displayed by name.
 	 *
-	 * This is just a helper to keep the html clean
+	 * This is just a helper to keep the html clean.
 	 *
-	 * @param var $instance
+	 * @param var $instance is the instance of the widget.
+	 * @since 8/2/2019
+	 * @author sheparddw
+	 * @return void
 	 */
 	public function widget_options( $instance ) {
 
@@ -145,6 +185,8 @@ class Idx_Middleware_Widget extends \WP_Widget {
 	 *
 	 * @param  string $widget_uid The IDX assigned widget UID.
 	 * @return string | false     Widget or URL or false if none found.
+	 * @since 8/2/2019
+	 * @author sheparddw
 	 */
 	public function get_widget_url( $widget_uid ) {
 		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();

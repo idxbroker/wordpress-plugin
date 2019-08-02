@@ -11,7 +11,8 @@ class Create_Impress_Widgets {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @return void
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
@@ -20,18 +21,21 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * idx_api
+	 * Begin using the idx_api class.
 	 *
 	 * @var mixed
 	 * @access public
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public $idx_api;
 
 	/**
-	 * register_impress_widgets function.
+	 * Register_impress_widgets function.
 	 *
 	 * @access public
-	 * @return void
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public function register_impress_widgets() {
 		register_widget( '\IDX\Widgets\Impress_Showcase_Widget' );
@@ -45,10 +49,12 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * lead_login_shortcode function.
+	 * Create the lead_login_shortcode function.
 	 *
 	 * @access public
-	 * @return void
+	 * @return string $widget Contains the form html markup for the widget.
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public function lead_login_shortcode() {
 		$widget = sprintf(
@@ -68,14 +74,22 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * lead_signup_shortcode function.
+	 * Create the lead_signup_shortcode function.
 	 *
 	 * @access public
-	 * @param mixed $atts
-	 * @return void
+	 * @param mixed $atts array of attributes to include the phone option.
+	 * @return string @widget return the html markup of the widget.
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public function lead_signup_shortcode( $atts ) {
 
+		/**
+		 * Best Practices: extract() usage is highly discouraged, due to the complexity and unintended issues it might cause.
+		 *
+		 * @since 8/2/2019
+		 * @author allen-mcnichols
+		 */
 		extract(
 			shortcode_atts(
 				array(
@@ -120,11 +134,13 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * property_showcase_shortcode function.
+	 * Create the property_showcase_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
-	 * @return void
+	 * @param array $atts (default: array()).
+	 * @return $output string Return the html markup for the property showcase widget.
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public function property_showcase_shortcode( $atts = array() ) {
 
@@ -143,7 +159,7 @@ class Create_Impress_Widgets {
 			)
 		);
 
-		if ( ( $property_type ) == 'savedlink' ) {
+		if ( 'savedlink' === ( $property_type ) ) {
 			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
 		} else {
 			$properties = $this->idx_api->client_properties( $property_type );
@@ -160,12 +176,12 @@ class Create_Impress_Widgets {
 
 		$column_class = '';
 
-		if ( 1 == $use_rows ) {
+		if ( 1 === $use_rows ) {
 
-			// Max of four columns
+			// Max of four columns.
 			$number_columns = ( $num_per_row > 4 ) ? 4 : (int) $num_per_row;
 
-			// column class
+			// column class.
 			switch ( $number_columns ) {
 				case 0:
 					$column_class = 'columns small-12 large-12';
@@ -185,10 +201,10 @@ class Create_Impress_Widgets {
 			}
 		}
 
-		// sort low to high
+		// Sort low to high.
 		usort( $properties, array( $idx_api, 'price_cmp' ) );
 
-		if ( 'high-low' == $order ) {
+		if ( 'high-low' === $order ) {
 			$properties = array_reverse( $properties );
 		}
 
@@ -198,13 +214,13 @@ class Create_Impress_Widgets {
 				return $output;
 			}
 
-			if ( ( $property_type ) == 'savedlink' ) {
+			if ( ( 'savedlink' === $property_type ) ) {
 				$prop_image_url = ( isset( $prop['image']['1']['url'] ) ) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 			} else {
 				$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 			}
 
-			if ( 1 == $use_rows && $count == 0 && $max != '1' ) {
+			if ( 1 === $use_rows && 0 === $count && '1' !== $max ) {
 				$output .= '<div class="shortcode property-showcase row">';
 			}
 
@@ -214,7 +230,7 @@ class Create_Impress_Widgets {
 
 			$count++;
 
-			if ( 1 == $show_image ) {
+			if ( 1 === $show_image ) {
 				$output .= sprintf(
 					'<div class="showcase-property %15$s">
                         <a href="%3$s" class="showcase-photo">
@@ -285,21 +301,21 @@ class Create_Impress_Widgets {
 				);
 			}
 
-			if ( 1 == $use_rows && $count != 1 ) {
+			if ( 1 === $use_rows && 1 !== $count ) {
 
 				// close a row if..
 				// num_per_row is a factor of count OR
 				// count is equal to the max number of listings to show OR
-				// count is equal to the total number of listings available
-				if ( $count % $num_per_row == 0 || $count == $total || $count == $max ) {
+				// count is equal to the total number of listings available.
+				if ( 0 === $count % $num_per_row || $count === $total || $count === $max ) {
 					$output .= '</div> <!-- .row -->';
 				}
 
 				// open a new row if..
 				// num per row is a factor of count AND
 				// count is not equal to max AND
-				// count is not equal to total
-				if ( $count % $num_per_row == 0 && $count != $max && $count != $total ) {
+				// count is not equal to total.
+				if ( 0 === $count % $num_per_row && $count !== $max && $count !== $total ) {
 					$output .= '<div class="row shortcode property-showcase">';
 				}
 			}
@@ -310,14 +326,22 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * property_carousel_shortcode function.
+	 * Begin creating the property_carousel_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
-	 * @return void
+	 * @param array $atts (default: array()).
+	 * @return string @output Return the html markup of the carousel widget.
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public function property_carousel_shortcode( $atts = array() ) {
 
+		/**
+		 * Best Practices: extract() usage is highly discouraged, due to the complexity and unintended issues it might cause.
+		 *
+		 * @since 8/2/2019
+		 * @author allen-mcnichols
+		 */
 		extract(
 			shortcode_atts(
 				array(
@@ -338,7 +362,7 @@ class Create_Impress_Widgets {
 		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fa fa-chevron-circle-left\"></i><span>Prev</span>', 'equity' ) );
 		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fa fa-chevron-circle-right\"></i><span>Next</span>', 'equity' ) );
 
-		if ( ( $property_type ) == 'savedlink' ) {
+		if ( 'savedlink' === ( $property_type ) ) {
 			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
 		} else {
 			$properties = $this->idx_api->client_properties( $property_type );
@@ -348,10 +372,10 @@ class Create_Impress_Widgets {
 			return 'No properties found';
 		}
 
-		// sort low to high
+		// Sort low to high.
 		usort( $properties, array( $this->idx_api, 'price_cmp' ) );
 
-		if ( 'high-low' == $order ) {
+		if ( 'high-low' === $order ) {
 			$properties = array_reverse( $properties );
 		}
 
@@ -361,7 +385,7 @@ class Create_Impress_Widgets {
 			$autoplay_param = '';
 		}
 
-		if ( $display === 1 ) {
+		if ( 1 === $display ) {
 			$output = '
             <script>
             jQuery(function( $ ){
@@ -403,12 +427,12 @@ class Create_Impress_Widgets {
 
 		foreach ( $properties as $prop ) {
 
-			if ( ! empty( $max ) && $count == $max ) {
+			if ( ! empty( $max ) && $count === $max ) {
 				$output .= '</div><!-- end .equity-listing-carousel -->';
 				return $output;
 			}
 
-			if ( ( $property_type ) == 'savedlink' ) {
+			if ( 'savedlink' === ( $property_type ) ) {
 				$prop_image_url = ( isset( $prop['image']['1']['url'] ) ) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 			} else {
 				$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
@@ -457,14 +481,22 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * city_links_shortcode function.
+	 * Begin creating the city_links_shortcode function.
 	 *
 	 * @access public
-	 * @param array $atts (default: array())
-	 * @return void
+	 * @param array $atts (default: array()).
+	 * @return string $city_links Return the style markup for the city-list-links class or an error message if not found.
+	 * @since 8/2/2019
+	 * @author shepparddw
 	 */
 	public function city_links_shortcode( $atts = array() ) {
 
+		/**
+		 * Best Practices: extract() usage is highly discouraged, due to the complexity and unintended issues it might cause.
+		 *
+		 * @since 8/2/2019
+		 * @author allen-mcnichols
+		 */
 		extract(
 			shortcode_atts(
 				array(
@@ -479,7 +511,7 @@ class Create_Impress_Widgets {
 
 		$city_links = $this->idx_api->city_list_links( $city_list, $mls, $use_columns, $number_columns );
 
-		if ( false == $city_links ) {
+		if ( false === $city_links ) {
 			return 'City list ID or MLS ID not found';
 		}
 		$city_links .= '<style>.city-list-links ul {margin-left: 0;}</style>';
@@ -491,6 +523,7 @@ class Create_Impress_Widgets {
 	 *
 	 * @see  https://github.com/fusioneng/Shortcake
 	 * @since 1.5
+	 * @author shepparddw
 	 */
 	public function register_shortcake() {
 		if ( function_exists( 'shortcode_ui_register_for_shortcode' ) ) {
@@ -524,7 +557,7 @@ class Create_Impress_Widgets {
 				)
 			);
 
-			// * Property Showcase
+			// * Property Showcase.
 			// $saved_links = $this->idx_api->saved_links();
 			shortcode_ui_register_for_shortcode(
 				'property_showcase',
