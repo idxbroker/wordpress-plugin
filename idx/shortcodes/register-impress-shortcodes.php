@@ -558,7 +558,7 @@ class Register_Impress_Shortcodes {
 		// All Instance Values are strings for shortcodes but not widgets.
 		$output .= '
             <script>
-            jQuery(document).ready(function( $ ){
+            	jQuery(document).ready(function( $ ){
                 $(".impress-listing-carousel-' . $display . '").owlCarousel({
                     items: ' . $display . ',
                     ' . $autoplay_param . '
