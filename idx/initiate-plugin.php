@@ -258,7 +258,7 @@ class Initiate_Plugin {
 		$this->idx_api->idx_clean_transients();
 		update_option( 'idx_broker_apikey', $_REQUEST['idx_broker_apikey'], false );
 		setcookie( 'api_refresh', 1, time() + 20 );
-		wp_schedule_single_event( time(), 'idx_omnibar_get_locations' );
+		$this->schedule_omnibar_update();
 		wp_die();
 	}
 
@@ -367,7 +367,7 @@ class Initiate_Plugin {
 		}
 		$args = array(
 			'id'     => 'idx_admin_bar_menu_item_5',
-			'title'  => 'Upgrade Account<i class="fa fa-arrow-up update-plugins"></i>',
+			'title'  => 'Upgrade Account <svg width="8" height="10" class="update-plugins" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1675 971q0 51-37 90l-75 75q-38 38-91 38-54 0-90-38l-294-293v704q0 52-37.5 84.5t-90.5 32.5h-128q-53 0-90.5-32.5t-37.5-84.5v-704l-294 293q-36 38-90 38t-90-38l-75-75q-38-38-38-90 0-53 38-91l651-651q35-37 90-37 54 0 91 37l651 651q37 39 37 91z" fill="#fff"/></svg>',
 			'parent' => 'idx_admin_bar_menu',
 			'href'   => 'https://middleware.idxbroker.com/mgmt/upgrade',
 			'meta'   => array(
@@ -457,8 +457,7 @@ class Initiate_Plugin {
 	public function add_upgrade_center_link() {
 		// Only load if account is not Platinum level
 		if ( ! $this->idx_api->platinum_account_type() ) {
-			wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
-			$html = '<li><a href="https://middleware.idxbroker.com/mgmt/upgrade" target="_blank">Upgrade Account<i class="fa fa-arrow-up update-plugins"></i></a>';
+			$html = '<li><a href="https://middleware.idxbroker.com/mgmt/upgrade" target="_blank">Upgrade Account<svg width="10" height="12" class="update-plugins" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1675 971q0 51-37 90l-75 75q-38 38-91 38-54 0-90-38l-294-293v704q0 52-37.5 84.5t-90.5 32.5h-128q-53 0-90.5-32.5t-37.5-84.5v-704l-294 293q-36 38-90 38t-90-38l-75-75q-38-38-38-90 0-53 38-91l651-651q35-37 90-37 54 0 91 37l651 651q37 39 37 91z" fill="#fff"/></svg></div></a></li>';
 			echo <<<EOD
             <script>window.addEventListener('DOMContentLoaded',function(){
                 document.querySelector('#toplevel_page_idx-broker ul').innerHTML += '$html';

@@ -482,7 +482,8 @@ class Register_Impress_Shortcodes {
 	 * @return void
 	 */
 	public function property_carousel_shortcode( $atts = array() ) {
-		wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 
 		extract(
 			shortcode_atts(
@@ -502,7 +503,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script( 'owl2', plugins_url( '../assets/js/owl2.carousel.min.js', dirname( __FILE__ ) ) );
+		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
 
 		if ( $styles ) {
 			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
@@ -579,14 +580,16 @@ class Register_Impress_Shortcodes {
                             margin: 0
                         },
                         450:{
-                            items: ' . round( $display / 2 ) . '
-                        },
-                        800:{
-                            items: ' . $display . '
-                        }
+							items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+							  loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
+						},
+						800:{
+							items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+							  loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
+						}
                     }
                 });
-            });
+              });
             </script>
             ';
 

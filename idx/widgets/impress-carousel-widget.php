@@ -59,7 +59,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	 */
 	public function body( $instance ) {
 		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script( 'owl2', plugins_url( '../assets/js/owl2.carousel.min.js', dirname( __FILE__ ) ) );
+		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
 
 		if ( empty( $instance ) ) {
 			$instance = $this->defaults;
@@ -70,7 +70,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		if ( $instance['styles'] ) {
 			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
-			wp_enqueue_style( 'font-awesome-4.7.0', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
+			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+			wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		}
 
 		$output = '';
@@ -111,8 +112,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		$output .= '
         <script>
-        jQuery(document).ready(function( $ ){
-            $(".impress-listing-carousel-' . $display . '").owlCarousel({
+          window.addEventListener("DOMContentLoaded", (event) => {
+            jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
                 items: ' . $display . ',
                 ' . $autoplay . '
                 nav: true,
@@ -132,14 +133,16 @@ class Impress_Carousel_Widget extends \WP_Widget {
                         margin: 0
                     },
                     450:{
-                        items: ' . round( $display / 2 ) . '
+                        items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+                      	loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
                     },
                     800:{
-                        items: ' . $display . '
+                        items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+                      	loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
                     }
                 }
             });
-        });
+          });
         </script>
         ';
 
