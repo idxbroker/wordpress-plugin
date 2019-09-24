@@ -1,8 +1,8 @@
-( function( blocks, element ) {
-	var el = wp.element.createElement
-	var registerBlockType = wp.blocks.registerBlockType
-	var InspectorControls = wp.editor.InspectorControls
-	var Checkbox = wp.components.CheckboxControl
+( function( blocks, element, editor, components ) {
+	var el = element.createElement
+	var registerBlockType = blocks.registerBlockType
+	var InspectorControls = editor.InspectorControls
+	var Checkbox = components.CheckboxControl
 	var icon = el('i', {class: "fa fa-users fa-2x"}, null )  
 
 	function setCategory() {
@@ -77,6 +77,8 @@
 	} );
 } )(
 	window.wp.blocks,
-	window.wp.element
+	window.wp.element,
+	window.wp.editor,
+  window.wp.components
 );
 
