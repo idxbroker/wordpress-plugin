@@ -1,7 +1,6 @@
 ( function( blocks, element ) {
 	var el = wp.element.createElement
 	var registerBlockType = wp.blocks.registerBlockType
-	var ServerSideRender = wp.components.ServerSideRender
 	var InspectorControls = wp.editor.InspectorControls
 	var TextControl = wp.components.TextControl
 	var Checkbox = wp.components.CheckboxControl

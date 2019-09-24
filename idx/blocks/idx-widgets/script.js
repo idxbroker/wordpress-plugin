@@ -31,7 +31,7 @@
 					class: 'idx-block-placeholder-container',
 				}, el("img", {
 					src: idx_widget_block_image_url
-				}), el("div", null, "")),
+				})),
 
 				el( InspectorControls, {},
 					el( SelectControl, {

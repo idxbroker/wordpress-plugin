@@ -1,7 +1,6 @@
 ( function( blocks, element ) {
 	var el = wp.element.createElement
 	var registerBlockType = wp.blocks.registerBlockType
-	var ServerSideRender = wp.components.ServerSideRender
 	var InspectorControls = wp.editor.InspectorControls
 	var TextControl = wp.components.TextControl
 	var Checkbox = wp.components.CheckboxControl
@@ -56,10 +55,11 @@
 			const columnCountOptions = [{label: '2', value: '2'}, {label: '3', value: '3'}, {label: '4', value: '4'}];
 
 			return [
-				el( ServerSideRender, {
-					block: 'idx-broker-platinum/impress-city-links-block',
-					attributes: props.attributes,
-				} ),
+				el( "div", { 
+					class: 'idx-block-placeholder-container',
+				 }, el("img", {
+					src: impress_city_links_block_image_url
+				})),
 
 				el( InspectorControls, {},
 					el( SelectControl, {

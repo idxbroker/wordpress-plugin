@@ -1,7 +1,6 @@
 ( function( blocks, element ) {
 	var el = wp.element.createElement
 	var registerBlockType = wp.blocks.registerBlockType
-	var ServerSideRender = wp.components.ServerSideRender
 	var InspectorControls = wp.editor.InspectorControls
 	var Checkbox = wp.components.CheckboxControl
 	var icon = el('i', {class: "fa fa-search fa-2x"}, null )  
@@ -36,10 +35,6 @@
 
 		edit: function( props ) {
 			return [
-				// el( ServerSideRender, {
-				// 	block: 'idx-broker-platinum/impress-omnibar-block',
-				// 	attributes: props.attributes,
-				// } ),
 				el( "div", { 
 					class: 'idx-block-placeholder-container',
 				 }, el("img", {

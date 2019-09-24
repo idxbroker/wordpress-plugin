@@ -22,7 +22,7 @@
 					class: 'idx-block-placeholder-container',
 				 }, el("img", {
 					src: idx_wrapper_tags_image_url
-				}), el("div", null, ""))
+				})),
 			]
 		},
 

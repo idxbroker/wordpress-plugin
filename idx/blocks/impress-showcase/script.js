@@ -1,7 +1,6 @@
 ( function( blocks, element ) {
 	var el = wp.element.createElement
 	var registerBlockType = wp.blocks.registerBlockType
-	var ServerSideRender = wp.components.ServerSideRender
 	var InspectorControls = wp.editor.InspectorControls
 	var TextControl = wp.components.TextControl
 	var Checkbox = wp.components.CheckboxControl
@@ -70,10 +69,6 @@
 			const sortOptions = [{label: 'Default', value: 'default'}, {label: 'Highest to Lowest Price', value: 'high-low'}, {label: 'Lowest to Highest Price', value: 'low-high'}];
 		
 			return [
-				// el( ServerSideRender, {
-				// 	block: 'idx-broker-platinum/impress-showcase-block',
-				// 	attributes: props.attributes,
-				// } ),
 				el( "div", { 
 					class: 'idx-block-placeholder-container',
 				 }, el("img", {

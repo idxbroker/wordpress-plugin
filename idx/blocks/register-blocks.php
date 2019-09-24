@@ -587,6 +587,9 @@ class Register_Blocks {
 			]
 		);
 
+		$placeholder_image_url = plugins_url( '/impress-city-links/impress-city-links.png', __FILE__ );
+		wp_localize_script( 'impress-city-links-block', 'impress_city_links_block_image_url', $placeholder_image_url );
+
 		$mls_options = $this->get_mls_options();
 		wp_localize_script( 'impress-city-links-block', 'impress_city_links_mls_options', $mls_options );
 

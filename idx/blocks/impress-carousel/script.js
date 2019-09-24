@@ -68,7 +68,7 @@
 					class: 'idx-block-placeholder-container',
 				 }, el("img", {
 					src: impress_carousel_image_url
-				}), el("div", null, "")),
+				})),
 
 				el( InspectorControls, {},
 					el( SelectControl, {
