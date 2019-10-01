@@ -1,5 +1,5 @@
 <?php
-namespace IDX\Blocks;
+namespace IDX;
 
 /**
  * Register_Blocks class.
@@ -61,7 +61,7 @@ class Register_Blocks {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->idx_api            = new \IDX\Idx_Api();
+		$this->idx_api            = new Idx_Api();
 		$this->impress_shortcodes = new \IDX\Shortcodes\Register_Impress_Shortcodes();
 		$this->idx_shortcodes     = new \IDX\Shortcodes\Register_Idx_Shortcodes();
 		$this->omnibar_shortcode  = new \IDX\Widgets\Omnibar\IDX_Omnibar_Widget();
@@ -95,7 +95,7 @@ class Register_Blocks {
 		// IDX Wrapper Tags.
 		add_action( 'enqueue_block_assets', [ $this, 'idx_wrapper_tags_block_init' ] );
 
-		// IDX Wrapper Tags.
+		// IDX Widgets.
 		add_action( 'enqueue_block_assets', [ $this, 'idx_widgets_block_init' ] );
 	}
 
@@ -128,7 +128,7 @@ class Register_Blocks {
 	 * @return mixed
 	 */
 	public function register_block_shared_css() {
-		wp_enqueue_style( 'idx-shared-block-editor-css', plugins_url( 'idx-block-edit.css', __FILE__ ), false, '1.0', 'all' );
+		wp_enqueue_style( 'idx-shared-block-editor-css', plugins_url( '../assets/css/idx-block-edit.css', __FILE__ ), false, '1.0', 'all' );
 	}
 
 	/**
@@ -141,7 +141,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'idx-widgets-block',
-			plugins_url( '/idx-widgets/script.js', __FILE__ ),
+			plugins_url( '../assets/js/idxWidgetsBlock.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -160,7 +160,7 @@ class Register_Blocks {
 			]
 		);
 
-		$placeholder_image_url = plugins_url( '/idx-widgets/idx-widget-placeholder.png', __FILE__ );
+		$placeholder_image_url = plugins_url( '../assets/images/block-placeholder-images/idx-widgets-placeholder.png', __FILE__ );
 		wp_localize_script( 'idx-widgets-block', 'idx_widget_block_image_url', $placeholder_image_url );
 
 		$available_widgets = $this->get_widget_list_options();
@@ -192,7 +192,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-lead-signup-block',
-			plugins_url( '/impress-lead-signup/script.js', __FILE__ ),
+			plugins_url( '../assets/js/impressLeadSignupBlock.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -229,7 +229,7 @@ class Register_Blocks {
 		$available_agents = $this->get_agents_select_list();
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $available_agents );
 
-		$lead_signup_image_url = plugins_url( '/impress-lead-signup/lead-signup-placeholder.png', __FILE__ );
+		$lead_signup_image_url = plugins_url( '../assets/images/block-placeholder-images/lead-signup-placeholder.png', __FILE__ );
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_image_url', $lead_signup_image_url );
 
 		wp_enqueue_script( 'impress-lead-signup-block' );
@@ -257,7 +257,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-lead-login-block',
-			plugins_url( '/impress-lead-login/script.js', __FILE__ ),
+			plugins_url( '../assets/js/impressLeadLoginBlock.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -282,7 +282,7 @@ class Register_Blocks {
 			]
 		);
 
-		$lead_login_image_url = plugins_url( '/impress-lead-login/lead-login-placeholder.png', __FILE__ );
+		$lead_login_image_url = plugins_url( '../assets/images/block-placeholder-images/lead-login-placeholder.png', __FILE__ );
 		wp_localize_script( 'impress-lead-login-block', 'lead_login_image_url', $lead_login_image_url );
 		wp_enqueue_script( 'impress-lead-login-block' );
 	}
@@ -309,7 +309,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-omnibar-block',
-			plugins_url( '/impress-omnibar/script.js', __FILE__ ),
+			plugins_url( '../assets/js/impressOmnibarBlock.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -334,7 +334,7 @@ class Register_Blocks {
 			]
 		);
 
-		$impress_omnibar_image_url = plugins_url( '/impress-omnibar/omnibar-placeholder.png', __FILE__ );
+		$impress_omnibar_image_url = plugins_url( '../assets/images/block-placeholder-images/omnibar-placeholder.png', __FILE__ );
 		wp_localize_script( 'impress-omnibar-block', 'impress_omnibar_image_url', $impress_omnibar_image_url );
 		wp_enqueue_script( 'impress-omnibar-block' );
 
@@ -364,7 +364,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'idx-wrapper-tags-block',
-			plugins_url( '/idx-wrapper-tags/script.js', __FILE__ ),
+			plugins_url( '../assets/js/idxWrapperTagsBlock.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -377,7 +377,7 @@ class Register_Blocks {
 			]
 		);
 
-		$idx_wrapper_tags_image_url = plugins_url( '/idx-wrapper-tags/wrapper-tag-placeholder.png', __FILE__ );
+		$idx_wrapper_tags_image_url = plugins_url( '../assets/images/block-placeholder-images/wrapper-tag-placeholder.png', __FILE__ );
 		wp_localize_script( 'idx-wrapper-tags-block', 'idx_wrapper_tags_image_url', $idx_wrapper_tags_image_url );
 		wp_enqueue_script( 'idx-wrapper-tags-block' );
 
@@ -393,7 +393,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-carousel-block',
-			plugins_url( '/impress-carousel/script.js', __FILE__ ),
+			plugins_url( '../assets/js/impressCarouselBlock.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -442,7 +442,7 @@ class Register_Blocks {
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_saved_links', $saved_links_list );
 
-		$impress_carousel_image_url = plugins_url( '/impress-carousel/carousel-placeholder.png', __FILE__ );
+		$impress_carousel_image_url = plugins_url( '../assets/images/block-placeholder-images/carousel-placeholder.png', __FILE__ );
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_image_url', $impress_carousel_image_url );
 
 		wp_enqueue_script( 'impress-carousel-block' );
@@ -470,7 +470,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-showcase-block',
-			plugins_url( '/impress-showcase/script.js', __FILE__ ),
+			plugins_url( '../assets/js/impressShowcaseBlock.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -522,7 +522,7 @@ class Register_Blocks {
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_saved_links', $saved_links_list );
 
-		$impress_showcase_image_url = plugins_url( '/impress-showcase/showcase-placeholder.png', __FILE__ );
+		$impress_showcase_image_url = plugins_url( '../assets/images/block-placeholder-images/showcase-placeholder.png', __FILE__ );
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_image_url', $impress_showcase_image_url );
 
 		wp_enqueue_script( 'impress-showcase-block' );
@@ -550,7 +550,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-city-links-block',
-			plugins_url( '/impress-city-links/script.js', __FILE__ ),
+			plugins_url( '../assets/js/impressCityLinksBlock.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -587,7 +587,7 @@ class Register_Blocks {
 			]
 		);
 
-		$placeholder_image_url = plugins_url( '/impress-city-links/impress-city-links.png', __FILE__ );
+		$placeholder_image_url = plugins_url( '../assets/images/block-placeholder-images/impress-city-links.png', __FILE__ );
 		wp_localize_script( 'impress-city-links-block', 'impress_city_links_block_image_url', $placeholder_image_url );
 
 		$mls_options = $this->get_mls_options();

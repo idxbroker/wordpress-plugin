@@ -73,7 +73,7 @@ class Initiate_Plugin {
 		}
 		// Register blocks if Gutenberg is present.
 		if ( function_exists( 'register_block_type' ) ) {
-			new Blocks\Register_Blocks();
+			new Register_Blocks();
 		}
 	}
 
