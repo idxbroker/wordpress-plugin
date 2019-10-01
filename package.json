@@ -4,7 +4,7 @@
   "description": "IMPress for IDX Broker",
   "main": "index.js",
   "scripts": {
-    "watch": "webpack --mode=development --watch --config webpack-config.js",
+    "watch": "webpack --mode=development --watch --config webpack.config.js",
     "build": "webpack --mode=production --config webpack.config.js"
   },
   "repository": {
