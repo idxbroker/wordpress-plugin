@@ -6,8 +6,9 @@
   var Checkbox = components.CheckboxControl
   var SelectControl = components.SelectControl
 
+  // setCategory() is a workaround to prevent the custom category from throwing an console warning
   function setCategory () {
-    if (window.location.href.includes('wp-admin')) {
+    if (window.location.href.indexOf('wp-admin') !== -1) {
       return 'idx-category'
     } else {
       return 'widgets'

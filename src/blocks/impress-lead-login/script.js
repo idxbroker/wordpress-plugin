@@ -5,8 +5,9 @@
   var Checkbox = components.CheckboxControl
   var icon = el('i', { class: 'fa fa-users fa-2x' }, null)
 
+  // setCategory() is a workaround to prevent the custom category from throwing an console warning
   function setCategory () {
-    if (window.location.href.includes('wp-admin')) {
+    if (window.location.href.indexOf('wp-admin') !== -1) {
       return 'idx-category'
     } else {
       return 'widgets'
