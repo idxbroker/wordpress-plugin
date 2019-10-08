@@ -7,14 +7,14 @@ const config = {
   // One for frontend and one for the admin area.
   entry: {
     // frontend and admin will replace the [name] portion of the output config below.
-    idxWrapperTagsBlock: './src/blocks/idx-wrapper-tags/script.js',
-    idxWidgetsBlock: './src/blocks/idx-widgets/script.js',
-    impressCarouselBlock: './src/blocks/impress-carousel/script.js',
-    impressCityLinksBlock: './src/blocks/impress-city-links/script.js',
-    impressLeadLoginBlock: './src/blocks/impress-lead-login/script.js',
-    impressLeadSignupBlock: './src/blocks/impress-lead-signup/script.js',
-    impressOmnibarBlock: './src/blocks/impress-omnibar/script.js',
-    impressShowcaseBlock: './src/blocks/impress-showcase/script.js'
+    'idx-wrapper-tags-block': './src/blocks/idx-wrapper-tags/script.js',
+    'idx-widgets-block': './src/blocks/idx-widgets/script.js',
+    'impress-carousel-block': './src/blocks/impress-carousel/script.js',
+    'impress-city-links-block': './src/blocks/impress-city-links/script.js',
+    'impress-lead-login-block': './src/blocks/impress-lead-login/script.js',
+    'impress-lead-signup-block': './src/blocks/impress-lead-signup/script.js',
+    'impress-omnibar-block': './src/blocks/impress-omnibar/script.js',
+    'impress-showcase-block': './src/blocks/impress-showcase/script.js'
   },
 
   // Create the output files.
