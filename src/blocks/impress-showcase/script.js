@@ -5,7 +5,7 @@
   var TextControl = components.TextControl
   var Checkbox = components.CheckboxControl
   var SelectControl = components.SelectControl
-  var icon = el('i', { class: 'fa fa-home fa-2x' }, null)
+  var icon = el('i', { class: 'fas fa-home fa-2x' }, null)
 
   // setCategory() is a workaround to prevent the custom category from throwing an console warning
   function setCategory () {

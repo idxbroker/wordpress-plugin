@@ -112,12 +112,12 @@ class Register_Blocks {
 
 		return array_merge(
 			$categories,
-			array(
-				array(
+			[
+				[
 					'slug'  => 'idx-category',
 					'title' => __( 'IMPress for IDX Broker', 'idx-broker-platinum' ),
-				),
-			)
+				],
+			]
 		);
 	}
 
@@ -337,7 +337,6 @@ class Register_Blocks {
 		$impress_omnibar_image_url = plugins_url( '../assets/images/block-placeholder-images/omnibar-placeholder.png', __FILE__ );
 		wp_localize_script( 'impress-omnibar-block', 'impress_omnibar_image_url', $impress_omnibar_image_url );
 		wp_enqueue_script( 'impress-omnibar-block' );
-
 	}
 
 	/**
@@ -597,7 +596,6 @@ class Register_Blocks {
 		wp_localize_script( 'impress-city-links-block', 'impress_city_links_city_options', $city_list_options );
 
 		wp_enqueue_script( 'impress-city-links-block' );
-
 	}
 
 	/**
@@ -618,7 +616,6 @@ class Register_Blocks {
 	 * @return array
 	 */
 	public function get_saved_links_list() {
-
 		$saved_links_list = [];
 
 		// Check for API key before making call.
@@ -640,7 +637,6 @@ class Register_Blocks {
 		return $saved_links_list;
 	}
 
-
 	/**
 	 * Get_agents_select_list function.
 	 *
@@ -648,7 +644,6 @@ class Register_Blocks {
 	 * @return array
 	 */
 	public function get_agents_select_list() {
-
 		$agents_list = [
 			[
 				'label' => 'All',
@@ -660,7 +655,7 @@ class Register_Blocks {
 			$agent_api_data = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 			if ( $agent_api_data['agent'] ) {
 				foreach ( $agent_api_data['agent'] as $current_agent ) {
-					array_push( $agents_list, array( 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ) );
+					array_push( $agents_list, [ 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ] );
 				}
 			}
 		}
@@ -694,7 +689,7 @@ class Register_Blocks {
 		foreach ( $lists as $list ) {
 			// display the list id if no list name has been assigned.
 			$list_text = empty( $list->name ) ? $list->id : $list->name;
-			array_push( $impress_city_lists, array( 'label' => $list_text, 'value' => $list->id ) );
+			array_push( $impress_city_lists, [ 'label' => $list_text, 'value' => $list->id ] );
 		}
 		return $impress_city_lists;
 	}
@@ -735,5 +730,4 @@ class Register_Blocks {
 		}
 		return $widget_list;
 	}
-
 }

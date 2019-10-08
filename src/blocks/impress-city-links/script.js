@@ -4,7 +4,7 @@
   var InspectorControls = editor.InspectorControls
   var Checkbox = components.CheckboxControl
   var SelectControl = components.SelectControl
-  var icon = el('i', { class: 'fa fa-link fa-2x' }, null)
+  var icon = el('i', { class: 'fas fa-link fa-2x' }, null)
 
   // setCategory() is a workaround to prevent the custom category from throwing an console warning
   function setCategory () {

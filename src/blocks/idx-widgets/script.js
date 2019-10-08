@@ -3,7 +3,7 @@
   var registerBlockType = blocks.registerBlockType
   var InspectorControls = editor.InspectorControls
   var SelectControl = components.SelectControl
-  var icon = el('i', { class: 'fa fa-cog fa-2x' }, null)
+  var icon = el('i', { class: 'fas fa-cog fa-2x' }, null)
 
   // setCategory() is a workaround to prevent the custom category from throwing an console warning
   function setCategory () {

@@ -3,7 +3,7 @@
   var registerBlockType = blocks.registerBlockType
   var InspectorControls = editor.InspectorControls
   var Checkbox = components.CheckboxControl
-  var icon = el('i', { class: 'fa fa-search fa-2x' }, null)
+  var icon = el('i', { class: 'fas fa-search fa-2x' }, null)
 
   // setCategory() is a workaround to prevent the custom category from throwing an console warning
   function setCategory () {

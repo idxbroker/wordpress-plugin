@@ -1,7 +1,7 @@
 (function (blocks, element) {
   var el = element.createElement
   var registerBlockType = blocks.registerBlockType
-  var icon = el('i', { class: 'fa fa-cog fa-2x' }, null)
+  var icon = el('i', { class: 'fas fa-code fa-2x' }, null)
 
   // setCategory() is a workaround to prevent the custom category from throwing an console warning
   function setCategory () {
