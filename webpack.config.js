@@ -14,7 +14,8 @@ const config = {
     'impress-lead-login-block': './src/blocks/impress-lead-login/script.js',
     'impress-lead-signup-block': './src/blocks/impress-lead-signup/script.js',
     'impress-omnibar-block': './src/blocks/impress-omnibar/script.js',
-    'impress-showcase-block': './src/blocks/impress-showcase/script.js'
+		'impress-showcase-block': './src/blocks/impress-showcase/script.js',
+	  'test-block': './src/blocks/test-block/script.js'
   },
 
   // Create the output files.
@@ -39,7 +40,10 @@ const config = {
         loader: 'babel-loader',
         options: {
           babelrc: false,
-          presets: ['@babel/preset-env']
+					presets: ['@babel/preset-env'],
+					plugins: [
+						["babel-plugin-transform-react-jsx"]
+				]
         }
       }
     ]
