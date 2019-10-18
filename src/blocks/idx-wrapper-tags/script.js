@@ -1,41 +1,32 @@
-(function (blocks, element) {
-  var el = element.createElement
-  var registerBlockType = blocks.registerBlockType
-  var icon = el('i', { class: 'fas fa-code fa-2x' }, null)
+const { __ } = wp.i18n
+const { registerBlockType } = wp.blocks
+const icon = () => (<i className='fas fa-code fa-2x'/>)
 
-  // setCategory() is a workaround to prevent the custom category from throwing an console warning
-  function setCategory () {
-    if (window.location.href.indexOf('wp-admin') !== -1) {
-      return 'idx-category'
-    } else {
-      return 'widgets'
-    }
+// workaround to prevent the custom category from throwing an console warning
+function setCategory () {
+  if (window.location.href.indexOf('wp-admin') !== -1) {
+    return 'idx-category'
+  } else {
+    return 'widgets'
   }
+}
 
-  registerBlockType('idx-broker-platinum/idx-wrapper-tags-block', {
-    title: 'IDX Broker Wrapper Tags',
+registerBlockType(
+  'idx-broker-platinum/idx-wrapper-tags-block', {
+    title: __('IDX Broker Wrapper Tags', 'idx-broker-platinum'),
     icon: icon,
     category: setCategory(),
-
-    edit: function (props) {
-      return [
-        el('div', {
-          class: 'idx-block-placeholder-container',
-        }, el('img', {
-          src: idx_wrapper_tags_image_url
-        }))
-      ]
+    edit: () => {
+      return (
+        <div className='idx-block-placeholder-container'>
+          <img src={idx_wrapper_tags_image_url} />
+        </div>
+      )
     },
-
-    save: function (props) {
-      return el(
-        element.RawHTML,
-        null,
-        '<div id="idxStart"></div><div id="idxStop"></div>' 
+    save: () => {
+      return (
+        <div><div id='idxStart' /><div id='idxStop' /></div>
       )
     }
-  })
-})(
-  window.wp.blocks,
-  window.wp.element
+  }
 )

@@ -596,22 +596,6 @@ class Register_Blocks {
 		wp_localize_script( 'impress-city-links-block', 'impress_city_links_city_options', $city_list_options );
 
 		wp_enqueue_script( 'impress-city-links-block' );
-
-
-		wp_register_script(
-			'test-block',
-			plugins_url( '../assets/js/test-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
-			'1.0',
-			false
-		);
-		register_block_type(
-			'idx-broker-platinum/test-block',
-			[
-				'editor_script' => 'test-block',
-			]
-		);
-		wp_enqueue_script( 'test-block' );
 	}
 
 	/**

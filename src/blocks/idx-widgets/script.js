@@ -1,60 +1,49 @@
-(function (blocks, element, editor, components) {
-  var el = element.createElement
-  var registerBlockType = blocks.registerBlockType
-  var InspectorControls = editor.InspectorControls
-  var SelectControl = components.SelectControl
-  var icon = el('i', { class: 'fas fa-cog fa-2x' }, null)
+const { __ } = wp.i18n
+const { registerBlockType } = wp.blocks
+const { InspectorControls } = wp.editor
+const { SelectControl } = wp.components
+const icon = () => (<i className='fas fa-cog fa-2x' />)
 
-  // setCategory() is a workaround to prevent the custom category from throwing an console warning
-  function setCategory () {
-    if (window.location.href.indexOf('wp-admin') !== -1) {
-      return 'idx-category'
-    } else {
-      return 'widgets'
-    }
+// workaround to prevent the custom category from throwing an console warning
+function setCategory () {
+  if (window.location.href.indexOf('wp-admin') !== -1) {
+    return 'idx-category'
+  } else {
+    return 'widgets'
   }
+}
 
-  registerBlockType('idx-broker-platinum/idx-widgets-block', {
-    title: 'IDX Broker Widgets',
+registerBlockType(
+  'idx-broker-platinum/idx-widgets-block', {
+    title: __('IDX Broker Widgets', 'idx-broker-platinum'),
     icon: icon,
     category: setCategory(),
-
     attributes: {
       id: {
         type: 'string',
         default: null
       }
     },
+    edit: ({ attributes, setAttributes }) => {
+      return (
+        <div>
+          <div className='idx-block-placeholder-container'>
+            <img src={idx_widget_block_image_url} />
+          </div>
 
-    edit: function (props) {
-      return [
-        el('div', {
-          class: 'idx-block-placeholder-container'
-        }, el('img', {
-          src: idx_widget_block_image_url
-        })),
-
-        el(InspectorControls, {},
-          el(SelectControl, {
-            label: 'Select a Widget:',
-            value: props.attributes.id,
-            options: (idx_widgets_list ? idx_widgets_list : [{ label: 'All', value: '' }]),
-            onChange: (value) => {
-              props.setAttributes({ id: value })
-            }
-          })
-        )
-      ]
+          <InspectorControls>
+            <SelectControl
+              label='Select a Widget:'
+              value={attributes.id}
+              options={ idx_widgets_list ? idx_widgets_list : [{ label: 'All', value: '' }] }
+              onChange={(value) => { setAttributes({ id: value }) }}
+            />
+          </InspectorControls>
+        </div>
+      )
     },
-
-    save: function (props) {
+    save: () => {
       return null
     }
-
-  })
-})(
-  window.wp.blocks,
-  window.wp.element,
-  window.wp.editor,
-  window.wp.components
+  }
 )

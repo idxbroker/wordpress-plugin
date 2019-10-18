@@ -1,24 +1,23 @@
-(function (blocks, element, editor, components) {
-  var el = element.createElement
-  var registerBlockType = blocks.registerBlockType
-  var InspectorControls = editor.InspectorControls
-  var Checkbox = components.CheckboxControl
-  var icon = el('i', { class: 'fas fa-users fa-2x' }, null)
+const { __ } = wp.i18n
+const { registerBlockType } = wp.blocks
+const { InspectorControls } = wp.editor
+const { CheckboxControl } = wp.components
+const icon = () => (<i className='fas fa-users fa-2x' />)
 
-  // setCategory() is a workaround to prevent the custom category from throwing an console warning
-  function setCategory () {
-    if (window.location.href.indexOf('wp-admin') !== -1) {
-      return 'idx-category'
-    } else {
-      return 'widgets'
-    }
+// workaround to prevent the custom category from throwing an console warning
+function setCategory () {
+  if (window.location.href.indexOf('wp-admin') !== -1) {
+    return 'idx-category'
+  } else {
+    return 'widgets'
   }
+}
 
-  registerBlockType('idx-broker-platinum/impress-lead-login-block', {
-    title: 'IMPress Lead Login',
+registerBlockType(
+  'idx-broker-platinum/impress-lead-login-block', {
+    title: __('IMPress Lead Login', 'idx-broker-platinum'),
     icon: icon,
     category: setCategory(),
-
     attributes: {
       styles: {
         type: 'int',
@@ -33,52 +32,38 @@
         default: false
       }
     },
+    edit: ({ attributes, setAttributes }) => {
+      return (
+        <div>
+          <div className='idx-block-placeholder-container'>
+            <img src={lead_login_image_url} />
+          </div>
 
-    edit: function (props) {
-      return [
-        el('div', {
-          class: 'idx-block-placeholder-container'
-        }, el('img', {
-          src: lead_login_image_url
-        })),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Default Styles?',
-            value: props.attributes.styles,
-            checked: (props.attributes.styles > 0),
-            onChange: (value) => { props.setAttributes({ styles: (value > 0 ? 1 : 0) }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Open in a New Window?',
-            value: props.attributes.new_window,
-            checked: (props.attributes.new_window > 0),
-            onChange: (value) => { props.setAttributes({ new_window: (value > 0 ? 1 : 0) }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Add password form field?',
-            value: props.attributes.password_field,
-            checked: (!!props.attributes.password_field),
-            onChange: (value) => { props.setAttributes({ password_field: value }) }
-          })
-        )
-      ]
+          <InspectorControls>
+            <CheckboxControl
+              label={__('Default Styles?', 'idx-broker-platinum')}
+              value={attributes.styles}
+              checked={(attributes.styles > 0)}
+              onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
+            />
+            <CheckboxControl
+              label={__('Open in a New Window?', 'idx-broker-platinum')}
+              value={attributes.new_window}
+              checked={(attributes.new_window > 0)}
+              onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
+            />
+            <CheckboxControl
+              label={__('Add password form field?', 'idx-broker-platinum')}
+              value={attributes.password_field}
+              checked={(!!attributes.password_field)}
+              onChange={(value) => { setAttributes({ password_field: value }) }}
+            />
+          </InspectorControls>
+        </div>
+      )
     },
-
-    save: function (props) {
+    save: () => {
       return null
     }
-
-  })
-})(
-  window.wp.blocks,
-  window.wp.element,
-  window.wp.editor,
-  window.wp.components
+  }
 )

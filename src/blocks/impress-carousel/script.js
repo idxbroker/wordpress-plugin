@@ -1,25 +1,22 @@
-(function (blocks, element, editor, components) {
-  var el = element.createElement
-  var registerBlockType = blocks.registerBlockType
-  var InspectorControls = editor.InspectorControls
-  var TextControl = components.TextControl
-  var Checkbox = components.CheckboxControl
-  var SelectControl = components.SelectControl
+const { __ } = wp.i18n
+const { registerBlockType } = wp.blocks
+const { InspectorControls } = wp.editor
+const { SelectControl, CheckboxControl, TextControl } = wp.components
 
-  // setCategory() is a workaround to prevent the custom category from throwing an console warning
-  function setCategory () {
-    if (window.location.href.indexOf('wp-admin') !== -1) {
-      return 'idx-category'
-    } else {
-      return 'widgets'
-    }
+// workaround to prevent the custom category from throwing an console warning
+function setCategory () {
+  if (window.location.href.indexOf('wp-admin') !== -1) {
+    return 'idx-category'
+  } else {
+    return 'widgets'
   }
+}
 
-  registerBlockType('idx-broker-platinum/impress-carousel-block', {
+registerBlockType(
+  'idx-broker-platinum/impress-carousel-block', {
     title: 'IMPress Carousel',
     icon: 'admin-multisite',
     category: setCategory(),
-
     attributes: {
       max: {
         type: 'int',
@@ -58,110 +55,75 @@
         default: ''
       }
     },
-
-    edit: function (props) {
+    edit: ({ attributes, setAttributes }) => {
       const propertiesToFeature = [{ label: 'Featured', value: 'featured' }, { label: 'Sold/Pending', value: 'soldpending' }, { label: 'Supplemental', value: 'supplemental' }, { label: 'Use Saved Link', value: 'savedlinks' }]
       const sortOptions = [{ label: 'Default', value: 'default' }, { label: 'Highest to Lowest Price', value: 'high-low' }, { label: 'Lowest to Highest Price', value: 'low-high' }]
-
-      return [
-        el('div', {
-          class: 'idx-block-placeholder-container'
-        }, el('img', {
-          src: impress_carousel_image_url
-        })),
-
-        el(InspectorControls, {},
-          el(SelectControl, {
-            label: 'Properties to Display:',
-            value: props.attributes.property_type,
-            options: propertiesToFeature,
-            onChange: (value) => { props.setAttributes({ property_type: value }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(SelectControl, {
-            label: 'Choose a saved link (if selected above):',
-            value: props.attributes.saved_link_id,
-            options: (impress_carousel_saved_links || [ { label: 'All', value: '' } ]),
-            onChange: (value) => { props.setAttributes({ saved_link_id: value }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(SelectControl, {
-            label: 'Limit by Agent:',
-            value: props.attributes.agent_id,
-            options: (impress_carousel_agent_list || [ { label: 'All', value: '' } ]),
-            onChange: (value) => { props.setAttributes({ agent_id: value }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(TextControl, {
-            label: 'Listings to show without scrolling:',
-            value: props.attributes.display,
-            type: 'number',
-            onChange: (value) => { props.setAttributes({ display: value }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(TextControl, {
-            label: 'Max number of listings to show:',
-            value: props.attributes.max,
-            type: 'number',
-            onChange: (value) => { props.setAttributes({ max: value }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(SelectControl, {
-            label: 'Sort Order:',
-            value: props.attributes.order,
-            options: sortOptions,
-            onChange: (value) => { props.setAttributes({ order: value }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Autoplay?',
-            value: props.attributes.autoplay,
-            checked: (props.attributes.autoplay > 0),
-            onChange: (value) => { props.setAttributes({ autoplay: (value > 0 ? 1 : 0) }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Open Listings in a New Window?',
-            value: props.attributes.new_window,
-            checked: (props.attributes.new_window > 0),
-            onChange: (value) => { props.setAttributes({ new_window: (value > 0 ? 1 : 0) }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Default Styles?',
-            value: props.attributes.styles,
-            checked: (props.attributes.styles > 0),
-            onChange: (value) => { props.setAttributes({ styles: (value > 0 ? 1 : 0) }) }
-          })
-        )
-
-      ]
+      return (
+        <div>
+          <div className='idx-block-placeholder-container'>
+            <img src={impress_carousel_image_url} />
+          </div>
+          <InspectorControls>
+            <SelectControl
+              label={__('Properties to Display:', 'idx-broker-platinum')}
+              value={attributes.property_type}
+              options={propertiesToFeature}
+              onChange={(value) => { setAttributes({ property_type: value }) }}
+            />
+            <SelectControl
+              label={__('Choose a saved link (if selected above):', 'idx-broker-platinum')}
+              value={attributes.saved_link_id}
+              options={(impress_carousel_saved_links || [{ label: 'All', value: '' }])}
+              onChange={(value) => { setAttributes({ saved_link_id: value }) }}
+            />
+            <SelectControl
+              label={__('Limit by Agent:', 'idx-broker-platinum')}
+              value={attributes.agent_id}
+              options={(impress_carousel_agent_list || [{ label: 'All', value: '' }])}
+              onChange={(value) => { setAttributes({ agent_id: value }) }}
+            />
+            <TextControl
+              label={__('Listings to show without scrolling:', 'idx-broker-platinum')}
+              value={attributes.display}
+              type='number'
+              onChange={(value) => { setAttributes({ display: value }) }}
+            />
+            <TextControl
+              label={__('Max number of listings to show:', 'idx-broker-platinum')}
+              value={attributes.max}
+              type='number'
+              onChange={(value) => { setAttributes({ max: value }) }}
+            />
+            <SelectControl
+              label={__('Sort Order:', 'idx-broker-platinum')}
+              value={attributes.order}
+              options={sortOptions}
+              onChange={(value) => { setAttributes({ order: value }) }}
+            />
+            <CheckboxControl
+              label={__('Autoplay?', 'idx-broker-platinum')}
+              value={attributes.autoplay}
+              checked={(attributes.autoplay > 0)}
+              onChange={(value) => { setAttributes({ autoplay: (value > 0 ? 1 : 0) }) }}
+            />
+            <CheckboxControl
+              label={__('Open Listings in a New Window?', 'idx-broker-platinum')}
+              value={attributes.new_window}
+              checked={(attributes.new_window > 0)}
+              onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
+            />
+            <CheckboxControl
+              label={__('Default Styles?', 'idx-broker-platinum')}
+              value={attributes.styles}
+              checked={(attributes.styles > 0)}
+              onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
+            />
+          </InspectorControls>
+        </div>
+      )
     },
-
-    save: function (props) {
+    save: () => {
       return null
     }
-
-  })
-})(
-  window.wp.blocks,
-  window.wp.element,
-  window.wp.editor,
-  window.wp.components
+  }
 )

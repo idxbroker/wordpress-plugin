@@ -1,26 +1,23 @@
-(function (blocks, element, editor, components) {
-  var el = element.createElement
-  var registerBlockType = blocks.registerBlockType
-  var InspectorControls = editor.InspectorControls
-  var TextControl = components.TextControl
-  var Checkbox = components.CheckboxControl
-  var SelectControl = components.SelectControl
-  var icon = el('i', { class: 'fas fa-user-plus fa-2x' }, null)
+const { __ } = wp.i18n
+const { registerBlockType } = wp.blocks
+const { InspectorControls } = wp.editor
+const { SelectControl, CheckboxControl, TextControl } = wp.components
+const icon = () => (<i className='fas fa-user-plus fa-2x' />)
 
-  // setCategory() is a workaround to prevent the custom category from throwing an console warning
-  function setCategory () {
-    if (window.location.href.indexOf('wp-admin') !== -1) {
-      return 'idx-category'
-    } else {
-      return 'widgets'
-    }
+// workaround to prevent the custom category from throwing an console warning
+function setCategory () {
+  if (window.location.href.indexOf('wp-admin') !== -1) {
+    return 'idx-category'
+  } else {
+    return 'widgets'
   }
+}
 
-  registerBlockType('idx-broker-platinum/impress-lead-signup-block', {
-    title: 'IMPress Lead Signup',
+registerBlockType(
+  'idx-broker-platinum/impress-lead-signup-block', {
+    title: __('IMPress Lead Signup', 'idx-broker-platinum'),
     icon: icon,
     category: setCategory(),
-
     attributes: {
       phone: {
         type: 'int',
@@ -46,79 +43,54 @@
         default: 'Sign Up!'
       }
     },
-
-    edit: function (props) {
-      return [
-        el('div', {
-          class: 'idx-block-placeholder-container'
-        }, el('img', {
-          src: lead_signup_image_url
-        })),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Show phone number field?',
-            value: props.attributes.phone,
-            checked: (props.attributes.phone > 0),
-            onChange: (value) => { props.setAttributes({ phone: (value > 0 ? 1 : 0) }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Default Styles?',
-            value: props.attributes.styles,
-            checked: (props.attributes.styles > 0),
-            onChange: (value) => { props.setAttributes({ styles: (value > 0 ? 1 : 0) }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Open in a New Window?',
-            value: props.attributes.new_window,
-            checked: (props.attributes.new_window > 0),
-            onChange: (value) => { props.setAttributes({ new_window: (value > 0 ? 1 : 0) }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(Checkbox, {
-            label: 'Add password form field?',
-            value: props.attributes.password_field,
-            checked: (!!props.attributes.password_field),
-            onChange: (value) => { props.setAttributes({ password_field: value }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(TextControl, {
-            label: 'Sign up button text:',
-            value: props.attributes.button_text,
-            onChange: (value) => { props.setAttributes({ button_text: value }) }
-          })
-        ),
-
-        el(InspectorControls, {},
-          el(SelectControl, {
-            label: 'Route to Agent:',
-            value: props.attributes.agent_id,
-            options: (lead_signup_agent_list || [ { label: 'All', value: '' } ]),
-            onChange: (value) => { props.setAttributes({ agent_id: value }) }
-          })
-        )
-
-      ]
+    edit: ({ attributes, setAttributes }) => {
+      return (
+        <div>
+          <div className='idx-block-placeholder-container'>
+            <img src={lead_signup_image_url} />
+          </div>
+          <InspectorControls>
+            <CheckboxControl
+              label={__('Show phone number field?', 'idx-broker-platinum')}
+              value={attributes.phone}
+              checked={(attributes.phone > 0)}
+              onChange={(value) => { setAttributes({ phone: (value > 0 ? 1 : 0) }) }}
+            />
+            <CheckboxControl
+              label={__('Default Styles?', 'idx-broker-platinum')}
+              value={attributes.styles}
+              checked={(attributes.styles > 0)}
+              onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
+            />
+            <CheckboxControl
+              label={__('Open in a New Window?', 'idx-broker-platinum')}
+              value={attributes.new_window}
+              checked={(attributes.new_window > 0)}
+              onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
+            />
+            <CheckboxControl
+              label={__('Add password form field?', 'idx-broker-platinum')}
+              value={attributes.password_field}
+              checked={(!!attributes.password_field)}
+              onChange={(value) => { setAttributes({ password_field: value }) }}
+            />
+            <TextControl
+              label={__('Sign up button text:', 'idx-broker-platinum')}
+              value={attributes.button_text}
+              onChange={(value) => { setAttributes({ button_text: value }) }}
+            />
+            <SelectControl
+              label={__('Route to Agent:', 'idx-broker-platinum')}
+              value={attributes.agent_id}
+              options={(lead_signup_agent_list || [{ label: 'All', value: '' }])}
+              onChange={(value) => { setAttributes({ agent_id: value }) }}
+            />
+          </InspectorControls>
+        </div>
+      )
     },
-
-    save: function (props) {
+    save: () => {
       return null
     }
-
-  })
-})(
-  window.wp.blocks,
-  window.wp.element,
-  window.wp.editor,
-  window.wp.components
+  }
 )
