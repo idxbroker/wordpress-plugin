@@ -35,7 +35,7 @@ registerBlockType(
             <SelectControl
               label='Select a Widget:'
               value={attributes.id}
-              options={ idx_widgets_list ? idx_widgets_list : [{ label: 'All', value: '' }] }
+              options={idx_widgets_list ? idx_widgets_list : [{ label: 'All', value: '' }]}
               onChange={(value) => { setAttributes({ id: value }) }}
             />
           </InspectorControls>
