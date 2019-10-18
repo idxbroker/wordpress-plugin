@@ -1,5 +1,5 @@
 // Require path.
-const path = require('path');
+const path = require('path')
 
 // Configuration object.
 const config = {
@@ -28,16 +28,16 @@ const config = {
 
   // Setup a loader to transpile down the latest and great JavaScript so older browsers
   // can understand it.
-	module: {
-		loaders: [
-			{
-				test: /.js$/,
-				loader: 'babel-loader',
-				exclude: /node_modules/,
-			},
-		],
-	},
+  module: {
+    loaders: [
+      {
+        test: /.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      }
+    ]
+  }
 }
 
 // Export the config object.
-module.exports = config;
+module.exports = config
