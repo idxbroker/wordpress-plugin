@@ -29,25 +29,15 @@ const config = {
 
   // Setup a loader to transpile down the latest and great JavaScript so older browsers
   // can understand it.
-  module: {
-    rules: [
-      {
-        // Look for any .js files.
-        test: /\.js$/,
-        // Exclude the node_modules folder.
-        exclude: /node_modules/,
-        // Use babel loader to transpile the JS files.
-        loader: 'babel-loader',
-        options: {
-          babelrc: false,
-					presets: ['@babel/preset-env'],
-					plugins: [
-						["babel-plugin-transform-react-jsx"]
-				]
-        }
-      }
-    ]
-  }
+	module: {
+		loaders: [
+			{
+				test: /.js$/,
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+			},
+		],
+	},
 }
 
 // Export the config object.
