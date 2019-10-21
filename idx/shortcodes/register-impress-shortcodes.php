@@ -292,7 +292,7 @@ class Register_Impress_Shortcodes {
 						$target
 					),
 					$prop,
-					$instance,
+					( isset( $instance ) ? $instance : [] ),
 					$url,
 					$prop_image_url,
 					$this->maybe_add_disclaimer_and_courtesy( $prop ),
@@ -337,7 +337,7 @@ class Register_Impress_Shortcodes {
 						$target
 					),
 					$prop,
-					$instance,
+					( isset( $instance ) ? $instance : [] ),
 					$url,
 					$column_class,
 					$target
