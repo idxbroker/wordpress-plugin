@@ -335,7 +335,7 @@ class Initiate_Plugin {
 			'id'     => 'idx_admin_bar_menu_item_1',
 			'title'  => 'IDX Control Panel',
 			'parent' => 'idx_admin_bar_menu',
-			'href'   => 'https://middleware.idxbroker.com/mgmt/login.php',
+			'href'   => 'https://middleware.idxbroker.com/mgmt/login',
 			'meta'   => array( 'target' => '_blank' ),
 		);
 		$wp_admin_bar->add_node( $args );
