@@ -79,7 +79,7 @@ class Impress_Lead_Signup_Shortcode {
 			$hidden_fields
 		);
 
-		if ( $password_field ) {
+		if ( filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ) {
 			$widget .= sprintf(
 				'
 				<label for="impress-widgetPassword">Password:</label>

@@ -1,40 +1,18 @@
 {
-  "name": "impress-for-idx-broker",
-  "version": "2.3.0",
-  "description": "IMPress for IDX Broker",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/idxbroker/wordpress-plugin.git"
-  },
-  "keywords": [
-    "wordpress",
-    "plugin",
-    "idx",
-    "idxbroker",
-    "impress",
-    "real estate"
-  ],
-  "author": "IDX Broker",
-  "license": "GPL-2.0+",
-  "bugs": {
-    "url": "https://github.com/idxbroker/wordpress-plugin/issues"
-  },
-  "homepage": "https://github.com/idxbroker/wordpress-plugin#readme",
+  "name": "block-simple",
+  "version": "1.0.0",
+  "license": "GPL-2.0-or-later",
+  "main": "block.js",
   "devDependencies": {
-    "glob": "^6.0.1",
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-jshint": "^2.0.0",
-    "gulp-notify": "^2.2.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.1",
-    "gulp-util": "^3.0.7",
-    "jshint": "^2.8.0",
-    "jshint-stylish": "^2.1.0"
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "cross-env": "^5.0.1",
+    "webpack": "^3.1.0"
+  },
+   "scripts": {
+     "build": "cross-env BABEL_ENV=default NODE_ENV=production webpack",
+     "watch": "cross-env BABEL_ENV=default webpack --watch"
   }
 }

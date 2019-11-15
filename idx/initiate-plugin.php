@@ -69,7 +69,11 @@ class Initiate_Plugin {
 		new \IDX\Views\Lead_Management();
 		new \IDX\Views\Search_Management();
 		if ( is_multisite() ) {
-			 new \IDX\Views\Multisite();
+			new \IDX\Views\Multisite();
+		}
+		// Register blocks if Gutenberg is present.
+		if ( function_exists( 'register_block_type' ) ) {
+			new Register_Blocks();
 		}
 	}
 

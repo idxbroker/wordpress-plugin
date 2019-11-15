@@ -63,8 +63,8 @@ class Register_Impress_Shortcodes {
 		$target = $this->target( $new_window );
 
 		// Returns hidden if false or not set
-		$password_field_type = $password_field ? 'password' : 'hidden';
-		$password_label      = $password_field ? '<label for="impress-widgetPassword">Password:</label>' : '';
+		$password_field_type = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? 'password' : 'hidden';
+		$password_label      = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? '<label for="impress-widgetPassword">Password:</label>' : '';
 
 		$widget = sprintf(
 			'
