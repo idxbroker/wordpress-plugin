@@ -538,7 +538,29 @@ class Idx_Api {
 	 * @return void
 	 */
 	public function client_properties( $type ) {
-		$properties = $this->idx_api( $type . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		// IDX Broker v1.7.0 API call for featured listings has a chunk size of 50.
+		$limit  = 50;
+		$offset = 0;
+
+		$listing_data = [];
+		$properties   = [];
+
+		$listing_data = $this->idx_api( $type . '?disclaimers=true&offset=' . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$properties = $listing_data['data'];
+
+
+		while ( ( $offset + $limit ) < $listing_data['total'] ) {
+			error_log( print_r( '$offset ' . $offset , true ) );
+			$offset = $offset + $limit;
+			$listing_data = $this->idx_api( $type . '?disclaimers=true&offset=' . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+
+			error_log( print_r( 'listing_data count ' . count($listing_data['data']), true ) );
+
+			$properties = array_merge($properties, $listing_data['data']);
+
+			error_log( print_r( count($properties), true ) );
+		}
+
 
 		return $properties;
 	}
