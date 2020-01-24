@@ -747,20 +747,40 @@ class Idx_Api {
 	 * @return void
 	 */
 	public function get_leads( $timeframe = null, $start_date = '' ) {
+		// API return limit and offset.
+		$limit  = 500;
+		$offset = 0;
+
+		// Raw lead data and parsed leads.
+		$lead_data = [];
+		$leads     = [];
+
+		$api_method = '';
+
 		if ( ! empty( $start_date ) ) {
 			$start_date = "&startDatetime=$start_date";
 		}
+
 		if ( ! empty( $timeframe ) ) {
-			$leads = $this->idx_api( "lead?interval=$timeframe$start_date", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+			$api_method = "lead?interval=$timeframe$start_date&offset=";
 		} else {
-			$leads = $this->idx_api( 'lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+			$api_method = 'lead?offset=';
 		}
-		return $leads['data'];
+
+		$lead_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+		$leads = $lead_data['data'];
+
+		while ( ( $offset + $limit ) < $lead_data['total'] ) {
+			$offset    = $offset + $limit;
+			$lead_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+			$leads     = array_merge( $leads, $lead_data['data'] );
+		}
+
+		return $leads;
 	}
 
 	public function get_featured_listings( $listing_type = 'featured', $timeframe = null ) {
-
-		// IDX Broker API v1.7.0 featured listings call is limited to 50 listings per request.
+		// API return limit and offset.
 		$limit  = 50;
 		$offset = 0;
 		// Returned data from IDXB featured listings call.
@@ -770,62 +790,26 @@ class Idx_Api {
 		// API method string.
 		$api_method = '';
 		if ( ! empty( $timeframe ) ) {
-		// 	error_log( print_r( 'not empty', true ) );
 			$api_method = "$listing_type?interval=$timeframe&offset=";
 		} else {
-		 	// error_log( print_r( 'empty', true ) );
 			$api_method = "$listing_type?offset=";
 		}
 
-		if ($listing_type === 'soldpending') {
-			$api_method = $api_method . '&startDatetime=2019-11-20+23:59:59';
-		}
-		error_log( print_r( $api_method . $offset, true ) );
 		// Initial request.
 		$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
-		if ($listing_type === 'soldpending') {
-		 error_log( print_r( $listing_data, true ) );
-		}
+
 		// Assign returned listings to $properties.
 		$properties = $listing_data['data'];
 
 		// Get rest of listings if there are more than 50.
 		while ( ( $offset + $limit ) < $listing_data['total'] ) {
-			$offset = $offset + $limit;
-
+			$offset       = $offset + $limit;
 			$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
 			$properties   = array_merge( $properties, $listing_data['data'] );
 		}
 
 		return $properties;
 	}
-
-	/*
-
-			// IDX Broker API v1.7.0 featured listings call is limited to 50 listings per request.
-		$limit  = 50;
-		$offset = 0;
-		// Returned data from IDXB featured listings call.
-		$listing_data = [];
-		// Property listings taken from $listing_data['data'].
-		$properties = [];
-
-		// Initial request.
-		$listing_data = $this->idx_api( $type . '?disclaimers=true&offset=' . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-		// Assign returned listings to $properties.
-		$properties = $listing_data['data'];
-
-		// Get rest of listings if there are more than 50.
-		while ( ( $offset + $limit ) < $listing_data['total'] ) {
-			$offset = $offset + $limit;
-
-			$listing_data = $this->idx_api( $type . '?disclaimers=true&offset=' . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-			$properties   = array_merge( $properties, $listing_data['data'] );
-		}
-
-		return $properties;
-
-	*/
 
 	/**
 	 * Returns agents wrapped in option tags
