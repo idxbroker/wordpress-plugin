@@ -4,11 +4,11 @@ jQuery(document).ready(function($) {
 	
 	$('.mdl-data-table.leads').DataTable( {
 		"ajax": {
-      		"url": datatablesajax.url,
-      		"data": {
+      			"url": datatablesajax.url,
+      			"data": {
 				action: 'get_idx_leads_data'
 			}
-    	},
+    		},
 		"pagingType": "full_numbers",
 		"bSort": true,
 		"bPaginate":true,
