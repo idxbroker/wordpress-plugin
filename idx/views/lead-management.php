@@ -90,6 +90,8 @@ class Lead_Management {
 		add_action( 'wp_ajax_idx_lead_note_delete', array( $this, 'idx_lead_note_delete' ) );
 		add_action( 'wp_ajax_idx_lead_property_delete', array( $this, 'idx_lead_property_delete' ) );
 		add_action( 'wp_ajax_idx_lead_search_delete', array( $this, 'idx_lead_search_delete' ) );
+
+		add_action( 'wp_ajax_get_idx_leads_data', [$this,'get_idx_leads_data'] );
 	}
 
 	public function idx_lead_scripts() {
@@ -111,6 +113,7 @@ class Lead_Management {
 			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
 			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
 			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
+			wp_localize_script( 'jquery-datatables', 'datatablesajax', [ 'url' => admin_url( 'admin-ajax.php' ) ] );
 			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 
 			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.css' );
@@ -530,8 +533,40 @@ class Lead_Management {
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
-
 		echo '<h3>Leads</h3>';
+		echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp leads">';
+		echo '
+			<a href="#" title="Delete Lead" class="delete-selected hide"><i class="material-icons md-18">delete</i> Delete Selected</a>
+			<thead>
+				<th class="mdl-data-table__cell--non-numeric">Lead Name</th>
+				<th class="mdl-data-table__cell--non-numeric">Email</th>
+				<th class="mdl-data-table__cell--non-numeric">Phone</th>
+				<th class="mdl-data-table__cell--non-numeric">Subscribed</th>
+				<th class="mdl-data-table__cell--non-numeric">Last Active</th>
+				<th class="mdl-data-table__cell--non-numeric">Agent</th>
+				<th class="mdl-data-table__cell--non-numeric">Actions</th>
+			</thead>
+			<tbody>
+			';
+		echo '</tbody></table>';
+		echo '<dialog id="dialog-lead-delete">
+				<form method="dialog">
+					<h5>Delete Lead</h5>
+					<p>Are you sure you want to delete this lead?</p>
+					<button type="submit" value="no" autofocus>No</button>
+					<button type="submit" value="yes">Yes</button>
+				</form>
+			</dialog>';
+		echo '
+			<a href="' . admin_url( 'admin.php?page=edit-lead' ) . '" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+				<i class="material-icons">add</i>
+				<div class="mdl-tooltip" data-mdl-for="add-lead">Add New Lead</div>
+			</a>
+			<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
+			';
+	}
+
+	public function get_idx_leads_data() {
 
 		$leads_array = $this->idx_api->get_leads();
 
@@ -539,11 +574,11 @@ class Lead_Management {
 
 		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
-		$leads = '';
+		$leads = [];
 
 		$offset = get_option( 'gmt_offset', 0 );
 
-		// prepare leads for display
+		// prepare leads for display.
 		foreach ( $leads_array as $lead ) {
 
 			$last_active = Carbon::parse( ( $lead->lastActivityDate === '0000-00-00 00:00:00' ) ? $lead->subscribeDate : $lead->lastActivityDate )->addHours( $offset )->toDayDateTimeString();
@@ -570,52 +605,44 @@ class Lead_Management {
 
 			$nonce = wp_create_nonce( 'idx_lead_delete_nonce' );
 
-			$leads .= '<tr class="lead-row">';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . $lead->firstName . ' ' . $lead->lastName . '</a></td>';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . $lead->id . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $lead->phone . '</td>';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $subscribed_on . '</td>';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $last_active . '</td>';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric">' . $agent_name . '</td>';
-			$leads .= '<td class="mdl-data-table__cell--non-numeric">
-						<a href="' . admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) . '" id="edit-lead-' . $lead->id . '" data-id="' . $lead->id . '" data-nonce="' . $nonce . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-lead-' . $lead->id . '">Edit Lead</div></a>
-						<a href="' . admin_url( 'admin-ajax.php?action=idx_lead_delete&id=' . $lead->id . '&nonce=' . $nonce ) . '" id="delete-lead-' . $lead->id . '" class="delete-lead" data-id="' . $lead->id . '" data-nonce="' . $nonce . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-lead-' . $lead->id . '">Delete Lead</div></a>
-						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" id="edit-mw-' . $lead->id . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $lead->id . '">Edit Lead in Middleware</div></a>
-						</td>';
-			$leads .= '</tr>';
+			// Column structure of data being passed to jQuery Datatables:
+			// Column 0 = Gravitar, First Name + Last Name.
+			// Column 1 = Email address.
+			// Column 2 = Phone number.
+			// Column 3 = Subscribed.
+			// Column 4 = Last active.
+			// Column 5 = Agent.
+			// Column 6 = Actions (edit, delete, MW link).
+
+			$current_lead = [
+				0 => '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . $lead->firstName . ' ' . $lead->lastName . '</a></td>',
+				1 => '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . $lead->id . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>',
+				2 => '<td class="mdl-data-table__cell--non-numeric">' . $lead->phone . '</td>',
+				3 => '<td class="mdl-data-table__cell--non-numeric">' . $subscribed_on . '</td>',
+				4 => '<td class="mdl-data-table__cell--non-numeric">' . $last_active . '</td>',
+				5 => '<td class="mdl-data-table__cell--non-numeric">' . $agent_name . '</td>',
+				6 => '<td class="mdl-data-table__cell--non-numeric">
+						<a href="' . admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) . '" id="edit-lead-' . $lead->id . '" data-id="' . $lead->id . '" data-nonce="' . $nonce . '">
+							<i class="material-icons md-18">create</i>
+							<div class="mdl-tooltip" data-mdl-for="edit-lead-' . $lead->id . '">Edit Lead</div>
+						</a>
+						<a href="' . admin_url( 'admin-ajax.php?action=idx_lead_delete&id=' . $lead->id . '&nonce=' . $nonce ) . '" id="delete-lead-' . $lead->id . '" class="delete-lead" data-id="' . $lead->id . '" data-nonce="' . $nonce . '">
+							<i class="material-icons md-18">delete</i>
+							<div class="mdl-tooltip" data-mdl-for="delete-lead-' . $lead->id . '">Delete Lead</div>
+						</a>
+						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" id="edit-mw-' . $lead->id . '" target="_blank">
+							<i class="material-icons md-18">exit_to_app</i>
+							<div class="mdl-tooltip" data-mdl-for="edit-mw-' . $lead->id . '">Edit Lead in Middleware</div>
+						</a>
+					 </td>',
+			];
+
+			array_push( $leads, $current_lead );
+
 		}
 
-		echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp leads">';
-		echo '
-			<a href="#" title="Delete Lead" class="delete-selected hide"><i class="material-icons md-18">delete</i> Delete Selected</a>
-			<thead>
-				<th class="mdl-data-table__cell--non-numeric">Lead Name</th>
-				<th class="mdl-data-table__cell--non-numeric">Email</th>
-				<th class="mdl-data-table__cell--non-numeric">Phone</th>
-				<th class="mdl-data-table__cell--non-numeric">Subscribed</th>
-				<th class="mdl-data-table__cell--non-numeric">Last Active</th>
-				<th class="mdl-data-table__cell--non-numeric">Agent</th>
-				<th class="mdl-data-table__cell--non-numeric">Actions</th>
-			</thead>
-			<tbody>
-			';
-		echo $leads;
-		echo '</tbody></table>';
-		echo '<dialog id="dialog-lead-delete">
-				<form method="dialog">
-					<h5>Delete Lead</h5>
-					<p>Are you sure you want to delete this lead?</p>
-					<button type="submit" value="no" autofocus>No</button>
-					<button type="submit" value="yes">Yes</button>
-				</form>
-			</dialog>';
-		echo '
-			<a href="' . admin_url( 'admin.php?page=edit-lead' ) . '" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
-				<i class="material-icons">add</i>
-				<div class="mdl-tooltip" data-mdl-for="add-lead">Add New Lead</div>
-			</a>
-			<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
-			';
+		echo json_encode( [ 'data' => $leads ] );
+		wp_die();
 	}
 
 	/*

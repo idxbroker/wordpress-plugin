@@ -3,6 +3,12 @@ jQuery(document).ready(function($) {
 	// Initialize datatables
 	
 	$('.mdl-data-table.leads').DataTable( {
+		"ajax": {
+      		"url": datatablesajax.url,
+      		"data": {
+				action: 'get_idx_leads_data'
+			}
+    	},
 		"pagingType": "full_numbers",
 		"bSort": true,
 		"bPaginate":true,
