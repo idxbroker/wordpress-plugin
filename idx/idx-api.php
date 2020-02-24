@@ -725,7 +725,7 @@ class Idx_Api {
 	}
 
 	/**
-	 * platinum_account_type function.
+	 * Platinum_account_type function.
 	 *
 	 * @access public
 	 * @return bool
@@ -739,12 +739,12 @@ class Idx_Api {
 	}
 
 	/**
-	 * get_leads function.
+	 * Get_leads function.
 	 *
 	 * @access public
-	 * @param mixed  $timeframe (default: null)
-	 * @param string $start_date (default: '')
-	 * @return void
+	 * @param mixed  $timeframe (default: null).
+	 * @param string $start_date (default: '').
+	 * @return array
 	 */
 	public function get_leads( $timeframe = null, $start_date = '' ) {
 		// API return limit and offset.
@@ -768,17 +768,94 @@ class Idx_Api {
 		}
 
 		$lead_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
-		$leads = $lead_data['data'];
 
-		while ( ( $offset + $limit ) < $lead_data['total'] ) {
-			$offset    = $offset + $limit;
-			$lead_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
-			$leads     = array_merge( $leads, $lead_data['data'] );
+		if ( array_key_exists( 'data', $lead_data ) && array_key_exists( 'total', $lead_data ) ) {
+			$leads = $lead_data['data'];
+
+			while ( ( $offset + $limit ) < $lead_data['total'] ) {
+				$offset    = $offset + $limit;
+				$lead_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+				// If no leads are returned, stop requesting more.
+				if ( empty( $lead_data['data'] ) ) {
+					break;
+				}
+				$leads = array_merge( $leads, $lead_data['data'] );
+			}
 		}
 
 		return $leads;
 	}
 
+	/**
+	 * Get_leads_total function.
+	 *
+	 * @access public
+	 * @return int
+	 */
+	public function get_leads_total() {
+
+		$lead_count = 0;
+
+		$lead_data = $this->idx_api( 'lead?offset=0', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( array_key_exists( 'total', $lead_data ) && 'integer' === gettype( $lead_data['total'] ) ) {
+			$lead_count = $lead_data['total'];
+		}
+
+		return $lead_count;
+	}
+
+	/**
+	 * Get_recent_active_leads function.
+	 *
+	 * @access public
+	 * @param string $date_type (default: 'subscribeDate').
+	 * @param int    $lead_count (default: 5).
+	 * @return array
+	 */
+	public function get_recent_leads( $date_type = 'subscribeDate', $lead_count = 5 ) {
+		// Get first page of leads.
+		$lead_data = $this->idx_api( 'lead?offset=0&dateType=' . $date_type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( ! is_wp_error( $lead_data ) && ! empty( $lead_data['data'] ) ) {
+			// If 'first' and 'last' are the same URL, return the results. If not, request leads with the 'last' URL and return those.
+			if ( $lead_data['first'] === $lead_data['last'] ) {
+				return array_reverse( array_slice( $lead_data['data'], -$lead_count ) );
+			}
+
+			// Get last page of leads. 
+			$api_method = 'lead' . substr( $lead_data['last'], strpos( $lead_data['last'], '?' ) ) . '&dateType=' . $date_type;
+			$lead_data  = $this->idx_api( $api_method, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+			if ( ! is_wp_error( $lead_data ) && ! empty( $lead_data['data'] ) ) {
+				// If returned listings from last page is enough to cover the $lead_count, return results.
+				if ( count( $lead_data['data'] ) >= $lead_count ) {
+					return array_reverse( array_slice( $lead_data['data'], -$lead_count ) );
+				}
+
+				// If there are not enough leads on the last page to match the $lead_count, store the current leads and call the previous-to-last page to get the rest.
+				$returned_leads = array_reverse( array_slice( $lead_data['data'], $lead_count ) );
+
+				// Get 2nd-to-last page of leads if needed. 
+				$api_method = 'lead' . substr( $lead_data['previous'], strpos( $lead_data['previous'], '?' ) ) . '&dateType=' . $date_type;
+				$lead_data  = $this->idx_api( $api_method, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+				if ( ! is_wp_error( $lead_data ) && ! empty( $lead_data['data'] ) ) {
+					return array_merge( $returned_leads, array_reverse( array_slice( $lead_data['data'], -( $lead_count - count( $returned_leads ) ) ) ) );
+				}
+			}
+		}
+		return [];
+	}
+
+	/**
+	 * Get_featured_listings function.
+	 *
+	 * @access public
+	 * @param string $listing_type (default: 'featured').
+	 * @param string $timeframe (default: null).
+	 * @return array
+	 */
 	public function get_featured_listings( $listing_type = 'featured', $timeframe = null ) {
 		// API return limit and offset.
 		$limit  = 50;
@@ -798,14 +875,16 @@ class Idx_Api {
 		// Initial request.
 		$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
 
-		// Assign returned listings to $properties.
-		$properties = $listing_data['data'];
+		if ( array_key_exists( 'data', $listing_data ) && ! empty( $listing_data['data'] ) ) {
+			// Assign returned listings to $properties.
+			$properties = $listing_data['data'];
 
-		// Get rest of listings if there are more than 50.
-		while ( ( $offset + $limit ) < $listing_data['total'] ) {
-			$offset       = $offset + $limit;
-			$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
-			$properties   = array_merge( $properties, $listing_data['data'] );
+			// Get rest of listings if there are more than 50.
+			while ( ( $offset + $limit ) < $listing_data['total'] ) {
+				$offset       = $offset + $limit;
+				$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
+				$properties   = array_merge( $properties, $listing_data['data'] );
+			}
 		}
 
 		return $properties;
@@ -814,7 +893,7 @@ class Idx_Api {
 	/**
 	 * Returns agents wrapped in option tags
 	 *
-	 * @param  int $agent_id Instance agentID if exists
+	 * @param  int $agent_id Instance agentID if exists.
 	 * @return str           HTML options tags of agents ids and names
 	 */
 	public function get_agents_select_list( $agent_id ) {
