@@ -817,34 +817,39 @@ class Idx_Api {
 		// Get first page of leads.
 		$lead_data = $this->idx_api( 'lead?offset=0&dateType=' . $date_type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
 
-		if ( ! is_wp_error( $lead_data ) && ! empty( $lead_data['data'] ) ) {
-			// If 'first' and 'last' are the same URL, return the results. If not, request leads with the 'last' URL and return those.
-			if ( $lead_data['first'] === $lead_data['last'] ) {
-				return array_reverse( array_slice( $lead_data['data'], -$lead_count ) );
-			}
-
-			// Get last page of leads. 
-			$api_method = 'lead' . substr( $lead_data['last'], strpos( $lead_data['last'], '?' ) ) . '&dateType=' . $date_type;
-			$lead_data  = $this->idx_api( $api_method, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
-
-			if ( ! is_wp_error( $lead_data ) && ! empty( $lead_data['data'] ) ) {
-				// If returned listings from last page is enough to cover the $lead_count, return results.
-				if ( count( $lead_data['data'] ) >= $lead_count ) {
-					return array_reverse( array_slice( $lead_data['data'], -$lead_count ) );
-				}
-
-				// If there are not enough leads on the last page to match the $lead_count, store the current leads and call the previous-to-last page to get the rest.
-				$returned_leads = array_reverse( array_slice( $lead_data['data'], $lead_count ) );
-
-				// Get 2nd-to-last page of leads if needed. 
-				$api_method = 'lead' . substr( $lead_data['previous'], strpos( $lead_data['previous'], '?' ) ) . '&dateType=' . $date_type;
-				$lead_data  = $this->idx_api( $api_method, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
-
-				if ( ! is_wp_error( $lead_data ) && ! empty( $lead_data['data'] ) ) {
-					return array_merge( $returned_leads, array_reverse( array_slice( $lead_data['data'], -( $lead_count - count( $returned_leads ) ) ) ) );
-				}
-			}
+		if ( is_wp_error( $lead_data ) || empty( $lead_data['data'] ) ) {
+			return [];
 		}
+
+		// If 'first' and 'last' are the same URL, return the results. If not, request leads with the 'last' URL and return those.
+		if ( $lead_data['first'] === $lead_data['last'] ) {
+			return array_reverse( array_slice( $lead_data['data'], -$lead_count ) );
+		}
+
+		// Get last page of leads.
+		$api_method = 'lead' . substr( $lead_data['last'], strpos( $lead_data['last'], '?' ) ) . '&dateType=' . $date_type;
+		$lead_data  = $this->idx_api( $api_method, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( is_wp_error( $lead_data ) || empty( $lead_data['data'] ) ) {
+			return [];
+		}
+
+		// If returned listings from last page is enough to cover the $lead_count, return results.
+		if ( count( $lead_data['data'] ) >= $lead_count ) {
+			return array_reverse( array_slice( $lead_data['data'], -$lead_count ) );
+		}
+
+		// If there are not enough leads on the last page to match the $lead_count, store the current leads and call the previous-to-last page to get the rest.
+		$returned_leads = array_reverse( array_slice( $lead_data['data'], $lead_count ) );
+
+		// Get 2nd-to-last page of leads if needed.
+		$api_method = 'lead' . substr( $lead_data['previous'], strpos( $lead_data['previous'], '?' ) ) . '&dateType=' . $date_type;
+		$lead_data  = $this->idx_api( $api_method, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( ! is_wp_error( $lead_data ) && ! empty( $lead_data['data'] ) ) {
+			return array_merge( $returned_leads, array_reverse( array_slice( $lead_data['data'], -( $lead_count - count( $returned_leads ) ) ) ) );
+		}
+
 		return [];
 	}
 
