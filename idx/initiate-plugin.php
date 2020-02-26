@@ -254,11 +254,16 @@ class Initiate_Plugin {
 	 * @return void
 	 */
 	public function idx_refreshapi() {
-		$this->idx_api->clear_wrapper_cache();
-		$this->idx_api->idx_clean_transients();
-		update_option( 'idx_broker_apikey', $_REQUEST['idx_broker_apikey'], false );
-		setcookie( 'api_refresh', 1, time() + 20 );
-		$this->schedule_omnibar_update();
+		if ( isset( $_REQUEST['idx_broker_apikey'], $_REQUEST['nonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['nonce'] ), 'idx-settings-nonce' ) ) {
+			$this->idx_api->clear_wrapper_cache();
+			$this->idx_api->idx_clean_transients();
+
+			$api_key = sanitize_text_field( wp_unslash( $_REQUEST['idx_broker_apikey'] ) );
+			update_option( 'idx_broker_apikey', $api_key, false );
+
+			setcookie( 'api_refresh', 1, time() + 20 );
+			$this->schedule_omnibar_update();
+		}
 		wp_die();
 	}
 
@@ -397,6 +402,7 @@ class Initiate_Plugin {
 			'IDXAdminAjax',
 			array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'idx-settings-nonce' )
 			)
 		);
 		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.css', dirname( __FILE__ ) ) );

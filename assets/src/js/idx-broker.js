@@ -97,6 +97,7 @@
 		params = params || jQuery('#idx_broker_options').serialize();
 		params += '&' + jQuery('#currentTab').serialize();
 		params += '&' + jQuery('[name=action]').serialize();
+		params += '&' + 'nonce=' + IDXAdminAjax.nonce;
 		return jQuery.ajax({
 	  		type: "POST",
 	   		url: ajaxurl,
