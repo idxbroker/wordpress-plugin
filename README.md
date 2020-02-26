@@ -4,7 +4,7 @@ Author: IDX, LLC
 Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 4.6
-**Tested up to:** 5.2.1
+**Tested up to:** 5.3.2
 **Stable tag:** 2.5.12
 **Minimum PHP:** 5.6
 **License:** GPLv2 or later  
@@ -117,7 +117,7 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 ## Changelog ##
 
 ### 2.5.12 ###
-* Fix:  
+* Fix: Resolves potential security issue in settings form
 
 ### 2.5.11 ###
 * Fix: Font Awesome 5 support

@@ -257,10 +257,8 @@ class Initiate_Plugin {
 		if ( isset( $_REQUEST['idx_broker_apikey'], $_REQUEST['nonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['nonce'] ), 'idx-settings-nonce' ) ) {
 			$this->idx_api->clear_wrapper_cache();
 			$this->idx_api->idx_clean_transients();
-
 			$api_key = sanitize_text_field( wp_unslash( $_REQUEST['idx_broker_apikey'] ) );
 			update_option( 'idx_broker_apikey', $api_key, false );
-
 			setcookie( 'api_refresh', 1, time() + 20 );
 			$this->schedule_omnibar_update();
 		}
