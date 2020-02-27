@@ -806,7 +806,7 @@ class Idx_Api {
 	}
 
 	/**
-	 * Get_recent_active_leads function.
+	 * Get_recent_leads function.
 	 *
 	 * @access public
 	 * @param string $date_type (default: 'subscribeDate').
