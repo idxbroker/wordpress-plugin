@@ -141,7 +141,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'idx-widgets-block',
-			plugins_url( '../assets/js/idx-widgets-block.min.js', __FILE__ ),
+			plugins_url( '../assets/blocks/idx-widgets-block.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -192,7 +192,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-lead-signup-block',
-			plugins_url( '../assets/js/impress-lead-signup-block.min.js', __FILE__ ),
+			plugins_url( '../assets/blocks/impress-lead-signup-block.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -257,7 +257,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-lead-login-block',
-			plugins_url( '../assets/js/impress-lead-login-block.min.js', __FILE__ ),
+			plugins_url( '../assets/blocks/impress-lead-login-block.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -309,7 +309,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-omnibar-block',
-			plugins_url( '../assets/js/impress-omnibar-block.min.js', __FILE__ ),
+			plugins_url( '../assets/blocks/impress-omnibar-block.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -363,7 +363,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'idx-wrapper-tags-block',
-			plugins_url( '../assets/js/idx-wrapper-tags-block.min.js', __FILE__ ),
+			plugins_url( '../assets/blocks/idx-wrapper-tags-block.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -392,7 +392,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-carousel-block',
-			plugins_url( '../assets/js/impress-carousel-block.min.js', __FILE__ ),
+			plugins_url( '../assets/blocks/impress-carousel-block.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -469,7 +469,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-showcase-block',
-			plugins_url( '../assets/js/impress-showcase-block.min.js', __FILE__ ),
+			plugins_url( '../assets/blocks/impress-showcase-block.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false
@@ -549,7 +549,7 @@ class Register_Blocks {
 		// Register block script.
 		wp_register_script(
 			'impress-city-links-block',
-			plugins_url( '../assets/js/impress-city-links-block.min.js', __FILE__ ),
+			plugins_url( '../assets/blocks/impress-city-links-block.min.js', __FILE__ ),
 			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
 			'1.0',
 			false

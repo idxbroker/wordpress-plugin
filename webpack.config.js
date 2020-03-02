@@ -3,6 +3,7 @@ const path = require('path')
 
 // Configuration object.
 const config = {
+  mode: 'production',
   // Create the entry points.
   // One for frontend and one for the admin area.
   entry: {
@@ -14,14 +15,14 @@ const config = {
     'impress-lead-login-block': './src/blocks/impress-lead-login/script.js',
     'impress-lead-signup-block': './src/blocks/impress-lead-signup/script.js',
     'impress-omnibar-block': './src/blocks/impress-omnibar/script.js',
-    'impress-showcase-block': './src/blocks/impress-showcase/script.js'
+    'impress-showcase-block': './src/blocks/impress-showcase/script.js',
   },
 
   // Create the output files.
   // One for each of our entry points.
   output: {
     // [name] allows for the entry object keys to be used as file names.
-    filename: 'js/[name].min.js',
+    filename: 'blocks/[name].min.js',
     // Specify the path to the JS files.
     path: path.resolve(__dirname, 'assets')
   },
@@ -29,11 +30,15 @@ const config = {
   // Setup a loader to transpile down the latest and great JavaScript so older browsers
   // can understand it.
   module: {
-    loaders: [
+    rules: [
       {
-        test: /.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['babel-preset-env']
+          }
+        }
       }
     ]
   }
