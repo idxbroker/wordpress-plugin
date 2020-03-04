@@ -1,22 +1,13 @@
 const { __ } = wp.i18n
 const { registerBlockType } = wp.blocks
-const { InspectorControls } = wp.editor
+const { InspectorControls } = wp.blockEditor
 const { SelectControl, CheckboxControl, TextControl } = wp.components
-
-// workaround to prevent the custom category from throwing an console warning
-function setCategory () {
-  if (window.location.href.indexOf('wp-admin') !== -1) {
-    return 'idx-category'
-  } else {
-    return 'widgets'
-  }
-}
 
 registerBlockType(
   'idx-broker-platinum/impress-carousel-block', {
     title: 'IMPress Carousel',
     icon: 'admin-multisite',
-    category: setCategory(),
+    category: 'idx-category',
     attributes: {
       max: {
         type: 'int',

@@ -1,23 +1,14 @@
 const { __ } = wp.i18n
 const { registerBlockType } = wp.blocks
-const { InspectorControls } = wp.editor
+const { InspectorControls } = wp.blockEditor
 const { SelectControl, CheckboxControl, TextControl } = wp.components
 const icon = () => (<i className='fas fa-home fa-2x' />)
-
-// workaround to prevent the custom category from throwing an console warning
-function setCategory () {
-  if (window.location.href.indexOf('wp-admin') !== -1) {
-    return 'idx-category'
-  } else {
-    return 'widgets'
-  }
-}
 
 registerBlockType(
   'idx-broker-platinum/impress-showcase-block', {
     title: __('IMPress Showcase', 'idx-broker-platinum'),
     icon: icon,
-    category: setCategory(),
+    category: 'idx-category',
     attributes: {
       max: {
         type: 'int',
