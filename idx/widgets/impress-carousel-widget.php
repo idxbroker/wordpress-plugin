@@ -65,13 +65,12 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			$instance = $this->defaults;
 		}
 
-		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker' ) );
-		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
+		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fas fa-caret-left\"></i><span>Prev</span>', 'idxbroker' ) );
+		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
 
 		if ( $instance['styles'] ) {
 			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
 			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-			wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		}
 
 		$output = '';
@@ -112,7 +111,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		$output .= '
         <script>
-          window.addEventListener("DOMContentLoaded", (event) => {
+					window.addEventListener("DOMContentLoaded", function(event) {
             jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
                 items: ' . $display . ',
                 ' . $autoplay . '
