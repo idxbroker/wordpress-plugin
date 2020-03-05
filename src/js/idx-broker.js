@@ -19,7 +19,7 @@
 		    	status.fadeIn('fast').html(ajax_load+'Refreshing API...');
 		    	save_form_options(params, function() {
 		    		status.fadeIn('fast').html(ajax_load+'Refreshing Links...');
-		    		setTimeout(window.location.reload(), 1000);
+				setTimeout(window.location.reload(), 1000);
 		    	});
 	    	}
 	    });
