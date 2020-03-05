@@ -110,40 +110,40 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$target = $this->target( $instance['new_window'] );
 
 		$output .= '
-        <script>
-					window.addEventListener("DOMContentLoaded", function(event) {
-            jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
-                items: ' . $display . ',
-                ' . $autoplay . '
-                nav: true,
-                navText: ["' . $prev_link . '", "' . $next_link . '"],
-                loop: true,
-                lazyLoad: true,
-                addClassActive: true,
-                itemsScaleUp: true,
-                addClassActive: true,
-                itemsScaleUp: true,
-                navContainerClass: "owl-controls owl-nav",
-                responsiveClass:true,
-                responsive:{
-                    0:{
-                        items: 1,
-                        nav: true,
-                        margin: 0
-                    },
-                    450:{
-                        items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
-                      	loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
-                    },
-                    800:{
-                        items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
-                      	loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
-                    }
-                }
-            });
-          });
-        </script>
-        ';
+        		<script>
+			window.addEventListener("DOMContentLoaded", function(event) {
+			    jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+				items: ' . $display . ',
+				' . $autoplay . '
+				nav: true,
+				navText: ["' . $prev_link . '", "' . $next_link . '"],
+				loop: true,
+				lazyLoad: true,
+				addClassActive: true,
+				itemsScaleUp: true,
+				addClassActive: true,
+				itemsScaleUp: true,
+				navContainerClass: "owl-controls owl-nav",
+				responsiveClass:true,
+				responsive:{
+				    0:{
+					items: 1,
+					nav: true,
+					margin: 0
+				    },
+				    450:{
+					items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+					loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
+				    },
+				    800:{
+					items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+					loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
+				    }
+				}
+			    });
+			  });
+			</script>
+		';
 
 		if ( 'low-high' == $instance['order'] ) {
 			// sort low to high
