@@ -483,7 +483,6 @@ class Register_Impress_Shortcodes {
 	 */
 	public function property_carousel_shortcode( $atts = array() ) {
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 
 		extract(
 			shortcode_atts(
@@ -515,8 +514,8 @@ class Register_Impress_Shortcodes {
 
 		$target = $this->target( $new_window );
 
-		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker' ) );
-		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
+		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fas fa-caret-left\"></i><span>Prev</span>', 'idxbroker' ) );
+		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
 
 		$output = '';
 		if ( ( $property_type ) === 'savedlinks' ) {
@@ -559,35 +558,35 @@ class Register_Impress_Shortcodes {
 		// All Instance Values are strings for shortcodes but not widgets.
 		$output .= '
             <script>
-            	jQuery(document).ready(function( $ ){
-                $(".impress-listing-carousel-' . $display . '").owlCarousel({
-                    items: ' . $display . ',
-                    ' . $autoplay_param . '
-                    nav: true,
-                    navText: ["' . $prev_link . '", "' . $next_link . '"],
-                    loop: true,
-                    lazyLoad: true,
-                    addClassActive: true,
-                    itemsScaleUp: true,
-                    addClassActive: true,
-                    itemsScaleUp: true,
-                    navContainerClass: "owl-controls owl-nav",
-                    responsiveClass:true,
-                    responsive:{
-                        0:{
-                            items: 1,
-                            nav: true,
-                            margin: 0
-                        },
-                        450:{
-							items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
-							  loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
-						},
-						800:{
-							items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
-							  loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
-						}
-                    }
+		window.addEventListener("DOMContentLoaded", function(event) {
+                	jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+			    items: ' . $display . ',
+			    ' . $autoplay_param . '
+			    nav: true,
+			    navText: ["' . $prev_link . '", "' . $next_link . '"],
+			    loop: true,
+			    lazyLoad: true,
+			    addClassActive: true,
+			    itemsScaleUp: true,
+			    addClassActive: true,
+			    itemsScaleUp: true,
+			    navContainerClass: "owl-controls owl-nav",
+			    responsiveClass:true,
+			    responsive:{
+				0:{
+					items: 1,
+				    	nav: true,
+				    	margin: 0
+				},
+				450:{
+					items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+					loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
+				},
+				800:{
+					items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+					loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
+				}
+                    	}
                 });
               });
             </script>
