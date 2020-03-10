@@ -585,7 +585,7 @@ class Lead_Management {
 
 			$subscribed_on = Carbon::parse( $lead->subscribeDate )->addHours( $offset )->toDayDateTimeString();
 
-			if ( $lead->agentOwner != '0' ) {
+			if ( $lead->agentOwner != '0' && isset( $agents_array['agent'] ) ) {
 				foreach ( $agents_array['agent'] as $agent ) {
 					if ( $lead->agentOwner == $agent['agentID'] ) {
 						$agent_name = $agent['agentDisplayName'];

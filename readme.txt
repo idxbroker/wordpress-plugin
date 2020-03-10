@@ -134,6 +134,9 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 
 = 2.6.0 =
 
+= 2.5.12 =
+* Fix: Resolves potential security issue in settings form
+
 = 2.5.11 =
 * New: Font Awesome 5 support
 
