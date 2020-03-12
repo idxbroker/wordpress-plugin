@@ -171,7 +171,7 @@ class Register_Shortcode_For_Ui {
 	 * @param mixed $shortcode
 	 * @return void
 	 */
-	public function idx_wrapper_tags( $shortcode ) {
+	public function idx_wrapper_tags( ) {
 		$output = '<div class="idx-modal-shortcode-field" data-shortcode="idx-wrapper-tags"></div>';
 
 		return $output;
