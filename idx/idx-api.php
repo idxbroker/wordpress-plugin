@@ -549,14 +549,17 @@ class Idx_Api {
 		// Initial request.
 		$listing_data = $this->idx_api( $type . "?disclaimers=true&offset=$offset", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 		// Assign returned listings to $properties.
-		$properties = $listing_data['data'];
+		if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
+			$properties = $listing_data['data'];
+		}
 
 		// Get rest of listings if there are more than 50.
-		while ( ( $offset + $limit ) < $listing_data['total'] ) {
-			$offset = $offset + $limit;
-
-			$listing_data = $this->idx_api( $type . "?disclaimers=true&offset=$offset", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-			$properties   = array_merge( $properties, $listing_data['data'] );
+		if ( isset( $listing_data['total'] ) ) {
+			while ( ( $offset + $limit ) < $listing_data['total'] ) {
+				$offset = $offset + $limit;
+				$listing_data = $this->idx_api( $type . "?disclaimers=true&offset=$offset", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+				$properties   = array_merge( $properties, $listing_data['data'] );
+			}
 		}
 
 		// Get any supplemental listings.
