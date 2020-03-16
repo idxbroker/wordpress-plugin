@@ -559,6 +559,13 @@ class Idx_Api {
 			$properties   = array_merge( $properties, $listing_data['data'] );
 		}
 
+		// Get any supplemental listings.
+		$supplemental_listings = $this->idx_api( 'supplemental', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+
+		if ( is_array( $supplemental_listings ) ) {
+			$properties = array_merge( $properties, $supplemental_listings );
+		}
+
 		return $properties;
 	}
 
