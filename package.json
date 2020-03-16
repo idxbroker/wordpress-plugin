@@ -1,6 +1,6 @@
 {
   "name": "impress-for-idx-broker",
-  "version": "2.6.0",
+  "version": "1",
   "description": "IMPress for IDX Broker",
   "main": "index.js",
   "repository": {
