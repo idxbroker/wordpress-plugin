@@ -17,6 +17,7 @@ class Register_Shortcode_For_Ui {
 		$this->idx_api = new \IDX\Idx_Api();
 		add_action( 'wp_ajax_idx_shortcode_options', array( $this, 'get_shortcode_options' ) );
 		add_action( 'wp_ajax_idx_shortcode_preview', array( $this, 'shortcode_preview' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'idx_set_shortcode_preview_nonce' ) );
 	}
 
 	/**
@@ -28,10 +29,20 @@ class Register_Shortcode_For_Ui {
 	public $idx_api;
 
 	/**
-	 * default_shortcodes function.
+	 * Idx_set_shortcode_preview_nonce function.
 	 *
 	 * @access public
 	 * @return void
+	 */
+	public function idx_set_shortcode_preview_nonce() {
+		wp_localize_script( 'idx-shortcode', 'IDXShortcodePreviewNonce', wp_create_nonce( 'idx-shortcode-preview-nonce' ) );
+	}
+
+	/**
+	 * Default_shortcodes function.
+	 *
+	 * @access public
+	 * @return array
 	 */
 	public function default_shortcodes() {
 		$shortcode_types = array(
@@ -158,9 +169,16 @@ class Register_Shortcode_For_Ui {
 	 * @return void
 	 */
 	public function shortcode_preview() {
-		// output shortcode for shortcode preview
-		$shortcode = sanitize_text_field( $_POST['idx_shortcode'] );
-		echo do_shortcode( stripslashes( $shortcode ) );
+		// User capability check.
+		if ( ! current_user_can( 'publish_posts' ) && ! current_user_can( 'publish_pages' ) ) {
+			wp_die();
+		}
+		// Validate and process request.
+		if ( isset( $_POST['idx_shortcode'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-shortcode-preview-nonce' ) ) {
+			// Output shortcode for shortcode preview.
+			$shortcode = stripslashes( sanitize_text_field( $_POST['idx_shortcode'] ) );
+			echo do_shortcode( $shortcode );
+		}
 		wp_die();
 	}
 

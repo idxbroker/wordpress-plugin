@@ -191,56 +191,68 @@ class Wrappers {
 	}
 
 	/**
-	 * idx_ajax_create_dynamic_page function.
+	 * Idx_ajax_create_dynamic_page function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function idx_ajax_create_dynamic_page() {
-
-		// default page content
-		$post_content = $this->does_theme_include_idx_tag();
-
-		$post_title = $_POST['post_title'] ? $_POST['post_title'] : 'Properties';
-		$new_post   = array(
-			'post_title'   => $post_title,
-			'post_name'    => $post_title,
-			'post_content' => $post_content,
-			'post_type'    => 'idx-wrapper',
-			'post_status'  => 'publish',
-		);
-		if ( $_POST['wrapper_page_id'] ) {
-			$new_post['ID'] = $_POST['wrapper_page_id'];
+		// User capability check.
+		if ( ! current_user_can( 'publish_posts' ) && ! current_user_can( 'edit_others_posts' ) ) {
+			wp_die();
 		}
-		$wrapper_page_id = wp_insert_post( $new_post );
-		update_option( 'idx_broker_dynamic_wrapper_page_name', $post_title, false );
-		update_option( 'idx_broker_dynamic_wrapper_page_id', $wrapper_page_id, false );
-		$wrapper_page_url = get_permalink( $wrapper_page_id );
-		$this->idx_api->set_wrapper( 'global', $wrapper_page_url );
-		update_post_meta( $wrapper_page_id, 'idx-wrapper-page', 'global' );
+		// Validate and process request.
+		if ( isset( $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-settings-wrapper-create-nonce' ) ) {
+			// Default page content.
+			$post_content    = $this->does_theme_include_idx_tag();
+			$submitted_title = sanitize_text_field( wp_unslash( $_POST['post_title'] ) );
+			$post_title      = $submitted_title ? $submitted_title : 'Properties';
 
-		die(
-			json_encode(
-				array(
-					'wrapper_page_id'   => $wrapper_page_id,
-					'wrapper_page_name' => $post_title,
-				)
-			)
-		);
+			$new_post = [
+				'post_title'   => $post_title,
+				'post_name'    => $post_title,
+				'post_content' => $post_content,
+				'post_type'    => 'idx-wrapper',
+				'post_status'  => 'publish',
+			];
+
+			// If an existing post ID is submitted, verify post is the custom type 'idx-wrapper' before updating.
+			$submitted_post_id = sanitize_text_field( wp_unslash( $_POST['wrapper_page_id'] ) );
+			if ( $submitted_post_id && 'idx-wrapper' === get_post_type( $submitted_post_id ) ) {
+				$new_post['ID'] = $submitted_post_id;
+			}
+
+			$wrapper_page_id = wp_insert_post( $new_post );
+			update_option( 'idx_broker_dynamic_wrapper_page_name', $post_title, false );
+			update_option( 'idx_broker_dynamic_wrapper_page_id', $wrapper_page_id, false );
+			$wrapper_page_url = get_permalink( $wrapper_page_id );
+			$this->idx_api->set_wrapper( 'global', $wrapper_page_url );
+			update_post_meta( $wrapper_page_id, 'idx-wrapper-page', 'global' );
+		}
+		wp_die();
 	}
 
 	/**
-	 * idx_ajax_delete_dynamic_page function.
+	 * Idx_ajax_delete_dynamic_page function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function idx_ajax_delete_dynamic_page() {
-		if ( $_POST['wrapper_page_id'] ) {
-			wp_delete_post( $_POST['wrapper_page_id'], true );
-			wp_trash_post( $_POST['wrapper_page_id'] );
+		// User capability check.
+		if ( ! current_user_can( 'delete_others_posts' ) ) {
+			wp_die();
 		}
-		die();
+		// Validate and process request.
+		if ( isset( $_POST['wrapper_page_id'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-settings-wrapper-delete-nonce' ) ) {
+			$wrapper_page_id = sanitize_text_field( wp_unslash( $_POST['wrapper_page_id'] ) );
+			// Verify retrieved post type is idx-wrapper before deleting.
+			if ( get_post_type( $wrapper_page_id ) === 'idx-wrapper' ) {
+				wp_delete_post( $wrapper_page_id, true );
+				wp_trash_post( $wrapper_page_id );
+			}
+		}
+		wp_die();
 	}
 
 	// dynamic wrapper requires the pageID, not the UID, so we must strip out the account number from the UID
