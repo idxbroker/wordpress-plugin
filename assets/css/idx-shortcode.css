@@ -1,5 +1,6 @@
 #idx-shortcode {
     height: 30px;
+    overflow: hidden;
 }
 #idx-shortcode:before {
     content: '\e021';
