@@ -67,7 +67,7 @@ class Help {
 			'title'   => 'API Key',
 			'content' => '
                 <strong>API Key</strong>
-                <br>&bull; The API key can be found in your <a href="https://middleware.idxbroker.com/mgmt/apikey.php" target="_blank">IDX Control Panel</a> under Home > API Control.
+                <br>&bull; The API key can be found in your <a href="https://middleware.idxbroker.com/mgmt/access-control" target="_blank">IDX Control Panel</a> under Home > API Control.
                 <br>&bull; For more information, see <a href="http://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control?b_id=10433" target="_blank">this article</a>.
                 ',
 		),
@@ -164,7 +164,7 @@ class Help {
 				)
 			);
 			$screen->set_help_sidebar(
-				'<p><a href="https://middleware.idxbroker.com/mgmt/login.php" target="_blank">IDX Control Panel</a></p>' .
+				'<p><a href="https://middleware.idxbroker.com/mgmt/login" target="_blank">IDX Control Panel</a></p>' .
 				'<p><a href="http://support.idxbroker.com/customer/en/portal/topics/784215-wordpress/articles" target="_blank">IDX Plugin Knowledgebase</a></p>' .
 				'<p><a href="http://support.idxbroker.com" target="_blank">IDX Support</a></p>'
 			);

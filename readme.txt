@@ -4,8 +4,8 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 4.6
-Tested up to: 5.2.1
-Stable tag: 2.5.11
+Tested up to: 5.3.2
+Stable tag: 2.6.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -132,8 +132,25 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 
 == Changelog ==
 
+= 2.6.2 =
+* Fix: Resolves potential security issues in settings forms and adds additional capability checks.
+
+= 2.6.1 =
+* Fix: Resolves issue with supplemental listings.
+
+= 2.6.0 =
+* New: Gutenberg blocks added for IMPress and IDX Broker widgets.
+* New: Updated to use IDX Broker API v1.7.0.
+* Fix: Sizing of 'Add IDX Shortcode' when using the classic editor.
+* Fix: IMPress Carousel/Showcase widget shortcodes correctly save agent ID when set.
+* Fix: IE 11 compatibility issue with IMPress Carousel widgets.
+* Fix: Issue preventing all leads from appearing in the Leads section of the dashboard.
+
+= 2.5.12 =
+* Fix: Resolves potential security issue in settings form.
+
 = 2.5.11 =
-* New: Font Awesome 5 support
+* New: Font Awesome 5 support.
 
 = 2.5.10 =
 * Fix: IMPress Carousel and Showcase widgets no longer show duplicate entries.

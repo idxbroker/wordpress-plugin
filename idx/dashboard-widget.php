@@ -11,9 +11,10 @@ class Dashboard_Widget {
 	public function __construct() {
 		$this->idx_api = new Idx_Api();
 
-		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
-		add_action( 'wp_ajax_idx_dashboard_leads', array( $this, 'leads_overview' ) );
-		add_action( 'wp_ajax_idx_dashboard_listings', array( $this, 'listings_overview' ) );
+		add_action( 'wp_dashboard_setup', [ $this, 'add_dashboard_widget' ] );
+		add_action( 'wp_ajax_idx_dashboard_leads', [ $this, 'leads_overview' ] );
+		add_action( 'wp_ajax_idx_dashboard_listings', [ $this, 'listings_overview' ] );
+		add_action( 'wp_ajax_side_overview_data', [ $this, 'side_overview_data' ] );
 	}
 
 	/**
@@ -80,7 +81,7 @@ class Dashboard_Widget {
 			];
 			echo wp_kses( $this->api_error, $allowed_html );
 		}
-		
+
 		// No key and no error (initial state of plugin after install but before API key is added).
 		if ( ! get_option( 'idx_broker_apikey' ) && null === $this->api_error ) {
 			echo '<a href="' . esc_url( admin_url() ) . 'admin.php?page=idx-broker">Enter your IDX Broker API key to get started</a>';
@@ -161,21 +162,44 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function side_overview() {
+		return '<div class="new-leads">
+					<p>New Leads</p>
+					<ul>
+						<!-- Placeholder list item, will be replaced with live data via ajax -->
+						<li><div class="idx-dashboard-loader" style="display:block;"></div></li>
+					</ul>
+				</div>
+				<div class="popular-listings">
+					<p>Popular Listings</p>
+					<ul>
+						<!-- Placeholder list item, will be replaced with live data via ajax -->
+						<li><div class="idx-dashboard-loader" style="display:block;"></div></li>
+					</ul>
+				</div>';
+	}
+
+	public function side_overview_data() {
 		try {
 			$leads = $this->new_leads();
 		} catch ( Exception $error ) {
 			$leads = '<li>' . $error->getMessage() . '</li>';
 		}
+
 		try {
 			$listings = $this->popular_listings();
 		} catch ( Exception $error ) {
 			$listings = '<li>' . $error->getMessage() . '</li>';
 		}
-		$output  = '<div class="new-leads"><p>New Leads</p>';
-		$output .= '<ul>' . $leads . '</ul></div>';
-		$output .= '<div class="popular-listings"><p>Popular Listings</p>';
-		$output .= '<ul>' . $listings . '</ul></div>';
-		return $output;
+
+		echo wp_json_encode(
+			[
+				'data' => [
+					'leads'    => $leads,
+					'listings' => $listings,
+				],
+			]
+		);
+		wp_die();
 	}
 
 	/**
@@ -248,13 +272,11 @@ class Dashboard_Widget {
 	 */
 	public function new_leads() {
 		// order newest first
-		$leads_array = $this->idx_api->get_leads();
+		$leads_array = $this->idx_api->get_recent_leads( 'subscribeDate', 5 );
 		// handle empty leads and listing arrays
 		if ( is_wp_error( $leads_array ) || empty( $leads_array ) ) {
 			throw new Exception( 'No Leads Returned' );
 		}
-
-		$leads_array = array_slice( array_reverse( $leads_array ), 0, 5 );
 
 		$leads = '';
 

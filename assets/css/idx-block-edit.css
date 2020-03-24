@@ -1,0 +1,12 @@
+.idx-block-placeholder-container {
+	text-align: center;
+	padding-top: 12px;
+}
+
+/* Used to change the size of the size of the dashicon used for the IMPress Carousel, it is the only block not using a Font Awesome icon */
+button.editor-block-list-item-idx-broker-platinum-impress-carousel-block > span > span > svg.dashicons-admin-multisite {
+	max-width: none;
+	max-height: none;
+	min-width: 35px;
+	min-height: 35px;
+}

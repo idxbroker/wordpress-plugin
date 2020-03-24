@@ -44,7 +44,7 @@ class Initiate_Plugin {
 		$this->instantiate_classes();
 	}
 
-	const IDX_API_DEFAULT_VERSION = '1.6.0';
+	const IDX_API_DEFAULT_VERSION = '1.7.0';
 	const IDX_API_URL             = 'https://api.idxbroker.com';
 
 	/**
@@ -69,7 +69,11 @@ class Initiate_Plugin {
 		new \IDX\Views\Lead_Management();
 		new \IDX\Views\Search_Management();
 		if ( is_multisite() ) {
-			 new \IDX\Views\Multisite();
+			new \IDX\Views\Multisite();
+		}
+		// Register blocks if Gutenberg is present.
+		if ( function_exists( 'register_block_type' ) ) {
+			new Register_Blocks();
 		}
 	}
 
@@ -248,34 +252,48 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * Function to delete existing cache. So API response in cache will be deleted
+	 * Function to delete existing cache. So API response in cache will be deleted.
 	 *
-	 * @param void
 	 * @return void
 	 */
 	public function idx_refreshapi() {
-		$this->idx_api->clear_wrapper_cache();
-		$this->idx_api->idx_clean_transients();
-		update_option( 'idx_broker_apikey', $_REQUEST['idx_broker_apikey'], false );
-		setcookie( 'api_refresh', 1, time() + 20 );
-		$this->schedule_omnibar_update();
+		// User capability check.
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			wp_die();
+		}
+		// Validate and process request.
+		if ( isset( $_REQUEST['idx_broker_apikey'], $_REQUEST['nonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['nonce'] ), 'idx-settings-refresh-api-nonce' ) ) {
+			$this->idx_api->clear_wrapper_cache();
+			$this->idx_api->idx_clean_transients();
+			$api_key = sanitize_text_field( wp_unslash( $_REQUEST['idx_broker_apikey'] ) );
+			update_option( 'idx_broker_apikey', $api_key, false );
+			setcookie( 'api_refresh', 1, time() + 20 );
+			$this->schedule_omnibar_update();
+		}
 		wp_die();
 	}
 
 	/**
-	 * Function to update recaptcha key on admin settings page
+	 * Function to update recaptcha key on admin settings page.
 	 *
 	 * @return void
 	 */
 	public function idx_update_recaptcha_key() {
-		if ( $_POST['idx_recaptcha_site_key'] ) {
-			update_option( 'idx_recaptcha_site_key', $_POST['idx_recaptcha_site_key'], false );
-			echo 1;
-		} else {
-			delete_option( 'idx_recaptcha_site_key' );
-			echo 'error';
+		// User capability check.
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_die();
 		}
-		die();
+		// Validate and process request.
+		if ( isset( $_POST['idx_recaptcha_site_key'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-settings-recaptcha-nonce' ) ) {
+			if ( $_POST['idx_recaptcha_site_key'] ) {
+				update_option( 'idx_recaptcha_site_key', sanitize_text_field( wp_unslash( $_POST['idx_recaptcha_site_key'] ) ), false );
+				echo 1;
+			} else {
+				delete_option( 'idx_recaptcha_site_key' );
+				echo 'error';
+			}
+		}
+		wp_die();
 	}
 
 	/**
@@ -335,7 +353,7 @@ class Initiate_Plugin {
 			'id'     => 'idx_admin_bar_menu_item_1',
 			'title'  => 'IDX Control Panel',
 			'parent' => 'idx_admin_bar_menu',
-			'href'   => 'https://middleware.idxbroker.com/mgmt/login.php',
+			'href'   => 'https://middleware.idxbroker.com/mgmt/login',
 			'meta'   => array( 'target' => '_blank' ),
 		);
 		$wp_admin_bar->add_node( $args );
@@ -397,6 +415,10 @@ class Initiate_Plugin {
 			'IDXAdminAjax',
 			array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'refresh_api_nonce' => wp_create_nonce( 'idx-settings-refresh-api-nonce' ),
+				'google_recaptcha_nonce' => wp_create_nonce( 'idx-settings-recaptcha-nonce' ),
+				'wrapper_create_nonce' => wp_create_nonce( 'idx-settings-wrapper-create-nonce' ),
+				'wrapper_delete_nonce' => wp_create_nonce( 'idx-settings-wrapper-delete-nonce' ),
 			)
 		);
 		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.css', dirname( __FILE__ ) ) );
