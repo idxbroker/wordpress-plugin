@@ -585,7 +585,7 @@ class Idx_Api {
 	 * Helper function to gather supplemental listings.
 	 *
 	 * @access public
-	 * @param bool $active_only - active only supplemental listings flag.
+	 * @param string $status - defaults to all listings if not set, 'featured' will pull in active supplemental listings and 'soldpending' will get non-active supplementals.
 	 * @return array
 	 */
 	public function get_client_supplementals( $status = '' ) {
@@ -605,11 +605,11 @@ class Idx_Api {
 		return array_filter(
 			$listing_data,
 			function ( $listing ) use ( &$status ) {
-				// If $active_only is true, match for active listings.
+				// If $status is featured, match for active listings.
 				if ( 'featured' === $status && 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] ) {
 					return true;
 				}
-				// If $active_only is false, match for non-active listings.
+				// If $status is soldpending, match for non-active listings.
 				if ( 'soldpending' === $status && 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] ) {
 					return true;
 				}
