@@ -569,14 +569,11 @@ class Idx_Api {
 				$properties = array_merge( $properties, $listing_data['data'] );
 			}
 		}
-		// Add active supplementals to featured call.
-		if ( 'featured' === $type ) {
+		// Add supplemental listings to featured and soldpending types.
+		if ( 'featured' === $type || 'soldpending' === $type ) {
 			return array_merge( $properties, $this->get_client_supplementals( $type ) );
 		}
-		// Add inactive supplementals to soldpending call.
-		if ( 'soldpending' === $type ) {
-			return array_merge( $properties, $this->get_client_supplementals( $type ) );
-		}
+
 		// Fallback return of the $properties array.
 		return $properties;
 	}
