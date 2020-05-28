@@ -539,7 +539,7 @@ class Idx_Api {
 	 * @return array
 	 */
 	public function client_properties( $type ) {
-		// Handle supplemental listings. 
+		// Handle supplemental listings.
 		if ( 'supplemental' === $type ) {
 			// Pass 'featured' to get just the active supplemental listings.
 			return $this->get_client_supplementals( 'featured' );
@@ -562,19 +562,20 @@ class Idx_Api {
 				$download_complete = true;
 				continue;
 			}
-			// Explode the $listing_data['next'] string on '/clients/', index 1 of the resulting array will have the fragment needed to make the next API request.
+			// Explode $listing_data['next'] on '/clients/', index 1 of the resulting array will have the fragment needed to make the next API request.
 			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1], Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 			// If $listing_data['data'] is an array, merge it with the existing listings/properties array.
 			if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 				$properties = array_merge( $properties, $listing_data['data'] );
 			}
 		}
+
 		// Add supplemental listings to featured and soldpending types.
 		if ( 'featured' === $type || 'soldpending' === $type ) {
 			return array_merge( $properties, $this->get_client_supplementals( $type ) );
 		}
 
-		// Fallback return of the $properties array.
+		// Fallback, return $properties array.
 		return $properties;
 	}
 
