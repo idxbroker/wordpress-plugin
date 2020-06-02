@@ -101,8 +101,10 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		wp_register_script( 'impress-lead-signup', plugins_url( '../assets/js/idx-lead-signup.min.js', dirname( __FILE__ ) ) );
 		wp_localize_script( 'impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page() );
 		wp_enqueue_script( 'impress-lead-signup' );
-		if ( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key' ) != '' ) {
-			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js' );
+
+		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
+			wp_enqueue_script( 'idx-recaptcha', plugins_url( '../assets/js/idx-recaptcha.min.js', dirname(__FILE__) ) );
+			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], null, false );
 		}
 
 		echo $before_widget;
@@ -155,13 +157,18 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 			?>
 
 			<?php
-			if ( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key' ) != '' ) {
-				$site_key = ( $wpl_options['wp_listings_captcha_site_key'] != '' ) ? $wpl_options['wp_listings_captcha_site_key'] : get_option( 'idx_recaptcha_site_key' );
-				echo '<div id="recaptcha" class="g-recaptcha" data-sitekey="' . $site_key . '"></div>';
+			// Include Google reCAPTCHA hidden field if setting enabled.
+			if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
+				echo '<input type="hidden" name="recaptchaToken" id="IDX-recaptcha-usersignup" data-action="usersignup" class="IDX-recaptchaToken" value>';
+				echo '<button id="bb-IDX-widgetsubmit" type="submit" name="btnSubmit" data-action="submit" data-callback="onSubmit" data-sitekey="6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij">';
+				echo esc_attr( apply_filters( 'impress_lead_signup_submit_text', $instance['button_text'] ) );
+				echo '</button>';
+			} else {
+				echo '<button id="bb-IDX-widgetsubmit" type="submit" name="btnSubmit">';
+				echo esc_attr( apply_filters( 'impress_lead_signup_submit_text', $instance['button_text'] ) );
+				echo '</button>';
 			}
 			?>
-
-			<button id="bb-IDX-widgetsubmit" type="submit" name="submit"><?php echo apply_filters( 'impress_lead_signup_submit_text', $instance['button_text'] ); ?></button>
 		</form>
 		<?php
 
