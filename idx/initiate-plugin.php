@@ -75,6 +75,8 @@ class Initiate_Plugin {
 		if ( function_exists( 'register_block_type' ) ) {
 			new Register_Blocks();
 		}
+		// Check if reCAPTCHA option has been set. If it does not exist, a default of 1 will be set.
+		get_option( 'idx_recaptcha_enabled', 1 );
 	}
 
 	/**

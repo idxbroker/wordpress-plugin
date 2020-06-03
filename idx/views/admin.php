@@ -109,11 +109,10 @@ if ( $wrapper_page_id ) {
 					<input id="page_link" class="hidden" type="text" value="<?php echo $wrapper_page_url; ?>" readonly>
 				</div>
 
-				<?php 
+				<?php
 				// Remove old recaptcha key if still present.
 				if ( get_option( 'idx_recaptcha_site_key' ) ) {
 					delete_option( 'idx_recaptcha_site_key' );
-					update_option( 'idx_recaptcha_enabled', 1 );
 				}
 				?>
 
