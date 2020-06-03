@@ -59,20 +59,20 @@ class Impress_Lead_Signup_Shortcode {
 
 		$widget = sprintf(
 			'<form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup" id="LeadSignup">
-                %3$s
-                <input type="hidden" name="action" value="addLead">
-                <input type="hidden" name="signupWidget" value="true">
-                <input type="hidden" name="contactType" value="direct">
-                %4$s
+				%3$s
+				<input type="hidden" name="action" value="addLead">
+				<input type="hidden" name="signupWidget" value="true">
+				<input type="hidden" name="contactType" value="direct">
+				%4$s
 
-                <label id="impress-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName">First Name:</label>
-                <input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
+				<label id="impress-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName">First Name:</label>
+				<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
 
-                <label id="impress-widgetlastName-label" class="ie-only" for="IDX-widgetlastName">Last Name:</label>
-                <input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name" required>
+				<label id="impress-widgetlastName-label" class="ie-only" for="IDX-widgetlastName">Last Name:</label>
+				<input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name" required>
 
-                <label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
-                <input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>',
+				<label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
+				<input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>',
 			$this->idx_api->subdomain_url(),
 			$target,
 			$this->error_message,
@@ -83,15 +83,15 @@ class Impress_Lead_Signup_Shortcode {
 			$widget .= sprintf(
 				'
 				<label for="impress-widgetPassword">Password:</label>
-                <input id="impress-widgetPassword" type="password" name="password" placeholder="Password">'
+				<input id="impress-widgetPassword" type="password" name="password" placeholder="Password">'
 			);
 		}
 
 		if ( $phone ) {
 			$widget .= sprintf(
 				'
-            <label id="impress-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
-            <input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">'
+			<label id="impress-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
+			<input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">'
 			);
 		}
 
@@ -100,14 +100,14 @@ class Impress_Lead_Signup_Shortcode {
 			$widget  .= sprintf(
 				'<input type="hidden" name="recaptchaToken" id="IDX-recaptcha-usersignup" data-action="usersignup" class="IDX-recaptchaToken" value>
 				 <input id="impress-widgetsubmit" type="submit" name="btnSubmit" data-action="submit" data-callback="onSubmit" data-sitekey="6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij"  value="%s">
-            	 </form>
+				 </form>
 				',
 				$button_text
 			);
 		} else {
 			$widget .= sprintf(
 				'<input id="impress-widgetsubmit" type="submit" name="btnSubmit" data-action="submit" value="%s">
-	             </form>',
+				 </form>',
 				$button_text
 			);
 		}
