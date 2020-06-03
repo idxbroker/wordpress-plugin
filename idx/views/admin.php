@@ -109,22 +109,6 @@ if ( $wrapper_page_id ) {
 					<input id="page_link" class="hidden" type="text" value="<?php echo $wrapper_page_url; ?>" readonly>
 				</div>
 
-				<script>
-					function updateRecaptchaSetting(element) {
-						console.log(element.checked);
-
-						jQuery.post(
-							ajaxurl, {
-								action: 'idx_update_recaptcha_setting',
-								nonce: IDXAdminAjax['google_recaptcha_nonce'],
-								enable_recaptcha: (element.checked ? 1 : 0)
-							}, function (response) {
-								console.log(response)
-							}
-						)
-
-					}
-				</script>
 				<?php 
 				// Remove old recaptcha key if still present.
 				if ( get_option( 'idx_recaptcha_site_key' ) ) {
