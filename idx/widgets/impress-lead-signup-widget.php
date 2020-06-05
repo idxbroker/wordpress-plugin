@@ -105,6 +105,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
 			wp_enqueue_script( 'idx-recaptcha', plugins_url( '../assets/js/idx-recaptcha.min.js', dirname(__FILE__) ) );
 			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], null, false );
+			wp_enqueue_script( 'jquery' );
 		}
 
 		echo $before_widget;

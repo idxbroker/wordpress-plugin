@@ -2,7 +2,7 @@ function onSubmit(token) {
     document.getElementById("LeadSignup").submit();
 }
 
-jQuery(function(){
+document.addEventListener('DOMContentLoaded', function(event) {
     var idxRecaptchaTimer = [];
 
     function fetchCaptchaToken(tokenElement) {
