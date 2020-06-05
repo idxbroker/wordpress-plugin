@@ -31,7 +31,7 @@ class Initiate_Plugin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'idx_inject_script_and_style' ) );
 
 		add_action( 'wp_ajax_idx_refresh_api', array( $this, 'idx_refreshapi' ) );
-		add_action( 'wp_ajax_idx_update_recaptcha_key', array( $this, 'idx_update_recaptcha_key' ) );
+		add_action( 'wp_ajax_idx_update_recaptcha_setting', [ $this, 'idx_update_recaptcha_setting' ] );
 
 		add_action( 'wp_loaded', array( $this, 'schedule_omnibar_update' ) );
 		add_action( 'idx_omnibar_get_locations', array( $this, 'idx_omnibar_get_locations' ) );
@@ -75,6 +75,8 @@ class Initiate_Plugin {
 		if ( function_exists( 'register_block_type' ) ) {
 			new Register_Blocks();
 		}
+		// Check if reCAPTCHA option has been set. If it does not exist, a default of 1 will be set.
+		get_option( 'idx_recaptcha_enabled', 1 );
 	}
 
 	/**
@@ -274,23 +276,23 @@ class Initiate_Plugin {
 	}
 
 	/**
-	 * Function to update recaptcha key on admin settings page.
+	 * Function to update recaptcha setting on admin settings page.
 	 *
 	 * @return void
 	 */
-	public function idx_update_recaptcha_key() {
+	public function idx_update_recaptcha_setting() {
 		// User capability check.
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			wp_die();
 		}
 		// Validate and process request.
-		if ( isset( $_POST['idx_recaptcha_site_key'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-settings-recaptcha-nonce' ) ) {
-			if ( $_POST['idx_recaptcha_site_key'] ) {
-				update_option( 'idx_recaptcha_site_key', sanitize_text_field( wp_unslash( $_POST['idx_recaptcha_site_key'] ) ), false );
-				echo 1;
+		if ( isset( $_POST['enable_recaptcha'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-settings-recaptcha-nonce' ) ) {
+			if ( ! empty( $_POST['enable_recaptcha'] ) ) {
+				update_option( 'idx_recaptcha_enabled', 1 );
+				echo 'success';
 			} else {
-				delete_option( 'idx_recaptcha_site_key' );
-				echo 'error';
+				update_option( 'idx_recaptcha_enabled', 0 );
+				echo 'success';
 			}
 		}
 		wp_die();
@@ -413,13 +415,13 @@ class Initiate_Plugin {
 		wp_localize_script(
 			'idxjs',
 			'IDXAdminAjax',
-			array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'refresh_api_nonce' => wp_create_nonce( 'idx-settings-refresh-api-nonce' ),
+			[
+				'ajaxurl'                => admin_url( 'admin-ajax.php' ),
+				'refresh_api_nonce'      => wp_create_nonce( 'idx-settings-refresh-api-nonce' ),
 				'google_recaptcha_nonce' => wp_create_nonce( 'idx-settings-recaptcha-nonce' ),
-				'wrapper_create_nonce' => wp_create_nonce( 'idx-settings-wrapper-create-nonce' ),
-				'wrapper_delete_nonce' => wp_create_nonce( 'idx-settings-wrapper-delete-nonce' ),
-			)
+				'wrapper_create_nonce'   => wp_create_nonce( 'idx-settings-wrapper-create-nonce' ),
+				'wrapper_delete_nonce'   => wp_create_nonce( 'idx-settings-wrapper-delete-nonce' ),
+			]
 		);
 		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.css', dirname( __FILE__ ) ) );
 	}

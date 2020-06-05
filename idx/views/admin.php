@@ -109,19 +109,27 @@ if ( $wrapper_page_id ) {
 					<input id="page_link" class="hidden" type="text" value="<?php echo $wrapper_page_url; ?>" readonly>
 				</div>
 
-				<!-- Add reCAPTCHA field if a key has not already been entered in WP Listings settings -->
-				<?php if ( $wpl_options['wp_listings_captcha_site_key'] == '' || $wpl_options['wp_listings_captcha_site_key'] == null ) { ?>
-					<div id="recaptcha-key">
-						<h3>Add Google reCAPTCHA</h3>
-						<div class="help-text">You can choose to add Google reCAPTCHA v2 to prevent spam lead signups. To use Google reCAPTCHA, you must first <a href="https://www.google.com/recaptcha/admin" target="_blank">sign up for a v2 key</a>, then enter the site key below:</div>
-						<label for="idx_recaptcha_site_key">Site Key:</label>
-						<input name="idx_recaptcha_site_key" type="text" id="idx_recaptcha_site_key" size="40" value="<?php echo get_option( 'idx_recaptcha_site_key' ); ?>" />
-						<input type="button" class="button-primary" id="idx_update_recaptcha_key" value="Update" />
+				<?php
+				// Remove old recaptcha key if still present.
+				if ( get_option( 'idx_recaptcha_site_key' ) ) {
+					delete_option( 'idx_recaptcha_site_key' );
+				}
+				?>
+
+				<div id="idx-enable-recaptcha-container">
+					<h3>Enable Google reCAPTCHA</h3>
+					<div id="recaptcha-control-area">
+						<div class="help-text">Enable Google reCAPTCHA v3 to prevent spam lead signups:</div>
+						<div class="toggle-container">
+							<input name="" id="enable-recaptcha-checkbox" type="checkbox" value="1" class="impress-settings-checkbox" onchange="updateRecaptchaSetting(this);" <?php echo ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) ? 'checked' : ''  ); ?> >
+							<label for="enable-recaptcha-checkbox" class="checkbox-label-slider"></label>
+						</div>
+						<div id="recaptcha-save-indicator"></div>
 					</div>
-					<?php
-}
-		settings_fields( 'idx-platinum-settings-group' );
-?>
+				</div>
+
+
+				<?php settings_fields( 'idx-platinum-settings-group' ); ?>
 	</form>
 
 </div>

@@ -114,29 +114,16 @@
   }
 })(window, undefined)
 
-jQuery(document).ready(function ($) {
-  // update recaptcha key
-  $('#idx_update_recaptcha_key').click(function (e) {
-    e.preventDefault()
-    var idx_recaptcha_site_key = $('#idx_recaptcha_site_key').val()
-    $.ajax({
-      type: 'post',
-      url: IDXAdminAjax.ajaxurl,
-      data: {
-        action: 'idx_update_recaptcha_key',
-        idx_recaptcha_site_key: idx_recaptcha_site_key,
-        nonce: IDXAdminAjax.google_recaptcha_nonce
-      },
-      success: function (result) {
-        if ($.isNumeric(result)) {
-          $('#idx_recaptcha_site_key').val(idx_recaptcha_site_key)
-          setTimeout(window.location.reload(), 1000)
-        } else {
-          $('#idx_recaptcha_site_key').val('')
-          setTimeout(window.location.reload(), 1000)
-        }
-      }
-    })
-    return false
-  })
-})
+function updateRecaptchaSetting(element) {
+  jQuery.post(
+    ajaxurl, {
+      action: 'idx_update_recaptcha_setting',
+      nonce: IDXAdminAjax['google_recaptcha_nonce'],
+      enable_recaptcha: (element.checked ? 1 : 0)
+    }, function (response) {
+         if ( response !== 'success' ) {
+           console.error('reCAPTCHA setting update failed')
+         }
+    }
+  )
+}
