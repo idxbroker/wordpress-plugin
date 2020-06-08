@@ -606,7 +606,7 @@ class Idx_Api {
 			$listing_data,
 			function ( $listing ) use ( &$status ) {
 				// If $status is featured, match for active listings.
-				if ( 'featured' === $status && 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] ) {
+				if ( 'featured' === $status && 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] || 'ACTIVE' === $listing['status'] ) {
 					return true;
 				}
 				// If $status is soldpending, match for non-active listings.
