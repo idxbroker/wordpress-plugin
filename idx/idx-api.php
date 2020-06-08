@@ -610,7 +610,7 @@ class Idx_Api {
 					return true;
 				}
 				// If $status is soldpending, match for non-active listings.
-				if ( 'soldpending' === $status && 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] ) {
+				if ( 'soldpending' === $status && 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] && 'ACTIVE' !== $listing['status'] ) {
 					return true;
 				}
 			}
