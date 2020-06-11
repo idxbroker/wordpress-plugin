@@ -23,7 +23,7 @@ class Notice_Handler {
 				$name,
 				__( 'Yoast is not allowing your pages to be indexed!', 'idxbroker' ),
 				'error',
-				'https://support.idxbroker.com/customer/portal/articles/2925410-fix-no-index',
+				'https://support.idxbroker.com/s/article/fix-no-index',
 				__( 'How can I fix this?', 'idxbroker' )
 			);
 		}
