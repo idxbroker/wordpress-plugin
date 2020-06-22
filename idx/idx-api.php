@@ -571,7 +571,7 @@ class Idx_Api {
 		}
 
 		// Add supplemental listings to featured and soldpending types.
-		if ( 'featured' === $type || 'soldpending' === $type ) {
+		if ( strpos( $type, 'featured' ) !== false || strpos( $type, 'soldpending' ) !== false ) {
 			return array_merge( $properties, $this->get_client_supplementals( $type ) );
 		}
 
@@ -606,11 +606,11 @@ class Idx_Api {
 			$listing_data,
 			function ( $listing ) use ( &$status ) {
 				// If $status is featured, match for active listings.
-				if ( 'featured' === $status && 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] || 'ACTIVE' === $listing['status'] ) {
+				if ( strpos( $status, 'featured' ) !== false && 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] || 'ACTIVE' === $listing['status'] ) {
 					return true;
 				}
 				// If $status is soldpending, match for non-active listings.
-				if ( 'soldpending' === $status && 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] && 'ACTIVE' !== $listing['status'] ) {
+				if ( strpos( $status, 'soldpending' ) !== false && 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] && 'ACTIVE' !== $listing['status'] ) {
 					return true;
 				}
 			}
