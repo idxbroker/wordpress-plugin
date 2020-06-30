@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 4.6
 **Tested up to:** 5.4.1
-**Stable tag:** 2.6.3
+**Stable tag:** 2.6.4
 **Minimum PHP:** 5.6
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -116,12 +116,15 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 
 ## Changelog ##
 
+### 2.6.4 ###
+* Fix: Resolves issue with IDX Broker API that prevented supplemental listings from importing when using IMPress Listings.
+
 ### 2.6.3 ###
 * New: reCAPTCHA v3 support added to the IMPress Lead Signup widget.
 * Fix: Add IDX Shortcode button blocks other buttons when using the classic editor.
 * Fix: Resolves omnibar issues that could prevent the default property type from saving.
 * Fix: Resolves issue where addresses used for omnibar searches would not save correctly.
-* Fix: Sold supplemental listings being included with active results for IMPress Carousel and Showcase widgets
+* Fix: Sold supplemental listings being included with active results for IMPress Carousel and Showcase widgets.
 
 ### 2.6.2 ###
 * Fix: Resolves potential security issues in settings forms and adds additional capability checks.
