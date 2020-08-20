@@ -60,7 +60,7 @@ Back up your expertise with neighborhood and community pages. Write a story, or 
 Assign leads to your agents exactly the way you want. Choose from multiple lead routing options, including [round robin](http://www.idxbroker.com/features/round-robin-and-core-fields-lead-routing), custom assignments for neighborhood pages, using a [showcase widget](https://www.idxbroker.com/features/listing-showcase-and-slideshow-widget), or by creating a unique [bio page](http://www.idxbroker.com/features/agent-bio-page-wrapper) for each agent!
 
 <h4>Affordable Pricing</h4>
-IMPress for IDX Broker requires an IDX Broker account. Plans start at $50/mo for IDX Broker Lite and $70/mo for IDX Broker Platinum. [View all features now](http://www.idxbroker.com/compare-idx).
+IMPress for IDX Broker requires an IDX Broker account. Lite plans start at $50/mo and offer the essential features and functionality needed for home search. Platinum plans start at $80/mo and include the features of Lite plus map search widgets, Market Reports, Sold Data and much more.
 
 IDX Broker also offers fully-hosted real estate websites – IDX Broker HOME – which include IDX Broker Platinum and live support starting at $150 per month.
 
