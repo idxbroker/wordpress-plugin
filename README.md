@@ -61,7 +61,7 @@ Assign leads to your agents exactly the way you want. Choose from multiple lead 
 
 <h4>Affordable Pricing</h4>
 IMPress for IDX Broker requires an IDX Broker account. Lite plans start at $50/mo and offer the essential features and functionality needed for home search. Platinum plans start at $80/mo and include the features of Lite plus map search widgets, Market Reports, Sold Data and much more.
-
+<br>
 IDX Broker also offers fully-hosted real estate websites – IDX Broker HOME – which include IDX Broker Platinum and live support starting at $150 per month.
 
 <h4>General Terms of Use</h4>
@@ -108,7 +108,7 @@ IDX Broker offers three account levels: Lite, Platinum and HOME.
 - Platinum monthly subscriptions: Agent ($80+), Team ($100+), and Office ($130+)
 - HOME monthly subscriptions: Agent ($150+), Team ($170+), and Office ($200+)
 
-<a target="_blank" href="https://idxbroker.com/idx_broker#lite">Read more about pricing.</a>
+<a href="https://idxbroker.com/idx_broker#lite" target="_blank">Read more about pricing.</a>
 
 ### What can I expect if I decide to get my IDX feed through IDX Broker? ###
 When you sign up for a new account our MLS team will send you a Docusign email (or PDF). Simply add your signature to the Docusign file or PDF in order to proceed. If you are not a Principal Broker, and have provided us with your Broker name and contact information, we will then forward the same paperwork to your Broker for approval. Once we receive the paperwork from your Broker, we will send to the MLS for data approval. MLS approval can take anywhere from 3-10 days. Once approved, we will activate your account, integrate your site's design into IDX pages, and send you IDX Broker login credentials so that you can use this plugin to add links and Widgets to your site or blog.
