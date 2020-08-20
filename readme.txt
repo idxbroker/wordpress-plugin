@@ -103,8 +103,13 @@ Yes. All IDX feeds require approval from a local board or MLS. If you (or your c
 No. IDX Broker requires a month-to-month agreement only. 
  
 = What is the pricing for IDX Broker services? =
-There are three base account levels - IDX Broker Lite ($50+), IDX Broker Platinum ($80+), and IDX Broker HOME ($150+). <a href="https://www.idxbroker.com/idx_broker">Read more about pricing.</a>
- 
+IDX Broker offers three account levels: Lite, Platinum and HOME. 
+- Lite monthly subscriptions: Agent ($50+), Team ($70+), and Office ($100+)
+- Platinum monthly subscriptions: Agent ($80+), Team ($100+), and Office ($130+)
+- HOME monthly subscriptions: Agent ($150+), Team ($170+), and Office ($200+)
+
+<a target="_blank" href="https://idxbroker.com/idx_broker#lite">Read more about pricing.</a>
+
 = What can I expect if I decide to get my IDX feed through IDX Broker? =
 When you sign up for a new account our MLS team will send you a Docusign email (or PDF). Simply add your signature to the Docusign file or PDF in order to proceed. If you are not a Principal Broker, and have provided us with your Broker name and contact information, we will then forward the same paperwork to your Broker for approval. Once we receive the paperwork from your Broker, we will send to the MLS for data approval. MLS approval can take anywhere from 3-10 days. Once approved, we will activate your account, integrate your site's design into IDX pages, and send you IDX Broker login credentials so that you can use this plugin to add links and Widgets to your site or blog.
  
