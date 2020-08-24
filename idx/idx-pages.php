@@ -330,10 +330,10 @@ class Idx_Pages {
 	 * Deletes IDX pages that dont have a url or title matching a systemlink url or title
 	 */
 	public function delete_idx_pages() {
-		// Only schedule update once IDX pages have UID
+		// Only schedule update once IDX pages have UID.
 		$uid_added = get_option( 'idx_added_uid_to_idx_pages' );
 		if ( empty( $uid_added ) ) {
-			return $this->app->make( '\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages' );
+			return new Backward_Compatibility\Add_Uid_To_Idx_Pages();
 		}
 
 		$posts = get_posts(
