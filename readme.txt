@@ -138,6 +138,7 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 == Changelog ==
 
 = 2.6.5 =
+* New: Pricing information changes
 
 = 2.6.4 =
 * Fix: Resolves issue with IDX Broker API that prevented supplemental listings from importing when using IMPress Listings.
