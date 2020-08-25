@@ -280,19 +280,19 @@ class Register_Blocks {
 			[
 				'attributes' => [
 					'phone' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'styles' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'new_window' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'agent_id' => [
 						'type' => 'string',
 					],
 					'password_field' => [
-						'type' => 'bool',
+						'type' => 'boolean',
 					],
 					'button_text' => [
 						'type' => 'string',
@@ -352,13 +352,13 @@ class Register_Blocks {
 			[
 				'attributes' => [
 					'styles' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'new_window' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'password_field' => [
-						'type' => 'bool',
+						'type' => 'boolean',
 					],
 				],
 				'editor_script'   => 'impress-lead-login-block',
@@ -415,13 +415,13 @@ class Register_Blocks {
 			[
 				'attributes' => [
 					'styles' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'extra' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'min_price' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 				],
 				'editor_script'   => 'impress-omnibar-block',
@@ -485,13 +485,13 @@ class Register_Blocks {
 			[
 				'attributes' => [
 					'max' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'display' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'autoplay' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'order' => [
 						'type' => 'string',
@@ -500,10 +500,10 @@ class Register_Blocks {
 						'type' => 'string',
 					],
 					'styles' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'new_window' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'saved_link_id' => [
 						'type' => 'string',
@@ -573,16 +573,16 @@ class Register_Blocks {
 			[
 				'attributes' => [
 					'max' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'use_rows' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'num_per_row' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'show_image' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'order' => [
 						'type' => 'string',
@@ -597,10 +597,10 @@ class Register_Blocks {
 						'type' => 'string',
 					],
 					'styles' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'new_window' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 				],
 				'editor_script'   => 'impress-showcase-block',
@@ -670,19 +670,19 @@ class Register_Blocks {
 						'type' => 'string',
 					],
 					'use_columns' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'number_columns' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'styles' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'show_count' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 					'new_window' => [
-						'type' => 'int',
+						'type' => 'integer',
 					],
 				],
 				'editor_script'   => 'impress-city-links-block',
