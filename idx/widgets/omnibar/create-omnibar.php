@@ -295,14 +295,15 @@ EOD;
 		add_action(
 			'rest_api_init',
 			function() {
-				// Query string can be anything
+				// Query string can be anything.
 				register_rest_route(
 					'idxbroker/v1',
 					'/omnibar/autocomplete/(?P<query>(.*)+)',
-					array(
-						'methods'  => 'GET',
-						'callback' => [ new \IDX\Widgets\Omnibar\Autocomplete(), 'get_autocomplete_data' ],
-					)
+					[
+						'methods'             => 'GET',
+						'callback'            => [ new \IDX\Widgets\Omnibar\Autocomplete(), 'get_autocomplete_data' ],
+						'permission_callback' => '__return_true',
+					]
 				);
 			}
 		);
