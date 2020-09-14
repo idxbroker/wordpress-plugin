@@ -89,7 +89,7 @@ class Idx_Pages {
 			return;
 		}
 
-		// Schedule any missing events if missing.
+		// Schedule any missing events.
 		if ( ! wp_next_scheduled( 'idx_create_idx_pages' ) ) {
 			wp_schedule_event( time(), $idx_cron_schedule, 'idx_create_idx_pages' );
 		}
