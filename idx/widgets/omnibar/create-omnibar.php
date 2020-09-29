@@ -166,7 +166,7 @@ EOD;
 			$mlsPtIDs = array(
 				array(
 					'idxID'   => '',
-					'mlsPtID' => 1,
+					'mlsPtID' => 'all',
 				),
 			);
 		}
