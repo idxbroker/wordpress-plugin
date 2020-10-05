@@ -1,7 +1,7 @@
 const { __ } = wp.i18n
 const { registerBlockType } = wp.blocks
 const { InspectorControls } = wp.blockEditor
-const { SelectControl, CheckboxControl, TextControl } = wp.components
+const { SelectControl, CheckboxControl, TextControl, Panel, PanelBody } = wp.components
 const icon = () => (<i className='fas fa-user-plus fa-2x' />)
 
 registerBlockType(
@@ -41,41 +41,45 @@ registerBlockType(
             <img src={lead_signup_image_url} />
           </div>
           <InspectorControls>
-            <CheckboxControl
-              label={__('Show phone number field?', 'idx-broker-platinum')}
-              value={attributes.phone}
-              checked={(attributes.phone > 0)}
-              onChange={(value) => { setAttributes({ phone: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Default Styles?', 'idx-broker-platinum')}
-              value={attributes.styles}
-              checked={(attributes.styles > 0)}
-              onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Open in a New Window?', 'idx-broker-platinum')}
-              value={attributes.new_window}
-              checked={(attributes.new_window > 0)}
-              onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Add password form field?', 'idx-broker-platinum')}
-              value={attributes.password_field}
-              checked={(!!attributes.password_field)}
-              onChange={(value) => { setAttributes({ password_field: value }) }}
-            />
-            <TextControl
-              label={__('Sign up button text:', 'idx-broker-platinum')}
-              value={attributes.button_text}
-              onChange={(value) => { setAttributes({ button_text: value }) }}
-            />
-            <SelectControl
-              label={__('Route to Agent:', 'idx-broker-platinum')}
-              value={attributes.agent_id}
-              options={(lead_signup_agent_list || [{ label: 'All', value: '' }])}
-              onChange={(value) => { setAttributes({ agent_id: value }) }}
-            />
+            <Panel>
+              <PanelBody title='Settings' initialOpen={true}>
+                <CheckboxControl
+                  label={__('Show phone number field?', 'idx-broker-platinum')}
+                  value={attributes.phone}
+                  checked={(attributes.phone > 0)}
+                  onChange={(value) => { setAttributes({ phone: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Default Styles?', 'idx-broker-platinum')}
+                  value={attributes.styles}
+                  checked={(attributes.styles > 0)}
+                  onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Open in a New Window?', 'idx-broker-platinum')}
+                  value={attributes.new_window}
+                  checked={(attributes.new_window > 0)}
+                  onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Add password form field?', 'idx-broker-platinum')}
+                  value={attributes.password_field}
+                  checked={(!!attributes.password_field)}
+                  onChange={(value) => { setAttributes({ password_field: value }) }}
+                />
+                <TextControl
+                  label={__('Sign up button text:', 'idx-broker-platinum')}
+                  value={attributes.button_text}
+                  onChange={(value) => { setAttributes({ button_text: value }) }}
+                />
+                <SelectControl
+                  label={__('Route to Agent:', 'idx-broker-platinum')}
+                  value={attributes.agent_id}
+                  options={(lead_signup_agent_list || [{ label: 'All', value: '' }])}
+                  onChange={(value) => { setAttributes({ agent_id: value }) }}
+                />
+              </PanelBody>
+            </Panel>
           </InspectorControls>
         </div>
       )
