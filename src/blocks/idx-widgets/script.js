@@ -1,7 +1,7 @@
 const { __ } = wp.i18n
 const { registerBlockType } = wp.blocks
 const { InspectorControls } = wp.blockEditor
-const { SelectControl } = wp.components
+const { SelectControl, Panel, PanelBody } = wp.components
 const icon = () => (<i className='fas fa-cog fa-2x' />)
 
 registerBlockType(
@@ -23,12 +23,16 @@ registerBlockType(
           </div>
 
           <InspectorControls>
-            <SelectControl
-              label='Select a Widget:'
-              value={attributes.id}
-              options={idx_widgets_list ? idx_widgets_list : [{ label: 'All', value: '' }]}
-              onChange={(value) => { setAttributes({ id: value }) }}
-            />
+            <Panel>
+              <PanelBody title='Settings' initialOpen={true}>
+                <SelectControl
+                  label='Select a Widget:'
+                  value={attributes.id}
+                  options={idx_widgets_list ? idx_widgets_list : [{ label: 'All', value: '' }]}
+                  onChange={(value) => { setAttributes({ id: value }) }}
+                />
+              </PanelBody>
+            </Panel>
           </InspectorControls>
         </div>
       )

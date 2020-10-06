@@ -1,7 +1,7 @@
 const { __ } = wp.i18n
 const { registerBlockType } = wp.blocks
 const { InspectorControls } = wp.blockEditor
-const { SelectControl, CheckboxControl } = wp.components
+const { SelectControl, CheckboxControl, Panel, PanelBody } = wp.components
 const icon = () => (<i className='fas fa-link fa-2x' />)
 
 registerBlockType(
@@ -49,54 +49,58 @@ registerBlockType(
           </div>
 
           <InspectorControls>
-            <SelectControl
-              label={__('MLS to use for city links:', 'idx-broker-platinum')}
-              value={attributes.mls}
-              options={(impress_city_links_mls_options || [{ label: '-', value: '' }])}
-              onChange={(value) => { setAttributes({ mls: value }) }}
-            />
-            <SelectControl
-              label={__('Select a city list:', 'idx-broker-platinum')}
-              value={attributes.city_list}
-              options={(impress_city_links_city_options || [{ label: '-', value: '' }])}
-              onChange={(value) => { setAttributes({ city_list: value }) }}
-            />
-            <CheckboxControl
-              label={__('Split links into columns?', 'idx-broker-platinum')}
-              value={attributes.use_columns}
-              checked={(attributes.use_columns > 0)}
-              onChange={(value) => { setAttributes({ use_columns: value }) }}
-            />
-            <SelectControl
-              label={__('Number of columns:', 'idx-broker-platinum')}
-              value={attributes.number_columns}
-              options={columnCountOptions}
-              onChange={(value) => { setAttributes({ number_columns: value }) }}
-            />
-            <CheckboxControl
-              label={__('Default Styles?', 'idx-broker-platinum')}
-              value={attributes.styles}
-              checked={(attributes.styles > 0)}
-              onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Show Number of Listings for each city?', 'idx-broker-platinum')}
-              value={attributes.show_count}
-              checked={(attributes.show_count > 0)}
-              onChange={(value) => { setAttributes({ show_count: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Open Listings in a New Window?', 'idx-broker-platinum')}
-              value={attributes.new_window}
-              checked={(attributes.new_window > 0)}
-              onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
-            />
-            <p>
-              Don't have any city lists? Go create some in your
-              <a href='http://middleware.idxbroker.com/mgmt/citycountyziplists.php' target='_blank'>
-                IDX dashboard.
-              </a>
-            </p>
+            <Panel>
+              <PanelBody title='Settings' initialOpen={true}>
+                <SelectControl
+                  label={__('MLS to use for city links:', 'idx-broker-platinum')}
+                  value={attributes.mls}
+                  options={(impress_city_links_mls_options || [{ label: '-', value: '' }])}
+                  onChange={(value) => { setAttributes({ mls: value }) }}
+                />
+                <SelectControl
+                  label={__('Select a city list:', 'idx-broker-platinum')}
+                  value={attributes.city_list}
+                  options={(impress_city_links_city_options || [{ label: '-', value: '' }])}
+                  onChange={(value) => { setAttributes({ city_list: value }) }}
+                />
+                <CheckboxControl
+                  label={__('Split links into columns?', 'idx-broker-platinum')}
+                  value={attributes.use_columns}
+                  checked={(attributes.use_columns > 0)}
+                  onChange={(value) => { setAttributes({ use_columns: value }) }}
+                />
+                <SelectControl
+                  label={__('Number of columns:', 'idx-broker-platinum')}
+                  value={attributes.number_columns}
+                  options={columnCountOptions}
+                  onChange={(value) => { setAttributes({ number_columns: value }) }}
+                />
+                <CheckboxControl
+                  label={__('Default Styles?', 'idx-broker-platinum')}
+                  value={attributes.styles}
+                  checked={(attributes.styles > 0)}
+                  onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Show Number of Listings for each city?', 'idx-broker-platinum')}
+                  value={attributes.show_count}
+                  checked={(attributes.show_count > 0)}
+                  onChange={(value) => { setAttributes({ show_count: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Open Listings in a New Window?', 'idx-broker-platinum')}
+                  value={attributes.new_window}
+                  checked={(attributes.new_window > 0)}
+                  onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
+                />
+                <p>
+                  Don't have any city lists? Go create some in your
+                  <a href='http://middleware.idxbroker.com/mgmt/citycountyziplists.php' target='_blank'>
+                    IDX dashboard.
+                  </a>
+                </p>
+              </PanelBody>
+            </Panel>
           </InspectorControls>
         </div>
       )
