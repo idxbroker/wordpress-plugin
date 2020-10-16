@@ -87,6 +87,12 @@ class Idx_Api {
 		$request_type = 'GET',
 		$json_decode_type = false
 	) {
+
+		// If no API key is set, return early.
+		if ( empty( $this->api_key ) || empty( str_replace( ' ', '', $this->api_key ) ) ) {
+			return [];
+		}
+
 		$cache_key = 'idx_' . $level . '_' . $method . '_cache';
 
 		if ( $this->get_transient( $cache_key ) !== false ) {
@@ -787,7 +793,7 @@ class Idx_Api {
 	 */
 	public function platinum_account_type() {
 		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
-		if ( 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'plat' ) || stripos( $account_type[0], 'home' ) ) ) {
+		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'plat' ) || stripos( $account_type[0], 'home' ) ) ) {
 			return true;
 		}
 		return false;
