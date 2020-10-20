@@ -138,6 +138,10 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 == Changelog ==
 
 = 2.6.6 =
+* New: Omnibar step control increments increased
+* Fix: Gutenberg block menu padding
+* Fix: Resolves bug that caused some cron scheduling issues
+* Fix: Resolves rest route registration warnings
 
 = 2.6.5 =
 * New: Pricing information changes
