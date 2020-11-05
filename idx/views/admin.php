@@ -121,13 +121,25 @@ if ( $wrapper_page_id ) {
 					<div id="recaptcha-control-area">
 						<div class="help-text">Enable Google reCAPTCHA v3 to prevent spam lead signups:</div>
 						<div class="toggle-container">
-							<input name="" id="enable-recaptcha-checkbox" type="checkbox" value="1" class="impress-settings-checkbox" onchange="updateRecaptchaSetting(this);" <?php echo ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) ? 'checked' : ''  ); ?> >
+							<input id="enable-recaptcha-checkbox" type="checkbox" value="1" class="impress-settings-checkbox" onchange="updateRecaptchaSetting(this);" <?php echo ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) ? 'checked' : '' ); ?> >
 							<label for="enable-recaptcha-checkbox" class="checkbox-label-slider"></label>
 						</div>
 						<div id="recaptcha-save-indicator"></div>
 					</div>
 				</div>
 
+				<div>
+					<h3>Install Information Data Collection</h3>
+					<div class="help-text">IDX Broker collects general install information to help improve our WordPress plugins.</div>
+					<div id="recaptcha-control-area">
+						<div class="help-text">Opt-out:</div>
+						<div class="toggle-container">
+							<input name="" id="enable-data-optout-checkbox" type="checkbox" value="1" class="impress-settings-checkbox" onchange="updateOptoutSetting(this);" <?php echo ( ! empty( get_option( 'impress_data_optout' ) ) ? 'checked' : '' ); ?> >
+							<label for="enable-data-optout-checkbox" class="checkbox-label-slider"></label>
+						</div>
+						<div id="recaptcha-save-indicator"></div>
+					</div>
+				</div>
 
 				<?php settings_fields( 'idx-platinum-settings-group' ); ?>
 	</form>

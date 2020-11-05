@@ -114,16 +114,30 @@
   }
 })(window, undefined)
 
-function updateRecaptchaSetting(element) {
+function updateRecaptchaSetting (element) {
   jQuery.post(
     ajaxurl, {
       action: 'idx_update_recaptcha_setting',
       nonce: IDXAdminAjax['google_recaptcha_nonce'],
       enable_recaptcha: (element.checked ? 1 : 0)
     }, function (response) {
-         if ( response !== 'success' ) {
-           console.error('reCAPTCHA setting update failed')
-         }
+      if (response !== 'success') {
+        window.location.reload()
+      }
+    }
+  )
+}
+
+function updateOptoutSetting (element) {
+  jQuery.post(
+    ajaxurl, {
+      action: 'idx_update_data_optout_setting',
+      nonce: IDXAdminAjax['data_optout_nonce'],
+      optout: element.checked
+    }, function (response) {
+      if ( response !== 'success') {
+        window.location.reload()
+      }
     }
   )
 }
