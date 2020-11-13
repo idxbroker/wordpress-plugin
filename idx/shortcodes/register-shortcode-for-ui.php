@@ -49,33 +49,33 @@ class Register_Shortcode_For_Ui {
 			'system_links'              => array(
 				'name'       => 'System Links',
 				'short_name' => 'system_links',
-				'icon'       => 'fa fa-star',
+				'icon'       => 'fas fa-star',
 			),
 			'saved_links'               => array(
 				'name'       => 'Saved Links',
 				'short_name' => 'saved_links',
-				'icon'       => 'fa fa-floppy-o',
+				'icon'       => 'far fa-save',
 			),
 			'widgets'                   => array(
 				'name'       => 'IDX Widgets',
 				'short_name' => 'widgets',
-				'icon'       => 'fa fa-cog',
+				'icon'       => 'fas fa-cog',
 			),
 			// omnibar extra included as option
 			'omnibar'                   => array(
 				'name'       => 'IMPress Omnibar Search',
 				'short_name' => 'omnibar',
-				'icon'       => 'fa fa-search',
+				'icon'       => 'fas fa-search',
 			),
 			'impress_city_links'        => array(
 				'name'       => 'IMPress City Links',
 				'short_name' => 'impress_city_links',
-				'icon'       => 'fa fa-link',
+				'icon'       => 'fas fa-link',
 			),
 			'impress_property_showcase' => array(
 				'name'       => 'IMPress Property Showcase',
 				'short_name' => 'impress_property_showcase',
-				'icon'       => 'fa fa-home',
+				'icon'       => 'fas fa-home',
 			),
 			'impress_property_carousel' => array(
 				'name'       => 'IMPress Property Carousel',
@@ -85,12 +85,12 @@ class Register_Shortcode_For_Ui {
 			'impress_lead_login'        => array(
 				'name'       => 'IMPress Lead Login Widget',
 				'short_name' => 'impress_lead_login',
-				'icon'       => 'fa fa-users',
+				'icon'       => 'fas fa-users',
 			),
 			'idx_wrapper_tags'          => array(
 				'name'       => 'IDX Wrapper Tags',
 				'short_name' => 'idx_wrapper_tags',
-				'icon'       => 'fa fa-cog',
+				'icon'       => 'fas fa-code',
 			),
 		);
 		// Only add lead signup shortcode if the account type is Platinum
@@ -98,7 +98,7 @@ class Register_Shortcode_For_Ui {
 			$shortcode_types['impress_lead_signup'] = array(
 				'name'       => 'IMPress Lead Signup Widget',
 				'short_name' => 'impress_lead_signup',
-				'icon'       => 'fa fa-user-plus',
+				'icon'       => 'fas fa-user-plus',
 			);
 		}
 		return $shortcode_types;
