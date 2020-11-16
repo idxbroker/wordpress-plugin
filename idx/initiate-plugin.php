@@ -563,8 +563,8 @@ EOD;
 				'memory_limit'      => WP_MEMORY_LIMIT,
 				'api_key'           => get_option( 'idx_broker_apikey' ),
 				'site_url'          => get_site_url(),
-				'impress_listings'  => class_exists( 'WP_Listings' ) ? true : false,
-				'impress_agents'    => class_exists( 'IMPress_Agents' ) ? true : false,
+				'impress_listings'  => class_exists( 'WP_Listings' ),
+				'impress_agents'    => class_exists( 'IMPress_Agents' ),
 				'impress_idxb'      => true,
 			];
 
