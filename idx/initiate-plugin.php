@@ -28,10 +28,12 @@ class Initiate_Plugin {
 		add_action( 'admin_bar_init', array( $this, 'load_admin_menu_styles' ) );
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 999.125 );
 		add_action( 'admin_init', array( $this, 'disable_original_plugin' ) );
+		add_action( 'admin_init', [ $this, 'get_install_info' ] );
 		add_action( 'admin_enqueue_scripts', array( $this, 'idx_inject_script_and_style' ) );
 
 		add_action( 'wp_ajax_idx_refresh_api', array( $this, 'idx_refreshapi' ) );
 		add_action( 'wp_ajax_idx_update_recaptcha_setting', [ $this, 'idx_update_recaptcha_setting' ] );
+		add_action( 'wp_ajax_idx_update_data_optout_setting', [ $this, 'idx_update_data_optout_setting' ] );
 
 		add_action( 'wp_loaded', array( $this, 'schedule_omnibar_update' ) );
 		add_action( 'idx_omnibar_get_locations', array( $this, 'idx_omnibar_get_locations' ) );
@@ -299,6 +301,25 @@ class Initiate_Plugin {
 	}
 
 	/**
+	 * Function to update data collection optout option on admin settings page.
+	 *
+	 * @return void
+	 */
+	public function idx_update_data_optout_setting() {
+		// User capability check.
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_die();
+		}
+		// Validate and process request.
+		if ( isset( $_POST['optout'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-settings-data-optout-nonce' ) ) {
+			update_option( 'impress_data_optout', rest_sanitize_boolean( wp_unslash( $_POST['optout'] ) ) );
+			echo 'success';
+		}
+		wp_die();
+	}
+
+
+	/**
 	 * load_admin_menu_styles function.
 	 *
 	 * @access public
@@ -419,6 +440,7 @@ class Initiate_Plugin {
 				'ajaxurl'                => admin_url( 'admin-ajax.php' ),
 				'refresh_api_nonce'      => wp_create_nonce( 'idx-settings-refresh-api-nonce' ),
 				'google_recaptcha_nonce' => wp_create_nonce( 'idx-settings-recaptcha-nonce' ),
+				'data_optout_nonce'      => wp_create_nonce( 'idx-settings-data-optout-nonce' ),
 				'wrapper_create_nonce'   => wp_create_nonce( 'idx-settings-wrapper-create-nonce' ),
 				'wrapper_delete_nonce'   => wp_create_nonce( 'idx-settings-wrapper-delete-nonce' ),
 			]
@@ -516,4 +538,53 @@ EOD;
 
 		add_action( 'wp_ajax_idx_dismissed', array( '\IDX\Notice\Notice_Handler', 'dismissed' ) );
 	}
+
+	/**
+	 * Get Install Info.
+	 *
+	 * @since 2.6.7
+	 */
+	public function get_install_info() {
+		// Return early if impress_data_optout is true.
+		if ( get_option( 'impress_data_optout' ) ) {
+			return;
+		}
+
+		$current_info_version         = '1.0.0';
+		$previously_sent_info_version = get_option( 'impress_data_sent' );
+		if ( empty( get_option( 'impress_data_sent' ) ) || version_compare( $previously_sent_info_version, $current_info_version ) < 0 ) {
+
+			global $wpdb;
+			$install_info = [
+				'php_version'       => phpversion(),
+				'wordpress_version' => get_bloginfo( 'version' ),
+				'theme_name'        => wp_get_theme()->get( 'Name' ),
+				'db_version'        => $wpdb->dbh->server_info,
+				'memory_limit'      => WP_MEMORY_LIMIT,
+				'api_key'           => get_option( 'idx_broker_apikey' ),
+				'site_url'          => get_site_url(),
+				'impress_listings'  => class_exists( 'WP_Listings' ),
+				'impress_agents'    => class_exists( 'IMPress_Agents' ),
+				'impress_idxb'      => true,
+			];
+
+			$response = wp_remote_post(
+				'https://hsstezluih.execute-api.us-east-1.amazonaws.com/v1/wp-data',
+				[
+					'headers' => [
+						'Content-Type' => 'application/json',
+					],
+					'body'    => wp_json_encode( $install_info ),
+				]
+			);
+
+			if ( ! is_wp_error( $response ) ) {
+				$response_code = wp_remote_retrieve_response_code( $response );
+				if ( 200 === $response_code ) {
+					update_option( 'impress_data_sent', $current_info_version );
+				}
+			}
+		}
+	}
+
 }
