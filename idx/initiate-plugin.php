@@ -34,6 +34,7 @@ class Initiate_Plugin {
 		add_action( 'wp_ajax_idx_refresh_api', array( $this, 'idx_refreshapi' ) );
 		add_action( 'wp_ajax_idx_update_recaptcha_setting', [ $this, 'idx_update_recaptcha_setting' ] );
 		add_action( 'wp_ajax_idx_update_data_optout_setting', [ $this, 'idx_update_data_optout_setting' ] );
+		add_action( 'wp_ajax_idx_update_dev_partner_key', [ $this, 'idx_update_dev_partner_key' ] );
 
 		add_action( 'wp_loaded', array( $this, 'schedule_omnibar_update' ) );
 		add_action( 'idx_omnibar_get_locations', array( $this, 'idx_omnibar_get_locations' ) );
@@ -318,6 +319,29 @@ class Initiate_Plugin {
 		wp_die();
 	}
 
+	/**
+	 * Function to update developer account API key on admin settings page.
+	 *
+	 * @return void
+	 */
+	public function idx_update_dev_partner_key() {
+		// User capability check.
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			echo 'Check user permissions, activate plugins capabilities required.';
+			wp_die();
+		}
+		// Validate and process request.
+		if ( isset( $_POST['key'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-settings-dev-key-update-nonce' ) ) {
+			if ( is_string( $_POST['key'] ) ) {
+				update_option( 'idx_broker_dev_partner_key', sanitize_text_field( wp_unslash( $_POST['key'] ) ) );
+			}
+			echo 'success';
+		} else {
+			echo 'API key or security nonce validation failed.';
+		}
+		wp_die();
+	}
+
 
 	/**
 	 * load_admin_menu_styles function.
@@ -441,6 +465,7 @@ class Initiate_Plugin {
 				'refresh_api_nonce'      => wp_create_nonce( 'idx-settings-refresh-api-nonce' ),
 				'google_recaptcha_nonce' => wp_create_nonce( 'idx-settings-recaptcha-nonce' ),
 				'data_optout_nonce'      => wp_create_nonce( 'idx-settings-data-optout-nonce' ),
+				'dev_key_update_nonce'   => wp_create_nonce( 'idx-settings-dev-key-update-nonce' ),
 				'wrapper_create_nonce'   => wp_create_nonce( 'idx-settings-wrapper-create-nonce' ),
 				'wrapper_delete_nonce'   => wp_create_nonce( 'idx-settings-wrapper-delete-nonce' ),
 			]

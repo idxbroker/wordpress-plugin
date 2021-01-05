@@ -13,7 +13,8 @@ class Idx_Api {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->api_key = get_option( 'idx_broker_apikey' );
+		$this->api_key         = get_option( 'idx_broker_apikey' );
+		$this->dev_partner_key = get_option( 'idx_broker_dev_partner_key' );
 	}
 
 	/**
@@ -23,6 +24,15 @@ class Idx_Api {
 	 * @access public
 	 */
 	public $api_key;
+
+	/**
+	 * developer_partner_key
+	 * 
+	 * @var mixed
+	 * @access public
+	 */
+	public $dev_partner_key;
+
 	/**
 	 * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
 	 *
@@ -107,6 +117,10 @@ class Idx_Api {
 			'apiversion'    => $apiversion,
 			'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
 		);
+
+		if ( ! empty( $this->dev_partner_key ) && is_string( $this->dev_partner_key ) ) {
+			$headers['ancillarykey'] = $this->dev_partner_key;
+		}
 
 		$params = array_merge(
 			array(

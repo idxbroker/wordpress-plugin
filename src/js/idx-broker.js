@@ -76,6 +76,12 @@
         })
       })
     })
+
+    // Unhide dev partner API key option if URL parameter is present.
+    if (window.location.search.includes('idxdev')) {
+      document.getElementById('devSettings').classList.remove('hide')
+    }
+
   })
 
   /**
@@ -138,6 +144,34 @@ function updateOptoutSetting (element) {
       if ( response !== 'success') {
         window.location.reload()
       }
+    }
+  )
+}
+
+function updateDevPartnerKey () {
+  var loadingIcon = "<span class='dashicons dashicons-update spin' style='color: #007cba;'></span>"
+  var successIcon = "<span class='dashicons dashicons-yes-alt' style='color:#bada55;'></span>"
+  var failIcon = "<span class='dashicons dashicons-dismiss' style='color: tomato;'></span>"
+  var statusContainer = jQuery('.idx-dev-key-refresh-status')
+  statusContainer.fadeIn('fast').html(loadingIcon + 'Saving Developer Partner API key...')
+  jQuery.post(
+    ajaxurl, {
+      action: 'idx_update_dev_partner_key',
+      nonce: IDXAdminAjax.dev_key_update_nonce,
+      key: document.getElementById('idx-broker-dev-partner-key').value
+    }, function (response) {
+      if ( response !== 'success') {
+        setTimeout(function () {
+          statusContainer.fadeIn('slow').html(failIcon + 'Save Failed! ' + response)
+        }, 700)
+      } else {
+        setTimeout(function () {
+          statusContainer.fadeIn('slow').html(successIcon + 'Saved!')
+        }, 700)
+      }
+      setTimeout(function () {
+        statusContainer.fadeOut('slow')
+      }, 2000)
     }
   )
 }
