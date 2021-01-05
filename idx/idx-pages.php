@@ -66,8 +66,15 @@ class Idx_Pages {
 	/** Schedule IDX Page update regularly. **/
 	public function schedule_idx_page_update() {
 		$idx_cron_schedule = get_option( 'idx_cron_schedule' );
-		$next_create_event = wp_get_scheduled_event( 'idx_create_idx_pages' );
-		$next_delete_event = wp_get_scheduled_event( 'idx_delete_idx_pages' );
+		
+		// Construct next_create_event/next_delete_event objects to replicate output from wp_get_scheduled_event() until we raise the supported WP version to 5.1.0 or above.
+		$next_create_event            = new \stdClass();
+		$next_create_event->schedule  = wp_get_schedule( 'idx_create_idx_pages' );
+		$next_create_event->timestamp = wp_next_scheduled( 'idx_create_idx_pages' );
+
+		$next_delete_event            = new \stdClass();
+		$next_delete_event->schedule  = wp_get_schedule( 'idx_delete_idx_pages' );
+		$next_delete_event->timestamp = wp_next_scheduled( 'idx_delete_idx_pages' );
 
 		// If disabled, clear hooks and return early.
 		if ( 'disabled' === $idx_cron_schedule ) {
