@@ -41,7 +41,6 @@ class Create_Omnibar {
 
 		// css and js have been minified and combined to help performance
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
 		}
@@ -98,11 +97,10 @@ EOD;
 
 		// css and js have been minified and combined to help performance
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
 		}
-		wp_register_script( 'idx-omnibar-js', plugins_url( '../../assets/js/idx-omnibar.min.js', dirname( __FILE__ ) ), array(), false, true );
+		wp_register_script( 'idx-omnibar-js', plugins_url( '../../assets/js/idx-omnibar.min.js', dirname( __FILE__ ) ), array( 'wp-api' ), false, true );
 		// inserts inline variable for the results page url
 		wp_localize_script( 'idx-omnibar-js', 'idxUrl', $idx_url );
 		wp_localize_script( 'idx-omnibar-js', 'sortOrder', $sort_order );

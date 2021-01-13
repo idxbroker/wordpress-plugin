@@ -213,7 +213,6 @@ class Dashboard_Widget {
 		wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js' );
 		wp_enqueue_script( 'idx-dashboard-widget', plugins_url( '/assets/js/idx-dashboard-widget.min.js', dirname( __FILE__ ) ) );
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 	}
 
 	/**
@@ -286,7 +285,7 @@ class Dashboard_Widget {
 			$leads .= '<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" target="_blank">';
 			$leads .= '<li><p class="lead-name">';
 			$leads .= $lead->firstName . ' ' . $lead->lastName . '</p>';
-			$leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fa fa-user"></i></li></a>';
+			$leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fas fa-user"></i></li></a>';
 		}
 
 		return $leads;
@@ -314,7 +313,7 @@ class Dashboard_Widget {
 		foreach ( $listings_array as $listing ) {
 			$listings .= '<a href="' . $listing['fullDetailsURL'] . '" target="_blank">';
 			$listings .= '<li><p class="listing-address">' . $listing['address'] . '</p>';
-			$listings .= '<p class="listing-views">' . $listing['viewCount'] . ' Views</p><i class="fa fa-external-link"></i></li></a>';
+			$listings .= '<p class="listing-views">' . $listing['viewCount'] . ' Views</p><i class="fas fa-external-link-alt"></i></li></a>';
 		}
 
 		return $listings;
