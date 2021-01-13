@@ -260,3 +260,31 @@ label {
 .checkbox-label-slider {
   display: inline-block;
 }
+
+.hide {
+  display: none;
+}
+
+.admin-text-input-field {
+  width: 250px;
+}
+
+.idx-dev-key-refresh-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashicons.spin {
+  animation: dashicons-spin 1s infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes dashicons-spin {
+  0% {
+     transform: rotate( 0deg );
+  }
+  100% {
+     transform: rotate( 360deg );
+  }
+}

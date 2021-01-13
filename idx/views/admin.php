@@ -52,7 +52,7 @@ if ( $wrapper_page_id ) {
 					<div class="inlineBlock">
 						<div>
 							<label for="idx_broker_apikey">Enter Your API Key: </label>
-							<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option( 'idx_broker_apikey' ); ?>" />
+							<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" class="admin-text-input-field" value="<?php echo get_option( 'idx_broker_apikey' ); ?>" />
 							<input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" />
 							<span class="refresh_status"></span>
 						</div>
@@ -93,7 +93,7 @@ if ( $wrapper_page_id ) {
 					<h3>Create the Global Wrapper<a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank"><img class="help-icon" src="<?php echo plugins_url( '../../assets/images/helpIcon.svg', __FILE__ ); ?>" alt="help"></a></h3>
 					<div class="help-text">Setting this up will match the IDX pages to your website design automatically every few hours.<div>Example: Properties</div></div>
 					<label for="idx_broker_dynamic_wrapper_page_name">Page Name:</label>
-					<input name="idx_broker_dynamic_wrapper_page_name" type="text" id="idx_broker_dynamic_wrapper_page_name" value="<?php echo $post_title; ?>" />
+					<input name="idx_broker_dynamic_wrapper_page_name" type="text" id="idx_broker_dynamic_wrapper_page_name" class="admin-text-input-field " value="<?php echo $post_title; ?>" />
 					<input name="idx_broker_dynamic_wrapper_page_id" type="hidden" id="idx_broker_dynamic_wrapper_page_id" value="<?php echo get_option( 'idx_broker_dynamic_wrapper_page_id' ); ?>" />
 					<input type="button" class="button-primary" id="idx_broker_create_wrapper_page" value="<?php echo $post_title ? 'Update' : 'Create'; ?>" />
 					<?php
@@ -144,4 +144,17 @@ if ( $wrapper_page_id ) {
 				<?php settings_fields( 'idx-platinum-settings-group' ); ?>
 	</form>
 
+</div>
+
+
+<div id="devSettings" class="hide">
+	<h3>IDX Broker Developer Partner API Key</h3>
+	<div class="inlineBlock">
+		<div>
+			<label for="idx-broker-dev-partner-key">Enter Your Developer Partner Key: </label>
+			<input name="idx-broker-dev-partner-key" type="text" id="idx-broker-dev-partner-key" class="admin-text-input-field" value="<?php echo esc_html( get_option( 'idx_broker_dev_partner_key' ) ); ?>" />
+			<input id="idx-dev-key-update-button" type="button" onclick="updateDevPartnerKey();" value="Save API Key" class="button-primary" />
+			<span class="idx-dev-key-refresh-status"></span>
+		</div>
+	</div>
 </div>
