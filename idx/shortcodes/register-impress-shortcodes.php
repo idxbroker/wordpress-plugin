@@ -568,8 +568,6 @@ class Register_Impress_Shortcodes {
 			    lazyLoad: true,
 			    addClassActive: true,
 			    itemsScaleUp: true,
-			    addClassActive: true,
-			    itemsScaleUp: true,
 			    navContainerClass: "owl-controls owl-nav",
 			    responsiveClass:true,
 			    responsive:{
