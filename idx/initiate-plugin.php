@@ -274,6 +274,7 @@ class Initiate_Plugin {
 			update_option( 'idx_broker_apikey', $api_key, false );
 			setcookie( 'api_refresh', 1, time() + 20 );
 			$this->schedule_omnibar_update();
+			$this->idx_omnibar_get_locations();
 		}
 		wp_die();
 	}
