@@ -39,6 +39,11 @@ class Create_Omnibar {
 		$upload_dir  = wp_upload_dir();
 		$idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
 
+		// Check if SSL is enabled but not set correctly in the WP Dashboard.
+		if ( strpos( $idx_dir_url, 'https://' ) === false && $this->omnibar_ssl_check() ) {
+			$idx_dir_url = str_replace( 'http://', 'https://', $idx_dir_url );
+		}
+
 		// css and js have been minified and combined to help performance
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
 		if ( ! empty( $styles ) ) {
@@ -306,4 +311,27 @@ EOD;
 			}
 		);
 	}
+
+	/**
+	 * Omnibar_SSL_Check
+	 *
+	 * Checks if SSL is enabled but not correctly set in the WP dashboard.
+	 */
+	private function omnibar_ssl_check() {
+		// Cloudflare.
+		if ( ! empty( $_SERVER['HTTP_CF_VISITOR'] ) ) {
+			$cfo = json_decode( $_SERVER['HTTP_CF_VISITOR'] );
+			if ( isset( $cfo->scheme ) && 'https' === $cfo->scheme ) {
+				return true;
+			}
+		}
+
+		// Other proxy.
+		if ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+			return true;
+		}
+
+		return function_exists( 'is_ssl' ) ? is_ssl() : false;
+	}
+
 }
