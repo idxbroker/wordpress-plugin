@@ -41,13 +41,18 @@ class Idx_Broker_Plugin {
 			register_activation_hook( __FILE__, array( $this, 'idx_activate' ) );
 			register_deactivation_hook( __FILE__, array( $this, 'idx_deactivate' ) );
 		}
+
+		// IMPress Listings.
+		include_once 'add-ons/listings/plugin.php';
+		// IMPress Agents.
+		include_once 'add-ons/agents/plugin.php';
 	}
 
 	/**
-	 * Check for versions less than PHP5.3 and display error.
+	 * Check for versions less than PHP7.0 and display error.
 	 */
 	public function php_version_check() {
-		if ( PHP_VERSION < 5.6 ) {
+		if ( PHP_VERSION < 7.0 ) {
 			add_action( 'admin_init', array( $this, 'idx_deactivate_plugin' ) );
 			add_action( 'admin_notices', array( $this, 'incompatible_message' ) );
 			return false;
@@ -68,7 +73,7 @@ class Idx_Broker_Plugin {
             of PHP. This is incompatable with the IDX Broker plugin.
             For security reasons, please contact your host and upgrade to the
             latest stable version of PHP they offer. We recommend a minimum
-            of PHP 5.6.<br>For more information on what versions of PHP are
+            of PHP 7.0.<br>For more information on what versions of PHP are
             supported with security updates, see <a
             href=\"http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin\">
             this knowledgebase article</a> and PHP.net's
@@ -113,8 +118,29 @@ class Idx_Broker_Plugin {
 		$wrappers = new \IDX\Wrappers( $idx_api );
 		$wrappers->register_wrapper_post_type();
 
+		// IMPress Listings.
+		if ( ! post_type_exists( 'listing' ) ) {
+			wp_listings_init();
+			global $_wp_listings, $_wp_listings_taxonomies, $_wp_listings_templates;
+			$_wp_listings->create_post_type();
+			$_wp_listings_taxonomies->register_taxonomies();
+		}
+
+		$notice_keys = array('wpl_notice_idx', 'wpl_listing_notice_idx');
+		foreach ($notice_keys as $notice) {
+			delete_user_meta( get_current_user_id(), $notice );
+		}
+
+		// IMPress Agents.
+		if ( ! post_type_exists( 'employee' ) ) {
+			impress_agents_init();
+			global $_impress_agents, $_impress_agents_taxonomies;
+			$_impress_agents->create_post_type();
+			$_impress_agents_taxonomies->register_taxonomies();
+		}
+
 		flush_rewrite_rules();
-	} // End idx_activate fn.
+	}
 
 
 	/**
@@ -130,5 +156,13 @@ class Idx_Broker_Plugin {
 
 		// Disable scheduled IDX Page Update as well.
 		\IDX\Idx_Pages::unschedule_idx_page_update();
+
+		// IMPress Listings.
+		flush_rewrite_rules();
+
+		$notice_keys = array('wpl_notice_idx', 'wpl_listing_notice_idx');
+		foreach ($notice_keys as $notice) {
+			delete_user_meta( get_current_user_id(), $notice );
+		}
 	}
 }
