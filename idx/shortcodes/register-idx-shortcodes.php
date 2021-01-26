@@ -62,7 +62,8 @@ class Register_Idx_Shortcodes {
 				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
 				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
 			}
-			$widget .= '<script type="text/javascript" src="' . $url . '"></script>';
+			$widget_id = explode( '-', $id );
+			$widget   .= '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : $widget_id[1] ) . '" src="' . $url . '"></script>';
 			return $widget;
 		} else {
 			return false;
