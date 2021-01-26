@@ -62,7 +62,11 @@ class Idx_Middleware_Widget extends \WP_Widget {
 				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
 				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
 			}
-			echo '<script type="text/javascript" src="' . $instance['widget'] . '"></script>';
+			// Check URL structure for new widget type, if found set the widget ID.
+			if ( strpos( $instance['widget'], '/idx/widgets/' ) !== false ) {
+				$widget_id = explode( '/idx/widgets/', $instance['widget'] );
+			}
+			echo '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : esc_attr( $widget_id[1] ) ) . '" src="' . esc_attr( $instance['widget'] ) . '"></script>';
 		}
 
 		echo $after_widget;
