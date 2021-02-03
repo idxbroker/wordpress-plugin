@@ -4,8 +4,8 @@ Author: IDX, LLC
 Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 4.6
-**Tested up to:** 5.4.1
-**Stable tag:** 2.6.6
+**Tested up to:** 5.6.0
+**Stable tag:** 2.6.7
 **Minimum PHP:** 5.6
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -120,6 +120,12 @@ Features provided by this Plugin - Widgets, links, and custom links may be place
 This plugin requires a PHP version higher than 5.6. For security reasons, we recommend updating to the latest stable version of PHP your web host provides. We also recommend using the latest production version of WordPress. See <a href="http://support.idxbroker.com/customer/en/portal/articles/1917460-wordpress-plugin?b_id=10433">this article</a> for more information.
 
 ## Changelog ##
+
+### 2.6.7 ###
+* Fix: Issues with the Omnibar widget not creating the required locationlist.js file
+* Fix: IMPress Showcase widget not correctly filtering by agent
+* Fix: Market Report and Virtual Tour IDX Broker widgets now load correctly
+* New: Option to include a developer partner API key (field appears by adding '&idxdev' to the URL on the IDX IMPress > Initial Settings page)
 
 ### 2.6.6 ###
 * New: Omnibar step control increments increased
