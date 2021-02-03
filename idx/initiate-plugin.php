@@ -505,7 +505,6 @@ class Initiate_Plugin {
 	 * @return void
 	 */
 	public function idx_broker_platinum_admin_page() {
-
 		wp_enqueue_script( 'idx-backend', plugins_url( '/assets/vue/backend/admin.js', dirname( __FILE__ ) ) );
 		wp_enqueue_style( 'idx-backend', plugins_url( '/assets/vue/backend/admin.css', dirname( __FILE__ ) ) );
 		include plugin_dir_path( __FILE__ ) . 'views/admin.php';
