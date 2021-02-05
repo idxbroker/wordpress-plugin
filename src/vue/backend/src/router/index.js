@@ -11,13 +11,13 @@ const routes = [
                 path: '/listings',
                 children: [
                     {
-                        path: 'imported',
-                        name: 'Imported IDX Listings'
+                        path: '',
+                        name: 'Unimported IDX Listings'
                         // component
                     },
                     {
-                        path: '',
-                        name: 'Unimported IDX Listings'
+                        path: 'imported',
+                        name: 'Imported IDX Listings'
                         // component
                     }
                 ]
@@ -26,13 +26,13 @@ const routes = [
                 path: '/agents',
                 children: [
                     {
-                        path: 'imported',
-                        name: 'Imported Agents'
+                        path: '',
+                        name: 'Unimported Agents'
                         // component
                     },
                     {
-                        path: '',
-                        name: 'Unimported Agents'
+                        path: 'imported',
+                        name: 'Imported Agents'
                         // component
                     }
                 ]
@@ -62,12 +62,12 @@ const routes = [
                         // component
                     },
                     {
-                        path: '',
+                        path: '/idx',
                         name: 'IMPress Listings IDX Settings'
                         // component
                     },
                     {
-                        path: '',
+                        path: '/advanced',
                         name: 'IMPress Listings Advanced Settings'
                         // component
                     }
