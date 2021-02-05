@@ -62,12 +62,12 @@ const routes = [
                         // component
                     },
                     {
-                        path: '/idx',
+                        path: 'idx',
                         name: 'IMPress Listings IDX Settings'
                         // component
                     },
                     {
-                        path: '/advanced',
+                        path: 'advanced',
                         name: 'IMPress Listings Advanced Settings'
                         // component
                     }
