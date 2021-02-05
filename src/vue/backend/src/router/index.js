@@ -5,36 +5,37 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '/import/listings',
-        name: 'Import IDX Listings',
-        // component
+        path: '/import',
         children: [
             {
-                path: 'imported',
-                name: 'Imported IDX Listings'
-                // component
+                path: '/listings',
+                children: [
+                    {
+                        path: 'imported',
+                        name: 'Imported IDX Listings'
+                        // component
+                    },
+                    {
+                        path: '',
+                        name: 'Unimported IDX Listings'
+                        // component
+                    }
+                ]
             },
             {
-                path: 'unimported',
-                name: 'Unimported IDX Listings'
-                // component
-            }
-        ]
-    },
-    {
-        path: '/import/agents',
-        name: 'Import Agents',
-        // component
-        children: [
-            {
-                path: 'imported',
-                name: 'Imported Agents'
-                // component
-            },
-            {
-                path: 'unimported',
-                name: 'Unimported Agents'
-                // component
+                path: '/agents',
+                children: [
+                    {
+                        path: 'imported',
+                        name: 'Imported Agents'
+                        // component
+                    },
+                    {
+                        path: '',
+                        name: 'Unimported Agents'
+                        // component
+                    }
+                ]
             }
         ]
     },
