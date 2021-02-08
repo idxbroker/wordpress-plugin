@@ -7,9 +7,10 @@ import IDXStrapClass from '@idxbrokerllc/idxstrap/dist/idxStrap.js'
 
 // Import VCL base and variable styles
 import '@idxbrokerllc/idxstrap/dist/styles/base.scss'
+import '@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss'
 
 // Import VCL components
-import { IdxBlock } from '@idxbrokerllc/idxstrap'
+import { IdxBlock, IdxTabContainer, IdxButton } from '@idxbrokerllc/idxstrap'
 
 const idxConfig = require('../idx.config')
 const pluginOptions = {
@@ -27,6 +28,8 @@ Vue.mixin({
 })
 
 Vue.component(IdxBlock.name, IdxBlock)
+Vue.component(IdxTabContainer.name, IdxTabContainer)
+Vue.component(IdxButton.name, IdxButton)
 
 Vue.config.productionTip = false
 
