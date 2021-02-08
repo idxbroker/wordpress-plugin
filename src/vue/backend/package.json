@@ -10,7 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@idxbrokerllc/idxstrap": "^3.3.0",
+    "@idxbrokerllc/idxstrap": "^3.2.1",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

@@ -4,7 +4,7 @@
         <idx-card-body>
             <idx-list unstyled>
                 <idx-list-item v-for="link in links" :key="link.href">
-                    <a :href="link.href">{{ link.text }}</a>
+                    <a :href="link.href" target="_blank">{{ link.text }}</a>
                 </idx-list-item>
             </idx-list>
         </idx-card-body>
@@ -14,10 +14,14 @@
 <script>
 export default {
     name: 'RelatedLinks',
-    data () {
-        return {
-            title: 'Related Links',
-            links: this.$store.state.relatedLinks
+    props: {
+        title: {
+            type: String,
+            defaut: 'Related Links'
+        },
+        links: {
+            type: Array,
+            default: () => []
         }
     }
 }
