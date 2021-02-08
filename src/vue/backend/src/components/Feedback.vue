@@ -32,7 +32,6 @@ export default {
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 
     :root {
-        --font-family: 'Mulish', "Segoe UI", "Helvetica Neue", Arial, sans-serif;
         --font-size-h3: 21px;
         --font-size-p-large: 18px;
         --letter-spacing-h3: 2.1px;
@@ -47,7 +46,6 @@ export default {
         align-items: center;
         display: flex;
         flex-direction: column;
-        font-family: var(--font-family);
         justify-content: center;
         margin-left: auto;
         margin-right: auto;
