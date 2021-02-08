@@ -38,10 +38,8 @@ export default {
         --letter-spacing-h3: 2.1px;
         --line-height-h3: 22px;
         --line-height-p-large: 28px;
-        --space-3: 12px;
         --space-4: 16px;
         --space-6: 24px;
-        --space-8: 32px;
         --space-10: 40px;
     }
 
