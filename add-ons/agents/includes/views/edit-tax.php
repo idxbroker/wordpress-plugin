@@ -8,7 +8,6 @@ if ( array_key_exists( $_REQUEST['id'], (array) $options ) ) {
 }
 ?>
 
-<?php screen_icon( 'plugins' ); ?>
 <h2><?php _e( 'Edit Taxonomy', 'impress_agents' ); ?></h2>
 
 <form method="post" action="<?php echo admin_url( 'admin.php?page=' . $this->menu_page . '&amp;action=edit' ); ?>">
