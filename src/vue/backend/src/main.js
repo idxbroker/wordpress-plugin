@@ -10,7 +10,7 @@ import '@idxbrokerllc/idxstrap/dist/styles/base.scss'
 import '@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss'
 
 // Import VCL components
-import { IdxBlock, IdxTabContainer, IdxButton } from '@idxbrokerllc/idxstrap'
+import { IdxBlock, IdxButton, IdxTabContainer, IdxButton } from '@idxbrokerllc/idxstrap'
 
 const idxConfig = require('../idx.config')
 const pluginOptions = {
@@ -27,9 +27,9 @@ Vue.mixin({
     }
 })
 
-Vue.component(IdxBlock.name, IdxBlock)
-Vue.component(IdxTabContainer.name, IdxTabContainer)
-Vue.component(IdxButton.name, IdxButton)
+const components = [IdxBlock, IdxButton, IdxTabContainer]
+
+components.forEach(component => Vue.component(component.name, component))
 
 Vue.config.productionTip = false
 
