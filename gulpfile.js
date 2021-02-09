@@ -10,6 +10,8 @@ var notify = require('gulp-notify')
 var sourcemaps = require('gulp-sourcemaps')
 var glob = require('glob')
 var gutil = require('gulp-util')
+var babel = require("gulp-babel")
+var plumber = require("gulp-plumber")
 var sass = require('gulp-sass')
 sass.compiler = require('node-sass')
 
@@ -21,6 +23,19 @@ gulp.task('js', function () {
 
     var tasks = files.map(function (entry) {
       return gulp.src(entry)
+        .pipe(plumber())
+        .pipe(
+          babel({
+            presets: [
+              [
+                "@babel/env",
+                {
+                  modules: false
+                }
+              ]
+            ]
+          })
+        )
         .pipe(uglify().on('error', gutil.log))
         .pipe(rename(function (path) {
           path.extname = '.min.js'
@@ -32,9 +47,18 @@ gulp.task('js', function () {
 })
 
 gulp.task('sass', function () {
-  // return gulp.src('./sass/**/*.scss')
-  //   .pipe(sass().on('error', sass.logError))
-  //   .pipe(gulp.dest('./css'));
+  glob('./src/scss/*.scss', function (err, files) {
+    if (err) {
+      done(err)
+    }
+
+    var tasks = files.map(function (entry) {
+      return gulp.src(entry)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest('./assets/css/'))
+        .pipe(notify({ message: 'Finished processing ' + entry }))
+    })
+  })
 });
 
 gulp.task('css', function () {
@@ -50,6 +74,7 @@ gulp.task('readme', function () {
 
 gulp.task('watch', function () {
   gulp.watch('./src/js/*.js', ['js'])
+  gulp.watch('./src/scss/*.scss', ['sass'])
 })
 
 gulp.task('default', ['js'], function () {})
