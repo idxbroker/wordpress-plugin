@@ -9,7 +9,9 @@ import IDXStrapClass from '@idxbrokerllc/idxstrap/dist/idxStrap.js'
 import '@idxbrokerllc/idxstrap/dist/styles/base.scss'
 
 // Import VCL components
-import { IdxBlock, IdxSinglePropertyCard, IdxCheckboxLabel } from '@idxbrokerllc/idxstrap'
+
+import { IdxBlock, IdxButton, IdxSinglePropertyCard, IdxCheckboxLabel } from '@idxbrokerllc/idxstrap'
+
 
 const idxConfig = require('../idx.config')
 const pluginOptions = {
@@ -26,9 +28,9 @@ Vue.mixin({
     }
 })
 
-Vue.component(IdxBlock.name, IdxBlock)
-Vue.component(IdxSinglePropertyCard.name, IdxSinglePropertyCard)
-Vue.component(IdxCheckboxLabel.name, IdxCheckboxLabel)
+const components = [IdxBlock, IdxButton, IdxSinglePropertyCard, IdxCheckboxLabel]
+
+components.forEach(component => Vue.component(component.name, component))
 
 Vue.config.productionTip = false
 
