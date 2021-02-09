@@ -10,6 +10,8 @@ var notify = require('gulp-notify')
 var sourcemaps = require('gulp-sourcemaps')
 var glob = require('glob')
 var gutil = require('gulp-util')
+var sass = require('gulp-sass')
+sass.compiler = require('node-sass')
 
 gulp.task('js', function () {
   glob('./src/js/*.js', function (err, files) {
@@ -28,6 +30,12 @@ gulp.task('js', function () {
     })
   })
 })
+
+gulp.task('sass', function () {
+  // return gulp.src('./sass/**/*.scss')
+  //   .pipe(sass().on('error', sass.logError))
+  //   .pipe(gulp.dest('./css'));
+});
 
 gulp.task('css', function () {
   // concat CSS and put them in appropriate space

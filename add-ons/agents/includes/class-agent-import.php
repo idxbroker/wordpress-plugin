@@ -288,11 +288,11 @@ function impress_agents_idx_agent_scripts() {
 	if($screen->id != 'employee_page_impa-idx-agent')
 		return;
 
-	wp_enqueue_script( 'impress_agents_idx_agent_delete_script', IMPRESS_AGENTS_URL . 'includes/js/admin-agent-import.js', array( 'jquery' ), true );
+	wp_enqueue_script( 'impress_agents_idx_agent_delete_script', IMPRESS_IDX_URL . 'assets/js/admin-agent-import.min.js', array( 'jquery' ), true );
 	wp_enqueue_script( 'jquery-masonry' );
 	wp_enqueue_script( 'images-loaded', 'https://unpkg.com/imagesloaded@4.1/imagesloaded.pkgd.min.js' );
 	wp_localize_script( 'impress_agents_idx_agent_delete_script', 'DeleteAgentAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-	wp_enqueue_style( 'impress_agents_idx_agent_style', IMPRESS_AGENTS_URL . 'includes/css/impress-agents-import.css' );
+	wp_enqueue_style( 'impress_agents_idx_agent_style', IMPRESS_IDX_URL . 'assets/css/impress-agents-import.css' );
 }
 add_action( 'wp_ajax_impa_idx_agent_delete', 'impa_idx_agent_delete' );
 function impa_idx_agent_delete(){
@@ -325,13 +325,6 @@ function impress_agents_idx_agent_setting_page() {
 			// Show popup if IDX Broker plugin not active or installed
 			if( !class_exists( 'IDX_Broker_Plugin') ) {
 				echo 'You must have the IMPress for IDX Broker plugin and an active IDX Broker account to import agents.';
-				// thickbox like content
-				// echo '
-				// 	<img class="idx-import bkg" src="' . IMPRESS_AGENTS_URL . 'images/import-bg.jpg' . '" /></a>
-				// 	<div class="idx-import thickbox">
-				// 	     <a href="http://www.idxbroker.com/features/idx-wordpress-plugin" target="_blank"><img src="' . IMPRESS_AGENTS_URL . 'images/idx-ad.png' . '" alt="Sign up for IDX now!"/></a>
-				// 	</div>';
-
 				return;
 			}
 
@@ -403,7 +396,7 @@ function impress_agents_idx_agent_setting_page() {
 					printf('<div class="grid-item post"><label for="%s" class="idx-agent"><li class="%s agent"><img class="agent" src="%s"><input type="checkbox" id="%s" class="checkbox" name="impress_agents_idx_agent_options[]" value="%s" %s /><p><span class="agent-name">%s</span><br/><span class="agent-title">%s</span><br/><span class="agent-phone">%s</span><br/><span class="agent-id">Agent ID: %s</span></p><div class="controls">%s %s</div></li></label></div>',
 						$a['agentID'],
 						isset($idx_agent_wp_options[$a['agentID']]['status']) ? ($idx_agent_wp_options[$a['agentID']]['status'] == 'publish' ? "imported" : '') : '',
-						isset($a['agentPhotoURL']) && $a['agentPhotoURL'] != '' ? $a['agentPhotoURL'] : IMPRESS_AGENTS_URL . 'images/impress-agents-nophoto.png',
+						isset($a['agentPhotoURL']) && $a['agentPhotoURL'] != '' ? $a['agentPhotoURL'] : IMPRESS_IDX_URL . 'assets/images/impress-agents-nophoto.png',
 						$a['agentID'],
 						$a['agentID'],
 						isset($idx_agent_wp_options[$a['agentID']]['status']) ? ($idx_agent_wp_options[$a['agentID']]['status'] == 'publish' ? "checked" : '') : '',
