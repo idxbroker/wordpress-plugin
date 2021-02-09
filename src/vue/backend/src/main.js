@@ -9,7 +9,7 @@ import IDXStrapClass from '@idxbrokerllc/idxstrap/dist/idxStrap.js'
 import '@idxbrokerllc/idxstrap/dist/styles/base.scss'
 
 // Import VCL components
-import { IdxBlock, IdxFormGroup, IdxFormInput, IdxFormLabel } from '@idxbrokerllc/idxstrap'
+import { IdxBlock, IdxButton, IdxFormGroup, IdxFormInput, IdxFormLabel } from '@idxbrokerllc/idxstrap'
 
 const idxConfig = require('../idx.config')
 const pluginOptions = {
@@ -26,7 +26,7 @@ Vue.mixin({
     }
 })
 
-const components = [IdxBlock, IdxFormGroup, IdxFormInput, IdxFormLabel]
+const components = [IdxBlock, IdxButton, IdxFormGroup, IdxFormInput, IdxFormLabel]
 
 components.forEach(component => Vue.component(component.name, component))
 
