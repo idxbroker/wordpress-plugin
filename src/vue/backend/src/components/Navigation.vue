@@ -14,5 +14,6 @@ export default {
 .navigation {
     background-color: $gray-800;
     grid-area: sidebar;
+    transition: width 1s;
 }
 </style>

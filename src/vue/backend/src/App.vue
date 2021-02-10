@@ -1,9 +1,19 @@
 <template>
-    <idx-block className="app {'nav-is-expanded': expanded}">
-        <Header/>
+    <idx-block :className="{app: isActive, 'nav-is-collapsed': navCollapsed}">
+        <Header>
+            <template v-slot:toggle>
+                <idx-button
+                    @click="toggleCollapse()"
+                    :aria-expanded="navCollapsed ? 'false' : 'true'">
+                    Toggle</idx-button>
+            </template>
+        </Header>
         <Navigation>
             <idx-block className="nav">
-                <router-link to="/settings">Settings</router-link>
+                <router-link to="/settings">
+                    <idx-block tag="span" className="link-icon">(icon)</idx-block>
+                    <idx-block tag="span" className="link-text">Settings</idx-block>
+                </router-link>
             </idx-block>
         </Navigation>
         <Page>
@@ -25,10 +35,14 @@ export default {
     },
     data () {
         return {
-            expanded: true
+            isActive: true,
+            navCollapsed: false
         }
     },
     methods: {
+        toggleCollapse (el) {
+            this.navCollapsed = !this.navCollapsed
+        }
     },
     computed: {
     },
@@ -38,7 +52,6 @@ export default {
 </script>
 
 <style lang="scss">
-    @import '~@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss';
     @import '~@idxbrokerllc/idxstrap/dist/styles/base.scss';
     @import '~bootstrap/scss/grid';
 
@@ -60,22 +73,50 @@ export default {
             "content"
     }
 
+    .navigation {
+
+        a {
+            color: #fff;
+            display: flex;
+            letter-spacing: 1px;
+
+            span {
+                padding: 12px 8px;
+            }
+        }
+    }
+
     @media only screen and (min-width: 500px)  {
         .app {
-            grid-template-columns: 33.34% auto;
+            grid-template-columns: min-content auto;
             grid-template-rows: 80px auto;
             grid-template-areas:
                 "header   header"
                 "sidebar  content";
+
+            .navigation {
+                width: 33.34%;
+            }
+
+            &.nav-is-collapsed .navigation {
+                width: 50px;
+
+                .link-text {
+                    display: none;
+                }
+            }
         }
     }
 
     @media only screen and (min-width: 900px)   {
         .app {
-            grid-template-columns: 255px auto;
             grid-template-areas:
                 "header  header  header"
                 "sidebar content content";
+
+            .navigation {
+                width: 255px;
+            }
         }
     }
 </style>
