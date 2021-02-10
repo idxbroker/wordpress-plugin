@@ -1,11 +1,11 @@
 <template>
-    <idx-form-group class="idx-wp-needs-validation" :class="{'idx-wp-was-validated': success|error}" novalidate>
-        <idx-form-label for="APIKey" class="idx-wp-visually-hidden">API Key</idx-form-label>
+    <idx-form-group class="idx-wp-needs-validation {'was-validated': success|error}" novalidate>
+        <idx-form-label for="APIKey" customClass="visually-hidden">API Key</idx-form-label>
         <idx-form-input
             type="text"
             id="APIKey"
             :placeholder="placeholder"
-            :class="{
+            customClass="{
                 'is-invalid': error,
                 'is-valid': success,
                 'is-loading': loading
@@ -18,7 +18,7 @@
             We couldn't find an account with the provided API key
         </idx-block>
         <idx-block className="idx-wp-spinner-border" role="status" v-if="loading">
-            <idx-block tag="span" className="idx-wp-visually-hidden">Loading...</idx-block>
+            <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
         </idx-block>
     </idx-form-group>
 </template>
@@ -48,6 +48,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    // TODO: move global and base to main.js
     @import '~@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss';
     @import '~@idxbrokerllc/idxstrap/dist/styles/base.scss';
     @import '~bootstrap/scss/forms';
