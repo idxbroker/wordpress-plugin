@@ -6,7 +6,7 @@ module.exports = {
   // Create the entry points.
   // One for frontend and one for the admin area.
   entry: {
-    'google-my-business-settings': './src/apps/GoogleMyBusinessSettings.js'
+    'google-my-business-settings': './apps/GoogleMyBusinessSettings.js'
   },
 
   // Create the output files.
@@ -15,7 +15,7 @@ module.exports = {
     // [name] allows for the entry object keys to be used as file names.
     filename: '[name].min.js',
     // Specify the path to the JS files.
-    path: path.resolve(__dirname, 'assets')
+    path: path.join(__dirname, '/../../assets/js')
   },
   module: {
     rules: [
