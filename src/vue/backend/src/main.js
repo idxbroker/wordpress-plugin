@@ -7,10 +7,9 @@ import IDXStrapClass from '@idxbrokerllc/idxstrap/dist/idxStrap.js'
 
 // Import VCL base and variable styles
 import '@idxbrokerllc/idxstrap/dist/styles/base.scss'
-import '@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss'
 
 // Import VCL components
-import { IdxBlock, IdxButton, IdxTabContainer, IdxButton } from '@idxbrokerllc/idxstrap'
+import { IdxBlock, IdxButton, IdxTabContainer } from '@idxbrokerllc/idxstrap'
 
 const idxConfig = require('../idx.config')
 const pluginOptions = {

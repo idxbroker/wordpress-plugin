@@ -3,7 +3,7 @@
         customClass="import-header"
         @activeTab="switchTabs"
         :activeTab="activeTab"
-        :tabs="['UNIMPORTED', 'IMPORTED']"
+        :tabs="['Unimported', 'Imported']"
     >
         <idx-block className="import-header__description">{{ description }}</idx-block>
         <idx-block className="import-header__actions-bar">
@@ -85,6 +85,7 @@ export default {
             font-size: 16px;
             letter-spacing: 1.6px;
             color: #788088;
+            text-transform: uppercase;
             &:first-child {
                 margin-right: 18px;
             }
