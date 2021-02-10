@@ -6,7 +6,7 @@
                     @click="toggleCollapse()"
                     customClass="toggle-nav"
                     :aria-expanded="navCollapsed ? 'false' : 'true'">
-                    <img src="@/assets/arrow-right-light.svg" height="30" alt="IDX Broker" loading="lazy">
+                    <img src="@/assets/plus.svg" height="30" alt="IDX Broker" loading="lazy">
                     Toggle</idx-button>
             </template>
         </Header>
@@ -100,19 +100,20 @@ export default {
                 width: 33.34%;
             }
 
-            .toggle-nav img {}
+            &.nav-is-collapsed {
 
-            &.nav-is-collapsed .navigation {
-                width: 50px;
+                .toggle-nav img {
+                    transform: rotate(45deg);
+                }
 
-                .link-text {
-                    display: none;
+                .navigation {
+                    width: 50px;
+
+                    .link-text {
+                        display: none;
+                    }
                 }
             }
-        }
-
-        .app:not(.nav-is-collapsed) .toggle-nav img {
-            transform: rotate(180deg);
         }
     }
 
