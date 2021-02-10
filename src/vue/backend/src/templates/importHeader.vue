@@ -7,8 +7,8 @@
     >
         <idx-block className="import-header__description">{{ description }}</idx-block>
         <idx-block className="import-header__actions-bar">
-            <idx-block className="import-header__select-all" @click="$emit('selectAll', selected)">{{ selected ? 'Select All' : 'Deselect All' }}</idx-block>
-            <idx-button customClass="import-header__action" @click="$emit('bulkAction', action)">{{ action }} Selected</idx-button>
+            <idx-block className="import-header__select-all" @click="$emit('select-all', selected)">{{ selected ? 'Select All' : 'Deselect All' }}</idx-block>
+            <idx-button customClass="import-header__action" @click="$emit('bulk-action', action)">{{ action }} Selected</idx-button>
         </idx-block>
         <router-view></router-view>
     </idx-tab-container>
@@ -39,7 +39,7 @@ export default {
         switchTabs (e) {
             this.activeTab = e
             /* Router change here, once we have router set up we can switch it. For now emitting and event */
-            this.$emit('switchTabs', this.activeTab)
+            this.$emit('switch-tabs', this.activeTab)
         }
     }
 }
