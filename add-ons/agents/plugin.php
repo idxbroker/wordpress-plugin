@@ -12,9 +12,6 @@ function impress_agents_init() {
 
 	global $_impress_agents, $_impress_agents_taxonomies;
 
-	define( 'IMPRESS_AGENTS_URL', plugin_dir_url( __FILE__ ) );
-	define( 'IMPRESS_AGENTS_VERSION', '1.1.4' );
-
 	/** Load textdomain for translation */
 	load_plugin_textdomain( 'impress_agents', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 
@@ -50,17 +47,17 @@ function impress_agents_init() {
 			return;
 		}
 
-        if ( file_exists(dirname( __FILE__ ) . '/includes/css/impress-agents.css') ) {
-        	wp_register_style('impress_agents', IMPRESS_AGENTS_URL . 'includes/css/impress-agents.css', '', null, 'all');
+        if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/impress-agents.css') ) {
+        	wp_register_style('impress_agents', IMPRESS_IDX_URL . 'assets/css/impress-agents.css', '', null, 'all');
             wp_enqueue_style('impress_agents');
         }
     }
 
     /** Add admin scripts and styles */
     function impress_agents_admin_scripts_styles() {
-        wp_enqueue_style( 'impress_agents_admin_css', IMPRESS_AGENTS_URL . 'includes/css/impress-agents-admin.css' );
+        wp_enqueue_style( 'impress_agents_admin_css', IMPRESS_IDX_URL . 'assets/css/impress-agents-admin.css' );
 
-		wp_enqueue_script( 'impress-agents-admin', IMPRESS_AGENTS_URL . 'includes/js/admin.js', 'media-views' );
+		wp_enqueue_script( 'impress-agents-admin', IMPRESS_IDX_URL . 'assets/js/agents-admin.js', 'media-views' );
 		wp_localize_script(
 			'impress-agents-admin',
 			'impressAgentsAdmin',

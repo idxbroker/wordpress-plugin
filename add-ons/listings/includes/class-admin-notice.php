@@ -112,8 +112,8 @@ class WP_Listings_Admin_Notice {
 	 */
 	public static function js_css() {
 		global $wp_version;
-		wp_enqueue_style( 'wp-listings-admin-notice', plugin_dir_url( __FILE__ ) . '/includes/css/wp-listings-admin-notice.css' );
-		wp_enqueue_script( 'wp-listings-admin', plugin_dir_url( __FILE__ ) . '/includes/js/admin.js' );
+		wp_enqueue_style( 'wp-listings-admin-notice', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin-notice.css' );
+		wp_enqueue_script( 'wp-listings-admin', IMPRESS_IDX_URL . 'assets/js/listing-admin.min.js' );
 		wp_localize_script( 'wp-listings-admin', 'wp_listings_adminL10n', array(
 			'nonce'      => wp_create_nonce( self::$nonce_action ),
 			'wp_version' => $wp_version,

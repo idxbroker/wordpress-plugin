@@ -14,8 +14,8 @@ if ( class_exists( 'Idx_Broker_Plugin' ) ) {
 
 // If no refresh token saved, show Google login button.
 if ( empty( $google_my_business_options['refresh_token'] ) ) {
-	wp_enqueue_style( 'impress-gmb-login', WP_LISTINGS_URL . 'includes/css/impress-gmb-login.css', [], '1.0.0' );
-	wp_enqueue_script( 'impress-gmb-login', WP_LISTINGS_URL . 'includes/js/impress-gmb-login.js', [], '1.0.0', true );
+	wp_enqueue_style( 'impress-gmb-login', IMPRESS_IDX_URL . 'assets/css/impress-gmb-login.css', [], '1.0.0' );
+	wp_enqueue_script( 'impress-gmb-login', IMPRESS_IDX_URL . 'assets/js/impress-gmb-login.min.js', [], '1.0.0', true );
 	wp_localize_script(
 		'impress-gmb-login',
 		'impressGmbAdmin',

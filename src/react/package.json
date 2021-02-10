@@ -8,16 +8,11 @@
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
     "file-loader": "^6.0.0",
-    "grunt": "^1.0.1",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-sass": "^2.0.0",
-    "grunt-wp-i18n": "^1.0.0",
     "node-sass": "^4.5.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   },
   "description": "**Author:** IDX Broker",
-  "main": "Gruntfile.js",
   "scripts": {
     "build": "webpack --mode production",
     "watch": "webpack --watch"
