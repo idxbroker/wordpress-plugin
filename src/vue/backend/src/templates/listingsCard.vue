@@ -1,7 +1,7 @@
 <template>
     <checkbox-label
         :option="option"
-        @checked="$emit('listingSelected', [$event.data, property.listingID])"
+        @checked="$emit('listing-selected', [$event.data, property.listingID])"
     >
         <template v-slot:content>
             <!-- Prop bindings will need to be reevaluated once we have the property shape -->
@@ -14,8 +14,8 @@
                 :address="property.address"
                 :cityName="property.cityName"
                 :courtesy="property.courtesy"
-                :image="property.image[1]"
-                :primaryPhoto="property.image[1].url"
+                :image="property.image"
+                :primaryPhoto="property.image"
             >
             </idx-single-property-card>
         </template>
