@@ -4,7 +4,9 @@
             <template v-slot:toggle>
                 <idx-button
                     @click="toggleCollapse()"
+                    customClass="toggle-nav"
                     :aria-expanded="navCollapsed ? 'false' : 'true'">
+                    <img src="@/assets/arrow-right-light.svg" height="30" alt="IDX Broker" loading="lazy">
                     Toggle</idx-button>
             </template>
         </Header>
@@ -98,6 +100,8 @@ export default {
                 width: 33.34%;
             }
 
+            .toggle-nav img {}
+
             &.nav-is-collapsed .navigation {
                 width: 50px;
 
@@ -105,6 +109,10 @@ export default {
                     display: none;
                 }
             }
+        }
+
+        .app:not(.nav-is-collapsed) .toggle-nav img {
+            transform: rotate(180deg);
         }
     }
 
