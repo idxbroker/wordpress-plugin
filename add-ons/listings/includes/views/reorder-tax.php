@@ -36,7 +36,7 @@ function wp_listings_tax_reorder() {
 		update_option('wp_listings_taxonomies', $wp_listings_taxes_reordered);
 		
 	}
-screen_icon( 'themes' ); ?>
+?>
 <h2><?php _e( 'Reorder Taxonomies', 'wp-listings' ); ?></h2>
 <div id="col-container">
 <style>

@@ -43,11 +43,11 @@ function wp_listings_init() {
 	/** Registers and enqueues scripts for single listings */
 	add_action('wp_enqueue_scripts', 'add_wp_listings_scripts');
 	function add_wp_listings_scripts() {
-		wp_register_script( 'wp-listings-single', WP_LISTINGS_URL . 'includes/js/single-listing.min.js', array('jquery'), null, true ); // enqueued only on single listings
-		wp_register_script( 'jquery-validate', WP_LISTINGS_URL . 'includes/js/jquery.validate.min.js', array('jquery'), null, true ); // enqueued only on single listings
-		wp_register_script( 'fitvids', '//cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js', array('jquery'), null, true ); // enqueued only on single listings
+		wp_register_script( 'wp-listings-single', IMPRESS_IDX_URL . 'assets/js/single-listing.min.js', [ 'jquery' ], null, true ); // enqueued only on single listings.
+		wp_register_script( 'jquery-validate', IMPRESS_IDX_URL . 'assets/js/jquery.validate.min.js', [ 'jquery' ], null, true ); // enqueued only on single listings.
+		wp_register_script( 'fitvids', '//cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js', [ 'jquery' ], null, true ); // enqueued only on single listings.
 		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery-ui-tabs', array('jquery') );
+		wp_enqueue_script( 'jquery-ui-tabs', [ 'jquery' ] );
     }
 
 	/** Enqueues wp-listings.css style file if it exists and is not deregistered in settings */
@@ -57,7 +57,7 @@ function wp_listings_init() {
 		$options = get_option('plugin_wp_listings_settings');
 
 		/** Register single styles but don't enqueue them **/
-		wp_register_style('wp-listings-single', WP_LISTINGS_URL . 'includes/css/wp-listings-single.css', '', null, 'all');
+		wp_register_style('wp-listings-single', IMPRESS_IDX_URL . 'assets/css/wp-listings-single.css', '', null, 'all');
 
 		/** Register Font Awesome icons but don't enqueue them */
 		wp_register_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2', 'all' );
@@ -74,8 +74,8 @@ function wp_listings_init() {
 			return;
 		}
 
-        if ( file_exists(dirname( __FILE__ ) . '/includes/css/wp-listings.css') ) {
-        	wp_register_style('wp_listings', WP_LISTINGS_URL . 'includes/css/wp-listings.css', '', null, 'all');
+        if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/wp-listings.css') ) {
+        	wp_register_style('wp_listings', IMPRESS_IDX_URL . 'assets/css/wp-listings.css', '', null, 'all');
             wp_enqueue_style('wp_listings');
         }
     }
@@ -94,8 +94,8 @@ function wp_listings_init() {
 			return;
 		}
 
-		if ( file_exists(dirname( __FILE__ ) . '/includes/css/wp-listings-widgets.css') ) {
-			wp_register_style('wp_listings_widgets', WP_LISTINGS_URL . 'includes/css/wp-listings-widgets.css', '', null, 'all');
+		if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/wp-listings-widgets.css') ) {
+			wp_register_style('wp_listings_widgets', WP_LISTINGS_URL . 'assets/css/wp-listings-widgets.css', '', null, 'all');
 				wp_enqueue_style('wp_listings_widgets');
 		}
 	}
@@ -137,19 +137,19 @@ function wp_listings_init() {
 
 		}
 
-		wp_enqueue_style( 'wp_listings_admin_css', WP_LISTINGS_URL . 'includes/css/wp-listings-admin.css' );
+		wp_enqueue_style( 'wp_listings_admin_css', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin.css' );
 
 		/** Enqueue Font Awesome in the Admin if IDX Broker is not installed */
 		if (!class_exists( 'Idx_Broker_Plugin' )) {
 			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-			wp_enqueue_style( 'upgrade-icon', WP_LISTINGS_URL . 'includes/css/wp-listings-upgrade.css' );
+			wp_enqueue_style( 'upgrade-icon', IMPRESS_IDX_URL . 'assets/css/wp-listings-upgrade.css' );
 		}
 
 		global $wp_version;
 		$nonce_action = 'wp_listings_admin_notice';
 
-		wp_enqueue_style( 'wp-listings-admin-notice', WP_LISTINGS_URL . 'includes/css/wp-listings-admin-notice.css' );
-		wp_enqueue_script( 'wp-listings-admin', WP_LISTINGS_URL . 'includes/js/admin.js', 'media-views' );
+		wp_enqueue_style( 'wp-listings-admin-notice', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin-notice.css' );
+		wp_enqueue_script( 'wp-listings-admin', IMPRESS_IDX_URL . 'assets/js/listings-admin.min.js', 'media-views' );
 		wp_localize_script( 'wp-listings-admin', 'wp_listings_adminL10n', array(
 			'ajaxurl'                            => admin_url( 'admin-ajax.php' ),
 			'nonce'                              => wp_create_nonce( $nonce_action ),
