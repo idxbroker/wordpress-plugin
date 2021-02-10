@@ -465,11 +465,11 @@ function wp_listings_idx_listing_scripts() {
 		return;
 
 	wp_enqueue_script( 'jquery-masonry' );
-	wp_enqueue_script( 'wp_listings_idx_listing_lazyload', WP_LISTINGS_URL . 'includes/js/jquery.lazyload.min.js', array( 'jquery' ), true );
-	wp_enqueue_script( 'wp_listings_idx_listing_delete_script', WP_LISTINGS_URL . 'includes/js/admin-listing-import.js', array( 'jquery' ), true );
+	wp_enqueue_script( 'wp_listings_idx_listing_lazyload', IMPRESS_IDX_URL . 'assets/js/jquery.lazyload.min.js', [ 'jquery' ], true );
+	wp_enqueue_script( 'wp_listings_idx_listing_delete_script', IMPRESS_IDX_URL . 'assets/js/admin-listing-import.min.js', [ 'jquery' ], true );
 	wp_localize_script( 'wp_listings_idx_listing_delete_script', 'DeleteListingAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 	wp_localize_script( 'wp_listings_idx_listing_delete_script', 'DeleteAllListingAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-	wp_enqueue_style( 'wp_listings_idx_listing_style', WP_LISTINGS_URL . 'includes/css/wp-listings-import.css' );
+	wp_enqueue_style( 'wp_listings_idx_listing_style', IMPRESS_IDX_URL . 'assets/css/wp-listings-import.css' );
 }
 
 add_action( 'wp_ajax_wp_listings_idx_listing_delete', 'wp_listings_idx_listing_delete' );
@@ -612,9 +612,9 @@ function wp_listings_idx_listing_setting_page() {
 			if( !class_exists( 'IDX_Broker_Plugin') ) {
 				// thickbox like content
 				echo '
-					<img class="idx-import bkg" src="' . WP_LISTINGS_URL . 'images/import-bg.jpg' . '" /></a>
+					<img class="idx-import bkg" src="' . IMPRESS_IDX_URL . 'assets/images/import-bg.jpg' . '" /></a>
 					<div class="idx-import thickbox">
-					     <a href="http://www.idxbroker.com/features/idx-wordpress-plugin" target="_blank"><img src="' . WP_LISTINGS_URL . 'images/idx-ad.png' . '" alt="Sign up for IDX now!"/></a>
+					     <a href="http://www.idxbroker.com/features/idx-wordpress-plugin" target="_blank"><img src="' . IMPRESS_IDX_URL . 'assets/images/idx-ad.png' . '" alt="Sign up for IDX now!"/></a>
 					</div>';
 
 				return;
@@ -782,7 +782,7 @@ function load_idx_listing_import_nonce() {
 		$full_rest_url = $full_rest_url . 'wp-listings/v1/import-listings/?listings=';
 	}
 
-	wp_register_script( 'wp-listings-admin', plugins_url( '/wp-listings/includes/js/admin.js') );
+	wp_register_script( 'wp-listings-admin', IMPRESS_IDX_URL . 'assets/js/listings-admin.min.js' );
 	wp_enqueue_script( 'wp-listings-admin' );
 	$server_obj = array(
 		'nonce' => wp_create_nonce( 'wp_rest' ),

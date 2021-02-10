@@ -1,4 +1,3 @@
-<?php screen_icon( 'themes' ); ?>
 <h2><?php _e( 'Listing Taxonomies', 'wp-listings' ); ?></h2>
 
 <div id="col-container">
