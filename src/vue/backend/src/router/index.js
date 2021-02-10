@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import NetworkIssue from '@/views/NetworkIssue.vue'
+import NotFound from '@/views/NotFound.vue'
+import Settings from '@/views/Settings.vue'
 
 Vue.use(VueRouter)
 
@@ -42,6 +45,7 @@ const routes = [
     {
         path: '/settings',
         name: 'Settings',
+        component: Settings,
         children: [
             {
                 path: 'general',
@@ -166,6 +170,20 @@ const routes = [
                 ]
             }
         ]
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: NotFound
+    },
+    {
+        path: '/network-issue',
+        name: 'network-issue',
+        component: NetworkIssue
+    },
+    {
+        path: '*',
+        redirect: { name: '404', params: { resource: 'page' } }
     }
 ]
 
