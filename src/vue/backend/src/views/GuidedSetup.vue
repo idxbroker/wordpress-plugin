@@ -26,8 +26,6 @@
 </template>
 
 <style scoped lang="scss">
-    @import '~@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss';
-    @import '~@idxbrokerllc/idxstrap/dist/styles/base.scss';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/fullscreen';
     @import '~bootstrap/scss/grid';
@@ -76,7 +74,7 @@
     }
 
     .media-content {
-        background-color: #fff;
+        background-color: $white;
         box-shadow: 10px 10px 0px #00000019;
         color: $gray-800;
         padding: var(--space-6) var(--space-9);
