@@ -1,5 +1,5 @@
 <template>
-    <idx-form-group class="idx-wp-needs-validation {'was-validated': success|error}" novalidate>
+    <idx-form-group customClass="needs-validation {'was-validated': success|error}" novalidate>
         <idx-form-label for="APIKey" customClass="visually-hidden">API Key</idx-form-label>
         <idx-form-input
             type="text"
@@ -51,7 +51,6 @@ export default {
     // TODO: move global and base to main.js
     @import '~@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss';
     @import '~@idxbrokerllc/idxstrap/dist/styles/base.scss';
-    @import '~bootstrap/scss/forms';
 
     .form-group {
         position: relative;
@@ -69,12 +68,11 @@ export default {
 
     @keyframes spinner-border {
         to {
-            transform: rotate(360deg)
+            transform: rotate(360deg);
         }
     }
 
     .spinner-border {
-        -webkit-animation: 0.75s linear infinite spinner-border;
         animation: 0.75s linear infinite spinner-border;
         border: 2px solid currentColor;
         border-right-color: $primary;
