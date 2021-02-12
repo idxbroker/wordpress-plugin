@@ -44,5 +44,8 @@
   },
   "resolutions": {
     "graceful-fs": "^4.2.2"
+  },
+  "dependencies": {
+    "normalizr": "^3.6.1"
   }
 }
