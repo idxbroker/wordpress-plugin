@@ -1,15 +1,15 @@
 <template>
-    <idx-fullscreen customClass="guided-intro">
+    <idx-fullscreen customClass="gs">
         <idx-container fluid>
-            <idx-block className="hero">
+            <idx-block className="gs-hero">
                 <h1>Welcome to IMPress for IDX Broker</h1>
                 <p>Add some description about how we will guide the user through setting up IMPress</p>
             </idx-block>
-            <idx-block className="media">
-                <idx-block className="media-image">
+            <idx-block className="gs-media">
+                <idx-block className="gs-media-image">
                     <img src="@/assets/guided-setup.svg" alt="Illustration of monitor and mobile device" loading="lazy">
                 </idx-block>
-                <idx-block className="media-content">
+                <idx-block className="gs-media-content">
                     <h2>What this guide covers</h2>
                     <idx-block>Cover the bases paragraph on what the install covers.</idx-block>
                     <idx-block>Lorem ipsum dolor sit amet,</idx-block>
@@ -18,26 +18,21 @@
                         <idx-list-item>Bullet list item 2</idx-list-item>
                         <idx-list-item>Bullet list item 3</idx-list-item>
                     </idx-list>
-                    <idx-button tag="a" href="#" size="lg">Let's Get Started</idx-button>
+                    <idx-button href="#" size="lg" @click="() => openDialog()">Let's Get Started</idx-button>
                 </idx-block>
             </idx-block>
         </idx-container>
-        <idx-block className="gs">
-            <idx-button @click="() => openDialog()">
-                Open Guided Setup
-            </idx-button>
-            <idx-dialog :show="showDialog" @dismiss="closeDialog" customClass="gs-dialog">
-                <template v-slot:header>
-                    <idx-block className="dialog-header">
-                        <idx-block className="dialog-header__title">{{ title }}</idx-block>
-                        <idx-block className="dialog-header__dismiss">
-                            <span @click="closeDialog">Close X</span>
-                        </idx-block>
+        <idx-dialog :show="showDialog" @dismiss="closeDialog" customClass="gs-dialog">
+            <template v-slot:header>
+                <idx-block className="gs-dialog-header">
+                    <idx-block className="gs-dialog-header__title">{{ title }}</idx-block>
+                    <idx-block className="gs-dialog-header__dismiss">
+                        <span @click="closeDialog">Close X</span>
                     </idx-block>
-                </template>
-                <GuidedSetupContentCard/>
-            </idx-dialog>
-        </idx-block>
+                </idx-block>
+            </template>
+            <GuidedSetupContentCard/>
+        </idx-dialog>
     </idx-fullscreen>
 </template>
 
@@ -52,7 +47,7 @@ export default {
     },
     data () {
         return {
-            showDialog: true,
+            showDialog: false,
             title: 'IMPress for IDX Broker Setup'
         }
     },
@@ -73,7 +68,7 @@ export default {
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/fullscreen';
     @import '~bootstrap/scss/grid';
 
-    :root {
+    .gs {
         --font-size-h1: 31px;
         --font-size-h2: 25px;
         --font-size-p: 16px;
@@ -86,22 +81,6 @@ export default {
         --space-6: 24px;
         --space-9: 36px;
         --space-10: 40px;
-    }
-
-    .dialog-header {
-        display: -webkit-box;
-        display: flex;
-        -webkit-box-pack: justify;
-        justify-content: space-between;
-        -webkit-box-align: center;
-        align-items: center;
-        background: #414B51;
-        color: #fff;
-        height: 50px;
-        padding: 0 15px;
-    }
-
-    .guided-intro {
         align-items: center;
         display: flex;
 
@@ -112,7 +91,25 @@ export default {
         }
     }
 
-    .hero {
+    .gs-dialog-header {
+        align-items: center;
+        background: #414B51;
+        color: #fff;
+        display: flex;
+        font-size: var(--font-size-p);
+        height: 50px;
+        justify-content: space-between;
+        letter-spacing: 1.6px;
+        line-height: var(--line-height-p);
+        padding: 0 15px;
+        text-transform: uppercase;
+    }
+
+    .gs-dialog-header__title {
+        font-weight: 500;
+    }
+
+    .gs-hero {
         font-size: var(--font-size-p-large);
         line-height: var(--line-height-p-large);
         margin-bottom: 40px;
@@ -126,13 +123,13 @@ export default {
         }
     }
 
-    .media {
+    .gs-media {
         font-size: var(--font-size-p-large);
         line-height: var(--line-height-p-large);
         max-width: fit-content;
     }
 
-    .media-content {
+    .gs-media-content {
         background-color: $white;
         box-shadow: 10px 10px 0px #00000019;
         color: $gray-800;
@@ -152,7 +149,7 @@ export default {
         }
     }
 
-    .media-image {
+    .gs-media-image {
         text-align: center;
 
         img {
@@ -161,16 +158,16 @@ export default {
     }
 
     @media screen and (max-width: 1199px) {
-        .media-image {
+        .gs-media-image {
             margin-bottom: 40px;
         }
     }
 
     @media screen and (min-width: 1200px) {
-        .hero {
+        .gs-hero {
             margin-bottom: 158px;
         }
-        .media {
+        .gs-media {
             display: grid;
             grid-gap: 70px;
             grid-template-columns: auto 1fr;
