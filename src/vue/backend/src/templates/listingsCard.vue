@@ -7,16 +7,11 @@
             <!-- Prop bindings will need to be reevaluated once we have the property shape -->
             <idx-single-property-card
                 customClass="import-listing__card"
-                :listingPrice="property.listingPrice"
-                :bedrooms="property.bedrooms"
-                :totalBaths="property.totalBaths"
-                :sqFt="property.sqFt"
-                :address="property.address"
-                :cityName="property.cityName"
-                :courtesy="property.courtesy"
-                :image="property.image"
-                :primaryPhoto="property.image"
+                v-bind="property"
             >
+            <template v-slot:propertyCardImage>
+                    <img class="property-card__image" :src="property.image">
+                </template>
             </idx-single-property-card>
         </template>
     </checkbox-label>

@@ -11,7 +11,6 @@ import '@idxbrokerllc/idxstrap/dist/styles/base.scss'
 // Import VCL components
 import { IdxBlock, IdxButton, IdxCard, IdxCardBody, IdxCardHeader, IdxList, IdxListItem, IdxSinglePropertyCard, IdxCheckboxLabel } from '@idxbrokerllc/idxstrap'
 
-
 const idxConfig = require('../idx.config')
 const pluginOptions = {
     prefix: idxConfig.options.prefix,
