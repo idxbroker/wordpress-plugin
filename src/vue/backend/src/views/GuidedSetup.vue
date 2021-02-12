@@ -22,15 +22,58 @@
                 </idx-block>
             </idx-block>
         </idx-container>
+        <idx-block className="gs">
+            <idx-button @click="() => openDialog()">
+                Open Guided Setup
+            </idx-button>
+            <idx-dialog :show="showDialog" @dismiss="closeDialog" customClass="gs-dialog">
+                <template v-slot:header>
+                    <idx-block className="dialog-header">
+                        <idx-block className="dialog-header__title">{{ title }}</idx-block>
+                        <idx-block className="dialog-header__dismiss">
+                            <span @click="closeDialog">Close X</span>
+                        </idx-block>
+                    </idx-block>
+                </template>
+                <GuidedSetupContentCard/>
+            </idx-dialog>
+        </idx-block>
     </idx-fullscreen>
 </template>
 
+<script>
+// @ is an alias to /src
+import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
+
+export default {
+    name: 'Home',
+    components: {
+        GuidedSetupContentCard
+    },
+    data () {
+        return {
+            showDialog: true,
+            title: 'IMPress for IDX Broker Setup'
+        }
+    },
+    methods: {
+        openDialog () {
+            this.showDialog = true
+        },
+        closeDialog () {
+            this.showDialog = false
+        }
+    }
+}
+</script>
+
 <style scoped lang="scss">
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
+    @import '~@idxbrokerllc/idxstrap/dist/styles/components/dialog';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/fullscreen';
     @import '~bootstrap/scss/grid';
 
-    .guided-intro {
+    :root {
         --font-size-h1: 31px;
         --font-size-h2: 25px;
         --font-size-p: 16px;
@@ -43,6 +86,22 @@
         --space-6: 24px;
         --space-9: 36px;
         --space-10: 40px;
+    }
+
+    .dialog-header {
+        display: -webkit-box;
+        display: flex;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        align-items: center;
+        background: #414B51;
+        color: #fff;
+        height: 50px;
+        padding: 0 15px;
+    }
+
+    .guided-intro {
         align-items: center;
         display: flex;
 
