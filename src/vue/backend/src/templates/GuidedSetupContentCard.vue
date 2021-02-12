@@ -7,7 +7,7 @@
             <APIKey/>
         </idx-block>
         <idx-block className="gs-content-card__sidebar">
-            <RelatedLinks title="title"/>
+            <RelatedLinks title="title" :links="links"/>
         </idx-block>
         <idx-block className="gs-content-card__footer">
             <idx-block className="gs-content-card__buttons">
@@ -33,7 +33,15 @@ export default {
             links: [
                 {
                     href: '#one',
-                    text: 'text'
+                    text: 'Where can I find my API key?'
+                },
+                {
+                    href: '#one',
+                    text: 'IDX Broker Middleware'
+                },
+                {
+                    href: '#one',
+                    text: 'Sign up for IDX Broker'
                 }
             ]
         }
