@@ -49,11 +49,11 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/tabContainer';
 .import-header {
     background-color: $white;
+    font-size: 1rem;
     &__description {
         padding: 20px 25px;
         background-color: $gray-150;
         color: $gray-800;
-        font-size: 16px;
     }
     &__actions-bar {
         display: flex;
@@ -62,14 +62,12 @@ export default {
         margin-top: 25px;
     }
     &__select-all {
-        font-size: 16px;
         color: $cyan;
         cursor: pointer;
     }
     &__action {
         padding: 8px 12px;
         font-weight: 600;
-        font-size: 16px;
         letter-spacing: 0.4px;
     }
     .tab-container {
@@ -82,7 +80,7 @@ export default {
             width: 164px;
             margin-left: 0px;
             flex: unset;
-            font-size: 16px;
+
             letter-spacing: 1.6px;
             color: #788088;
             text-transform: uppercase;
