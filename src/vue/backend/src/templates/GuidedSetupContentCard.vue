@@ -22,12 +22,23 @@ export default {
     components: {
         ContentCard
     },
+    props: {
+        cardTitle: {
+            type: String,
+            default: ''
+        },
+        relatedLinks: {
+            type: Array,
+            default: () => []
+        },
+        steps: {
+            type: Array,
+            default: () => []
+        }
+    },
     data () {
         return {
-            cardTitle: '',
             showDialog: true,
-            relatedLinks: [],
-            steps: [],
             title: 'IMPress for IDX Broker Setup'
         }
     },
