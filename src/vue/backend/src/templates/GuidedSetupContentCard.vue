@@ -8,7 +8,7 @@
                 </idx-block>
             </idx-block>
         </template>
-        <ContentCard/>
+        <ContentCard :steps="steps"/>
     </idx-dialog>
 </template>
 
@@ -27,7 +27,8 @@ export default {
     },
     data () {
         return {
-            showDialog: true
+            showDialog: true,
+            steps: []
         }
     },
     methods: {

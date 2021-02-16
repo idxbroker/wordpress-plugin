@@ -1,6 +1,6 @@
 <template>
     <idx-fullscreen customClass="gs">
-        <GuidedSetupContentCard :steps="steps"/>
+        <GuidedSetupContentCard/>
         <idx-container fluid>
             <idx-block className="gs-hero">
                 <h1>Welcome to IMPress for IDX Broker</h1>
