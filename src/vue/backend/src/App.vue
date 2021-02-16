@@ -1,5 +1,7 @@
 <template>
-    <idx-block className="app"></idx-block>
+    <idx-block className="app">
+        <router-view/>
+    </idx-block>
 </template>
 
 <style lang="scss">

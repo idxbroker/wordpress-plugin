@@ -4,13 +4,17 @@
             <idx-block className="dialog-header">
                 <idx-block className="dialog-header__title">{{ title }}</idx-block>
                 <idx-block className="dialog-header__dismiss">
-                    <span @click="closeDialog">Close X</span>
+                    <span @click="closeDialog">Close ×</span>
                 </idx-block>
             </idx-block>
         </template>
         <ContentCard :steps="steps" :cardTitle="cardTitle" :relatedLinks="relatedLinks">
-            <template v-slot:description></template>
-            <template v-slot:controls></template>
+            <template v-slot:description>
+                <slot name="description"></slot>
+            </template>
+            <template v-slot:controls>
+                <slot name="controls"></slot>
+            </template>
         </ContentCard>
     </idx-dialog>
 </template>

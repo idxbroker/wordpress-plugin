@@ -26,13 +26,8 @@
 </template>
 
 <script>
-import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
-
 export default {
-    name: 'GuidedSetup',
-    components: {
-        GuidedSetupContentCard
-    }
+    name: 'GuidedSetup'
 }
 </script>
 
