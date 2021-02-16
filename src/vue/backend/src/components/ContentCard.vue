@@ -21,7 +21,7 @@
             <slot name="controls"></slot>
         </idx-block>
         <idx-block className="content-card__sidebar">
-            <RelatedLinks/>
+            <RelatedLinks :relatedLinks="relatedLinks"/>
         </idx-block>
         <idx-block className="content-card__footer">
             <idx-block className="content-card__buttons">
@@ -49,8 +49,8 @@ export default {
             default: () => []
         },
         relatedLinks: {
-            type: Object,
-            default: () => {}
+            type: Array,
+            default: () => []
         }
     }
 }

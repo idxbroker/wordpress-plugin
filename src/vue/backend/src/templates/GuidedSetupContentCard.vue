@@ -2,13 +2,16 @@
     <idx-dialog :show="showDialog" @dismiss="closeDialog" customClass="gs-dialog">
         <template v-slot:header>
             <idx-block className="dialog-header">
-                <idx-block className="dialog-header__title">{{ dialogTitle }}</idx-block>
+                <idx-block className="dialog-header__title">{{ title }}</idx-block>
                 <idx-block className="dialog-header__dismiss">
                     <span @click="closeDialog">Close X</span>
                 </idx-block>
             </idx-block>
         </template>
-        <ContentCard :steps="steps"/>
+        <ContentCard :steps="steps" :cardTitle="cardTitle" :relatedLinks="relatedLinks">
+            <template v-slot:description></template>
+            <template v-slot:controls></template>
+        </ContentCard>
     </idx-dialog>
 </template>
 
@@ -19,16 +22,13 @@ export default {
     components: {
         ContentCard
     },
-    props: {
-        dialogTitle: {
-            type: String,
-            default: 'IMPress for IDX Broker Setup'
-        }
-    },
     data () {
         return {
+            cardTitle: '',
             showDialog: true,
-            steps: []
+            relatedLinks: [],
+            steps: [],
+            title: 'IMPress for IDX Broker Setup'
         }
     },
     methods: {
