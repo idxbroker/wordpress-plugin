@@ -1,5 +1,4 @@
 import { schema } from 'normalizr'
-import { navigationModelTranslation as settings } from '../settings'
 
 const subpagesEntity = new schema.Entity(
     'routes',
@@ -18,7 +17,7 @@ const pagesEntity = new schema.Entity(
 )
 
 const categoriesEntity = new schema.Entity(
-    settings.categories.key,
+    'routes',
     { routes: [pagesEntity] },
     {
         idAttribute: 'itemId'

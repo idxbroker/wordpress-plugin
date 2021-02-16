@@ -1,10 +1,10 @@
 <template>
-    <div class="demo--page">
+    <div class="content-page">
         <slot></slot>
     </div>
 </template>
 <style lang="scss">
-    .demo--page {
+    .content-page {
         padding: 50px;
         margin-left: 255px;
         margin-top: 83px;
