@@ -53,7 +53,7 @@
             line-height: var(--line-height-h2);
         }
 
-        .wp-die-message, p {
+        p {
             font-size: inherit;
             line-height: inherit;
         }
