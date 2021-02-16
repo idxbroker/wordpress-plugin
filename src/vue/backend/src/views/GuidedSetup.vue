@@ -33,15 +33,6 @@ export default {
     name: 'GuidedSetup',
     components: {
         GuidedSetupContentCard
-    },
-    data () {
-        return {
-            steps: [
-                { name: '1. Connect', total: 10, active: 10 },
-                { name: '2. Your Listings', total: 10, active: 5 },
-                { name: '3. Agents', total: 1, active: 0 }
-            ]
-        }
     }
 }
 </script>
