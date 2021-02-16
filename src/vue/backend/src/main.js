@@ -25,8 +25,11 @@ import {
     IdxFormInput,
     IdxFormLabel,
     IdxFullscreen,
+    IdxIcon,
     IdxList,
-    IdxListItem
+    IdxListItem,
+    IdxProgressBar,
+    IdxProgressStepper
 } from '@idxbrokerllc/idxstrap'
 
 const idxConfig = require('../idx.config')
@@ -60,8 +63,11 @@ const components = [
     IdxFormInput,
     IdxFormLabel,
     IdxFullscreen,
+    IdxIcon,
     IdxList,
-    IdxListItem
+    IdxListItem,
+    IdxProgressBar,
+    IdxProgressStepper
 ]
 
 components.forEach(component => Vue.component(component.name, component))

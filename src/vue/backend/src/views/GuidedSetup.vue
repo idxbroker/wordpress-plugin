@@ -1,5 +1,6 @@
 <template>
     <idx-fullscreen customClass="gs">
+        <GuidedSetupContentCard :steps="steps"/>
         <idx-container fluid>
             <idx-block className="gs-hero">
                 <h1>Welcome to IMPress for IDX Broker</h1>
@@ -18,106 +19,61 @@
                         <idx-list-item>Bullet list item 2</idx-list-item>
                         <idx-list-item>Bullet list item 3</idx-list-item>
                     </idx-list>
-                    <idx-button href="#" size="lg" @click="() => openDialog()">Let's Get Started</idx-button>
+                    <idx-button href="#" size="lg" @click="showDialog = true">Let's Get Started</idx-button>
                 </idx-block>
             </idx-block>
         </idx-container>
-        <idx-dialog :show="showDialog" @dismiss="closeDialog" customClass="gs-dialog">
-            <template v-slot:header>
-                <idx-block className="gs-dialog-header">
-                    <idx-block className="gs-dialog-header__title">{{ title }}</idx-block>
-                    <idx-block className="gs-dialog-header__dismiss">
-                        <span @click="closeDialog">Close X</span>
-                    </idx-block>
-                </idx-block>
-            </template>
-            <GuidedSetupContentCard/>
-        </idx-dialog>
     </idx-fullscreen>
 </template>
 
 <script>
-// @ is an alias to /src
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 
 export default {
-    name: 'Home',
+    name: 'GuidedSetup',
     components: {
         GuidedSetupContentCard
     },
     data () {
         return {
-            showDialog: false,
-            title: 'IMPress for IDX Broker Setup'
-        }
-    },
-    methods: {
-        openDialog () {
-            this.showDialog = true
-        },
-        closeDialog () {
-            this.showDialog = false
+            steps: [
+                { name: '1. Connect', total: 10, active: 10 },
+                { name: '2. Your Listings', total: 10, active: 5 },
+                { name: '3. Agents', total: 1, active: 0 }
+            ]
         }
     }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/dialog';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/fullscreen';
-    @import '~bootstrap/scss/grid';
 
     .gs {
-        --font-size-h1: 31px;
-        --font-size-h2: 25px;
-        --font-size-p: 16px;
-        --font-size-p-large: 18px;
-        --line-height-h1: 28px;
-        --line-height-h2: 28px;
-        --line-height-p: 28px;
-        --line-height-p-large: 28px;
-        --space-4: 16px;
-        --space-6: 24px;
-        --space-9: 36px;
-        --space-10: 40px;
         align-items: center;
         display: flex;
+
+        &.fullscreen {
+            position: absolute;
+        }
 
         .container-fluid {
             align-items: center;
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
-    }
-
-    .gs-dialog-header {
-        align-items: center;
-        background: #414B51;
-        color: #fff;
-        display: flex;
-        font-size: var(--font-size-p);
-        height: 50px;
-        justify-content: space-between;
-        letter-spacing: 1.6px;
-        line-height: var(--line-height-p);
-        padding: 0 15px;
-        text-transform: uppercase;
-    }
-
-    .gs-dialog-header__title {
-        font-weight: 500;
     }
 
     .gs-hero {
         font-size: var(--font-size-p-large);
         line-height: var(--line-height-p-large);
-        margin-bottom: 40px;
+        margin-bottom: var(--space-10);
         text-align: center;
 
         h1 {
-            font-size: var(--font-size-h1);
-            line-height: var(--line-height-h1);
             margin-bottom: var(--space-4);
             text-transform: uppercase;
         }
@@ -136,8 +92,6 @@ export default {
         padding: var(--space-6) var(--space-9);
 
         h2 {
-            font-size: var(--font-size-h2);
-            line-height: var(--line-height-h2);
             margin-bottom: var(--space-4);
             text-align: center;
         }
@@ -158,18 +112,21 @@ export default {
     }
 
     @media screen and (max-width: 1199px) {
+
         .gs-media-image {
-            margin-bottom: 40px;
+            margin-bottom: var(--space-10);
         }
     }
 
     @media screen and (min-width: 1200px) {
+
         .gs-hero {
             margin-bottom: 158px;
         }
+
         .gs-media {
             display: grid;
-            grid-gap: 70px;
+            grid-gap: var(--space-18);
             grid-template-columns: auto 1fr;
         }
     }
