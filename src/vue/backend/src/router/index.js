@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import GuidedSetup from '@/views/GuidedSetup.vue'
 
 Vue.use(VueRouter)
 
@@ -83,7 +84,7 @@ const routes = [
     {
         path: '/guided-setup',
         name: 'Guided Setup',
-        // component
+        component: GuidedSetup,
         children: [
             {
                 path: 'connect',
