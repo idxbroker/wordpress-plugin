@@ -1,15 +1,40 @@
 // Import libraries and stuff
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import storeModules from './store'
 import IDXStrapClass from '@idxbrokerllc/idxstrap/dist/idxStrap.js'
 
 // Import VCL base and variable styles
 import '@idxbrokerllc/idxstrap/dist/styles/base.scss'
 
 // Import VCL components
-import { IdxBlock, IdxButton, IdxCard, IdxCardBody, IdxCardHeader, IdxContainer, IdxFormGroup, IdxFormInput, IdxFormLabel, IdxFullscreen, IdxList, IdxListItem, IdxSinglePropertyCard, IdxCheckboxLabel, IdxTabContainer } from '@idxbrokerllc/idxstrap'
+import {
+    IdxBlock,
+    IdxButton,
+    IdxCard,
+    IdxCardBody,
+    IdxCardHeader,
+    IdxContainer,
+    IdxFormGroup,
+    IdxFormInput,
+    IdxFormLabel,
+    IdxFullscreen,
+    IdxList,
+    IdxListItem,
+    IdxNavbar,
+    IdxHeader,
+    IdxVArrow,
+    IdxVIcon,
+    IdxNavList,
+    IdxVNav,
+    IdxNavItem,
+    IdxNavbarBrand,
+    IdxSinglePropertyCard,
+    IdxCheckboxLabel,
+    IdxTabContainer
+} from '@idxbrokerllc/idxstrap'
 
 const idxConfig = require('../idx.config')
 const pluginOptions = {
@@ -17,7 +42,7 @@ const pluginOptions = {
     separator: idxConfig.options.separator,
     applyPrefix: true
 }
-
+Vue.use(Vuex)
 const idxstrap = new IDXStrapClass(pluginOptions)
 Vue.mixin({
     created () {
@@ -26,9 +51,38 @@ Vue.mixin({
     }
 })
 
-const components = [IdxBlock, IdxButton, IdxCard, IdxCardBody, IdxCardHeader, IdxContainer, IdxFormGroup, IdxFormInput, IdxFormLabel, IdxFullscreen, IdxList, IdxListItem, IdxSinglePropertyCard, IdxCheckboxLabel, IdxTabContainer]
+const components = [
+    IdxBlock,
+    IdxButton,
+    IdxCard,
+    IdxCardBody,
+    IdxCardHeader,
+    IdxContainer,
+    IdxFormGroup,
+    IdxFormInput,
+    IdxFormLabel,
+    IdxFullscreen,
+    IdxList,
+    IdxListItem,
+    IdxNavbar,
+    IdxHeader,
+    IdxVArrow,
+    IdxVIcon,
+    IdxNavList,
+    IdxVNav,
+    IdxNavItem,
+    IdxNavbarBrand,
+    IdxSinglePropertyCard,
+    IdxCheckboxLabel,
+    IdxTabContainer
+]
 
 components.forEach(component => Vue.component(component.name, component))
+
+const store = new Vuex.Store({
+    strict: process.env.NODE_ENV !== 'production',
+    modules: storeModules
+})
 
 Vue.config.productionTip = false
 
