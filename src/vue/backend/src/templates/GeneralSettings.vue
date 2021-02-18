@@ -25,7 +25,7 @@
         <idx-form-group>
             <idx-form-label for="update-frequency"><strong>Update Frequency</strong><br> Choose how often IMPress gets updates from your IDX Broker account.</idx-form-label>
             <idx-custom-select
-                uniqueID="update-frequency"
+                id="update-frequency"
                 ariaLabel="Select frequency"
                 :selected="updateFrequency"
                 :options="updateFrequencyOptions"
