@@ -6,7 +6,7 @@
                 type="text"
                 id="website-wrapper"
                 :value="wrapperName"
-                @change="generalSettingsStateChange({ key: 'wrapperName', value: $event })"
+                @input="generalSettingsStateChange({ key: 'wrapperName', value: $event })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -42,11 +42,11 @@ export default {
         return {
             toggleLabel: 'Enable Google reCAPTCHA',
             updateFrequencyOptions: [
-                { name: '1 Minute' },
-                { name: '2 Minutes' },
-                { name: '3 Minutes' },
-                { name: '4 Minutes' },
-                { name: '5 Minutes' }
+                { value: '1', label: '1 Minute' },
+                { value: '2', label: '2 Minutes' },
+                { value: '3', label: '3 Minutes' },
+                { value: '4', label: '4 Minutes' },
+                { value: '5', label: '5 Minutes' }
             ]
         }
     },

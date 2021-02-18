@@ -4,7 +4,7 @@ import mutations from './mutations'
 
 const state = {
     reCAPTCHA: false,
-    updateFrequency: { name: '3 minutes' },
+    updateFrequency: { value: '3', label: '3 minutes' },
     wrapperName: 'idx-wp-'
 }
 
