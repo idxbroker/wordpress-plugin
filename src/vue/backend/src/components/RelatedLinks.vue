@@ -3,7 +3,7 @@
         <idx-card-header>{{ title }}</idx-card-header>
         <idx-card-body>
             <idx-list unstyled>
-                <idx-list-item v-for="link in links" :key="link.href">
+                <idx-list-item v-for="link in relatedLinks" :key="link.href">
                     <a :href="link.href" target="_blank">{{ link.text }}</a>
                 </idx-list-item>
             </idx-list>
@@ -17,9 +17,9 @@ export default {
     props: {
         title: {
             type: String,
-            defaut: 'Related Links'
+            default: 'Related Links'
         },
-        links: {
+        relatedLinks: {
             type: Array,
             default: () => []
         }
