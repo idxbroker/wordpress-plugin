@@ -58,6 +58,7 @@ export default {
 </script>
 
 <style lang="scss">
+    @import '~@idxbrokerllc/idxstrap/dist/styles/components/dialog';
 
     .gs .dialog__mask {
         position: absolute;

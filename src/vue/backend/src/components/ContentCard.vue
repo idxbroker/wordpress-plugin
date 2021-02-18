@@ -25,9 +25,9 @@
         </idx-block>
         <idx-block className="content-card__footer">
             <idx-block className="content-card__buttons">
-                <idx-button href="#" size="lg" theme="light" @click="$emit('back-step')">← Back</idx-button>
-                <idx-button href="#" size="lg" theme="link" @click="$emit('skip-step')">Skip</idx-button>
-                <idx-button href="#" size="lg" @click="$emit('continue')">Continue</idx-button>
+                <idx-button size="lg" theme="light" @click="$emit('back-step')">← Back</idx-button>
+                <idx-button size="lg" theme="link" @click="$emit('skip-step')">Skip</idx-button>
+                <idx-button size="lg" @click="$emit('continue')">Continue</idx-button>
             </idx-block>
         </idx-block>
     </idx-block>
