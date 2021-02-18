@@ -6,7 +6,7 @@
         }"
         novalidate
     >
-        <idx-form-label for="APIKey" customClass="visually-hidden">API Key</idx-form-label>
+        <idx-form-label for="APIKey">API Key</idx-form-label>
         <idx-form-input
             type="text"
             id="APIKey"
@@ -54,6 +54,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    @import '~bootstrap/scss/forms';
 
     .form-group {
         position: relative;
