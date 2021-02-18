@@ -24,5 +24,8 @@ export default {
     },
     collapseRoutes: ({ commit }) => {
         commit('COLLAPSE_ROUTES')
+    },
+    toggleSidebar: ({ commit }, payload) => {
+        commit('SET_ITEM', payload)
     }
 }

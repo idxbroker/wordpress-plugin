@@ -6,11 +6,11 @@ import omnibar from './modules/omnibar'
 import socialPro from './modules/socialPro'
 import routes from './modules/routes'
 export default {
-   agentSettings,
-   general,
-   importContent,
-   listingsSettings,
-   omnibar,
-   socialPro,
-   routes
+    agentSettings,
+    general,
+    importContent,
+    listingsSettings,
+    omnibar,
+    socialPro,
+    routes
 }

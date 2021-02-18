@@ -1,17 +1,34 @@
 <template>
-    <div class="content-page">
+    <idx-block :className="{
+            'content-page': true,
+            'content-page--slide-left': !expanded
+        }"
+    >
         <slot></slot>
-    </div>
+    </idx-block>
 </template>
-<style lang="scss">
-    .content-page {
-        padding: 50px;
-        margin-left: 255px;
-        margin-top: 83px;
-        background-color: #fafafa;
-
-        p.lead {
-            font-weight: 400;
-        }
+<script>
+import { mapState } from 'vuex'
+export default {
+    name: 'page',
+    computed: {
+        ...mapState({
+            expanded: state => state.routes.expanded
+        })
     }
+}
+</script>
+<style lang="scss">
+.content-page {
+    padding: 50px;
+    margin: 83px 50px 0px 255px;
+    background-color: $white;
+    transition: margin-left .5s ease;
+    &--slide-left {
+        margin-left: 50px;
+    }
+    p.lead {
+        font-weight: 400;
+    }
+}
 </style>
