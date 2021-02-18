@@ -1,6 +1,6 @@
 const path = require('path')
 const devPort = 8123
-
+const utilityPath = `@idxbrokerllc/idxstrap/dist/Utilities/`
 module.exports = {
     transpileDependencies: [
         '@idxbrokerllc/idxstrap'
@@ -24,6 +24,11 @@ module.exports = {
         },
         optimization: {
             splitChunks: false
+        },
+        resolve: {
+            alias: {
+                '@utilityPath': utilityPath
+            }
         }
     },
     filenameHashing: true,

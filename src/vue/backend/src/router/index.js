@@ -7,36 +7,27 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/import',
+        name: 'Import',
         children: [
             {
-                path: '/listings',
-                children: [
-                    {
-                        path: '',
-                        name: 'Unimported IDX Listings'
-                        // component
-                    },
-                    {
-                        path: 'imported',
-                        name: 'Imported IDX Listings'
-                        // component
-                    }
-                ]
+                path: 'listings',
+                name: 'Unimported IDX Listings'
+                // component
             },
             {
-                path: '/agents',
-                children: [
-                    {
-                        path: '',
-                        name: 'Unimported Agents'
-                        // component
-                    },
-                    {
-                        path: 'imported',
-                        name: 'Imported Agents'
-                        // component
-                    }
-                ]
+                path: 'listings/imported',
+                name: 'Imported IDX Listings'
+                // component
+            },
+            {
+                path: 'agents',
+                name: 'Unimported Agents'
+                // component
+            },
+            {
+                path: 'agents/imported',
+                name: 'Imported Agents'
+                // component
             }
         ]
     },
@@ -83,6 +74,10 @@ const routes = [
                 path: 'social-pro',
                 name: 'Social Pro Settings'
                 // component
+            },
+            {
+                path: 'gmb',
+                name: 'Google My Business'
             }
         ]
     },
