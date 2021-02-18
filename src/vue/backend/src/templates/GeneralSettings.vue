@@ -5,6 +5,8 @@
             <idx-form-input
                 type="text"
                 id="website-wrapper"
+                :value="websiteWrapper"
+                @change="generalSettingsStateChange({ key: 'websiteWrapper', value: $event })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -27,7 +29,7 @@
                 ariaLabel="Select frequency"
                 :selected="updateFrequency"
                 :options="updateFrequencyOptions"
-                @selectedItem="generalSettingsStateChange({ key: 'updateFrequency', value: $event })"
+                @selected-item="generalSettingsStateChange({ key: 'updateFrequency', value: $event })"
             />
         </idx-form-group>
     </idx-block>
@@ -51,7 +53,8 @@ export default {
     computed: {
         ...mapState({
             enableRecaptcha: state => state.general.enableRecaptcha,
-            updateFrequency: state => state.general.updateFrequency
+            updateFrequency: state => state.general.updateFrequency,
+            websiteWrapper: state => state.general.websiteWrapper
         })
     },
     methods: {

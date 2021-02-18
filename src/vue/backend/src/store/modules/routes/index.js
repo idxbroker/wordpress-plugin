@@ -4,7 +4,8 @@ import mutations from './mutations'
 
 const state = {
     routes: {},
-    categoryKeys: []
+    categoryKeys: [],
+    expanded: true
 }
 
 export default {
