@@ -1,4 +1,4 @@
-import * as types from '../../common/store/mutationTypes'
+import * as types from '../../common/mutationTypes'
 
 const socialProStateChange = ({ commit }, payload) => {
     commit(types.SET_ITEM, {

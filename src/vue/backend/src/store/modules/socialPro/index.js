@@ -4,9 +4,9 @@ import mutations from './mutations'
 
 const state = {
     enableSyndication: false,
-    autopublishArticles: { name: 'Autopublish' },
-    postDay: { name: 'Sunday' },
-    postType: { name: 'Post' }
+    autopublish: { label: 'Autopublish', value: 'autopublish' },
+    postDay: { label: 'Sunday', value: 'sun' },
+    postType: { label: 'Post', value: 'post' }
 }
 
 export default {

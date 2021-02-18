@@ -18,17 +18,15 @@
             <idx-block className="social-pro-form__field">
                 <label>Autopublish General Interest Articles</label>
                 <idx-custom-select
-                    uniqueID="autopublish"
                     ariaLabel="Select Autopublish setting"
-                    :selected="autopublishArticles"
+                    :selected="autopublish"
                     :options="autopublishOptions"
-                    @selected-item="socialProStateChange({ key: 'autopublishArticles', value: $event })"
+                    @selected-item="socialProStateChange({ key: 'autopublish', value: $event })"
                 ></idx-custom-select>
             </idx-block>
             <idx-block className="social-pro-form__field">
                 <label>General Interest Article Post Day of the Week</label>
                 <idx-custom-select
-                    uniqueID="post-day"
                     ariaLabel="Select post day"
                     :selected="postDay"
                     :options="postDayOptions"
@@ -38,7 +36,6 @@
             <idx-block className="social-pro-form__field">
                 <label>General Interest Article Post Type</label>
                 <idx-custom-select
-                    uniqueID="post-type"
                     ariaLabel="Select post type"
                     :selected="postType"
                     :options="postTypeOptions"
@@ -57,27 +54,27 @@ export default {
             toggleLabel: 'Enable General Interest Article Syndication',
             enable: false,
             autopublishOptions: [
-                { name: 'Autopublish' },
-                { name: 'Draft' }
+                { label: 'Autopublish', value: 'autopublish' },
+                { label: 'Draft', value: 'draft' }
             ],
             postDayOptions: [
-                { name: 'Sunday' },
-                { name: 'Monday' },
-                { name: 'Tuesday' },
-                { name: 'Wednesday' },
-                { name: 'Thursday' },
-                { name: 'Friday' },
-                { name: 'Saturday' }
+                { label: 'Sunday', value: 'sun' },
+                { label: 'Monday', value: 'mon' },
+                { label: 'Tuesday', value: 'tues' },
+                { label: 'Wednesday', value: 'wed' },
+                { label: 'Thursday', value: 'thurs' },
+                { label: 'Friday', value: 'fri' },
+                { label: 'Saturday', value: 'sat' }
             ],
             postTypeOptions: [
-                { name: 'Post' }
+                { label: 'Post', value: 'post' }
             ]
         }
     },
     computed: {
         ...mapState({
             enableSyndication: state => state.socialPro.enableSyndication,
-            autopublishArticles: state => state.socialPro.autopublishArticles,
+            autopublish: state => state.socialPro.autopublish,
             postDay: state => state.socialPro.postDay,
             postType: state => state.socialPro.postType
         })
