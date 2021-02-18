@@ -17,9 +17,11 @@ import {
     IdxCardBody,
     IdxCardHeader,
     IdxContainer,
+    IdxCustomSelect,
     IdxFormGroup,
     IdxFormInput,
     IdxFormLabel,
+    IdxFormSelect,
     IdxFullscreen,
     IdxList,
     IdxListItem,
@@ -33,7 +35,8 @@ import {
     IdxNavbarBrand,
     IdxSinglePropertyCard,
     IdxCheckboxLabel,
-    IdxTabContainer
+    IdxTabContainer,
+    IdxToggleSlider
 } from '@idxbrokerllc/idxstrap'
 
 const idxConfig = require('../idx.config')
@@ -58,9 +61,11 @@ const components = [
     IdxCardBody,
     IdxCardHeader,
     IdxContainer,
+    IdxCustomSelect,
     IdxFormGroup,
     IdxFormInput,
     IdxFormLabel,
+    IdxFormSelect,
     IdxFullscreen,
     IdxList,
     IdxListItem,
@@ -74,7 +79,8 @@ const components = [
     IdxNavbarBrand,
     IdxSinglePropertyCard,
     IdxCheckboxLabel,
-    IdxTabContainer
+    IdxTabContainer,
+    IdxToggleSlider
 ]
 
 components.forEach(component => Vue.component(component.name, component))

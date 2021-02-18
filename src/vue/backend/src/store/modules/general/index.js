@@ -3,6 +3,10 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
+    enableRecaptcha: false,
+    updateFrequency: {
+        name: '3 minutes'
+    }
 }
 
 export default {

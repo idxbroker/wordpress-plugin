@@ -1,7 +1,7 @@
 <template>
-    <div class="content-page">
+    <idx-block className="content-page">
         <slot></slot>
-    </div>
+    </idx-block>
 </template>
 <style lang="scss">
     .content-page {
