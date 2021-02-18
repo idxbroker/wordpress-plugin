@@ -3,9 +3,9 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
-    enableRecaptcha: false,
+    reCAPTCHA: false,
     updateFrequency: { name: '3 minutes' },
-    websiteWrapper: 'idx-wp-'
+    wrapperName: 'idx-wp-'
 }
 
 export default {

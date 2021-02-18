@@ -5,8 +5,8 @@
             <idx-form-input
                 type="text"
                 id="website-wrapper"
-                :value="websiteWrapper"
-                @change="generalSettingsStateChange({ key: 'websiteWrapper', value: $event })"
+                :value="wrapperName"
+                @change="generalSettingsStateChange({ key: 'wrapperName', value: $event })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -16,8 +16,8 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="generalSettingsStateChange({ key: 'enableRecaptcha', value: !enableRecaptcha })"
-                    :active="enableRecaptcha"
+                    @toggle="generalSettingsStateChange({ key: 'reCAPTCHA', value: !reCAPTCHA })"
+                    :active="reCAPTCHA"
                     :label="toggleLabel"
                 ></idx-toggle-slider>
             </idx-block>
@@ -52,9 +52,9 @@ export default {
     },
     computed: {
         ...mapState({
-            enableRecaptcha: state => state.general.enableRecaptcha,
+            reCAPTCHA: state => state.general.reCAPTCHA,
             updateFrequency: state => state.general.updateFrequency,
-            websiteWrapper: state => state.general.websiteWrapper
+            wrapperName: state => state.general.wrapperName
         })
     },
     methods: {
