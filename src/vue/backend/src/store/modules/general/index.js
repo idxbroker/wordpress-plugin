@@ -3,6 +3,9 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
+    reCAPTCHA: false,
+    updateFrequency: { value: '', label: '' },
+    wrapperName: ''
 }
 
 export default {
