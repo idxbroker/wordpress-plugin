@@ -6,7 +6,7 @@
                 type="text"
                 id="website-wrapper"
                 :value="wrapperName"
-                @change="generalSettingsStateChange('wrapperName', $event)"
+                @change="generalSettingsStateChange({key: 'wrapperName', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
