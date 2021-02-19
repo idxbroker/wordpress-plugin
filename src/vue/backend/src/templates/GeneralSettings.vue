@@ -6,7 +6,7 @@
                 type="text"
                 id="website-wrapper"
                 :value="wrapperName"
-                @keyup="debounceInput($event)"
+                @change="generalSettingsStateChange('wrapperName', $event)"
             />
         </idx-form-group>
         <idx-form-group>
@@ -58,12 +58,7 @@ export default {
             reCAPTCHA: state => state.general.reCAPTCHA,
             updateFrequency: state => state.general.updateFrequency,
             wrapperName: state => state.general.wrapperName
-        }),
-        debounceInput: function (e) {
-            return _debounce(function (e) {
-                this.generalSettingsStateChange({ key: 'wrapperName', value: e.target.value })
-            }, 250)
-        }
+        })
     },
     methods: {
         ...mapActions({
