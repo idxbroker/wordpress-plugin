@@ -3,19 +3,17 @@
     <Navbar></Navbar>
     <page>
         <transition name="router" mode="out-in">
-            <GeneralSettings/>
+            <router-view></router-view>
         </transition>
     </page>
   </idx-block>
 </template>
 <script>
-import GeneralSettings from './templates/GeneralSettings.vue'
 import Navbar from './templates/navbar'
 import Page from './templates/page'
 export default {
     name: 'app',
     components: {
-        GeneralSettings,
         Navbar,
         Page
     }
@@ -23,5 +21,4 @@ export default {
 </script>
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/vNav';
-.v-nav { display: none !important;}
 </style>
