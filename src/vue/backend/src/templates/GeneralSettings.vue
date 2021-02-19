@@ -34,7 +34,6 @@
     </idx-block>
 </template>
 <script>
-import _debounce from 'lodash/debounce'
 import { mapState, mapActions } from 'vuex'
 export default {
     name: 'GeneralSettings',
