@@ -5,7 +5,7 @@ import mutations from './mutations'
 const state = {
     reCAPTCHA: false,
     updateFrequency: { value: '', label: '' },
-    wrapperName: 'idx-wp-'
+    wrapperName: ''
 }
 
 export default {
