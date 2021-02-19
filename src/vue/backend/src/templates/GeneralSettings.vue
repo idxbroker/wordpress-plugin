@@ -6,7 +6,7 @@
                 type="text"
                 id="website-wrapper"
                 :value="wrapperName"
-                @keyup="wrapperChangeState($event)"
+                @keyup="debounceInput($event)"
             />
         </idx-form-group>
         <idx-form-group>
@@ -23,10 +23,9 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label for="update-frequency"><strong>Update Frequency</strong><br> Choose how often IMPress gets updates from your IDX Broker account.</idx-form-label>
+            <idx-block className="control-label"><strong>Update Frequency</strong><br> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
             <idx-custom-select
-                id="update-frequency"
-                ariaLabel="Select frequency"
+                ariaLabel="Update Frequency"
                 :selected="updateFrequency"
                 :options="updateFrequencyOptions"
                 @selected-item="generalSettingsStateChange({ key: 'updateFrequency', value: $event })"
@@ -62,19 +61,14 @@ export default {
         }),
         debounceInput: function (e) {
             return _debounce(function (e) {
-                this.$emit('keyPress', e)
+                this.generalSettingsStateChange({ key: 'wrapperName', value: e.target.value })
             }, this.debounceTimeout)
         }
     },
     methods: {
         ...mapActions({
             generalSettingsStateChange: 'general/generalSettingsStateChange'
-        }),
-
-        wrapperChangeState: function (e) {
-            this.generalSettingsStateChange({ key: 'wrapperName', value: e.target.value })
-            this.debounceInput(e)
-        }
+        })
     }
 }
 </script>
