@@ -6,7 +6,7 @@
                 type="text"
                 id="website-wrapper"
                 :value="wrapperName"
-                @input="generalSettingsStateChange({ key: 'wrapperName', value: $event })"
+                @keyup="wrapperChangeState($event)"
             />
         </idx-form-group>
         <idx-form-group>
@@ -35,6 +35,7 @@
     </idx-block>
 </template>
 <script>
+import _debounce from 'lodash/debounce'
 import { mapState, mapActions } from 'vuex'
 export default {
     name: 'GeneralSettings',
@@ -42,11 +43,14 @@ export default {
         return {
             toggleLabel: 'Enable Google reCAPTCHA',
             updateFrequencyOptions: [
-                { value: '1', label: '1 Minute' },
-                { value: '2', label: '2 Minutes' },
-                { value: '3', label: '3 Minutes' },
-                { value: '4', label: '4 Minutes' },
-                { value: '5', label: '5 Minutes' }
+                { value: 'five_minutes', label: 'Every 5 Minutes' },
+                { value: 'hourly', label: 'Hourly' },
+                { value: 'daily', label: 'Daily' },
+                { value: 'twice_daily', label: 'Twice Daily' },
+                { value: 'weekly', label: 'Weekly' },
+                { value: 'two_weeks', label: 'Every 2 Weeks' },
+                { value: 'monthly', label: 'Monthly' },
+                { value: 'disabled', label: 'Disabled' }
             ]
         }
     },
@@ -55,12 +59,23 @@ export default {
             reCAPTCHA: state => state.general.reCAPTCHA,
             updateFrequency: state => state.general.updateFrequency,
             wrapperName: state => state.general.wrapperName
-        })
+        }),
+        debounceInput: function (e) {
+            return _debounce(function (e) {
+                this.$emit('keyPress', e)
+            }, this.debounceTimeout)
+        }
     },
     methods: {
         ...mapActions({
             generalSettingsStateChange: 'general/generalSettingsStateChange'
-        })
+        }),
+
+        wrapperChangeState: function (e) {
+            console.log(e.target.value)
+            this.generalSettingsStateChange({ key: 'wrapperName', value: e.target.value })
+            this.debounceInput(e)
+        }
     }
 }
 </script>
@@ -70,54 +85,24 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
 .general-settings {
     // Spacing
-    --space-4: 16px;
-    --space-6: 24px;
-    --space-8: 32px;
-    --space-9: 36px;
-    --space-10: 40px;
-    --space-12: 48px;
-    --space-15: 60px;
-    --space-18: 72px;
+    --space-3: 12px;
+    --space-5: 20px;
     // Typography
-    --font-size-h1: 31px;
-    --font-size-h2: 25px;
     --font-size-p: 16px;
-    --font-size-p-large: 18px;
-    --line-height-h1: 28px;
-    --line-height-h2: 28px;
     --line-height-p: 28px;
-    --line-height-p-large: 28px;
     font-size: var(--font-size-p);
     height: 100%;
     line-height: var(--line-height-p);
-    margin-left: -20px;
+    margin-left: calc(-1 * var(--space-5));
     min-height: 100vh;
     position: relative;
-    width: calc(100% + 20px);
-    h1,h2,h3,h4,h5,h6 {
-        // reset styles
-        color: inherit;
-        display: block;
-        float: none;
-    }
-    h1 {
-        font-size: var(--font-size-h1);
-        line-height: var(--line-height-h1);
-    }
-    h2 {
-        font-size: var(--font-size-h2);
-        line-height: var(--line-height-h2);
-    }
-    p {
-        font-size: inherit;
-        line-height: inherit;
-    }
+    width: calc(100% + var(--space-5));
     .control-toggle-slider {
         align-items: center;
         background-color: $gray-150;
         display: flex;
         justify-content: space-between;
-        padding: 12px 20px;
+        padding: var(--space-3) var(--space-5);
     }
 }
 </style>
