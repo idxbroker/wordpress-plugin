@@ -53,6 +53,12 @@ export default {
             ]
         }
     },
+    props: {
+        debounceTimeout: {
+            type: Number,
+            default: 250
+        },
+    }
     computed: {
         ...mapState({
             reCAPTCHA: state => state.general.reCAPTCHA,
