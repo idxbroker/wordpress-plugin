@@ -52,7 +52,6 @@ import wizard from '../assets/wizard.svg'
 export default {
     data () {
         return {
-            expanded: true,
             idxBrand,
             plus,
             icons: {
@@ -68,7 +67,10 @@ export default {
             if (newVal.matched && Array.isArray(newVal.matched)) {
                 this.getRouteByPath(newVal.matched[0].path)
                 if (this.handleResize()) {
-                    this.expanded = false
+                    this.toggleSidebar({
+                        key: 'expanded',
+                        value: false
+                    })
                 }
             }
         }
@@ -78,23 +80,31 @@ export default {
             routes: 'routes/navigationRoutes'
         }),
         ...mapState({
-            childRoutes: 'routes/routes'
+            childRoutes: state => state.routes.routes,
+            expanded: state => state.routes.expanded
         })
     },
     methods: {
         ...mapActions({
             gatherRoutes: 'routes/gatherRoutes',
             expandRoute: 'routes/expandRoute',
-            collapseRoutes: 'routes/collapseRoutes'
+            collapseRoutes: 'routes/collapseRoutes',
+            toggleSidebar: 'routes/toggleSidebar'
         }),
         handleResize () {
             return window.matchMedia('(max-width: 782px)').matches
         },
         horizontalExpand () {
-            this.expanded = !this.expanded
+            this.toggleSidebar({
+                key: 'expanded',
+                value: !this.expanded
+            })
         },
         iconBarExpand (e) {
-            this.expanded = true
+            this.toggleSidebar({
+                key: 'expanded',
+                value: true
+            })
         },
         doCollapse (e) {
             this.expandRoute(e)

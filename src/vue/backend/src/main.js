@@ -46,7 +46,6 @@ import {
     IdxVIcon,
     IdxVNav
 } from '@idxbrokerllc/idxstrap'
-
 const idxConfig = require('../idx.config')
 const pluginOptions = {
     prefix: idxConfig.options.prefix,
@@ -98,9 +97,7 @@ const components = [
     IdxVIcon,
     IdxVNav
 ]
-
 components.forEach(component => Vue.component(component.name, component))
-
 const store = new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',
     modules: storeModules
