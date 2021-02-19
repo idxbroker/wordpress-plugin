@@ -53,12 +53,6 @@ export default {
             ]
         }
     },
-    props: {
-        debounceTimeout: {
-            type: Number,
-            default: 250
-        },
-    }
     computed: {
         ...mapState({
             reCAPTCHA: state => state.general.reCAPTCHA,
@@ -68,7 +62,7 @@ export default {
         debounceInput: function (e) {
             return _debounce(function (e) {
                 this.generalSettingsStateChange({ key: 'wrapperName', value: e.target.value })
-            }, this.debounceTimeout)
+            }, 250)
         }
     },
     methods: {
