@@ -72,7 +72,6 @@ export default {
         }),
 
         wrapperChangeState: function (e) {
-            console.log(e.target.value)
             this.generalSettingsStateChange({ key: 'wrapperName', value: e.target.value })
             this.debounceInput(e)
         }
