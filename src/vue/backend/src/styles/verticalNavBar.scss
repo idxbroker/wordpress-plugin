@@ -10,14 +10,24 @@ $header-height: 8.5%;
 $font-weight: 300;
 $top-level-after: 20px;
 $second-level-after: 35px;
+$large-screen-left: 160px;
+$medium-screen-left: 36px;
+$small-screen-left: 0px;
 
-.navbar {
-    left: -20px;
+.wordpress-navigation.navbar {
+    position: fixed;
+    top: 31px;
+    left: $large-screen-left;
+    right: 0;
     height: 82.95px;
+    z-index: 2;
     border-bottom: 2px solid $gray-400;
     background-color: $white;
+    @media (max-width: 960px) {
+        left: $medium-screen-left;
+    }
     @media (max-width: 782px) {
-        left: -9px;
+        left: $small-screen-left;
     }
 }
 
@@ -146,7 +156,7 @@ $second-level-after: 35px;
     position: fixed;
     top: 114px;
     bottom: 0;
-    left: 160px;
+    left: $large-screen-left;
     height: 100% - $header-height;
     width: $v-nav-width;
     background-color: $gray-725;
@@ -155,11 +165,10 @@ $second-level-after: 35px;
     transition-duration: $transition-time;
     z-index: 2;
     @media (max-width: 960px) {
-        left: 36px;
+        left: $medium-screen-left;
     }
     @media (max-width: 782px) {
-        left: 0;
-        top: 128px;
+        left: $small-screen-left;
         width: 100%;
     }
 

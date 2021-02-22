@@ -24,6 +24,10 @@ export default {
     margin: 83px 50px 0px 255px;
     background-color: $white;
     transition: margin-left .5s ease;
+    @media (max-width: 782px) {
+        transition: none;
+        margin-left: 50px;
+    }
     &--slide-left {
         margin-left: 50px;
     }

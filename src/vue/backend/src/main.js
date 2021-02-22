@@ -45,7 +45,8 @@ import {
     IdxToggleSlider,
     IdxVArrow,
     IdxVIcon,
-    IdxVNav
+    IdxVNav,
+    IdxRichSelect
 } from '@idxbrokerllc/idxstrap'
 const idxConfig = require('../idx.config')
 const pluginOptions = {
@@ -97,7 +98,8 @@ const components = [
     IdxToggleSlider,
     IdxVArrow,
     IdxVIcon,
-    IdxVNav
+    IdxVNav,
+    IdxRichSelect
 ]
 components.forEach(component => Vue.component(component.name, component))
 const store = new Vuex.Store({
