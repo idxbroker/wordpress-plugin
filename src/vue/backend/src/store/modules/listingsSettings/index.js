@@ -3,8 +3,8 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
-    currencyCodeSelected: { value: '', label: '' },
-    currencySymbolSelected: { value: '', label: '' },
+    currencyCodeSelected: { value: null, label: 'Select Currency Code' },
+    currencySymbolSelected: { value: null, label: 'Select Currency Symbol' },
     defaultDisclaimer: '',
     numberOfPosts: '',
     listingSlug: '',

@@ -16,14 +16,14 @@
             <idx-custom-select
                 ariaLabel="Currency Symbol"
                 :selected="currencySymbolSelected"
-                :options="currencySymbols"
+                :options="currency.currencySymbols"
                 @selected-item="listingsSettingsStateChange({ key: 'currencySymbolSelected', value: $event })"
             />
             <idx-form-label>Currency Code</idx-form-label>
             <idx-custom-select
                 ariaLabel="Currency Code"
                 :selected="currencyCodeSelected"
-                :options="currencyCodes"
+                :options="currency.currencyCodes"
                 @selected-item="listingsSettingsStateChange({ key: 'currencyCodeSelected', value: $event })"
             />
         </idx-form-group>
@@ -61,15 +61,9 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import currency from '@/data/currency'
 export default {
     name: 'ListingsGeneral',
-    data () {
-        return {
-            // Options to be provided by client
-            currencyCodes: [],
-            currencySymbols: []
-        }
-    },
     computed: {
         ...mapState({
             currencyCodeSelected: state => state.listingsSettings.currencyCodeSelected,
@@ -79,6 +73,11 @@ export default {
             listingSlug: state => state.listingsSettings.listingSlug,
             defaultState: state => state.listingsSettings.defaultState
         })
+    },
+    data () {
+        return {
+            currency
+        }
     },
     methods: {
         ...mapActions({
