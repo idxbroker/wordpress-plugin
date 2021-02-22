@@ -1,6 +1,6 @@
 <template>
     <div>
-        <idx-navbar type="light" theme="light">
+        <idx-navbar type="light" theme="light" customClass="wordpress-navigation">
             <idx-v-icon
                 :customClass="{
                     'horizontal-navigation__toggle': true,
