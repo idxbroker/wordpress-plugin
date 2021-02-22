@@ -71,6 +71,8 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
 .fieldset {
+    --space-3: 12px;
+    --space-5: 20px;
     --font-size-p: 16px;
     --line-height-p: 28px;
     font-size: var(--font-size-p);
