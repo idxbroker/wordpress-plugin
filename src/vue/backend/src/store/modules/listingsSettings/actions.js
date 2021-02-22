@@ -6,6 +6,7 @@ const listingsSettingsStateChange = ({ commit }, payload) => {
         value: payload.value
     })
 }
+
 export default {
     listingsSettingsStateChange
 }

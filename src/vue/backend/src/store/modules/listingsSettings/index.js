@@ -3,6 +3,12 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
+    currencyCodeSelected: { value: null, label: 'Select Currency Code' },
+    currencySymbolSelected: { value: null, label: 'Select Currency Symbol' },
+    defaultDisclaimer: '',
+    numberOfPosts: '',
+    listingSlug: '',
+    defaultState: '',
     updateListings: 'update-all',
     soldListings: 'keep-all',
     automaticImport: false,

@@ -1,5 +1,5 @@
 <template>
-    <idx-block className="general-settings">
+    <idx-block tag="fieldset" className="fieldset general-settings">
         <idx-form-group>
             <idx-form-label for="website-wrapper"><strong>Name Your Global Website Wrapper</strong><br> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
             <idx-form-input
@@ -70,20 +70,11 @@ export default {
 @import '~bootstrap/scss/forms';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
-.general-settings {
-    // Spacing
-    --space-3: 12px;
-    --space-5: 20px;
-    // Typography
+.fieldset {
     --font-size-p: 16px;
     --line-height-p: 28px;
     font-size: var(--font-size-p);
-    height: 100%;
     line-height: var(--line-height-p);
-    margin-left: calc(-1 * var(--space-5));
-    min-height: 100vh;
-    position: relative;
-    width: calc(100% + var(--space-5));
     .control-toggle-slider {
         align-items: center;
         background-color: $gray-150;
