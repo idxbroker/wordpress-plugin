@@ -4,8 +4,8 @@ import mutations from './mutations'
 
 const state = {
     deregisterMainCss: false,
-    numberOfPosts: '',
-    directorySlug: '',
+    numberOfPosts: '9',
+    directorySlug: 'employees',
     wrapperStart: '',
     wrapperEnd: ''
 }

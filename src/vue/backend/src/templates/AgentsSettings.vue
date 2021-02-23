@@ -14,42 +14,48 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="control-label" for="website-wrapper"><strong>Default Number of Posts</strong> Default Number of Posts Description of the Default Number of Posts setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-form-label>
+            <idx-block className="control-label"><strong>Default Number of Posts</strong> Default Number of Posts Description of the Default Number of Posts setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="control-label" for="number-of-posts">Default Number of Posts</idx-form-label>
             <idx-form-input
                 type="text"
-                id="website-wrapper"
+                id="number-of-posts"
                 :value="numberOfPosts"
-                @change="agentSettingsStateChange({ key: numberOfPosts, value: $event.target.value })"
+                @change="agentSettingsStateChange({ key: 'numberOfPosts', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="control-label" for="website-wrapper"><strong>Directory Slug</strong> Directory Slug Description of the Employee Slug setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-form-label>
+            <idx-block className="control-label"><strong>Directory Slug</strong> Directory Slug Description of the Employee Slug setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="control-label" for="directory-slug">Directory Slug</idx-form-label>
             <idx-form-input
                 type="text"
-                id="website-wrapper"
+                id="directory-slug"
                 :value="directorySlug"
-                @change="agentSettingsStateChange({ key: directorySlug, value: $event.target.value })"
+                @change="agentSettingsStateChange({ key: 'directorySlug', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
             <idx-block className="control-label"><strong>Custom Wrapper</strong> Detailed sentence or two describing how custom wrappers can be used and how to set them up properly.</idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="control-label" for="website-wrapper">Wrapper Start HTML</idx-form-label>
+            <idx-form-label customClass="control-label" for="wrapper-start">Wrapper Start HTML</idx-form-label>
             <idx-form-input
                 type="text"
-                id="website-wrapper"
+                id="wrapper-start"
                 :value="wrapperStart"
-                @change="agentSettingsStateChange({ key: wrapperStart, value: $event.target.value })"
+                @change="agentSettingsStateChange({ key: 'wrapperStart', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="control-label" for="website-wrapper">Wrapper End HTML</idx-form-label>
+            <idx-form-label customClass="control-label" for="wrapper-end">Wrapper End HTML</idx-form-label>
             <idx-form-input
                 type="text"
-                id="website-wrapper"
+                id="wrapper-end"
                 :value="wrapperEnd"
-                @change="agentSettingsStateChange({ key: wrapperEnd, value: $event.target.value })"
+                @change="agentSettingsStateChange({ key: 'wrapperEnd', value: $event.target.value })"
             />
         </idx-form-group>
     </idx-block>
@@ -97,7 +103,7 @@ export default {
     --line-height-p: 28px;
     font-size: var(--font-size-p);
     line-height: var(--line-height-p);
-    input[type=color], input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week], select, textarea {
+    input[type=text] {
         border: 1px solid $gray-250;
         color: $gray-875;
         line-height: 1.5;
