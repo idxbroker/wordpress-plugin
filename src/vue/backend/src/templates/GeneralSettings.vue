@@ -1,7 +1,7 @@
 <template>
     <idx-block tag="fieldset" className="fieldset general-settings">
         <idx-form-group>
-            <idx-form-label for="website-wrapper"><strong>Name Your Global Website Wrapper</strong><br> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
+            <idx-form-label customClass="control-label" for="website-wrapper"><strong>Name Your Global Website Wrapper</strong> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
             <idx-form-input
                 type="text"
                 id="website-wrapper"
@@ -10,7 +10,7 @@
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="control-label"><strong>Google reCAPTCHA</strong><br> Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</idx-block>
+            <idx-block className="control-label"><strong>Google reCAPTCHA</strong> Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</idx-block>
             <idx-block className="control-toggle-slider">
                 {{ toggleLabel }}
                 <idx-toggle-slider
@@ -23,7 +23,7 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="control-label"><strong>Update Frequency</strong><br> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
+            <idx-block className="control-label"><strong>Update Frequency</strong> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
             <idx-custom-select
                 ariaLabel="Update Frequency"
                 :selected="updateFrequency"
@@ -71,15 +71,45 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
 .fieldset {
+    // Global Styles
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --font-size-label: 16px;
     --font-size-p: 16px;
+    --line-height-label: 22px;
     --line-height-p: 28px;
     font-size: var(--font-size-p);
     line-height: var(--line-height-p);
+    input[type=text] {
+        border: 1px solid $gray-250;
+        color: $gray-875;
+        line-height: 1.5;
+        padding: 0.625rem 1.25rem;
+    }
+    .form-group {
+        margin-bottom: var(--space-6);
+    }
+    .control-label {
+        display: block;
+        font-size: var(--font-size-label);
+        line-height: var(--line-height-label);
+        margin-bottom: var(--space-2);
+        width: auto;
+        strong {
+            display: block;
+            margin-bottom: var(--space-1);
+        }
+    }
     .control-toggle-slider {
         align-items: center;
         background-color: $gray-150;
         display: flex;
         justify-content: space-between;
+        margin-top: var(--space-4);
         padding: var(--space-3) var(--space-5);
     }
 }
