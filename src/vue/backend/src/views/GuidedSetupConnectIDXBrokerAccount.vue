@@ -1,17 +1,4 @@
 <template>
-    <!-- Use the guided set up contact card
-    Add the appropriate related links
-    Find api key: TBD
-    IDX Broker Middleware: https://middleware.idxbroker.com/mgmt/
-    Sign up for IDX Broker: TBD
-    Add the title and description
-    Add the API Key component
-    Capture events
-    @backStep Close modal
-    @skipStep move to Your Listings step
-    @continue
-    Ping API endpoint: TBD
-    move to global wrapper step -->
     <GuidedSetupContentCard class="gs" cardTitle="Connect Your IDX Broker Account" :steps="steps" :relatedLinks="links">
         <template v-slot:description>
             <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
