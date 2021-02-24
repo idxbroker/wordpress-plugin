@@ -13,7 +13,6 @@ class Initiate_Plugin {
 	 * @return void
 	 */
 	public function __construct() {
-
 		$this->idx_api = new Idx_Api();
 
 		$this->set_defaults();
@@ -31,7 +30,6 @@ class Initiate_Plugin {
 		add_action( 'admin_init', [ $this, 'get_install_info' ] );
 		add_action( 'admin_enqueue_scripts', array( $this, 'idx_inject_script_and_style' ) );
 
-		add_action( 'wp_ajax_idx_refresh_api', array( $this, 'idx_refreshapi' ) );
 		add_action( 'wp_ajax_idx_update_recaptcha_setting', [ $this, 'idx_update_recaptcha_setting' ] );
 		add_action( 'wp_ajax_idx_update_data_optout_setting', [ $this, 'idx_update_data_optout_setting' ] );
 		add_action( 'wp_ajax_idx_update_dev_partner_key', [ $this, 'idx_update_dev_partner_key' ] );
@@ -43,6 +41,8 @@ class Initiate_Plugin {
 
 		add_action( 'plugins_loaded', array( $this, 'idx_extensions' ) );
 		add_action( 'plugins_loaded', array( $this, 'add_notices' ) );
+
+		add_action( 'rest_api_init', array( $this, 'idx_broker_register_rest_routes' ) );
 
 		$this->instantiate_classes();
 	}
@@ -254,29 +254,6 @@ class Initiate_Plugin {
 				$api_error = $systemlinks->get_error_message();
 			}
 		}
-	}
-
-	/**
-	 * Function to delete existing cache. So API response in cache will be deleted.
-	 *
-	 * @return void
-	 */
-	public function idx_refreshapi() {
-		// User capability check.
-		if ( ! current_user_can( 'publish_posts' ) ) {
-			wp_die();
-		}
-		// Validate and process request.
-		if ( isset( $_REQUEST['idx_broker_apikey'], $_REQUEST['nonce'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['nonce'] ), 'idx-settings-refresh-api-nonce' ) ) {
-			$this->idx_api->clear_wrapper_cache();
-			$this->idx_api->idx_clean_transients();
-			$api_key = sanitize_text_field( wp_unslash( $_REQUEST['idx_broker_apikey'] ) );
-			update_option( 'idx_broker_apikey', $api_key, false );
-			setcookie( 'api_refresh', 1, time() + 20 );
-			$this->schedule_omnibar_update();
-			$this->idx_omnibar_get_locations();
-		}
-		wp_die();
 	}
 
 	/**
@@ -615,4 +592,7 @@ EOD;
 		}
 	}
 
+	public function idx_broker_register_rest_routes() {
+		new \IDX\Admin\Rest_Controller();
+	}
 }
