@@ -1,13 +1,8 @@
 <template>
     <idx-block tag="fieldset" className="fieldset agents-settings form-content">
         <idx-form-group>
-<<<<<<< HEAD
-            <idx-block className="control-label"><strong>CSS Settings</strong> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
-            <idx-block className="control-toggle-slider form-content__toggle">
-=======
             <idx-block className="control-label"><strong class="control-label-title">CSS Settings</strong> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
             <idx-block className="control-toggle-slider">
->>>>>>> bd4efce... UXG-1267 feedback and rebase
                 {{ cssLabel }}
                 <idx-toggle-slider
                     uncheckedState="No"

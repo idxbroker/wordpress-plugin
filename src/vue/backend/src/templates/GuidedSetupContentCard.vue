@@ -64,8 +64,15 @@ export default {
         z-index: 99999;
     }
 
-    .gs-dialog .dialog__container {
-        max-width: 1030px;
+    .gs-dialog {
+        left: -20px;
+        right: -50px;
+        top: -1px;
+        width: auto;
+
+        .dialog__container {
+            max-width: 1030px;
+        }
     }
 
     .dialog-header {
