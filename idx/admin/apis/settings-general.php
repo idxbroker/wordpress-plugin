@@ -44,14 +44,16 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 	/**
 	 * GET request
 	 *
-	 * @return array REST response.
+	 * @return WP_REST_Response
 	 */
 	public function get() {
-		return array(
-			'apiKey'          => get_option( 'idx_broker_apikey', '' ),
-			'reCAPTCHA'       => (int) get_option( 'idx_recaptcha_enabled', 0 ) === 1 ? true : false,
-			'updateFrequency' => get_option( 'idx_cron_schedule', '' ),
-			'wrapperName'     => get_option( 'idx_broker_dynamic_wrapper_page_name', '' ),
+		return rest_ensure_response(
+			array(
+				'apiKey'          => get_option( 'idx_broker_apikey', '' ),
+				'reCAPTCHA'       => (int) get_option( 'idx_recaptcha_enabled', 0 ) === 1 ? true : false,
+				'updateFrequency' => get_option( 'idx_cron_schedule', '' ),
+				'wrapperName'     => get_option( 'idx_broker_dynamic_wrapper_page_name', '' ),
+			)
 		);
 	}
 
@@ -59,37 +61,37 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 	 * POST request
 	 *
 	 * @param string $payload Settings to update.
-	 * @return WP_Error|null REST response.
+	 * @return WP_REST_Response
 	 */
 	public function post( $payload ) {
 		if ( isset( $payload['apiKey'] ) ) {
 			$error = $this->refresh_api( $payload['apiKey'] );
 			if ( is_wp_error( $error ) ) {
-				return $error;
+				return rest_ensure_response( $error );
 			}
 		}
 
 		if ( isset( $payload['reCAPTCHA'] ) ) {
 			$error = $this->update_recaptcha( 'true' === $payload['reCAPTCHA'] ? true : false );
 			if ( is_wp_error( $error ) ) {
-				return $error;
+				return rest_ensure_response( $error );
 			}
 		}
 
 		if ( isset( $payload['updateFrequency'] ) ) {
 			$error = $this->update_cron_frequency( $payload['updateFrequency'] );
 			if ( is_wp_error( $error ) ) {
-				return $error;
+				return rest_ensure_response( $error );
 			}
 		}
 
 		if ( isset( $payload['wrapperName'] ) ) {
 			$error = $this->create_wrapper( $payload['wrapperName'] );
 			if ( is_wp_error( $error ) ) {
-				return $error;
+				return rest_ensure_response( $error );
 			}
 		}
-		return null;
+		return rest_ensure_response( null );
 	}
 
 	/**
