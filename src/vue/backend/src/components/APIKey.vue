@@ -18,6 +18,8 @@
             }"
             :invalid="error"
             :valid="success"
+            :value="apiKey"
+            @change="generalSettingsStateChange({ key: 'apiKey', value: $event.target.value })"
             required
         />
         <idx-block className="invalid-feedback" v-if="error">
@@ -30,6 +32,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
     name: 'APIKey',
     props: {
@@ -49,6 +52,16 @@ export default {
             type: Boolean,
             default: false
         }
+    },
+    computed: {
+        ...mapState({
+            apiKey: state => state.general.apiKey
+        })
+    },
+    methods: {
+        ...mapActions({
+            generalSettingsStateChange: 'general/generalSettingsStateChange'
+        })
     }
 }
 </script>
@@ -57,7 +70,18 @@ export default {
     @import '~bootstrap/scss/forms';
 
     .form-group {
+        --space-1: 4px;
+        --space-6: 24px;
+        margin-bottom: var(--space-6);
         position: relative;
+
+        input[type=text] {
+            border: 1px solid $gray-250;
+            border-radius: var(--space-1);
+            color: $gray-875;
+            line-height: 1.5;
+            padding: 0.625rem 1.25rem;
+        }
     }
 
     .invalid-feedback {
