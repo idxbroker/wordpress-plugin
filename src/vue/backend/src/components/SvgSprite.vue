@@ -1,4 +1,3 @@
-// https://css-tricks.com/a-font-like-svg-icon-system-for-vue/
 <template>
     <svg width="0" height="0" style="display: none;" v-html="$options.svgSprite" />
 </template>

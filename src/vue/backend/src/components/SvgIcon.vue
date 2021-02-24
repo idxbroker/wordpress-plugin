@@ -1,4 +1,3 @@
-// https://css-tricks.com/a-font-like-svg-icon-system-for-vue/
 <template>
     <svg
         class="idx-wp-icon"
