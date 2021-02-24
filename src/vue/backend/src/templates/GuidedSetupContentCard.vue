@@ -60,12 +60,19 @@ export default {
 <style lang="scss">
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/dialog';
 
-    .gs .dialog__mask {
+    .dialog__mask {
         position: absolute;
     }
 
-    .gs-dialog .dialog__container {
-        max-width: 1030px;
+    .gs-dialog {
+        left: -20px;
+        right: -50px;
+        top: -1px;
+        width: auto;
+
+        .dialog__container {
+            max-width: 1030px;
+        }
     }
 
     .dialog-header {
@@ -73,7 +80,7 @@ export default {
         background: $gray-800;
         color: $white;
         display: flex;
-        height: var(--space-12);
+        height: var(--dialog-header-height);
         justify-content: space-between;
         letter-spacing: 1.6px;
         padding: 0 var(--space-4);

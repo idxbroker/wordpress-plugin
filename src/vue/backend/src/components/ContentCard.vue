@@ -9,7 +9,7 @@
                 }"
             >
                 <template v-slot:icon>
-                    <idx-icon :icon="step.icon"></idx-icon>
+                    <svg-icon :icon="step.icon" />
                 </template>
             </idx-progress-stepper>
         </idx-block>
@@ -34,10 +34,12 @@
 </template>
 <script>
 import RelatedLinks from '@/components/RelatedLinks.vue'
+import SvgIcon from '@/components/SvgIcon.vue'
 export default {
     name: 'ContentCard',
     components: {
-        RelatedLinks
+        RelatedLinks,
+        SvgIcon
     },
     props: {
         cardTitle: {
@@ -66,7 +68,6 @@ export default {
         background-color: $white;
         color: $gray-875;
         display: grid;
-
         grid-template-areas:
             "header"
             "content"
@@ -89,7 +90,7 @@ export default {
         }
 
         p {
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-6);
             max-width: 45em;
         }
     }
@@ -98,7 +99,7 @@ export default {
         border-top: 2px solid $gray-250;
         grid-area: footer;
         margin: var(--space-8);
-        padding: var(--space-8) 0 var(--space-15);
+        padding: var(--space-8) 0 var(--space-8);
 
         .btn {
             margin: var(--space-button);
@@ -112,6 +113,11 @@ export default {
     .content-card__sidebar {
         grid-area: sidebar;
         margin: 0 var(--space-8);
+
+        .card-header {
+            border-bottom: 0 none;
+            line-height: var(--space-5);
+        }
     }
 
     .content-card__stepper {
@@ -120,6 +126,10 @@ export default {
         grid-area: header;
         justify-content: center;
         padding: var(--space-8);
+
+        .icon-users {
+            width:20px;
+        }
     }
 
     @media only screen and (min-width: 1200px)   {
@@ -134,16 +144,16 @@ export default {
         }
 
         .content-card__content {
-            margin: var(--space-10) var(--space-8) var(--space-15) var(--space-15);
+            margin: var(--space-10) var(--space-8) var(--space-9) var(--space-15);
         }
 
         .content-card__footer {
             margin: 0 var(--space-12);
-            padding: var(--space-8) 0 var(--space-15);
+            padding: var(--space-8) 0 var(--space-8);
         }
 
         .content-card__sidebar {
-            margin: var(--space-10) var(--space-15) var(--space-15) 0;
+            margin: var(--space-10) var(--space-9) var(--space-15) 0;
         }
     }
 </style>
