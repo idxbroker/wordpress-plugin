@@ -3,6 +3,7 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
+    apiKey: '',
     reCAPTCHA: false,
     updateFrequency: 'five_minutes',
     wrapperName: ''
