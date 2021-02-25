@@ -6,10 +6,10 @@
         }"
         novalidate
     >
-        <idx-form-label for="APIKey">API Key</idx-form-label>
+        <idx-form-label for="ApiKey">API Key</idx-form-label>
         <idx-form-input
             type="text"
-            id="APIKey"
+            id="ApiKey"
             :placeholder="placeholder"
             :customClass="{
                 'is-invalid': error,
@@ -34,7 +34,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 export default {
-    name: 'APIKey',
+    name: 'ApiKey',
     props: {
         placeholder: {
             type: String,
