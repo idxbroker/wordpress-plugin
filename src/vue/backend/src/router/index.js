@@ -46,6 +46,11 @@ const routes = [
                 component: Generic,
                 children: [
                     {
+                        path: 'api',
+                        name: 'Connect Account',
+                        component: GuidedSetupConnectApi
+                    },
+                    {
                         path: 'general',
                         name: 'IMPress General Settings',
                         component: () => import('@/views/settings/General')
