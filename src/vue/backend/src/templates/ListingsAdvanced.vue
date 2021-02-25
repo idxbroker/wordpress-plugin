@@ -52,7 +52,7 @@
                 type="text"
                 id="form-shortcode"
                 :value="formShortcode"
-                @change="listingsSettingsStateChange({ key: formShortcode, value: $event.target.value })"
+                @change="listingsSettingsStateChange({ key: 'formShortcode', value: $event.target.value })"
             />
         </idx-form-group>
         <hr/>
