@@ -1,3 +1,6 @@
+#wpcontent {
+    padding: 0;
+}
 #logo {
     background-image: url(../images/logo-wp.png);
     background-repeat: no-repeat;

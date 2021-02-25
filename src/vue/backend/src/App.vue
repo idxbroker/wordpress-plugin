@@ -1,24 +1,18 @@
 <template>
-  <idx-block className="app">
-    <Navbar></Navbar>
-    <page>
-        <transition name="router" mode="out-in">
-            <router-view></router-view>
-        </transition>
-    </page>
-  </idx-block>
+    <idx-block className="app">
+        <router-view></router-view>
+    </idx-block>
 </template>
 <script>
-import Navbar from './templates/navbar'
-import Page from './templates/page'
 export default {
-    name: 'app',
-    components: {
-        Navbar,
-        Page
-    }
+    name: 'app'
 }
 </script>
 <style lang="scss">
-@import '~@idxbrokerllc/idxstrap/dist/styles/components/vNav';
+.app {
+    h2 {
+        display: block;
+        float: unset;
+    }
+}
 </style>
