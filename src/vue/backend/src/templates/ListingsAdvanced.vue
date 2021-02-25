@@ -27,8 +27,9 @@
                 ></idx-toggle-slider>
             </idx-block>
         </idx-form-group>
+        <hr/>
         <idx-form-group>
-            <idx-block className="control-label"><strong>Form Submissions to IDX Broker</strong> Send all contact form submissions to IDX Broker as a lead.<br> Note: This option only works while using default contact forms.</idx-block>
+            <idx-block className="control-label"><strong>Form Submissions to IDX Broker</strong> Send all contact form submissions to IDX Broker as a lead.<br> <b>Note:</b> This option only works while using default contact forms.</idx-block>
         </idx-form-group>
         <idx-form-group>
             <idx-block className="control-toggle-slider">
@@ -54,8 +55,9 @@
                 @change="listingsSettingsStateChange({ key: formShortcode, value: $event.target.value })"
             />
         </idx-form-group>
+        <hr/>
         <idx-form-group>
-            <idx-block className="control-label"><strong>Google Maps</strong> Listings can be automatically mapped if a latitude and longitude is provided. A Google Maps API Key is required - click here to register.</idx-block>
+            <idx-block className="control-label"><strong>Google Maps</strong> Listings can be automatically mapped if a latitude and longitude is provided. A Google Maps API Key is required - <a href="https://developers.google.com/maps/documentation/javascript/get-api-key">click here</a> to register.</idx-block>
         </idx-form-group>
         <idx-form-group>
             <idx-form-label customClass="control-label" for="google-maps">Google Maps API Key</idx-form-label>
@@ -63,9 +65,10 @@
                 type="text"
                 id="google-maps"
                 :value="googleMapsAPIKey"
-                @change="listingsSettingsStateChange({ key: googleMapsAPIKey, value: $event.target.value })"
+                @change="listingsSettingsStateChange({ key: 'googleMapsAPIKey', value: $event.target.value })"
             />
         </idx-form-group>
+        <hr/>
         <idx-form-group>
             <idx-block className="control-label"><strong>Custom Wrapper</strong> Detailed sentence or two describing how custom wrappers can be used and how to set them up properly.</idx-block>
         </idx-form-group>
@@ -75,7 +78,7 @@
                 type="text"
                 id="wrapper-start-html"
                 :value="wrapperStart"
-                @change="listingsSettingsStateChange({ key: wrapperStart, value: $event.target.value })"
+                @change="listingsSettingsStateChange({ key: 'wrapperStart', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -84,9 +87,10 @@
                 type="text"
                 id="wrapper-end-html"
                 :value="wrapperEnd"
-                @change="listingsSettingsStateChange({ key: wrapperEnd, value: $event.target.value })"
+                @change="listingsSettingsStateChange({ key: 'wrapperEnd', value: $event.target.value })"
             />
         </idx-form-group>
+        <hr/>
         <idx-form-group>
             <idx-block className="control-label"><strong>Plugin Uninstallation</strong> Checking this option will delete <b>all</b> plugin data when uninstalling the plugin.</idx-block>
         </idx-form-group>
@@ -150,6 +154,12 @@ export default {
     --line-height-p: 28px;
     font-size: var(--font-size-p);
     line-height: var(--line-height-p);
+    hr {
+        border: 1px solid $gray-400;
+        margin-bottom: var(--space-6);
+        margin-top: var(--space-6);
+        opacity: 1;
+    }
     input[type=text] {
         border: 1px solid $gray-250;
         color: $gray-875;
