@@ -1,7 +1,6 @@
 <template>
     <svg
-        class="idx-wp-icon"
-        :class="['idx-wp-icon-' + icon, { 'idx-wp-icon-spin': spin }]"
+        :class="['idx-wp-icon', 'idx-wp-icon-' + icon, { 'idx-wp-icon-spin': spin }]"
         role="image"
         aria-hidden="true"
         focusable="false">
@@ -29,8 +28,7 @@ export default {
 svg.icon {
     fill: currentColor;
     height: 1em;
-    margin-bottom: 0.125em;
-    vertical-align: middle;
+    vertical-align: -0.125em;
     width: 1em;
 }
 svg.icon-spin {

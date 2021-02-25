@@ -38,15 +38,7 @@ export default {
     .gs {
         align-items: center;
         display: flex;
-        height: 100%;
-        margin-left: -20px;
-        min-height: 100vh;
-        position: relative;
-        width: calc(100% + 20px);
-
-        &.fullscreen {
-            position: absolute;
-        }
+        z-index: 99999;
 
         .container-fluid {
             align-items: center;

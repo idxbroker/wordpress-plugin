@@ -22,11 +22,11 @@
             @change="generalSettingsStateChange({ key: 'apiKey', value: $event.target.value })"
             required
         />
-        <idx-block className="invalid-feedback" v-if="error">
-            We couldn't find an account with the provided API key
-        </idx-block>
         <idx-block className="spinner-border" role="status" v-if="loading">
             <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
+        </idx-block>
+        <idx-block className="invalid-feedback" v-if="error">
+            We couldn't find an account with the provided API key
         </idx-block>
     </idx-form-group>
 </template>
@@ -105,12 +105,12 @@ export default {
         border: 2px solid currentColor;
         border-right-color: $primary;
         border-radius: 50%;
+        bottom: 15px;
         color: #acd9ee;
         display: inline-block;
         height: 1rem;
         position: absolute;
         right: 1rem;
-        top: 15px;
         vertical-align: text-bottom;
         width: 1rem;
     }
