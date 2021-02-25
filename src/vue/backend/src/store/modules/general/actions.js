@@ -7,6 +7,11 @@ const generalSettingsStateChange = ({ commit }, payload) => {
     })
 }
 
+const promiseWithTimeout = () => {
+    return new Promise(resolve => setTimeout(resolve, 5000))
+}
+
 export default {
-    generalSettingsStateChange
+    generalSettingsStateChange,
+    promiseWithTimeout
 }
