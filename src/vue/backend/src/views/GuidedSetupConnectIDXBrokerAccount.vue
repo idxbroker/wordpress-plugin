@@ -1,15 +1,22 @@
 <template>
-    <GuidedSetupContentCard class="gs" cardTitle="Connect Your IDX Broker Account" :steps="steps" :relatedLinks="links">
+    <GuidedSetupContentCard
+        cardTitle="Connect Your IDX Broker Account"
+        :steps="guidedSetupSteps"
+        :relatedLinks="links"
+        @back-step="goBackStep"
+        @skip-step="goSkipStep"
+        @continue="goContinue">
         <template v-slot:description>
             <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
         <template v-slot:controls>
-            <APIKey/>
+            <APIKey :error="error" :loading="loading" :success="success"/>
         </template>
     </GuidedSetupContentCard>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import APIKey from '@/components/APIKey.vue'
 export default {
@@ -20,12 +27,9 @@ export default {
     },
     data () {
         return {
-            steps: [
-                { name: '1. Connect', icon: 'link', total: 2, active: 1 },
-                { name: '2. Your Listings', icon: 'list', total: 2, active: 0 },
-                { name: '3. Agents', icon: 'users', total: 2, active: 0 },
-                { name: '4. Social', icon: 'thumbs-up', total: 1, active: 0 }
-            ],
+            error: false,
+            loading: false,
+            success: false,
             links: [
                 {
                     text: 'Where can I find my API key?',
@@ -41,9 +45,40 @@ export default {
                 }
             ]
         }
+    },
+    computed: {
+        ...mapState({
+            guidedSetupSteps: state => state.general.guidedSetupSteps
+        })
+    },
+    methods: {
+        ...mapActions({
+            generalSettingsStateChange: 'general/generalSettingsStateChange',
+            promiseWithTimeout: 'general/promiseWithTimeout'
+        }),
+        async apiCall () {
+            this.loading = true
+            await this.promiseWithTimeout()
+            this.loading = false
+            this.success = true
+        },
+        goBackStep: function () {
+            // to-do: go back in history
+            this.$router.go(-1)
+        },
+        goSkipStep: function () {
+            this.$router.push({ path: '/guided-setup/connect/general' })
+        },
+        goContinue: function () {
+            this.apiCall()
+        }
+    },
+    watch: {
+        success: function () {
+            if (this.success === true) {
+                this.$router.push({ path: '/guided-setup/connect/general' })
+            }
+        }
     }
 }
 </script>
-
-<style lang="scss">
-</style>

@@ -36,10 +36,13 @@ export default {
     // Typography
     --font-size-h1: 31px;
     --font-size-h2: 25px;
+    --font-size-h3: 21px;
     --font-size-p: 16px;
     --font-size-p-large: 18px;
+    --letter-spacing-h3: 2.1px;
     --line-height-h1: 28px;
     --line-height-h2: 28px;
+    --line-height-h3: 22px;
     --line-height-p: 28px;
     --line-height-p-large: 28px;
     --dialog-header-height: 48px;
