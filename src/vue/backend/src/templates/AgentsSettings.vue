@@ -2,6 +2,8 @@
     <idx-block tag="fieldset" className="fieldset agents-settings">
         <idx-form-group>
             <idx-block className="control-label"><strong>CSS Settings</strong> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
+        </idx-form-group>
+        <idx-form-group>
             <idx-block className="control-toggle-slider">
                 {{ cssLabel }}
                 <idx-toggle-slider
