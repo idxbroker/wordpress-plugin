@@ -14,7 +14,7 @@ const _navLinks = [
         collapsed: true,
         routes: [
             { label: 'Agents', link: '/import/agents/' },
-            { label: 'Listings', link: '/import/listings' }
+            { label: 'Listings', link: '/import/listings/' }
         ]
     },
     {

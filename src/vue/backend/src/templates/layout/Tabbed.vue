@@ -1,53 +1,28 @@
 <template>
     <idx-tab-container
         customClass="import-header"
-        @activeTab="switchTabs"
+        @activeTab="switchTab"
         :activeTab="activeTab"
-        :tabs="['Unimported', 'Imported']"
+        :tabs="tabs"
     >
-        <idx-block className="import-header__description">{{ description }}</idx-block>
-        <idx-block className="import-header__actions-bar">
-            <idx-block className="import-header__select-all" @click="$emit('select-all', selected)">{{ selected ? 'Select All' : 'Deselect All' }}</idx-block>
-            <idx-button customClass="import-header__action" @click="$emit('bulk-action', action)">{{ action }} Selected</idx-button>
-        </idx-block>
         <router-view></router-view>
     </idx-tab-container>
 </template>
 <script>
+import Tabbed from '@/mixins/Tabbed'
 export default {
-    name: 'import-header',
-    data () {
-        return {
-            activeTab: 0
-        }
-    },
-    props: {
-        selected: {
-            type: Boolean,
-            default: false
-        },
-        action: {
-            type: String,
-            default: 'Import'
-        },
-        description: {
-            type: String,
-            default: ''
-        }
-    },
-    methods: {
-        switchTabs (e) {
-            this.activeTab = e
-            /* Router change here, once we have router set up we can switch it. For now emitting and event */
-            this.$emit('switch-tabs', this.activeTab)
-        }
-    }
+    name: 'tabbed',
+    mixins: [Tabbed]
 }
 </script>
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/tabContainer';
+.import-header.tab-container {
+    padding: 0;
+}
 .import-header {
+    padding: 0;
     background-color: $white;
     font-size: 1rem;
     &__description {
@@ -75,6 +50,7 @@ export default {
             justify-content: end;
             border-bottom: 1px solid $gray-150;
             height: 50px;
+            gap: 1rem;
         }
         &__tab {
             width: 164px;
@@ -84,9 +60,6 @@ export default {
             letter-spacing: 1.6px;
             color: #788088;
             text-transform: uppercase;
-            &:first-child {
-                margin-right: 18px;
-            }
         }
     }
 }
