@@ -1,5 +1,5 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset general-settings">
+    <idx-block tag="fieldset" className="fieldset general-settings form-content">
         <idx-form-group>
             <idx-form-label customClass="control-label" for="website-wrapper"><strong>Name Your Global Website Wrapper</strong> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
             <idx-form-input
@@ -11,7 +11,7 @@
         </idx-form-group>
         <idx-form-group>
             <idx-block className="control-label"><strong>Google reCAPTCHA</strong> Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</idx-block>
-            <idx-block className="control-toggle-slider">
+            <idx-block className="control-toggle-slider form-content__toggle">
                 {{ toggleLabel }}
                 <idx-toggle-slider
                     uncheckedState="No"
@@ -28,7 +28,7 @@
                 ariaLabel="Update Frequency"
                 :selected="updateFrequency"
                 :options="updateFrequencyOptions"
-                @selected-item="generalSettingsStateChange({ key: 'updateFrequency', value: $event })"
+                @selected-item="generalSettingsStateChange({ key: 'updateFrequency', value: $event.value })"
             />
         </idx-form-group>
     </idx-block>
@@ -70,6 +70,7 @@ export default {
 @import '~bootstrap/scss/forms';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
+@import '../styles/formContentStyles.scss';
 .fieldset {
     // Global Styles
     --space-1: 4px;
@@ -103,14 +104,6 @@ export default {
             display: block;
             margin-bottom: var(--space-1);
         }
-    }
-    .control-toggle-slider {
-        align-items: center;
-        background-color: $gray-150;
-        display: flex;
-        justify-content: space-between;
-        margin-top: var(--space-4);
-        padding: var(--space-3) var(--space-5);
     }
 }
 </style>

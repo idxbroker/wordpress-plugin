@@ -1,8 +1,8 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset agents-settings">
+    <idx-block tag="fieldset" className="fieldset agents-settings form-content">
         <idx-form-group>
             <idx-block className="control-label"><strong>CSS Settings</strong> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
-            <idx-block className="control-toggle-slider">
+            <idx-block className="control-toggle-slider form-content__toggle">
                 {{ cssLabel }}
                 <idx-toggle-slider
                     uncheckedState="No"
@@ -89,6 +89,7 @@ export default {
 @import '~bootstrap/scss/forms';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
+@import '../styles/formContentStyles.scss';
 .fieldset {
     // Global Styles
     --space-1: 4px;
@@ -122,14 +123,6 @@ export default {
             display: block;
             margin-bottom: var(--space-1);
         }
-    }
-    .control-toggle-slider {
-        align-items: center;
-        background-color: $gray-150;
-        display: flex;
-        justify-content: space-between;
-        margin-top: var(--space-4);
-        padding: var(--space-3) var(--space-5);
     }
 }
 </style>

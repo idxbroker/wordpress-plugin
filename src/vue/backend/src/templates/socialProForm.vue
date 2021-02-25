@@ -1,8 +1,8 @@
 <template>
-    <idx-block className="social-pro-form">
+    <idx-block className="social-pro-form form-content">
         <b>Social Pro</b>
         <div>Detailed sentence or two describing Social Pro General Interest Articles. Lorem ipsum dolor sit amet.</div>
-        <idx-block className="social-pro-form__syndication">
+        <idx-block className="social-pro-form__syndication form-content__toggle">
             {{ toggleLabel }}
             <idx-toggle-slider
                 uncheckedState="No"
@@ -21,7 +21,7 @@
                     ariaLabel="Select Autopublish setting"
                     :selected="autopublish"
                     :options="autopublishOptions"
-                    @selected-item="socialProStateChange({ key: 'autopublish', value: $event })"
+                    @selected-item="socialProStateChange({ key: 'autopublish', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
             <idx-block className="social-pro-form__field">
@@ -30,7 +30,7 @@
                     ariaLabel="Select post day"
                     :selected="postDay"
                     :options="postDayOptions"
-                    @selected-item="socialProStateChange({ key: 'postDay', value: $event })"
+                    @selected-item="socialProStateChange({ key: 'postDay', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
             <idx-block className="social-pro-form__field">
@@ -39,7 +39,7 @@
                     ariaLabel="Select post type"
                     :selected="postType"
                     :options="postTypeOptions"
-                    @selected-item="socialProStateChange({ key: 'postType', value: $event })"
+                    @selected-item="socialProStateChange({ key: 'postType', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
         </idx-block>
@@ -89,21 +89,8 @@ export default {
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
+@import '../styles/formContentStyles.scss';
 .social-pro-form {
-    font-size: 1rem;
-    color: $gray-875;
-    &__syndication {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 20px;
-        background-color: $gray-150;
-        @media (max-width: 630px) {
-            flex-direction: column;
-            align-items: end;
-            grid-gap: 10px;
-        }
-    }
     &__settings {
         margin-top: 25px;
     }

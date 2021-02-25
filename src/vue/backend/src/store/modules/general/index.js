@@ -4,7 +4,7 @@ import mutations from './mutations'
 
 const state = {
     reCAPTCHA: false,
-    updateFrequency: { value: '', label: '' },
+    updateFrequency: 'five_minutes',
     wrapperName: ''
 }
 

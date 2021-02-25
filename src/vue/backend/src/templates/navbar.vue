@@ -35,7 +35,7 @@
                     }"
                     @collapse="doCollapse"
                     @click.native="topLevelClick(route.itemId, route.routes)"
-                    @iconClick="iconBarExpand"
+                    @icon-click="iconBarExpand"
                 ></idx-nav-item>
             </idx-nav-list>
         </idx-v-nav>

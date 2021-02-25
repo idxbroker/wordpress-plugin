@@ -19,6 +19,7 @@
             <idx-form-label customClass="control-label">Currency Symbol</idx-form-label>
             <idx-custom-select
                 ariaLabel="Currency Symbol"
+                placeholder="None"
                 :selected="currencySymbolSelected"
                 :options="currency.currencySymbols"
                 @selected-item="listingsSettingsStateChange({ key: 'currencySymbolSelected', value: $event })"
@@ -28,6 +29,7 @@
             <idx-form-label customClass="control-label">Currency Code</idx-form-label>
             <idx-custom-select
                 ariaLabel="Currency Code"
+                placeholder="None"
                 :selected="currencyCodeSelected"
                 :options="currency.currencyCodes"
                 @selected-item="listingsSettingsStateChange({ key: 'currencyCodeSelected', value: $event })"
