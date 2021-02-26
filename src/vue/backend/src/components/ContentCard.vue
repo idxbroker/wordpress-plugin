@@ -72,6 +72,8 @@ export default {
         background-color: $white;
         color: $gray-875;
         display: grid;
+        font-size: var(--font-size-p);
+        line-height: var(--line-height-p);
         grid-template-areas:
             "header"
             "content"
@@ -89,10 +91,17 @@ export default {
             margin: var(--content-margin);
 
             h1 {
+                color: inherit;
+                display: block;
+                font-size: var(--font-size-h1);
+                font-weight: 300;
+                line-height: var(--line-height-h1);
                 margin-bottom: var(--space-4);
             }
 
             p {
+                font-size: inherit;
+                line-height: inherit;
                 margin-bottom: var(--space-6);
                 max-width: 45em;
             }

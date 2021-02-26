@@ -1,3 +1,4 @@
+@import '~bootstrap/scss/forms';
 .form-content {
     display: flex;
     flex-direction: column;
@@ -24,6 +25,10 @@
     &__label {
         width: 100%;
     }
+    &__title {
+        display: block;
+        margin-bottom: 5px;
+    }
     input:focus {
         border-color: $gray-400;
         box-shadow: 0 0 0 1px $gray-400;
@@ -39,11 +44,6 @@
 .form-group {
     margin-bottom: var(--space-6);
     position: relative;
-
-    .control-label-title {
-        display: block;
-        margin-bottom: var(--space-1);
-    }
 }
 
 .invalid-feedback {

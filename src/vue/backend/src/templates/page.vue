@@ -23,10 +23,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~bootstrap/scss/forms';
-@import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
-@import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
-@import '../styles/formContentStyles.scss';
 .content-page {
   --font-size-h1: 31px;
   --font-size-h2: 25px;
@@ -51,7 +47,7 @@ export default {
         // reset styles
         color: inherit;
         display: block;
-        float: none;
+        float: unset;
     }
 
     h1 {

@@ -1,34 +1,36 @@
 <template>
-    <idx-form-group
-        :customClass="{
-            'needs-validation': true,
-            'was-validated': error || success
-        }"
-        novalidate
-    >
-        <idx-form-label customClass="control-label" for="ApiKey">API Key</idx-form-label>
-        <idx-form-input
-            type="text"
-            id="ApiKey"
-            :placeholder="placeholder"
+    <idx-block className="form-content">
+        <idx-form-group
             :customClass="{
-                'is-invalid': error,
-                'is-valid': success,
-                'is-loading': loading
+                'needs-validation': true,
+                'was-validated': error || success
             }"
-            :invalid="error"
-            :valid="success"
-            :value="apiKey"
-            @change="generalSettingsStateChange({ key: 'apiKey', value: $event.target.value })"
-            required
-        />
-        <idx-block className="spinner-border" role="status" v-if="loading">
-            <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
-        </idx-block>
-        <idx-block className="invalid-feedback" v-if="error">
-            We couldn't find an account with the provided API key
-        </idx-block>
-    </idx-form-group>
+            novalidate
+        >
+            <idx-form-label customClass="form-content__label" for="ApiKey">API Key</idx-form-label>
+            <idx-form-input
+                type="text"
+                id="ApiKey"
+                :placeholder="placeholder"
+                :customClass="{
+                    'is-invalid': error,
+                    'is-valid': success,
+                    'is-loading': loading
+                }"
+                :invalid="error"
+                :valid="success"
+                :value="apiKey"
+                @change="generalSettingsStateChange({ key: 'apiKey', value: $event.target.value })"
+                required
+            />
+            <idx-block className="spinner-border" role="status" v-if="loading">
+                <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
+            </idx-block>
+            <idx-block className="invalid-feedback" v-if="error">
+                We couldn't find an account with the provided API key
+            </idx-block>
+        </idx-form-group>
+    </idx-block>
 </template>
 
 <script>
@@ -65,3 +67,7 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+@import '../styles/formContentStyles.scss';
+</style>
