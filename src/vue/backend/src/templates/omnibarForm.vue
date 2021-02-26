@@ -224,6 +224,8 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTagAutocomplete.scss';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTags.scss';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/autocomplete.scss';
 @import '~bootstrap/scss/forms';
 @import '../styles/formContentStyles.scss';
 
