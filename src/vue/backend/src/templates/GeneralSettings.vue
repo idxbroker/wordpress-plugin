@@ -10,8 +10,8 @@
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="control-label"><strong>Google reCAPTCHA</strong> Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</idx-block>
-            <idx-block className="control-toggle-slider form-content__toggle">
+            <idx-block className="control-label"><strong class="control-label-title">Google reCAPTCHA</strong> Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</idx-block>
+            <idx-block className="control-toggle-slider">
                 {{ toggleLabel }}
                 <idx-toggle-slider
                     uncheckedState="No"
@@ -23,7 +23,7 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="control-label"><strong>Update Frequency</strong> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
+            <idx-block className="control-label"><strong class="control-label-title">Update Frequency</strong> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
             <idx-custom-select
                 ariaLabel="Update Frequency"
                 :selected="updateFrequency"
@@ -66,44 +66,3 @@ export default {
     }
 }
 </script>
-<style lang="scss">
-@import '~bootstrap/scss/forms';
-@import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
-@import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
-@import '../styles/formContentStyles.scss';
-.fieldset {
-    // Global Styles
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 12px;
-    --space-4: 16px;
-    --space-5: 20px;
-    --space-6: 24px;
-    --font-size-label: 16px;
-    --font-size-p: 16px;
-    --line-height-label: 22px;
-    --line-height-p: 28px;
-    font-size: var(--font-size-p);
-    line-height: var(--line-height-p);
-    input[type=text] {
-        border: 1px solid $gray-250;
-        color: $gray-875;
-        line-height: 1.5;
-        padding: 0.625rem 1.25rem;
-    }
-    .form-group {
-        margin-bottom: var(--space-6);
-    }
-    .control-label {
-        display: block;
-        font-size: var(--font-size-label);
-        line-height: var(--line-height-label);
-        margin-bottom: var(--space-2);
-        width: auto;
-        strong {
-            display: block;
-            margin-bottom: var(--space-1);
-        }
-    }
-}
-</style>

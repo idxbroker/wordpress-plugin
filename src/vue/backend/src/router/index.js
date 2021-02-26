@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import GuidedSetup from '@/views/GuidedSetup.vue'
 import Generic from '@/templates/layout/Generic'
 import Layout from '@/templates/layout/Layout'
 import routeMeta from './routeMeta'
+import GuidedSetup from '@/views/GuidedSetup.vue'
+import GuidedSetupConnectApi from '@/views/GuidedSetupConnectApi.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -89,8 +91,8 @@ const routes = [
                         children: [
                             {
                                 path: 'api',
-                                name: 'Connect Account'
-                                // component
+                                name: 'Connect Account',
+                                component: GuidedSetupConnectApi
                             },
                             {
                                 path: 'general',

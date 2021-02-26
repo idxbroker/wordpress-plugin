@@ -3,7 +3,7 @@
         <idx-block className="feedback__icon">
             <svg-icon icon="exclamation-triangle" />
         </idx-block>
-        <idx-block tag="h2" className="feedback__title">{{ title }}</idx-block>
+        <idx-block tag="h3" className="feedback__title">{{ title }}</idx-block>
         <slot name="content"></slot>
         <idx-button tag="a" outline :href="link">Show Me</idx-button>
     </idx-block>
@@ -31,11 +31,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    @import '~@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss';
-    @import '~@idxbrokerllc/idxstrap/dist/styles/base.scss';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 
     .feedback {
+        --font-size-h3: 21px;
+        --letter-spacing-h3: 2.1px;
+        --line-height-h3: 22px;
         align-items: center;
         display: flex;
         flex-direction: column;

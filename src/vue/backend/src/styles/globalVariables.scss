@@ -1,1 +1,46 @@
 @import "~@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss";
+
+$v-nav-width: 255px;
+$v-nav-height: 43px;
+$v-nav-padding-x: 0;
+$v-nav-padding-y: 5px;
+$icon-nav-width: 50px;
+$transition-time: .5s;
+$a-tag-padding: 55px;
+$header-height: 8.5%;
+$font-weight: 300;
+$top-level-after: 20px;
+$second-level-after: 35px;
+$large-screen-left: 160px;
+$medium-screen-left: 36px;
+$small-screen-left: 0px;
+
+:root {
+  // Spacing
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-15: 60px;
+  --space-18: 72px;
+  // Typography
+  --font-size-h1: 31px;
+  --font-size-h2: 25px;
+  --font-size-h3: 21px;
+  --font-size-label: 16px;
+  --font-size-p: 16px;
+  --font-size-p-large: 18px;
+  --letter-spacing-h3: 2.1px;
+  --line-height-h1: 28px;
+  --line-height-h2: 28px;
+  --line-height-h3: 22px;
+  --line-height-label: 22px;
+  --line-height-p: 28px;
+  --line-height-p-large: 28px;
+}
