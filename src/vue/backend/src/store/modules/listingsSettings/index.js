@@ -20,7 +20,15 @@ const state = {
     displayIDXLink: false,
     importTitle: '{{address}}',
     advancedFieldData: false,
-    displayAdvancedFields: false
+    displayAdvancedFields: false,
+    deregisterMainCss: false,
+    deregisterWidgetCss: false,
+    sendFormSubmission: true,
+    formShortcode: '',
+    googleMapsAPIKey: '',
+    wrapperStart: '',
+    wrapperEnd: '',
+    deletePluginDataOnUninstall: false
 }
 
 export default {
