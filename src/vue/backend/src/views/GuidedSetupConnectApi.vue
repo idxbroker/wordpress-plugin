@@ -10,7 +10,7 @@
             <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
         <template v-slot:controls>
-            <ApiKey :error="error" :loading="loading" :success="success"/>
+            <APIKey :error="error" :loading="loading" :success="success"/>
         </template>
     </GuidedSetupContentCard>
 </template>
@@ -18,11 +18,11 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
-import ApiKey from '@/components/ApiKey.vue'
+import APIKey from '@/components/APIKey.vue'
 export default {
     name: 'GuidedSetupConnectApi',
     components: {
-        ApiKey,
+        APIKey,
         GuidedSetupContentCard
     },
     data () {

@@ -14,8 +14,6 @@ class Wrappers {
 	 */
 	public function __construct() {
 		$this->idx_api = new Idx_Api();
-		add_action( 'wp_ajax_create_dynamic_page', array( $this, 'idx_ajax_create_dynamic_page' ) );
-		add_action( 'wp_ajax_delete_dynamic_page', array( $this, 'idx_ajax_delete_dynamic_page' ) );
 		add_action( 'init', array( $this, 'register_wrapper_post_type' ) );
 		add_action( 'admin_init', array( $this, 'manage_idx_wrapper_capabilities' ) );
 		add_filter( 'default_content', array( $this, 'idx_wrapper_content' ), 10, 2 );
@@ -191,45 +189,42 @@ class Wrappers {
 	}
 
 	/**
-	 * Idx_ajax_create_dynamic_page function.
+	 * Idx_create_dynamic_page function.
 	 *
+	 * @param string $title Wrapper page title.
 	 * @access public
-	 * @return void
+	 * @return WP_Error|null
 	 */
-	public function idx_ajax_create_dynamic_page() {
-		// User capability check.
-		if ( ! current_user_can( 'publish_posts' ) && ! current_user_can( 'edit_others_posts' ) ) {
-			wp_die();
+	public function idx_create_dynamic_page( $title ) {
+		// Default page content.
+		$post_content    = $this->does_theme_include_idx_tag();
+		$submitted_title = sanitize_text_field( wp_unslash( $title ) );
+		$post_title      = $submitted_title ? $submitted_title : 'Properties';
+
+		// Check if already exists.
+		$existing_post = get_page_by_title( $post_title, OBJECT, 'idx-wrapper' );
+		if ( $existing_post ) {
+			return null;
 		}
-		// Validate and process request.
-		if ( isset( $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-settings-wrapper-create-nonce' ) ) {
-			// Default page content.
-			$post_content    = $this->does_theme_include_idx_tag();
-			$submitted_title = sanitize_text_field( wp_unslash( $_POST['post_title'] ) );
-			$post_title      = $submitted_title ? $submitted_title : 'Properties';
 
-			$new_post = [
-				'post_title'   => $post_title,
-				'post_name'    => $post_title,
-				'post_content' => $post_content,
-				'post_type'    => 'idx-wrapper',
-				'post_status'  => 'publish',
-			];
+		$new_post = [
+			'post_title'   => $post_title,
+			'post_name'    => $post_title,
+			'post_content' => $post_content,
+			'post_type'    => 'idx-wrapper',
+			'post_status'  => 'publish',
+		];
 
-			// If an existing post ID is submitted, verify post is the custom type 'idx-wrapper' before updating.
-			$submitted_post_id = sanitize_text_field( wp_unslash( $_POST['wrapper_page_id'] ) );
-			if ( $submitted_post_id && 'idx-wrapper' === get_post_type( $submitted_post_id ) ) {
-				$new_post['ID'] = $submitted_post_id;
-			}
-
-			$wrapper_page_id = wp_insert_post( $new_post );
-			update_option( 'idx_broker_dynamic_wrapper_page_name', $post_title, false );
-			update_option( 'idx_broker_dynamic_wrapper_page_id', $wrapper_page_id, false );
-			$wrapper_page_url = get_permalink( $wrapper_page_id );
-			$this->idx_api->set_wrapper( 'global', $wrapper_page_url );
-			update_post_meta( $wrapper_page_id, 'idx-wrapper-page', 'global' );
+		$wrapper_page_id = wp_insert_post( $new_post );
+		update_option( 'idx_broker_dynamic_wrapper_page_name', $post_title, false );
+		update_option( 'idx_broker_dynamic_wrapper_page_id', $wrapper_page_id, false );
+		$wrapper_page_url = get_permalink( $wrapper_page_id );
+		$error            = $this->idx_api->set_wrapper( 'global', $wrapper_page_url );
+		update_post_meta( $wrapper_page_id, 'idx-wrapper-page', 'global' );
+		if ( is_wp_error( $error ) ) {
+			return $error;
 		}
-		wp_die();
+		return null;
 	}
 
 	/**

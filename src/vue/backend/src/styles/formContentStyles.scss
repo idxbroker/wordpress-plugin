@@ -22,11 +22,16 @@
         border: 1px solid $gray-250;
         padding-left: 15px;
     }
+    .form-group {
+        margin-bottom: 0;
+        position: relative;
+    }
     &__label {
         width: 100%;
     }
     &__title {
         display: block;
+        font-size: 1em;
         margin-bottom: 5px;
     }
     input:focus {
@@ -39,11 +44,6 @@
             transform: translateX(36px);
         }
     }
-}
-
-.form-group {
-    margin-bottom: var(--space-6);
-    position: relative;
 }
 
 .invalid-feedback {

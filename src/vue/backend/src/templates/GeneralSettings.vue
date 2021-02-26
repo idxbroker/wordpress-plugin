@@ -1,5 +1,5 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset general-settings form-content">
+    <idx-block tag="fieldset" className="general-settings form-content">
         <idx-form-group>
             <idx-form-label customClass="form-content__label" for="website-wrapper"><idx-block tag="strong" className="control-label__title">Name Your Global Website Wrapper</idx-block> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
             <idx-form-input

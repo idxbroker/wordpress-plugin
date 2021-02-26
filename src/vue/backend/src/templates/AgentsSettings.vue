@@ -1,5 +1,5 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset agents-settings form-content">
+    <idx-block tag="fieldset" className="agents-settings form-content">
         <idx-form-group>
             <idx-block className="form-content__label"><idx-block tag="h3" className="form-content__title">CSS Settings</idx-block> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
             <idx-block className="form-content__toggle">

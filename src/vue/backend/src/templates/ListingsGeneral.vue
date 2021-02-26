@@ -1,5 +1,5 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset listings-general">
+    <idx-block tag="fieldset" className="listings-general">
         <idx-form-group>
             <idx-block className="form-content__label"><idx-block tag="h3" className="form-content__title">Default State</idx-block> Description of the Default State setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</idx-block>
         </idx-form-group>
@@ -100,3 +100,7 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect';
+@import '../styles/formContentStyles.scss';
+</style>
