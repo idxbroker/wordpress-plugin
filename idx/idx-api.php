@@ -144,7 +144,14 @@ class Idx_Api {
 			if ( $code == 401 ) {
 				$this->delete_transient( $cache_key );
 			}
-			return new \WP_Error( 'idx_api_error', __( "Error {$code}: $error" ) );
+			return new \WP_Error(
+				'idx_api_error',
+				__( 'Error ' ) . $code . __( ': ' ) . $error,
+				array(
+					'status'  => $code,
+					'message' => $error,
+				)
+			);
 		} else {
 			$data = (array) json_decode( (string) $response['body'], $json_decode_type );
 			if ( $request_type !== 'POST' ) {
