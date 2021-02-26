@@ -34,10 +34,11 @@ export default {
     @import '~bootstrap/scss/list-group';
 
     .card {
+        // color isn't available in VCL
         border: 1px solid #EFEFEF;
         max-width: 300px;
         min-height: 226px;
-        padding: 24px;
+        padding: var(--space-6);
 
         .card-body {
             padding: 0;
@@ -45,7 +46,7 @@ export default {
 
         .card-header {
             color: $gray-400;
-            margin-bottom: 20px;
+            margin-bottom: var(--space-5);
             padding: 0;
         }
     }

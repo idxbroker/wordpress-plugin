@@ -21,36 +21,28 @@ export default {
     }
 }
 </script>
+
 <style lang="scss">
+@import '~bootstrap/scss/forms';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
+@import '../styles/formContentStyles.scss';
 .content-page {
-    // Spacing
-    --space-4: 16px;
-    --space-5: 20px;
-    --space-6: 24px;
-    --space-8: 32px;
-    --space-9: 36px;
-    --space-10: 40px;
-    --space-12: 48px;
-    --space-15: 60px;
-    --space-18: 72px;
-    // Typography
-    --font-size-h1: 31px;
-    --font-size-h2: 25px;
-    --font-size-h3: 21px;
-    --font-size-p: 16px;
-    --font-size-p-large: 18px;
-    --letter-spacing-h3: 2.1px;
-    --line-height-h1: 28px;
-    --line-height-h2: 28px;
-    --line-height-h3: 22px;
-    --line-height-p: 28px;
-    --line-height-p-large: 28px;
-    --dialog-header-height: 48px;
+  --font-size-h1: 31px;
+  --font-size-h2: 25px;
+  --font-size-p: 16px;
+  --font-size-p-large: 18px;
+  --header-height: 83px;
+  --line-height-h1: 28px;
+  --line-height-h2: 28px;
+  --line-height-p: 28px;
+  --line-height-p-large: 28px;
+  --wordpress-header-footer-height: 72px;
     background-color: $white;
     font-size: var(--font-size-p);
-    height: 100vh;
+    height: calc(100vh - var(--header-height) - var(--wordpress-header-footer-height));
     line-height: var(--line-height-p);
-    margin: 83px 50px 0px 255px;
+    margin: var(--header-height) 0 0px $v-nav-width;
     padding: 50px;
     position: relative;
     transition: margin-left .5s ease;

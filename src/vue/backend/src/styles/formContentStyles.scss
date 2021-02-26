@@ -1,0 +1,82 @@
+.fieldset,
+.form-group {
+  font-size: var(--font-size-p);
+  line-height: var(--line-height-p);
+  margin-bottom: var(--space-6);
+  position: relative;
+
+  input[type=text],
+  .form-control {
+    border: 1px solid $gray-250;
+    border-radius: var(--space-1);
+    color: $gray-875;
+    line-height: 1.5;
+    padding: 0.625rem 1.25rem;
+  }
+
+  .control-label {
+    display: block;
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-label);
+    margin-bottom: var(--space-2);
+    width: auto;
+  }
+
+  .control-label-title {
+    display: block;
+    margin-bottom: var(--space-1);
+  }
+
+  .control-toggle-slider {
+    align-items: center;
+    background-color: $gray-150;
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+  }
+}
+
+.invalid-feedback {
+  font-size: 1em;
+}
+
+@-webkit-keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-border {
+  animation: 0.75s linear infinite spinner-border;
+  border: 2px solid currentColor;
+  border-right-color: $primary;
+  border-radius: 50%;
+  bottom: 15px;
+  color: #acd9ee;
+  display: inline-block;
+  height: 1rem;
+  position: absolute;
+  right: 1rem;
+  vertical-align: text-bottom;
+  width: 1rem;
+}
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus) {
+  border: 0 !important;
+  clip: rect(0, 0, 0, 0) !important;
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  white-space: nowrap !important;
+  width: 1px !important;
+}

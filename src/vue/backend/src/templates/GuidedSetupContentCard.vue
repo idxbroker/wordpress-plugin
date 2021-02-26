@@ -73,7 +73,7 @@ export default {
         background: $gray-800;
         color: $white;
         display: flex;
-        height: var(--dialog-header-height);
+        height: 48px;
         justify-content: space-between;
         letter-spacing: 1.6px;
         padding: 0 var(--space-4);

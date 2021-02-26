@@ -65,6 +65,10 @@ export default {
 
     .content-card {
         --space-button: 8px;
+        --content-margin: var(--space-8) var(--space-8) 0;
+        --footer-margin: var(--space-8);
+        --footer-padding: var(--space-8) 0 var(--space-8);
+        --sidebar-margin: 0 var(--space-8);
         background-color: $white;
         color: $gray-875;
         display: grid;
@@ -72,88 +76,76 @@ export default {
             "header"
             "content"
             "sidebar"
-            "footer"
-    }
+            "footer";
 
-    .content-card__buttons {
-        display: flex;
-        margin-left: calc(-1 * var(--space-button));
-        margin-right: calc(-1 * var(--space-button));
-    }
-
-    .content-card__content {
-        grid-area: content;
-        margin: var(--space-8) var(--space-8) 0;
-
-        h1 {
-            margin-bottom: var(--space-4);
+        &__buttons {
+            display: flex;
+            margin-left: calc(-1 * var(--space-button));
+            margin-right: calc(-1 * var(--space-button));
         }
 
-        p {
-            margin-bottom: var(--space-6);
-            max-width: 45em;
-        }
-    }
+        &__content {
+            grid-area: content;
+            margin: var(--content-margin);
 
-    .content-card__footer {
-        border-top: 2px solid $gray-250;
-        grid-area: footer;
-        margin: var(--space-8);
-        padding: var(--space-8) 0 var(--space-8);
+            h1 {
+                margin-bottom: var(--space-4);
+            }
 
-        .btn {
-            margin: var(--space-button);
+            p {
+                margin-bottom: var(--space-6);
+                max-width: 45em;
+            }
         }
 
-        .btn:first-of-type {
-            margin-right: auto;
+        &__footer {
+            border-top: 2px solid $gray-250;
+            grid-area: footer;
+            margin: var(--footer-margin);
+            padding: var(--footer-padding);
+
+            .btn {
+                margin: var(--space-button);
+            }
+
+            .btn:first-of-type {
+                margin-right: auto;
+            }
         }
-    }
 
-    .content-card__sidebar {
-        grid-area: sidebar;
-        margin: 0 var(--space-8);
+        &__sidebar {
+            grid-area: sidebar;
+            margin: var(--sidebar-margin);
 
-        .card-header {
-            border-bottom: 0 none;
-            line-height: var(--space-5);
+            .card-header {
+                border-bottom: 0 none;
+                line-height: var(--space-5);
+            }
         }
-    }
 
-    .content-card__stepper {
-        border-bottom: 2px solid $gray-250;
-        display: flex;
-        grid-area: header;
-        justify-content: center;
-        padding: var(--space-8);
+        &__stepper {
+            border-bottom: 2px solid $gray-250;
+            display: flex;
+            grid-area: header;
+            justify-content: center;
+            padding: var(--space-8);
 
-        .icon-users {
-            width:20px;
+            .icon-users {
+                width:20px;
+            }
         }
-    }
 
-    @media only screen and (min-width: 1200px)   {
-
-        .content-card {
+        @media only screen and (min-width: 960px)   {
+            --content-margin: var(--space-10) var(--space-8) var(--space-9) var(--space-15);
+            --footer-margin: 0 var(--space-12);
+            --footer-padding: var(--space-8) 0 var(--space-8);
+            --sidebar-margin: var(--space-10) var(--space-9) var(--space-15) 0;
             grid-template-columns: 1fr 1fr 360px;
             grid-template-rows: auto 1fr auto;
             grid-template-areas:
                 "header  header  header"
                 "content content sidebar"
                 "footer  footer  footer";
-        }
-
-        .content-card__content {
-            margin: var(--space-10) var(--space-8) var(--space-9) var(--space-15);
-        }
-
-        .content-card__footer {
-            margin: 0 var(--space-12);
-            padding: var(--space-8) 0 var(--space-8);
-        }
-
-        .content-card__sidebar {
-            margin: var(--space-10) var(--space-9) var(--space-15) 0;
         }
     }
 </style>
