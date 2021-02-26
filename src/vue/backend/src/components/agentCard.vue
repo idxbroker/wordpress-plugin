@@ -7,9 +7,9 @@
         <template v-slot:content>
             <idx-block :className="{
                     'agent-card__image-wrap': true,
-                    'agent-card__image--placeholder': !primaryImage
+                    'agent-card__image--placeholder': !agent.image
                 }">
-                <img v-if="primaryImage" :src="agent.image">
+                <img v-if="agent.image" :src="agent.image" :alt="`Image of ${agent.name}`">
                 <div v-else>
                     {{ agentInitials }}
                 </div>
@@ -25,7 +25,7 @@
                     Imported <img :src="check">
                 </idx-block>
                 <idx-block @click.native.stop="$emit('removeAgent', agent.id)" className="agent-card__delete">
-                    <img :src="deleteIcon">
+                    <img :src="deleteIcon" alt="Remove Agent">
                 </idx-block>
             </idx-block>
         </template>
@@ -53,9 +53,6 @@ export default {
         }
     },
     computed: {
-        primaryImage () {
-            return this.agent.image !== (null || '')
-        },
         agentInitials () {
             const matches = this.agent.name.match(/\b(\w)/g)
             return matches.join('')
