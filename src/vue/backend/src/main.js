@@ -31,6 +31,7 @@ import {
     IdxFullscreen,
     IdxHeader,
     IdxIcon,
+    IdxInputTagAutocomplete,
     IdxList,
     IdxListItem,
     IdxNavbar,
@@ -39,14 +40,14 @@ import {
     IdxNavList,
     IdxProgressBar,
     IdxProgressStepper,
+    IdxRichSelect,
     IdxSinglePropertyCard,
     IdxTabContainer,
     IdxTextarea,
     IdxToggleSlider,
     IdxVArrow,
     IdxVIcon,
-    IdxVNav,
-    IdxRichSelect
+    IdxVNav
 } from '@idxbrokerllc/idxstrap'
 const idxConfig = require('../idx.config')
 const pluginOptions = {
@@ -84,6 +85,7 @@ const components = [
     IdxFullscreen,
     IdxHeader,
     IdxIcon,
+    IdxInputTagAutocomplete,
     IdxList,
     IdxListItem,
     IdxNavbar,
@@ -92,14 +94,14 @@ const components = [
     IdxNavList,
     IdxProgressBar,
     IdxProgressStepper,
+    IdxRichSelect,
     IdxSinglePropertyCard,
     IdxTabContainer,
     IdxTextarea,
     IdxToggleSlider,
     IdxVArrow,
     IdxVIcon,
-    IdxVNav,
-    IdxRichSelect
+    IdxVNav
 ]
 components.forEach(component => Vue.component(component.name, component))
 const store = new Vuex.Store({
