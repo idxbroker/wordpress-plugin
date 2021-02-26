@@ -56,7 +56,7 @@ export default {
     methods: {
         ...mapActions({
             generalSettingsStateChange: 'general/generalSettingsStateChange',
-            apiCall: 'general/apiCall'
+            verifyAPIkey: 'general/verifyAPIkey'
         }),
         goBackStep: function () {
             // to-do: go back in history
@@ -67,13 +67,13 @@ export default {
         },
         async goContinue () {
             this.loading = true
-            await this.apiCall()
+            await this.verifyAPIkey()
             this.loading = false
             this.success = true
             this.cardTitle = 'Account Connected!'
             setTimeout( () => {
                 this.$router.push({ path: '/guided-setup/connect/general' })
-            }, 5000)
+            }, 3000)
         }
     }
 }
