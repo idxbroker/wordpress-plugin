@@ -18,6 +18,30 @@ class Single_Listing_Template {
 		add_action( 'admin_menu', [ $this, 'wplistings_add_metabox' ] );
 		add_action( 'save_post', [ $this, 'metabox_save' ], 1, 2 );
 		add_filter( 'single_template', [ $this, 'load_listing_template' ] );
+		add_action( 'wp_head', [ $this, 'frontend_ajaxurl' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'listing_load_dashicons' ] );
+	}
+
+	/**
+	 * Frontend Ajaxurl
+	 *
+	 * Provides ajax URL for frontend scipts on listing template pages.
+	 *
+	 * @return void
+	 */
+	public function frontend_ajaxurl() {
+		echo '<script type="text/javascript">var ajaxurl = "' . admin_url('admin-ajax.php') . '";</script>';
+	}
+
+	/**
+	 * Listing Load Dashicons
+	 *
+	 * Explicitly enqueue dashicons.
+	 *
+	 * @return void
+	 */
+	public function listing_load_dashicons(){
+		wp_enqueue_style('dashicons');
 	}
 
 	/**
@@ -101,7 +125,7 @@ class Single_Listing_Template {
 	 * @return array
 	 */
 	public function get_plugin_templates() {
-		$plugin_files = glob( plugin_dir_path( __FILE__ ) . 'add-ons/listings/listing-templates/single-listing-*.php' );
+		$plugin_files = glob( IMPRESS_IDX_DIR . 'add-ons/listings/includes/listing-templates/single-listing-*.php' );
 		if ( is_array( $plugin_files ) ) {
 			return $plugin_files;
 		}
@@ -205,4 +229,99 @@ class Single_Listing_Template {
 
 	}
 
+}
+
+add_action( 'wp_ajax_listing_inquiry_request', 'listing_inquiry_request' );
+add_action( 'wp_ajax_nopriv_listing_inquiry_request', 'listing_inquiry_request' );
+
+/**
+ * Listing Inquiry Request
+ * Listing inquiry form handling.
+ *
+ * @return mixed
+ */
+function listing_inquiry_request() {
+
+	// Exit early if nonce/formdata is missing.
+	if ( ! isset( $_POST['nonce'], $_POST['formdata'] ) || ! wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'impress_listing_inquiry_nonce' ) ) {
+		wp_send_json( 'Nonce or Formdata Check Failed' );
+	}
+
+	$form_data = [];
+	parse_str( $_POST['formdata'], $form_data );
+
+	$form_data['inquiryFirstname'] = sanitize_text_field( $form_data['inquiryFirstname'] );
+	$form_data['inquiryLastname']  = sanitize_text_field( $form_data['inquiryLastname'] );
+	$form_data['inquiryEmail']     = sanitize_email( $form_data['inquiryEmail'] );
+	$form_data['inquiryPhone']     = sanitize_text_field( $form_data['inquiryPhone'] );
+	$form_data['inquiryComment']   = sanitize_text_field( $form_data['inquiryComment'] );
+	$form_data['inquiryPostID']    = filter_var( $form_data['inquiryPostID'], FILTER_SANITIZE_NUMBER_INT );
+
+	// Exit early if no post ID provided.
+	if ( empty( $form_data['inquiryPostID'] ) ) {
+		wp_send_json( 'No ID Provided' );
+	}
+
+	$idx_api = new \IDX\Idx_Api();
+	// Using 'interval=168' to grab any leads that recently signed up.
+	$leads = $idx_api->idx_api( 'lead?interval=168', '1.7.0', 'leads', [], 20 );
+	$leads = empty( $leads['data'] ) ? [] : $leads['data'];
+
+	$lead_id;
+
+	$post = get_post( $form_data['inquiryPostID'] );
+
+	foreach ( $leads as $lead ) {
+		if ( strcasecmp( $lead->email, $form_data['inquiryEmail'] ) == 0 ) {
+			$lead_id = $lead->id;
+		}
+	}
+
+	// If no match is found, try again with full list of leads.
+	if ( empty( $lead_id ) ) {
+		$leads = $idx_api->get_leads();
+		foreach ( $leads as $lead ) {
+			if ( strcasecmp( $lead->email, $form_data['inquiryEmail'] ) == 0 ) {
+				$lead_id = $lead->id;
+			}
+		}
+	}
+
+	// If no lead is matched.
+	if ( empty( $lead_id ) ) {
+		wp_send_json( 'No Lead Match' );
+	}
+
+	// Email notification.
+	$email_to = get_the_author_meta( 'user_email', $post->post_author );
+	if ( ! isset( $email_to ) || ( $email_to == '' ) ) {
+		$email_to = get_option( 'admin_email' );
+	}
+
+	$subject = 'Listing Inquiry from ' . $form_data['inquiryFirstname'] . ' ' . $form_data['inquiryLastname'];
+	$body    = 'Name: ' . $form_data['inquiryFirstname'] . ' ' . $form_data['inquiryLastname'] . "\n\n" . 'Email: ' . $form_data['inquiryEmail'] . "\n\n" . 'Phone: ' . $form_data['inquiryPhone'] . "\n\n" . 'Listing: ' . get_the_title( $post ) . "\n\n" . 'URL: ' . get_permalink( $post ) . "\n\n" . 'Comments: ' . $form_data['inquiryComment'];
+	$headers = 'From: ' . $form_data['inquiryFirstname'] . ' ' . $form_data['inquiryLastname'] . ' <' . $email_to . '>' . "\r\n" . 'Reply-To: ' . $form_data['inquiryEmail'];
+
+	wp_mail( $email_to, $subject, $body, $headers );
+
+	// Add note to lead.
+	$note = [
+		'note' => ( ! empty( $form_data['inquiryComment'] ) ) ? 'I\'m interested in this listing: <a href="' . get_permalink( $post ) . '">' . get_the_title( $post ) . '</a>' . "\n\n" . 'Comments: ' . $form_data['inquiryComment'] : 'I\'m interested in this listing: <a href="' . get_permalink( $post ) . '">' . get_the_title( $post ) . '</a>'
+	];
+
+	$args = [
+		'method'    => 'PUT',
+		'headers'   => [
+			'content-type' => 'application/x-www-form-urlencoded',
+			'accesskey'    => get_option( 'idx_broker_apikey' ),
+			'outputtype'   => 'json',
+		],
+		'sslverify' => false,
+		'body'      => http_build_query( $note ),
+	];
+
+	$api_url = 'https://api.idxbroker.com/leads/note/' . $lead_id;
+	$response = wp_remote_request( $api_url, $args );
+
+	wp_send_json( 'Success' );
 }

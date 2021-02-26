@@ -51,7 +51,7 @@ class Impress_Lead_Signup_Shortcode {
 		wp_enqueue_script( 'impress-lead-signup' );
 
 		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
-			wp_enqueue_script( 'idx-recaptcha', plugins_url( '../assets/js/idx-recaptcha.min.js', dirname(__FILE__) ) );
+			wp_enqueue_script( 'idx-recaptcha', IMPRESS_IDX_URL . 'assets/js/idx-recaptcha.min.js' );
 			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], null, false );
 			wp_enqueue_script( 'jquery' );
 		}
@@ -136,6 +136,7 @@ class Impress_Lead_Signup_Shortcode {
 		// User already has an account.
 		if ( stristr( $error, 'lead' ) ) {
 			// Redirect to lead login page.
+			include WPINC . '/pluggable.php';
 			return wp_redirect( $this->lead_login_page() );
 			// Other form error.
 		} elseif ( stristr( $error, 'true' ) ) {

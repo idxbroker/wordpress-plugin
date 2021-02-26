@@ -45,10 +45,16 @@ function wp_listings_init() {
 	function add_wp_listings_scripts() {
 		wp_register_script( 'wp-listings-single', IMPRESS_IDX_URL . 'assets/js/single-listing.min.js', [ 'jquery' ], null, true ); // enqueued only on single listings.
 		wp_register_script( 'jquery-validate', IMPRESS_IDX_URL . 'assets/js/jquery.validate.min.js', [ 'jquery' ], null, true ); // enqueued only on single listings.
-		wp_register_script( 'fitvids', '//cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js', [ 'jquery' ], null, true ); // enqueued only on single listings.
+		wp_register_script( 'fitvids', IMPRESS_IDX_URL . 'assets/js/jquery.fitvids.min.js', [ 'jquery' ], null, true ); // enqueued only on single listings.
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-tabs', [ 'jquery' ] );
-    }
+		// Add nonce to wp-listing-single script.
+		wp_localize_script(
+			'wp-listings-single',
+			'impressSingleListing',
+			[ 'nonce-listing-inquiry' => wp_create_nonce( 'impress_listing_inquiry_nonce' ) ]
+		);
+	}
 
 	/** Enqueues wp-listings.css style file if it exists and is not deregistered in settings */
 	add_action('wp_enqueue_scripts', 'add_wp_listings_main_styles');
@@ -95,8 +101,8 @@ function wp_listings_init() {
 		}
 
 		if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/wp-listings-widgets.css') ) {
-			wp_register_style('wp_listings_widgets', WP_LISTINGS_URL . 'assets/css/wp-listings-widgets.css', '', null, 'all');
-				wp_enqueue_style('wp_listings_widgets');
+			wp_register_style( 'wp_listings_widgets', IMPRESS_IDX_URL . 'assets/css/wp-listings-widgets.css', '', null, 'all' );
+			wp_enqueue_style( 'wp_listings_widgets' );
 		}
 	}
 
