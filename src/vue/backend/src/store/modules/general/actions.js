@@ -7,11 +7,13 @@ const generalSettingsStateChange = ({ commit }, payload) => {
     })
 }
 
-const promiseWithTimeout = () => {
+const apiCall = () => {
+    // To-Do: Do API call here
+    // This is a placeholder to mimic response time
     return new Promise(resolve => setTimeout(resolve, 5000))
 }
 
 export default {
     generalSettingsStateChange,
-    promiseWithTimeout
+    apiCall
 }

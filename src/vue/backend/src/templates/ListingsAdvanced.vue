@@ -57,7 +57,7 @@
         </idx-form-group>
         <hr/>
         <idx-form-group>
-            <idx-block className="control-label"><idx-block tag="strong" className="control-label-title">Google Maps</idx-block> Listings can be automatically mapped if a latitude and longitude is provided. A Google Maps API Key is required - <a href="https://developers.google.com/maps/documentation/javascript/get-api-key">click here</a> to register.</idx-block>
+            <idx-block className="control-label"><idx-block tag="strong" className="control-label-title">Google Maps</idx-block> Listings can be automatically mapped if a latitude and longitude is provided. A Google Maps API Key is required - <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">click here</a> to register.</idx-block>
         </idx-form-group>
         <idx-form-group>
             <idx-form-label customClass="control-label" for="google-maps">Google Maps API Key</idx-form-label>

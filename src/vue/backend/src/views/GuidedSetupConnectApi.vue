@@ -56,7 +56,7 @@ export default {
     methods: {
         ...mapActions({
             generalSettingsStateChange: 'general/generalSettingsStateChange',
-            promiseWithTimeout: 'general/promiseWithTimeout'
+            apiCall: 'general/apiCall'
         }),
         goBackStep: function () {
             // to-do: go back in history
@@ -67,18 +67,13 @@ export default {
         },
         async goContinue () {
             this.loading = true
-            await this.promiseWithTimeout()
+            await this.apiCall()
             this.loading = false
             this.success = true
-        }
-    },
-    watch: {
-        success: async function () {
-            if (this.success === true) {
-                this.cardTitle = 'Account Connected!'
-                await this.promiseWithTimeout()
+            this.cardTitle = 'Account Connected!'
+            setTimeout( () => {
                 this.$router.push({ path: '/guided-setup/connect/general' })
-            }
+            }, 5000)
         }
     }
 }
