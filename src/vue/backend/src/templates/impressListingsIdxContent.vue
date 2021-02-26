@@ -1,5 +1,5 @@
 <template>
-    <idx-block className="idx-content-settings">
+    <idx-block className="idx-content-settings form-content">
         <div>
             <idx-block className="idx-content-settings__title">Imported Listings</idx-block>
             <div>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</div>
@@ -39,7 +39,7 @@
             <div>
                 <b>{{ toggleLabels[0] }}</b>
                 <div>Description of the automatic import listings setting. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</div>
-                <idx-block className="idx-content-settings__toggle">
+                <idx-block className="idx-content-settings__toggle form-content__toggle">
                     {{ toggleLabels[0] }}
                     <idx-toggle-slider
                         uncheckedState="No"
@@ -68,7 +68,7 @@
                     :ariaLabel="importedListingsTemplateLabel"
                 ></idx-custom-select>
             </div>
-            <idx-block className="idx-content-settings__toggle">
+            <idx-block className="idx-content-settings__toggle form-content__toggle">
                 {{ toggleLabels[1] }}
                 <idx-toggle-slider
                     uncheckedState="No"
@@ -91,7 +91,7 @@
         </idx-block>
         <idx-block className="idx-content-settings__advanced">
             <idx-block className="idx-content-settings__title">Advanced Field Settings</idx-block>
-            <idx-block className="idx-content-settings__toggle">
+            <idx-block className="idx-content-settings__toggle form-content__toggle">
                 {{ toggleLabels[2] }}
                 <idx-toggle-slider
                     uncheckedState="No"
@@ -101,7 +101,7 @@
                     :label="toggleLabels[2]"
                 ></idx-toggle-slider>
             </idx-block>
-            <idx-block className="idx-content-settings__toggle">
+            <idx-block className="idx-content-settings__toggle form-content__toggle">
                 {{ toggleLabels[3] }}
                 <idx-toggle-slider
                     uncheckedState="No"
@@ -166,6 +166,7 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/richSelect';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect';
+@import '../styles/formContentStyles.scss';
 .rich-select {
     &__label {
         width: 100%;
@@ -175,21 +176,6 @@ export default {
     }
 }
 .idx-content-settings {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 25px;
-    &__toggle {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 20px;
-        background-color: $gray-150;
-        @media (max-width: 630px) {
-            flex-direction: column;
-            align-items: end;
-            grid-gap: 10px;
-        }
-    }
     &__title {
         text-transform: uppercase;
         letter-spacing: 1.6px;

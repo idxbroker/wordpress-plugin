@@ -3,8 +3,8 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
-    currencyCodeSelected: { value: null, label: 'Select Currency Code' },
-    currencySymbolSelected: { value: null, label: 'Select Currency Symbol' },
+    currencyCodeSelected: '',
+    currencySymbolSelected: '',
     defaultDisclaimer: '',
     numberOfPosts: '',
     listingSlug: '',
@@ -12,11 +12,11 @@ const state = {
     updateListings: 'update-all',
     soldListings: 'keep-all',
     automaticImport: false,
-    defaultListingTemplateSelected: { value: null, label: 'Select a Template' },
-    importedListingsAuthorSelected: { value: null, label: 'Select an Author' },
+    defaultListingTemplateSelected: '',
+    importedListingsAuthorSelected: '',
     // options will be returned with client data, and will be set in an action on the parent template.
-    defaultListingTemplateOptions: [{ value: null, label: 'Select a Template' }],
-    importedListingsAuthorOptions: [{ value: null, label: 'Select an Author' }],
+    defaultListingTemplateOptions: [],
+    importedListingsAuthorOptions: [],
     displayIDXLink: false,
     importTitle: '{{address}}',
     advancedFieldData: false,
