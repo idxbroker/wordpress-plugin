@@ -1,19 +1,4 @@
 // The incorrect usage of BEM lines up with the VCL implementation. Will need a major VCL upgrade to change.
-$v-nav-width: 255px;
-$v-nav-height: 43px;
-$v-nav-padding-x: 0;
-$v-nav-padding-y: 5px;
-$icon-nav-width: 50px;
-$transition-time: .5s;
-$a-tag-padding: 55px;
-$header-height: 8.5%;
-$font-weight: 300;
-$top-level-after: 20px;
-$second-level-after: 35px;
-$large-screen-left: 160px;
-$medium-screen-left: 36px;
-$small-screen-left: 0px;
-
 .wordpress-navigation.navbar {
     position: fixed;
     top: 31px;

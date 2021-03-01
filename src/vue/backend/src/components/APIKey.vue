@@ -1,37 +1,42 @@
 <template>
-    <idx-form-group
-        :customClass="{
-            'needs-validation': true,
-            'was-validated': error || success
-        }"
-        novalidate
-    >
-        <idx-form-label for="APIKey">API Key</idx-form-label>
-        <idx-form-input
-            type="text"
-            id="APIKey"
-            :placeholder="placeholder"
+    <idx-block className="form-content">
+        <idx-form-group
             :customClass="{
-                'is-invalid': error,
-                'is-valid': success,
-                'is-loading': loading
+                'needs-validation': true,
+                'was-validated': error || success
             }"
-            :invalid="error"
-            :valid="success"
-            required
-        />
-        <idx-block className="invalid-feedback" v-if="error">
-            We couldn't find an account with the provided API key
-        </idx-block>
-        <idx-block className="spinner-border" role="status" v-if="loading">
-            <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
-        </idx-block>
-    </idx-form-group>
+            novalidate
+        >
+            <idx-form-label customClass="form-content__label" for="ApiKey">API Key</idx-form-label>
+            <idx-form-input
+                type="text"
+                id="ApiKey"
+                :placeholder="placeholder"
+                :customClass="{
+                    'is-invalid': error,
+                    'is-valid': success,
+                    'is-loading': loading
+                }"
+                :invalid="error"
+                :valid="success"
+                :value="apiKey"
+                @change="generalSettingsStateChange({ key: 'apiKey', value: $event.target.value })"
+                required
+            />
+            <idx-block className="spinner-border" role="status" v-if="loading">
+                <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
+            </idx-block>
+            <idx-block className="invalid-feedback" v-if="error">
+                We couldn't find an account with the provided API key
+            </idx-block>
+        </idx-form-group>
+    </idx-block>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
-    name: 'APIKey',
+    name: 'ApiKey',
     props: {
         placeholder: {
             type: String,
@@ -49,58 +54,20 @@ export default {
             type: Boolean,
             default: false
         }
+    },
+    computed: {
+        ...mapState({
+            apiKey: state => state.general.apiKey
+        })
+    },
+    methods: {
+        ...mapActions({
+            generalSettingsStateChange: 'general/generalSettingsStateChange'
+        })
     }
 }
 </script>
 
-<style scoped lang="scss">
-    @import '~bootstrap/scss/forms';
-
-    .form-group {
-        position: relative;
-    }
-
-    .invalid-feedback {
-        font-size: 1em;
-    }
-
-    @-webkit-keyframes spinner-border {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes spinner-border {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    .spinner-border {
-        animation: 0.75s linear infinite spinner-border;
-        border: 2px solid currentColor;
-        border-right-color: $primary;
-        border-radius: 50%;
-        color: #acd9ee;
-        display: inline-block;
-        height: 1rem;
-        position: absolute;
-        right: 1rem;
-        top: 15px;
-        vertical-align: text-bottom;
-        width: 1rem;
-    }
-
-    .visually-hidden,
-    .visually-hidden-focusable:not(:focus) {
-        border: 0 !important;
-        clip: rect(0, 0, 0, 0) !important;
-        height: 1px !important;
-        margin: -1px !important;
-        overflow: hidden !important;
-        padding: 0 !important;
-        position: absolute !important;
-        white-space: nowrap !important;
-        width: 1px !important;
-    }
+<style lang="scss">
+@import '../styles/formContentStyles.scss';
 </style>
