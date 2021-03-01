@@ -37,6 +37,34 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'post' ),
 				'permission_callback' => array( $this, 'admin_check' ),
+				'args'                => array(
+					'apiKey'          => array(
+						'required' => false,
+						'type'     => 'string',
+					),
+					'reCAPTCHA'       => array(
+						'required' => false,
+						'type'     => 'boolean',
+					),
+					'updateFrequency' => array(
+						'required' => false,
+						'type'     => 'string',
+						// TODO: Create whitelist of timings and sync this list.
+						'enum'     => array(
+							'five_minutes',
+							'hourly',
+							'twice_daily',
+							'weekly',
+							'two_weeks',
+							'monthly',
+							'disabled',
+						),
+					),
+					'wrapperName'     => array(
+						'required' => false,
+						'type'     => 'string',
+					),
+				),
 			)
 		);
 	}
@@ -50,7 +78,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 		return rest_ensure_response(
 			array(
 				'apiKey'          => get_option( 'idx_broker_apikey', '' ),
-				'reCAPTCHA'       => (int) get_option( 'idx_recaptcha_enabled', 0 ) === 1 ? true : false,
+				'reCAPTCHA'       => boolval( get_option( 'idx_recaptcha_enabled', 0 ) ),
 				'updateFrequency' => get_option( 'idx_cron_schedule', '' ),
 				'wrapperName'     => get_option( 'idx_broker_dynamic_wrapper_page_name', '' ),
 			)
@@ -72,10 +100,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 		}
 
 		if ( isset( $payload['reCAPTCHA'] ) ) {
-			$error = $this->update_recaptcha( 'true' === $payload['reCAPTCHA'] ? true : false );
-			if ( is_wp_error( $error ) ) {
-				return rest_ensure_response( $error );
-			}
+			update_option( 'idx_recaptcha_enabled', (int) filter_var( $payload['reCAPTCHA'], FILTER_VALIDATE_BOOLEAN ) );
 		}
 
 		if ( isset( $payload['updateFrequency'] ) ) {
@@ -167,21 +192,6 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 				'message' => 'Update frequency option does not exist.',
 			)
 		);
-	}
-
-	/**
-	 * Updates reCAPTCHA setting.
-	 *
-	 * @param bool $enable Enable reCAPTCHA state.
-	 * @return WP_Error|null
-	 */
-	private function update_recaptcha( $enable ) {
-		if ( $enable ) {
-			update_option( 'idx_recaptcha_enabled', 1 );
-		} else {
-			update_option( 'idx_recaptcha_enabled', 0 );
-		}
-		return null;
 	}
 }
 
