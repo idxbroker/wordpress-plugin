@@ -5,6 +5,7 @@ import Layout from '@/templates/layout/Layout'
 import routeMeta from './routeMeta'
 import GuidedSetup from '@/views/GuidedSetup.vue'
 import GuidedSetupConnectApi from '@/views/GuidedSetupConnectApi.vue'
+import GuidedSetupGeneral from '@/views/GuidedSetupGeneral.vue'
 
 Vue.use(VueRouter)
 
@@ -101,8 +102,8 @@ const routes = [
                             },
                             {
                                 path: 'general',
-                                name: 'General Settings'
-                                // component
+                                name: 'General Settings',
+                                component: GuidedSetupGeneral
                             },
                             {
                                 path: 'omnibar',
