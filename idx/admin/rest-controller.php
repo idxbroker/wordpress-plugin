@@ -43,7 +43,7 @@ class Rest_Controller {
 	/**
 	 * Check if user has persmissions to use REST endpoint.
 	 *
-	 * @return bool
+	 * @return WP_Error|bool
 	 */
 	public function admin_check() {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -55,10 +55,17 @@ class Rest_Controller {
 	/**
 	 * Checks if IMPress Agents is enabled.
 	 *
-	 * @return bool
+	 * @return WP_Error|bool
 	 */
 	public function agents_enabled() {
-		// TODO: Return wp_option for agents enabled state.
+		$admin_permissions = $this->admin_check();
+		if ( true !== $admin_permissions ) {
+			return $admin_permissions;
+		}
+		// TODO: Uncomment code after endpoint for agents enable/disable is compelted.
+		// if ( ! boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) ) {
+		// 	return $this->addon_not_enabled_error( 'IMPress Agents' );
+		// }
 		return true;
 	}
 
@@ -68,7 +75,14 @@ class Rest_Controller {
 	 * @return bool
 	 */
 	public function listings_enabled() {
-		// TODO: Return wp_option for listings enabled state.
+		$admin_permissions = $this->admin_check();
+		if ( true !== $admin_permissions ) {
+			return $admin_permissions;
+		}
+		// TODO: Uncomment code after endpoint for listings enable/disable is compelted.
+		// if ( ! boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
+		// 	return $this->addon_not_enabled_error( 'IMPress Listings' );
+		// }
 		return true;
 	}
 
@@ -86,6 +100,25 @@ class Rest_Controller {
 
 		return $status;
 	}
+
+	/**
+	 * Returns WP_Error for invalid value.
+	 *
+	 * @param string $name Human readable value name for addon.
+	 * @return WP_Error
+	 */
+	public function addon_not_enabled_error( $name ) {
+		// Uses same error format as \IDX\IDX_Api.
+		return new \WP_Error(
+			'addon_disabled',
+			"422: $name is not enabled.",
+			array(
+				'status'  => 422,
+				'message' => "$name is not enabled.",
+			)
+		);
+	}
 }
 
 new Apis\Settings_General();
+new Apis\Agents_Settings();
