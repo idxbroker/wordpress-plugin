@@ -64,7 +64,7 @@ export default {
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/progressBar';
 
     .content-card {
-        --space-button: 8px;
+        --space-button: 16px;
         --content-margin: var(--space-8) var(--space-8) 0;
         --footer-margin: var(--space-8);
         --footer-padding: var(--space-8) 0 var(--space-8);
@@ -82,8 +82,7 @@ export default {
 
         &__buttons {
             display: flex;
-            margin-left: calc(-1 * var(--space-button));
-            margin-right: calc(-1 * var(--space-button));
+            gap: var(--space-button);
         }
 
         &__content {
@@ -112,10 +111,6 @@ export default {
             grid-area: footer;
             margin: var(--footer-margin);
             padding: var(--footer-padding);
-
-            .btn {
-                margin: var(--space-button);
-            }
 
             .btn:first-of-type {
                 margin-right: auto;

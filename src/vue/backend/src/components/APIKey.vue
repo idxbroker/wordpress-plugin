@@ -26,9 +26,7 @@
             <idx-block className="spinner-border" role="status" v-if="loading">
                 <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
             </idx-block>
-            <idx-block className="invalid-feedback" v-if="error">
-                We couldn't find an account with the provided API key
-            </idx-block>
+            <idx-block className="invalid-feedback" v-if="error">We couldn't find an account with the provided API key</idx-block>
         </idx-form-group>
     </idx-block>
 </template>
