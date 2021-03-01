@@ -1,3 +1,4 @@
+import { LISTINGS, AGENTS, API_KEY } from '@/data/productTerms'
 /**
  * Route Meta
  * Uses:
@@ -9,32 +10,74 @@ export default {
             path: '',
             name: 'IMPress Listings General Settings',
             label: 'General',
-            // component
-            component: () => import('@/templates/ListingsGeneral.vue')
+            component: () => import('@/templates/ListingsGeneral'),
+            meta: {
+                requires: [LISTINGS]
+            }
         },
         {
             path: 'idx',
             name: 'IMPress Listings IDX Settings',
             label: 'IDX',
-            // component
-            component: () => import('@/templates/impressListingsIdxContent')
+            component: () => import('@/templates/impressListingsIdxContent'),
+            meta: {
+                requires: [LISTINGS]
+            }
         },
         {
             path: 'advanced',
             name: 'IMPress Listings Advanced Settings',
             label: 'Advanced',
-            // component
-            component: () => import('@/templates/impressListingsAdvancedContent')
+            component: () => import('@/templates/impressListingsAdvancedContent'),
+            meta: {
+                requires: [LISTINGS]
+            }
         }]
     },
     imports: {
         listings: [
-            { path: '', name: 'Unimported IDX Listings', label: 'Unimported' /* Component here */ },
-            { path: 'imported', name: 'Imported IDX Listings', label: 'Imported' /* Component here */ }
+            {
+                path: '',
+                name: 'Unimported IDX Listings',
+                label: 'Unimported',
+                /* Component here */
+                meta: {
+                    requires: [LISTINGS, API_KEY],
+                    strict: true
+                }
+            },
+            {
+                path: 'imported',
+                name: 'Imported IDX Listings',
+                label: 'Imported',
+                /* Component here */
+                meta: {
+                    requires: [LISTINGS, API_KEY],
+                    strict: true
+                }
+            }
         ],
         agents: [
-            { path: '', name: 'Unimported IDX Agents', label: 'Unimported' /* Component here */ },
-            { path: 'imported', name: 'Imported IDX Agents', label: 'Imported' /* Component here */ }
+            {
+                path: '',
+                name: 'Unimported IDX Agents',
+                label: 'Unimported',
+                /* Component here */
+                meta: {
+                    requires: [AGENTS, API_KEY],
+                    strict: true
+                }
+            },
+            {
+                path: 'imported',
+                name: 'Imported IDX Agents',
+                label: 'Imported',
+                /* Component here */
+                meta: {
+                    requires: [AGENTS, API_KEY],
+                    strict: true
+                }
+            }
         ]
     }
 }
