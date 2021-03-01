@@ -1,7 +1,7 @@
 <template>
     <idx-block :id="id" :className="className">
         <idx-block className="section__content">
-            <h2>{{ title }}</h2>
+            <h1>{{ title }}</h1>
             <slot />
         </idx-block>
         <idx-block v-if="$slots.related" className="section__content">
@@ -38,6 +38,9 @@ export default {
         grid-template-columns: 1fr 300px;
         grid-template-rows: auto;
         grid-gap: 4rem;
+    }
+    &__content h1 {
+        margin-bottom: var(--space-10);
     }
 }
 </style>

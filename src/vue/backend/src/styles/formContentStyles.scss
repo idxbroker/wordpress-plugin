@@ -2,7 +2,6 @@
 .form-content {
     display: flex;
     flex-direction: column;
-    grid-gap: 25px;
     font-size: 1rem;
     color: $gray-875;
     &__toggle {
@@ -22,11 +21,11 @@
         border: 1px solid $gray-250;
         padding-left: 15px;
     }
-    .form-group {
-        margin-bottom: 0;
-        position: relative;
+    &__header {
+        margin-bottom: 24px;
     }
     &__label {
+        margin-bottom: 5px;
         width: 100%;
     }
     &__title {
@@ -44,6 +43,11 @@
             transform: translateX(36px);
         }
     }
+}
+
+.form-group {
+    margin-bottom: 40px;
+    position: relative;
 }
 
 .invalid-feedback {
