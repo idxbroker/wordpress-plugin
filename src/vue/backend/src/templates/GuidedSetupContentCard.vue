@@ -8,7 +8,7 @@
                 </idx-block>
             </idx-block>
         </template>
-        <ContentCard :steps="steps" :cardTitle="cardTitle" :relatedLinks="relatedLinks">
+        <ContentCard @back-step="$emit('back-step')" @skip-step="$emit('skip-step')" @continue="$emit('continue')" :steps="steps" :cardTitle="cardTitle" :relatedLinks="relatedLinks">
             <template v-slot:description>
                 <slot name="description"></slot>
             </template>
@@ -60,8 +60,8 @@ export default {
 <style lang="scss">
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/dialog';
 
-    .gs .dialog__mask {
-        position: absolute;
+    .dialog__mask {
+        z-index: 99999;
     }
 
     .gs-dialog .dialog__container {
@@ -73,7 +73,7 @@ export default {
         background: $gray-800;
         color: $white;
         display: flex;
-        height: var(--space-12);
+        height: 48px;
         justify-content: space-between;
         letter-spacing: 1.6px;
         padding: 0 var(--space-4);

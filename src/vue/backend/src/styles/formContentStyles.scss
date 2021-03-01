@@ -1,3 +1,4 @@
+@import '~bootstrap/scss/forms';
 .form-content {
     display: flex;
     flex-direction: column;
@@ -21,8 +22,17 @@
         border: 1px solid $gray-250;
         padding-left: 15px;
     }
+    .form-group {
+        margin-bottom: 0;
+        position: relative;
+    }
     &__label {
         width: 100%;
+    }
+    &__title {
+        display: block;
+        font-size: 1em;
+        margin-bottom: 5px;
     }
     input:focus {
         border-color: $gray-400;
@@ -34,4 +44,48 @@
             transform: translateX(36px);
         }
     }
+}
+
+.invalid-feedback {
+    font-size: 1em;
+}
+
+@-webkit-keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner-border {
+    animation: 0.75s linear infinite spinner-border;
+    border: 2px solid currentColor;
+    border-right-color: $primary;
+    border-radius: 50%;
+    bottom: 15px;
+    color: #acd9ee;
+    display: inline-block;
+    height: 1rem;
+    position: absolute;
+    right: 1rem;
+    vertical-align: text-bottom;
+    width: 1rem;
+}
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus) {
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    white-space: nowrap !important;
+    width: 1px !important;
 }

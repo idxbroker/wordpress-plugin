@@ -1,7 +1,7 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset general-settings form-content">
+    <idx-block tag="fieldset" className="general-settings form-content">
         <idx-form-group>
-            <idx-form-label customClass="control-label" for="website-wrapper"><strong>Name Your Global Website Wrapper</strong> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
+            <idx-form-label customClass="form-content__label" for="website-wrapper"><idx-block tag="strong" className="control-label__title">Name Your Global Website Wrapper</idx-block> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
             <idx-form-input
                 type="text"
                 id="website-wrapper"
@@ -10,8 +10,8 @@
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="control-label"><strong>Google reCAPTCHA</strong> Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</idx-block>
-            <idx-block className="control-toggle-slider form-content__toggle">
+            <idx-block className="form-content__label"><idx-block tag="h3" className="form-content__title">Google reCAPTCHA</idx-block> Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</idx-block>
+            <idx-block className="form-content__toggle">
                 {{ toggleLabel }}
                 <idx-toggle-slider
                     uncheckedState="No"
@@ -23,7 +23,7 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="control-label"><strong>Update Frequency</strong> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
+            <idx-block className="form-content__label"><idx-block tag="h3" className="form-content__title">Update Frequency</idx-block> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
             <idx-custom-select
                 ariaLabel="Update Frequency"
                 :selected="updateFrequency"
@@ -67,43 +67,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '~bootstrap/scss/forms';
-@import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
-@import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider';
 @import '../styles/formContentStyles.scss';
-.fieldset {
-    // Global Styles
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 12px;
-    --space-4: 16px;
-    --space-5: 20px;
-    --space-6: 24px;
-    --font-size-label: 16px;
-    --font-size-p: 16px;
-    --line-height-label: 22px;
-    --line-height-p: 28px;
-    font-size: var(--font-size-p);
-    line-height: var(--line-height-p);
-    input[type=text] {
-        border: 1px solid $gray-250;
-        color: $gray-875;
-        line-height: 1.5;
-        padding: 0.625rem 1.25rem;
-    }
-    .form-group {
-        margin-bottom: var(--space-6);
-    }
-    .control-label {
-        display: block;
-        font-size: var(--font-size-label);
-        line-height: var(--line-height-label);
-        margin-bottom: var(--space-2);
-        width: auto;
-        strong {
-            display: block;
-            margin-bottom: var(--space-1);
-        }
-    }
-}
 </style>

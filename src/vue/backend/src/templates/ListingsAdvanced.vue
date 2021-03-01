@@ -1,5 +1,5 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset listings-advanced form-content">
+    <idx-block tag="fieldset" className="listings-advanced form-content">
         <idx-form-group>
             <idx-block className="control-label"><idx-block tag="strong" className="control-label-title">CSS Settings</idx-block> Detailed sentence or two describing deregistering IMPress Listing CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
         </idx-form-group>
@@ -57,7 +57,7 @@
         </idx-form-group>
         <hr/>
         <idx-form-group>
-            <idx-block className="control-label"><idx-block tag="strong" className="control-label-title">Google Maps</idx-block> Listings can be automatically mapped if a latitude and longitude is provided. A Google Maps API Key is required - <a href="https://developers.google.com/maps/documentation/javascript/get-api-key">click here</a> to register.</idx-block>
+            <idx-block className="control-label"><idx-block tag="strong" className="control-label-title">Google Maps</idx-block> Listings can be automatically mapped if a latitude and longitude is provided. A Google Maps API Key is required - <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">click here</a> to register.</idx-block>
         </idx-form-group>
         <idx-form-group>
             <idx-form-label customClass="control-label" for="google-maps">Google Maps API Key</idx-form-label>
@@ -140,18 +140,13 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '~bootstrap/scss/forms';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect';
 @import '../styles/formContentStyles.scss';
-.fieldset hr {
+.form-content hr {
     border: 1px solid $gray-400;
     margin-bottom: var(--space-6);
     margin-top: var(--space-6);
     opacity: 1;
-}
-.control-label-title {
-    display: block;
-    margin-bottom: var(--space-1);
 }
 </style>

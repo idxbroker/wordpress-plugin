@@ -7,6 +7,13 @@ const generalSettingsStateChange = ({ commit }, payload) => {
     })
 }
 
+const verifyAPIkey = () => {
+    // To-Do: Do API call here
+    // This is a placeholder to mimic response time
+    return new Promise(resolve => setTimeout(resolve, 5000))
+}
+
 export default {
-    generalSettingsStateChange
+    generalSettingsStateChange,
+    verifyAPIkey
 }

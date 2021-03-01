@@ -1,17 +1,21 @@
 <template>
     <idx-block className="feedback">
         <idx-block className="feedback__icon">
-            <!-- TODO: Waiting on new icon -->
+            <svg-icon icon="exclamation-triangle" />
         </idx-block>
-        <idx-block tag="h2" className="feedback__title">{{ title }}</idx-block>
+        <idx-block tag="h3" className="feedback__title">{{ title }}</idx-block>
         <slot name="content"></slot>
         <idx-button tag="a" outline :href="link">Show Me</idx-button>
     </idx-block>
 </template>
 
 <script>
+import SvgIcon from '@/components/SvgIcon.vue'
 export default {
     name: 'RelatedLinks',
+    components: {
+        SvgIcon
+    },
     props: {
         title: {
             type: String,
@@ -27,22 +31,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    @import '~@idxbrokerllc/idxstrap/dist/styles/globalVariables.scss';
-    @import '~@idxbrokerllc/idxstrap/dist/styles/base.scss';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 
-    :root {
+    .feedback {
         --font-size-h3: 21px;
-        --font-size-p-large: 18px;
         --letter-spacing-h3: 2.1px;
         --line-height-h3: 22px;
-        --line-height-p-large: 28px;
-        --space-4: 16px;
-        --space-6: 24px;
-        --space-10: 40px;
-    }
-
-    .feedback {
         align-items: center;
         display: flex;
         flex-direction: column;
@@ -54,6 +48,8 @@ export default {
         &__icon {
             background-color: $primary;
             border-radius: var(--space-4);
+            color: $white;
+            font-size: 64px;
             margin-bottom: var(--space-10);
             padding: var(--space-10);
         }
