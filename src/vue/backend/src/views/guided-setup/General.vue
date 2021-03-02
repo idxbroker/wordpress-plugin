@@ -6,36 +6,28 @@
         @back-step="goBackStep"
         @skip-step="goSkipStep"
         @continue="goContinue">
-        <template v-slot:description>
-            <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </template>
         <template v-slot:controls>
-            <APIKey :error="error" :loading="loading" :success="success"/>
+            <GeneralSettings/>
         </template>
     </GuidedSetupContentCard>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import GeneralSettings from '@/templates/GeneralSettings.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
-import APIKey from '@/components/APIKey.vue'
 export default {
-    name: 'GuidedSetupConnectApi',
     components: {
-        APIKey,
+        GeneralSettings,
         GuidedSetupContentCard
     },
     data () {
         return {
-            cardTitle: 'Connect Your IDX Broker Account',
-            error: false,
-            errorMessage: 'We couldn’t find an account with the provided API key',
-            loading: false,
-            success: false,
+            cardTitle: 'General Settings',
             links: [
                 {
-                    text: 'Where can I find my API key?',
-                    href: '#where'
+                    text: 'Dynamic Wrappers',
+                    href: '#dynamic-wrappers'
                 },
                 {
                     text: 'IDX Broker Middleware',
@@ -55,25 +47,19 @@ export default {
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange',
-            verifyAPIkey: 'general/verifyAPIkey'
+            generalSettingsStateChange: 'general/generalSettingsStateChange'
         }),
         goBackStep: function () {
             // to-do: go back in history
             this.$router.go(-1)
         },
         goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/connect/general' })
+            this.$router.push({ path: '/guided-setup/omnibar' })
         },
-        async goContinue () {
-            this.loading = true
-            await this.verifyAPIkey()
-            this.loading = false
-            this.success = true
-            this.cardTitle = 'Account Connected!'
+        goContinue () {
             setTimeout(() => {
-                this.$router.push({ path: '/guided-setup/connect/general' })
-            }, 3000)
+                this.$router.push({ path: '/guided-setup/omnibar' })
+            }, 1000)
         }
     }
 }

@@ -7,19 +7,18 @@
         @skip-step="goSkipStep"
         @continue="goContinue">
         <template v-slot:controls>
-            <GeneralSettings/>
+            <omnibarForm/>
         </template>
     </GuidedSetupContentCard>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import GeneralSettings from '@/templates/GeneralSettings.vue'
+import omnibarForm from '@/templates/omnibarForm.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
-    name: 'GuidedSetupGeneral',
     components: {
-        GeneralSettings,
+        omnibarForm,
         GuidedSetupContentCard
     },
     data () {
@@ -48,20 +47,18 @@ export default {
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange',
-            verifyAPIkey: 'general/verifyAPIkey'
+            generalSettingsStateChange: 'general/generalSettingsStateChange'
         }),
         goBackStep: function () {
             // to-do: go back in history
             this.$router.go(-1)
         },
         goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/connect/omnibar' })
+            this.$router.push({ path: '/guided-setup/omnibar' })
         },
-        async goContinue () {
-            await this.verifyAPIkey()
+        goContinue () {
             setTimeout(() => {
-                this.$router.push({ path: '/guided-setup/connect/omnibar' })
+                this.$router.push({ path: '/guided-setup/omnibar' })
             }, 1000)
         }
     }

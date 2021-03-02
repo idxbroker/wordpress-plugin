@@ -3,9 +3,6 @@ import VueRouter from 'vue-router'
 import Generic from '@/templates/layout/Generic'
 import Layout from '@/templates/layout/Layout'
 import routeMeta from './routeMeta'
-import GuidedSetup from '@/views/GuidedSetup.vue'
-import GuidedSetupConnectApi from '@/views/GuidedSetupConnectApi.vue'
-import GuidedSetupGeneral from '@/views/GuidedSetupGeneral.vue'
 
 Vue.use(VueRouter)
 
@@ -47,11 +44,6 @@ const routes = [
                 component: Generic,
                 children: [
                     {
-                        path: 'api',
-                        name: 'Connect Account',
-                        component: GuidedSetupConnectApi
-                    },
-                    {
                         path: 'general',
                         name: 'IMPress General Settings',
                         component: () => import('@/views/settings/General')
@@ -90,27 +82,27 @@ const routes = [
             {
                 path: '/guided-setup',
                 name: 'Guided Setup',
-                component: GuidedSetup,
+                component: Generic,
                 children: [
                     {
-                        path: 'connect',
-                        children: [
-                            {
-                                path: 'api',
-                                name: 'Connect Account',
-                                component: GuidedSetupConnectApi
-                            },
-                            {
-                                path: 'general',
-                                name: 'General Settings',
-                                component: GuidedSetupGeneral
-                            },
-                            {
-                                path: 'omnibar',
-                                name: 'Omnibar Settings'
-                                // component
-                            }
-                        ]
+                        path: 'welcome',
+                        name: 'Welcome',
+                        component: () => import('@/views/guided-setup/Welcome')
+                    },
+                    {
+                        path: 'api',
+                        name: 'Connect Account',
+                        component: () => import('@/views/guided-setup/Api')
+                    },
+                    {
+                        path: 'general',
+                        name: 'General Settings',
+                        component: () => import('@/views/guided-setup/General')
+                    },
+                    {
+                        path: 'omnibar',
+                        name: 'Omnibar Settings',
+                        component: () => import('@/views/guided-setup/Omnibar')
                     },
                     {
                         path: 'listings',
