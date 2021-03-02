@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Generic from '@/templates/layout/Generic'
 import Layout from '@/templates/layout/Layout'
 import routeMeta from './routeMeta'
-import GuidedSetup from '@/views/GuidedSetup.vue'
 import GuidedSetupConnectApi from '@/views/GuidedSetupConnectApi.vue'
 
 Vue.use(VueRouter)
@@ -89,8 +88,13 @@ const routes = [
             {
                 path: '/guided-setup',
                 name: 'Guided Setup',
-                component: GuidedSetup,
+                component: Generic,
                 children: [
+                    {
+                        path: 'connect/omnibar',
+                        name: 'Omnibar Settings',
+                        component: () => import('@/views/guided-setup/Omnibar')
+                    },
                     {
                         path: 'connect',
                         children: [
@@ -102,11 +106,6 @@ const routes = [
                             {
                                 path: 'general',
                                 name: 'General Settings'
-                                // component
-                            },
-                            {
-                                path: 'omnibar',
-                                name: 'Omnibar Settings'
                                 // component
                             }
                         ]
