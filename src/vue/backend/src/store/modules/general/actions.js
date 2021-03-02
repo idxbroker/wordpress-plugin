@@ -15,22 +15,6 @@ const verifyAPIkey = () => {
 
 const saveGeneralSettings = () => {
     // To-Do: add actual endpoints
-    // GET /idxbroker/v1/admin/settings/general
-    // return {
-    //     apiKey,
-    //     wrapperName,
-    //     reCAPTCHA,
-    //     updateFrequency
-    // }
-    // POST /idxbroker/v1/admin/settings/general
-    // Include only what needs to be updated
-    // Request Body {
-    //     apiKey,
-    //     wrapperName,
-    //     reCAPTCHA,
-    //     updateFrequency
-    // }
-    // return 200 or error message
     return new Promise(resolve => setTimeout(resolve, 1000))
 }
 
