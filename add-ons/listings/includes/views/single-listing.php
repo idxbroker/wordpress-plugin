@@ -49,10 +49,9 @@ add_action('wp_enqueue_scripts', 'enqueue_single_listing_scripts');
 function enqueue_single_listing_scripts() {
 	wp_enqueue_style( 'wp-listings-single' );
 	wp_enqueue_style( 'font-awesome-5.8.2' );
-	wp_enqueue_script( 'jquery-validate', array('jquery'), true, true );
-	wp_enqueue_script( 'fitvids', array('jquery'), true, true );
-	wp_enqueue_script( 'wp-listings-single', array('jquery, jquery-ui-tabs', 'jquery-validate'), true, true );
-	include_once IMPRESS_IDX_DIR . 'add-ons/listings/includes/listing-templates/listing-inquiry-form.php';
+	wp_enqueue_script( 'jquery-validate', [ 'jquery' ], true, true );
+	wp_enqueue_script( 'fitvids', [ 'jquery' ], true, true );
+	wp_enqueue_script( 'wp-listings-single', [ 'jquery, jquery-ui-tabs', 'jquery-validate' ], true, true );
 }
 
 function single_listing_post_content() {
@@ -65,7 +64,7 @@ function single_listing_post_content() {
 	<div itemscope itemtype="http://schema.org/SingleFamilyResidence" class="entry-content wplistings-single-listing">
 
 		<div class="listing-image-wrap">
-			<?php echo '<div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">'. get_the_post_thumbnail( $post->ID, 'listings-full', array('class' => 'single-listing-image', 'itemprop'=>'contentUrl') ) . '</div>';
+			<?php echo '<div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">'. get_the_post_thumbnail( $post->ID, 'listings-full', [ 'class' => 'single-listing-image', 'itemprop' => 'contentUrl' ] ) . '</div>';
 			if ( '' != wp_listings_get_status() ) {
 				printf( '<span class="listing-status %s">%s</span>', strtolower(str_replace(' ', '-', wp_listings_get_status())), wp_listings_get_status() );
 			}
@@ -364,6 +363,7 @@ function single_listing_post_content() {
 				echo do_shortcode($options['wp_listings_default_form']);
 
 			} else {
+				include_once IMPRESS_IDX_DIR . 'add-ons/listings/includes/listing-templates/listing-inquiry-form.php';
 				listing_inquiry_form( $post );
 			}
 
