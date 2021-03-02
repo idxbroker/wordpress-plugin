@@ -1,20 +1,18 @@
 <template>
-    <div>
-        <GuidedSetupContentCard
-            :cardTitle="cardTitle"
-            :steps="guidedSetupSteps"
-            :relatedLinks="links"
-            @back-step="goBackStep"
-            @skip-step="goSkipStep"
-            @continue="goContinue">
-            <template v-slot:description>
-                <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </template>
-            <template v-slot:controls>
-                <APIKey :error="error" :loading="loading" :success="success"/>
-            </template>
-        </GuidedSetupContentCard>
-    </div>
+    <GuidedSetupContentCard
+        :cardTitle="cardTitle"
+        :steps="guidedSetupSteps"
+        :relatedLinks="links"
+        @back-step="goBackStep"
+        @skip-step="goSkipStep"
+        @continue="goContinue">
+        <template v-slot:description>
+            <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </template>
+        <template v-slot:controls>
+            <APIKey :error="error" :loading="loading" :success="success"/>
+        </template>
+    </GuidedSetupContentCard>
 </template>
 
 <script>
