@@ -59,9 +59,7 @@ export default {
         },
         async goContinue () {
             await this.saveGeneralSettings()
-            setTimeout(() => {
-                this.$router.push({ path: '/guided-setup/omnibar' })
-            }, 1000)
+            this.$router.push({ path: '/guided-setup/omnibar' })
         }
     }
 }
