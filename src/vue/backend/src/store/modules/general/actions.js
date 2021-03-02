@@ -13,7 +13,13 @@ const verifyAPIkey = () => {
     return new Promise(resolve => setTimeout(resolve, 5000))
 }
 
+const saveGeneralSettings = () => {
+    // To-Do: add actual endpoints
+    return new Promise(resolve => setTimeout(resolve, 1000))
+}
+
 export default {
     generalSettingsStateChange,
+    saveGeneralSettings,
     verifyAPIkey
 }
