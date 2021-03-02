@@ -9,7 +9,6 @@ import { filterRequires } from '@/utilities'
 import GuidedSetup from '@/views/GuidedSetup.vue'
 import GuidedSetupConnectApi from '@/views/GuidedSetupConnectApi.vue'
 
-
 Vue.use(VueRouter)
 
 const routes = [

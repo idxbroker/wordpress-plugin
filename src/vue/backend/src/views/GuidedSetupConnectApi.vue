@@ -71,7 +71,7 @@ export default {
             this.loading = false
             this.success = true
             this.cardTitle = 'Account Connected!'
-            setTimeout( () => {
+            setTimeout(() => {
                 this.$router.push({ path: '/guided-setup/connect/general' })
             }, 3000)
         }
