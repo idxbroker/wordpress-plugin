@@ -3,6 +3,7 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
+    enabled: true,
     currencyCodeSelected: '',
     currencySymbolSelected: '',
     defaultDisclaimer: '',

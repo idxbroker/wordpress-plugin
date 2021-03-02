@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import router from './router'
-import storeModules from './store'
+import store from './store'
 import IDXStrapClass from '@idxbrokerllc/idxstrap/dist/idxStrap.js'
 
 // Import VCL base and variable styles
@@ -104,10 +104,6 @@ const components = [
     IdxVNav
 ]
 components.forEach(component => Vue.component(component.name, component))
-const store = new Vuex.Store({
-    strict: process.env.NODE_ENV !== 'production',
-    modules: storeModules
-})
 
 Vue.config.productionTip = false
 
