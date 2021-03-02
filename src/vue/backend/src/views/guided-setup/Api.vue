@@ -20,7 +20,6 @@ import { mapState, mapActions } from 'vuex'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import APIKey from '@/components/APIKey.vue'
 export default {
-    name: 'GuidedSetupConnectApi',
     components: {
         APIKey,
         GuidedSetupContentCard
@@ -63,7 +62,7 @@ export default {
             this.$router.go(-1)
         },
         goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/connect/general' })
+            this.$router.push({ path: '/guided-setup/listings' })
         },
         async goContinue () {
             this.loading = true

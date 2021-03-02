@@ -25,12 +25,6 @@
     </idx-fullscreen>
 </template>
 
-<script>
-export default {
-    name: 'GuidedSetup'
-}
-</script>
-
 <style lang="scss">
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/fullscreen';
