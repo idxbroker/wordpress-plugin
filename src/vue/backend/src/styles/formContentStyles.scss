@@ -1,9 +1,19 @@
 @import '~bootstrap/scss/forms';
 .form-content {
-    display: flex;
-    flex-direction: column;
+    --space-form-control: 25px;
+    --space-form-label: 5px;
+    --space-form-height: 43px;
     font-size: 1rem;
     color: $gray-875;
+    h3,
+    strong {
+        font-weight: 500;
+    }
+    hr {
+        border-top: 1px solid $gray-400;
+        margin-bottom: var(--space-form-control);
+        margin-top: var(--space-form-control);
+    }
     &__toggle {
         display: flex;
         justify-content: space-between;
@@ -17,21 +27,26 @@
             grid-gap: 10px;
         }
     }
+    .autocomplete {
+        &__results {
+            margin-top: var(--space-form-height);
+        }
+    }
     .form-control {
         border: 1px solid $gray-250;
         padding-left: 15px;
     }
     &__header {
-        margin-bottom: 24px;
+        margin-bottom: var(--space-form-control);
     }
     &__label {
-        margin-bottom: 5px;
+        margin-bottom: var(--space-form-label);
         width: 100%;
     }
     &__title {
         display: block;
         font-size: 1em;
-        margin-bottom: 5px;
+        margin-bottom: var(--space-form-label);
     }
     input:focus {
         border-color: $gray-400;
