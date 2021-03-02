@@ -68,11 +68,12 @@ export default {
         --content-margin: var(--space-8) var(--space-8) 0;
         --footer-margin: var(--space-8);
         --footer-padding: var(--space-8) 0 var(--space-8);
-        --sidebar-margin: 0 var(--space-8);
+        --sidebar-margin: var(--space-8) var(--space-8) 0;
         background-color: $white;
         color: $gray-875;
         display: grid;
         font-size: var(--font-size-p);
+        height: 100%;
         line-height: var(--line-height-p);
         grid-template-areas:
             "header"
@@ -88,6 +89,7 @@ export default {
         &__content {
             grid-area: content;
             margin: var(--content-margin);
+            overflow-y: auto;
 
             h1 {
                 color: inherit;
