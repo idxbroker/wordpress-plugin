@@ -35,10 +35,11 @@ function enqueue_single_listing_scripts() {
 	wp_register_style( 'wplistings-google-fonts', '//fonts.googleapis.com/css?family=Lato:700,400,300');
 	wp_enqueue_style( 'font-awesome-5.8.2' );
 	wp_enqueue_style( 'wplistings-google-fonts' );
-	wp_register_script( 'fitvids', '//cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.js', array('jquery'), true, true );
 	wp_enqueue_script( 'fitvids', array('jquery'), true, true );
 	wp_enqueue_script( 'jquery-validate', array('jquery'), true, true );
 	wp_enqueue_script( 'wp-listings-single', array('jquery, jquery-ui-tabs', 'jquery-validate'), true, true );
+	// Dequeue any known themes that conflict with single page listing layout.
+	wp_dequeue_style( 'twenty-twenty-one-style' );
 }
 
 // not using eqnueue, added in content area so it takes precedence over theme styles
@@ -887,6 +888,56 @@ function single_listing_style() { ?>
 		}
 	}
 
+	#contact-tabs ul {
+		display: flex;
+
+	}
+
+	#contact-tabs ul li {
+		display: flex;
+		width: 50%;
+	}
+
+	#contact-tabs ul li a {
+		width: 100%;
+	}
+
+	#contact-tabs form {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#contact-tabs form input {
+		margin-bottom: 10px;
+	}
+
+	#contact-tabs textarea {
+		margin-bottom: 10px;
+	}
+
+
+	#signup-notification {
+		display: none;
+		text-align: center;
+		font-size: 14px;
+		color: #97c356;
+	}
+
+	#loading-icon-container {
+		display: none;
+		padding-top: 20px;
+		text-align: center;
+	}
+
+	.dashicons-update {
+		animation: spin 2s linear infinite;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
 	</style>
 	<?php 
 }
@@ -1154,103 +1205,8 @@ function single_listing_post_content() {
 						echo do_shortcode($options['wp_listings_default_form']);
 
 					} else {
-						echo '<h4>Listing Inquiry</h4>';
-
-						$nameError = '';
-						$emailError = '';
-
-						if(isset($_POST['submitted'])) {
-
-						$url = get_permalink();
-						$listing = get_the_title();
-
-						if(trim($_POST['contactName']) === '') {
-							$nameError = 'Please enter your name.';
-							$hasError = true;
-						} else {
-							$name = trim($_POST['contactName']);
-						}
-
-						if(trim($_POST['email']) === '')  {
-							$emailError = 'Please enter your email address.';
-							$hasError = true;
-						} else if (!preg_match("/^[[:alnum:]][a-z0-9_.-]*@[a-z0-9.-]+\.[a-z]{2,4}$/i", trim($_POST['email']))) {
-							$emailError = 'You entered an invalid email address.';
-							$hasError = true;
-						} else {
-							$email = trim($_POST['email']);
-						}
-
-						$phone = trim($_POST['phone']);
-
-						if(function_exists('stripslashes')) {
-							$comments = stripslashes(trim($_POST['comments']));
-						} else {
-							$comments = trim($_POST['comments']);
-						}
-
-
-						if(!isset($hasError)) {
-							$emailTo = get_the_author_meta( 'user_email', $post->post_author );
-							if (!isset($emailTo) || ($emailTo == '') ){
-								$emailTo = get_option('admin_email');
-							}
-							$subject = 'Listing Inquiry from '.$name;
-							$body = "Name: $name \n\nEmail: $email \n\nPhone: $phone \n\nListing: $listing \n\nURL: $url \n\nComments: $comments";
-							$headers = 'From: '.$name.' <'.$emailTo.'>' . "\r\n" . 'Reply-To: ' . $email;
-
-							wp_mail($emailTo, $subject, $body, $headers);
-							$emailSent = true;
-						}
-
-					} ?>
-
-					<?php if(isset($emailSent) && $emailSent == true) {	?>
-						<div class="thanks">
-							<a name="redirectTo"></a>
-							<p>Thanks, your email was sent! We'll be in touch shortly.</p>
-						</div>
-					<?php } else { ?>
-						<?php if(isset($hasError)) { ?>
-							<a name="redirectTo"></a>
-							<label class="error" name="redirectTo">Sorry, an error occured. Please try again.<label>
-						<?php } ?>
-
-						<form action="<?php the_permalink(); ?>#redirectTo" id="inquiry-form" method="post">
-							<ul class="inquiry-form">
-								<li class="contactName">
-									<label for="contactName">Name: <span class="required">*</span></label>
-									<input type="text" name="contactName" id="contactName" value="<?php if(isset($_POST['contactName'])) echo $_POST['contactName'];?>" class="required requiredField" />
-									<?php if($nameError != '') { ?>
-										<label class="error"><?=$nameError;?></label>
-									<?php } ?>
-								</li>
-
-								<li class="contactEmail">
-									<label for="email">Email: <span class="required">*</span></label>
-									<input type="text" name="email" id="email" value="<?php if(isset($_POST['email']))  echo $_POST['email'];?>" class="required requiredField email" />
-									<?php if($emailError != '') { ?>
-										<label class="error"><?=$emailError;?></label>
-									<?php } ?>
-								</li>
-
-								<li class="contactPhone">
-									<label for="phone">Phone:</label>
-									<input type="text" name="phone" id="phone" value="<?php if(isset($_POST['phone']))  echo $_POST['phone'];?>" />
-								</li>
-
-								<li class="contactComments"><label for="commentsText">Message:</label>
-									<textarea name="comments" id="commentsText" rows="6" cols="20"><?php if(isset($_POST['comments'])) { if(function_exists('stripslashes')) { echo stripslashes($_POST['comments']); } else { echo $_POST['comments']; } } ?></textarea>
-								</li>
-
-								<li>
-									<input id="submit" type="submit" value="Send Inquiry"></input>
-								</li>
-							</ul>
-							<input type="hidden" name="submitted" id="submitted" value="true" />
-						</form>
-					<?php }
-
+						include_once IMPRESS_IDX_DIR . 'add-ons/listings/includes/listing-templates/listing-inquiry-form.php';
+						listing_inquiry_form( $post );
 					}
 					?>
 				</div><!-- .contact-form -->
