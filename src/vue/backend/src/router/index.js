@@ -6,7 +6,6 @@ import routeMeta from './routeMeta'
 import { AGENTS, API_KEY, LISTINGS, SOCIAL_PRO } from '@/data/productTerms'
 import store from '../store'
 import { filterRequires } from '@/utilities'
-import GuidedSetup from '@/views/GuidedSetup.vue'
 import GuidedSetupConnectApi from '@/views/GuidedSetupConnectApi.vue'
 
 Vue.use(VueRouter)
