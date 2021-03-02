@@ -4,15 +4,12 @@
             'content-page--slide-left': !expanded
         }"
     >
-        <SvgSprite/>
         <slot></slot>
     </idx-block>
 </template>
 <script>
 import { mapState } from 'vuex'
-import SvgSprite from '@/components/SvgSprite.vue'
 export default {
-    components: { SvgSprite },
     name: 'page',
     computed: {
         ...mapState({
@@ -23,6 +20,9 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+    overflow-y: scroll;
+}
 .content-page {
   --font-size-h1: 31px;
   --font-size-h2: 25px;
@@ -33,15 +33,14 @@ export default {
   --line-height-h2: 28px;
   --line-height-p: 28px;
   --line-height-p-large: 28px;
-  --wordpress-header-footer-height: 72px;
+    padding: 50px;
+    margin: 135px 30px 0 300px;
     background-color: $white;
     font-size: var(--font-size-p);
-    height: calc(100vh - var(--header-height) - var(--wordpress-header-footer-height));
     line-height: var(--line-height-p);
-    margin: var(--header-height) 0 0px $v-nav-width;
-    padding: 50px;
     position: relative;
     transition: margin-left .5s ease;
+    overflow: auto;
 
     h1,h2,h3,h4,h5,h6 {
         // reset styles
@@ -71,7 +70,7 @@ export default {
     }
 
     &--slide-left {
-        margin-left: 50px;
+        margin-left: 90px;
     }
 
     @media (max-width: 782px) {

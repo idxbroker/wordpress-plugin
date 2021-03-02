@@ -3,11 +3,12 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
-    currencyCodeSelected: '',
-    currencySymbolSelected: '',
+    enabled: true,
+    currencyCodeSelected: 'none',
+    currencySymbolSelected: 'none',
     defaultDisclaimer: '',
-    numberOfPosts: '',
-    listingSlug: '',
+    numberOfPosts: '9',
+    listingSlug: 'listings',
     defaultState: '',
     updateListings: 'update-all',
     soldListings: 'keep-all',

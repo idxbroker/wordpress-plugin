@@ -1,7 +1,7 @@
 <template>
     <idx-block className="idx-content-settings form-content">
         <div>
-            <idx-block className="idx-content-settings__title">Imported Listings</idx-block>
+            <idx-block className="form-content__title">Imported Listings</idx-block>
             <div>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</div>
         </div>
         <div>
@@ -34,9 +34,9 @@
                 })"
             ></idx-rich-select>
         </div>
-        <idx-block className="idx-content-settings">
-            <idx-block className="idx-content-settings__title">Additional Import Options</idx-block>
+        <idx-block className="idx-content-settings idx-content-settings__additional-imports">
             <div>
+                <idx-block className="form-content__title">Additional Import Options</idx-block>
                 <b>{{ toggleLabels[0] }}</b>
                 <div>Description of the automatic import listings setting. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</div>
                 <idx-block className="idx-content-settings__toggle form-content__toggle">
@@ -57,6 +57,7 @@
                     :options="defaultListingTemplateOptions"
                     :selected="defaultListingTemplateSelected"
                     :ariaLabel="defaultListingTemplateLabel"
+                    @toggle="listingsSettingsStateChange({ key: 'defaultListingTemplateSelected', value: $event.value })"
                 ></idx-custom-select>
             </div>
             <div>
@@ -66,6 +67,7 @@
                     :options="importedListingsAuthorOptions"
                     :selected="importedListingsAuthorSelected"
                     :ariaLabel="importedListingsTemplateLabel"
+                    @toggle="listingsSettingsStateChange({ key: 'importedListingsAuthorSelected', value: $event.value })"
                 ></idx-custom-select>
             </div>
             <idx-block className="idx-content-settings__toggle form-content__toggle">
@@ -90,26 +92,28 @@
             </idx-form-group>
         </idx-block>
         <idx-block className="idx-content-settings__advanced">
-            <idx-block className="idx-content-settings__title">Advanced Field Settings</idx-block>
-            <idx-block className="idx-content-settings__toggle form-content__toggle">
-                {{ toggleLabels[2] }}
-                <idx-toggle-slider
-                    uncheckedState="No"
-                    checkedState="Yes"
-                    @toggle="listingsSettingsStateChange({ key: 'advancedFieldData', value: !advancedFieldData })"
-                    :active="advancedFieldData"
-                    :label="toggleLabels[2]"
-                ></idx-toggle-slider>
-            </idx-block>
-            <idx-block className="idx-content-settings__toggle form-content__toggle">
-                {{ toggleLabels[3] }}
-                <idx-toggle-slider
-                    uncheckedState="No"
-                    checkedState="Yes"
-                    @toggle="listingsSettingsStateChange({ key: 'displayAdvancedFields', value: !displayAdvancedFields })"
-                    :active="displayAdvancedFields"
-                    :label="toggleLabels[3]"
-                ></idx-toggle-slider>
+            <idx-block className="form-content__title">Advanced Field Settings</idx-block>
+            <idx-block className="idx-content-settings ">
+                <idx-block className="idx-content-settings__toggle form-content__toggle">
+                    {{ toggleLabels[2] }}
+                    <idx-toggle-slider
+                        uncheckedState="No"
+                        checkedState="Yes"
+                        @toggle="listingsSettingsStateChange({ key: 'advancedFieldData', value: !advancedFieldData })"
+                        :active="advancedFieldData"
+                        :label="toggleLabels[2]"
+                    ></idx-toggle-slider>
+                </idx-block>
+                <idx-block className="idx-content-settings__toggle form-content__toggle">
+                    {{ toggleLabels[3] }}
+                    <idx-toggle-slider
+                        uncheckedState="No"
+                        checkedState="Yes"
+                        @toggle="listingsSettingsStateChange({ key: 'displayAdvancedFields', value: !displayAdvancedFields })"
+                        :active="displayAdvancedFields"
+                        :label="toggleLabels[3]"
+                    ></idx-toggle-slider>
+                </idx-block>
             </idx-block>
         </idx-block>
     </idx-block>
@@ -176,21 +180,21 @@ export default {
     }
 }
 .idx-content-settings {
-    &__title {
-        text-transform: uppercase;
-        letter-spacing: 1.6px;
-        font-weight: 700;
-    }
+    display: flex;
+    flex-direction: column;
+    grid-gap: 40px;
     &__import-title.form-control {
         width: 100%;
         height: 45px;
         padding-left: 15px;
         border-color: $gray-250;
     }
+    &__additional-imports {
+        padding-bottom: 40px;
+        border-bottom: 1px solid $gray-400;
+    }
     &__advanced {
-        padding-top: 25px;
-        border-top: 1px solid $gray-400;
-        .idx-content-settings__title {
+        .form-content__title {
             margin-bottom: 25px;
         }
         .idx-content-settings__toggle {
