@@ -55,20 +55,8 @@
                     @selected-item="omnibarStateChange({ key: 'defaultPropertyTypeSelected', value: $event.value })"
                 ></idx-custom-select>
             </idx-form-group>
-            <idx-form-group>
-                <idx-block className="form-content__toggle">
-                    {{ labels.advancedSettingsLabel }}
-                    <idx-toggle-slider
-                        uncheckedState="Off"
-                        checkedState="On"
-                        @toggle="showAdvanced = !showAdvanced"
-                        :active="showAdvanced"
-                        :label="labels.advancedSettingsLabel"
-                    ></idx-toggle-slider>
-                </idx-block>
-            </idx-form-group>
         </idx-block>
-        <idx-block tag="fieldset" v-if="showAdvanced">
+        <idx-block tag="fieldset">
             <idx-block className="omnibar-form__field-subset">
                 <idx-block className="form-content__header">
                     <idx-block tag="h3" className="form-content__title">MLS Specific Property Type</idx-block>
@@ -152,11 +140,9 @@ export default {
                 countyListLabel: 'County List',
                 postalCodeListLabel: 'Postal Code List',
                 defaultPropertyTypeLabel: 'Default Property Type',
-                advancedSettingsLabel: 'Show Advanced Settings',
                 sortOrderLabel: 'Default Sort Order',
                 addressAutofillLabel: 'Address Autofill MLS'
             },
-            showAdvanced: true,
             sortOrderOptions: [
                 // These are the current values used in the system, we can update them if we want to have it more
                 // human readable.

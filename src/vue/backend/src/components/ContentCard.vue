@@ -65,7 +65,7 @@ export default {
 
     .content-card {
         --space-button: 16px;
-        --content-margin: var(--space-8) var(--space-8) 0;
+        --content-padding: var(--space-8) var(--space-8) 0;
         --footer-margin: var(--space-8);
         --footer-padding: var(--space-8) 0 var(--space-8);
         --sidebar-margin: var(--space-8) var(--space-8) 0;
@@ -88,8 +88,8 @@ export default {
 
         &__content {
             grid-area: content;
-            margin: var(--content-margin);
             overflow-y: auto;
+            padding: var(--content-padding);
 
             h1 {
                 color: inherit;
@@ -142,7 +142,7 @@ export default {
         }
 
         @media only screen and (min-width: 960px)   {
-            --content-margin: var(--space-10) var(--space-8) var(--space-9) var(--space-15);
+            --content-padding: var(--space-10) var(--space-8) var(--space-9) var(--space-15);
             --footer-margin: 0 var(--space-12);
             --footer-padding: var(--space-8) 0 var(--space-8);
             --sidebar-margin: var(--space-10) var(--space-9) var(--space-15) 0;
