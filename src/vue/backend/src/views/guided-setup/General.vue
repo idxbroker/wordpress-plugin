@@ -47,16 +47,18 @@ export default {
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange'
+            generalSettingsStateChange: 'general/generalSettingsStateChange',
+            saveGeneralSettings: 'general/saveGeneralSettings'
         }),
         goBackStep: function () {
             // to-do: go back in history
             this.$router.go(-1)
         },
         goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/omnibar' })
+            this.$router.push({ path: '/guided-setup/listings' })
         },
-        goContinue () {
+        async goContinue () {
+            await this.saveGeneralSettings()
             setTimeout(() => {
                 this.$router.push({ path: '/guided-setup/omnibar' })
             }, 1000)

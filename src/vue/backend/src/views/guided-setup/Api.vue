@@ -62,7 +62,7 @@ export default {
             this.$router.go(-1)
         },
         goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/general' })
+            this.$router.push({ path: '/guided-setup/listings' })
         },
         async goContinue () {
             this.loading = true

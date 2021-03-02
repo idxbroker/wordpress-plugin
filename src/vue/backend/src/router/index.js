@@ -85,24 +85,24 @@ const routes = [
                 component: Generic,
                 children: [
                     {
-                        path: 'welcome',
+                        path: 'connect/welcome',
                         name: 'Welcome',
                         component: () => import('@/views/guided-setup/Welcome')
                     },
                     {
-                        path: 'api',
+                        path: 'connect/api',
                         name: 'Connect Account',
                         component: () => import('@/views/guided-setup/Api')
                     },
                     {
-                        path: 'general',
+                        path: 'connect/general',
                         name: 'General Settings',
                         component: () => import('@/views/guided-setup/General')
                     },
                     {
-                        path: 'omnibar',
-                        name: 'Omnibar Settings',
-                        component: () => import('@/views/guided-setup/Omnibar')
+                        path: 'connect/omnibar',
+                        name: 'Omnibar Settings'
+                        // component
                     },
                     {
                         path: 'listings',
