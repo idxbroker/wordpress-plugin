@@ -81,5 +81,4 @@ export default {
 </script>
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider';
-@import '../styles/formContentStyles.scss';
 </style>

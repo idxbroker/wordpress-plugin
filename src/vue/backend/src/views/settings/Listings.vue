@@ -84,7 +84,6 @@ export default {
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/tabContainer';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider';
-@import '../../styles/formContentStyles.scss';
 .settings-button__save {
     width: 155px;
     height: 50px;
