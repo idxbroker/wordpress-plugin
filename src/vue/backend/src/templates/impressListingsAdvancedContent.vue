@@ -153,10 +153,8 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '~bootstrap/scss/forms';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect';
-@import '../styles/formContentStyles.scss';
 .fieldset hr {
     border: 1px solid $gray-400;
     margin-bottom: var(--space-6);

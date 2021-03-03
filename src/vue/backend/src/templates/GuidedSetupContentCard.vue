@@ -61,10 +61,13 @@ export default {
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/dialog';
 
     .dialog__mask {
+        --dialog-header-height: 48px;
+        --dialog-wrapper-space: 60px;
         z-index: 99999;
     }
 
     .gs-dialog .dialog__container {
+        height: calc(100vh - var(--dialog-header-height) - var(--dialog-wrapper-space) * 2);
         max-width: 1030px;
     }
 
@@ -73,7 +76,7 @@ export default {
         background: $gray-800;
         color: $white;
         display: flex;
-        height: 48px;
+        height: var(--dialog-header-height);
         justify-content: space-between;
         letter-spacing: 1.6px;
         padding: 0 var(--space-4);

@@ -20,6 +20,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../styles/formContentStyles.scss';
 body {
     overflow-y: scroll;
 }
