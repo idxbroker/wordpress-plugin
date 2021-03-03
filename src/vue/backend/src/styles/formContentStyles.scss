@@ -2,6 +2,7 @@
 .form-content {
     display: flex;
     flex-direction: column;
+    grid-gap: 40px;
     font-size: 1rem;
     color: $gray-875;
     &__toggle {
@@ -11,18 +12,27 @@
         padding: 12px 20px;
         background-color: $gray-150;
 
+        .toggle-switch {
+            width: 65px;
+
+            &__checkbox:checked+.toggle-switch__slider:before {
+                transform: translateX(36px);
+            }
+        }
+
         @media (max-width: 630px) {
             flex-direction: column;
             align-items: end;
             grid-gap: 10px;
         }
     }
-    .form-control {
-        border: 1px solid $gray-250;
-        padding-left: 15px;
+    &__title {
+        text-transform: uppercase;
+        letter-spacing: 1.6px;
+        font-weight: 700;
     }
     &__header {
-        margin-bottom: 24px;
+        margin-bottom: 0px;
     }
     &__label {
         margin-bottom: 5px;
@@ -33,20 +43,23 @@
         font-size: 1em;
         margin-bottom: 5px;
     }
-    input:focus {
+    .form-control,
+    input {
+        border: 1px solid $gray-250;
+        padding-left: 15px;
+    }
+    input:focus,
+    textarea:focus {
         border-color: $gray-400;
         box-shadow: 0 0 0 1px $gray-400;
     }
-    .toggle-switch {
-        width: 65px;
-        &__checkbox:checked + .toggle-switch__slider:before {
-            transform: translateX(36px);
-        }
-    }
 }
-
+.custom-select__options {
+	height: 300px;
+	overflow: auto;
+}
 .form-group {
-    margin-bottom: 40px;
+    margin-bottom: 0px;
     position: relative;
 }
 
