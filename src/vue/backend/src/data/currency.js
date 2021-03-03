@@ -1,5 +1,5 @@
 const currencyCodes = [
-    { value: '', label: 'None' },
+    { value: 'none', label: 'None' },
     { value: 'USD', label: 'United States dollar' },
     { value: 'GBP', label: 'British pound' },
     { value: 'CAD', label: 'Canadian dollar' },
@@ -164,7 +164,7 @@ const currencyCodes = [
 
 const currencySymbols = [
     {
-        value: ' ',
+        value: 'none',
         label: 'None'
     },
     {

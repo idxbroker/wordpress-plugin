@@ -49,9 +49,9 @@ add_action('wp_enqueue_scripts', 'enqueue_single_listing_scripts');
 function enqueue_single_listing_scripts() {
 	wp_enqueue_style( 'wp-listings-single' );
 	wp_enqueue_style( 'font-awesome-5.8.2' );
-	wp_enqueue_script( 'jquery-validate', array('jquery'), true, true );
-	wp_enqueue_script( 'fitvids', array('jquery'), true, true );
-	wp_enqueue_script( 'wp-listings-single', array('jquery, jquery-ui-tabs', 'jquery-validate'), true, true );
+	wp_enqueue_script( 'jquery-validate', [ 'jquery' ], true, true );
+	wp_enqueue_script( 'fitvids', [ 'jquery' ], true, true );
+	wp_enqueue_script( 'wp-listings-single', [ 'jquery, jquery-ui-tabs', 'jquery-validate' ], true, true );
 }
 
 function single_listing_post_content() {
@@ -64,7 +64,7 @@ function single_listing_post_content() {
 	<div itemscope itemtype="http://schema.org/SingleFamilyResidence" class="entry-content wplistings-single-listing">
 
 		<div class="listing-image-wrap">
-			<?php echo '<div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">'. get_the_post_thumbnail( $post->ID, 'listings-full', array('class' => 'single-listing-image', 'itemprop'=>'contentUrl') ) . '</div>';
+			<?php echo '<div itemprop="image" itemscope itemtype="http://schema.org/ImageObject">'. get_the_post_thumbnail( $post->ID, 'listings-full', [ 'class' => 'single-listing-image', 'itemprop' => 'contentUrl' ] ) . '</div>';
 			if ( '' != wp_listings_get_status() ) {
 				printf( '<span class="listing-status %s">%s</span>', strtolower(str_replace(' ', '-', wp_listings_get_status())), wp_listings_get_status() );
 			}
@@ -363,221 +363,10 @@ function single_listing_post_content() {
 				echo do_shortcode($options['wp_listings_default_form']);
 
 			} else {
-
-				echo '<h4>Listing Inquiry</h4>';
-				$firstNameError = '';
-				$lastNameError = '';
-				$emailError = '';
-				$response = '';
-
-				if(isset($_POST['submitted'])) {
-
-					$url = get_permalink();
-					$listing = get_the_title();
-
-					if(trim($_POST['firstName']) === '') {
-						$firstNameError = 'Please enter your first name.';
-						$hasError = true;
-					} else {
-						$firstName = esc_html(trim($_POST['firstName']));
-					}
-
-					if(trim($_POST['lastName']) === '') {
-						$lastNameError = 'Please enter your last name.';
-						$hasError = true;
-					} else {
-						$lastName = esc_html(trim($_POST['lastName']));
-					}
-
-					if(trim($_POST['email']) === '')  {
-						$emailError = 'Please enter your email address.';
-						$hasError = true;
-					} else if (!is_email(trim($_POST['email']))) {
-						$emailError = 'You entered an invalid email address.';
-						$hasError = true;
-					} else {
-						$email = esc_html(trim($_POST['email']));
-					}
-
-					$phone = esc_html(trim($_POST['phone']));
-
-					if(function_exists('stripslashes')) {
-						$comments = esc_html(stripslashes(trim($_POST['comments'])));
-					} else {
-						$comments = esc_html(trim($_POST['comments']));
-					}
-
-					if($options['wp_listings_captcha_site_key'] != '' && $options['wp_listings_captcha_secret_key'] != '') {
-						require_once( WP_LISTINGS_DIR . '/includes/recaptcha.php' );
-
-						// your secret key
-						$secret = $options['wp_listings_captcha_secret_key'];
-
-						$gRecaptchaResponse = $_POST["g-recaptcha-response"];
-						$remoteIp = $_SERVER["REMOTE_ADDR"];
-
-						$recaptcha = new \ReCaptcha\ReCaptcha($secret);
-						$resp = $recaptcha->verify($gRecaptchaResponse, $remoteIp);
-						if ($resp->isSuccess()) {
-						    // verified!
-						    $emailSent = true;
-						} else {
-						    $errors = $resp->getErrorCodes();
-						    $emailSent = true;
-						}
-					}
-
-					if(isset($_POST['antispam']) && $_POST['antispam'] == '' || $resp != null && $resp->isSuccess()) {
-						if(!isset($hasError)) {
-							$emailTo = get_the_author_meta( 'user_email', $post->post_author );
-							if (!isset($emailTo) || ($emailTo == '') ){
-								$emailTo = get_option('admin_email');
-							}
-							$subject = 'Listing Inquiry from '. $firstName . ' ' . $lastName;
-							$body = 'Name: ' . $firstName . ' ' . $lastName . "\n\n" .'Email: ' . $email . "\n\n" . 'Phone: ' . $phone . "\n\n" . 'Listing: ' . $listing . "\n\n" . 'URL: ' . $url . "\n\n" .'Comments: ' . $comments;
-							$headers = 'From: '.$firstName . ' ' . $lastName .' <'.$emailTo.'>' . "\r\n" . 'Reply-To: ' . $email;
-
-							wp_mail($emailTo, $subject, $body, $headers);
-
-							// If option is set. PUT or POST contact form data to IDX as a lead or lead note
-							if($options['wp_listings_idx_lead_form'] == 1) {
-								$lead_data = array(
-									'firstName' => $firstName,
-									'lastName'  => $lastName,
-									'email'		=> $email,
-									'phone'		=> (isset($phone)) ? $phone : ''
-								);
-								$api_url = 'https://api.idxbroker.com/leads/lead';
-								$args = array(
-									'method' => 'PUT',
-									'headers' => array(
-										'content-type' => 'application/x-www-form-urlencoded',
-										'accesskey'    => get_option('idx_broker_apikey'),
-										'outputtype'   => 'json'
-									),
-									'sslverify' => false,
-									'body'		=> http_build_query($lead_data)
-								);
-								$response = wp_remote_request($api_url, $args);
-
-								// Check for error then add note
-								if (is_wp_error($response)) {
-									$hasError = true;
-								} else {
-
-									$decoded_response = json_decode($response['body']);
-									$note = array(
-										'note' => (isset($comments) && $comments != '') ? 'I\'m interested in this listing: <a href="' . $url . '">' . $listing . '</a>' . "\n\n" . 'Comments: ' . $comments : 'I\'m interested in this listing: <a href="' . $url . '">' . $listing . '</a>'
-									);
-
-									// Add note if lead already exists
-									if($decoded_response == 'Lead already exists.') {
-										$args = array_replace($args, array('method' => 'GET', 'body' => null));
-
-										// Get leads
-										if ( false === ( $all_leads = get_transient('idx_leads') ) ) {
-											$response = wp_remote_request($api_url, $args);
-											$all_leads = json_decode($response['body'], 1);
-											set_transient('idx_leads', $all_leads, 60*60*1);
-										}
-
-										// Loop through leads to match email address
-										foreach($all_leads as $leads => $lead) {
-											if($lead['email'] == $email) {
-												$api_url = 'https://api.idxbroker.com/leads/note/' . $lead['id'];
-												$args = array_replace($args, array('method' => 'PUT', 'body' => http_build_query($note)));
-												$response = wp_remote_request($api_url, $args);
-												if (is_wp_error($response)) {
-													$hasError = true;
-												}
-											}
-										}
-									} else {
-										// Add note for new lead
-										$lead_id = $decoded_response->newID;
-										$api_url = 'https://api.idxbroker.com/leads/note/' . $lead_id;
-										$args = array_replace($args, array('body' => http_build_query($note)));
-										$response = wp_remote_request($api_url, $args);
-										if (is_wp_error($response)) {
-											$hasError = true;
-										}
-									}
-								}
-							}
-							$emailSent = true;
-						}
-					} else {
-						$emailSent = true; // make spammer think message went through
-					}
-				}
-				?>
-
-			<?php if(isset($emailSent) && $emailSent == true) {	?>
-				<div class="thanks">
-					<a name="redirectTo"></a>
-					<p>Thanks, your message was sent! We'll be in touch shortly.</p>
-				</div>
-			<?php } else { ?>
-				<?php if(isset($hasError)) { ?>
-					<a name="redirectTo"></a>
-					<label class="error" name="redirectTo">Sorry, an error occured. Please try again.<label>
-				<?php } ?>
-
-				<form action="<?php the_permalink(); ?>#redirectTo" id="inquiry-form" method="post">
-					<ul class="inquiry-form">
-						<li class="firstName">
-							<label for="firstName">First name: <span class="required">*</span></label>
-							<input type="text" name="firstName" id="firstName" value="<?php if(isset($_POST['firstName'])) echo esc_html($_POST['firstName']);?>" class="required requiredField" />
-							<?php if($firstNameError != '') { ?>
-								<label class="error"><?=$firstNameError;?></label>
-							<?php } ?>
-						</li>
-
-						<li class="lastName">
-							<label for="lastName">Last name: <span class="required">*</span></label>
-							<input type="text" name="lastName" id="lastName" value="<?php if(isset($_POST['lastName'])) echo esc_html($_POST['lastName']);?>" class="required requiredField" />
-							<?php if($lastNameError != '') { ?>
-								<label class="error"><?=$lastNameError;?></label>
-							<?php } ?>
-						</li>
-
-						<li class="contactEmail">
-							<label for="email">Email: <span class="required">*</span></label>
-							<input type="text" name="email" id="email" value="<?php if(isset($_POST['email']))  echo esc_html($_POST['email']);?>" class="required requiredField email" />
-							<?php if($emailError != '') { ?>
-								<label class="error"><?=$emailError;?></label>
-							<?php } ?>
-						</li>
-
-						<li class="contactPhone">
-							<label for="phone">Phone:</label>
-							<input type="text" name="phone" id="phone" value="<?php if(isset($_POST['phone']))  echo esc_html($_POST['phone']);?>" />
-						</li>
-
-						<li class="contactComments"><label for="commentsText">Message:</label>
-							<textarea name="comments" id="commentsText" rows="6" cols="20"><?php if(isset($_POST['comments'])) echo esc_html($_POST['comments']); ?></textarea>
-						</li>
-
-						<?php
-						if($options['wp_listings_captcha_site_key'] != '' && $options['wp_listings_captcha_secret_key'] != '') {
-							echo '<div class="g-recaptcha" data-sitekey="'. $options['wp_listings_captcha_site_key'] .'"></div>';
-							echo '<script src="https://www.google.com/recaptcha/api.js"></script>';
-						} else {
-							echo '<li>
-									<input style="display: none;" type="text" name="antispam" />
-								</li>';
-						}
-						?>
-
-						<li>
-							<input id="submit" type="submit" value="Send Inquiry"></input>
-						</li>
-					</ul>
-					<input type="hidden" name="submitted" id="submitted" value="true" />
-				</form>
-			<?php }
-
+				include_once IMPRESS_IDX_DIR . 'add-ons/listings/includes/listing-templates/listing-inquiry-form.php';
+				listing_inquiry_form( $post );
 			}
+
 			?>
 		</div><!-- .listing-contact -->
 

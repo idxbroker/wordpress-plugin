@@ -483,3 +483,41 @@
 		margin-left: 0;
 	}
 }
+
+#contact-tabs {
+	ul {
+		display: flex;
+		height: 42px;
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+	}
+
+	textarea {
+		margin-bottom: 10px;
+	}
+}
+
+#signup-notification {
+	display: none;
+	text-align: center;
+	font-size: 14px;
+	color: #97c356;
+}
+
+#loading-icon-container {
+	display: none;
+	padding-top: 20px;
+	text-align: center;
+}
+
+.dashicons-update {
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

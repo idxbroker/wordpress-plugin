@@ -1,5 +1,6 @@
 <template>
     <idx-block className="content-card">
+        <SvgSprite/>
         <idx-block className="content-card__stepper">
             <idx-progress-stepper
                 v-for="step in steps"
@@ -35,11 +36,13 @@
 <script>
 import RelatedLinks from '@/components/RelatedLinks.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
+import SvgSprite from '@/components/SvgSprite.vue'
 export default {
     name: 'ContentCard',
     components: {
         RelatedLinks,
-        SvgIcon
+        SvgIcon,
+        SvgSprite
     },
     props: {
         cardTitle: {
