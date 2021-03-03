@@ -11,7 +11,7 @@
                 id="default-state"
                 placeholder="Enter your default state"
                 :value="defaultState"
-                @change="listingsSettingsStateChange({ key: defaultState, value: $event.target.value })"
+                @change="setItem({ key: 'defaultState', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Default Currency</idx-block> Description of the Default Currency setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</idx-block>
@@ -22,7 +22,7 @@
                 placeholder="None"
                 :selected="currencySymbolSelected"
                 :options="currency.currencySymbols"
-                @selected-item="listingsSettingsStateChange({ key: 'currencySymbolSelected', value: $event.value })"
+                @selected-item="setItem({ key: 'currencySymbolSelected', value: $event.value })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -32,7 +32,7 @@
                 placeholder="None"
                 :selected="currencyCodeSelected"
                 :options="currency.currencyCodes"
-                @selected-item="listingsSettingsStateChange({ key: 'currencyCodeSelected', value: $event.value })"
+                @selected-item="setItem({ key: 'currencyCodeSelected', value: $event.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Default Number of Posts</idx-block> Description of the Default Number of Posts setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
@@ -42,7 +42,7 @@
                 type="text"
                 id="default-posts"
                 :value="numberOfPosts"
-                @change="listingsSettingsStateChange({ key: numberOfPosts, value: $event.target.value })"
+                @change="setItem({ key: numberOfPosts, value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Default Disclaimer</idx-block> Description of the Default Disclaimer setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
@@ -54,7 +54,7 @@
                 customClass="listings-general__default-disclaimer"
                 placeholder="Disclaimer text"
                 rows="3"
-                @change="listingsSettingsStateChange({ key: defaultDisclaimer, value: $event.target.value })"
+                @change="setItem({ key: defaultDisclaimer, value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Listings Slug</idx-block> Description of the Listings Slug setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
@@ -64,7 +64,7 @@
                 type="text"
                 id="listings-slug"
                 :value="listingSlug"
-                @change="listingsSettingsStateChange({ key: listingSlug, value: $event.target.value })"
+                @change="setItem({ key: listingSlug, value: $event.target.value })"
             />
         </idx-form-group>
     </idx-block>
@@ -91,7 +91,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            listingsSettingsStateChange: 'listingsSettings/listingsSettingsStateChange'
+            setItem: 'listingsSettings/setItem'
         })
     }
 }

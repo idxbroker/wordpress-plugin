@@ -49,12 +49,13 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.general.guidedSetupSteps
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange',
+            setItem: 'general/setItem',
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             verifyAPIkey: 'general/verifyAPIkey'
         }),
         goBackStep: function () {
@@ -74,6 +75,9 @@ export default {
                 this.$router.push({ path: '/guided-setup/connect/general' })
             }, 3000)
         }
+    },
+    mounted () {
+        this.progressStepperUpdate([1, 0, 0, 0])
     }
 }
 </script>

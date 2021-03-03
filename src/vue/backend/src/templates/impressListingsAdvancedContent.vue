@@ -11,7 +11,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="listingsSettingsStateChange({ key: 'deregisterMainCss', value: !deregisterMainCss })"
+                        @toggle="setItem({ key: 'deregisterMainCss', value: !deregisterMainCss })"
                         :active="deregisterMainCss"
                         :label="mainCssLabel"
                     ></idx-toggle-slider>
@@ -23,7 +23,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="listingsSettingsStateChange({ key: 'deregisterWidgetCss', value: !deregisterWidgetCss })"
+                        @toggle="setItem({ key: 'deregisterWidgetCss', value: !deregisterWidgetCss })"
                         :active="deregisterWidgetCss"
                         :label="widgetsCssLabel"
                     ></idx-toggle-slider>
@@ -41,7 +41,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="listingsSettingsStateChange({ key: 'sendFormSubmission', value: !sendFormSubmission })"
+                        @toggle="setItem({ key: 'sendFormSubmission', value: !sendFormSubmission })"
                         :active="sendFormSubmission"
                         :label="sendFormLabel"
                     ></idx-toggle-slider>
@@ -57,7 +57,7 @@
                     type="text"
                     id="form-shortcode"
                     :value="formShortcode"
-                    @change="listingsSettingsStateChange({ key: 'formShortcode', value: $event.target.value })"
+                    @change="setItem({ key: 'formShortcode', value: $event.target.value })"
                 />
             </idx-form-group>
         </idx-block>
@@ -73,7 +73,7 @@
                     type="text"
                     id="google-maps"
                     :value="googleMapsAPIKey"
-                    @change="listingsSettingsStateChange({ key: 'googleMapsAPIKey', value: $event.target.value })"
+                    @change="setItem({ key: 'googleMapsAPIKey', value: $event.target.value })"
                 />
             </idx-form-group>
         </idx-block>
@@ -88,7 +88,7 @@
                     type="text"
                     id="wrapper-start-html"
                     :value="wrapperStart"
-                    @change="listingsSettingsStateChange({ key: 'wrapperStart', value: $event.target.value })"
+                    @change="setItem({ key: 'wrapperStart', value: $event.target.value })"
                 />
             </idx-form-group>
             <idx-form-group>
@@ -97,7 +97,7 @@
                     type="text"
                     id="wrapper-end-html"
                     :value="wrapperEnd"
-                    @change="listingsSettingsStateChange({ key: 'wrapperEnd', value: $event.target.value })"
+                    @change="setItem({ key: 'wrapperEnd', value: $event.target.value })"
                 />
             </idx-form-group>
         </idx-block>
@@ -112,7 +112,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="listingsSettingsStateChange({ key: 'sendFormSubmission', value: !sendFormSubmission })"
+                        @toggle="setItem({ key: 'sendFormSubmission', value: !sendFormSubmission })"
                         :active="sendFormSubmission"
                         :label="pluginUninstallationLabel"
                     ></idx-toggle-slider>
@@ -147,7 +147,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            listingsSettingsStateChange: 'listingsSettings/listingsSettingsStateChange'
+            setItem: 'listingsSettings/setItem'
         })
     }
 }

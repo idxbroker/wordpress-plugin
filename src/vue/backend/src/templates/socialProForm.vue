@@ -7,7 +7,7 @@
             <idx-toggle-slider
                 uncheckedState="No"
                 checkedState="Yes"
-                @toggle="socialProStateChange({ key: 'enableSyndication', value: !enableSyndication })"
+                @toggle="setItem({ key: 'enableSyndication', value: !enableSyndication })"
                 :active="enableSyndication"
                 :label="toggleLabel"
             ></idx-toggle-slider>
@@ -21,7 +21,7 @@
                     ariaLabel="Select Autopublish setting"
                     :selected="autopublish"
                     :options="autopublishOptions"
-                    @selected-item="socialProStateChange({ key: 'autopublish', value: $event.value })"
+                    @selected-item="setItem({ key: 'autopublish', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
             <idx-block className="social-pro-form__field">
@@ -30,7 +30,7 @@
                     ariaLabel="Select post day"
                     :selected="postDay"
                     :options="postDayOptions"
-                    @selected-item="socialProStateChange({ key: 'postDay', value: $event.value })"
+                    @selected-item="setItem({ key: 'postDay', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
             <idx-block className="social-pro-form__field">
@@ -39,7 +39,7 @@
                     ariaLabel="Select post type"
                     :selected="postType"
                     :options="postTypeOptions"
-                    @selected-item="socialProStateChange({ key: 'postType', value: $event.value })"
+                    @selected-item="setItem({ key: 'postType', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
         </idx-block>
@@ -81,7 +81,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            socialProStateChange: 'socialPro/socialProStateChange'
+            setItem: 'socialPro/setItem'
         })
     }
 }

@@ -20,7 +20,7 @@
                 :invalid="error"
                 :valid="success"
                 :value="apiKey"
-                @change="generalSettingsStateChange({ key: 'apiKey', value: $event.target.value })"
+                @change="setItem({ key: 'apiKey', value: $event.target.value })"
                 required
             />
             <idx-block className="spinner-border" role="status" v-if="loading">
@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange'
+            setItem: 'general/setItem'
         })
     }
 }
