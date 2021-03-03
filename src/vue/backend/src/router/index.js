@@ -122,28 +122,23 @@ const routes = [
                     },
                     {
                         path: 'listings',
-                        children: [
-                            {
-                                path: 'activate',
-                                name: 'Activate IMPress Listings'
-                                // component
-                            },
-                            {
-                                path: 'general',
-                                name: 'Configure General IMPress Listings'
-                                // component
-                            },
-                            {
-                                path: 'idx',
-                                name: 'Configure IDX IMPress Listings'
-                                // component
-                            },
-                            {
-                                path: 'advanced',
-                                name: 'Configure Advanced IMPress Listings'
-                                // component
-                            }
-                        ]
+                        name: 'Activate IMPress Listings',
+                        component: () => import('@/views/guided-setup/Listings')
+                    },
+                    {
+                        path: 'listings/general',
+                        name: 'Configure General IMPress Listings'
+                        // component
+                    },
+                    {
+                        path: 'listings/idx',
+                        name: 'Configure IDX IMPress Listings'
+                        // component
+                    },
+                    {
+                        path: 'listings/advanced',
+                        name: 'Configure Advanced IMPress Listings'
+                        // component
                     },
                     {
                         path: 'agents',
