@@ -9,6 +9,11 @@ const saveGeneralSettings = () => {
     return new Promise(resolve => setTimeout(resolve, 1000))
 }
 
+const saveListingsSettings = () => {
+    // To-Do: add actual endpoints
+    return new Promise(resolve => setTimeout(resolve, 1000))
+}
+
 const saveOmnibarSettings = () => {
     // To-Do: add actual endpoints
     return new Promise(resolve => setTimeout(resolve, 1000))
@@ -16,6 +21,7 @@ const saveOmnibarSettings = () => {
 
 export default {
     saveGeneralSettings,
+    saveListingsSettings,
     saveOmnibarSettings,
     verifyAPIkey
 }
