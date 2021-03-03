@@ -69,5 +69,4 @@ export default {
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider';
-@import '../styles/formContentStyles.scss';
 </style>

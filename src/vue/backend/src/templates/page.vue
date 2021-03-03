@@ -4,13 +4,18 @@
             'content-page--slide-left': !expanded
         }"
     >
+        <SvgSprite/>
         <slot></slot>
     </idx-block>
 </template>
 <script>
 import { mapState } from 'vuex'
+import SvgSprite from '@/components/SvgSprite.vue'
 export default {
     name: 'page',
+    components: {
+        SvgSprite
+    },
     computed: {
         ...mapState({
             expanded: state => state.routes.expanded
@@ -20,6 +25,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/styles/formContentStyles.scss';
 body {
     overflow-y: scroll;
 }
