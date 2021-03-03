@@ -1,12 +1,3 @@
-import * as types from '../../common/mutationTypes'
-
-const generalSettingsStateChange = ({ commit }, payload) => {
-    commit(types.SET_ITEM, {
-        key: payload.key,
-        value: payload.value
-    })
-}
-
 const verifyAPIkey = () => {
     // To-Do: Do API call here
     // This is a placeholder to mimic response time
@@ -24,7 +15,6 @@ const saveOmnibarSettings = () => {
 }
 
 export default {
-    generalSettingsStateChange,
     saveGeneralSettings,
     saveOmnibarSettings,
     verifyAPIkey

@@ -16,7 +16,7 @@
                 :ariaLabel="labels.cityListLabel"
                 :selected="cityListSelected"
                 :options="cityListOptions"
-                @selected-item="omnibarStateChange({ key: 'cityListSelected', value: $event.value })"
+                @selected-item="setItem({ key: 'cityListSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-form-group>
@@ -26,7 +26,7 @@
                 :ariaLabel="labels.countyListLabel"
                 :selected="countyListSelected"
                 :options="countyListOptions"
-                @selected-item="omnibarStateChange({ key: 'countyListSelected', value: $event.value })"
+                @selected-item="setItem({ key: 'countyListSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-form-group>
@@ -36,7 +36,7 @@
                 placeholder="Select"
                 :selected="postalCodeSelected"
                 :options="postalCodeListOptions"
-                @selected-item="omnibarStateChange({ key: 'postalCodeSelected', value: $event.value })"
+                @selected-item="setItem({ key: 'postalCodeSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <hr/>
@@ -51,7 +51,7 @@
                 placeholder="Choose the property type for default and custom fields"
                 :selected="defaultPropertyTypeSelected"
                 :options="defaultPropertyTypeOptions"
-                @selected-item="omnibarStateChange({ key: 'defaultPropertyTypeSelected', value: $event.value })"
+                @selected-item="setItem({ key: 'defaultPropertyTypeSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-block className="omnibar-form__field-subset">
@@ -68,7 +68,7 @@
                     :ariaLabel="mls.name"
                     :selected="mls.selected"
                     :options="mls.propertyTypes"
-                    @selected-item="omnibarMLSStateChange({ key: 'mlsMembership', value: [ mls, $event.value, key, mlsMembership ] })"
+                    @selected-item="setItem({ key: 'mlsMembership', value: [ mls, $event.value, key, mlsMembership ] })"
                 ></idx-custom-select>
             </idx-form-group>
         </idx-block>
@@ -83,7 +83,7 @@
                 placeholder="Select MLS Source"
                 :selected="autofillMLS"
                 :options="mlsNames"
-                @selected-item="omnibarStateChange({ key: 'autofillMLS', value: $event.value })"
+                @selected-item="setItem({ key: 'autofillMLS', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-block className="form-content__header">
@@ -110,7 +110,7 @@
                 type="text"
                 customClass=""
                 :value="customPlaceholder"
-                @change="omnibarStateChange({ key: 'customPlaceholder', value: $event.target.value })"
+                @change="setItem({ key: 'customPlaceholder', value: $event.target.value })"
             ></idx-form-input>
         </idx-form-group>
         <idx-form-group>
@@ -122,7 +122,7 @@
                 :ariaLabel="labels.sortOrderLabel"
                 :selected="defaultSortOrderSelected"
                 :options="sortOrderOptions"
-                @selected-item="omnibarStateChange({ key: 'defaultSortOrderSelected', value: $event.value })"
+                @selected-item="setItem({ key: 'defaultSortOrderSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
     </idx-block>
@@ -182,7 +182,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            omnibarStateChange: 'omnibar/omnibarStateChange',
+            setItem: 'omnibar/setItem',
             omnibarMLSStateChange: 'omnibar/omnibarMLSStateChange'
         })
     }
