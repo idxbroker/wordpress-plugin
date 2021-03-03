@@ -4,11 +4,11 @@ import mutations from './mutations'
 
 const state = {
     enabled: true,
-    currencyCodeSelected: '',
-    currencySymbolSelected: '',
+    currencyCodeSelected: 'none',
+    currencySymbolSelected: 'none',
     defaultDisclaimer: '',
-    numberOfPosts: '',
-    listingSlug: '',
+    numberOfPosts: '9',
+    listingSlug: 'listings',
     defaultState: '',
     updateListings: 'update-all',
     soldListings: 'keep-all',
