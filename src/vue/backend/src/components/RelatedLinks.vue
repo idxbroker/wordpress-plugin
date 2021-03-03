@@ -34,8 +34,7 @@ export default {
     @import '~bootstrap/scss/list-group';
 
     .card {
-        // color isn't available in VCL
-        border: 1px solid #EFEFEF;
+        border: 1px solid $gray-250;
         max-width: 300px;
         min-height: 226px;
         padding: var(--space-6);

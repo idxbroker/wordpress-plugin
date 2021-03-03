@@ -6,7 +6,7 @@
                 type="text"
                 id="website-wrapper"
                 :value="wrapperName"
-                @change="generalSettingsStateChange({ key: 'wrapperName', value: $event.target.value })"
+                @change="setItem({ key: 'wrapperName', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -16,7 +16,7 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="generalSettingsStateChange({ key: 'reCAPTCHA', value: !reCAPTCHA })"
+                    @toggle="setItem({ key: 'reCAPTCHA', value: !reCAPTCHA })"
                     :active="reCAPTCHA"
                     :label="toggleLabel"
                 ></idx-toggle-slider>
@@ -28,7 +28,7 @@
                 ariaLabel="Update Frequency"
                 :selected="updateFrequency"
                 :options="updateFrequencyOptions"
-                @selected-item="generalSettingsStateChange({ key: 'updateFrequency', value: $event.value })"
+                @selected-item="setItem({ key: 'updateFrequency', value: $event.value })"
             />
         </idx-form-group>
     </idx-block>
@@ -61,7 +61,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange'
+            setItem: 'general/setItem'
         })
     }
 }

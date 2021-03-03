@@ -42,12 +42,13 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.general.guidedSetupSteps
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange',
+            setItem: 'general/setItem',
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveOmnibarSettings: 'general/saveOmnibarSettings'
         }),
         goBackStep: function () {
@@ -61,6 +62,9 @@ export default {
             await this.saveOmnibarSettings()
             this.$router.push({ path: '/guided-setup/listings' })
         }
+    },
+    mounted () {
+        this.progressStepperUpdate([3, 0, 0, 0])
     }
 }
 </script>

@@ -41,12 +41,13 @@ export default {
     computed: {
         ...mapState({
             enabled: state => state.listingsSettings.enabled,
-            guidedSetupSteps: state => state.general.guidedSetupSteps
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            listingsSettingsStateChange: 'listingsSettings/listingsSettingsStateChange',
+            setItem: 'general/setItem',
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveListingsGeneralSettings: 'general/saveListingsGeneralSettings'
         }),
         goBackStep: function () {
@@ -60,6 +61,9 @@ export default {
             await this.saveListingsGeneralSettings()
             this.$router.push({ path: '/guided-setup/listings/idx' })
         }
+    },
+    mounted () {
+        this.progressStepperUpdate([4, 2, 0, 0])
     }
 }
 </script>

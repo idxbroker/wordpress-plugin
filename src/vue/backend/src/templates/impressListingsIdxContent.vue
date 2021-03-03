@@ -13,7 +13,7 @@
                 :description="option.description"
                 :radio="false"
                 :checked="updateListings === option.value"
-                @change="listingsSettingsStateChange({
+                @change="setItem({
                     key: 'updateListings',
                     value: option.value
                 })"
@@ -28,7 +28,7 @@
                 :description="option.description"
                 :radio="false"
                 :checked="soldListings === option.value"
-                @change="listingsSettingsStateChange({
+                @change="setItem({
                     key: 'soldListings',
                     value: option.value
                 })"
@@ -44,7 +44,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="listingsSettingsStateChange({ key: 'automaticImport', value: !automaticImport })"
+                        @toggle="setItem({ key: 'automaticImport', value: !automaticImport })"
                         :active="automaticImport"
                         :label="toggleLabels[0]"
                     ></idx-toggle-slider>
@@ -57,7 +57,7 @@
                     :options="defaultListingTemplateOptions"
                     :selected="defaultListingTemplateSelected"
                     :ariaLabel="defaultListingTemplateLabel"
-                    @toggle="listingsSettingsStateChange({ key: 'defaultListingTemplateSelected', value: $event.value })"
+                    @toggle="setItem({ key: 'defaultListingTemplateSelected', value: $event.value })"
                 ></idx-custom-select>
             </div>
             <div>
@@ -67,7 +67,7 @@
                     :options="importedListingsAuthorOptions"
                     :selected="importedListingsAuthorSelected"
                     :ariaLabel="importedListingsTemplateLabel"
-                    @toggle="listingsSettingsStateChange({ key: 'importedListingsAuthorSelected', value: $event.value })"
+                    @toggle="setItem({ key: 'importedListingsAuthorSelected', value: $event.value })"
                 ></idx-custom-select>
             </div>
             <idx-block className="idx-content-settings__toggle form-content__toggle">
@@ -75,7 +75,7 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="listingsSettingsStateChange({ key: 'displayIDXLink', value: !displayIDXLink })"
+                    @toggle="setItem({ key: 'displayIDXLink', value: !displayIDXLink })"
                     :active="displayIDXLink"
                     :label="toggleLabels[1]"
                 ></idx-toggle-slider>
@@ -87,7 +87,7 @@
                     type="text"
                     customClass="idx-content-settings__import-title"
                     :value="importTitle"
-                    @change="listingsSettingsStateChange({ key: 'importTitle', value: $event.target.value })"
+                    @change="setItem({ key: 'importTitle', value: $event.target.value })"
                 ></idx-form-input>
             </idx-form-group>
         </idx-block>
@@ -99,7 +99,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="listingsSettingsStateChange({ key: 'advancedFieldData', value: !advancedFieldData })"
+                        @toggle="setItem({ key: 'advancedFieldData', value: !advancedFieldData })"
                         :active="advancedFieldData"
                         :label="toggleLabels[2]"
                     ></idx-toggle-slider>
@@ -109,7 +109,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="listingsSettingsStateChange({ key: 'displayAdvancedFields', value: !displayAdvancedFields })"
+                        @toggle="setItem({ key: 'displayAdvancedFields', value: !displayAdvancedFields })"
                         :active="displayAdvancedFields"
                         :label="toggleLabels[3]"
                     ></idx-toggle-slider>
@@ -161,7 +161,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            listingsSettingsStateChange: 'listingsSettings/listingsSettingsStateChange'
+            setItem: 'listingsSettings/setItem'
         })
     }
 }

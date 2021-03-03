@@ -1,11 +1,5 @@
 import * as types from '../../common/mutationTypes'
 
-const omnibarStateChange = ({ commit }, payload) => {
-    commit(types.SET_ITEM, {
-        key: payload.key,
-        value: payload.value
-    })
-}
 const omnibarMLSStateChange = ({ commit }, payload) => {
     // payload: single MLS object, new selected value, key of object, full mlsMembership array
 
@@ -25,6 +19,5 @@ const omnibarMLSStateChange = ({ commit }, payload) => {
     })
 }
 export default {
-    omnibarStateChange,
     omnibarMLSStateChange
 }

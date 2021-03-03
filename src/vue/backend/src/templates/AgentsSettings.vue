@@ -7,7 +7,7 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="agentSettingsStateChange({ key: 'deregisterMainCss', value: !deregisterMainCss })"
+                    @toggle="setItem({ key: 'deregisterMainCss', value: !deregisterMainCss })"
                     :active="deregisterMainCss"
                     :label="cssLabel"
                 ></idx-toggle-slider>
@@ -20,7 +20,7 @@
                 type="text"
                 id="number-of-posts"
                 :value="numberOfPosts"
-                @change="agentSettingsStateChange({ key: 'numberOfPosts', value: $event.target.value })"
+                @change="setItem({ key: 'numberOfPosts', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Directory Slug</idx-block> Directory Slug Description of the Employee Slug setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
@@ -30,7 +30,7 @@
                 type="text"
                 id="directory-slug"
                 :value="directorySlug"
-                @change="agentSettingsStateChange({ key: 'directorySlug', value: $event.target.value })"
+                @change="setItem({ key: 'directorySlug', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Custom Wrapper</idx-block> Detailed sentence or two describing how custom wrappers can be used and how to set them up properly.</idx-block>
@@ -40,7 +40,7 @@
                 type="text"
                 id="wrapper-start"
                 :value="wrapperStart"
-                @change="agentSettingsStateChange({ key: 'wrapperStart', value: $event.target.value })"
+                @change="setItem({ key: 'wrapperStart', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -49,7 +49,7 @@
                 type="text"
                 id="wrapper-end"
                 :value="wrapperEnd"
-                @change="agentSettingsStateChange({ key: 'wrapperEnd', value: $event.target.value })"
+                @change="setItem({ key: 'wrapperEnd', value: $event.target.value })"
             />
         </idx-form-group>
     </idx-block>
@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            agentSettingsStateChange: 'agentSettings/agentSettingsStateChange'
+            setItem: 'agentSettings/setItem'
         })
     }
 }
