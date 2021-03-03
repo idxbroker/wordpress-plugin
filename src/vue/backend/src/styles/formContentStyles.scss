@@ -1,10 +1,20 @@
 @import '~bootstrap/scss/forms';
 .form-content {
+    --space-form-label: 5px;
+    --space-form-height: 43px;
     display: flex;
     flex-direction: column;
     grid-gap: 40px;
     font-size: 1rem;
     color: $gray-875;
+    h3,
+    strong {
+        font-weight: 600;
+    }
+    hr {
+        border-top: 1px solid $gray-150;
+        width: 100%;
+    }
     &__toggle {
         display: flex;
         justify-content: space-between;
@@ -27,6 +37,8 @@
         }
     }
     &__title {
+        font-size: 1em;
+        display: block;
         text-transform: uppercase;
         letter-spacing: 1.6px;
         font-weight: 700;
@@ -35,13 +47,8 @@
         margin-bottom: 0px;
     }
     &__label {
-        margin-bottom: 5px;
+        margin-bottom: var(--space-form-label);
         width: 100%;
-    }
-    &__title {
-        display: block;
-        font-size: 1em;
-        margin-bottom: 5px;
     }
     .form-control,
     input {
@@ -52,6 +59,11 @@
     textarea:focus {
         border-color: $gray-400;
         box-shadow: 0 0 0 1px $gray-400;
+    }
+    .autocomplete {
+        &__results {
+            margin-top: var(--space-form-height);
+        }
     }
 }
 .custom-select__options {

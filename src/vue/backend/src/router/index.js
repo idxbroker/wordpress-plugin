@@ -117,8 +117,8 @@ const routes = [
                     },
                     {
                         path: 'connect/omnibar',
-                        name: 'Omnibar Settings'
-                        // component
+                        name: 'Omnibar Settings',
+                        component: () => import('@/views/guided-setup/Omnibar')
                     },
                     {
                         path: 'listings',

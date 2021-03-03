@@ -97,8 +97,6 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../styles/formContentStyles.scss';
-@import '~bootstrap/scss/forms';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
 .listings-general__default-disclaimer {
     border-radius: 4px;

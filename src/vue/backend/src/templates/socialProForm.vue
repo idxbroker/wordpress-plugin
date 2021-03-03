@@ -89,7 +89,6 @@ export default {
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
-@import '../styles/formContentStyles.scss';
 .social-pro-form {
     &__settings {
         margin-top: 25px;

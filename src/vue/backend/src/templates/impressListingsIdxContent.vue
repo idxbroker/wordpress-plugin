@@ -170,7 +170,6 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/richSelect';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect';
-@import '../styles/formContentStyles.scss';
 .rich-select {
     &__label {
         width: 100%;

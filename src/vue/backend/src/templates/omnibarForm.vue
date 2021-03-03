@@ -1,159 +1,130 @@
 <template>
     <idx-block className="omnibar-form form-content">
-        <idx-block className="omnibar-form__description">
-            <idx-block className="omnibar-form__title">IMPress Omnibar Search</idx-block>
-            <div>
-                <b>Do you want to set up IMPress Omnibar Search?</b>
-                <br>
-                A short paragraph detailing the IMPress Omnibar Search feature. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit vulputate.
-            </div>
+        <idx-block className="form-content__header">
+            <idx-block tag="h3" className="form-content__title">Do you want to set up IMPress Omnibar Search?</idx-block>
+            A short paragraph detailing the IMPress Omnibar Search feature. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit vulputate.
         </idx-block>
-        <div>
-            <idx-block className="omnibar-form__ccz omnibar-form__field-subset">
-                <div>
-                    <b>City, County, and Postal Code Lists</b>
-                    <br>
-                    Only locations in these lists will return results.
-                </div>
-                <idx-block className="omnibar-form__field">
-                    <div>{{ labels.cityListLabel }}</div>
-                    <idx-custom-select
-                        placeholder="Select"
-                        :ariaLabel="labels.cityListLabel"
-                        :selected="cityListSelected"
-                        :options="cityListOptions"
-                        @selected-item="setItem({ key: 'cityListSelected', value: $event.value })"
-                    ></idx-custom-select>
-                </idx-block>
-                    <idx-block className="omnibar-form__field">
-                    <div>{{ labels.countyListLabel }}</div>
-                    <idx-custom-select
-                        placeholder="Select"
-                        :ariaLabel="labels.countyListLabel"
-                        :selected="countyListSelected"
-                        :options="countyListOptions"
-                        @selected-item="setItem({ key: 'countyListSelected', value: $event.value })"
-                    ></idx-custom-select>
-                </idx-block>
-                <idx-block className="omnibar-form__field">
-                    <div>{{ labels.postalCodeListLabel }}</div>
-                    <idx-custom-select
-                        :ariaLabel="labels.postalCodeListLabel"
-                        placeholder="Select"
-                        :selected="postalCodeSelected"
-                        :options="postalCodeListOptions"
-                        @selected-item="setItem({ key: 'postalCodeSelected', value: $event.value })"
-                    ></idx-custom-select>
-                </idx-block>
+        <hr/>
+        <idx-block className="form-content__header">
+            <idx-block tag="h3" className="form-content__title">City, County, and Postal Code Lists</idx-block>
+            Only locations in these lists will return results.
+        </idx-block>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">{{ labels.cityListLabel }}</idx-form-label>
+            <idx-custom-select
+                placeholder="Select"
+                :ariaLabel="labels.cityListLabel"
+                :selected="cityListSelected"
+                :options="cityListOptions"
+                @selected-item="setItem({ key: 'cityListSelected', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">{{ labels.countyListLabel }}</idx-form-label>
+            <idx-custom-select
+                placeholder="Select"
+                :ariaLabel="labels.countyListLabel"
+                :selected="countyListSelected"
+                :options="countyListOptions"
+                @selected-item="setItem({ key: 'countyListSelected', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">{{ labels.postalCodeListLabel }}</idx-form-label>
+            <idx-custom-select
+                :ariaLabel="labels.postalCodeListLabel"
+                placeholder="Select"
+                :selected="postalCodeSelected"
+                :options="postalCodeListOptions"
+                @selected-item="setItem({ key: 'postalCodeSelected', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <hr/>
+        <idx-block className="form-content__header">
+            <idx-block tag="h3" className="form-content__title">Property Type</idx-block>
+            Choose the property type for default and custom fields
+        </idx-block>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">{{ labels.defaultPropertyTypeLabel }}</idx-form-label>
+            <idx-custom-select
+                :ariaLabel="labels.defaultPropertyTypeLabel"
+                placeholder="Choose the property type for default and custom fields"
+                :selected="defaultPropertyTypeSelected"
+                :options="defaultPropertyTypeOptions"
+                @selected-item="setItem({ key: 'defaultPropertyTypeSelected', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <idx-block className="omnibar-form__field-subset">
+            <idx-block className="form-content__header">
+                <idx-block tag="h3" className="form-content__title">MLS Specific Property Type</idx-block>
+                Used or custom field searches and addresses
             </idx-block>
-            <idx-block className="omnibar-form__field">
-                <b>Property Type</b>
-                <idx-block className="omnibar-form__field-description">
-                    Choose the property type for default and custom fields
-                </idx-block>
-                <div>{{ labels.defaultPropertyTypeLabel }}</div>
+            <idx-form-group
+                v-for="(mls, key) in mlsMembership"
+                :key="mls.name"
+            >
+                <idx-form-label customClass="form-content__label">{{ mls.name }}</idx-form-label>
                 <idx-custom-select
-                    :ariaLabel="labels.defaultPropertyTypeLabel"
-                    placeholder="Choose the property type for default and custom fields"
-                    :selected="defaultPropertyTypeSelected"
-                    :options="defaultPropertyTypeOptions"
-                    @selected-item="setItem({ key: 'defaultPropertyTypeSelected', value: $event.value })"
+                    :ariaLabel="mls.name"
+                    :selected="mls.selected"
+                    :options="mls.propertyTypes"
+                    @selected-item="setItem({ key: 'mlsMembership', value: [ mls, $event.value, key, mlsMembership ] })"
                 ></idx-custom-select>
-            </idx-block>
-        </div>
-        <idx-block className="form-content">
-            <idx-block className="omnibar-form__advanced-settings form-content__toggle">
-                <div>{{ labels.advancedSettingsLabel }}</div>
-                <idx-toggle-slider
-                    uncheckedState="Off"
-                    checkedState="On"
-                    @toggle="showAdvanced = !showAdvanced"
-                    :active="showAdvanced"
-                    :label="labels.advancedSettingsLabel"
-                ></idx-toggle-slider>
-            </idx-block>
-            <idx-block v-if="showAdvanced" className="form-content">
-                <idx-block className="omnibar-form__field-subset">
-                    <div>
-                        <b>MLS Specific Property Type</b>
-                        <br>
-                        Used or custom field searches and addresses
-                    </div>
-                    <idx-block
-                        className="omnibar-form__field"
-                        v-for="(mls, key) in mlsMembership"
-                        :key="mls.name"
-                    >
-                        <div>{{ mls.name }}</div>
-                        <idx-custom-select
-                            :ariaLabel="mls.name"
-                            :selected="mls.selected"
-                            :options="mls.propertyTypes"
-                            @selected-item="omnibarMLSStateChange({ key: 'mlsMembership', value: [ mls, $event.value, key, mlsMembership ] })"
-                        ></idx-custom-select>
-                    </idx-block>
-                </idx-block>
-                <idx-block className="omnibar-form__field omnibar-form__autofill">
-                    <idx-block className="omnibar-form__field-description">
-                        <b>Addresses</b>
-                        <br>
-                        Choose which MLS is included in the address autofill. Addresses will only be included from the selected property types.
-                    </idx-block>
-                    <div>
-                        <div>{{ labels.addressAutofillLabel }}</div>
-                        <idx-custom-select
-                            :ariaLabel="labels.addressAutofillLabel"
-                            placeholder="Select MLS Source"
-                            :selected="autofillMLS"
-                            :options="mlsNames"
-                            @selected-item="setItem({ key: 'autofillMLS', value: $event.value })"
-                        ></idx-custom-select>
-                    </div>
-                </idx-block>
-                <idx-block>
-                    <idx-block className="omnibar-form__field-description">
-                        <b>Custom Fields</b>
-                        <br>
-                        By default the omnibar searches by City, County, Postal Code, or Listing ID. Add up to 10 custom fields to be used as well.
-                    </idx-block>
-                    <idx-block className="form-control__label">Add Custom Fields</idx-block>
-                    <idx-input-tag-autocomplete
-                        placeholder="Enter List Item"
-                        :limit="10"
-                        :previousSelections="customFieldsSelected"
-                        :resultsList="customFieldsOptions"
-                    ></idx-input-tag-autocomplete>
-                </idx-block>
-                <idx-form-group>
-                    <b>Custom Placeholder</b>
-                    <idx-block className="omnibar-form__field-description">
-                        This is a placeholder for the main input of Omibar Widgets.
-                        <br>
-                        Examples: “Search for Properties”, “Location, School, Address, or Listing ID”
-                    </idx-block>
-                    <idx-block className="form-content__label">Custom Placeholder</idx-block>
-                    <idx-form-input
-                        type="text"
-                        customClass=""
-                        :value="customPlaceholder"
-                        @change="setItem({ key: 'customPlaceholder', value: $event.target.value })"
-                    ></idx-form-input>
-                </idx-form-group>
-                <idx-block className="omnibar-form__field">
-                    <div>
-                        <b>{{ labels.sortOrderLabel }}</b>
-                        <br>
-                        The default sort order for results pages
-                    </div>
-                    <idx-custom-select
-                        :ariaLabel="labels.sortOrderLabel"
-                        :selected="defaultSortOrderSelected"
-                        :options="sortOrderOptions"
-                        @selected-item="setItem({ key: 'defaultSortOrderSelected', value: $event.value })"
-                    ></idx-custom-select>
-                </idx-block>
-            </idx-block>
+            </idx-form-group>
         </idx-block>
+        <idx-block className="form-content__header">
+            <idx-block tag="h3" className="form-content__title">Addresses</idx-block>
+            Choose which MLS is included in the address autofill. Addresses will only be included from the selected property types.
+        </idx-block>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">{{ labels.addressAutofillLabel }}</idx-form-label>
+            <idx-custom-select
+                :ariaLabel="labels.addressAutofillLabel"
+                placeholder="Select MLS Source"
+                :selected="autofillMLS"
+                :options="mlsNames"
+                @selected-item="setItem({ key: 'autofillMLS', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <idx-block className="form-content__header">
+            <idx-block tag="h3" className="form-content__title">Custom Fields</idx-block>
+            By default the omnibar searches by City, County, Postal Code, or Listing ID. Add up to 10 custom fields to be used as well.
+        </idx-block>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">Add Custom Fields</idx-form-label>
+            <idx-input-tag-autocomplete
+                placeholder="Enter List Item"
+                :limit="10"
+                :previousSelections="customFieldsSelected"
+                :resultsList="customFieldsOptions"
+            ></idx-input-tag-autocomplete>
+        </idx-form-group>
+        <idx-block className="form-content__header">
+            <idx-block tag="h3" className="form-content__title">Custom Placeholder</idx-block>
+            This is a placeholder for the main input of Omibar Widgets.<br>
+            Examples: “Search for Properties”, “Location, School, Address, or Listing ID”
+        </idx-block>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">Custom Placeholder</idx-form-label>
+            <idx-form-input
+                type="text"
+                customClass=""
+                :value="customPlaceholder"
+                @change="setItem({ key: 'customPlaceholder', value: $event.target.value })"
+            ></idx-form-input>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">
+                <idx-block tag="strong" className="form-content__title">{{ labels.sortOrderLabel }}</idx-block>
+                The default sort order for results pages
+            </idx-form-label>
+            <idx-custom-select
+                :ariaLabel="labels.sortOrderLabel"
+                :selected="defaultSortOrderSelected"
+                :options="sortOrderOptions"
+                @selected-item="setItem({ key: 'defaultSortOrderSelected', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
     </idx-block>
 </template>
 <script>
@@ -167,11 +138,9 @@ export default {
                 countyListLabel: 'County List',
                 postalCodeListLabel: 'Postal Code List',
                 defaultPropertyTypeLabel: 'Default Property Type',
-                advancedSettingsLabel: 'Show Advanced Settings',
                 sortOrderLabel: 'Default Sort Order',
                 addressAutofillLabel: 'Address Autofill MLS'
             },
-            showAdvanced: true,
             sortOrderOptions: [
                 // These are the current values used in the system, we can update them if we want to have it more
                 // human readable.
@@ -226,40 +195,4 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTagAutocomplete.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTags.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/autocomplete.scss';
-@import '~bootstrap/scss/forms';
-@import '../styles/formContentStyles.scss';
-
-.omnibar-form {
-    &__description,
-    &__ccz {
-        border-bottom: 1px solid $gray-150;
-        padding-bottom: 15px;
-    }
-    &__ccz {
-        margin-bottom: 25px;
-    }
-    &__title {
-        margin-bottom: 15px;
-        color: $gray-800;
-        font-size: 1.5rem;
-        font-weight: 100;
-    }
-    &__advanced-settings > div {
-        text-transform: uppercase;
-        letter-spacing: 1.6px;
-    }
-    &__field-subset {
-        display: flex;
-        flex-direction: column;
-        grid-gap: 15px;
-    }
-    &__field-description {
-        margin-bottom: 25px;
-    }
-    .autocomplete {
-        &__results {
-            margin-top: 43px;
-        }
-    }
-}
 </style>
