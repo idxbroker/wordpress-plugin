@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import IDXStrapClass from '@idxbrokerllc/idxstrap/dist/idxStrap.js'
+import serviceContainer from './serviceContainer'
 
 // Import VCL base and variable styles
 import '@idxbrokerllc/idxstrap/dist/styles/base.scss'
@@ -110,5 +111,6 @@ Vue.config.productionTip = false
 new Vue({
     router,
     store,
+    provide: serviceContainer,
     render: h => h(App)
 }).$mount('#app')
