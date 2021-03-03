@@ -35,9 +35,12 @@ export default {
 .section {
     &--two-column {
         display: grid;
-        grid-template-columns: 1fr 300px;
+        grid-template-columns: minmax(50%, 1fr) minmax(auto, 300px);
         grid-template-rows: auto;
         grid-gap: 4rem;
+        @media (max-width: 782px) {
+            grid-template-columns: 100%;
+        }
     }
     &__content h1 {
         margin-bottom: var(--space-10);

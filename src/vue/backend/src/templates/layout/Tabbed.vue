@@ -46,20 +46,28 @@ export default {
         letter-spacing: 0.4px;
     }
     .tab-container {
+        &__header {
+            border-bottom: 1px solid $gray-150;
+        }
         &__tabs {
             justify-content: end;
-            border-bottom: 1px solid $gray-150;
             height: 50px;
             gap: 1rem;
+            overflow: visible;
         }
         &__tab {
             width: 164px;
             margin-left: 0px;
+            margin-bottom: 0px;
             flex: unset;
 
             letter-spacing: 1.6px;
             color: #788088;
             text-transform: uppercase;
+
+            &--active {
+                height: 51px;
+            }
         }
     }
 }
