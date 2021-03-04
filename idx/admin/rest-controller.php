@@ -108,15 +108,38 @@ class Rest_Controller {
 	 * @return WP_Error
 	 */
 	public function addon_not_enabled_error( $name ) {
-		// Uses same error format as \IDX\IDX_Api.
 		return new \WP_Error(
 			'addon_disabled',
-			"422: $name is not enabled.",
+			"$name is not enabled.",
 			array(
-				'status'  => 422,
-				'message' => "$name is not enabled.",
+				'status' => 422,
 			)
 		);
+	}
+
+	/**
+	 * Converts the error returned from the IDX_API class to be more suitable for the REST endpoints.
+	 *
+	 * @param WP_Error $error WP_Error to convert.
+	 * @return WP_Error
+	 */
+	public function convert_idx_api_error( $error ) {
+		if ( ! is_wp_error( $error ) ) {
+			return $error;
+		}
+		$code    = $error->get_error_code();
+		$message = $error->get_error_message();
+		$data    = $error->get_error_data();
+		if ( 'idx_api_error' === $code ) {
+			return new \WP_Error(
+				$code,
+				$data['rest_error'],
+				array(
+					'status' => $data['status'],
+				)
+			);
+		}
+		return $error;
 	}
 }
 
