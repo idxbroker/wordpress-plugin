@@ -132,8 +132,8 @@ const routes = [
                     },
                     {
                         path: 'listings/idx',
-                        name: 'Configure IDX IMPress Listings'
-                        // component
+                        name: 'Configure IDX IMPress Listings',
+                        component: () => import('@/views/guided-setup/ListingsIdx')
                     },
                     {
                         path: 'listings/advanced',

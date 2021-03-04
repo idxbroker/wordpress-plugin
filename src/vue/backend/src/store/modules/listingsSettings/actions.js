@@ -4,6 +4,12 @@ const saveListingsSettings = ({ commit }, payload) => {
     return new Promise(resolve => setTimeout(resolve, 100))
 }
 
+const saveListingsIdxSettings = () => {
+    // To-Do: add actual endpoints
+    return new Promise(resolve => setTimeout(resolve, 1000))
+}
+
 export default {
-    saveListingsSettings
+    saveListingsSettings,
+    saveListingsIdxSettings
 }
