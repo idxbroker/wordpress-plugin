@@ -24,7 +24,7 @@
                         <idx-toggle-slider
                             uncheckedState="No"
                             checkedState="Yes"
-                            @toggle="listingsSettingsStateChange({ key: 'enabled', value: !enabled })"
+                            @toggle="setItem({ key: 'enabled', value: !enabled })"
                             :active="enabled"
                             :label="activateLabel"
                         ></idx-toggle-slider>
@@ -42,35 +42,16 @@ export default {
     components: {
         GuidedSetupContentCard
     },
-    data () {
-        return {
-            cardTitle: 'Activate IMPress Listings',
-            activateLabel: 'Activate',
-            links: [
-                {
-                    text: 'IMPress Listings Features',
-                    href: '#listings-features'
-                },
-                {
-                    text: 'IDX Broker Middleware',
-                    href: 'https://middleware.idxbroker.com/mgmt/'
-                },
-                {
-                    text: 'Sign up for IDX Broker',
-                    href: '#signUp'
-                }
-            ]
-        }
-    },
     computed: {
         ...mapState({
             enabled: state => state.listingsSettings.enabled,
-            guidedSetupSteps: state => state.general.guidedSetupSteps
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            listingsSettingsStateChange: 'listingsSettings/listingsSettingsStateChange',
+            setItem: 'listingsSettings/setItem',
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveListingsSettings: 'general/saveListingsSettings'
         }),
         goBackStep: function () {
@@ -84,6 +65,27 @@ export default {
             await this.saveListingsSettings()
             this.$router.push({ path: '/guided-setup/listings/general' })
         }
+    },
+    created () {
+        this.cardTitle = 'Enable IMPress Listings'
+        this.activateLabel = 'Enable'
+        this.links = [
+            {
+                text: 'IMPress Listings Features',
+                href: '#listings-features'
+            },
+            {
+                text: 'IDX Broker Middleware',
+                href: 'https://middleware.idxbroker.com/mgmt/'
+            },
+            {
+                text: 'Sign up for IDX Broker',
+                href: '#signUp'
+            }
+        ]
+    },
+    mounted () {
+        this.progressStepperUpdate([4, 1, 0, 0])
     }
 }
 </script>

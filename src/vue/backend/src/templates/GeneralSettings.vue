@@ -6,7 +6,7 @@
                 type="text"
                 id="website-wrapper"
                 :value="wrapperName"
-                @change="setItem({ key: 'wrapperName', value: $event.target.value })"
+                @change="$emit('form-field-update',{ key: 'wrapperName', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -16,7 +16,7 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="setItem({ key: 'reCAPTCHA', value: !reCAPTCHA })"
+                    @toggle="$emit('form-field-update',{ key: 'reCAPTCHA', value: !reCAPTCHA })"
                     :active="reCAPTCHA"
                     :label="toggleLabel"
                 ></idx-toggle-slider>
@@ -28,13 +28,13 @@
                 ariaLabel="Update Frequency"
                 :selected="updateFrequency"
                 :options="updateFrequencyOptions"
-                @selected-item="setItem({ key: 'updateFrequency', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'updateFrequency', value: $event.value })"
             />
         </idx-form-group>
     </idx-block>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+
 export default {
     name: 'GeneralSettings',
     data () {
@@ -52,17 +52,19 @@ export default {
             ]
         }
     },
-    computed: {
-        ...mapState({
-            reCAPTCHA: state => state.general.reCAPTCHA,
-            updateFrequency: state => state.general.updateFrequency,
-            wrapperName: state => state.general.wrapperName
-        })
-    },
-    methods: {
-        ...mapActions({
-            setItem: 'general/setItem'
-        })
+    props: {
+        reCAPTCHA: {
+            type: Boolean,
+            default: false
+        },
+        updateFrequency: {
+            type: String,
+            default: 'five_minutes'
+        },
+        wrapperName: {
+            type: String,
+            default: ''
+        }
     }
 }
 </script>
