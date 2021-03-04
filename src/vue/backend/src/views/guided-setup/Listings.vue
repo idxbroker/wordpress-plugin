@@ -42,26 +42,6 @@ export default {
     components: {
         GuidedSetupContentCard
     },
-    data () {
-        return {
-            cardTitle: 'Activate IMPress Listings',
-            activateLabel: 'Activate',
-            links: [
-                {
-                    text: 'IMPress Listings Features',
-                    href: '#listings-features'
-                },
-                {
-                    text: 'IDX Broker Middleware',
-                    href: 'https://middleware.idxbroker.com/mgmt/'
-                },
-                {
-                    text: 'Sign up for IDX Broker',
-                    href: '#signUp'
-                }
-            ]
-        }
-    },
     computed: {
         ...mapState({
             enabled: state => state.listingsSettings.enabled,
@@ -70,9 +50,9 @@ export default {
     },
     methods: {
         ...mapActions({
-            setItem: 'general/setItem',
+            setItem: 'listingsSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveListingsSettings: 'general/saveListingsSettings'
+            saveListingsSettings: 'listingsSettings/saveListingsSettings'
         }),
         goBackStep: function () {
             // to-do: go back in history
@@ -85,6 +65,24 @@ export default {
             await this.saveListingsSettings()
             this.$router.push({ path: '/guided-setup/listings/general' })
         }
+    },
+    created () {
+        this.cardTitle = 'Activate IMPress Listings'
+        this.activateLabel = 'Activate'
+        this.links = [
+            {
+                text: 'IMPress Listings Features',
+                href: '#listings-features'
+            },
+            {
+                text: 'IDX Broker Middleware',
+                href: 'https://middleware.idxbroker.com/mgmt/'
+            },
+            {
+                text: 'Sign up for IDX Broker',
+                href: '#signUp'
+            }
+        ]
     },
     mounted () {
         this.progressStepperUpdate([4, 1, 0, 0])

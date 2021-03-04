@@ -21,6 +21,29 @@ export default {
         ListingsGeneral,
         GuidedSetupContentCard
     },
+    computed: {
+        ...mapState({
+            enabled: state => state.listingsSettings.enabled,
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+        })
+    },
+    methods: {
+        ...mapActions({
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
+            saveListingsGeneralSettings: 'listingsSettings/saveListingsGeneralSettings'
+        }),
+        goBackStep: function () {
+            // to-do: go back in history
+            this.$router.go(-1)
+        },
+        goSkipStep: function () {
+            this.$router.push({ path: '/guided-setup/agents' })
+        },
+        async goContinue () {
+            await this.saveListingsGeneralSettings()
+            this.$router.push({ path: '/guided-setup/listings/idx' })
+        }
+    },
     created () {
         this.cardTitle = 'Configure IMPress Listings'
         this.links = [
@@ -37,30 +60,6 @@ export default {
                 href: '#signUp'
             }
         ]
-    },
-    computed: {
-        ...mapState({
-            enabled: state => state.listingsSettings.enabled,
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
-        })
-    },
-    methods: {
-        ...mapActions({
-            setItem: 'general/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveListingsGeneralSettings: 'general/saveListingsGeneralSettings'
-        }),
-        goBackStep: function () {
-            // to-do: go back in history
-            this.$router.go(-1)
-        },
-        goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/agents' })
-        },
-        async goContinue () {
-            await this.saveListingsGeneralSettings()
-            this.$router.push({ path: '/guided-setup/listings/idx' })
-        }
     },
     mounted () {
         this.progressStepperUpdate([4, 2, 0, 0])

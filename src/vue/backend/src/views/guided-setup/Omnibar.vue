@@ -47,9 +47,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            setItem: 'general/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveOmnibarSettings: 'general/saveOmnibarSettings'
+            saveOmnibarSettings: 'omnibar/saveOmnibarSettings'
         }),
         goBackStep: function () {
             // to-do: go back in history
