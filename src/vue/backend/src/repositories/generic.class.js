@@ -6,12 +6,12 @@ class GenericRepositoryClass {
         this.instance = instance
     }
 
-    get () {
-        return this.instance.get(this.endpoint)
+    get (path = '') {
+        return this.instance.get(`${this.endpoint}/${path}`)
     }
 
-    post (payload) {
-        return this.instance.post(this.endpoint, payload)
+    post (payload, path = '') {
+        return this.instance.post(`${this.endpoint}/${path}`, payload)
     }
 }
 
