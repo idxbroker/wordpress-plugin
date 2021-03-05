@@ -1,5 +1,5 @@
 <template>
-    <idx-block className="form-content">
+    <idx-block className="form-content form-content__api-key">
         <idx-form-group
             :customClass="{
                 'needs-validation': true,
@@ -20,7 +20,7 @@
                 :invalid="error"
                 :valid="success"
                 :value="apiKey"
-                @change="setItem({ key: 'apiKey', value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'apiKey', value: $event.target.value })"
                 required
             />
             <idx-block className="spinner-border" role="status" v-if="loading">
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+
 export default {
     name: 'ApiKey',
     props: {
@@ -51,17 +51,11 @@ export default {
         success: {
             type: Boolean,
             default: false
+        },
+        apiKey: {
+            type: String,
+            default: ''
         }
-    },
-    computed: {
-        ...mapState({
-            apiKey: state => state.general.apiKey
-        })
-    },
-    methods: {
-        ...mapActions({
-            setItem: 'general/setItem'
-        })
     }
 }
 </script>

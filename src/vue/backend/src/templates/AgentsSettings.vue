@@ -7,7 +7,7 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="setItem({ key: 'deregisterMainCss', value: !deregisterMainCss })"
+                    @toggle="$emit('form-field-update', { key: 'deregisterMainCss', value: !deregisterMainCss })"
                     :active="deregisterMainCss"
                     :label="cssLabel"
                 ></idx-toggle-slider>
@@ -20,7 +20,7 @@
                 type="text"
                 id="number-of-posts"
                 :value="numberOfPosts"
-                @change="setItem({ key: 'numberOfPosts', value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'numberOfPosts', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Directory Slug</idx-block> Directory Slug Description of the Employee Slug setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
@@ -30,7 +30,7 @@
                 type="text"
                 id="directory-slug"
                 :value="directorySlug"
-                @change="setItem({ key: 'directorySlug', value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'directorySlug', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Custom Wrapper</idx-block> Detailed sentence or two describing how custom wrappers can be used and how to set them up properly.</idx-block>
@@ -40,7 +40,7 @@
                 type="text"
                 id="wrapper-start"
                 :value="wrapperStart"
-                @change="setItem({ key: 'wrapperStart', value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'wrapperStart', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -49,33 +49,38 @@
                 type="text"
                 id="wrapper-end"
                 :value="wrapperEnd"
-                @change="setItem({ key: 'wrapperEnd', value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'wrapperEnd', value: $event.target.value })"
             />
         </idx-form-group>
     </idx-block>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
 export default {
     name: 'agentSettings',
-    data () {
-        return {
-            cssLabel: 'Deregister IMPress Agents Main CSS?'
+    props: {
+        deregisterMainCss: {
+            type: Boolean,
+            default: false
+        },
+        numberOfPosts: {
+            type: [String, Number],
+            default: '9'
+        },
+        directorySlug: {
+            type: String,
+            default: 'employees'
+        },
+        wrapperStart: {
+            type: String,
+            default: ''
+        },
+        wrapperEnd: {
+            type: String,
+            default: ''
         }
     },
-    computed: {
-        ...mapState({
-            deregisterMainCss: state => state.agentSettings.deregisterMainCss,
-            numberOfPosts: state => state.agentSettings.numberOfPosts,
-            directorySlug: state => state.agentSettings.directorySlug,
-            wrapperStart: state => state.agentSettings.wrapperStart,
-            wrapperEnd: state => state.agentSettings.wrapperEnd
-        })
-    },
-    methods: {
-        ...mapActions({
-            setItem: 'agentSettings/setItem'
-        })
+    created () {
+        this.cssLabel = 'Deregister IMPress Agents Main CSS?'
     }
 }
 </script>
