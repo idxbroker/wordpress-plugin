@@ -82,7 +82,7 @@
             </idx-block>
             <idx-form-group>
                 <b>Import Title</b>
-                <idx-block>By default, your imported listigns will use the street address as the page title and permalink</idx-block>
+                <idx-block>By default, your imported listings will use the street address as the page title and permalink</idx-block>
                 <idx-form-input
                     type="text"
                     customClass="idx-content-settings__import-title"

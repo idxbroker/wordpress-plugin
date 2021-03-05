@@ -7,7 +7,19 @@
         @skip-step="goSkipStep"
         @continue="goContinue">
         <template v-slot:controls>
-            <ListingsIdx/>
+            <ListingsIdx
+                :updateListings="updateListings"
+                :soldListings="soldListings"
+                :automaticImport="automaticImport"
+                :displayIDXLink="displayIDXLink"
+                :defaultListingTemplateSelected="defaultListingTemplateSelected"
+                :defaultListingTemplateOptions="defaultListingTemplateOptions"
+                :importedListingsAuthorSelected="importedListingsAuthorSelected"
+                :importedListingsAuthorOptions="importedListingsAuthorOptions"
+                :importTitle="importTitle"
+                :advancedFieldData="advancedFieldData"
+                :displayAdvancedFields="displayAdvancedFields"
+                @form-field-update="setItem($event)"/>
         </template>
     </GuidedSetupContentCard>
 </template>
@@ -26,11 +38,23 @@ export default {
     computed: {
         ...mapState({
             enabled: state => state.listingsSettings.enabled,
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
+            updateListings: state => state.listingsSettings.updateListings,
+            soldListings: state => state.listingsSettings.soldListings,
+            automaticImport: state => state.listingsSettings.automaticImport,
+            displayIDXLink: state => state.listingsSettings.displayIDXLink,
+            defaultListingTemplateSelected: state => state.listingsSettings.defaultListingTemplateSelected,
+            defaultListingTemplateOptions: state => state.listingsSettings.defaultListingTemplateOptions,
+            importedListingsAuthorSelected: state => state.listingsSettings.importedListingsAuthorSelected,
+            importedListingsAuthorOptions: state => state.listingsSettings.importedListingsAuthorOptions,
+            importTitle: state => state.listingsSettings.importTitle,
+            advancedFieldData: state => state.listingsSettings.advancedFieldData,
+            displayAdvancedFields: state => state.listingsSettings.displayAdvancedFields
         })
     },
     methods: {
         ...mapActions({
+            setItem: 'listingsSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveIDXListingsSettings: 'listingsSettings/saveIDXListingsSettings'
         }),
