@@ -122,3 +122,4 @@ class Rest_Controller {
 
 new Apis\Settings_General();
 new Apis\Agents_Settings();
+new Apis\Import_Agents();
