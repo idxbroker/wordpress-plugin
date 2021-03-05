@@ -1,17 +1,12 @@
 <template>
     <div>
         <listings-general
-            :currencyCodeSelected="currencyCodeSelected"
-            :currencySymbolSelected="currencySymbolSelected"
-            :defaultDisclaimer="defaultDisclaimer"
-            :numberOfPosts="numberOfPosts"
-            :listingSlug="listingSlug"
-            :defaultState="defaultState"
-            @form-field-update="setItem($event)"
+            v-bind="localStateValues"
+            @form-field-update="formUpdate"
         ></listings-general>
         <idx-button
             customClass="settings-button__save"
-            @click="saveGeneralListingsSettings"
+            @click="saveAction"
         >
             Save
         </idx-button>
@@ -20,8 +15,10 @@
 <script>
 import ListingsGeneral from '@/templates/impressListingsGeneralContent'
 import { mapState, mapActions } from 'vuex'
+import pageGuard from '@/mixins/pageGuard'
 export default {
     name: 'listings-general-content-tab',
+    mixins: [pageGuard],
     components: {
         ListingsGeneral
     },
@@ -33,27 +30,16 @@ export default {
             numberOfPosts: state => state.listingsSettings.numberOfPosts,
             listingSlug: state => state.listingsSettings.listingSlug,
             defaultState: state => state.listingsSettings.defaultState
-        }),
-        newValues () {
-            // To Do: Add logic to prevent page load on unsaved form change.
-            return false
-        }
-    },
-    beforeRouteLeave (to, from, next) {
-        if (this.newValues) {
-            const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-            if (answer) {
-                next()
-            } else {
-                next(false)
-            }
-        } next()
+        })
     },
     methods: {
         ...mapActions({
             setItem: 'listingsSettings/setItem',
             saveGeneralListingsSettings: 'listingsSettings/saveGeneralListingsSettings'
         })
+    },
+    created () {
+        this.module = 'listingsSettings'
     }
 }
 </script>

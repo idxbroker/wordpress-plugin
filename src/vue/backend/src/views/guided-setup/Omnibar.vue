@@ -8,21 +8,8 @@
         @continue="goContinue">
         <template v-slot:controls>
             <omnibarForm
-                :cityListOptions="cityListOptions"
-                :cityListSelected="cityListSelected"
-                :countyListOptions="countyListOptions"
-                :countyListSelected="countyListSelected"
-                :postalCodeListOptions="postalCodeListOptions"
-                :postalCodeSelected="postalCodeSelected"
-                :defaultPropertyTypeOptions="defaultPropertyTypeOptions"
-                :defaultPropertyTypeSelected="defaultPropertyTypeSelected"
-                :mlsMembership="mlsMembership"
-                :autofillMLS="autofillMLS"
-                :customFieldsSelected="customFieldsSelected"
-                :customFieldsOptions="customFieldsOptions"
-                :customPlaceholder="customPlaceholder"
-                :defaultSortOrderSelected="defaultSortOrderSelected"
-                @form-field-update="setItem($event)"
+                v-bind="localStateValues"
+                @form-field-update="formUpdate"
             />
         </template>
     </GuidedSetupContentCard>
@@ -30,9 +17,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import pageGuard from '@/mixins/pageGuard'
 import omnibarForm from '@/templates/omnibarForm.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    mixins: [pageGuard],
     components: {
         omnibarForm,
         GuidedSetupContentCard
@@ -91,8 +80,12 @@ export default {
         },
         async goContinue () {
             await this.saveOmnibarSettings()
+            this.saveAction()
             this.$router.push({ path: '/guided-setup/listings' })
         }
+    },
+    created () {
+        this.module = 'omnibar'
     },
     mounted () {
         this.progressStepperUpdate([3, 0, 0, 0])

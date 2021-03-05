@@ -9,10 +9,15 @@
 <script>
 import AgentsSettings from '@/templates/AgentsSettings'
 import TwoColumn from '@/templates/layout/TwoColumn'
+import pageGuard from '@/mixins/pageGuard'
 export default {
+    mixins: [pageGuard],
     components: {
         AgentsSettings,
         TwoColumn
+    },
+    created () {
+        this.module = 'agentSettings'
     }
 }
 </script>
