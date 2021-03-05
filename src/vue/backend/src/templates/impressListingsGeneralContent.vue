@@ -11,7 +11,7 @@
                 id="default-state"
                 placeholder="Enter your default state"
                 :value="defaultState"
-                @change="setItem({ key: 'defaultState', value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'defaultState', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Default Currency</idx-block> Description of the Default Currency setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</idx-block>
@@ -22,7 +22,7 @@
                 placeholder="None"
                 :selected="currencySymbolSelected"
                 :options="currency.currencySymbols"
-                @selected-item="setItem({ key: 'currencySymbolSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'currencySymbolSelected', value: $event.value })"
             />
         </idx-form-group>
         <idx-form-group>
@@ -32,7 +32,7 @@
                 placeholder="None"
                 :selected="currencyCodeSelected"
                 :options="currency.currencyCodes"
-                @selected-item="setItem({ key: 'currencyCodeSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'currencyCodeSelected', value: $event.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Default Number of Posts</idx-block> Description of the Default Number of Posts setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
@@ -42,7 +42,7 @@
                 type="text"
                 id="default-posts"
                 :value="numberOfPosts"
-                @change="setItem({ key: numberOfPosts, value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'numberOfPosts', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Default Disclaimer</idx-block> Description of the Default Disclaimer setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
@@ -54,7 +54,8 @@
                 customClass="listings-general__default-disclaimer"
                 placeholder="Disclaimer text"
                 rows="3"
-                @change="setItem({ key: defaultDisclaimer, value: $event.target.value })"
+                :value="defaultDisclaimer"
+                @change="$emit('form-field-update', { key: 'defaultDisclaimer', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">Listings Slug</idx-block> Description of the Listings Slug setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</idx-block>
@@ -64,35 +65,43 @@
                 type="text"
                 id="listings-slug"
                 :value="listingSlug"
-                @change="setItem({ key: listingSlug, value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'listingSlug', value: $event.target.value })"
             />
         </idx-form-group>
     </idx-block>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
 import currency from '@/data/currency'
 export default {
     name: 'ListingsGeneral',
-    computed: {
-        ...mapState({
-            currencyCodeSelected: state => state.listingsSettings.currencyCodeSelected,
-            currencySymbolSelected: state => state.listingsSettings.currencySymbolSelected,
-            defaultDisclaimer: state => state.listingsSettings.defaultDisclaimer,
-            numberOfPosts: state => state.listingsSettings.numberOfPosts,
-            listingSlug: state => state.listingsSettings.listingSlug,
-            defaultState: state => state.listingsSettings.defaultState
-        })
-    },
-    data () {
-        return {
-            currency
+    props: {
+        currencyCodeSelected: {
+            type: String,
+            default: 'none'
+        },
+        currencySymbolSelected: {
+            type: String,
+            default: 'none'
+        },
+        defaultDisclaimer: {
+            type: String,
+            default: ''
+        },
+        numberOfPosts: {
+            type: [Number, String],
+            default: '9'
+        },
+        listingSlug: {
+            type: String,
+            default: 'listings'
+        },
+        defaultState: {
+            type: String,
+            default: ''
         }
     },
-    methods: {
-        ...mapActions({
-            setItem: 'listingsSettings/setItem'
-        })
+    created () {
+        this.currency = currency
     }
 }
 </script>

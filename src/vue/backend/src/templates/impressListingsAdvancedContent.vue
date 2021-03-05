@@ -11,7 +11,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="setItem({ key: 'deregisterMainCss', value: !deregisterMainCss })"
+                        @toggle="$emit('form-field-update', { key: 'deregisterMainCss', value: !deregisterMainCss })"
                         :active="deregisterMainCss"
                         :label="mainCssLabel"
                     ></idx-toggle-slider>
@@ -23,7 +23,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="setItem({ key: 'deregisterWidgetCss', value: !deregisterWidgetCss })"
+                        @toggle="$emit('form-field-update', { key: 'deregisterWidgetCss', value: !deregisterWidgetCss })"
                         :active="deregisterWidgetCss"
                         :label="widgetsCssLabel"
                     ></idx-toggle-slider>
@@ -41,7 +41,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="setItem({ key: 'sendFormSubmission', value: !sendFormSubmission })"
+                        @toggle="$emit('form-field-update', { key: 'sendFormSubmission', value: !sendFormSubmission })"
                         :active="sendFormSubmission"
                         :label="sendFormLabel"
                     ></idx-toggle-slider>
@@ -57,7 +57,7 @@
                     type="text"
                     id="form-shortcode"
                     :value="formShortcode"
-                    @change="setItem({ key: 'formShortcode', value: $event.target.value })"
+                    @change="$emit('form-field-update', { key: 'formShortcode', value: $event.target.value })"
                 />
             </idx-form-group>
         </idx-block>
@@ -73,7 +73,7 @@
                     type="text"
                     id="google-maps"
                     :value="googleMapsAPIKey"
-                    @change="setItem({ key: 'googleMapsAPIKey', value: $event.target.value })"
+                    @change="$emit('form-field-update', { key: 'googleMapsAPIKey', value: $event.target.value })"
                 />
             </idx-form-group>
         </idx-block>
@@ -88,7 +88,7 @@
                     type="text"
                     id="wrapper-start-html"
                     :value="wrapperStart"
-                    @change="setItem({ key: 'wrapperStart', value: $event.target.value })"
+                    @change="$emit('form-field-update', { key: 'wrapperStart', value: $event.target.value })"
                 />
             </idx-form-group>
             <idx-form-group>
@@ -97,7 +97,7 @@
                     type="text"
                     id="wrapper-end-html"
                     :value="wrapperEnd"
-                    @change="setItem({ key: 'wrapperEnd', value: $event.target.value })"
+                    @change="$emit('form-field-update', { key: 'wrapperEnd', value: $event.target.value })"
                 />
             </idx-form-group>
         </idx-block>
@@ -112,7 +112,7 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="setItem({ key: 'sendFormSubmission', value: !sendFormSubmission })"
+                        @toggle="$emit('form-field-update', { key: 'sendFormSubmission', value: !sendFormSubmission })"
                         :active="sendFormSubmission"
                         :label="pluginUninstallationLabel"
                     ></idx-toggle-slider>
@@ -122,33 +122,47 @@
     </idx-block>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
 export default {
     name: 'ListingsAdvanced',
-    data () {
-        return {
-            mainCssLabel: 'Deregister IMPress Listings Main CSS?',
-            widgetsCssLabel: 'Deregister IMPress Listings Widgets CSS?',
-            sendFormLabel: 'Send Form Submissions to IDX Broker',
-            pluginUninstallationLabel: 'Delete Plugin Data on Uninstall'
+    props: {
+        deregisterMainCss: {
+            type: Boolean,
+            default: false
+        },
+        deregisterWidgetCss: {
+            type: Boolean,
+            default: false
+        },
+        sendFormSubmission: {
+            type: Boolean,
+            default: true
+        },
+        formShortcode: {
+            type: String,
+            default: ''
+        },
+        googleMapsAPIKey: {
+            type: String,
+            default: ''
+        },
+        wrapperStart: {
+            type: String,
+            default: ''
+        },
+        wrapperEnd: {
+            type: String,
+            default: ''
+        },
+        deletePluginDataOnUninstall: {
+            type: Boolean,
+            default: false
         }
     },
-    computed: {
-        ...mapState({
-            deregisterMainCss: state => state.listingsSettings.deregisterMainCss,
-            deregisterWidgetCss: state => state.listingsSettings.deregisterWidgetCss,
-            sendFormSubmission: state => state.listingsSettings.sendFormSubmission,
-            formShortcode: state => state.listingsSettings.formShortcode,
-            googleMapsAPIKey: state => state.listingsSettings.googleMapsAPIKey,
-            wrapperStart: state => state.listingsSettings.wrapperStart,
-            wrapperEnd: state => state.listingsSettings.wrapperEnd,
-            deletePluginDataOnUninstall: state => state.listingsSettings.deletePluginDataOnUninstall
-        })
-    },
-    methods: {
-        ...mapActions({
-            setItem: 'listingsSettings/setItem'
-        })
+    created () {
+        this.mainCssLabel = 'Deregister IMPress Listings Main CSS?'
+        this.widgetsCssLabel = 'Deregister IMPress Listings Widgets CSS?'
+        this.sendFormLabel = 'Send Form Submissions to IDX Broker'
+        this.pluginUninstallationLabel = 'Delete Plugin Data on Uninstall'
     }
 }
 </script>

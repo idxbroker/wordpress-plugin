@@ -5,9 +5,15 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="goContinue"
+    >
         <template v-slot:controls>
-            <GeneralSettings/>
+            <GeneralSettings
+                :reCAPTCHA="reCAPTCHA"
+                :updateFrequency="updateFrequency"
+                :wrapperName="wrapperName"
+                @form-field-update="setItem($event)"
+            />
         </template>
     </GuidedSetupContentCard>
 </template>
@@ -42,7 +48,10 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
+            reCAPTCHA: state => state.general.reCAPTCHA,
+            updateFrequency: state => state.general.updateFrequency,
+            wrapperName: state => state.general.wrapperName
         })
     },
     methods: {

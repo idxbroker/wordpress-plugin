@@ -7,7 +7,7 @@
             <idx-toggle-slider
                 uncheckedState="No"
                 checkedState="Yes"
-                @toggle="setItem({ key: 'enableSyndication', value: !enableSyndication })"
+                @toggle="$emit('form-field-update', { key: 'enableSyndication', value: !enableSyndication })"
                 :active="enableSyndication"
                 :label="toggleLabel"
             ></idx-toggle-slider>
@@ -21,7 +21,7 @@
                     ariaLabel="Select Autopublish setting"
                     :selected="autopublish"
                     :options="autopublishOptions"
-                    @selected-item="setItem({ key: 'autopublish', value: $event.value })"
+                    @selected-item="$emit('form-field-update', { key: 'autopublish', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
             <idx-block className="social-pro-form__field">
@@ -30,7 +30,7 @@
                     ariaLabel="Select post day"
                     :selected="postDay"
                     :options="postDayOptions"
-                    @selected-item="setItem({ key: 'postDay', value: $event.value })"
+                    @selected-item="$emit('form-field-update', { key: 'postDay', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
             <idx-block className="social-pro-form__field">
@@ -39,50 +39,51 @@
                     ariaLabel="Select post type"
                     :selected="postType"
                     :options="postTypeOptions"
-                    @selected-item="setItem({ key: 'postType', value: $event.value })"
+                    @selected-item="$emit('form-field-update', { key: 'postType', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
         </idx-block>
     </idx-block>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
 export default {
     name: 'social-pro-form',
-    data () {
-        return {
-            toggleLabel: 'Enable General Interest Article Syndication',
-            enable: false,
-            autopublishOptions: [
-                { label: 'Autopublish', value: 'autopublish' },
-                { label: 'Draft', value: 'draft' }
-            ],
-            postDayOptions: [
-                { label: 'Sunday', value: 'sun' },
-                { label: 'Monday', value: 'mon' },
-                { label: 'Tuesday', value: 'tues' },
-                { label: 'Wednesday', value: 'wed' },
-                { label: 'Thursday', value: 'thurs' },
-                { label: 'Friday', value: 'fri' },
-                { label: 'Saturday', value: 'sat' }
-            ],
-            postTypeOptions: [
-                { label: 'Post', value: 'post' }
-            ]
+    props: {
+        enableSyndication: {
+            type: Boolean,
+            default: false
+        },
+        autopublish: {
+            type: String,
+            default: 'autopublish'
+        },
+        postDay: {
+            type: String,
+            default: 'sun'
+        },
+        postType: {
+            type: String,
+            default: 'post'
         }
     },
-    computed: {
-        ...mapState({
-            enableSyndication: state => state.socialPro.enableSyndication,
-            autopublish: state => state.socialPro.autopublish,
-            postDay: state => state.socialPro.postDay,
-            postType: state => state.socialPro.postType
-        })
-    },
-    methods: {
-        ...mapActions({
-            setItem: 'socialPro/setItem'
-        })
+    created () {
+        this.toggleLabel = 'Enable General Interest Article Syndication'
+        this.autopublishOptions = [
+            { label: 'Autopublish', value: 'autopublish' },
+            { label: 'Draft', value: 'draft' }
+        ]
+        this.postDayOptions = [
+            { label: 'Sunday', value: 'sun' },
+            { label: 'Monday', value: 'mon' },
+            { label: 'Tuesday', value: 'tues' },
+            { label: 'Wednesday', value: 'wed' },
+            { label: 'Thursday', value: 'thurs' },
+            { label: 'Friday', value: 'fri' },
+            { label: 'Saturday', value: 'sat' }
+        ]
+        this.postTypeOptions = [
+            { label: 'Post', value: 'post' }
+        ]
     }
 }
 </script>

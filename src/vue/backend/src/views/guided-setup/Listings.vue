@@ -52,7 +52,7 @@ export default {
         ...mapActions({
             setItem: 'listingsSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveListingsSettings: 'listingsSettings/saveListingsSettings'
+            saveListingsSettings: 'general/saveListingsSettings'
         }),
         goBackStep: function () {
             // to-do: go back in history
@@ -67,8 +67,8 @@ export default {
         }
     },
     created () {
-        this.cardTitle = 'Activate IMPress Listings'
-        this.activateLabel = 'Activate'
+        this.cardTitle = 'Enable IMPress Listings'
+        this.activateLabel = 'Enable'
         this.links = [
             {
                 text: 'IMPress Listings Features',
