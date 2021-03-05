@@ -127,8 +127,8 @@ const routes = [
                     },
                     {
                         path: 'listings/general',
-                        name: 'Configure General IMPress Listings'
-                        // component
+                        name: 'Configure General IMPress Listings',
+                        component: () => import('@/views/guided-setup/ListingsGeneral')
                     },
                     {
                         path: 'listings/idx',
