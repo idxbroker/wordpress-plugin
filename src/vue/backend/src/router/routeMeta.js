@@ -10,7 +10,7 @@ export default {
             path: '',
             name: 'IMPress Listings General Settings',
             label: 'General',
-            component: () => import('@/templates/ListingsGeneral'),
+            component: () => import('@/views/children/generalContentTab'),
             meta: {
                 requires: [LISTINGS]
             }
@@ -19,7 +19,7 @@ export default {
             path: 'idx',
             name: 'IMPress Listings IDX Settings',
             label: 'IDX',
-            component: () => import('@/templates/impressListingsIdxContent'),
+            component: () => import('@/views/children/idxContentTab'),
             meta: {
                 requires: [LISTINGS]
             }
@@ -28,7 +28,7 @@ export default {
             path: 'advanced',
             name: 'IMPress Listings Advanced Settings',
             label: 'Advanced',
-            component: () => import('@/templates/impressListingsAdvancedContent'),
+            component: () => import('@/views/children/advancedContentTab'),
             meta: {
                 requires: [LISTINGS]
             }

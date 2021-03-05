@@ -66,8 +66,13 @@
         }
     }
 }
+.settings-button__save {
+    width: 155px;
+    height: 50px;
+    margin-top: 40px;
+}
 .custom-select__options {
-	height: 300px;
+	max-height: 300px;
 	overflow: auto;
 }
 .form-group {

@@ -10,7 +10,13 @@
             <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
         <template v-slot:controls>
-            <APIKey :error="error" :loading="loading" :success="success"/>
+            <APIKey
+                :error="error"
+                :loading="loading"
+                :success="success"
+                :apiKey="apiKey"
+                @form-field-update="setItem($event)"
+            />
         </template>
     </GuidedSetupContentCard>
 </template>
@@ -26,30 +32,15 @@ export default {
     },
     data () {
         return {
-            cardTitle: 'Connect Your IDX Broker Account',
             error: false,
-            errorMessage: 'We couldn’t find an account with the provided API key',
             loading: false,
-            success: false,
-            links: [
-                {
-                    text: 'Where can I find my API key?',
-                    href: '#where'
-                },
-                {
-                    text: 'IDX Broker Middleware',
-                    href: 'https://middleware.idxbroker.com/mgmt/'
-                },
-                {
-                    text: 'Sign up for IDX Broker',
-                    href: '#signUp'
-                }
-            ]
+            success: false
         }
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
+            apiKey: state => state.general.apiKey
         })
     },
     methods: {
@@ -75,6 +66,24 @@ export default {
                 this.$router.push({ path: '/guided-setup/connect/general' })
             }, 3000)
         }
+    },
+    created () {
+        this.links = [
+            {
+                text: 'Where can I find my API key?',
+                href: '#where'
+            },
+            {
+                text: 'IDX Broker Middleware',
+                href: 'https://middleware.idxbroker.com/mgmt/'
+            },
+            {
+                text: 'Sign up for IDX Broker',
+                href: '#signUp'
+            }
+        ]
+        this.errorMessage = 'We couldn’t find an account with the provided API key'
+        this.cardTitle = 'Connect Your IDX Broker Account'
     },
     mounted () {
         this.progressStepperUpdate([1, 0, 0, 0])

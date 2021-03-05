@@ -16,7 +16,7 @@
                 :ariaLabel="labels.cityListLabel"
                 :selected="cityListSelected"
                 :options="cityListOptions"
-                @selected-item="setItem({ key: 'cityListSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'cityListSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-form-group>
@@ -26,7 +26,7 @@
                 :ariaLabel="labels.countyListLabel"
                 :selected="countyListSelected"
                 :options="countyListOptions"
-                @selected-item="setItem({ key: 'countyListSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'countyListSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-form-group>
@@ -36,7 +36,7 @@
                 placeholder="Select"
                 :selected="postalCodeSelected"
                 :options="postalCodeListOptions"
-                @selected-item="setItem({ key: 'postalCodeSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'postalCodeSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <hr/>
@@ -51,7 +51,7 @@
                 placeholder="Choose the property type for default and custom fields"
                 :selected="defaultPropertyTypeSelected"
                 :options="defaultPropertyTypeOptions"
-                @selected-item="setItem({ key: 'defaultPropertyTypeSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'defaultPropertyTypeSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-block className="omnibar-form__field-subset">
@@ -68,7 +68,7 @@
                     :ariaLabel="mls.name"
                     :selected="mls.selected"
                     :options="mls.propertyTypes"
-                    @selected-item="setItem({ key: 'mlsMembership', value: [ mls, $event.value, key, mlsMembership ] })"
+                    @selected-item="$emit('form-field-update-mls-membership', { key: 'mlsMembership', value: [ mls, $event.value, key, mlsMembership ] })"
                 ></idx-custom-select>
             </idx-form-group>
         </idx-block>
@@ -83,7 +83,7 @@
                 placeholder="Select MLS Source"
                 :selected="autofillMLS"
                 :options="mlsNames"
-                @selected-item="setItem({ key: 'autofillMLS', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'autofillMLS', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-block className="form-content__header">
@@ -110,7 +110,7 @@
                 type="text"
                 customClass=""
                 :value="customPlaceholder"
-                @change="setItem({ key: 'customPlaceholder', value: $event.target.value })"
+                @change="$emit('form-field-update', { key: 'customPlaceholder', value: $event.target.value })"
             ></idx-form-input>
         </idx-form-group>
         <idx-form-group>
@@ -122,69 +122,102 @@
                 :ariaLabel="labels.sortOrderLabel"
                 :selected="defaultSortOrderSelected"
                 :options="sortOrderOptions"
-                @selected-item="setItem({ key: 'defaultSortOrderSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'defaultSortOrderSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
     </idx-block>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
 export default {
     name: 'omnibar-form',
-    data () {
-        return {
-            labels: {
-                cityListLabel: 'City List',
-                countyListLabel: 'County List',
-                postalCodeListLabel: 'Postal Code List',
-                defaultPropertyTypeLabel: 'Default Property Type',
-                sortOrderLabel: 'Default Sort Order',
-                addressAutofillLabel: 'Address Autofill MLS'
-            },
-            sortOrderOptions: [
-                // These are the current values used in the system, we can update them if we want to have it more
-                // human readable.
-                { value: 'newest', label: 'Newest Listings' },
-                { value: 'oldest', label: 'Oldest Listings' },
-                { value: 'pra', label: 'Least expensive to most' },
-                { value: 'prd', label: 'Most expensive to least' },
-                { value: 'bda', label: 'Bedrooms (Low to High)' },
-                { value: 'bdd', label: 'Bedrooms (High to Low)' },
-                { value: 'tba', label: 'Bathrooms (Low to High)' },
-                { value: 'tbd', label: 'Bathrooms (High to Low)' },
-                { value: 'sqfta', label: 'Square Feet (Low to High)' },
-                { value: 'sqftd', label: 'Square Feet (High to Low)' }
-            ]
+    props: {
+        cityListOptions: {
+            type: Array,
+            default: () => []
+        },
+        cityListSelected: {
+            type: String,
+            default: ''
+        },
+        countyListOptions: {
+            type: Array,
+            default: () => []
+        },
+        countyListSelected: {
+            type: String,
+            default: ''
+        },
+        postalCodeListOptions: {
+            type: Array,
+            default: () => []
+        },
+        postalCodeSelected: {
+            type: String,
+            default: ''
+        },
+        defaultPropertyTypeOptions: {
+            type: Array,
+            default: () => []
+        },
+        defaultPropertyTypeSelected: {
+            type: String,
+            default: ''
+        },
+        mlsMembership: {
+            type: Array,
+            default: () => []
+        },
+        autofillMLS: {
+            type: String,
+            default: ''
+        },
+        customFieldsSelected: {
+            type: Array,
+            default: () => []
+        },
+        customFieldsOptions: {
+            type: Array,
+            default: () => []
+        },
+        customPlaceholder: {
+            type: String,
+            default: ''
+        },
+        defaultSortOrderSelected: {
+            type: String,
+            default: ''
         }
     },
     computed: {
-        ...mapState({
-            cityListOptions: state => state.omnibar.cityListOptions,
-            cityListSelected: state => state.omnibar.cityListSelected,
-            countyListOptions: state => state.omnibar.countyListOptions,
-            countyListSelected: state => state.omnibar.countyListSelected,
-            postalCodeListOptions: state => state.omnibar.postalCodeListOptions,
-            postalCodeSelected: state => state.omnibar.postalCodeSelected,
-            defaultPropertyTypeOptions: state => state.omnibar.defaultPropertyTypeOptions,
-            defaultPropertyTypeSelected: state => state.omnibar.defaultPropertyTypeSelected,
-            mlsMembership: state => state.omnibar.mlsMembership,
-            autofillMLS: state => state.omnibar.autofillMLS,
-            customFieldsSelected: state => state.omnibar.customFieldsSelected,
-            customFieldsOptions: state => state.omnibar.customFieldsOptions,
-            customPlaceholder: state => state.omnibar.customPlaceholder,
-            defaultSortOrderSelected: state => state.omnibar.defaultSortOrderSelected
-        }),
         mlsNames () {
             return this.mlsMembership.map(x => {
                 return { value: x.value, label: x.name }
             })
         }
     },
-    methods: {
-        ...mapActions({
-            setItem: 'omnibar/setItem',
-            omnibarMLSStateChange: 'omnibar/omnibarMLSStateChange'
-        })
+    created () {
+        this.labels = {
+            cityListLabel: 'City List',
+            countyListLabel: 'County List',
+            postalCodeListLabel: 'Postal Code List',
+            defaultPropertyTypeLabel: 'Default Property Type',
+            sortOrderLabel: 'Default Sort Order',
+            addressAutofillLabel: 'Address Autofill MLS'
+        }
+        this.sortOrderOptions = [
+            // These are the current values used in the system, we can update them if we want to have it more
+            // human readable.
+            { value: 'newest', label: 'Newest Listings' },
+            { value: 'oldest', label: 'Oldest Listings' },
+            { value: 'pra', label: 'Least expensive to most' },
+            { value: 'prd', label: 'Most expensive to least' },
+            { value: 'bda', label: 'Bedrooms (Low to High)' },
+            { value: 'bdd', label: 'Bedrooms (High to Low)' },
+            { value: 'tba', label: 'Bathrooms (Low to High)' },
+            { value: 'tbd', label: 'Bathrooms (High to Low)' },
+            { value: 'sqfta', label: 'Square Feet (Low to High)' },
+            { value: 'sqftd', label: 'Square Feet (High to Low)' }
+        ]
     }
 }
 </script>

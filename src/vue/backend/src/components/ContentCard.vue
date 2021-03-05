@@ -62,6 +62,7 @@ export default {
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/vNav';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/progressStepper';
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/progressBar';
+    @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 
     .content-card {
         --space-button: 16px;

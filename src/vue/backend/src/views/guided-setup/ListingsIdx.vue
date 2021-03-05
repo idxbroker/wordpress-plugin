@@ -30,22 +30,23 @@ export default {
     methods: {
         ...mapActions({
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveListingsIdxSettings: 'listingsSettings/saveListingsIdxSettings'
+            saveIDXListingsSettings: 'listingsSettings/saveIDXListingsSettings'
         }),
         goBackStep: function () {
-            // to-do: go back in history
             this.$router.go(-1)
         },
         goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/agents' })
+            this.$router.push({ path: this.skipPath })
         },
         async goContinue () {
-            await this.saveListingsIdxSettings()
-            this.$router.push({ path: '/guided-setup/listings/advanced' })
+            await this.saveIDXListingsSettings()
+            this.$router.push({ path: this.continuePath })
         }
     },
     created () {
         this.cardTitle = 'Configure IMPress Listings'
+        this.continuePath = '/guided-setup/listings/advanced'
+        this.skipPath = '/guided-setup/agents'
         this.links = [
             {
                 text: 'IMPress Listings Features',
