@@ -14,9 +14,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import GuidedSetupMixin from '@/mixins/guidedSetup'
 import ListingsIdx from '@/templates/impressListingsIdxContent.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    mixins: [GuidedSetupMixin],
     components: {
         ListingsIdx,
         GuidedSetupContentCard
@@ -32,12 +34,6 @@ export default {
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveIDXListingsSettings: 'listingsSettings/saveIDXListingsSettings'
         }),
-        goBackStep: function () {
-            this.$router.go(-1)
-        },
-        goSkipStep: function () {
-            this.$router.push({ path: this.skipPath })
-        },
         async goContinue () {
             await this.saveIDXListingsSettings()
             this.$router.push({ path: this.continuePath })

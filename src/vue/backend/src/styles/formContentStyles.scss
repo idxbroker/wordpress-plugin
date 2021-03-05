@@ -71,6 +71,10 @@
     height: 50px;
     margin-top: 40px;
 }
+.btn.btn-link {
+    background-color: transparent;
+    border-color: transparent;
+}
 .custom-select__options {
 	max-height: 300px;
 	overflow: auto;
@@ -79,7 +83,6 @@
     margin-bottom: 0px;
     position: relative;
 }
-
 .invalid-feedback {
     font-size: 1em;
 }
