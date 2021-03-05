@@ -22,8 +22,8 @@ export default {
             this.formChanges = { ...this.formChanges, ...change }
         },
         saveAction () {
-            for (const item in this.formChanges) {
-                this.setItem({ key: item, value: this.formChanges[item] })
+            for (const key in this.formChanges) {
+                this.setItem({ key, value: this.formChanges[key] })
             }
             this.formChanges = {}
         }

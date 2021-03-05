@@ -1,14 +1,7 @@
 <template>
     <div>
         <impress-listings-advanced-content
-            :deregisterMainCss="localStateValues.deregisterMainCss"
-            :deregisterWidgetCss="localStateValues.deregisterWidgetCss"
-            :sendFormSubmission="localStateValues.sendFormSubmission"
-            :formShortcode="localStateValues.formShortcode"
-            :googleMapsAPIKey="localStateValues.googleMapsAPIKey"
-            :wrapperStart="localStateValues.wrapperStart"
-            :wrapperEnd="localStateValues.wrapperEnd"
-            :deletePluginDataOnUninstall="localStateValues.deletePluginDataOnUninstall"
+            v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></impress-listings-advanced-content>
         <idx-button

@@ -8,20 +8,7 @@
         @continue="goContinue">
         <template v-slot:controls>
             <omnibarForm
-                :cityListOptions="localStateValues.cityListOptions"
-                :cityListSelected="localStateValues.cityListSelected"
-                :countyListOptions="localStateValues.countyListOptions"
-                :countyListSelected="localStateValues.countyListSelected"
-                :postalCodeListOptions="localStateValues.postalCodeListOptions"
-                :postalCodeSelected="localStateValues.postalCodeSelected"
-                :defaultPropertyTypeOptions="localStateValues.defaultPropertyTypeOptions"
-                :defaultPropertyTypeSelected="localStateValues.defaultPropertyTypeSelected"
-                :mlsMembership="localStateValues.mlsMembership"
-                :autofillMLS="localStateValues.autofillMLS"
-                :customFieldsSelected="localStateValues.customFieldsSelected"
-                :customFieldsOptions="localStateValues.customFieldsOptions"
-                :customPlaceholder="localStateValues.customPlaceholder"
-                :defaultSortOrderSelected="localStateValues.defaultSortOrderSelected"
+                v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
         </template>

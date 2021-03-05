@@ -9,9 +9,7 @@
     >
         <template v-slot:controls>
             <GeneralSettings
-                :reCAPTCHA="localStateValues.reCAPTCHA"
-                :updateFrequency="localStateValues.updateFrequency"
-                :wrapperName="localStateValues.wrapperName"
+                v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
         </template>

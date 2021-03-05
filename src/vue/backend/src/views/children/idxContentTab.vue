@@ -1,17 +1,7 @@
 <template>
     <div>
         <impress-listings-idx-content
-            :updateListings="localStateValues.updateListings"
-            :soldListings="localStateValues.soldListings"
-            :automaticImport="localStateValues.automaticImport"
-            :displayIDXLink="localStateValues.displayIDXLink"
-            :defaultListingTemplateSelected="localStateValues.defaultListingTemplateSelected"
-            :defaultListingTemplateOptions="localStateValues.defaultListingTemplateOptions"
-            :importedListingsAuthorSelected="localStateValues.importedListingsAuthorSelected"
-            :importedListingsAuthorOptions="localStateValues.importedListingsAuthorOptions"
-            :importTitle="localStateValues.importTitle"
-            :advancedFieldData="localStateValues.advancedFieldData"
-            :displayAdvancedFields="localStateValues.displayAdvancedFields"
+            v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></impress-listings-idx-content>
         <idx-button

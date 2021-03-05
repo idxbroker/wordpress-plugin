@@ -1,12 +1,7 @@
 <template>
     <div>
         <listings-general
-            :currencyCodeSelected="localStateValues.currencyCodeSelected"
-            :currencySymbolSelected="localStateValues.currencySymbolSelected"
-            :defaultDisclaimer="localStateValues.defaultDisclaimer"
-            :numberOfPosts="localStateValues.numberOfPosts"
-            :listingSlug="localStateValues.listingSlug"
-            :defaultState="localStateValues.defaultState"
+            v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></listings-general>
         <idx-button

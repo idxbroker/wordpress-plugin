@@ -8,9 +8,7 @@
             @form-field-update="formUpdate"
         />
         <GeneralSettings
-            :reCAPTCHA="localStateValues.reCAPTCHA"
-            :updateFrequency="localStateValues.updateFrequency"
-            :wrapperName="localStateValues.wrapperName"
+            v-bind="localStateValues"
             @form-field-update="formUpdate"
         />
         <idx-button size="lg" customClass="settings-button__save " @click="saveAction">Save</idx-button>
