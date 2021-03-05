@@ -1,14 +1,4 @@
-export const guidedSetupMixin = {
-    props: {
-        continuePath: {
-            type: String,
-            default: ''
-        },
-        skipPath: {
-            type: String,
-            default: ''
-        }
-    },
+export default {
     methods: {
         goBackStep: function () {
             this.$router.go(-1)
@@ -16,9 +6,12 @@ export const guidedSetupMixin = {
         goSkipStep: function () {
             this.$router.push({ path: this.skipPath })
         },
-        async goContinue () {
-            await this.saveGeneralListingsSettings()
+        goContinue: function () {
             this.$router.push({ path: this.continuePath })
         }
+    },
+    created () {
+        this.continuePath = ''
+        this.skipPath = ''
     }
 }

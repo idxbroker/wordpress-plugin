@@ -7,7 +7,15 @@
         @skip-step="goSkipStep"
         @continue="goContinue">
         <template v-slot:controls>
-            <ListingsGeneral/>
+            <ListingsGeneral
+                :currencyCodeSelected="currencyCodeSelected"
+                :currencySymbolSelected="currencySymbolSelected"
+                :defaultDisclaimer="defaultDisclaimer"
+                :numberOfPosts="numberOfPosts"
+                :listingSlug="listingSlug"
+                :defaultState="defaultState"
+                @form-field-update="setItem($event)"
+            />
         </template>
     </GuidedSetupContentCard>
 </template>
@@ -25,15 +33,25 @@ export default {
     },
     computed: {
         ...mapState({
-            enabled: state => state.listingsSettings.enabled,
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
+            currencyCodeSelected: state => state.listingsSettings.currencyCodeSelected,
+            currencySymbolSelected: state => state.listingsSettings.currencySymbolSelected,
+            defaultDisclaimer: state => state.listingsSettings.defaultDisclaimer,
+            numberOfPosts: state => state.listingsSettings.numberOfPosts,
+            listingSlug: state => state.listingsSettings.listingSlug,
+            defaultState: state => state.listingsSettings.defaultState
         })
     },
     methods: {
         ...mapActions({
+            setItem: 'listingsSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveGeneralListingsSettings: 'listingsSettings/saveGeneralListingsSettings'
-        })
+        }),
+        async goContinue () {
+            await this.saveGeneralListingsSettings()
+            this.$router.push({ path: this.continuePath })
+        }
     },
     created () {
         this.cardTitle = 'Configure IMPress Listings'
