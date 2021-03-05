@@ -37,21 +37,6 @@
 
 export default {
     name: 'GeneralSettings',
-    data () {
-        return {
-            toggleLabel: 'Enable Google reCAPTCHA',
-            updateFrequencyOptions: [
-                { value: 'five_minutes', label: 'Every 5 Minutes' },
-                { value: 'hourly', label: 'Hourly' },
-                { value: 'daily', label: 'Daily' },
-                { value: 'twice_daily', label: 'Twice Daily' },
-                { value: 'weekly', label: 'Weekly' },
-                { value: 'two_weeks', label: 'Every 2 Weeks' },
-                { value: 'monthly', label: 'Monthly' },
-                { value: 'disabled', label: 'Disabled' }
-            ]
-        }
-    },
     props: {
         reCAPTCHA: {
             type: Boolean,
@@ -65,6 +50,19 @@ export default {
             type: String,
             default: ''
         }
+    },
+    created () {
+        this.toggleLabel = 'Enable Google reCAPTCHA'
+        this.updateFrequencyOptions = [
+            { value: 'five_minutes', label: 'Every 5 Minutes' },
+            { value: 'hourly', label: 'Hourly' },
+            { value: 'daily', label: 'Daily' },
+            { value: 'twice_daily', label: 'Twice Daily' },
+            { value: 'weekly', label: 'Weekly' },
+            { value: 'two_weeks', label: 'Every 2 Weeks' },
+            { value: 'monthly', label: 'Monthly' },
+            { value: 'disabled', label: 'Disabled' }
+        ]
     }
 }
 </script>

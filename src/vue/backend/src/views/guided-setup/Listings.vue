@@ -24,8 +24,8 @@
                         <idx-toggle-slider
                             uncheckedState="No"
                             checkedState="Yes"
-                            @toggle="setItem({ key: 'enabled', value: !enabled })"
-                            :active="enabled"
+                            @toggle="formUpdate({ key: 'enabled', value: !localStateValues.enabled })"
+                            :active="localStateValues.enabled"
                             :label="activateLabel"
                         ></idx-toggle-slider>
                     </idx-block>
@@ -37,8 +37,10 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    mixins: [pageGuard],
     components: {
         GuidedSetupContentCard
     },
@@ -63,10 +65,12 @@ export default {
         },
         async goContinue () {
             await this.saveListingsSettings()
+            this.saveAction()
             this.$router.push({ path: '/guided-setup/listings/general' })
         }
     },
     created () {
+        this.module = 'listingsSettings'
         this.cardTitle = 'Enable IMPress Listings'
         this.activateLabel = 'Enable'
         this.links = [

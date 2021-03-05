@@ -1,19 +1,19 @@
 <template>
     <TwoColumn title="General Settings">
         <APIKey
-            :apiKey="apiKey"
+            :apiKey="localStateValues.apiKey"
             :error="error"
             :loading="loading"
             :success="success"
-            @form-field-update="setItem($event)"
+            @form-field-update="formUpdate"
         />
         <GeneralSettings
-            :reCAPTCHA="reCAPTCHA"
-            :updateFrequency="updateFrequency"
-            :wrapperName="wrapperName"
-            @form-field-update="setItem($event)"
+            :reCAPTCHA="localStateValues.reCAPTCHA"
+            :updateFrequency="localStateValues.updateFrequency"
+            :wrapperName="localStateValues.wrapperName"
+            @form-field-update="formUpdate"
         />
-        <idx-button size="lg" customClass="settings-button__save " @click="goSave">Save</idx-button>
+        <idx-button size="lg" customClass="settings-button__save " @click="saveAction">Save</idx-button>
         <template #related>
             <RelatedLinks :relatedLinks="relatedLinks"/>
         </template>
@@ -25,7 +25,9 @@ import APIKey from '@/components/APIKey.vue'
 import GeneralSettings from '@/templates/GeneralSettings'
 import RelatedLinks from '@/components/RelatedLinks.vue'
 import TwoColumn from '@/templates/layout/TwoColumn'
+import pageGuard from '@/mixins/pageGuard'
 export default {
+    mixins: [pageGuard],
     components: {
         APIKey,
         GeneralSettings,
@@ -60,6 +62,7 @@ export default {
         }
     },
     created () {
+        this.module = 'general'
         this.relatedLinks = [
             {
                 text: 'Where can I find my API key?',

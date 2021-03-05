@@ -1,22 +1,22 @@
 <template>
     <div>
         <impress-listings-idx-content
-            :updateListings="updateListings"
-            :soldListings="soldListings"
-            :automaticImport="automaticImport"
-            :displayIDXLink="displayIDXLink"
-            :defaultListingTemplateSelected="defaultListingTemplateSelected"
-            :defaultListingTemplateOptions="defaultListingTemplateOptions"
-            :importedListingsAuthorSelected="importedListingsAuthorSelected"
-            :importedListingsAuthorOptions="importedListingsAuthorOptions"
-            :importTitle="importTitle"
-            :advancedFieldData="advancedFieldData"
-            :displayAdvancedFields="displayAdvancedFields"
-            @form-field-update="setItem($event)"
+            :updateListings="localStateValues.updateListings"
+            :soldListings="localStateValues.soldListings"
+            :automaticImport="localStateValues.automaticImport"
+            :displayIDXLink="localStateValues.displayIDXLink"
+            :defaultListingTemplateSelected="localStateValues.defaultListingTemplateSelected"
+            :defaultListingTemplateOptions="localStateValues.defaultListingTemplateOptions"
+            :importedListingsAuthorSelected="localStateValues.importedListingsAuthorSelected"
+            :importedListingsAuthorOptions="localStateValues.importedListingsAuthorOptions"
+            :importTitle="localStateValues.importTitle"
+            :advancedFieldData="localStateValues.advancedFieldData"
+            :displayAdvancedFields="localStateValues.displayAdvancedFields"
+            @form-field-update="formUpdate"
         ></impress-listings-idx-content>
         <idx-button
             customClass="settings-button__save"
-            @click="saveIDXListingsSettings"
+            @click="saveAction"
         >
             Save
         </idx-button>
@@ -24,10 +24,12 @@
 </template>
 <script>
 import impressListingsIdxContent from '@/templates/impressListingsIdxContent.vue'
+import pageGuard from '@/mixins/pageGuard'
 import { mapActions, mapState } from 'vuex'
 export default {
-    components: { impressListingsIdxContent },
     name: 'listings-idx-content-tab',
+    mixins: [pageGuard],
+    components: { impressListingsIdxContent },
     computed: {
         ...mapState({
             updateListings: state => state.listingsSettings.updateListings,
@@ -48,6 +50,9 @@ export default {
             setItem: 'listingsSettings/setItem',
             saveIDXListingsSettings: 'listingsSettings/saveIDXListingsSettings'
         })
+    },
+    created () {
+        this.module = 'listingsSettings'
     }
 }
 </script>

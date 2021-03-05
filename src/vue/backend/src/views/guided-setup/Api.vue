@@ -14,8 +14,8 @@
                 :error="error"
                 :loading="loading"
                 :success="success"
-                :apiKey="apiKey"
-                @form-field-update="setItem($event)"
+                :apiKey="localStateValues.apiKey"
+                @form-field-update="formUpdate"
             />
         </template>
     </GuidedSetupContentCard>
@@ -23,9 +23,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import APIKey from '@/components/APIKey.vue'
 export default {
+    mixins: [pageGuard],
     components: {
         APIKey,
         GuidedSetupContentCard
@@ -59,6 +61,7 @@ export default {
         async goContinue () {
             this.loading = true
             await this.verifyAPIkey()
+            this.saveAction()
             this.loading = false
             this.success = true
             this.cardTitle = 'Account Connected!'
@@ -68,6 +71,7 @@ export default {
         }
     },
     created () {
+        this.module = 'general'
         this.links = [
             {
                 text: 'Where can I find my API key?',

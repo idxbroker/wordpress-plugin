@@ -1,19 +1,19 @@
 <template>
     <div>
         <impress-listings-advanced-content
-            :deregisterMainCss="deregisterMainCss"
-            :deregisterWidgetCss="deregisterWidgetCss"
-            :sendFormSubmission="sendFormSubmission"
-            :formShortcode="formShortcode"
-            :googleMapsAPIKey="googleMapsAPIKey"
-            :wrapperStart="wrapperStart"
-            :wrapperEnd="wrapperEnd"
-            :deletePluginDataOnUninstall="deletePluginDataOnUninstall"
-            @form-field-update="setItem($event)"
+            :deregisterMainCss="localStateValues.deregisterMainCss"
+            :deregisterWidgetCss="localStateValues.deregisterWidgetCss"
+            :sendFormSubmission="localStateValues.sendFormSubmission"
+            :formShortcode="localStateValues.formShortcode"
+            :googleMapsAPIKey="localStateValues.googleMapsAPIKey"
+            :wrapperStart="localStateValues.wrapperStart"
+            :wrapperEnd="localStateValues.wrapperEnd"
+            :deletePluginDataOnUninstall="localStateValues.deletePluginDataOnUninstall"
+            @form-field-update="formUpdate"
         ></impress-listings-advanced-content>
         <idx-button
             customClass="settings-button__save"
-            @click="saveAdvancedListingsSettings"
+            @click="saveAction"
         >
             Save
         </idx-button>
@@ -22,8 +22,10 @@
 <script>
 import impressListingsAdvancedContent from '@/templates/impressListingsAdvancedContent.vue'
 import { mapActions, mapState } from 'vuex'
+import pageGuard from '@/mixins/pageGuard'
 export default {
     name: 'listings-advanced-content-tab',
+    mixins: [pageGuard],
     components: {
         impressListingsAdvancedContent
     },
@@ -44,6 +46,9 @@ export default {
             setItem: 'listingsSettings/setItem',
             saveAdvancedListingsSettings: 'listingsSettings/saveAdvancedListingsSettings'
         })
+    },
+    created () {
+        this.module = 'listingsSettings'
     }
 }
 </script>

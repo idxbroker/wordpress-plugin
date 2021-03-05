@@ -9,10 +9,10 @@
     >
         <template v-slot:controls>
             <GeneralSettings
-                :reCAPTCHA="reCAPTCHA"
-                :updateFrequency="updateFrequency"
-                :wrapperName="wrapperName"
-                @form-field-update="setItem($event)"
+                :reCAPTCHA="localStateValues.reCAPTCHA"
+                :updateFrequency="localStateValues.updateFrequency"
+                :wrapperName="localStateValues.wrapperName"
+                @form-field-update="formUpdate"
             />
         </template>
     </GuidedSetupContentCard>
@@ -20,9 +20,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import pageGuard from '@/mixins/pageGuard'
 import GeneralSettings from '@/templates/GeneralSettings.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    mixins: [pageGuard],
     components: {
         GeneralSettings,
         GuidedSetupContentCard
@@ -69,8 +71,12 @@ export default {
         },
         async goContinue () {
             await this.saveGeneralSettings()
+            this.saveAction()
             this.$router.push({ path: '/guided-setup/connect/omnibar' })
         }
+    },
+    created () {
+        this.module = 'general'
     },
     mounted () {
         this.progressStepperUpdate([2, 0, 0, 0])
