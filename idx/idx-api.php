@@ -48,40 +48,51 @@ class Idx_Api {
 		}
 		$response_code = $response['response']['code'];
 		$err_message   = false;
+		$rest_error    = false;
 		if ( is_numeric( $response_code ) ) {
+			// $err_message is for legacy error messaging. $rest_error is for the return in the REST API interface.
 			switch ( $response_code ) {
 				case 401:
 					$err_message = 'Access key is invalid or has been revoked, please ensure there are no spaces in your key.<br />If the problem persists, please reset your API key in the <a href="https://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control">IDX Broker Dashboard</a>, or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 401">help@idxbroker.com</a>';
+					$rest_error  = 'Access key is invalid or has been revoked.';
 					break;
 				case 403:
 					$ip          = gethostbyname( preg_replace( '(^https?://)', '', get_site_url() ) );
 					$err_message = 'IP address: ' . $ip . ' was blocked due to violation of TOS. Contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 403">help@idxbroker.com</a> with your IP to determine the reason for the block.';
+					$rest_error  = "IP address: $ip was blocked due to violation of IDX Broker's Terms of Service.";
 					break;
 				case 403.4:
 					$err_message = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.<br />Please contact your developer and/or hosting provider.';
+					$rest_error  = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.';
 					break;
 				case 405:
 				case 409:
 					$err_message = 'Invalid request sent to IDX Broker API, please re-install the IMPress for IDX Broker plugin.';
+					$rest_error  = 'Invalid request sent to IDX Broker API.';
 					break;
 				case 406:
 					$err_message = 'Access key is missing. To obtain an access key, please visit your <a href="https://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control">IDX Broker Dashboard</a>.';
+					$rest_error  = 'Access key is missing.';
 					break;
 				case 412:
 					$err_message = 'Your account has exceeded the hourly access limit for your API key.<br />You may either wait and try again later, reset your API key in the <a href="https://support.idxbroker.com/customer/en/portal/articles/1911631-api-key-control">IDX Broker Dashboard</a>, or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 412">help@idxbroker.com</a>';
+					$rest_error  = 'Account has exceeded the hourly access limit for your API key.';
 					update_option( 'idx_api_limit_exceeded', time() );
 					break;
 				case 500:
 					$err_message = 'General system error when attempting to communicate with the IDX Broker API, please try again in a few moments or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 500">help@idxbroker.com</a> if the problem persists.';
+					$rest_error  = 'General system error when attempting to communicate with the IDX Broker API.';
 					break;
 				case 503:
 					$err_message = 'IDX Broker API is currently undergoing maintenance. Please try again in a few moments or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 503">help@idxbroker.com</a> if the problem persists.';
+					$rest_error  = 'IDX Broker API is currently undergoing maintenance.';
 					break;
 			}
 		}
 		return array(
-			'code'  => $response_code,
-			'error' => $err_message,
+			'code'       => $response_code,
+			'error'      => $err_message,
+			'rest_error' => $rest_error,
 		);
 	}
 
@@ -148,8 +159,8 @@ class Idx_Api {
 				'idx_api_error',
 				__( 'Error ' ) . $code . __( ': ' ) . $error,
 				array(
-					'status'  => $code,
-					'message' => $error,
+					'status'     => $code,
+					'rest_error' => $rest_error,
 				)
 			);
 		} else {

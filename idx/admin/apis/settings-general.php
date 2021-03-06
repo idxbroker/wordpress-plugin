@@ -39,18 +39,15 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 				'permission_callback' => array( $this, 'admin_check' ),
 				'args'                => array(
 					'apiKey'          => array(
-						'required' => false,
-						'type'     => 'string',
+						'type' => 'string',
 					),
 					'reCAPTCHA'       => array(
-						'required' => false,
-						'type'     => 'boolean',
+						'type' => 'boolean',
 					),
 					'updateFrequency' => array(
-						'required' => false,
-						'type'     => 'string',
+						'type' => 'string',
 						// TODO: Create whitelist of timings and sync this list.
-						'enum'     => array(
+						'enum' => array(
 							'five_minutes',
 							'hourly',
 							'twice_daily',
@@ -61,8 +58,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 						),
 					),
 					'wrapperName'     => array(
-						'required' => false,
-						'type'     => 'string',
+						'type' => 'string',
 					),
 				),
 			)
@@ -149,7 +145,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 		$idx_api->idx_clean_transients();
 		$error = $this->api_error_test( $idx_api );
 		if ( $error ) {
-			return $error;
+			return $this->convert_idx_api_error( $error );
 		}
 
 		// Fire an omnibar location update and schedule a daily cron.
@@ -168,7 +164,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 	private function create_wrapper( $wrapper_name ) {
 		$idx_wrappers = new \IDX\Wrappers();
 		$error        = $idx_wrappers->idx_create_dynamic_page( $wrapper_name );
-		return $error;
+		return $this->convert_idx_api_error( $error );
 	}
 
 	/**
@@ -183,13 +179,12 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 			update_option( 'idx_cron_schedule', $timing );
 			return null;
 		}
-		// Uses same error format as \IDX\IDX_Api.
+
 		return new \WP_Error(
-			'cron_update_error',
-			'500: Update frequency option does not exist.',
+			'cron_option_unavailable',
+			"Update frequency option $timing does not exist.",
 			array(
-				'status'  => 500,
-				'message' => 'Update frequency option does not exist.',
+				'status' => 500,
 			)
 		);
 	}

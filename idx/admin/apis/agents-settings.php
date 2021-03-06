@@ -38,28 +38,22 @@ class Agents_Settings extends \IDX\Admin\Rest_Controller {
 				'permission_callback' => array( $this, 'agents_enabled' ),
 				'args'                => array(
 					'deregisterMainCss' => array(
-						'required' => false,
-						'type'     => 'boolean',
+						'type' => 'boolean',
 					),
 					'numberOfPosts'     => array(
-						'required' => false,
-						'type'     => 'integer',
+						'type' => 'integer',
 					),
 					'directorySlug'     => array(
-						'required' => false,
-						'type'     => 'string',
+						'type' => 'string',
 					),
 					'wrapperEnabled'    => array(
-						'required' => false,
-						'type'     => 'boolean',
+						'type' => 'boolean',
 					),
 					'wrapperStart'      => array(
-						'required' => false,
-						'type'     => 'string',
+						'type' => 'string',
 					),
 					'wrapperEnd'        => array(
-						'required' => false,
-						'type'     => 'string',
+						'type' => 'string',
 					),
 				),
 			)
