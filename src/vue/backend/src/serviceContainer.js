@@ -36,6 +36,12 @@ export default {
     },
     get agentSettingsRepository () {
         return loadRepo('agentSettings')
+    },
+    get listingsSettingsRepository () {
+        return loadRepo('listingsSettings')
+    },
+    get socialProRepository () {
+        return loadRepo('socialPro')
     }
     /* Add more repositories here as they become available. */
 }
