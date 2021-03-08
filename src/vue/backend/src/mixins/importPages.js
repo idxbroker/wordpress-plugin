@@ -6,10 +6,13 @@ export default {
     },
     methods: {
         updateSelected (e, actionsArray) {
+            const inArray = actionsArray.indexOf(e[1])
             if (e[0]) {
-                actionsArray.push(e[1])
+                if (inArray === -1) {
+                    actionsArray.push(e[1])
+                }
             } else {
-                actionsArray.splice(actionsArray.indexOf(e[1]), 1)
+                actionsArray.splice(inArray, 1)
             }
         },
         selectAll (reference, masterList) {

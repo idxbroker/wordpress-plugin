@@ -6,7 +6,7 @@
             <idx-button
                 customClass="import-header__action"
                 :disabled="disabled"
-                @click="$emit('bulk-action', action)"
+                @click="$emit('bulk-action')"
             >
                 {{ action }} Selected
             </idx-button>
