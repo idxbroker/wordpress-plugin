@@ -58,7 +58,7 @@ export default {
         ...mapActions({
             setItem: 'agentSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveAgentSettings: 'general/saveAgentSettings'
+            saveAgentSettings: 'agentSettings/saveAgentSettings'
         }),
         async goContinue () {
             await this.saveAgentSettings()
@@ -68,8 +68,8 @@ export default {
     },
     created () {
         this.module = 'agentSettings'
-        this.cardTitle = 'Activate IMPress Agents'
-        this.activateLabel = 'Activate'
+        this.cardTitle = 'Enable IMPress Agents'
+        this.activateLabel = 'Enable'
         this.continuePath = '/guided-setup/agents/configure'
         this.skipPath = '/guided-setup/social-pro'
         this.links = [

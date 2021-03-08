@@ -58,7 +58,7 @@ export default {
         ...mapActions({
             setItem: 'listingsSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveListingsSettings: 'general/saveListingsSettings'
+            saveListingsSettings: 'agentSettings/saveListingsSettings'
         }),
         async goContinue () {
             await this.saveListingsSettings()
