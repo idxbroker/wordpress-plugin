@@ -84,7 +84,6 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 .form-content__api-key {
     margin-bottom: 40px;
 }

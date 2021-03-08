@@ -2,7 +2,7 @@
     <checkbox-label
         :option="option"
         customClass="agent-card"
-        @checked="$emit('agent-selected', [$event.data, agent.id])"
+        @checked="$emit('agent-selected', [$event.data, agent.agentId])"
     >
         <template v-slot:content>
             <idx-block :className="{
@@ -18,13 +18,13 @@
                 <idx-block className="agent-card__name">{{ agent.name }}</idx-block>
                 <idx-block className="agent-card__title">{{ agent.title }}</idx-block>
                 <idx-block className="agent-card__email">{{ agent.email }}</idx-block>
-                <idx-block className="agent-card__id">#{{ agent.id }}</idx-block>
+                <idx-block className="agent-card__id">#{{ agent.agentId }}</idx-block>
             </idx-block>
-            <idx-block v-if="agent.imported" className="agent-card__import-flag">
+            <idx-block v-if="imported" className="agent-card__import-flag">
                 <idx-block className="agent-card__imported">
                     Imported <img :src="check">
                 </idx-block>
-                <idx-block @click.native.stop="$emit('removeAgent', agent.id)" className="agent-card__delete">
+                <idx-block @click.native.stop="$emit('remove-agent', agent.agentId)" className="agent-card__delete">
                     <img :src="deleteIcon" alt="Remove Agent">
                 </idx-block>
             </idx-block>
@@ -36,20 +36,14 @@ import deleteIcon from '@/assets/trash-light.svg'
 import check from '@/assets/check-light-white.svg'
 export default {
     name: 'agent-card',
-    data () {
-        return {
-            option: {
-                value: 'selected',
-                label: 'selected'
-            },
-            deleteIcon,
-            check
-        }
-    },
     props: {
         agent: {
             type: Object,
             default: () => {}
+        },
+        imported: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -57,6 +51,14 @@ export default {
             const matches = this.agent.name.match(/\b(\w)/g)
             return matches.join('')
         }
+    },
+    created () {
+        this.option = {
+            value: 'selected',
+            label: 'selected'
+        }
+        this.deleteIcon = deleteIcon
+        this.check = check
     }
 }
 </script>
