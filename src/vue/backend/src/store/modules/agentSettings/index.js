@@ -2,7 +2,7 @@ import actions from './actions'
 import getters from './getters'
 
 const state = {
-    enabled: false,
+    enabled: true,
     deregisterMainCss: false,
     numberOfPosts: '9',
     directorySlug: 'employees',

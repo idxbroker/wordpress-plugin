@@ -1,3 +1,7 @@
+const saveListingsSettings = ({ commit }, payload) => {
+    // To-Do: api call to corresponding endpoint
+    return new Promise(resolve => setTimeout(resolve, 100))
+}
 const saveGeneralListingsSettings = ({ commit }, payload) => {
     // To-Do: api call to corresponding endpoint
     return new Promise(resolve => setTimeout(resolve, 100))
@@ -12,6 +16,7 @@ const saveAdvancedListingsSettings = ({ commit }, payload) => {
 }
 
 export default {
+    saveListingsSettings,
     saveGeneralListingsSettings,
     saveIDXListingsSettings,
     saveAdvancedListingsSettings

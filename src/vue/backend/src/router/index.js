@@ -142,18 +142,13 @@ const routes = [
                     },
                     {
                         path: 'agents',
-                        children: [
-                            {
-                                path: 'activate',
-                                name: 'Activate IMPress Agents'
-                                // component
-                            },
-                            {
-                                path: 'configure',
-                                name: 'Configure IMPress Agents'
-                                // component
-                            }
-                        ]
+                        name: 'Activate IMPress Agents',
+                        component: () => import('@/views/guided-setup/Agents')
+                    },
+                    {
+                        path: 'agents/configure',
+                        name: 'Configure IMPress Agents'
+                        // component
                     },
                     {
                         path: 'social-pro',
