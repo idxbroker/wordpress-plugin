@@ -1,7 +1,7 @@
 <template>
     <idx-block tag="fieldset" className="agents-settings form-content">
+        <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">CSS Settings</idx-block> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
         <idx-form-group>
-            <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">CSS Settings</idx-block> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
             <idx-block className="form-content__toggle">
                 {{ cssLabel }}
                 <idx-toggle-slider
