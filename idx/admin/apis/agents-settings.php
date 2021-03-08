@@ -31,6 +31,31 @@ class Agents_Settings extends \IDX\Admin\Rest_Controller {
 
 		register_rest_route(
 			$this->namespace,
+			$this->route_name( 'settings/agents/enable' ),
+			[
+				'methods' 				=> 'GET',
+				'callback' 				=> [ $this, 'get_enabled' ],
+				'permission_callback' 	=> [ $this, 'admin_check' ]
+			]
+		);
+
+		register_rest_route(
+			$this->namespace,
+			$this->route_name( 'settings/agents/enable' ),
+			[
+				'methods'				=> 'POST',
+				'callback'				=> [ $this, 'post_enabled' ],
+				'permission_callback'	=> [ $this, 'admin_check' ],
+				'args'					=> [
+					'enabled' => [
+						'type' => 'boolean'
+					]
+				]
+			]
+		);
+
+		register_rest_route(
+			$this->namespace,
 			$this->route_name( 'settings/agents' ),
 			array(
 				'methods'             => 'POST',
@@ -87,6 +112,35 @@ class Agents_Settings extends \IDX\Admin\Rest_Controller {
 				'wrapperEnd'        => $settings['impress_agents_end_wrapper'],
 			)
 		);
+	}
+
+	/**
+	 * GET Feature enabled request.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function get_enabled() {
+		$existing = boolval(get_option( 'idx_broker_agents_enabled', false ));
+		return rest_ensure_response(
+			[
+				'enabled' => $existing
+			]
+		);
+	}
+
+	/**
+	 * POST Enabled feature request.
+	 *
+	 * @param string $payload Update the enabled status of the feature.
+	 * @return WP_REST_Response
+	 */
+	public function post_enabled( $payload ) {
+		if ( isset( $payload['enabled'] ) ) {
+			$value = (int) filter_var( $payload['enabled'], FILTER_VALIDATE_BOOLEAN );
+
+			update_option( 'idx_broker_agents_enabled', $value );
+		}
+		return rest_ensure_response( null );
 	}
 
 	/**
