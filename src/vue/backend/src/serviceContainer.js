@@ -20,10 +20,10 @@ const loadRepo = (fileName) => {
 const bind = (repositoryFactory, Interface) => {
     return {
         ...Object.keys(Interface).reduce((prev, method) => {
-            const resolveableMethod = async (args) => {
+            const resolveableMethod = async (...args) => {
                 const repository = await repositoryFactory()
                 const instance = new repository.default() // eslint-disable-line
-                return instance[method](args)
+                return instance[method](...args)
             }
             return { ...prev, [method]: resolveableMethod }
         }, {})
