@@ -58,10 +58,10 @@ export default {
         ...mapActions({
             setItem: 'listingsSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            enableListingsSettings: 'listingsSettings/enableListingsSettings'
+            enableListingsPlugin: 'listingsSettings/enableListingsPlugin'
         }),
         async goContinue () {
-            await this.enableListingsSettings()
+            await this.enableListingsPlugin()
             this.saveAction()
             this.$router.push({ path: this.continuePath })
         }
