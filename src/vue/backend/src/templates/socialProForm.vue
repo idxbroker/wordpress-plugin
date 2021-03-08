@@ -1,17 +1,5 @@
 <template>
     <idx-block className="social-pro-form form-content">
-        <b>Social Pro</b>
-        <div>Detailed sentence or two describing Social Pro General Interest Articles. Lorem ipsum dolor sit amet.</div>
-        <idx-block className="social-pro-form__syndication form-content__toggle">
-            {{ toggleLabel }}
-            <idx-toggle-slider
-                uncheckedState="No"
-                checkedState="Yes"
-                @toggle="$emit('form-field-update', { key: 'enableSyndication', value: !enableSyndication })"
-                :active="enableSyndication"
-                :label="toggleLabel"
-            ></idx-toggle-slider>
-        </idx-block>
         <idx-block className="social-pro-form__settings">
             <b>General Interest Article Settings</b>
             <div>General Interest Articles come from Elevate writers and contain rich content related to homes and home life.</div>
@@ -49,10 +37,6 @@
 export default {
     name: 'social-pro-form',
     props: {
-        enableSyndication: {
-            type: Boolean,
-            default: false
-        },
         autopublish: {
             type: String,
             default: 'autopublish'
@@ -67,7 +51,6 @@ export default {
         }
     },
     created () {
-        this.toggleLabel = 'Enable General Interest Article Syndication'
         this.autopublishOptions = [
             { label: 'Autopublish', value: 'autopublish' },
             { label: 'Draft', value: 'draft' }
@@ -91,9 +74,6 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
 .social-pro-form {
-    &__settings {
-        margin-top: 25px;
-    }
     &__field {
         margin-top: 25px;
         label {
