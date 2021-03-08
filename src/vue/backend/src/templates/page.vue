@@ -26,6 +26,7 @@ export default {
 
 <style lang="scss">
 @import '@/styles/formContentStyles.scss';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 body {
     overflow-y: scroll;
 }
