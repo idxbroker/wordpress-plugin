@@ -62,7 +62,7 @@ export default {
                 path: '',
                 name: 'Unimported IDX Agents',
                 label: 'Unimported',
-                /* Component here */
+                component: () => import('@/views/children/unimportedAgents'),
                 meta: {
                     requires: [AGENTS, API_KEY],
                     strict: true
@@ -72,7 +72,7 @@ export default {
                 path: 'imported',
                 name: 'Imported IDX Agents',
                 label: 'Imported',
-                /* Component here */
+                component: () => import('@/views/children/importedAgents'),
                 meta: {
                     requires: [AGENTS, API_KEY],
                     strict: true
