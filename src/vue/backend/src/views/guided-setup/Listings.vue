@@ -50,7 +50,6 @@ export default {
     },
     computed: {
         ...mapState({
-            enabled: state => state.listingsSettings.enabled,
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
