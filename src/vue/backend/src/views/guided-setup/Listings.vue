@@ -37,10 +37,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
-    mixins: [pageGuard],
+    mixins: [
+        guidedSetupMixin,
+        pageGuard
+    ],
     components: {
         GuidedSetupContentCard
     },
@@ -56,23 +60,18 @@ export default {
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveListingsSettings: 'general/saveListingsSettings'
         }),
-        goBackStep: function () {
-            // to-do: go back in history
-            this.$router.go(-1)
-        },
-        goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/agents' })
-        },
         async goContinue () {
             await this.saveListingsSettings()
             this.saveAction()
-            this.$router.push({ path: '/guided-setup/listings/general' })
+            this.$router.push({ path: this.continuePath })
         }
     },
     created () {
         this.module = 'listingsSettings'
         this.cardTitle = 'Enable IMPress Listings'
         this.activateLabel = 'Enable'
+        this.continuePath = '/guided-setup/listings/general'
+        this.skipPath = '/guided-setup/agents'
         this.links = [
             {
                 text: 'IMPress Listings Features',
