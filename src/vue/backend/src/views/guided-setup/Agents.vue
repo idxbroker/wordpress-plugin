@@ -58,10 +58,10 @@ export default {
         ...mapActions({
             setItem: 'agentSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveAgentSettings: 'agentSettings/saveAgentSettings'
+            enableAgentSettings: 'agentSettings/enableAgentSettings'
         }),
         async goContinue () {
-            await this.saveAgentSettings()
+            await this.enableAgentSettings()
             this.saveAction()
             this.$router.push({ path: this.continuePath })
         }
