@@ -17,33 +17,18 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import omnibarForm from '@/templates/omnibarForm.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
-    mixins: [pageGuard],
+    mixins: [
+        guidedSetupMixin,
+        pageGuard
+    ],
     components: {
         omnibarForm,
         GuidedSetupContentCard
-    },
-    data () {
-        return {
-            cardTitle: 'IMPress Omnibar Search',
-            links: [
-                {
-                    text: 'IMPress Omnibar FAQs',
-                    href: '#omnibar-faqs'
-                },
-                {
-                    text: 'IDX Broker Middleware',
-                    href: 'https://middleware.idxbroker.com/mgmt/'
-                },
-                {
-                    text: 'Sign up for IDX Broker',
-                    href: '#signUp'
-                }
-            ]
-        }
     },
     computed: {
         ...mapState({
@@ -71,21 +56,31 @@ export default {
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveOmnibarSettings: 'general/saveOmnibarSettings'
         }),
-        goBackStep: function () {
-            // to-do: go back in history
-            this.$router.go(-1)
-        },
-        goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/listings' })
-        },
         async goContinue () {
             await this.saveOmnibarSettings()
             this.saveAction()
-            this.$router.push({ path: '/guided-setup/listings' })
+            this.$router.push({ path: this.continuePath })
         }
     },
     created () {
         this.module = 'omnibar'
+        this.cardTitle = 'IMPress Omnibar Search'
+        this.continuePath = '/guided-setup/listings'
+        this.skipPath = '/guided-setup/listings'
+        this.links = [
+            {
+                text: 'IMPress Omnibar FAQs',
+                href: '#omnibar-faqs'
+            },
+            {
+                text: 'IDX Broker Middleware',
+                href: 'https://middleware.idxbroker.com/mgmt/'
+            },
+            {
+                text: 'Sign up for IDX Broker',
+                href: '#signUp'
+            }
+        ]
     },
     mounted () {
         this.progressStepperUpdate([3, 0, 0, 0])

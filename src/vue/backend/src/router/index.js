@@ -137,8 +137,8 @@ const routes = [
                     },
                     {
                         path: 'listings/advanced',
-                        name: 'Configure Advanced IMPress Listings'
-                        // component
+                        name: 'Configure Advanced IMPress Listings',
+                        component: () => import('@/views/guided-setup/ListingsAdvanced')
                     },
                     {
                         path: 'agents',

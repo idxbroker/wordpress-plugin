@@ -8,13 +8,8 @@
         @continue="goContinue">
         <template v-slot:controls>
             <ListingsGeneral
-                :currencyCodeSelected="currencyCodeSelected"
-                :currencySymbolSelected="currencySymbolSelected"
-                :defaultDisclaimer="defaultDisclaimer"
-                :numberOfPosts="numberOfPosts"
-                :listingSlug="listingSlug"
-                :defaultState="defaultState"
-                @form-field-update="setItem($event)"
+                v-bind="localStateValues"
+                @form-field-update="formUpdate"
             />
         </template>
     </GuidedSetupContentCard>
@@ -22,11 +17,15 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import GuidedSetupMixin from '@/mixins/guidedSetup'
+import guidedSetupMixin from '@/mixins/guidedSetup'
+import pageGuard from '@/mixins/pageGuard'
 import ListingsGeneral from '@/templates/impressListingsGeneralContent.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
-    mixins: [GuidedSetupMixin],
+    mixins: [
+        guidedSetupMixin,
+        pageGuard
+    ],
     components: {
         ListingsGeneral,
         GuidedSetupContentCard
@@ -50,10 +49,12 @@ export default {
         }),
         async goContinue () {
             await this.saveGeneralListingsSettings()
+            this.saveAction()
             this.$router.push({ path: this.continuePath })
         }
     },
     created () {
+        this.module = 'listingsSettings'
         this.cardTitle = 'Configure IMPress Listings'
         this.continuePath = '/guided-setup/listings/idx'
         this.skipPath = '/guided-setup/agents'

@@ -7,7 +7,7 @@
         @skip-step="goSkipStep"
         @continue="goContinue">
         <template v-slot:controls>
-            <ListingsIdx
+            <ListingsAdvanced
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -19,7 +19,7 @@
 import { mapState, mapActions } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
-import ListingsIdx from '@/templates/impressListingsIdxContent.vue'
+import ListingsAdvanced from '@/templates/impressListingsAdvancedContent.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
     mixins: [
@@ -27,34 +27,30 @@ export default {
         pageGuard
     ],
     components: {
-        ListingsIdx,
+        ListingsAdvanced,
         GuidedSetupContentCard
     },
     computed: {
         ...mapState({
-            enabled: state => state.listingsSettings.enabled,
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
-            updateListings: state => state.listingsSettings.updateListings,
-            soldListings: state => state.listingsSettings.soldListings,
-            automaticImport: state => state.listingsSettings.automaticImport,
-            displayIDXLink: state => state.listingsSettings.displayIDXLink,
-            defaultListingTemplateSelected: state => state.listingsSettings.defaultListingTemplateSelected,
-            defaultListingTemplateOptions: state => state.listingsSettings.defaultListingTemplateOptions,
-            importedListingsAuthorSelected: state => state.listingsSettings.importedListingsAuthorSelected,
-            importedListingsAuthorOptions: state => state.listingsSettings.importedListingsAuthorOptions,
-            importTitle: state => state.listingsSettings.importTitle,
-            advancedFieldData: state => state.listingsSettings.advancedFieldData,
-            displayAdvancedFields: state => state.listingsSettings.displayAdvancedFields
+            deregisterMainCss: state => state.listingsSettings.deregisterMainCss,
+            deregisterWidgetCss: state => state.listingsSettings.deregisterWidgetCss,
+            sendFormSubmission: state => state.listingsSettings.sendFormSubmission,
+            formShortcode: state => state.listingsSettings.formShortcode,
+            googleMapsAPIKey: state => state.listingsSettings.googleMapsAPIKey,
+            wrapperStart: state => state.listingsSettings.wrapperStart,
+            wrapperEnd: state => state.listingsSettings.wrapperEnd,
+            deletePluginDataOnUninstall: state => state.listingsSettings.deletePluginDataOnUninstall
         })
     },
     methods: {
         ...mapActions({
             setItem: 'listingsSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveIDXListingsSettings: 'listingsSettings/saveIDXListingsSettings'
+            saveAdvancedListingsSettings: 'listingsSettings/saveAdvancedListingsSettings'
         }),
         async goContinue () {
-            await this.saveIDXListingsSettings()
+            await this.saveAdvancedListingsSettings()
             this.saveAction()
             this.$router.push({ path: this.continuePath })
         }
@@ -62,7 +58,7 @@ export default {
     created () {
         this.module = 'listingsSettings'
         this.cardTitle = 'Configure IMPress Listings'
-        this.continuePath = '/guided-setup/listings/advanced'
+        this.continuePath = '/guided-setup/agents'
         this.skipPath = '/guided-setup/agents'
         this.links = [
             {
@@ -80,7 +76,7 @@ export default {
         ]
     },
     mounted () {
-        this.progressStepperUpdate([4, 3, 0, 0])
+        this.progressStepperUpdate([4, 4, 0, 0])
     }
 }
 </script>
