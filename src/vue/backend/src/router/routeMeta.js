@@ -40,7 +40,7 @@ export default {
                 path: '',
                 name: 'Unimported IDX Listings',
                 label: 'Unimported',
-                /* Component here */
+                component: () => import('@/views/children/unimportedListings'),
                 meta: {
                     requires: [LISTINGS, API_KEY],
                     strict: true
@@ -50,7 +50,7 @@ export default {
                 path: 'imported',
                 name: 'Imported IDX Listings',
                 label: 'Imported',
-                /* Component here */
+                component: () => import('@/views/children/importedListings'),
                 meta: {
                     requires: [LISTINGS, API_KEY],
                     strict: true

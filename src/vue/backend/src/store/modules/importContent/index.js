@@ -3,6 +3,14 @@ import getters from './getters'
 import mutations from './mutations'
 
 const state = {
+    listings: {
+        unimported: [],
+        imported: []
+    },
+    agents: {
+        unimported: [],
+        imported: []
+    }
 }
 
 export default {

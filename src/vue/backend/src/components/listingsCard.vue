@@ -1,16 +1,16 @@
 <template>
     <checkbox-label
         :option="option"
-        @checked="$emit('listing-selected', [$event.data, property.listingID])"
+        @checked="$emit('listing-selected', [$event.data, listing.listingId])"
     >
         <template v-slot:content>
             <!-- Prop bindings will need to be reevaluated once we have the property shape -->
             <idx-single-property-card
                 customClass="import-listing__card"
-                v-bind="property"
+                v-bind="listing"
             >
             <template v-slot:propertyCardImage>
-                    <img class="property-card__image" :src="property.image">
+                    <img class="property-card__image" :src="listing.image">
                 </template>
             </idx-single-property-card>
         </template>
@@ -20,17 +20,15 @@
 export default {
     name: 'listings-card',
     props: {
-        property: {
+        listing: {
             type: Object,
             default: () => {}
         }
     },
-    data () {
-        return {
-            option: {
-                value: 'selected',
-                label: 'selected'
-            }
+    created () {
+        this.option = {
+            value: 'selected',
+            label: 'selected'
         }
     }
 }
@@ -42,8 +40,13 @@ export default {
     height: 193px;
     width: 309px;
 }
-.property-card__details {
-    text-shadow: none;
+.property-card {
+    &__details {
+        text-shadow: none;
+    }
+    &__listing-price.property-card__single-item {
+        color: $white;
+    }
 }
 .checkbox-label {
     position: relative;
