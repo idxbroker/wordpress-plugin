@@ -32,12 +32,7 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
-            deregisterMainCss: state => state.agentSettings.deregisterMainCss,
-            numberOfPosts: state => state.agentSettings.numberOfPosts,
-            directorySlug: state => state.agentSettings.directorySlug,
-            wrapperStart: state => state.agentSettings.wrapperStart,
-            wrapperEnd: state => state.agentSettings.wrapperEnd
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
     methods: {
