@@ -7,7 +7,7 @@ const _navLinks = [
         label: 'Get Started',
         icon: 'wizard',
         collapsed: true,
-        link: '/guided-setup'
+        link: '/guided-setup/welcome'
     },
     {
         label: 'Import',
