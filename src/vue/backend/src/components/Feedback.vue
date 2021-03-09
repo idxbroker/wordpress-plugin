@@ -12,7 +12,6 @@
 <script>
 import SvgIcon from '@/components/SvgIcon.vue'
 export default {
-    name: 'RelatedLinks',
     components: {
         SvgIcon
     },

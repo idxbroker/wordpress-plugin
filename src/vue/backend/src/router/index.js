@@ -159,6 +159,11 @@ const routes = [
                         path: 'social-pro/configure',
                         name: 'Configure Social Pro'
                         // component
+                    },
+                    {
+                        path: 'confirmation',
+                        name: 'Confirmation',
+                        component: () => import('@/views/guided-setup/Confirmation')
                     }
                 ]
             },
