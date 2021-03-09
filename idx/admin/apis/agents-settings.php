@@ -22,41 +22,41 @@ class Agents_Settings extends \IDX\Admin\Rest_Controller {
 		register_rest_route(
 			$this->namespace,
 			$this->route_name( 'settings/agents' ),
-			array(
+			[
 				'methods'             => 'GET',
-				'callback'            => array( $this, 'get' ),
-				'permission_callback' => array( $this, 'agents_enabled' ),
-			)
+				'callback'            => [ $this, 'get' ],
+				'permission_callback' => [ $this, 'agents_enabled' ],
+			]
 		);
 
 		register_rest_route(
 			$this->namespace,
 			$this->route_name( 'settings/agents' ),
-			array(
+			[
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'post' ),
-				'permission_callback' => array( $this, 'agents_enabled' ),
-				'args'                => array(
-					'deregisterMainCss' => array(
+				'callback'            => [ $this, 'post' ],
+				'permission_callback' => [ $this, 'agents_enabled' ],
+				'args'                => [
+					'deregisterMainCss' => [
 						'type' => 'boolean',
-					),
-					'numberOfPosts'     => array(
+					],
+					'numberOfPosts'     => [
 						'type' => 'integer',
-					),
-					'directorySlug'     => array(
+					],
+					'directorySlug'     => [
 						'type' => 'string',
-					),
-					'wrapperEnabled'    => array(
+					],
+					'wrapperEnabled'    => [
 						'type' => 'boolean',
-					),
-					'wrapperStart'      => array(
+					],
+					'wrapperStart'      => [
 						'type' => 'string',
-					),
-					'wrapperEnd'        => array(
+					],
+					'wrapperEnd'        => [
 						'type' => 'string',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 	}
 
@@ -66,26 +66,26 @@ class Agents_Settings extends \IDX\Admin\Rest_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get() {
-		$defaults = array(
+		$defaults = [
 			'impress_agents_stylesheet_load'   => 0,
 			'impress_agents_archive_posts_num' => 9,
 			'impress_agents_slug'              => 'employees',
 			'impress_agents_custom_wrapper'    => 0,
 			'impress_agents_start_wrapper'     => '',
 			'impress_agents_end_wrapper'       => '',
-		);
-		$existing = get_option( 'plugin_impress_agents_settings', array() );
+		];
+		$existing = get_option( 'plugin_impress_agents_settings', [] );
 		$settings = array_merge( $defaults, $existing );
 
 		return rest_ensure_response(
-			array(
+			[
 				'deregisterMainCss' => boolval( $settings['impress_agents_stylesheet_load'] ),
 				'numberOfPosts'     => (int) $settings['impress_agents_archive_posts_num'],
 				'directorySlug'     => $settings['impress_agents_slug'],
 				'wrapperEnabled'    => boolval( $settings['impress_agents_custom_wrapper'] ),
 				'wrapperStart'      => $settings['impress_agents_start_wrapper'],
 				'wrapperEnd'        => $settings['impress_agents_end_wrapper'],
-			)
+			]
 		);
 	}
 
@@ -96,7 +96,7 @@ class Agents_Settings extends \IDX\Admin\Rest_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function post( $payload ) {
-		$existing = get_option( 'plugin_impress_agents_settings', array() );
+		$existing = get_option( 'plugin_impress_agents_settings', [] );
 
 		if ( isset( $payload['deregisterMainCss'] ) ) {
 			$existing['impress_agents_stylesheet_load'] = (int) filter_var( $payload['deregisterMainCss'], FILTER_VALIDATE_BOOLEAN );
