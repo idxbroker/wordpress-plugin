@@ -152,18 +152,13 @@ const routes = [
                     },
                     {
                         path: 'social-pro',
-                        children: [
-                            {
-                                path: 'activate',
-                                name: 'Activate Social Pro'
-                                // component
-                            },
-                            {
-                                path: 'general',
-                                name: 'Configure Social Pro'
-                                // component
-                            }
-                        ]
+                        name: 'Activate Social Pro'
+                        // component
+                    },
+                    {
+                        path: 'social-pro/configure',
+                        name: 'Configure Social Pro',
+                        component: () => import('@/views/guided-setup/SocialProConfigure')
                     }
                 ]
             },
