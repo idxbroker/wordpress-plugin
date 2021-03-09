@@ -76,7 +76,11 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	public function agents_get() {
 		$enabled = boolval( get_option( 'idx_broker_agents_enabled', 0 ) );
 
-		return rest_ensure_response( $enabled );
+		return rest_ensure_response(
+			[
+				'enabled' => $enabled,
+			]
+		);
 	}
 
 	/**
@@ -101,7 +105,11 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	public function listings_get() {
 		$enabled = boolval( get_option( 'idx_broker_listings_enabled', 0 ) );
 
-		return rest_ensure_response( $enabled );
+		return rest_ensure_response(
+			[
+				'enabled' => $enabled,
+			]
+		);
 	}
 
 	/**
