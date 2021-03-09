@@ -33,9 +33,6 @@ export default {
     @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 
     .feedback {
-        --font-size-h3: 21px;
-        --letter-spacing-h3: 2.1px;
-        --line-height-h3: 22px;
         align-items: center;
         display: flex;
         flex-direction: column;

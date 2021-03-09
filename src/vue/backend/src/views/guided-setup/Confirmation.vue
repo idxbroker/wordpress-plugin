@@ -1,5 +1,5 @@
 <template>
-    <idx-fullscreen customClass="gs" @click="closeDialog">
+    <idx-fullscreen customClass="gs">
         <idx-block className="gs__hero">
             <idx-block className="gs__icon">
                 <svg-icon icon="fal-check" />
@@ -15,11 +15,8 @@ export default {
     components: {
         SvgIcon
     },
-    methods: {
-        closeDialog () {
-            console.log('close dialog')
-            this.$router.push({ path: '/' })
-        }
+    mounted () {
+        setTimeout(() => { this.$router.push({ path: '/' }) }, 3000)
     }
 }
 </script>
@@ -37,7 +34,6 @@ export default {
 
     .gs {
         bottom: 0;
-        cursor: pointer;
         height: auto;
         left: 0;
         right: 0;
