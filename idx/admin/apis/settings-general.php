@@ -135,10 +135,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 		$error        = null;
 		$system_links = $idx_api->idx_api_get_systemlinks();
 		if ( is_wp_error( $system_links ) ) {
-			// Legacy api error tracking.
-			global $api_error;
-			$api_error = $system_links->get_error_message();
-			$error     = $system_links;
+			$error = $system_links;
 		}
 		return $error;
 	}
