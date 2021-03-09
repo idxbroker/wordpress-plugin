@@ -66,7 +66,7 @@ class Listings_Settings extends \IDX\Admin\Rest_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get() {
-		$defaults = array(
+		$defaults = [
 			'wp_listings_default_state'         => '',
 			'wp_listings_currency_symbol'       => '',
 			'wp_listings_currency_code'         => '',
@@ -74,12 +74,12 @@ class Listings_Settings extends \IDX\Admin\Rest_Controller {
 			'wp_listings_archive_posts_num'     => 9,
 			'wp_listings_global_disclaimer'     => '',
 			'wp_listings_slug'                  => 'listings',
-		);
-		$existing = get_option( 'plugin_wp_listings_settings', array() );
+		];
+		$existing = get_option( 'plugin_wp_listings_settings', [] );
 		$settings = array_merge( $defaults, $existing );
 
 		return rest_ensure_response(
-			array(
+			[
 				'defaultState'           => $settings['wp_listings_default_state'],
 				'currencySymbolSelected' => $settings['wp_listings_currency_symbol'],
 				'currencyCodeSelected'   => $settings['wp_listings_currency_code'],
@@ -87,7 +87,7 @@ class Listings_Settings extends \IDX\Admin\Rest_Controller {
 				'numberOfPosts'          => (int) $settings['wp_listings_archive_posts_num'],
 				'defaultDisclaimer'      => $settings['wp_listings_global_disclaimer'],
 				'listingSlug'            => $settings['wp_listings_slug'],
-			)
+			]
 		);
 	}
 
