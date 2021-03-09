@@ -23,31 +23,31 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 		register_rest_route(
 			$this->namespace,
 			$this->route_name( 'settings/general' ),
-			array(
+			[
 				'methods'             => 'GET',
-				'callback'            => array( $this, 'get' ),
-				'permission_callback' => array( $this, 'admin_check' ),
-			)
+				'callback'            => [ $this, 'get' ],
+				'permission_callback' => [ $this, 'admin_check' ],
+			]
 		);
 
 		register_rest_route(
 			$this->namespace,
 			$this->route_name( 'settings/general' ),
-			array(
+			[
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'post' ),
-				'permission_callback' => array( $this, 'admin_check' ),
-				'args'                => array(
-					'apiKey'          => array(
+				'callback'            => [ $this, 'post' ],
+				'permission_callback' => [ $this, 'admin_check' ],
+				'args'                => [
+					'apiKey'          => [
 						'type' => 'string',
-					),
-					'reCAPTCHA'       => array(
+					],
+					'reCAPTCHA'       => [
 						'type' => 'boolean',
-					),
-					'updateFrequency' => array(
+					],
+					'updateFrequency' => [
 						'type' => 'string',
 						// TODO: Create whitelist of timings and sync this list.
-						'enum' => array(
+						'enum' => [
 							'five_minutes',
 							'hourly',
 							'twice_daily',
@@ -55,13 +55,13 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 							'two_weeks',
 							'monthly',
 							'disabled',
-						),
-					),
-					'wrapperName'     => array(
+						],
+					],
+					'wrapperName'     => [
 						'type' => 'string',
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 	}
 
@@ -72,12 +72,12 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 	 */
 	public function get() {
 		return rest_ensure_response(
-			array(
+			[
 				'apiKey'          => get_option( 'idx_broker_apikey', '' ),
 				'reCAPTCHA'       => boolval( get_option( 'idx_recaptcha_enabled', 0 ) ),
 				'updateFrequency' => get_option( 'idx_cron_schedule', '' ),
 				'wrapperName'     => get_option( 'idx_broker_dynamic_wrapper_page_name', '' ),
-			)
+			]
 		);
 	}
 
@@ -183,9 +183,9 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 		return new \WP_Error(
 			'cron_option_unavailable',
 			"Update frequency option $timing does not exist.",
-			array(
+			[
 				'status' => 500,
-			)
+			]
 		);
 	}
 }
