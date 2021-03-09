@@ -200,9 +200,9 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 	}
 
 	/**
-	 * Updates cron update frequency.
+	 * Checks if API key is valid.
 	 *
-	 * @return WP_Error|null
+	 * @return bool
 	 */
 	public function api_valid_endpoint_callback() {
 		$api_key = get_option( 'idx_broker_apikey', '' );
