@@ -62,10 +62,10 @@ class Rest_Controller {
 		if ( true !== $admin_permissions ) {
 			return $admin_permissions;
 		}
-		// TODO: Uncomment code after endpoint for agents enable/disable is compelted.
-		// if ( ! boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) ) {
-		// 	return $this->addon_not_enabled_error( 'IMPress Agents' );
-		// }
+
+		if ( ! boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) ) {
+			return $this->addon_not_enabled_error( 'IMPress Agents' );
+		}
 		return true;
 	}
 
@@ -79,10 +79,10 @@ class Rest_Controller {
 		if ( true !== $admin_permissions ) {
 			return $admin_permissions;
 		}
-		// TODO: Uncomment code after endpoint for listings enable/disable is compelted.
-		// if ( ! boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
-		// 	return $this->addon_not_enabled_error( 'IMPress Listings' );
-		// }
+
+		if ( ! boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
+			return $this->addon_not_enabled_error( 'IMPress Listings' );
+		}
 		return true;
 	}
 
@@ -143,6 +143,7 @@ class Rest_Controller {
 	}
 }
 
+new Apis\Enable_Addons();
 new Apis\Settings_General();
 new Apis\Agents_Settings();
 new Apis\Import_Agents();
