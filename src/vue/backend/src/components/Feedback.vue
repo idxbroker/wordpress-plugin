@@ -12,6 +12,7 @@
 <script>
 import SvgIcon from '@/components/SvgIcon.vue'
 export default {
+    name: 'Feedback',
     components: {
         SvgIcon
     },
