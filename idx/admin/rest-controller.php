@@ -47,7 +47,7 @@ class Rest_Controller {
 	 */
 	public function admin_check() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			return new \WP_Error( 'rest_forbidden', esc_html__( 'You do not have permissions to view this resource.' ), array( 'status' => $this->authorization_failed_status_code() ) );
+			return new \WP_Error( 'rest_forbidden', esc_html__( 'You do not have permissions to view this resource.' ), [ 'status' => $this->authorization_failed_status_code() ] );
 		}
 		return true;
 	}
@@ -111,9 +111,9 @@ class Rest_Controller {
 		return new \WP_Error(
 			'addon_disabled',
 			"$name is not enabled.",
-			array(
+			[
 				'status' => 422,
-			)
+			]
 		);
 	}
 
@@ -134,9 +134,9 @@ class Rest_Controller {
 			return new \WP_Error(
 				$code,
 				$data['rest_error'],
-				array(
+				[
 					'status' => $data['status'],
-				)
+				]
 			);
 		}
 		return $error;
@@ -146,3 +146,4 @@ class Rest_Controller {
 new Apis\Settings_General();
 new Apis\Agents_Settings();
 new Apis\Import_Agents();
+new Apis\Listings_Settings();

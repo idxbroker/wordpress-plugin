@@ -142,8 +142,8 @@ const routes = [
                     },
                     {
                         path: 'agents',
-                        name: 'Activate IMPress Agents'
-                        // component
+                        name: 'Activate IMPress Agents',
+                        component: () => import('@/views/guided-setup/Agents')
                     },
                     {
                         path: 'agents/configure',
@@ -157,8 +157,8 @@ const routes = [
                     },
                     {
                         path: 'social-pro/configure',
-                        name: 'Configure Social Pro'
-                        // component
+                        name: 'Configure Social Pro',
+                        component: () => import('@/views/guided-setup/SocialProConfigure')
                     },
                     {
                         path: 'confirmation',

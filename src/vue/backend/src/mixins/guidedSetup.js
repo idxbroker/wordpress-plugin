@@ -5,13 +5,9 @@ export default {
         },
         goSkipStep: function () {
             this.$router.push({ path: this.skipPath })
-        },
-        goContinue: function () {
-            this.$router.push({ path: this.continuePath })
         }
     },
     created () {
-        this.continuePath = ''
         this.skipPath = ''
     }
 }

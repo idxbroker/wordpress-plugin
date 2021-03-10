@@ -15,8 +15,16 @@ export default {
     components: {
         SvgIcon
     },
+    data () {
+        return {
+            timeout: ''
+        }
+    },
     mounted () {
-        setTimeout(() => { this.$router.push({ path: '/' }) }, 3000)
+        this.timeout = setTimeout(() => { this.$router.push({ path: '/' }) }, 3000)
+    },
+    beforeDestroy () {
+        clearTimeout(this.timeout)
     }
 }
 </script>
