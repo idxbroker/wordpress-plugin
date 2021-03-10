@@ -147,3 +147,4 @@ new Apis\Settings_General();
 new Apis\Agents_Settings();
 new Apis\Import_Agents();
 new Apis\Listings_Settings();
+new Apis\Listings_Advanced_Settings();

@@ -98,40 +98,40 @@ class Listings_Settings extends \IDX\Admin\Rest_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function post( $payload ) {
-		$existing = get_option( 'plugin_wp_listings_settings', [] );
+		$settings = get_option( 'plugin_wp_listings_settings', [] );
 
 		if ( isset( $payload['defaultState'] ) ) {
-			$existing['wp_listings_default_state'] = $payload['defaultState'];
+			$settings['wp_listings_default_state'] = $payload['defaultState'];
 		}
 
 		if ( isset( $payload['currencySymbolSelected'] ) ) {
-			$existing['wp_listings_currency_symbol'] = $payload['currencySymbolSelected'];
+			$settings['wp_listings_currency_symbol'] = $payload['currencySymbolSelected'];
 		}
 
 		if ( isset( $payload['currencyCodeSelected'] ) ) {
-			$existing['wp_listings_currency_code'] = $payload['currencyCodeSelected'];
+			$settings['wp_listings_currency_code'] = $payload['currencyCodeSelected'];
 		}
 
 		if ( isset( $payload['numberOfPosts'] ) ) {
-			$existing['wp_listings_archive_posts_num'] = filter_var( $payload['numberOfPosts'], FILTER_VALIDATE_INT );
+			$settings['wp_listings_archive_posts_num'] = filter_var( $payload['numberOfPosts'], FILTER_VALIDATE_INT );
 		}
 
 		if ( isset( $payload['defaultDisclaimer'] ) ) {
-			$existing['wp_listings_global_disclaimer'] = $payload['defaultDisclaimer'];
+			$settings['wp_listings_global_disclaimer'] = $payload['defaultDisclaimer'];
 		}
 
 		if ( isset( $payload['listingSlug'] ) ) {
-			$existing['wp_listings_slug'] = $payload['listingSlug'];
+			$settings['wp_listings_slug'] = $payload['listingSlug'];
 		}
 
 		// Set display currency code flag if currency code is set.
-		if ( ! $existing['wp_listings_currency_code'] || 'none' === $existing['wp_listings_currency_code'] ) {
-			$existing['wp_listings_display_currency_code'] = 0;
+		if ( ! $settings['wp_listings_currency_code'] || 'none' === $settings['wp_listings_currency_code'] ) {
+			$settings['wp_listings_display_currency_code'] = 0;
 		} else {
-			$existing['wp_listings_display_currency_code'] = 1;
+			$settings['wp_listings_display_currency_code'] = 1;
 		}
 
-		update_option( 'plugin_wp_listings_settings', $existing );
+		update_option( 'plugin_wp_listings_settings', $settings );
 
 		return new \WP_REST_Response( null, 204 );
 	}
