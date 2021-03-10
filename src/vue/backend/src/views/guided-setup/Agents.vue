@@ -41,6 +41,7 @@ import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-agents',
     mixins: [
         guidedSetupMixin,
         pageGuard

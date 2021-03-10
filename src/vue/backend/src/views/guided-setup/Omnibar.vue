@@ -22,6 +22,7 @@ import pageGuard from '@/mixins/pageGuard'
 import omnibarForm from '@/templates/omnibarForm.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-omnibar',
     mixins: [
         guidedSetupMixin,
         pageGuard

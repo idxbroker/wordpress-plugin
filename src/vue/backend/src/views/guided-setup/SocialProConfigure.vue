@@ -22,6 +22,7 @@ import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import socialProForm from '@/templates/socialProForm.vue'
 export default {
+    name: 'guided-setup-social-pro-configure',
     mixins: [
         guidedSetupMixin,
         pageGuard
