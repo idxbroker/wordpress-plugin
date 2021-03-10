@@ -101,7 +101,7 @@ const routes = [
                 component: Generic,
                 children: [
                     {
-                        path: 'connect/welcome',
+                        path: 'welcome',
                         name: 'Welcome',
                         component: () => import('@/views/guided-setup/Welcome')
                     },
