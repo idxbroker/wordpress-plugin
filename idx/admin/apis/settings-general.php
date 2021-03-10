@@ -66,7 +66,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 
 		register_rest_route(
 			$this->namespace,
-			$this->route_name( 'settings/apiKeyIsValid' ),
+			$this->route_name( 'settings/general/apiKeyIsValid' ),
 			[
 				'methods'             => 'GET',
 				'callback'            => [ $this, 'api_valid_endpoint_callback' ],
