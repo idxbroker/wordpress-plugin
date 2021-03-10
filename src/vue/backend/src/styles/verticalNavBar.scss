@@ -1,10 +1,30 @@
 // The incorrect usage of BEM lines up with the VCL implementation. Will need a major VCL upgrade to change.
+
+// this media query is to match WordPress
+@media (max-width: 600px) {
+    .app {
+        margin-left: -10px;
+        width: calc(100% + 10px);
+        .navigation {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        .content-page {
+            margin-right: 0;
+            margin-top: 0;
+            padding-top: 70px;
+            width: calc(100vw - #{$icon-nav-width});
+        }
+    }
+}
+
 .wordpress-navigation.navbar {
-    position: fixed;
-    top: 31px;
+    position: absolute;
+    top: 0;
     left: $large-screen-left;
-    right: 0;
-    height: 82.95px;
+    height: $v-navbar-height;
+    width: 100%;
     z-index: 2;
     border-bottom: 2px solid $gray-400;
     background-color: $white;
@@ -13,6 +33,11 @@
     }
     @media (max-width: 782px) {
         left: $small-screen-left;
+    }
+    // this media query is to match WordPress
+    @media (min-width: 601px) {
+        position: fixed;
+        top: var(--v-navbar-top);
     }
 }
 
@@ -27,6 +52,7 @@
     background-color: $white;
     border: 1px solid $gray-400;
     cursor: pointer;
+    top: 1px;
 
     .icon--image {
         transition: transform .5s ease;
@@ -138,11 +164,11 @@
 .horizontal-navigation__options-bar.v-nav {
     overflow-y: hidden;
     overflow-x: hidden;
-    position: fixed;
-    top: 114px;
+    position: absolute;
+    top: $v-navbar-height;
     bottom: 0;
     left: $large-screen-left;
-    height: 100% - $header-height;
+    height: calc(100vh - #{$v-navbar-height});
     width: $v-nav-width;
     background-color: $gray-725;
     transition-property: width, visibility;
@@ -155,6 +181,11 @@
     @media (max-width: 782px) {
         left: $small-screen-left;
         width: 100%;
+    }
+    // this media query is to match WordPress
+    @media (min-width: 601px) {
+        position: fixed;
+        top: calc(#{$v-navbar-height} + var(--v-navbar-top));
     }
 
     &.horizontal-navigation--collapsed {
