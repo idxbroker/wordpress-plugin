@@ -15,7 +15,6 @@
 <script>
 import { PRODUCT_REFS } from '@/data/productTerms'
 import impressListingsAdvancedContent from '@/templates/impressListingsAdvancedContent.vue'
-import { mapState } from 'vuex'
 import pageGuard from '@/mixins/pageGuard'
 const { listingsSettings: { repo } } = PRODUCT_REFS
 export default {
@@ -24,11 +23,6 @@ export default {
     mixins: [pageGuard],
     components: {
         impressListingsAdvancedContent
-    },
-    computed: {
-        ...mapState({
-            advancedSettings: state => state.listingsSettings
-        })
     },
     methods: {
         async saveHandler () {
