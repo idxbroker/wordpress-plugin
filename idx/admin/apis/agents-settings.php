@@ -96,33 +96,33 @@ class Agents_Settings extends \IDX\Admin\Rest_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function post( $payload ) {
-		$existing = get_option( 'plugin_impress_agents_settings', [] );
+		$settings = get_option( 'plugin_impress_agents_settings', [] );
 
 		if ( isset( $payload['deregisterMainCss'] ) ) {
-			$existing['impress_agents_stylesheet_load'] = (int) filter_var( $payload['deregisterMainCss'], FILTER_VALIDATE_BOOLEAN );
+			$settings['impress_agents_stylesheet_load'] = (int) filter_var( $payload['deregisterMainCss'], FILTER_VALIDATE_BOOLEAN );
 		}
 
 		if ( isset( $payload['numberOfPosts'] ) ) {
-			$existing['impress_agents_archive_posts_num'] = filter_var( $payload['numberOfPosts'], FILTER_VALIDATE_INT );
+			$settings['impress_agents_archive_posts_num'] = filter_var( $payload['numberOfPosts'], FILTER_VALIDATE_INT );
 		}
 
 		if ( isset( $payload['directorySlug'] ) ) {
-			$existing['impress_agents_slug'] = $payload['directorySlug'];
+			$settings['impress_agents_slug'] = $payload['directorySlug'];
 		}
 
 		if ( isset( $payload['wrapperEnabled'] ) ) {
-			$existing['impress_agents_custom_wrapper'] = (int) filter_var( $payload['wrapperEnabled'], FILTER_VALIDATE_BOOLEAN );
+			$settings['impress_agents_custom_wrapper'] = (int) filter_var( $payload['wrapperEnabled'], FILTER_VALIDATE_BOOLEAN );
 		}
 
 		if ( isset( $payload['wrapperStart'] ) ) {
-			$existing['impress_agents_start_wrapper'] = $payload['wrapperStart'];
+			$settings['impress_agents_start_wrapper'] = $payload['wrapperStart'];
 		}
 
 		if ( isset( $payload['wrapperEnd'] ) ) {
-			$existing['impress_agents_end_wrapper'] = $payload['wrapperEnd'];
+			$settings['impress_agents_end_wrapper'] = $payload['wrapperEnd'];
 		}
 
-		update_option( 'plugin_impress_agents_settings', $existing );
+		update_option( 'plugin_impress_agents_settings', $settings );
 
 		return rest_ensure_response( null );
 	}
