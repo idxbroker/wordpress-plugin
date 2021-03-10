@@ -6,42 +6,44 @@
         ></impress-listings-advanced-content>
         <idx-button
             customClass="settings-button__save"
-            @click="saveAction"
+            @click="saveHandler"
         >
             Save
         </idx-button>
     </div>
 </template>
 <script>
+import { PRODUCT_REFS } from '@/data/productTerms'
 import impressListingsAdvancedContent from '@/templates/impressListingsAdvancedContent.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import pageGuard from '@/mixins/pageGuard'
+const { listingsSettings: { repo } } = PRODUCT_REFS
 export default {
     name: 'listings-advanced-content-tab',
+    inject: [repo],
     mixins: [pageGuard],
     components: {
         impressListingsAdvancedContent
     },
     computed: {
         ...mapState({
-            deregisterMainCss: state => state.listingsSettings.deregisterMainCss,
-            deregisterWidgetCss: state => state.listingsSettings.deregisterWidgetCss,
-            sendFormSubmission: state => state.listingsSettings.sendFormSubmission,
-            formShortcode: state => state.listingsSettings.formShortcode,
-            googleMapsAPIKey: state => state.listingsSettings.googleMapsAPIKey,
-            wrapperStart: state => state.listingsSettings.wrapperStart,
-            wrapperEnd: state => state.listingsSettings.wrapperEnd,
-            deletePluginDataOnUninstall: state => state.listingsSettings.deletePluginDataOnUninstall
+            advancedSettings: state => state.listingsSettings
         })
     },
     methods: {
-        ...mapActions({
-            setItem: 'listingsSettings/setItem',
-            saveAdvancedListingsSettings: 'listingsSettings/saveAdvancedListingsSettings'
-        })
+        async saveHandler () {
+            const { status } = await this[repo].post(this.formChanges, 'advanced')
+            if (status === 200) {
+                this.saveAction()
+            }
+        }
     },
-    created () {
+    async created () {
         this.module = 'listingsSettings'
+        const { data } = await this[repo].get('advanced')
+        for (const key in data) {
+            this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
+        }
     }
 }
 </script>

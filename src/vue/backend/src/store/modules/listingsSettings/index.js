@@ -26,6 +26,7 @@ const state = {
     sendFormSubmission: true,
     formShortcode: '',
     googleMapsAPIKey: '',
+    useCustomWrapper: false,
     wrapperStart: '',
     wrapperEnd: '',
     deletePluginDataOnUninstall: false

@@ -83,8 +83,21 @@
                 Detailed sentence or two describing how custom wrappers can be used and how to set them up properly.
             </idx-block>
             <idx-form-group>
+                <idx-block className="form-content__toggle">
+                    {{ useCustomWrapperLabel }}
+                    <idx-toggle-slider
+                        uncheckedState="No"
+                        checkedState="Yes"
+                        @toggle="$emit('form-field-update', { key: 'useCustomWrapper', value: !useCustomWrapper })"
+                        :active="useCustomWrapper"
+                        :label="useCustomWrapperLabel"
+                    ></idx-toggle-slider>
+                </idx-block>
+            </idx-form-group>
+            <idx-form-group>
                 <idx-form-label customClass="control-label form-content__label" for="wrapper-start-html">Wrapper Start HTML</idx-form-label>
                 <idx-form-input
+                    :disabled="!useCustomWrapper"
                     type="text"
                     id="wrapper-start-html"
                     :value="wrapperStart"
@@ -94,6 +107,7 @@
             <idx-form-group>
                 <idx-form-label customClass="control-label form-content__label" for="wrapper-end-html">Wrapper End HTML</idx-form-label>
                 <idx-form-input
+                    :disabled="!useCustomWrapper"
                     type="text"
                     id="wrapper-end-html"
                     :value="wrapperEnd"
@@ -112,8 +126,8 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="$emit('form-field-update', { key: 'sendFormSubmission', value: !sendFormSubmission })"
-                        :active="sendFormSubmission"
+                        @toggle="$emit('form-field-update', { key: 'deletePluginDataOnUninstall', value: !deletePluginDataOnUninstall })"
+                        :active="deletePluginDataOnUninstall"
                         :label="pluginUninstallationLabel"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -124,6 +138,7 @@
 <script>
 export default {
     name: 'ListingsAdvanced',
+    inheritAttrs: false,
     props: {
         deregisterMainCss: {
             type: Boolean,
@@ -156,6 +171,10 @@ export default {
         deletePluginDataOnUninstall: {
             type: Boolean,
             default: false
+        },
+        useCustomWrapper: {
+            type: Boolean,
+            default: false
         }
     },
     created () {
@@ -163,6 +182,7 @@ export default {
         this.widgetsCssLabel = 'Deregister IMPress Listings Widgets CSS?'
         this.sendFormLabel = 'Send Form Submissions to IDX Broker'
         this.pluginUninstallationLabel = 'Delete Plugin Data on Uninstall'
+        this.useCustomWrapperLabel = 'Use Custom Wrapper?'
     }
 }
 </script>
