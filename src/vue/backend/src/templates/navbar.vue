@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <idx-block className="navigation">
         <idx-navbar type="light" theme="light" customClass="wordpress-navigation">
             <idx-v-icon
                 :customClass="{
@@ -39,7 +39,7 @@
                 ></idx-nav-item>
             </idx-nav-list>
         </idx-v-nav>
-    </div>
+    </idx-block>
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
