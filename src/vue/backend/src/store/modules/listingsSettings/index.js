@@ -1,8 +1,5 @@
-import actions from './actions'
-import getters from './getters'
-
 const state = {
-    enabled: true,
+    enabled: false,
     currencyCodeSelected: 'none',
     currencySymbolSelected: 'none',
     defaultDisclaimer: '',
@@ -34,7 +31,5 @@ const state = {
 
 export default {
     namespaced: true,
-    actions,
-    getters,
     state
 }

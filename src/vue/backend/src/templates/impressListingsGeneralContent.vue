@@ -74,6 +74,7 @@
 import currency from '@/data/currency'
 export default {
     name: 'ListingsGeneral',
+    inheritAttrs: false,
     props: {
         currencyCodeSelected: {
             type: String,
