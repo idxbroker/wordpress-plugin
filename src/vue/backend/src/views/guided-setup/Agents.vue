@@ -10,12 +10,12 @@
             <p><strong>This is optional.</strong> A sentence or two about why you should install IMPress Listings to your WordPress site. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
         <template v-slot:controls>
-            <p>Activating IMPress Listings will:</p>
+            <p>Activating IMPress Agents will:</p>
             <idx-list customClass="list-featured">
-                <idx-list-item>Feature 1</idx-list-item>
-                <idx-list-item>Feature 2</idx-list-item>
-                <idx-list-item>Feature 3</idx-list-item>
-                <idx-list-item>Feature 4</idx-list-item>
+                <idx-list-item>Add Feature 1</idx-list-item>
+                <idx-list-item>Enable Feature 2</idx-list-item>
+                <idx-list-item>Import Feature 3</idx-list-item>
+                <idx-list-item>Automate Feature 4</idx-list-item>
             </idx-list>
             <idx-block className="form-content">
                 <idx-form-group>
@@ -55,25 +55,25 @@ export default {
     },
     methods: {
         ...mapActions({
-            setItem: 'listingsSettings/setItem',
+            setItem: 'agentSettings/setItem',
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            enableListingsPlugin: 'listingsSettings/enableListingsPlugin'
+            enableAgentsPlugin: 'agentSettings/enableAgentsPlugin'
         }),
         async goContinue () {
-            await this.enableListingsPlugin()
+            await this.enableAgentsPlugin()
             this.saveAction()
             this.$router.push({ path: this.continuePath })
         }
     },
     created () {
-        this.module = 'listingsSettings'
-        this.cardTitle = 'Enable IMPress Listings'
+        this.module = 'agentSettings'
+        this.cardTitle = 'Enable IMPress Agents'
         this.activateLabel = 'Enable'
-        this.continuePath = '/guided-setup/listings/general'
-        this.skipPath = '/guided-setup/agents'
+        this.continuePath = '/guided-setup/agents/configure'
+        this.skipPath = '/guided-setup/social-pro'
         this.links = [
             {
-                text: 'IMPress Listings Features',
+                text: 'IMPress Agents Features',
                 href: '#listings-features'
             },
             {
@@ -87,7 +87,7 @@ export default {
         ]
     },
     mounted () {
-        this.progressStepperUpdate([4, 1, 0, 0])
+        this.progressStepperUpdate([4, 5, 1, 0])
     }
 }
 </script>

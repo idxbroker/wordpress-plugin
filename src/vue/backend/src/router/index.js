@@ -142,8 +142,8 @@ const routes = [
                     },
                     {
                         path: 'agents',
-                        name: 'Activate IMPress Agents'
-                        // component
+                        name: 'Activate IMPress Agents',
+                        component: () => import('@/views/guided-setup/Agents')
                     },
                     {
                         path: 'agents/configure',
