@@ -178,16 +178,16 @@ class WPL_Idx_Listing {
 	 * @return true if success.
 	 */
 	public static function wp_listings_update_post() {
-
-		//require_once '../../../idx/idx-api.php';
+		// Run incase import list is out of sync.
+		sync_listing_options();
 
 		// Load IDX Broker API Class and retrieve featured properties.
 		$_idx_api = new \IDX\Idx_Api();
-		$properties = $_idx_api->client_properties('featured?disclaimers=true');
+		$properties = $_idx_api->client_properties( 'featured?disclaimers=true' );
 
 		// Load WP options
-		$idx_featured_listing_wp_options = get_option('wp_listings_idx_featured_listing_wp_options');
-		$wpl_options = get_option('plugin_wp_listings_settings');
+		$idx_featured_listing_wp_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
+		$wpl_options = get_option( 'plugin_wp_listings_settings' );
 
 		foreach ( $properties as $prop ) {
 			$key = self::get_key( $properties, 'listingID', $prop['listingID'] );
@@ -442,80 +442,8 @@ class WPL_Idx_Listing {
 	}
 }
 
-/**
- * Admin settings page
- * Outputs clients/featured properties to import
- * Enqueues scripts for display
- * Deletes post and post thumbnail via ajax
- */
-add_action( 'admin_menu', 'wp_listings_idx_listing_register_menu_page');
-function wp_listings_idx_listing_register_menu_page() {
-	add_submenu_page( 'edit.php?post_type=listing', __( 'Import IDX Listings', 'wp-listings' ), __( 'Import IDX Listings', 'wp-listings' ), 'manage_options', 'wplistings-idx-listing', 'wp_listings_idx_listing_setting_page' );
-	add_action( 'admin_init', 'wp_listings_idx_listing_register_settings' );
-}
-
 function wp_listings_idx_listing_register_settings() {
-	register_setting('wp_listings_idx_listing_settings_group', 'wp_listings_idx_featured_listing_wp_options', 'wp_listings_idx_create_post_cron');
-}
-
-add_action( 'admin_enqueue_scripts', 'wp_listings_idx_listing_scripts' );
-function wp_listings_idx_listing_scripts() {
-	$screen = get_current_screen();
-	if($screen->id != 'listing_page_wplistings-idx-listing')
-		return;
-
-	wp_enqueue_script( 'jquery-masonry' );
-	wp_enqueue_script( 'wp_listings_idx_listing_lazyload', IMPRESS_IDX_URL . 'assets/js/jquery.lazyload.min.js', [ 'jquery' ], true );
-	wp_enqueue_script( 'wp_listings_idx_listing_delete_script', IMPRESS_IDX_URL . 'assets/js/admin-listing-import.min.js', [ 'jquery' ], true );
-	wp_localize_script( 'wp_listings_idx_listing_delete_script', 'DeleteListingAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-	wp_localize_script( 'wp_listings_idx_listing_delete_script', 'DeleteAllListingAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-	wp_enqueue_style( 'wp_listings_idx_listing_style', IMPRESS_IDX_URL . 'assets/css/wp-listings-import.css' );
-}
-
-add_action( 'wp_ajax_wp_listings_idx_listing_delete', 'wp_listings_idx_listing_delete' );
-function wp_listings_idx_listing_delete(){
-
-	$permission = check_ajax_referer( 'wp_listings_idx_listing_delete_nonce', 'nonce', false );
-	if( $permission == false ) {
-		echo 'error';
-	}
-	else {
-		// Delete featured image
-		$post_featured_image_id = get_post_thumbnail_id( $_REQUEST['id'] );
-		wp_delete_attachment( $post_featured_image_id );
-
-		//Delete post
-		wp_delete_post( $_REQUEST['id'] );
-		echo 'success';
-	}
-	die();
-}
-
-add_action( 'wp_ajax_wp_listings_idx_listing_delete_all', 'wp_listings_idx_listing_delete_all' );
-function wp_listings_idx_listing_delete_all(){
-
-	$permission = check_ajax_referer( 'wp_listings_idx_listing_delete_all_nonce', 'nonce', false );
-	if( $permission == false ) {
-		echo 'error';
-	}
-	else {
-		// Get listings
-		$idx_featured_listing_wp_options = get_option('wp_listings_idx_featured_listing_wp_options');
-
-		foreach($idx_featured_listing_wp_options as $prop) {
-			if(isset($prop['post_id'])) {
-				// Delete featured image
-				$post_featured_image_id = get_post_thumbnail_id( $prop['post_id'] );
-				wp_delete_attachment( $post_featured_image_id );
-
-				//Delete post
-				wp_delete_post( $prop['post_id'] );
-			}
-		}
-		
-		echo 'success';
-	}
-	die();
+	register_setting( 'wp_listings_idx_listing_settings_group', 'wp_listings_idx_featured_listing_wp_options', 'wp_listings_idx_create_post_cron' );
 }
 
 /**
@@ -523,10 +451,14 @@ function wp_listings_idx_listing_delete_all(){
  */
 function sync_listing_options() {
 
+	$listings_options  = get_option( 'plugin_wp_listings_settings' );
+	$listing_post_slug = empty( $listing_options['wp_listings_slug'] ) ? 'listing' : $impress_listing_options['wp_listings_slug'];
+
 	$listing_posts = get_posts(
 		[
 			'numberposts' => '-1',
-			'post_type' => 'listing',
+			'post_type'   => $listing_post_slug,
+			'post_status' => [ 'publish', 'pending', 'draft', 'private' ],
 		]
 	);
 
@@ -575,220 +507,53 @@ function sync_listing_options() {
 }
 
 
-function wp_listings_idx_listing_setting_page() {
-	if( get_option('wp_listings_import_progress') == true ) {
-		add_settings_error('wp_listings_idx_listing_settings_group', 'idx_listing_import_progress', 'Your listings are being imported in the background. This notice will dismiss when all selected listings have been imported.', 'updated');
-	}
-
-	sync_listing_options();
-	$idx_featured_listing_wp_options = get_option('wp_listings_idx_featured_listing_wp_options');
-
-	$failed_import_list = get_option('impress_listings_import_fail_list');
-	if ( is_array( $failed_import_list ) &&  count( $failed_import_list ) > 0 ) {
-		add_settings_error('wp_listings_idx_listing_settings_group', 'idx_listing_import_progress', 'Import errors for the following listings: ' . implode(', ', $failed_import_list ), 'error');
-	}
-	
-	?>
-			<h1>Import IDX Listings</h1>
-			<p>Select the listings to import.</p>
-			<form id="wplistings-idx-listing-import" method="post" action="options.php">
-			<label for="selectall"><input type="checkbox" id="selectall"/>Select/Deselect All<br/><em>If importing all listings, it may take some time. <strong class="error">Please be patient.</strong></em></label>
-			
-			<?php
-			if ($idx_featured_listing_wp_options) {
-				foreach($idx_featured_listing_wp_options as $prop) {
-					if(isset($prop['post_id'])) {
-						$nonce_all = wp_create_nonce('wp_listings_idx_listing_delete_all_nonce');
-						echo '<a class="delete-all" href="admin-ajax.php?action=wp_listings_idx_delete_all&nonce=' . $nonce_all . '" data-nonce="' . $nonce_all .'">Delete All Imported Listings</a>';
-						break;
-					}
-				}
-			}
-
-			submit_button('Import Listings', 'primary submit-imports-button');
-
-
-			// Show popup if IDX Broker plugin not active or installed
-			if( !class_exists( 'IDX_Broker_Plugin') ) {
-				// thickbox like content
-				echo '
-					<img class="idx-import bkg" src="' . IMPRESS_IDX_URL . 'assets/images/import-bg.jpg' . '" /></a>
-					<div class="idx-import thickbox">
-					     <a href="http://www.idxbroker.com/features/idx-wordpress-plugin" target="_blank"><img src="' . IMPRESS_IDX_URL . 'assets/images/idx-ad.png' . '" alt="Sign up for IDX now!"/></a>
-					</div>';
-
-				return;
-			}
-
-			settings_errors('wp_listings_idx_listing_settings_group');
-			?>
-			
-			<ol id="selectable" class="grid">
-			<div class="grid-sizer"></div>
-			<script>
-				(function($){
-					$('.grid').on( 'layoutComplete', function( event, laidOutItems ) {
-						$(window).scroll()
-						$('#selectable').css({'opacity': '1', 'transition': 'opacity .2s'})
-					} )
-				})(jQuery)
-			</script>
-			<?php
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-			$plugin_data = get_plugins();
-
-			// Get properties from IDX Broker plugin
-			if (class_exists( 'IDX_Broker_Plugin' )) {
-				// bail if IDX plugin version is not at least 2.0.0.
-				if ( version_compare( $plugin_data['idx-broker-platinum/idx-broker-platinum.php']['Version'], '2.0.0' ) < 0 ) {
-					add_settings_error('wp_listings_idx_listing_settings_group', 'idx_listing_update', 'You must update to <a href="' . admin_url( 'update-core.php' ) . '">IMPress for IDX Broker</a> version 2.0.0 or higher to import listings.', 'error');
-					settings_errors('wp_listings_idx_listing_settings_group');
-					return;
-				}
-
-				$_idx_api = new \IDX\Idx_Api();
-				$properties = $_idx_api->client_properties('featured');
-			} elseif(is_wp_error($properties)) {
-				 $error_string = $properties->get_error_message();
-				add_settings_error('wp_listings_idx_listing_settings_group', 'idx_listing_update', $error_string, 'error');
-				settings_errors('wp_listings_idx_listing_settings_group');
-				return;
-			} else {
-				return;
-			}
-
-			settings_fields( 'wp_listings_idx_listing_settings_group' );
-			do_settings_sections( 'wp_listings_idx_listing_settings_group' );
-
-			// No featured properties found
-			if(!$properties) {
-				echo 'No featured properties found.';
-				return;
-			}
-
-			// Loop through properties
-			foreach ($properties as $prop) {
-
-				if(!isset($idx_featured_listing_wp_options[$prop['listingID']]['post_id']) || !get_post($idx_featured_listing_wp_options[$prop['listingID']]['post_id']) ) {
-					$idx_featured_listing_wp_options[$prop['listingID']] = array(
-						'listingID' => $prop['listingID']
-						);
-				}
-
-				if(isset($idx_featured_listing_wp_options[$prop['listingID']]['post_id']) && get_post($idx_featured_listing_wp_options[$prop['listingID']]['post_id']) ) {
-					$pid = $idx_featured_listing_wp_options[$prop['listingID']]['post_id'];
-					$nonce = wp_create_nonce('wp_listings_idx_listing_delete_nonce');
-					$delete_listing = sprintf('<a href="%s" data-id="%s" data-nonce="%s" class="delete-post">Delete</a>',
-						admin_url( 'admin-ajax.php?action=wp_listings_idx_listing_delete&id=' . $pid . '&nonce=' . $nonce),
-							$pid,
-							$nonce
-					 );
-				}
-
-				printf('
-				<div class="grid-item post">
-					<label for="%s" class="idx-listing">
-						<li class="%s">
-							<img class="listing lazy" data-original="%s">
-							<input type="checkbox" id="%s" class="checkbox" name="wp_listings_idx_featured_listing_wp_options[]" value="%s" %s />%s
-							<div class="impress-import-info-container">
-								<span class="price">%s</span><br/>
-								<span class="address">%s</span><br/>
-								<span class="mls">MLS#: </span>%s
-							</div>
-							%s
-						</li>
-					</label>
-				</div>',
-					$prop['listingID'],
-					isset($idx_featured_listing_wp_options[$prop['listingID']]['status']) ? (isset($idx_featured_listing_wp_options[$prop['listingID']]['post_id']) ? "imported" : '') : '',
-					isset($prop['image']['0']['url']) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png',
-					$prop['listingID'],
-					$prop['listingID'],
-					isset($idx_featured_listing_wp_options[$prop['listingID']]['status']) ? ($idx_featured_listing_wp_options[$prop['listingID']]['status'] == 'publish' ? "checked" : '') : '',
-					isset($idx_featured_listing_wp_options[$prop['listingID']]['status']) ? ($idx_featured_listing_wp_options[$prop['listingID']]['status'] == 'publish' ? "<span class='imported'><i class='dashicons dashicons-yes'></i>Imported</span>" : '') : '',
-					$prop['listingPrice'],
-					(isset($prop['address']) ? $prop['address'] : 'Address unlisted'),
-					$prop['listingID'],
-					isset($idx_featured_listing_wp_options[$prop['listingID']]['status']) ? ($idx_featured_listing_wp_options[$prop['listingID']]['status'] == 'publish' ? $delete_listing : '') : ''
-					);
-
-			}
-			echo '</ol>';
-			submit_button('Import Listings', 'primary submit-imports-button');
-			?>
-			</form>
-	<?php
-}
-
 /**
  * Check if update is scheduled - if not, schedule it to run twice daily.
  * Schedule auto import if option checked
  * Only add if IDX plugin is installed
  * @since 2.0
  */
-if( class_exists( 'IDX_Broker_Plugin') ) {
-	add_action( 'admin_init', 'wp_listings_idx_update_schedule' );
 
-	$wpl_options = get_option('plugin_wp_listings_settings');
+add_action( 'admin_init', 'wp_listings_idx_update_schedule' );
 
-	if ( isset($wpl_options['wp_listings_auto_import']) && $wpl_options['wp_listings_auto_import'] == true ) {
-		add_action( 'admin_init', 'wp_listings_idx_auto_import_schedule' );
-	}
+$wpl_options = get_option( 'plugin_wp_listings_settings' );
+
+if ( isset( $wpl_options['wp_listings_auto_import'] ) && $wpl_options['wp_listings_auto_import'] == true ) {
+	add_action( 'admin_init', 'wp_listings_idx_auto_import_schedule' );
 }
+
 function wp_listings_idx_update_schedule() {
 	if ( ! wp_next_scheduled( 'wp_listings_idx_update' ) ) {
-		wp_schedule_event( time(), 'twicedaily', 'wp_listings_idx_update');
+		wp_schedule_event( time(), 'twicedaily', 'wp_listings_idx_update' );
 	}
 }
 /**
  * On the scheduled update event, run wp_listings_update_post
  */
-add_action( 'wp_listings_idx_update', array('WPL_Idx_Listing', 'wp_listings_update_post') );
+add_action( 'wp_listings_idx_update', [ 'WPL_Idx_Listing', 'wp_listings_update_post' ] );
 
 /**
  * Schedule auto import task
  */
 function wp_listings_idx_auto_import_schedule() {
 	if ( ! wp_next_scheduled( 'wp_listings_idx_auto_import' ) ) {
-		wp_schedule_event( time(), 'twicedaily', 'wp_listings_idx_auto_import');
+		wp_schedule_event( time(), 'twicedaily', 'wp_listings_idx_auto_import' );
 	}
 }
 add_action( 'wp_listings_idx_auto_import', 'wp_listings_idx_auto_import_task' );
 /**
  * Get listingIDs and pass to create post cron job
+ *
  * @return void
  */
 function wp_listings_idx_auto_import_task() {
-	if(class_exists( 'IDX_Broker_Plugin')) {
-		require_once BASE_PLUGINS_DIR . 'idx-broker-platinum/idx/idx-api.php';
-		$_idx_api = new \IDX\Idx_Api();
-		$properties = $_idx_api->client_properties('featured');
-
-		foreach($properties as $prop) {
-			$listingIDs[] = $prop['listingID'];
-		}
+	$_idx_api    = new \IDX\Idx_Api();
+	$properties  = $_idx_api->client_properties( 'featured' );
+	$listing_ids = [];
+	foreach ( $properties as $prop ) {
+		$listing_ids[] = $prop['listingID'];
 	}
-
-	WPL_Idx_Listing::wp_listings_idx_create_post($listingIDs);
-}
-
-add_action('admin_menu', 'load_idx_listing_import_nonce');
-function load_idx_listing_import_nonce() {
-	$full_rest_url = get_rest_url();
-	if  ( strpos( $full_rest_url, '?' ) !== false ) {
-		$full_rest_url = $full_rest_url . 'wp-listings/v1/import-listings/&listings=';
-	} else {
-		$full_rest_url = $full_rest_url . 'wp-listings/v1/import-listings/?listings=';
-	}
-
-	wp_register_script( 'wp-listings-admin', IMPRESS_IDX_URL . 'assets/js/listings-admin.min.js' );
-	wp_enqueue_script( 'wp-listings-admin' );
-	$server_obj = array(
-		'nonce' => wp_create_nonce( 'wp_rest' ),
-		'url'   => $full_rest_url,
-	);
-	wp_localize_script( 'wp-listings-admin', 'idxImportListingObj', $server_obj );
+	WPL_Idx_Listing::wp_listings_idx_create_post( $listing_ids );
 }
 
 require_once plugin_dir_path( __FILE__ ) . 'wp-background-processing/wp-background-processing.php';

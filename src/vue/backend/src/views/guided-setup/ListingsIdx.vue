@@ -22,6 +22,7 @@ import pageGuard from '@/mixins/pageGuard'
 import ListingsIdx from '@/templates/impressListingsIdxContent.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-listings-idx',
     mixins: [
         guidedSetupMixin,
         pageGuard

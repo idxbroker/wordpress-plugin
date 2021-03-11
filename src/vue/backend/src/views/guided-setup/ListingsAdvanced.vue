@@ -22,6 +22,7 @@ import pageGuard from '@/mixins/pageGuard'
 import ListingsAdvanced from '@/templates/impressListingsAdvancedContent.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-listings-advanced',
     mixins: [
         guidedSetupMixin,
         pageGuard
