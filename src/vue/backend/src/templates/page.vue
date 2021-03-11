@@ -47,17 +47,6 @@ body {
         float: unset;
     }
 
-    h1 {
-        font-size: var(--font-size-h1);
-        font-weight: 300;
-        line-height: var(--line-height-h1);
-    }
-
-    h2 {
-        font-size: var(--font-size-h2);
-        line-height: var(--line-height-h2);
-    }
-
     p {
         font-size: inherit;
         line-height: inherit;

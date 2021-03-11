@@ -43,6 +43,9 @@ export default {
         }
     }
     &__content h1 {
+        font-size: var(--font-size-h1);
+        font-weight: 300;
+        line-height: var(--line-height-h1);
         margin-bottom: var(--space-10);
     }
 }

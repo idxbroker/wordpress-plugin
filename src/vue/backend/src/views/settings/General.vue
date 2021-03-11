@@ -1,5 +1,9 @@
 <template>
     <TwoColumn title="General Settings">
+        <idx-block className="form-content__label">
+            <idx-block tag="h2" className="form-content__title">Connect Your IDX Broker Account</idx-block>
+            <p>Description of API key and why it’s needed.</p>
+        </idx-block>
         <APIKey
             :apiKey="localStateValues.apiKey"
             :error="error"

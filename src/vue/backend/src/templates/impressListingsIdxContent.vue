@@ -1,8 +1,8 @@
 <template>
     <idx-block className="idx-content-settings form-content">
         <div>
-            <idx-block className="form-content__title">Imported Listings</idx-block>
-            <div>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</div>
+            <idx-block tag="h2" className="form-content__title">Imported Listings</idx-block>
+            <p>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</p>
         </div>
         <div>
             <b>Update Listings</b>
@@ -36,7 +36,7 @@
         </div>
         <idx-block className="idx-content-settings idx-content-settings__additional-imports">
             <div>
-                <idx-block className="form-content__title">Additional Import Options</idx-block>
+                <idx-block tag="h2" className="form-content__title">Additional Import Options</idx-block>
                 <b>{{ toggleLabels[0] }}</b>
                 <div>Description of the automatic import listings setting. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</div>
                 <idx-block className="idx-content-settings__toggle form-content__toggle">
@@ -92,7 +92,7 @@
             </idx-form-group>
         </idx-block>
         <idx-block className="idx-content-settings__advanced">
-            <idx-block className="form-content__title">Advanced Field Settings</idx-block>
+            <idx-block tag="h2" className="form-content__title">Advanced Field Settings</idx-block>
             <idx-block className="idx-content-settings ">
                 <idx-block className="idx-content-settings__toggle form-content__toggle">
                     {{ toggleLabels[2] }}

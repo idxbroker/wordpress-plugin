@@ -1,8 +1,8 @@
 <template>
     <idx-block tag="fieldset" className="fieldset listings-advanced form-content">
         <idx-block className="control-label form-content__label">
-            <idx-block className="form-content__title">CSS Settings</idx-block>
-            Detailed sentence or two describing deregistering IMPress Listing CSS files so that the installed theme’s CSS won’t have specificity issues.
+            <idx-block tag="h2" className="form-content__title">CSS Settings</idx-block>
+            <p>Detailed sentence or two describing deregistering IMPress Listing CSS files so that the installed theme’s CSS won’t have specificity issues.</p>
         </idx-block>
         <idx-block className="listings-advanced__border">
             <idx-form-group>

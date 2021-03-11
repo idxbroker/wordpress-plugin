@@ -10,6 +10,7 @@
             <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
         <template v-slot:controls>
+            <idx-form-label customClass="form-content__label" for="ApiKey">API Key</idx-form-label>
             <APIKey
                 :error="error"
                 :loading="loading"

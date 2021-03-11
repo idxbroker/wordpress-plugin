@@ -7,7 +7,6 @@
             }"
             novalidate
         >
-            <idx-form-label customClass="form-content__label" for="ApiKey">API Key</idx-form-label>
             <idx-form-input
                 type="text"
                 id="ApiKey"
