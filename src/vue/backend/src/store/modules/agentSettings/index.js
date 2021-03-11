@@ -1,6 +1,3 @@
-import actions from './actions'
-import getters from './getters'
-
 const state = {
     enabled: false,
     deregisterMainCss: false,
@@ -12,7 +9,5 @@ const state = {
 
 export default {
     namespaced: true,
-    actions,
-    getters,
     state
 }
