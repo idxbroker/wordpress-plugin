@@ -35,7 +35,7 @@ class Register_Shortcode_For_Ui {
 	 * @return void
 	 */
 	public function idx_set_shortcode_preview_nonce() {
-		wp_localize_script( 'idx-shortcode', 'IDXShortcodePreviewNonce', wp_create_nonce( 'idx-shortcode-preview-nonce' ) );
+		wp_localize_script( 'idx-shortcode', 'IDXShortcodePreviewNonce', [ wp_create_nonce( 'idx-shortcode-preview-nonce' ) ] );
 	}
 
 	/**
