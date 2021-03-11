@@ -1,5 +1,6 @@
 <template>
     <checkbox-label
+        customClass="import-listings"
         :option="option"
         @checked="$emit('listing-selected', [$event.data, listing.listingId])"
     >
@@ -48,10 +49,10 @@ export default {
         color: $white;
     }
 }
-.checkbox-label {
+.import-listings.checkbox-label {
     position: relative;
     width: 309px;
-    &__custom {
+    .checkbox-label__custom {
         position: absolute;
         top: 0px;
         right: 16px;

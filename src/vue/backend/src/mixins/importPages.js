@@ -1,18 +1,19 @@
 export default {
     data () {
         return {
-            selected: false
+            selected: false,
+            itemsSelected: []
         }
     },
     methods: {
-        updateSelected (e, actionsArray) {
-            const inArray = actionsArray.indexOf(e[1])
+        updateSelected (e) {
+            const inArray = this.itemsSelected.indexOf(e[1])
             if (e[0]) {
                 if (inArray === -1) {
-                    actionsArray.push(e[1])
+                    this.itemsSelected.push(e[1])
                 }
             } else {
-                actionsArray.splice(inArray, 1)
+                this.itemsSelected.splice(inArray, 1)
             }
         },
         selectAll (reference, masterList) {

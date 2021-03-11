@@ -1,41 +1,19 @@
 <template>
-    <div>
-        <bulk-action
-            action="Delete"
-            :selected="selected"
-            :description="description"
-            :disabled="listingsSelected.length === 0"
-            @select-all="selectAll('listing-checkbox', listings)"
-            @bulk-action="unimportListings"
-        ></bulk-action>
-        <idx-block className="listings-card__group">
-            <listings-card
-                v-for="listing in listings"
-                ref="listing-checkbox"
-                :key="listing.listingID"
-                :listing="listing"
-                @listing-selected="updateSelected($event, listingsSelected)"
-            >
-            </listings-card>
-        </idx-block>
-    </div>
+    <import-page-template
+        action="delete"
+        cardType="listings"
+        :masterList="listings"
+        :description="description"
+        @bulk-action="unimportListings"
+    ></import-page-template>
 </template>
 <script>
 import { mapState } from 'vuex'
-import importPages from '@/mixins/importPages'
-import BulkAction from '../../components/BulkAction.vue'
-import ListingsCard from '../../components/listingsCard.vue'
+import importPageTemplate from '@/templates/importPageTemplate'
 export default {
     name: 'imported-listings',
-    mixins: [importPages],
     components: {
-        BulkAction,
-        ListingsCard
-    },
-    data () {
-        return {
-            listingsSelected: []
-        }
+        importPageTemplate
     },
     computed: {
         ...mapState({
@@ -43,7 +21,7 @@ export default {
         })
     },
     methods: {
-        unimportListings () {
+        unimportListings (e) {
             // to do: DELETE request with post IDs
         }
     },
