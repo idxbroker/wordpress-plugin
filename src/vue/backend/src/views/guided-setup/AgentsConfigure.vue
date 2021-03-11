@@ -22,6 +22,7 @@ import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import AgentsSettings from '@/templates/AgentsSettings.vue'
 export default {
+    name: 'guided-setup-agents-configure',
     mixins: [
         guidedSetupMixin,
         pageGuard

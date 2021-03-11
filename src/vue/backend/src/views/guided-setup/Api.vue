@@ -28,6 +28,7 @@ import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import APIKey from '@/components/APIKey.vue'
 export default {
+    name: 'guided-setup-api',
     inject: [PRODUCT_REFS.general.repo],
     mixins: [pageGuard],
     components: {
