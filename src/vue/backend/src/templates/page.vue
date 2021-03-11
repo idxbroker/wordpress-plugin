@@ -31,15 +31,6 @@ body {
     overflow-y: scroll;
 }
 .content-page {
-  --font-size-h1: 31px;
-  --font-size-h2: 25px;
-  --font-size-p: 16px;
-  --font-size-p-large: 18px;
-  --header-height: 83px;
-  --line-height-h1: 28px;
-  --line-height-h2: 28px;
-  --line-height-p: 28px;
-  --line-height-p-large: 28px;
     padding: 50px;
     margin: 135px 30px 0 300px;
     background-color: $white;

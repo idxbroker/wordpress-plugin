@@ -7,12 +7,12 @@
                     uncheckedState="No"
                     checkedState="Yes"
                     @toggle="refreshPage"
-                    :active="agentSettings.enabled"
+                    :active="localStateValues.enabled"
                     label="Enable IMPress Listings"
                 ></idx-toggle-slider>
             </idx-block>
-            <template v-if="agentSettings.enabled">
-                <AgentsSettings v-bind="agentSettings" @form-field-update="formUpdate" />
+            <template v-if="enabled">
+                <AgentsSettings v-bind="localStateValues" @form-field-update="formUpdate" />
                 <idx-button theme="primary" @click="saveHandler">Save</idx-button>
             </template>
         </idx-block>
@@ -38,13 +38,14 @@ export default {
     },
     computed: {
         ...mapState({
-            agentSettings: (state) => state.agentSettings
+            enabled: (state) => state.agentSettings.enabled
         })
     },
     methods: {
         async refreshPage () {
-            const { status } = await this.agentSettingsRepository.post({ enabled: !this.agentSettings.enabled }, 'enable')
-            if (status === 200) {
+            this.formUpdate({ key: 'enabled', value: !this.enabled })
+            const { status } = await this.agentSettingsRepository.post({ enabled: !this.enabled }, 'enable')
+            if (status === (204 || 200)) {
                 location.reload()
             }
         },
@@ -63,9 +64,7 @@ export default {
             { text: 'Sign up for IDX Broker', href: 'https://signup.idxbroker.com/' } // Marketing may want a different entry
         ]
         const { data } = await this.agentSettingsRepository.get()
-        for (const key in data) {
-            this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
-        }
+        this.updateState(data)
     }
 }
 </script>

@@ -21,10 +21,13 @@ export default {
             }
             this.formChanges = { ...this.formChanges, ...change }
         },
-        saveAction () {
-            for (const key in this.formChanges) {
-                this.$store.dispatch(`${this.module}/setItem`, { key, value: this.formChanges[key] })
+        updateState (changes) {
+            for (const key in changes) {
+                this.$store.dispatch(`${this.module}/setItem`, { key, value: changes[key] })
             }
+        },
+        saveAction () {
+            this.updateState(this.formChanges)
             this.formChanges = {}
         }
     },
