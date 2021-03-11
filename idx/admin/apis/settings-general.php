@@ -122,7 +122,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 				return rest_ensure_response( $error );
 			}
 		}
-		return rest_ensure_response( null );
+		return new \WP_REST_Response( null, 204 );
 	}
 
 	/**
