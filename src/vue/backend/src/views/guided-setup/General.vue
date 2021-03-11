@@ -23,6 +23,7 @@ import pageGuard from '@/mixins/pageGuard'
 import GeneralSettings from '@/templates/GeneralSettings.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-general',
     inject: [PRODUCT_REFS.general.repo],
     mixins: [pageGuard],
     components: {

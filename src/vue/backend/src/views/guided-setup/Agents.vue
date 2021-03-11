@@ -43,6 +43,7 @@ import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
     inject: [PRODUCT_REFS.agentSettings.repo],
+    name: 'guided-setup-agents',
     mixins: [
         guidedSetupMixin,
         pageGuard

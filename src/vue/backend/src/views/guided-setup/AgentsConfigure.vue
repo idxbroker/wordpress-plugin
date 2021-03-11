@@ -24,6 +24,7 @@ import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import AgentsSettings from '@/templates/AgentsSettings.vue'
 export default {
     inject: [PRODUCT_REFS.agentSettings.repo],
+    name: 'guided-setup-agents-configure',
     mixins: [
         guidedSetupMixin,
         pageGuard
