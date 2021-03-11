@@ -6,7 +6,7 @@
                 uncheckedState="No"
                 checkedState="Yes"
                 @toggle="refreshPage"
-                :active="enabled"
+                :active="localStateValues.enabled"
                 label="Enable IMPress Listings"
             ></idx-toggle-slider>
         </idx-block>
@@ -22,13 +22,16 @@
     </TwoColumn>
 </template>
 <script>
+import { PRODUCT_REFS } from '@/data/productTerms'
+import pageGuard from '@/mixins/pageGuard'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import TabbedMixin from '@/mixins/Tabbed'
 import Tabbed from '@/templates/layout/Tabbed'
 import RelatedLinks from '../../components/RelatedLinks.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
-    mixins: [TabbedMixin],
+    inject: [PRODUCT_REFS.listingsSettings.repo],
+    mixins: [TabbedMixin, pageGuard],
     components: {
         Tabbed,
         TwoColumn,
@@ -40,15 +43,16 @@ export default {
         })
     },
     methods: {
-        ...mapActions({
-            setItem: 'listingsSettings/setItem'
-        }),
         async refreshPage () {
-            await this.setItem({ key: 'enabled', value: !this.enabled })
-            location.reload()
+            this.formUpdate({ key: 'enabled', value: !this.enabled })
+            const { status } = await this.listingsSettingsRepository.post({ enabled: !this.enabled }, 'enable')
+            if (status === (204 || 200)) {
+                location.reload()
+            }
         }
     },
-    created () {
+    async created () {
+        this.module = 'listingsSettings'
         this.links = [
             { text: 'Where can I find my API key?', href: 'https://support.idxbroker.com/s/article/api-key' },
             { text: 'IDX Broker Middleware', href: 'https://middleware.idxbroker.com/mgmt/' },

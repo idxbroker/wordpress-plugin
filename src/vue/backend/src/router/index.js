@@ -128,17 +128,26 @@ const routes = [
                     {
                         path: 'listings/general',
                         name: 'Configure General IMPress Listings',
-                        component: () => import('@/views/guided-setup/ListingsGeneral')
+                        component: () => import('@/views/guided-setup/ListingsGeneral'),
+                        meta: {
+                            requires: [LISTINGS]
+                        }
                     },
                     {
                         path: 'listings/idx',
                         name: 'Configure IDX IMPress Listings',
-                        component: () => import('@/views/guided-setup/ListingsIdx')
+                        component: () => import('@/views/guided-setup/ListingsIdx'),
+                        meta: {
+                            requires: [LISTINGS]
+                        }
                     },
                     {
                         path: 'listings/advanced',
                         name: 'Configure Advanced IMPress Listings',
-                        component: () => import('@/views/guided-setup/ListingsAdvanced')
+                        component: () => import('@/views/guided-setup/ListingsAdvanced'),
+                        meta: {
+                            requires: [LISTINGS]
+                        }
                     },
                     {
                         path: 'agents',

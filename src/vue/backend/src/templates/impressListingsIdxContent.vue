@@ -121,6 +121,7 @@
 <script>
 export default {
     name: 'impress-listings-idx-content',
+    inheritAttrs: false,
     props: {
         updateListings: {
             type: String,
