@@ -8,6 +8,9 @@
                     ...step
                 }"
             >
+                <template v-slot:complete>
+                    <svg-icon icon="check" />
+                </template>
                 <template v-slot:icon>
                     <svg-icon :icon="step.icon" />
                 </template>
