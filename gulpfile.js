@@ -6,6 +6,7 @@ var stylish = require('jshint-stylish')
 var rename = require('gulp-rename')
 var concat = require('gulp-concat')
 var uglify = require('gulp-uglify')
+var cleanCss = require('gulp-clean-css')
 var notify = require('gulp-notify')
 var sourcemaps = require('gulp-sourcemaps')
 var glob = require('glob')
@@ -55,6 +56,10 @@ gulp.task('sass', function () {
     var tasks = files.map(function (entry) {
       return gulp.src(entry)
         .pipe(sass().on('error', sass.logError))
+        .pipe(cleanCss())
+        .pipe(rename(function (path) {
+          path.extname = '.min.css'
+        }))
         .pipe(gulp.dest('./assets/css/'))
         .pipe(notify({ message: 'Finished processing ' + entry }))
     })
