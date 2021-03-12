@@ -60,7 +60,6 @@
             <idx-textarea
                 type="text"
                 id="default-disclaimer"
-                customClass="listings-general__default-disclaimer"
                 placeholder="Disclaimer text"
                 rows="3"
                 :value="defaultDisclaimer"
@@ -120,7 +119,4 @@ export default {
 </script>
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
-.listings-general__default-disclaimer {
-    border-radius: 4px;
-}
 </style>

@@ -15,7 +15,7 @@
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         />
-        <idx-button size="lg" customClass="settings-button__save " @click="saveHandler">Save</idx-button>
+        <idx-button size="lg" @click="saveHandler">Save</idx-button>
         <template #related>
             <RelatedLinks :relatedLinks="relatedLinks"/>
         </template>
@@ -96,8 +96,3 @@ export default {
     }
 }
 </script>
-<style lang="scss">
-.form-content__api-key {
-    margin-bottom: 40px;
-}
-</style>

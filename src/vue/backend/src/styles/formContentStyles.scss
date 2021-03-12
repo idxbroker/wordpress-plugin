@@ -1,26 +1,11 @@
 @import '~bootstrap/scss/forms';
-h1 {
-    font-size: var(--font-size-h1);
-    font-weight: 300;
-    line-height: var(--line-height-h1);
-}
-
-h2 {
-    font-size: var(--font-size-h2);
-    line-height: var(--line-height-h2);
-}
 .form-content {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 40px;
     font-size: 1rem;
     color: $gray-875;
-    strong {
-        font-weight: 600;
-    }
     hr {
-        border-top: 1px solid $gray-150;
-        width: 100%;
+        border-top: 1px solid $gray-250;
+        margin-bottom: var(--space-form-section);
+        margin-top: var(--space-form-section);
     }
     &__toggle {
         display: flex;
@@ -46,13 +31,15 @@ h2 {
     &__title {
         font-size: 1em;
         display: block;
-        font-weight: 600;
+        font-weight: 700;
         margin-bottom: var(--space-form-title);
     }
     &__header {
-        margin-bottom: 0px;
+        margin-bottom: var(--space-form-section);
+        margin-top: var(--space-form-section);
     }
     &__label {
+        font-size: 1em;
         margin-bottom: var(--space-form-label);
         width: 100%;
         *:last-child {
@@ -62,6 +49,7 @@ h2 {
     .form-control,
     input {
         border: 1px solid $gray-250;
+        border-radius: 4px;
         padding-left: 15px;
     }
     input:focus,
@@ -71,7 +59,7 @@ h2 {
     }
     .autocomplete {
         &__results {
-            margin-top: var(--space-form-height);
+            margin-top: var(--form-control-height);
         }
     }
     .form-control.is-valid {
@@ -91,21 +79,14 @@ h2 {
         box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
     }
 }
-.settings-button__save {
-    width: 155px;
-    height: 50px;
-    margin-top: 40px;
-}
-.btn.btn-link {
-    background-color: transparent;
-    border-color: transparent;
+.form-content + .btn.btn-primary {
+    margin-top: var(--space-form-section);
 }
 .custom-select__options {
 	max-height: 300px;
 	overflow: auto;
 }
 .form-group {
-    margin-bottom: 0px;
     position: relative;
 }
 .invalid-feedback {

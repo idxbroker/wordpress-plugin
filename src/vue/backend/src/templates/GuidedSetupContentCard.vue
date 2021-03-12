@@ -84,7 +84,7 @@ export default {
     }
 
     .dialog-header__title {
-        font-weight: 500;
+        font-weight: 400;
     }
 
     @media (min-width: 576px) {

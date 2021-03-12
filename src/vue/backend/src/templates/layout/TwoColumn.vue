@@ -1,10 +1,10 @@
 <template>
     <idx-block :id="id" :className="className">
-        <idx-block className="section__content">
+        <idx-block tag="main" className="section__content">
             <h1>{{ title }}</h1>
             <slot />
         </idx-block>
-        <idx-block v-if="$slots.related" className="section__content">
+        <idx-block tag="aside" v-if="$slots.related" className="section__content">
             <slot name="related" />
         </idx-block>
     </idx-block>

@@ -77,13 +77,14 @@ export default {
         color: $gray-875;
         display: grid;
         font-size: var(--font-size-p);
-        height: 100%;
-        line-height: var(--line-height-p);
         grid-template-areas:
             "header"
             "content"
             "sidebar"
             "footer";
+        height: 100%;
+        line-height: var(--line-height-p);
+        min-height: 600px;
 
         &__buttons {
             display: flex;
@@ -149,7 +150,7 @@ export default {
             --content-padding: var(--space-10) var(--space-8) var(--space-9) var(--space-15);
             --footer-margin: 0 var(--space-12);
             --footer-padding: var(--space-8) 0 var(--space-8);
-            --sidebar-margin: var(--space-10) var(--space-9) var(--space-15) 0;
+            --sidebar-margin: var(--space-10) var(--space-9) var(--space-15) var(--space-8);
             grid-template-columns: 1fr 1fr 360px;
             grid-template-rows: auto 1fr auto;
             grid-template-areas:

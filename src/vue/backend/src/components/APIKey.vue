@@ -1,5 +1,5 @@
 <template>
-    <idx-block className="form-content form-content__api-key">
+    <idx-block className="form-content">
         <idx-form-group
             :customClass="{
                 'needs-validation': true,

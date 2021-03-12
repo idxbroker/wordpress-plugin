@@ -13,7 +13,7 @@
             </idx-block>
             <template v-if="enabled">
                 <AgentsSettings v-bind="localStateValues" @form-field-update="formUpdate" />
-                <idx-button theme="primary" @click="saveHandler">Save</idx-button>
+                <idx-button size="lg" @click="saveHandler">Save</idx-button>
             </template>
         </idx-block>
         <template #related>
