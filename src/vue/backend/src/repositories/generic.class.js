@@ -13,6 +13,10 @@ class GenericRepositoryClass {
     post (payload, path = '') {
         return this.instance.post(`${this.endpoint}/${path}`, payload)
     }
+
+    delete (payload, path = '') {
+        return this.instance.delete(`${this.endpoint}/${path}`, { data: payload })
+    }
 }
 
 export default GenericRepositoryClass

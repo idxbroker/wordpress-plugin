@@ -3,7 +3,8 @@
  */
 const RepositoryInterface = {
     get () {},
-    post () {}
+    post () {},
+    delete () {}
 }
 
 /**
@@ -42,6 +43,9 @@ export default {
     },
     get socialProRepository () {
         return loadRepo('socialPro')
+    },
+    get importContentRepository () {
+        return loadRepo('importContent')
     }
     /* Add more repositories here as they become available. */
 }

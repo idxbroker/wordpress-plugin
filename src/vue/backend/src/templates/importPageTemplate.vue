@@ -5,10 +5,10 @@
             :selected="selected"
             :description="description"
             :disabled="itemsSelected.length === 0"
-            @select-all="selectAll('card-checkbox', masterList)"
+            @select-all="selectAll( masterList)"
             @bulk-action="$emit('bulk-action', itemsSelected)"
         ></bulk-action>
-        <idx-block :className="['import-card__group', `import-card__group-${cardType}`]">
+        <idx-block v-if="masterList.length" :className="['import-card__group', `import-card__group-${cardType}`]">
             <template v-if="cardType === 'listings'">
                 <listings-card
                     v-for="listing in masterList"
@@ -30,6 +30,9 @@
                 >
                 </agent-card>
             </template>
+        </idx-block>
+        <idx-block v-else>
+            There are no {{ cardType }} available.
         </idx-block>
     </div>
 </template>
@@ -64,6 +67,10 @@ export default {
             required: true
         },
         imported: {
+            type: Boolean,
+            default: false
+        },
+        clearSelections: {
             type: Boolean,
             default: false
         }

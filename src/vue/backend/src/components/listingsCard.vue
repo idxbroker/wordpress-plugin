@@ -2,7 +2,7 @@
     <checkbox-label
         customClass="import-listings"
         :option="option"
-        @checked="$emit('listing-selected', [$event.data, listing.listingId])"
+        @checked="$emit('listing-selected', [$event.data, listing])"
     >
         <template v-slot:content>
             <!-- Prop bindings will need to be reevaluated once we have the property shape -->
