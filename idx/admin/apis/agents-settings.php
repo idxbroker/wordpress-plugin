@@ -124,7 +124,7 @@ class Agents_Settings extends \IDX\Admin\Rest_Controller {
 
 		update_option( 'plugin_impress_agents_settings', $settings );
 
-		return rest_ensure_response( null );
+		return new \WP_REST_Response( null, 204 );
 	}
 }
 
