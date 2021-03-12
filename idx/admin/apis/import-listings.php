@@ -221,3 +221,5 @@ class Import_Listings extends \IDX\Admin\Rest_Controller {
 	}
 
 }
+
+new Import_Listings();

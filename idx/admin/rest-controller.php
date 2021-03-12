@@ -149,4 +149,5 @@ new Apis\Agents_Settings();
 new Apis\Import_Agents();
 new Apis\Import_Listings();
 new Apis\Listings_Settings();
+new Apis\Listings_IDX_Settings();
 new Apis\Listings_Advanced_Settings();
