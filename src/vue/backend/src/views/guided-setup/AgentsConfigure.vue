@@ -45,7 +45,7 @@ export default {
             saveConfigureAgentSettings: 'agentSettings/saveConfigureAgentSettings'
         }),
         async saveHandler () {
-            if (this.formChanges) {
+            if (this.formIsUpdated) {
                 const { status } = await this.agentSettingsRepository.post(this.formChanges)
                 if (status === 200) {
                     this.saveAction()

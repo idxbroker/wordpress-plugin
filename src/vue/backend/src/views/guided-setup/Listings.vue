@@ -64,7 +64,7 @@ export default {
             progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
         async saveHandler () {
-            if (this.formChanges) {
+            if (this.formIsUpdated) {
                 const { status } = await this.listingsSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
                 if (status === 204) {
                     this.saveAction()
