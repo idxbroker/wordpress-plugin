@@ -68,7 +68,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		}
 
 		if ( $instance['styles'] ) {
-			wp_enqueue_style( 'impress-city-links', plugins_url( '../assets/css/widgets/impress-city-links.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-city-links', plugins_url( '../assets/css/widgets/impress-city-links.min.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! isset( $instance['new_window'] ) ) {

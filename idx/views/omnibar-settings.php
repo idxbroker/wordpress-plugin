@@ -33,7 +33,7 @@ class Omnibar_Settings {
 	public function idx_omnibar_settings_interface() {
 		// register omnibar settings script
 		wp_register_script( 'idx-omnibar-settings', plugins_url( '/assets/js/idx-omnibar-settings.min.js', dirname( dirname( __FILE__ ) ) ), 'jquery' );
-		wp_enqueue_style( 'idx-omnibar-settings', plugins_url( '/assets/css/idx-omnibar-settings.css', dirname( dirname( __FILE__ ) ) ) );
+		wp_enqueue_style( 'idx-omnibar-settings', plugins_url( '/assets/css/idx-omnibar-settings.min.css', dirname( dirname( __FILE__ ) ) ) );
 		wp_localize_script( 'idx-omnibar-settings', 'IDXOmnibarCustomFieldsNonce', wp_create_nonce( 'idx-omnibar-custom-field-nonce' ) );
 		if ( $this->idx_api->get_transient( 'idx_mls_approvedmls_cache' ) !== false ) {
 			$this->idx_preload_omnibar_settings_view();

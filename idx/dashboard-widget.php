@@ -209,7 +209,7 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function load_scripts() {
-		wp_enqueue_style( 'idx-dashboard-widget', plugins_url( '/assets/css/idx-dashboard-widget.css', dirname( __FILE__ ) ) );
+		wp_enqueue_style( 'idx-dashboard-widget', plugins_url( '/assets/css/idx-dashboard-widget.min.css', dirname( __FILE__ ) ) );
 		wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js' );
 		wp_enqueue_script( 'idx-dashboard-widget', plugins_url( '/assets/js/idx-dashboard-widget.min.js', dirname( __FILE__ ) ) );
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );

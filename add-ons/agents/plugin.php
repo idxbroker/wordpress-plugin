@@ -30,7 +30,7 @@ function impress_agents_init() {
 		add_theme_support( 'post-thumbnails' );
 	}
 
-	/** Enqueues impress-agents.css style file if it exists and is not deregistered in settings */
+	/** Enqueues impress-agents.min.css style file if it exists and is not deregistered in settings */
 	add_action('wp_enqueue_scripts', 'add_impress_agents_main_styles');
 	function add_impress_agents_main_styles() {
 
@@ -47,15 +47,15 @@ function impress_agents_init() {
 			return;
 		}
 
-        if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/impress-agents.css') ) {
-        	wp_register_style('impress_agents', IMPRESS_IDX_URL . 'assets/css/impress-agents.css', '', null, 'all');
+        if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/impress-agents.min.css') ) {
+        	wp_register_style('impress_agents', IMPRESS_IDX_URL . 'assets/css/impress-agents.min.css', '', null, 'all');
             wp_enqueue_style('impress_agents');
         }
     }
 
     /** Add admin scripts and styles */
     function impress_agents_admin_scripts_styles() {
-        wp_enqueue_style( 'impress_agents_admin_css', IMPRESS_IDX_URL . 'assets/css/impress-agents-admin.css' );
+        wp_enqueue_style( 'impress_agents_admin_css', IMPRESS_IDX_URL . 'assets/css/impress-agents-admin.min.css' );
 
 		wp_enqueue_script( 'impress-agents-admin', IMPRESS_IDX_URL . 'assets/js/agents-admin.js', 'media-views' );
 		wp_localize_script(
