@@ -56,14 +56,14 @@ function wp_listings_init() {
 		);
 	}
 
-	/** Enqueues wp-listings.css style file if it exists and is not deregistered in settings */
+	/** Enqueues wp-listings.min.css style file if it exists and is not deregistered in settings */
 	add_action('wp_enqueue_scripts', 'add_wp_listings_main_styles');
 	function add_wp_listings_main_styles() {
 
 		$options = get_option('plugin_wp_listings_settings');
 
 		/** Register single styles but don't enqueue them **/
-		wp_register_style('wp-listings-single', IMPRESS_IDX_URL . 'assets/css/wp-listings-single.css', '', null, 'all');
+		wp_register_style('wp-listings-single', IMPRESS_IDX_URL . 'assets/css/wp-listings-single.min.css', '', null, 'all');
 
 		/** Register Font Awesome icons but don't enqueue them */
 		wp_register_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2', 'all' );
@@ -80,13 +80,13 @@ function wp_listings_init() {
 			return;
 		}
 
-        if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/wp-listings.css') ) {
-        	wp_register_style('wp_listings', IMPRESS_IDX_URL . 'assets/css/wp-listings.css', '', null, 'all');
+        if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/wp-listings.min.css') ) {
+        	wp_register_style('wp_listings', IMPRESS_IDX_URL . 'assets/css/wp-listings.min.css', '', null, 'all');
             wp_enqueue_style('wp_listings');
         }
     }
 
-	/** Enqueues wp-listings-widgets.css style file if it exists and is not deregistered in settings */
+	/** Enqueues wp-listings-widgets.min.css style file if it exists and is not deregistered in settings */
 	add_action('wp_enqueue_scripts', 'add_wp_listings_widgets_styles');
 	function add_wp_listings_widgets_styles() {
 
@@ -100,8 +100,8 @@ function wp_listings_init() {
 			return;
 		}
 
-		if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/wp-listings-widgets.css') ) {
-			wp_register_style( 'wp_listings_widgets', IMPRESS_IDX_URL . 'assets/css/wp-listings-widgets.css', '', null, 'all' );
+		if ( file_exists( IMPRESS_IDX_DIR . 'assets/css/wp-listings-widgets.min.css') ) {
+			wp_register_style( 'wp_listings_widgets', IMPRESS_IDX_URL . 'assets/css/wp-listings-widgets.min.css', '', null, 'all' );
 			wp_enqueue_style( 'wp_listings_widgets' );
 		}
 	}
