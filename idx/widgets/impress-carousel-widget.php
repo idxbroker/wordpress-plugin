@@ -58,7 +58,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	 * @return string $output html markup for front end display
 	 */
 	public function body( $instance ) {
-		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.css', dirname( __FILE__ ) ) );
+		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.min.css', dirname( __FILE__ ) ) );
 		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
 
 		if ( empty( $instance ) ) {
@@ -69,7 +69,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
 
 		if ( $instance['styles'] ) {
-			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) );
 			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
 		}
 

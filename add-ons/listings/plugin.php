@@ -143,18 +143,18 @@ function wp_listings_init() {
 
 		}
 
-		wp_enqueue_style( 'wp_listings_admin_css', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin.css' );
+		wp_enqueue_style( 'wp_listings_admin_css', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin.min.css' );
 
 		/** Enqueue Font Awesome in the Admin if IDX Broker is not installed */
 		if (!class_exists( 'Idx_Broker_Plugin' )) {
 			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-			wp_enqueue_style( 'upgrade-icon', IMPRESS_IDX_URL . 'assets/css/wp-listings-upgrade.css' );
+			wp_enqueue_style( 'upgrade-icon', IMPRESS_IDX_URL . 'assets/css/wp-listings-upgrade.min.css' );
 		}
 
 		global $wp_version;
 		$nonce_action = 'wp_listings_admin_notice';
 
-		wp_enqueue_style( 'wp-listings-admin-notice', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin-notice.css' );
+		wp_enqueue_style( 'wp-listings-admin-notice', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin-notice.min.css' );
 		wp_enqueue_script( 'wp-listings-admin', IMPRESS_IDX_URL . 'assets/js/listings-admin.min.js', 'media-views' );
 		wp_localize_script( 'wp-listings-admin', 'wp_listings_adminL10n', array(
 			'ajaxurl'                            => admin_url( 'admin-ajax.php' ),

@@ -83,7 +83,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		}
 
 		if ( ! empty( $instance['styles'] ) ) {
-			wp_enqueue_style( 'impress-lead-signup', plugins_url( '../assets/css/widgets/impress-lead-signup.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-signup', plugins_url( '../assets/css/widgets/impress-lead-signup.min.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! isset( $instance['new_window'] ) ) {

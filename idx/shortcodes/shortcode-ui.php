@@ -58,7 +58,7 @@ class Shortcode_Ui {
 		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
 		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
 		wp_enqueue_script( 'idx-shortcode', plugins_url( '../assets/js/idx-shortcode.min.js', dirname( __FILE__ ) ), array( 'jquery' ) );
-		wp_enqueue_style( 'idx-shortcode', plugins_url( '../assets/css/idx-shortcode.css', dirname( __FILE__ ) ) );
+		wp_enqueue_style( 'idx-shortcode', plugins_url( '../assets/css/idx-shortcode.min.css', dirname( __FILE__ ) ) );
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
 		// scripts and styles for map search widget preview
 		wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', array() );

@@ -109,7 +109,7 @@ class Wrappers {
 			wp_enqueue_style(
 				'idx-wrappers',
 				plugins_url(
-					'../assets/css/idx-wrappers.css',
+					'../assets/css/idx-wrappers.min.css',
 					__FILE__
 				)
 			);
