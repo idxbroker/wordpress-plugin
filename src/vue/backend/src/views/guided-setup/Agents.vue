@@ -26,6 +26,7 @@
                             checkedState="Yes"
                             @toggle="formUpdate({ key: 'enabled', value: !localStateValues.enabled })"
                             :active="localStateValues.enabled"
+                            :disabled="formDisabled"
                             :label="activateLabel"
                         ></idx-toggle-slider>
                     </idx-block>
@@ -51,6 +52,11 @@ export default {
     components: {
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
@@ -64,12 +70,14 @@ export default {
             progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
         async saveHandler () {
+            this.formDisabled = true
             if (this.formChanges) {
                 const { status } = await this.agentSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
                 if (status === 204) {
                     this.saveAction()
                     this.$router.push({ path: this.continuePath })
                 } else {
+                    this.formDisabled = false
                     // To do: user feedback
                 }
             } else {
@@ -98,6 +106,7 @@ export default {
         ]
     },
     mounted () {
+        this.formDisabled = false
         this.progressStepperUpdate([4, 5, 1, 0])
     }
 }

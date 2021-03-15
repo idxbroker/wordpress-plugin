@@ -1,6 +1,7 @@
 <template>
     <div>
         <listings-general
+            :formDisabled="formDisabled"
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></listings-general>
@@ -23,8 +24,14 @@ export default {
     components: {
         ListingsGeneral
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     methods: {
         async saveHandler () {
+            this.formDisabled = true
             const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'general')
             if (status === 204) {
                 this.saveAction()
@@ -36,6 +43,9 @@ export default {
         this.module = 'listingsSettings'
         const { data } = await this.listingsSettingsRepository.get('general')
         this.updateState(data)
+    },
+    mounted () {
+        this.formDisabled = false
     }
 }
 </script>

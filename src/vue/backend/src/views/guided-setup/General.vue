@@ -9,6 +9,7 @@
     >
         <template v-slot:controls>
             <GeneralSettings
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -30,6 +31,11 @@ export default {
         GeneralSettings,
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
@@ -47,12 +53,14 @@ export default {
             this.$router.push({ path: '/guided-setup/listings' })
         },
         async saveHandler () {
+            this.formDisabled = true
             if (this.formChanges) {
                 const { status } = await this.generalRepository.post(this.formChanges)
                 if (status === 200) {
                     this.saveAction()
                     this.$router.push({ path: '/guided-setup/connect/omnibar' })
                 } else {
+                    this.formDisabled = false
                     // To Do: form error handler
                 }
             } else {
@@ -83,6 +91,7 @@ export default {
         }
     },
     mounted () {
+        this.formDisabled = false
         this.progressStepperUpdate([2, 0, 0, 0])
     }
 }

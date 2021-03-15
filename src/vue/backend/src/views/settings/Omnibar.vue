@@ -2,6 +2,7 @@
     <TwoColumn title="Omnibar Settings">
         <idx-block className="form-content">
             <omnibar-form
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             ></omnibar-form>
@@ -32,6 +33,11 @@ export default {
         OmnibarForm,
         RelatedLinks
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     methods: {
         ...mapActions({
             setItem: 'omnibar/setItem'
@@ -57,6 +63,9 @@ export default {
                 href: '#signUp'
             }
         ]
+    },
+    mounted () {
+        this.formDisabled = false
     }
 }
 </script>

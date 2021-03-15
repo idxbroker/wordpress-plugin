@@ -7,6 +7,7 @@
                 checkedState="Yes"
                 @toggle="refreshPage"
                 :active="localStateValues.enabled"
+                :disabled="formDisabled"
                 label="Enable IMPress Listings"
             ></idx-toggle-slider>
         </idx-block>
@@ -37,6 +38,11 @@ export default {
         TwoColumn,
         RelatedLinks
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     computed: {
         ...mapState({
             enabled: state => state.listingsSettings.enabled
@@ -58,6 +64,9 @@ export default {
             { text: 'IDX Broker Middleware', href: 'https://middleware.idxbroker.com/mgmt/' },
             { text: 'Sign up for IDX Broker', href: 'https://signup.idxbroker.com/' } // Marketing may want a different entry
         ]
+    },
+    mounted () {
+        this.formDisabled = false
     }
 }
 </script>

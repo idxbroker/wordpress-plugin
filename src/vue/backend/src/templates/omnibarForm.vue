@@ -1,5 +1,8 @@
 <template>
-    <idx-block className="omnibar-form form-content">
+    <idx-block
+        tag="fieldset"
+        :className="templateClass"
+        :formDisabled="formDisabled">
         <idx-block className="form-content__header">
             <b>Do you want to set up IMPress Omnibar Search?</b>
             <br>
@@ -194,6 +197,10 @@ export default {
         defaultSortOrderSelected: {
             type: String,
             default: ''
+        },
+        formDisabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -201,6 +208,9 @@ export default {
             return this.mlsMembership.map(x => {
                 return { value: x.value, label: x.name }
             })
+        },
+        templateClass () {
+            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

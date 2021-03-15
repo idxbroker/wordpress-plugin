@@ -1,5 +1,8 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset listings-advanced form-content">
+    <idx-block
+        tag="fieldset"
+        :className="templateClass"
+        :formDisabled="formDisabled">
         <idx-block className="control-label form-content__label">
             <idx-block className="form-content__title">CSS Settings</idx-block>
             Detailed sentence or two describing deregistering IMPress Listing CSS files so that the installed theme’s CSS won’t have specificity issues.
@@ -13,6 +16,7 @@
                         checkedState="Yes"
                         @toggle="$emit('form-field-update', { key: 'deregisterMainCss', value: !deregisterMainCss })"
                         :active="deregisterMainCss"
+                        :disabled="formDisabled"
                         :label="mainCssLabel"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -25,6 +29,7 @@
                         checkedState="Yes"
                         @toggle="$emit('form-field-update', { key: 'deregisterWidgetCss', value: !deregisterWidgetCss })"
                         :active="deregisterWidgetCss"
+                        :disabled="formDisabled"
                         :label="widgetsCssLabel"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -43,6 +48,7 @@
                         checkedState="Yes"
                         @toggle="$emit('form-field-update', { key: 'sendFormSubmission', value: !sendFormSubmission })"
                         :active="sendFormSubmission"
+                        :disabled="formDisabled"
                         :label="sendFormLabel"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -55,6 +61,7 @@
                 <idx-form-label customClass="control-label form-content__label" for="form-shortcode">Form Shortcode</idx-form-label>
                 <idx-form-input
                     type="text"
+                    :disabled="formDisabled"
                     id="form-shortcode"
                     :value="formShortcode"
                     @change="$emit('form-field-update', { key: 'formShortcode', value: $event.target.value })"
@@ -71,6 +78,7 @@
                 <idx-form-label customClass="control-label form-content__label" for="google-maps">Google Maps API Key</idx-form-label>
                 <idx-form-input
                     type="text"
+                    :disabled="formDisabled"
                     id="google-maps"
                     :value="googleMapsAPIKey"
                     @change="$emit('form-field-update', { key: 'googleMapsAPIKey', value: $event.target.value })"
@@ -90,6 +98,7 @@
                         checkedState="Yes"
                         @toggle="$emit('form-field-update', { key: 'useCustomWrapper', value: !useCustomWrapper })"
                         :active="useCustomWrapper"
+                        :disabled="formDisabled"
                         :label="useCustomWrapperLabel"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -97,7 +106,7 @@
             <idx-form-group>
                 <idx-form-label customClass="control-label form-content__label" for="wrapper-start-html">Wrapper Start HTML</idx-form-label>
                 <idx-form-input
-                    :disabled="!useCustomWrapper"
+                    :disabled="!useCustomWrapper || formDisabled"
                     type="text"
                     id="wrapper-start-html"
                     :value="wrapperStart"
@@ -107,7 +116,7 @@
             <idx-form-group>
                 <idx-form-label customClass="control-label form-content__label" for="wrapper-end-html">Wrapper End HTML</idx-form-label>
                 <idx-form-input
-                    :disabled="!useCustomWrapper"
+                    :disabled="!useCustomWrapper || formDisabled"
                     type="text"
                     id="wrapper-end-html"
                     :value="wrapperEnd"
@@ -128,6 +137,7 @@
                         checkedState="Yes"
                         @toggle="$emit('form-field-update', { key: 'deletePluginDataOnUninstall', value: !deletePluginDataOnUninstall })"
                         :active="deletePluginDataOnUninstall"
+                        :disabled="formDisabled"
                         :label="pluginUninstallationLabel"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -175,6 +185,15 @@ export default {
         useCustomWrapper: {
             type: Boolean,
             default: false
+        },
+        formDisabled: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        templateClass () {
+            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

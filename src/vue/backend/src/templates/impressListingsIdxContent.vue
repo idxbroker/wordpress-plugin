@@ -1,5 +1,8 @@
 <template>
-    <idx-block className="idx-content-settings form-content">
+    <idx-block
+        tag="fieldset"
+        :className="templateClass"
+        :formDisabled="formDisabled">
         <div>
             <idx-block className="form-content__title">Imported Listings</idx-block>
             <div>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</div>
@@ -13,6 +16,7 @@
                 :description="option.description"
                 :radio="false"
                 :checked="updateListings === option.value"
+                :disabled="formDisabled"
                 @change="$emit('form-field-update', {
                     key: 'updateListings',
                     value: option.value
@@ -28,6 +32,7 @@
                 :description="option.description"
                 :radio="false"
                 :checked="soldListings === option.value"
+                :disabled="formDisabled"
                 @change="$emit('form-field-update', {
                     key: 'soldListings',
                     value: option.value
@@ -46,6 +51,7 @@
                         checkedState="Yes"
                         @toggle="$emit('form-field-update', { key: 'automaticImport', value: !automaticImport })"
                         :active="automaticImport"
+                        :disabled="formDisabled"
                         :label="toggleLabels[0]"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -57,6 +63,7 @@
                     :options="defaultListingTemplateOptions"
                     :selected="defaultListingTemplateSelected"
                     :ariaLabel="defaultListingTemplateLabel"
+                    :disabled="formDisabled"
                     @toggle="$emit('form-field-update', { key: 'defaultListingTemplateSelected', value: $event.value })"
                 ></idx-custom-select>
             </div>
@@ -67,6 +74,7 @@
                     :options="importedListingsAuthorOptions"
                     :selected="importedListingsAuthorSelected"
                     :ariaLabel="importedListingsTemplateLabel"
+                    :disabled="formDisabled"
                     @toggle="$emit('form-field-update', { key: 'importedListingsAuthorSelected', value: $event.value })"
                 ></idx-custom-select>
             </div>
@@ -77,6 +85,7 @@
                     checkedState="Yes"
                     @toggle="$emit('form-field-update', { key: 'displayIDXLink', value: !displayIDXLink })"
                     :active="displayIDXLink"
+                    :disabled="formDisabled"
                     :label="toggleLabels[1]"
                 ></idx-toggle-slider>
             </idx-block>
@@ -85,6 +94,7 @@
                 <idx-block>By default, your imported listings will use the street address as the page title and permalink</idx-block>
                 <idx-form-input
                     type="text"
+                    :disabled="formDisabled"
                     customClass="idx-content-settings__import-title"
                     :value="importTitle"
                     @change="$emit('form-field-update', { key: 'importTitle', value: $event.target.value })"
@@ -101,6 +111,7 @@
                         checkedState="Yes"
                         @toggle="$emit('form-field-update', { key: 'advancedFieldData', value: !advancedFieldData })"
                         :active="advancedFieldData"
+                        :disabled="formDisabled"
                         :label="toggleLabels[2]"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -111,6 +122,7 @@
                         checkedState="Yes"
                         @toggle="$emit('form-field-update', { key: 'displayAdvancedFields', value: !displayAdvancedFields })"
                         :active="displayAdvancedFields"
+                        :disabled="formDisabled"
                         :label="toggleLabels[3]"
                     ></idx-toggle-slider>
                 </idx-block>
@@ -166,6 +178,15 @@ export default {
         displayAdvancedFields: {
             type: Boolean,
             default: false
+        },
+        formDisabled: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        templateClass () {
+            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

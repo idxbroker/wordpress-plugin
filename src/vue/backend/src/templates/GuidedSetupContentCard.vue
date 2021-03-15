@@ -46,6 +46,11 @@ export default {
             title: 'IMPress for IDX Broker Setup'
         }
     },
+    computed: {
+        templateClass () {
+            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
+        }
+    },
     methods: {
         openDialog () {
             this.showDialog = true

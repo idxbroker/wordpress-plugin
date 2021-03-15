@@ -8,6 +8,7 @@
         @continue="saveHandler">
         <template v-slot:controls>
             <AgentsSettings
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -33,6 +34,11 @@ export default {
         AgentsSettings,
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
@@ -45,12 +51,14 @@ export default {
             saveConfigureAgentSettings: 'agentSettings/saveConfigureAgentSettings'
         }),
         async saveHandler () {
+            this.formDisabled = true
             if (this.formChanges) {
                 const { status } = await this.agentSettingsRepository.post(this.formChanges)
                 if (status === 200) {
                     this.saveAction()
                     this.$router.push({ path: this.continuePath })
                 } else {
+                    this.formDisabled = false
                     // To do: user feedback
                 }
             } else {
@@ -81,6 +89,7 @@ export default {
         this.updateState(data)
     },
     mounted () {
+        this.formDisabled = false
         this.progressStepperUpdate([4, 5, 2, 0])
     }
 }

@@ -8,6 +8,7 @@
         @continue="goContinue">
         <template v-slot:controls>
             <omnibarForm
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -30,6 +31,11 @@ export default {
     components: {
         omnibarForm,
         GuidedSetupContentCard
+    },
+    data () {
+        return {
+            formDisabled: true
+        }
     },
     computed: {
         ...mapState({
@@ -58,8 +64,10 @@ export default {
             saveOmnibarSettings: 'general/saveOmnibarSettings'
         }),
         async goContinue () {
+            this.formDisabled = true
             await this.saveOmnibarSettings()
             this.saveAction()
+            this.formDisabled = false
             this.$router.push({ path: this.continuePath })
         }
     },
@@ -84,6 +92,7 @@ export default {
         ]
     },
     mounted () {
+        this.formDisabled = false
         this.progressStepperUpdate([3, 0, 0, 0])
     }
 }

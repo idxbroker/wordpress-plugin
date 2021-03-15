@@ -8,6 +8,7 @@
         @continue="goContinue">
         <template v-slot:controls>
             <socialProForm
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -31,6 +32,11 @@ export default {
         socialProForm,
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
@@ -43,8 +49,10 @@ export default {
             saveConfigureSocialProSettings: 'socialPro/saveConfigureSocialProSettings'
         }),
         async goContinue () {
+            this.formDisabled = true
             await this.saveConfigureSocialProSettings()
             this.saveAction()
+            this.formDisabled = false
             this.$router.push({ path: this.continuePath })
         }
     },
@@ -69,6 +77,7 @@ export default {
         ]
     },
     mounted () {
+        this.formDisabled = false
         this.progressStepperUpdate([4, 5, 3, 2])
     }
 }

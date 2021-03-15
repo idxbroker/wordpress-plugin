@@ -11,12 +11,14 @@
                         checkedState="Yes"
                         @toggle="setItem({ key: 'enabled', value: !enabled })"
                         :active="enabled"
+                        :disabled="formDisabled"
                         :label="toggleLabel"
                     ></idx-toggle-slider>
                 </idx-block>
             </div>
             <div v-show="enabled">
                 <SocialProForm
+                    :formDisabled="formDisabled"
                     v-bind="localStateValues"
                     @form-field-update="formUpdate"
                 />
@@ -46,6 +48,11 @@ export default {
         SocialProForm,
         TwoColumn,
         RelatedLinks
+    },
+    data () {
+        return {
+            formDisabled: true
+        }
     },
     computed: {
         ...mapState({
@@ -77,6 +84,9 @@ export default {
                 href: '#signUp'
             }
         ]
+    },
+    mounted () {
+        this.formDisabled = false
     }
 }
 </script>

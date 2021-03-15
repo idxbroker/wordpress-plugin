@@ -1,9 +1,13 @@
 <template>
-    <idx-block tag="fieldset" className="general-settings form-content">
+    <idx-block
+        tag="fieldset"
+        :className="templateClass"
+        :formDisabled="formDisabled">
         <idx-form-group>
             <idx-form-label customClass="form-content__label" for="website-wrapper"><idx-block tag="h3" className="form-content__title">Name Your Global Website Wrapper</idx-block> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 id="website-wrapper"
                 :value="wrapperName"
                 @change="$emit('form-field-update',{ key: 'wrapperName', value: $event.target.value })"
@@ -18,6 +22,7 @@
                     checkedState="Yes"
                     @toggle="$emit('form-field-update',{ key: 'reCAPTCHA', value: !reCAPTCHA })"
                     :active="reCAPTCHA"
+                    :disabled="formDisabled"
                     :label="toggleLabel"
                 ></idx-toggle-slider>
             </idx-block>
@@ -26,6 +31,7 @@
             <idx-block className="form-content__label"><idx-block tag="h3" className="form-content__title">Update Frequency</idx-block> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
             <idx-custom-select
                 ariaLabel="Update Frequency"
+                :disabled="formDisabled"
                 :selected="updateFrequency"
                 :options="updateFrequencyOptions"
                 @selected-item="$emit('form-field-update', { key: 'updateFrequency', value: $event.value })"
@@ -49,6 +55,15 @@ export default {
         wrapperName: {
             type: String,
             default: ''
+        },
+        formDisabled: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        templateClass () {
+            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

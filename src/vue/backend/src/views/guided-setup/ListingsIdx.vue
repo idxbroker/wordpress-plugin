@@ -8,6 +8,7 @@
         @continue="goContinue">
         <template v-slot:controls>
             <ListingsIdx
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -30,6 +31,11 @@ export default {
     components: {
         ListingsIdx,
         GuidedSetupContentCard
+    },
+    data () {
+        return {
+            formDisabled: true
+        }
     },
     computed: {
         ...mapState({
@@ -55,8 +61,10 @@ export default {
             saveIDXListingsSettings: 'listingsSettings/saveIDXListingsSettings'
         }),
         async goContinue () {
+            this.formDisabled = true
             await this.saveIDXListingsSettings()
             this.saveAction()
+            this.formDisabled = false
             this.$router.push({ path: this.continuePath })
         }
     },
@@ -81,6 +89,7 @@ export default {
         ]
     },
     mounted () {
+        this.formDisabled = false
         this.progressStepperUpdate([4, 3, 0, 0])
     }
 }

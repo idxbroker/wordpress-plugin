@@ -1,5 +1,8 @@
 <template>
-    <idx-block tag="fieldset" className="listings-general form-content">
+    <idx-block
+        tag="fieldset"
+        :className="templateClass"
+        :formDisabled="formDisabled">
         <idx-block className="form-content__header">
             <idx-block tag="h3" className="form-content__title">Default State</idx-block>
             Description of the Default State setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.
@@ -8,6 +11,7 @@
             <idx-form-label customClass="form-content__label" for="default-state">Choose Default State</idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 id="default-state"
                 placeholder="Enter your default state"
                 :value="defaultState"
@@ -20,6 +24,7 @@
             <idx-custom-select
                 ariaLabel="Currency Symbol"
                 placeholder="None"
+                :disabled="formDisabled"
                 :selected="currencySymbolSelected"
                 :options="currency.currencySymbols"
                 @selected-item="$emit('form-field-update', { key: 'currencySymbolSelected', value: $event.value })"
@@ -30,6 +35,7 @@
             <idx-custom-select
                 ariaLabel="Currency Code"
                 placeholder="None"
+                :disabled="formDisabled"
                 :selected="currencyCodeSelected"
                 :options="currency.currencyCodes"
                 @selected-item="$emit('form-field-update', { key: 'currencyCodeSelected', value: $event.value })"
@@ -40,6 +46,7 @@
             <idx-form-label customClass="form-content__label" for="default-posts">Number of Posts on Listing Archive Page</idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 id="default-posts"
                 :value="numberOfPosts"
                 @change="$emit('form-field-update', { key: 'numberOfPosts', value: $event.target.value })"
@@ -50,6 +57,7 @@
             <idx-form-label customClass="form-content__label" for="default-disclaimer">Default Disclaimer</idx-form-label>
             <idx-textarea
                 type="text"
+                :disabled="formDisabled"
                 id="default-disclaimer"
                 customClass="listings-general__default-disclaimer"
                 placeholder="Disclaimer text"
@@ -63,6 +71,7 @@
             <idx-form-label customClass="form-content__label" for="listings-slug">Listings Slug</idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 id="listings-slug"
                 :value="listingSlug"
                 @change="$emit('form-field-update', { key: 'listingSlug', value: $event.target.value })"
@@ -99,6 +108,15 @@ export default {
         defaultState: {
             type: String,
             default: ''
+        },
+        formDisabled: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        templateClass () {
+            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

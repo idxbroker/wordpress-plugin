@@ -1,5 +1,8 @@
 <template>
-    <idx-block className="social-pro-form form-content">
+    <idx-block
+        tag="fieldset"
+        :className="templateClass"
+        :formDisabled="formDisabled">
         <idx-block className="social-pro-form__settings">
             <b>General Interest Article Settings</b>
             <div>General Interest Articles come from Elevate writers and contain rich content related to homes and home life.</div>
@@ -48,6 +51,15 @@ export default {
         postType: {
             type: String,
             default: 'post'
+        },
+        formDisabled: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        templateClass () {
+            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

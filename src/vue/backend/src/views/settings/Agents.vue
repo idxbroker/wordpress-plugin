@@ -8,11 +8,16 @@
                     checkedState="Yes"
                     @toggle="refreshPage"
                     :active="localStateValues.enabled"
+                    :disabled="formDisabled"
                     label="Enable IMPress Listings"
                 ></idx-toggle-slider>
             </idx-block>
             <template v-if="enabled">
-                <AgentsSettings v-bind="localStateValues" @form-field-update="formUpdate" />
+                <AgentsSettings
+                    :formDisabled="formDisabled"
+                    v-bind="localStateValues"
+                    @form-field-update="formUpdate"
+                />
                 <idx-button theme="primary" @click="saveHandler">Save</idx-button>
             </template>
         </idx-block>
@@ -36,6 +41,11 @@ export default {
         RelatedLinks,
         TwoColumn
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     computed: {
         ...mapState({
             enabled: (state) => state.agentSettings.enabled
@@ -50,6 +60,7 @@ export default {
             }
         },
         async saveHandler () {
+            this.formDisabled = true
             const { status } = await this.agentSettingsRepository.post(this.formChanges)
             if (status === 200) {
                 this.saveAction()
@@ -65,6 +76,9 @@ export default {
         ]
         const { data } = await this.agentSettingsRepository.get()
         this.updateState(data)
+    },
+    mounted () {
+        this.formDisabled = false
     }
 }
 </script>

@@ -26,6 +26,7 @@
                             checkedState="Yes"
                             @toggle="formUpdate({ key: 'enabled', value: !localStateValues.enabled })"
                             :active="localStateValues.enabled"
+                            :disabled="formDisabled"
                             :label="activateLabel"
                         ></idx-toggle-slider>
                     </idx-block>
@@ -49,6 +50,11 @@ export default {
     components: {
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
@@ -61,8 +67,10 @@ export default {
             enableSocialProPlugin: 'socialPro/enableSocialProPlugin'
         }),
         async goContinue () {
+            this.formDisabled = true
             await this.enableSocialProPlugin()
             this.saveAction()
+            this.formDisabled = false
             this.$router.push({ path: this.continuePath })
         }
     },
@@ -88,6 +96,7 @@ export default {
         ]
     },
     mounted () {
+        this.formDisabled = false
         this.progressStepperUpdate([4, 5, 3, 1])
     }
 }

@@ -1,6 +1,7 @@
 <template>
     <div>
         <impress-listings-idx-content
+            :formDisabled="formDisabled"
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></impress-listings-idx-content>
@@ -20,6 +21,11 @@ export default {
     name: 'listings-idx-content-tab',
     mixins: [pageGuard],
     components: { impressListingsIdxContent },
+    data () {
+        return {
+            formDisabled: true
+        }
+    },
     computed: {
         ...mapState({
             updateListings: state => state.listingsSettings.updateListings,
@@ -43,6 +49,9 @@ export default {
     },
     created () {
         this.module = 'listingsSettings'
+    },
+    mounted () {
+        this.formDisabled = false
     }
 }
 </script>

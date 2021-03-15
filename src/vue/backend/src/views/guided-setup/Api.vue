@@ -11,6 +11,7 @@
         </template>
         <template v-slot:controls>
             <APIKey
+                :disabled="formDisabled"
                 :error="error"
                 :loading="loading"
                 :success="success"
@@ -37,6 +38,7 @@ export default {
     },
     data () {
         return {
+            formDisabled: true,
             error: false,
             loading: false,
             success: false,
@@ -67,6 +69,7 @@ export default {
             }, 3000)
         },
         async saveHandler () {
+            this.formDisabled = true
             // To Do: user facing error checking
             if (this.formChanges) {
                 this.loading = true
@@ -75,6 +78,7 @@ export default {
                     this.saveAction()
                     this.continue()
                 } catch (error) {
+                    this.formDisabled = false
                     this.error = true
                     this.success = false
                 }
@@ -107,6 +111,7 @@ export default {
         }
     },
     mounted () {
+        this.formDisabled = false
         this.progressStepperUpdate([1, 0, 0, 0])
     }
 }
