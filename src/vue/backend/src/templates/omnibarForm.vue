@@ -155,10 +155,6 @@ export default {
             type: String,
             default: ''
         },
-        defaultPropertyTypeOptions: {
-            type: Array,
-            default: () => []
-        },
         defaultPropertyTypeSelected: {
             type: String,
             default: ''
@@ -204,6 +200,13 @@ export default {
             sortOrderLabel: 'Default Sort Order',
             addressAutofillLabel: 'Address Autofill MLS'
         }
+        this.defaultPropertyTypeOptions = [
+            { value: 'sfr', label: 'Single Family Residential' },
+            { value: 'com', label: 'Commercial' },
+            { value: 'ld', label: 'Lots and Land' },
+            { value: 'mfr', label: 'Multifamily Residential' },
+            { value: 'rnt', label: 'Rentals' }
+        ]
         this.sortOrderOptions = [
             // These are the current values used in the system, we can update them if we want to have it more
             // human readable.
