@@ -69,10 +69,21 @@ class Import_Listings extends \IDX\Admin\Rest_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get() {
+		$import_in_progress = get_option( 'wp_listings_import_progress', false );
+
+		if ( $import_in_progress ) {
+			return rest_ensure_response(
+				[
+					'inProgress' => true,
+				]
+			);
+		}
+
 		$import_lists = $this->generate_import_lists();
 
 		return rest_ensure_response(
 			[
+				'inProgress' => false,
 				'imported'   => array_values( $import_lists['imported'] ),
 				'unimported' => array_values( $import_lists['unimported'] ),
 			]
@@ -87,6 +98,7 @@ class Import_Listings extends \IDX\Admin\Rest_Controller {
 	 */
 	public function post( $payload ) {
 		$selected_ids = [];
+
 		if ( ! empty( $payload['ids'] ) && is_array( $payload['ids'] ) ) {
 			$selected_ids = filter_var_array( $payload['ids'], FILTER_SANITIZE_STRING );
 		}
