@@ -61,115 +61,109 @@ class WPL_Idx_Listing {
 	 * @param  array $listings listingID of the property.
 	 */
 	public static function wp_listings_idx_create_post( $listings ) {
+		update_option( 'wp_listings_import_progress', true );
+		update_option( 'impress_listings_import_fail_list', [] );
 
-		if ( class_exists( 'IDX_Broker_Plugin' ) ) {
+		// Load IDX Broker API Class and retrieve featured properties.
+		$_idx_api   = new \IDX\Idx_Api();
+		$properties = $_idx_api->client_properties( 'featured?disclaimers=true' );
 
-			update_option( 'wp_listings_import_progress', true );
-			update_option( 'impress_listings_import_fail_list', [] );
+		// Load WP options.
+		$wpl_import_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
+		$wpl_options        = get_option( 'plugin_wp_listings_settings' );
 
-			//require_once BASE_PLUGINS_DIR . 'idx-broker-platinum/idx/idx-api.php';
+		if ( is_array( $listings ) && is_array( $properties ) ) {
 
-			// Load IDX Broker API Class and retrieve featured properties.
-			$_idx_api   = new \IDX\Idx_Api();
-			$properties = $_idx_api->client_properties( 'featured?disclaimers=true' );
+			$background_process = new WPLBackgroundListings();
+			$item               = [];
 
-			// Load WP options.
-			$wpl_import_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
-			$wpl_options                     = get_option( 'plugin_wp_listings_settings' );
+			// Loop through featured properties.
+			foreach ( $properties as $prop ) {
 
-			if ( is_array( $listings ) && is_array( $properties ) ) {
+				// Get the listing ID.
+				$key = self::get_key( $properties, 'listingID', $prop['listingID'] );
 
-				$background_process = new WPLBackgroundListings();
-				$item               = [];
+				// Add options.
+				if ( ! in_array( $prop['listingID'], $listings, true ) ) {
+					$wpl_import_options[ $prop['listingID'] ]['listingID'] = $prop['listingID'];
+					$wpl_import_options[ $prop['listingID'] ]['status'] = '';
+				}
 
-				// Loop through featured properties.
-				foreach ( $properties as $prop ) {
+				// Unset options if they don't exist.
+				if ( isset( $wpl_import_options[ $prop['listingID'] ]['post_id'] ) && ! get_post( $wpl_import_options[ $prop['listingID'] ]['post_id'] ) ) {
+					unset( $wpl_import_options[ $prop['listingID'] ]['post_id'] );
+					unset( $wpl_import_options[ $prop['listingID'] ]['status'] );
+				}
 
-					// Get the listing ID.
-					$key = self::get_key( $properties, 'listingID', $prop['listingID'] );
+				// Add post and update post meta.
+				if ( in_array( $prop['listingID'], $listings, true ) && ! isset( $wpl_import_options[ $prop['listingID'] ]['post_id'] ) ) {
 
-					// Add options.
-					if ( ! in_array( $prop['listingID'], $listings, true ) ) {
-						$wpl_import_options[ $prop['listingID'] ]['listingID'] = $prop['listingID'];
-						$wpl_import_options[ $prop['listingID'] ]['status'] = '';
+					if ( empty( $properties[ $key ]['address'] ) ) {
+						$properties[ $key ]['address'] = 'Address unlisted';
+					}
+					if ( empty( $properties[ $key ]['remarksConcat'] ) ) {
+						$properties[ $key ]['remarksConcat'] = $properties[ $key ]['listingID'];
 					}
 
-					// Unset options if they don't exist.
-					if ( isset( $wpl_import_options[ $prop['listingID'] ]['post_id'] ) && ! get_post( $wpl_import_options[ $prop['listingID'] ]['post_id'] ) ) {
-						unset( $wpl_import_options[ $prop['listingID'] ]['post_id'] );
-						unset( $wpl_import_options[ $prop['listingID'] ]['status'] );
+					if ( empty( $wpl_options['wp_listings_import_title'] ) ) {
+						$title_format = $properties[ $key ]['address'];
+					} else {
+						$title_format = $wpl_options['wp_listings_import_title'];
+						$title_format = str_replace( '{{address}}', $properties[ $key ]['address'], $title_format );
+						$title_format = str_replace( '{{city}}', $properties[ $key ]['cityName'], $title_format );
+						$title_format = str_replace( '{{state}}', $properties[ $key ]['state'], $title_format );
+						$title_format = str_replace( '{{zipcode}}', $properties[ $key ]['zipcode'], $title_format );
+						$title_format = str_replace( '{{listingid}}', $properties[ $key ]['listingID'], $title_format );
 					}
 
-					// Add post and update post meta.
-					if ( in_array( $prop['listingID'], $listings, true ) && ! isset( $wpl_import_options[ $prop['listingID'] ]['post_id'] ) ) {
+					// Post creation options.
+					$opts = array(
+						'post_content' => $properties[ $key ]['remarksConcat'],
+						'post_title'   => $title_format,
+						'post_status'  => 'publish',
+						'post_type'    => 'listing',
+						'post_author'  => ( isset( $wpl_options['wp_listings_import_author'] ) ) ? $wpl_options['wp_listings_import_author'] : 1,
+					);
 
-						if ( empty( $properties[ $key ]['address'] ) ) {
-							$properties[ $key ]['address'] = 'Address unlisted';
-						}
-						if ( empty( $properties[ $key ]['remarksConcat'] ) ) {
-							$properties[ $key ]['remarksConcat'] = $properties[ $key ]['listingID'];
-						}
+					$item['opts']     = $opts;
+					$item['prop']     = $prop;
+					$item['key']      = $key;
+					$item['property'] = $properties[ $key ];
 
-						if ( empty( $wpl_options['wp_listings_import_title'] ) ) {
-							$title_format = $properties[ $key ]['address'];
-						} else {
-							$title_format = $wpl_options['wp_listings_import_title'];
-							$title_format = str_replace( '{{address}}', $properties[ $key ]['address'], $title_format );
-							$title_format = str_replace( '{{city}}', $properties[ $key ]['cityName'], $title_format );
-							$title_format = str_replace( '{{state}}', $properties[ $key ]['state'], $title_format );
-							$title_format = str_replace( '{{zipcode}}', $properties[ $key ]['zipcode'], $title_format );
-							$title_format = str_replace( '{{listingid}}', $properties[ $key ]['listingID'], $title_format );
-						}
- 
-						// Post creation options.
-						$opts = array(
-							'post_content' => $properties[ $key ]['remarksConcat'],
-							'post_title'   => $title_format,
-							'post_status'  => 'publish',
-							'post_type'    => 'listing',
-							'post_author'  => ( isset( $wpl_options['wp_listings_import_author'] ) ) ? $wpl_options['wp_listings_import_author'] : 1,
-						);
+					$background_process->push_to_queue( $item );
 
-						$item['opts']     = $opts;
-						$item['prop']     = $prop;
-						$item['key']      = $key;
-						$item['property'] = $properties[ $key ];
+					update_option( 'wp_listings_idx_featured_listing_wp_options', $wpl_import_options );
+				}
+				// Change status to publish if it's not already.
+				elseif ( in_array( $prop['listingID'], $listings, true ) && $wpl_import_options[ $prop['listingID'] ]['status'] !== 'publish' ) {
+					self::wp_listings_idx_change_post_status( $wpl_import_options[ $prop['listingID'] ]['post_id'], 'publish' );
+					$wpl_import_options[ $prop['listingID'] ]['status'] = 'publish';
+				}
+				// Change post status or delete post based on options.
+				elseif ( ! in_array( $prop['listingID'], $listings, true ) && isset( $wpl_import_options[ $prop['listingID'] ]['status'] ) && $wpl_import_options[ $prop['listingID'] ]['status'] === 'publish' ) {
+					// Change to draft or delete listing if the post exists but is not in the listing array based on settings.
+					if ( isset( $wpl_options['wp_listings_idx_sold'] ) && 'sold-draft' === $wpl_options['wp_listings_idx_sold'] ) {
+						// Change to draft.
+						self::wp_listings_idx_change_post_status( $wpl_import_options[ $prop['listingID'] ]['post_id'], 'draft' );
+						$wpl_import_options[ $prop['listingID'] ]['status'] = 'draft';
+					} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && 'sold-delete' === $wpl_options['wp_listings_idx_sold'] ) {
 
-						$background_process->push_to_queue( $item );
+						$wpl_import_options[ $prop['listingID'] ]['status'] = 'deleted';
 
-						update_option( 'wp_listings_idx_featured_listing_wp_options', $wpl_import_options );
-					}
-					// Change status to publish if it's not already.
-					elseif ( in_array( $prop['listingID'], $listings, true ) && $wpl_import_options[ $prop['listingID'] ]['status'] !== 'publish' ) {
-						self::wp_listings_idx_change_post_status( $wpl_import_options[ $prop['listingID'] ]['post_id'], 'publish' );
-						$wpl_import_options[ $prop['listingID'] ]['status'] = 'publish';
-					}
-					// Change post status or delete post based on options.
-					elseif ( ! in_array( $prop['listingID'], $listings, true ) && isset( $wpl_import_options[ $prop['listingID'] ]['status'] ) && $wpl_import_options[ $prop['listingID'] ]['status'] === 'publish' ) {
-						// Change to draft or delete listing if the post exists but is not in the listing array based on settings.
-						if ( isset( $wpl_options['wp_listings_idx_sold'] ) && 'sold-draft' === $wpl_options['wp_listings_idx_sold'] ) {
-							// Change to draft.
-							self::wp_listings_idx_change_post_status( $wpl_import_options[ $prop['listingID'] ]['post_id'], 'draft' );
-							$wpl_import_options[ $prop['listingID'] ]['status'] = 'draft';
-						} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && 'sold-delete' === $wpl_options['wp_listings_idx_sold'] ) {
+						// Delete featured image.
+						$post_featured_image_id = get_post_thumbnail_id( $wpl_import_options[ $prop['listingID'] ]['post_id'] );
+						wp_delete_attachment( $post_featured_image_id );
 
-							$wpl_import_options[ $prop['listingID'] ]['status'] = 'deleted';
-
-							// Delete featured image.
-							$post_featured_image_id = get_post_thumbnail_id( $wpl_import_options[ $prop['listingID'] ]['post_id'] );
-							wp_delete_attachment( $post_featured_image_id );
-
-							// Delete post.
-							wp_delete_post( $wpl_import_options[ $prop['listingID'] ]['post_id'] );
-						}
+						// Delete post.
+						wp_delete_post( $wpl_import_options[ $prop['listingID'] ]['post_id'] );
 					}
 				}
-				$background_process->save()->dispatch();
 			}
-
-			// Lastly, update our options.
-			update_option( 'wp_listings_idx_featured_listing_wp_options', $wpl_import_options );
+			$background_process->save()->dispatch();
 		}
+
+		// Lastly, update our options.
+		update_option( 'wp_listings_idx_featured_listing_wp_options', $wpl_import_options );
 	}
 
 	/**
@@ -638,7 +632,7 @@ class WPLBackgroundListings extends WP_Background_Process {
 
 	protected function complete() {
 		parent::complete();
-		delete_option( 'wp_listings_import_progress' );
+		update_option( 'wp_listings_import_progress', false );
 		die();
 	}
 }
