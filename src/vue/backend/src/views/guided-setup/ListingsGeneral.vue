@@ -50,7 +50,7 @@ export default {
         }),
         async saveHandler () {
             this.formDisabled = true
-            if (this.formChanges) {
+            if (this.formIsUpdated) {
                 const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'general')
                 this.formDisabled = false
                 if (status === 204) {

@@ -1,9 +1,14 @@
 <template>
     <TwoColumn title="General Settings">
+        <idx-block className="form-content__label">
+            <idx-block tag="h2" className="form-content__title">Connect Your IDX Broker Account</idx-block>
+            <p>Description of API key and why it’s needed.</p>
+        </idx-block>
         <APIKey
             :apiKey="localStateValues.apiKey"
             :disabled="formDisabled"
             :error="error"
+            :loading="formDisabled"
             :success="success"
             @form-field-update="formUpdate"
         />
@@ -12,7 +17,7 @@
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         />
-        <idx-button size="lg" customClass="settings-button__save " @click="saveHandler">Save</idx-button>
+        <idx-button size="lg" @click="saveHandler">Save</idx-button>
         <template #related>
             <RelatedLinks :relatedLinks="relatedLinks"/>
         </template>
@@ -44,7 +49,7 @@ export default {
     methods: {
         async saveHandler () {
             // To Do: user facing error checking
-            if (this.formChanges) {
+            if (this.formIsUpdated) {
                 this.formDisabled = true
                 try {
                     await this.generalRepository.post(this.formChanges)
@@ -94,8 +99,3 @@ export default {
     }
 }
 </script>
-<style lang="scss">
-.form-content__api-key {
-    margin-bottom: 40px;
-}
-</style>

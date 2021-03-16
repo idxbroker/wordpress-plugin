@@ -52,7 +52,7 @@ export default {
         }),
         async saveHandler () {
             this.formDisabled = true
-            if (this.formChanges) {
+            if (this.formIsUpdated) {
                 const { status } = await this.agentSettingsRepository.post(this.formChanges)
                 this.formDisabled = false
                 if (status === 200) {

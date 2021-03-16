@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
     <idx-block
         tag="fieldset"
         :className="{
@@ -35,7 +36,40 @@
                     @selected-item="$emit('form-field-update', { key: 'postType', value: $event.value })"
                 ></idx-custom-select>
             </idx-block>
+=======
+    <idx-block className="form-content">
+        <idx-block className="form-content__header">
+            <idx-block tag="h2" className="form-content__title">General Interest Article Settings</idx-block>
+            <p>General Interest Articles come from Elevate writers and contain rich content related to homes and home life.</p>
+>>>>>>> release/3.0.0
         </idx-block>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">Autopublish General Interest Articles</idx-form-label>
+            <idx-custom-select
+                ariaLabel="Select Autopublish setting"
+                :selected="autopublish"
+                :options="autopublishOptions"
+                @selected-item="$emit('form-field-update', { key: 'autopublish', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">General Interest Article Post Day of the Week</idx-form-label>
+            <idx-custom-select
+                ariaLabel="Select post day"
+                :selected="postDay"
+                :options="postDayOptions"
+                @selected-item="$emit('form-field-update', { key: 'postDay', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">General Interest Article Post Type</idx-form-label>
+            <idx-custom-select
+                ariaLabel="Select post type"
+                :selected="postType"
+                :options="postTypeOptions"
+                @selected-item="$emit('form-field-update', { key: 'postType', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
     </idx-block>
 </template>
 <script>
@@ -82,12 +116,4 @@ export default {
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
-.social-pro-form {
-    &__field {
-        margin-top: 25px;
-        label {
-            width: 100%;
-        }
-    }
-}
 </style>

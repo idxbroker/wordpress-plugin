@@ -71,7 +71,7 @@ export default {
         }),
         async saveHandler () {
             this.formDisabled = true
-            if (this.formChanges) {
+            if (this.formIsUpdated) {
                 const { status } = await this.agentSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
                 this.formDisabled = false
                 if (status === 204) {
@@ -116,7 +116,7 @@ export default {
 @import '@/styles/formContentStyles.scss';
 .list-featured {
     column-count: 2;
-    font-weight: 600;
+    font-weight: 700;
     list-style-type: circle;
     padding-left: 1.125em;
 }

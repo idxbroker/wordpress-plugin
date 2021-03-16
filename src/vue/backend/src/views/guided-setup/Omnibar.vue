@@ -46,7 +46,6 @@ export default {
             countyListSelected: state => state.omnibar.countyListSelected,
             postalCodeListOptions: state => state.omnibar.postalCodeListOptions,
             postalCodeSelected: state => state.omnibar.postalCodeSelected,
-            defaultPropertyTypeOptions: state => state.omnibar.defaultPropertyTypeOptions,
             defaultPropertyTypeSelected: state => state.omnibar.defaultPropertyTypeSelected,
             mlsMembership: state => state.omnibar.mlsMembership,
             autofillMLS: state => state.omnibar.autofillMLS,

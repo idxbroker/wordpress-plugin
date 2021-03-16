@@ -24,7 +24,6 @@
                 />
                 <idx-button
                     size="lg"
-                    customClass="settings-button__save"
                     @click="saveAction"
                 >
                     Save

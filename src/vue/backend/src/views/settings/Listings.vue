@@ -5,10 +5,10 @@
             <idx-toggle-slider
                 uncheckedState="No"
                 checkedState="Yes"
-                @toggle="refreshPage"
+                label="Enable IMPress Listings"
                 :active="localStateValues.enabled"
                 :disabled="formDisabled"
-                label="Enable IMPress Listings"
+                @toggle="refreshPage"
             ></idx-toggle-slider>
         </idx-block>
         <template #related>
@@ -50,8 +50,10 @@ export default {
     },
     methods: {
         async refreshPage () {
+            this.formDisabled = true
             this.formUpdate({ key: 'enabled', value: !this.enabled })
             const { status } = await this.listingsSettingsRepository.post({ enabled: !this.enabled }, 'enable')
+            this.formDisabled = false
             if (status === (204 || 200)) {
                 location.reload()
             }

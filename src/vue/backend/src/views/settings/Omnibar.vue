@@ -7,7 +7,6 @@
                 @form-field-update="formUpdate"
             ></omnibar-form>
             <idx-button
-                customClass="settings-button__save"
                 size="lg"
                 @click="saveAction"
             >
