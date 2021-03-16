@@ -7,16 +7,21 @@
         @skip-step="goSkipStep"
         @continue="saveHandler">
         <template v-slot:description>
-            <p>This step is optional. A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p><strong>This step is optional.</strong> A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
         <template v-slot:controls>
-            <APIKey
-                :error="error"
-                :loading="loading"
-                :success="success"
-                :apiKey="localStateValues.apiKey"
-                @form-field-update="formUpdate"
-            />
+            <idx-block className="form-content">
+                <idx-form-group>
+                    <idx-form-label customClass="form-content__label" for="ApiKey">API Key</idx-form-label>
+                    <APIKey
+                        :error="error"
+                        :loading="loading"
+                        :success="success"
+                        :apiKey="localStateValues.apiKey"
+                        @form-field-update="formUpdate"
+                    />
+                </idx-form-group>
+            </idx-block>
         </template>
     </GuidedSetupContentCard>
 </template>

@@ -6,7 +6,8 @@
         ></impress-listings-idx-content>
         <idx-button
             customClass="settings-button__save"
-            @click="saveHandler"
+            size="lg"
+            @click="saveHandler"            
         >
             Save
         </idx-button>

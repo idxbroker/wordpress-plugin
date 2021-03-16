@@ -5,7 +5,7 @@
             @form-field-update="formUpdate"
         ></listings-general>
         <idx-button
-            customClass="settings-button__save"
+            size="lg"
             @click="saveHandler"
         >
             Save
