@@ -7,7 +7,7 @@
         <idx-button
             customClass="settings-button__save"
             size="lg"
-            @click="saveHandler"            
+            @click="saveHandler"
         >
             Save
         </idx-button>

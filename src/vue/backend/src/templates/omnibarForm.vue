@@ -238,18 +238,14 @@ export default {
 
             // Loop through the custom field options prop
             for (let x = 0; x < this.customFieldsOptions.length; x++) {
-
                 // Get the object containing the information about the specific
                 // MLS this option is in
                 const MLSName = this.findMLSName(this.customFieldsOptions[x].idxID)
-
                 // For all the fields available, we want the options to have the
                 // MLS value and the user friendly label
                 this.customFieldsOptions[x].fieldNames.forEach(option => {
-
                     // If the option is one of the selected mls specific property types
                     if (option.mlsPtID === this.mlsSpecificPropTypes[MLSName.value]) {
-
                         // Add the option with a user friendly label and MLS value
                         options.push({
                             ...this.addCleanLabel(option, MLSName),
@@ -273,7 +269,6 @@ export default {
     methods: {
         addCleanLabel (item, MLSName) {
             // Adds a label with the user friendly name
-            
             // Save original label used on the backend
             const cleanLabel = item.label
             // Finds the property type the item is in
