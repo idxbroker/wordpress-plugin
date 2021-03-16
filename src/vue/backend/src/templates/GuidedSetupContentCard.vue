@@ -52,6 +52,7 @@ export default {
         },
         closeDialog () {
             this.showDialog = false
+            this.$router.push({ path: '/settings/general' })
         }
     }
 }
