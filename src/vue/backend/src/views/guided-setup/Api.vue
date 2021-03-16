@@ -73,7 +73,7 @@ export default {
         },
         async saveHandler () {
             // To Do: user facing error checking
-            if (this.formChanges) {
+            if (this.formIsUpdated) {
                 this.loading = true
                 try {
                     await this.generalRepository.post(this.formChanges)
