@@ -5,7 +5,7 @@
             @form-field-update="formUpdate"
         ></impress-listings-idx-content>
         <idx-button
-            customClass="settings-button__save"
+            size="lg"
             @click="saveAction"
         >
             Save

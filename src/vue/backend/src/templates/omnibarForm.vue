@@ -1,15 +1,13 @@
 <template>
     <idx-block className="omnibar-form form-content">
         <idx-block className="form-content__header">
-            <b>Do you want to set up IMPress Omnibar Search?</b>
-            <br>
-            A short paragraph detailing the IMPress Omnibar Search feature. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit vulputate.
+            <idx-block tag="h2" className="form-content__title">Do you want to set up IMPress Omnibar Search?</idx-block>
+            <p>A short paragraph detailing the IMPress Omnibar Search feature. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit vulputate.</p>
         </idx-block>
         <hr/>
         <idx-block className="form-content__header">
-            <b>City, County, and Postal Code Lists</b>
-            <br>
-            Only locations in these lists will return results.
+            <idx-block tag="h2" className="form-content__title">City, County, and Postal Code Lists</idx-block>
+            <p>Only locations in these lists will return results.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.cityListLabel }}</idx-form-label>
@@ -43,9 +41,8 @@
         </idx-form-group>
         <hr/>
         <idx-block className="form-content__header">
-            <b>Property Type</b>
-            <br>
-            Choose the property type for default and custom fields
+            <idx-block tag="h2" className="form-content__title">Property Type</idx-block>
+            <p>Choose the property type for default and custom fields.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.defaultPropertyTypeLabel }}</idx-form-label>
@@ -59,9 +56,8 @@
         </idx-form-group>
         <idx-block className="omnibar-form__field-subset">
             <idx-block className="form-content__header">
-                <b>MLS Specific Property Type</b>
-                <br>
-                Used or custom field searches and addresses
+                <idx-block tag="h2" className="form-content__title">MLS Specific Property Type</idx-block>
+                <p>Used or custom field searches and addresses</p>
             </idx-block>
             <idx-form-group
                 v-for="(mls, key) in mlsMembership"
@@ -77,9 +73,8 @@
             </idx-form-group>
         </idx-block>
         <idx-block className="form-content__header">
-            <b>Addresses</b>
-            <br>
-            Choose which MLS is included in the address autofill. Addresses will only be included from the selected property types.
+            <idx-block tag="h2" className="form-content__title">Addresses</idx-block>
+            <p>Choose which MLS is included in the address autofill. Addresses will only be included from the selected property types.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.addressAutofillLabel }}</idx-form-label>
@@ -92,9 +87,8 @@
             ></idx-custom-select>
         </idx-form-group>
         <idx-block className="form-content__header">
-            <b>Custom Fields</b>
-            <br>
-            By default the omnibar searches by City, County, Postal Code, or Listing ID. Add up to 10 custom fields to be used as well.
+            <idx-block tag="h2" className="form-content__title">Custom Fields</idx-block>
+            <p>By default the omnibar searches by City, County, Postal Code, or Listing ID. Add up to 10 custom fields to be used as well.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">Add Custom Fields</idx-form-label>
@@ -122,10 +116,9 @@
             ></idx-input-tag-autocomplete>
         </idx-form-group>
         <idx-block className="form-content__header">
-            <b>Custom Placeholder</b>
-            <br>
-            This is a placeholder for the main input of Omibar Widgets.<br>
-            Examples: “Search for Properties”, “Location, School, Address, or Listing ID”
+            <idx-block tag="h2" className="form-content__title">Custom Placeholder</idx-block>
+            <p>This is a placeholder for the main input of Omibar Widgets.<br>
+            Examples: “Search for Properties”, “Location, School, Address, or Listing ID”.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">Custom Placeholder</idx-form-label>
@@ -138,9 +131,8 @@
         </idx-form-group>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">
-                <b>{{ labels.sortOrderLabel }}</b>
-                <br>
-                The default sort order for results pages
+                <idx-block tag="h2" className="form-content__title">{{ labels.sortOrderLabel }}</idx-block>
+                <p>The default sort order for results pages.</p>
             </idx-form-label>
             <idx-custom-select
                 :ariaLabel="labels.sortOrderLabel"
@@ -178,10 +170,6 @@ export default {
         postalCodeSelected: {
             type: String,
             default: ''
-        },
-        defaultPropertyTypeOptions: {
-            type: Array,
-            default: () => []
         },
         defaultPropertyTypeSelected: {
             type: String,
@@ -296,6 +284,13 @@ export default {
             sortOrderLabel: 'Default Sort Order',
             addressAutofillLabel: 'Address Autofill MLS'
         }
+        this.defaultPropertyTypeOptions = [
+            { value: 'sfr', label: 'Single Family Residential' },
+            { value: 'com', label: 'Commercial' },
+            { value: 'ld', label: 'Lots and Land' },
+            { value: 'mfr', label: 'Multifamily Residential' },
+            { value: 'rnt', label: 'Rentals' }
+        ]
         this.sortOrderOptions = [
             // These are the current values used in the system, we can update them if we want to have it more
             // human readable.

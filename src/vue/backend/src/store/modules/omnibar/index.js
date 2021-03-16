@@ -5,7 +5,6 @@ const state = {
     countyListSelected: '',
     postalCodeListOptions: [],
     postalCodeSelected: '',
-    defaultPropertyTypeOptions: [],
     defaultPropertyTypeSelected: '',
     mlsMembership: [],
     autofillMLS: '',

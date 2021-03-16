@@ -64,7 +64,7 @@ export default {
             progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
         async saveHandler () {
-            if (this.formChanges) {
+            if (this.formIsUpdated) {
                 const { status } = await this.listingsSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
                 if (status === 204) {
                     this.saveAction()
@@ -108,7 +108,7 @@ export default {
 @import '@/styles/formContentStyles.scss';
 .list-featured {
     column-count: 2;
-    font-weight: 600;
+    font-weight: 700;
     list-style-type: circle;
     padding-left: 1.125em;
 }

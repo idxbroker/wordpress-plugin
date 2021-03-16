@@ -12,6 +12,9 @@ export default {
         },
         routeCanLeave () {
             return isEqual({ ...this.$store.state[this.module] }, this.localStateValues)
+        },
+        formIsUpdated () {
+            return Object.keys(this.formChanges).length > 0
         }
     },
     methods: {

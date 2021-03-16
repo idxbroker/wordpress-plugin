@@ -7,7 +7,6 @@
                 @form-field-update-mls-membership="mlsChangeUpdate"
             ></omnibar-form>
             <idx-button
-                customClass="settings-button__save"
                 size="lg"
                 @click="saveHandler"
             >

@@ -168,7 +168,10 @@ class Listings_IDX_Settings extends \IDX\Admin\Rest_Controller {
 		$available_authors = [];
 		$users             = get_users();
 		foreach ( $users as $user ) {
-			$available_authors[ $user->data->user_nicename ] = $user->ID;
+			$available_authors[] = [
+				'value' => $user->ID,
+				'label' => $user->data->user_nicename,
+			];
 		}
 		return $available_authors;
 	}
@@ -180,9 +183,21 @@ class Listings_IDX_Settings extends \IDX\Admin\Rest_Controller {
 	 * @return array
 	 */
 	public function generate_template_list() {
-		$template_list            = [ 'Default' => '' ];
+		$template_list            = [
+			[
+				'value' => '',
+				'label' => 'Default',
+			]
+		];
 		$listing_template_manager = new \Single_Listing_Template();
-		return array_merge( $template_list, array_flip( $listing_template_manager->get_listing_templates() ) );
+
+		foreach ( $listing_template_manager->get_listing_templates() as $path => $name ) {
+			$template_list[] = [
+				'value' => $path,
+				'label' => $name,
+			];
+		}
+		return $template_list;
 	}
 }
 
