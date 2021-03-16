@@ -86,7 +86,8 @@
 .form-content + .btn.btn-primary {
     margin-top: var(--space-form-section);
 }
-.custom-select__options {
+.custom-select__options,
+.autocomplete__results {
 	max-height: 300px;
 	overflow: auto;
 }

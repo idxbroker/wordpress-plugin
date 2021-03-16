@@ -32,8 +32,8 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.postalCodeListLabel }}</idx-form-label>
             <idx-custom-select
-                :ariaLabel="labels.postalCodeListLabel"
                 placeholder="Select"
+                :ariaLabel="labels.postalCodeListLabel"
                 :selected="postalCodeSelected"
                 :options="postalCodeListOptions"
                 @selected-item="$emit('form-field-update', { key: 'postalCodeSelected', value: $event.value })"
@@ -47,8 +47,8 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.defaultPropertyTypeLabel }}</idx-form-label>
             <idx-custom-select
-                :ariaLabel="labels.defaultPropertyTypeLabel"
                 placeholder="Choose the property type for default and custom fields"
+                :ariaLabel="labels.defaultPropertyTypeLabel"
                 :selected="defaultPropertyTypeSelected"
                 :options="defaultPropertyTypeOptions"
                 @selected-item="$emit('form-field-update', { key: 'defaultPropertyTypeSelected', value: $event.value })"
@@ -61,11 +61,11 @@
             </idx-block>
             <idx-form-group
                 v-for="(mls, key) in mlsMembership"
-                :key="mls.name"
+                :key="mls.value"
             >
-                <idx-form-label customClass="form-content__label">{{ mls.name }}</idx-form-label>
+                <idx-form-label customClass="form-content__label">{{ mls.label }}</idx-form-label>
                 <idx-custom-select
-                    :ariaLabel="mls.name"
+                    :ariaLabel="mls.label"
                     :selected="mls.selected"
                     :options="mls.propertyTypes"
                     @selected-item="$emit('form-field-update-mls-membership', { key: 'mlsMembership', value: [ mls, $event.value, key, mlsMembership ] })"
@@ -79,11 +79,11 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.addressAutofillLabel }}</idx-form-label>
             <idx-custom-select
-                :ariaLabel="labels.addressAutofillLabel"
                 placeholder="Select MLS Source"
-                :selected="autofillMLS"
-                :options="mlsNames"
-                @selected-item="$emit('form-field-update', { key: 'autofillMLS', value: $event.value })"
+                :ariaLabel="labels.addressAutofillLabel"
+                :selected="autofillMLSSelected"
+                :options="mlsMembership"
+                @selected-item="$emit('form-field-update', { key: 'autofillMLSSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-block className="form-content__header">
@@ -92,11 +92,27 @@
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">Add Custom Fields</idx-form-label>
+            <idx-block
+                v-if="invalidCustomTagsCheck.length > 0"
+                className="field__warning"
+                tag="ul"
+            >
+                The following {{ this.invalidCustomTagsCheck.length > 1 ? 'tags are' : 'tag is' }} not in the selected property type:
+                <idx-block
+                    v-for="invalid in invalidCustomTagsCheck"
+                    :key="invalid.value"
+                    tag="li"
+                >
+                    {{ invalid.label }}
+                </idx-block>
+                Please choose a Custom Field within the selected MLS Specific Property Type.
+            </idx-block>
             <idx-input-tag-autocomplete
                 placeholder="Enter List Item"
                 :limit="10"
-                :previousSelections="customFieldsSelected"
-                :resultsList="customFieldsOptions"
+                :previousSelections="customFieldsSelectedCleaned"
+                :resultsList="customFieldsOptionsCleaned"
+                @tag-list="updateCustomTags"
             ></idx-input-tag-autocomplete>
         </idx-form-group>
         <idx-block className="form-content__header">
@@ -163,7 +179,7 @@ export default {
             type: Array,
             default: () => []
         },
-        autofillMLS: {
+        autofillMLSSelected: {
             type: String,
             default: ''
         },
@@ -185,10 +201,134 @@ export default {
         }
     },
     computed: {
-        mlsNames () {
-            return this.mlsMembership.map(x => {
-                return { value: x.value, label: x.name }
+        invalidCustomTagsCheck () {
+            // Returns the custom fields that are not valid given the property types selected
+
+            // Set an empty invalid tags array
+            const invalidTags = []
+
+            // Loop through the cleaned list of the selected custom fields
+            for (const x in this.customFieldsSelectedCleaned) {
+                // Check if the selected custom field's property type is not in the list of selected property types
+                if (this.mlsSpecificPropTypes[this.customFieldsSelectedCleaned[x].idxID] !== this.customFieldsSelectedCleaned[x].mlsPtID) {
+                    // Add the item to the invalid tags array
+                    invalidTags.push(this.customFieldsSelectedCleaned[x])
+                }
+            }
+            // return the list of invalid custom tags
+            return invalidTags
+        },
+        mlsSpecificPropTypes () {
+            // A list of the property types selected in the mls specific property types fields
+
+            const selections = {}
+            // For MLS in the mls membership object
+            for (const x in this.mlsMembership) {
+                // Add the selected property type to the object
+                // ex: a001: 'Residential'
+                selections[this.mlsMembership[x].value] = this.mlsMembership[x].selected
+            }
+            // return the selected options
+            return selections
+        },
+        customFieldsOptionsCleaned () {
+            // Take the custom field options and modify the options to contain
+            // a user friendly label and the IDX ID of the mls it is a part of
+            const options = []
+
+            // Loop through the custom field options prop
+            for (let x = 0; x < this.customFieldsOptions.length; x++) {
+
+                // Get the object containing the information about the specific
+                // MLS this option is in
+                const MLSName = this.findMLSName(this.customFieldsOptions[x].idxID)
+
+                // For all the fields available, we want the options to have the
+                // MLS value and the user friendly label
+                this.customFieldsOptions[x].fieldNames.forEach(option => {
+
+                    // If the option is one of the selected mls specific property types
+                    if (option.mlsPtID === this.mlsSpecificPropTypes[MLSName.value]) {
+
+                        // Add the option with a user friendly label and MLS value
+                        options.push({
+                            ...this.addCleanLabel(option, MLSName),
+                            idxID: MLSName.value
+                        })
+                    }
+                })
+            }
+            // The options with the new data
+            return options
+        },
+        customFieldsSelectedCleaned () {
+            // Clean the incoming selected fields and transform their label to the
+            // user friendly label
+            return this.customFieldsSelected.map(x => {
+                const MLSName = this.findMLSName(x.idxID)
+                return this.addCleanLabel(x, MLSName)
             })
+        }
+    },
+    methods: {
+        addCleanLabel (item, MLSName) {
+            // Adds a label with the user friendly name
+            
+            // Save original label used on the backend
+            const cleanLabel = item.label
+            // Finds the property type the item is in
+            const propType = MLSName.propertyTypes.find(x => {
+                return x.value === item.mlsPtID
+            })
+            // Returns a new item, one that has a user friendly name
+            // which is "the custom field's name - the name of the MLS it belongs to (The property type it is in)"
+            return {
+                ...item,
+                label: `${item.label} - ${MLSName.label} (${propType.label})`,
+                cleanLabel
+            }
+        },
+        removeCleanLabel (item) {
+            // We added a user friendly label, lets remove it
+
+            // Get a copy of the item and replace the user friendly label with the database label
+            const updatedItem = {
+                ...item,
+                label: item.cleanLabel
+            }
+
+            // Delete the cleanLabel piece from the item
+            delete updatedItem.cleanLabel
+
+            // Delete the parentPtID, since that is not used in the custom fields backend
+            delete updatedItem.parentPtID
+
+            // Return the new item
+            return updatedItem
+        },
+        findMLSName (idxID) {
+            // Find the MLS object based on the given idxID
+            return this.mlsMembership.find(option => {
+                return option.value === idxID
+            })
+        },
+        findPropertyType (pt) {
+            // Find the object of the selected property type selected given
+            // the property type object
+            return pt.find(x => {
+                return pt.selected === x.value
+            })
+        },
+        updateCustomTags (selections) {
+            // Get the selections ready for the backend
+
+            // Loop through the selections and remove the cleanLabel added
+            const cleanedSelections = selections.map(x => {
+                return this.removeCleanLabel(x)
+            })
+
+            // Emit the form update with the new clean selections
+            this.$emit('form-field-update', { key: 'customFieldsSelected', value: cleanedSelections })
         }
     },
     created () {
@@ -231,4 +371,11 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTagAutocomplete.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTags.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/autocomplete.scss';
+.field__warning {
+    color: $red;
+    li {
+        margin-left: 25px;
+        font-weight: 700;
+    }
+}
 </style>

@@ -4,10 +4,11 @@
             <omnibar-form
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
+                @form-field-update-mls-membership="mlsChangeUpdate"
             ></omnibar-form>
             <idx-button
                 size="lg"
-                @click="saveAction"
+                @click="saveHandler"
             >
                 Save
             </idx-button>
@@ -18,23 +19,23 @@
     </TwoColumn>
 </template>
 <script>
-import { mapActions } from 'vuex'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
+import omnibarMixin from '@/mixins/omnibarMixin'
 import OmnibarForm from '@/templates/omnibarForm.vue'
 import RelatedLinks from '@/components/RelatedLinks.vue'
 export default {
     name: 'omnibar',
-    mixins: [pageGuard],
+    mixins: [pageGuard, omnibarMixin],
     components: {
         TwoColumn,
         OmnibarForm,
         RelatedLinks
     },
     methods: {
-        ...mapActions({
-            setItem: 'omnibar/setItem'
-        })
+        saveHandler () {
+            // To Do: api connection
+        }
     },
     created () {
         this.module = 'omnibar'
