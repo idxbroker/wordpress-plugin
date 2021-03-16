@@ -1,6 +1,3 @@
-import actions from './actions'
-import getters from './getters'
-
 const state = {
     cityListOptions: [],
     cityListSelected: '',
@@ -20,7 +17,5 @@ const state = {
 
 export default {
     namespaced: true,
-    actions,
-    getters,
     state
 }

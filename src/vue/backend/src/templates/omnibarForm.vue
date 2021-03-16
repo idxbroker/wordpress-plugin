@@ -34,8 +34,8 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.postalCodeListLabel }}</idx-form-label>
             <idx-custom-select
-                :ariaLabel="labels.postalCodeListLabel"
                 placeholder="Select"
+                :ariaLabel="labels.postalCodeListLabel"
                 :selected="postalCodeSelected"
                 :options="postalCodeListOptions"
                 @selected-item="$emit('form-field-update', { key: 'postalCodeSelected', value: $event.value })"
@@ -50,8 +50,8 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.defaultPropertyTypeLabel }}</idx-form-label>
             <idx-custom-select
-                :ariaLabel="labels.defaultPropertyTypeLabel"
                 placeholder="Choose the property type for default and custom fields"
+                :ariaLabel="labels.defaultPropertyTypeLabel"
                 :selected="defaultPropertyTypeSelected"
                 :options="defaultPropertyTypeOptions"
                 @selected-item="$emit('form-field-update', { key: 'defaultPropertyTypeSelected', value: $event.value })"
@@ -65,11 +65,11 @@
             </idx-block>
             <idx-form-group
                 v-for="(mls, key) in mlsMembership"
-                :key="mls.name"
+                :key="mls.value"
             >
-                <idx-form-label customClass="form-content__label">{{ mls.name }}</idx-form-label>
+                <idx-form-label customClass="form-content__label">{{ mls.label }}</idx-form-label>
                 <idx-custom-select
-                    :ariaLabel="mls.name"
+                    :ariaLabel="mls.label"
                     :selected="mls.selected"
                     :options="mls.propertyTypes"
                     @selected-item="$emit('form-field-update-mls-membership', { key: 'mlsMembership', value: [ mls, $event.value, key, mlsMembership ] })"
@@ -84,11 +84,11 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label">{{ labels.addressAutofillLabel }}</idx-form-label>
             <idx-custom-select
-                :ariaLabel="labels.addressAutofillLabel"
                 placeholder="Select MLS Source"
-                :selected="autofillMLS"
-                :options="mlsNames"
-                @selected-item="$emit('form-field-update', { key: 'autofillMLS', value: $event.value })"
+                :ariaLabel="labels.addressAutofillLabel"
+                :selected="autofillMLSSelected"
+                :options="mlsMembership"
+                @selected-item="$emit('form-field-update', { key: 'autofillMLSSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-block className="form-content__header">
@@ -98,11 +98,27 @@
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">Add Custom Fields</idx-form-label>
+            <idx-block
+                v-if="invalidCustomTagsCheck.length > 0"
+                className="field__warning"
+                tag="ul"
+            >
+                The following {{ this.invalidCustomTagsCheck.length > 1 ? 'tags are' : 'tag is' }} not in the selected property type:
+                <idx-block
+                    v-for="invalid in invalidCustomTagsCheck"
+                    :key="invalid.value"
+                    tag="li"
+                >
+                    {{ invalid.label }}
+                </idx-block>
+                Please choose a Custom Field within the selected MLS Specific Property Type.
+            </idx-block>
             <idx-input-tag-autocomplete
                 placeholder="Enter List Item"
                 :limit="10"
-                :previousSelections="customFieldsSelected"
-                :resultsList="customFieldsOptions"
+                :previousSelections="customFieldsSelectedCleaned"
+                :resultsList="customFieldsOptionsCleaned"
+                @tag-list="updateCustomTags"
             ></idx-input-tag-autocomplete>
         </idx-form-group>
         <idx-block className="form-content__header">
@@ -175,7 +191,7 @@ export default {
             type: Array,
             default: () => []
         },
-        autofillMLS: {
+        autofillMLSSelected: {
             type: String,
             default: ''
         },
@@ -197,10 +213,78 @@ export default {
         }
     },
     computed: {
-        mlsNames () {
-            return this.mlsMembership.map(x => {
-                return { value: x.value, label: x.name }
+        invalidCustomTagsCheck () {
+            const invalidTags = []
+            for (const x in this.customFieldsSelectedCleaned) {
+                if (this.mlsSpecificPropTypes[this.customFieldsSelectedCleaned[x].idxID] !== this.customFieldsSelectedCleaned[x].mlsPtID) {
+                    invalidTags.push(this.customFieldsSelectedCleaned[x])
+                }
+            } return invalidTags
+        },
+        mlsSpecificPropTypes () {
+            const selections = {}
+            for (const x in this.mlsMembership) {
+                selections[this.mlsMembership[x].value] = this.mlsMembership[x].selected
+            }
+            return selections
+        },
+        customFieldsOptionsCleaned () {
+            const options = []
+            for (let x = 0; x < this.customFieldsOptions.length; x++) {
+                const MLSName = this.findMLSName(this.customFieldsOptions[x].idxID)
+                this.customFieldsOptions[x].fieldNames.forEach(option => {
+                    if (option.mlsPtID === this.mlsSpecificPropTypes[MLSName.value]) {
+                        options.push({
+                            ...this.addCleanLabel(option, MLSName),
+                            idxID: MLSName.value
+                        })
+                    }
+                })
+            } return options
+        },
+        customFieldsSelectedCleaned () {
+            return this.customFieldsSelected.map(x => {
+                const MLSName = this.findMLSName(x.idxID)
+                return this.addCleanLabel(x, MLSName)
             })
+        }
+    },
+    methods: {
+        addCleanLabel (item, MLSName) {
+            const cleanLabel = item.label
+            const propType = MLSName.propertyTypes.find(x => {
+                return x.value === item.mlsPtID
+            })
+            return {
+                ...item,
+                label: `${item.label} - ${MLSName.label} (${propType.label})`,
+                cleanLabel
+            }
+        },
+        removeCleanLabel (item) {
+            const updatedItem = {
+                ...item,
+                label: item.cleanLabel
+            }
+            delete updatedItem.cleanLabel
+            delete updatedItem.parentPtID
+            return updatedItem
+        },
+        findMLSName (idxID) {
+            return this.mlsMembership.find(option => {
+                return option.value === idxID
+            })
+        },
+        findPropertyType (pt) {
+            return pt.find(x => {
+                return pt.selected === x.value
+            })
+        },
+        updateCustomTags (selections) {
+            const cleanedSelections = selections.map(x => {
+                return this.removeCleanLabel(x)
+            })
+            this.$emit('form-field-update', { key: 'customFieldsSelected', value: cleanedSelections })
         }
     },
     created () {
@@ -236,4 +320,11 @@ export default {
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTagAutocomplete.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTags.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/autocomplete.scss';
+.field__warning {
+    color: $red;
+    li {
+        margin-left: 25px;
+        font-weight: 700;
+    }
+}
 </style>

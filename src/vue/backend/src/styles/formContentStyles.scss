@@ -91,7 +91,8 @@
     background-color: transparent;
     border-color: transparent;
 }
-.custom-select__options {
+.custom-select__options,
+.autocomplete__results {
 	max-height: 300px;
 	overflow: auto;
 }
