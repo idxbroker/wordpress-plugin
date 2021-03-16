@@ -1,10 +1,10 @@
 <template>
-    <section id="layout">
+    <div id="layout">
         <Navbar></Navbar>
         <Page>
             <Generic />
         </Page>
-    </section>
+    </div>
 </template>
 <script>
 import Navbar from '@/templates/navbar'

@@ -1,11 +1,11 @@
 <template>
-    <idx-block className="idx-content-settings form-content">
-        <div>
-            <idx-block className="form-content__title">Imported Listings</idx-block>
-            <div>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</div>
-        </div>
-        <div>
-            <b>Update Listings</b>
+    <idx-block className="form-content">
+        <idx-block className="form-content__header">
+            <idx-block tag="h2" className="form-content__title">Imported Listings</idx-block>
+            <p>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</p>
+        </idx-block>
+        <idx-form-group>
+            <idx-block tag="h3" className="form-content__label">Update Listings</idx-block>
             <idx-rich-select
                 v-for="option in updateOptions"
                 :key="`${option.value}-${option.label}`"
@@ -18,9 +18,9 @@
                     value: option.value
                 })"
             ></idx-rich-select>
-        </div>
-        <div>
-            <b>Sold Listings</b>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-block tag="h3" className="form-content__label">Sold Listings</idx-block>
             <idx-rich-select
                 v-for="option in soldListingsOptions"
                 :key="`${option.value}-${option.label}`"
@@ -33,43 +33,47 @@
                     value: option.value
                 })"
             ></idx-rich-select>
-        </div>
-        <idx-block className="idx-content-settings idx-content-settings__additional-imports">
-            <div>
-                <idx-block className="form-content__title">Additional Import Options</idx-block>
-                <b>{{ toggleLabels[0] }}</b>
-                <div>Description of the automatic import listings setting. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</div>
-                <idx-block className="idx-content-settings__toggle form-content__toggle">
-                    {{ toggleLabels[0] }}
-                    <idx-toggle-slider
-                        uncheckedState="No"
-                        checkedState="Yes"
-                        @toggle="$emit('form-field-update', { key: 'automaticImport', value: !automaticImport })"
-                        :active="automaticImport"
-                        :label="toggleLabels[0]"
-                    ></idx-toggle-slider>
-                </idx-block>
-            </div>
-            <div>
-                {{ defaultListingTemplateLabel }}
-                <idx-custom-select
-                    placeholder="Select a Template"
-                    :options="defaultListingTemplateOptions"
-                    :selected="defaultListingTemplateSelected"
-                    :ariaLabel="defaultListingTemplateLabel"
-                    @toggle="$emit('form-field-update', { key: 'defaultListingTemplateSelected', value: $event.value })"
-                ></idx-custom-select>
-            </div>
-            <div>
-                {{ importedListingsTemplateLabel }}
-                <idx-custom-select
-                    placeholder="Select an Author"
-                    :options="importedListingsAuthorOptions"
-                    :selected="importedListingsAuthorSelected"
-                    :ariaLabel="importedListingsTemplateLabel"
-                    @toggle="$emit('form-field-update', { key: 'importedListingsAuthorSelected', value: $event.value })"
-                ></idx-custom-select>
-            </div>
+        </idx-form-group>
+        <idx-block className="form-content__header">
+            <idx-block tag="h2" className="form-content__title">Additional Import Options</idx-block>
+        </idx-block>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">
+                <idx-block tag="h3" className="form-content__title">{{ toggleLabels[0] }}</idx-block>
+                <p>Description of the automatic import listings setting. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</p>
+            </idx-form-label>
+            <idx-block className="idx-content-settings__toggle form-content__toggle">
+                {{ toggleLabels[0] }}
+                <idx-toggle-slider
+                    uncheckedState="No"
+                    checkedState="Yes"
+                    @toggle="$emit('form-field-update', { key: 'automaticImport', value: !automaticImport })"
+                    :active="automaticImport"
+                    :label="toggleLabels[0]"
+                ></idx-toggle-slider>
+            </idx-block>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">{{ defaultListingTemplateLabel }}</idx-form-label>
+            <idx-custom-select
+                placeholder="Select a Template"
+                :options="defaultListingTemplateOptions"
+                :selected="defaultListingTemplateSelected"
+                :ariaLabel="defaultListingTemplateLabel"
+                @toggle="$emit('form-field-update', { key: 'defaultListingTemplateSelected', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">{{ importedListingsTemplateLabel }}</idx-form-label>
+            <idx-custom-select
+                placeholder="Select an Author"
+                :options="importedListingsAuthorOptions"
+                :selected="importedListingsAuthorSelected"
+                :ariaLabel="importedListingsTemplateLabel"
+                @toggle="$emit('form-field-update', { key: 'importedListingsAuthorSelected', value: $event.value })"
+            ></idx-custom-select>
+        </idx-form-group>
+        <idx-form-group>
             <idx-block className="idx-content-settings__toggle form-content__toggle">
                 {{ toggleLabels[1] }}
                 <idx-toggle-slider
@@ -80,42 +84,46 @@
                     :label="toggleLabels[1]"
                 ></idx-toggle-slider>
             </idx-block>
-            <idx-form-group>
-                <b>Import Title</b>
-                <idx-block>By default, your imported listings will use the street address as the page title and permalink</idx-block>
-                <idx-form-input
-                    type="text"
-                    customClass="idx-content-settings__import-title"
-                    :value="importTitle"
-                    @change="$emit('form-field-update', { key: 'importTitle', value: $event.target.value })"
-                ></idx-form-input>
-            </idx-form-group>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">
+                <idx-block tag="h3" className="form-content__title">Import Title</idx-block>
+                <p>By default, your imported listings will use the street address as the page title and permalink</p>
+            </idx-form-label>
+            <idx-form-input
+                type="text"
+                :value="importTitle"
+                @change="$emit('form-field-update', { key: 'importTitle', value: $event.target.value })"
+            ></idx-form-input>
+        </idx-form-group>
+        <hr/>
+        <idx-block className="form-content__header">
+            <idx-block tag="h2" className="form-content__title">Advanced Field Settings</idx-block>
         </idx-block>
-        <idx-block className="idx-content-settings__advanced">
-            <idx-block className="form-content__title">Advanced Field Settings</idx-block>
-            <idx-block className="idx-content-settings ">
-                <idx-block className="idx-content-settings__toggle form-content__toggle">
-                    {{ toggleLabels[2] }}
-                    <idx-toggle-slider
-                        uncheckedState="No"
-                        checkedState="Yes"
-                        @toggle="$emit('form-field-update', { key: 'advancedFieldData', value: !advancedFieldData })"
-                        :active="advancedFieldData"
-                        :label="toggleLabels[2]"
-                    ></idx-toggle-slider>
-                </idx-block>
-                <idx-block className="idx-content-settings__toggle form-content__toggle">
-                    {{ toggleLabels[3] }}
-                    <idx-toggle-slider
-                        uncheckedState="No"
-                        checkedState="Yes"
-                        @toggle="$emit('form-field-update', { key: 'displayAdvancedFields', value: !displayAdvancedFields })"
-                        :active="displayAdvancedFields"
-                        :label="toggleLabels[3]"
-                    ></idx-toggle-slider>
-                </idx-block>
+        <idx-form-group>
+            <idx-block className="idx-content-settings__toggle form-content__toggle">
+                {{ toggleLabels[2] }}
+                <idx-toggle-slider
+                    uncheckedState="No"
+                    checkedState="Yes"
+                    @toggle="$emit('form-field-update', { key: 'advancedFieldData', value: !advancedFieldData })"
+                    :active="advancedFieldData"
+                    :label="toggleLabels[2]"
+                ></idx-toggle-slider>
             </idx-block>
-        </idx-block>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-block className="idx-content-settings__toggle form-content__toggle">
+                {{ toggleLabels[3] }}
+                <idx-toggle-slider
+                    uncheckedState="No"
+                    checkedState="Yes"
+                    @toggle="$emit('form-field-update', { key: 'displayAdvancedFields', value: !displayAdvancedFields })"
+                    :active="displayAdvancedFields"
+                    :label="toggleLabels[3]"
+                ></idx-toggle-slider>
+            </idx-block>
+        </idx-form-group>
     </idx-block>
 </template>
 <script>
@@ -200,29 +208,6 @@ export default {
     }
     &--check.rich-select {
         margin-bottom: 6px;
-    }
-}
-.idx-content-settings {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 40px;
-    &__import-title.form-control {
-        width: 100%;
-        height: 45px;
-        padding-left: 15px;
-        border-color: $gray-250;
-    }
-    &__additional-imports {
-        padding-bottom: 40px;
-        border-bottom: 1px solid $gray-400;
-    }
-    &__advanced {
-        .form-content__title {
-            margin-bottom: 25px;
-        }
-        .idx-content-settings__toggle {
-            margin-bottom: 6px;
-        }
     }
 }
 </style>
