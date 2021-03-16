@@ -202,35 +202,68 @@ export default {
     },
     computed: {
         invalidCustomTagsCheck () {
+            // Returns the custom fields that are not valid given the property types selected
+
+            // Set an empty invalid tags array
             const invalidTags = []
+
+            // Loop through the cleaned list of the selected custom fields
             for (const x in this.customFieldsSelectedCleaned) {
+                // Check if the selected custom field's property type is not in the list of selected property types
                 if (this.mlsSpecificPropTypes[this.customFieldsSelectedCleaned[x].idxID] !== this.customFieldsSelectedCleaned[x].mlsPtID) {
+                    // Add the item to the invalid tags array
                     invalidTags.push(this.customFieldsSelectedCleaned[x])
                 }
-            } return invalidTags
+            }
+            // return the list of invalid custom tags
+            return invalidTags
         },
         mlsSpecificPropTypes () {
+            // A list of the property types selected in the mls specific property types fields
+
             const selections = {}
+            // For MLS in the mls membership object
             for (const x in this.mlsMembership) {
+                // Add the selected property type to the object
+                // ex: a001: 'Residential'
                 selections[this.mlsMembership[x].value] = this.mlsMembership[x].selected
             }
+            // return the selected options
             return selections
         },
         customFieldsOptionsCleaned () {
+            // Take the custom field options and modify the options to contain
+            // a user friendly label and the IDX ID of the mls it is a part of
             const options = []
+
+            // Loop through the custom field options prop
             for (let x = 0; x < this.customFieldsOptions.length; x++) {
+
+                // Get the object containing the information about the specific
+                // MLS this option is in
                 const MLSName = this.findMLSName(this.customFieldsOptions[x].idxID)
+
+                // For all the fields available, we want the options to have the
+                // MLS value and the user friendly label
                 this.customFieldsOptions[x].fieldNames.forEach(option => {
+
+                    // If the option is one of the selected mls specific property types
                     if (option.mlsPtID === this.mlsSpecificPropTypes[MLSName.value]) {
+
+                        // Add the option with a user friendly label and MLS value
                         options.push({
                             ...this.addCleanLabel(option, MLSName),
                             idxID: MLSName.value
                         })
                     }
                 })
-            } return options
+            }
+            // The options with the new data
+            return options
         },
         customFieldsSelectedCleaned () {
+            // Clean the incoming selected fields and transform their label to the
+            // user friendly label
             return this.customFieldsSelected.map(x => {
                 const MLSName = this.findMLSName(x.idxID)
                 return this.addCleanLabel(x, MLSName)
@@ -239,10 +272,16 @@ export default {
     },
     methods: {
         addCleanLabel (item, MLSName) {
+            // Adds a label with the user friendly name
+            
+            // Save original label used on the backend
             const cleanLabel = item.label
+            // Finds the property type the item is in
             const propType = MLSName.propertyTypes.find(x => {
                 return x.value === item.mlsPtID
             })
+            // Returns a new item, one that has a user friendly name
+            // which is "the custom field's name - the name of the MLS it belongs to (The property type it is in)"
             return {
                 ...item,
                 label: `${item.label} - ${MLSName.label} (${propType.label})`,
@@ -250,28 +289,45 @@ export default {
             }
         },
         removeCleanLabel (item) {
+            // We added a user friendly label, lets remove it
+
+            // Get a copy of the item and replace the user friendly label with the database label
             const updatedItem = {
                 ...item,
                 label: item.cleanLabel
             }
+
+            // Delete the cleanLabel piece from the item
             delete updatedItem.cleanLabel
+
+            // Delete the parentPtID, since that is not used in the custom fields backend
             delete updatedItem.parentPtID
+
+            // Return the new item
             return updatedItem
         },
         findMLSName (idxID) {
+            // Find the MLS object based on the given idxID
             return this.mlsMembership.find(option => {
                 return option.value === idxID
             })
         },
         findPropertyType (pt) {
+            // Find the object of the selected property type selected given
+            // the property type object
             return pt.find(x => {
                 return pt.selected === x.value
             })
         },
         updateCustomTags (selections) {
+            // Get the selections ready for the backend
+
+            // Loop through the selections and remove the cleanLabel added
             const cleanedSelections = selections.map(x => {
                 return this.removeCleanLabel(x)
             })
+
+            // Emit the form update with the new clean selections
             this.$emit('form-field-update', { key: 'customFieldsSelected', value: cleanedSelections })
         }
     },
