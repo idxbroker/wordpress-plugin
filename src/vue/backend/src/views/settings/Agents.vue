@@ -43,7 +43,7 @@ export default {
     },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     computed: {
@@ -62,6 +62,7 @@ export default {
         async saveHandler () {
             this.formDisabled = true
             const { status } = await this.agentSettingsRepository.post(this.formChanges)
+            this.formDisabled = false
             if (status === 200) {
                 this.saveAction()
             }
@@ -76,9 +77,6 @@ export default {
         ]
         const { data } = await this.agentSettingsRepository.get()
         this.updateState(data)
-    },
-    mounted () {
-        this.formDisabled = false
     }
 }
 </script>

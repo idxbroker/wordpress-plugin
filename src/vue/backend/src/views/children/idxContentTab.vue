@@ -23,7 +23,7 @@ export default {
     components: { impressListingsIdxContent },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     computed: {
@@ -49,9 +49,6 @@ export default {
     },
     created () {
         this.module = 'listingsSettings'
-    },
-    mounted () {
-        this.formDisabled = false
     }
 }
 </script>

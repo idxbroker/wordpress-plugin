@@ -1,8 +1,10 @@
 <template>
     <idx-block
         tag="fieldset"
-        :className="templateClass"
-        :formDisabled="formDisabled">
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">CSS Settings</idx-block> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
         <idx-form-group>
             <idx-block className="form-content__toggle">
@@ -89,11 +91,6 @@ export default {
         formDisabled: {
             type: Boolean,
             default: false
-        }
-    },
-    computed: {
-        templateClass () {
-            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

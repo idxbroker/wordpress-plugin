@@ -1,8 +1,10 @@
 <template>
     <idx-block
         tag="fieldset"
-        :className="templateClass"
-        :formDisabled="formDisabled">
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-block className="form-content__header">
             <idx-block tag="h3" className="form-content__title">Default State</idx-block>
             Description of the Default State setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.
@@ -112,11 +114,6 @@ export default {
         formDisabled: {
             type: Boolean,
             default: false
-        }
-    },
-    computed: {
-        templateClass () {
-            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

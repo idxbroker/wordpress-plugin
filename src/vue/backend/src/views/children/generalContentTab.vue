@@ -26,13 +26,14 @@ export default {
     },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     methods: {
         async saveHandler () {
             this.formDisabled = true
             const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'general')
+            this.formDisabled = false
             if (status === 204) {
                 this.saveAction()
                 // To Do: User feed back
@@ -43,9 +44,6 @@ export default {
         this.module = 'listingsSettings'
         const { data } = await this.listingsSettingsRepository.get('general')
         this.updateState(data)
-    },
-    mounted () {
-        this.formDisabled = false
     }
 }
 </script>

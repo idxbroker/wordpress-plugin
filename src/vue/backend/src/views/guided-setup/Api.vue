@@ -13,7 +13,6 @@
             <APIKey
                 :disabled="formDisabled"
                 :error="error"
-                :loading="loading"
                 :success="success"
                 :apiKey="localStateValues.apiKey"
                 @form-field-update="formUpdate"
@@ -38,9 +37,8 @@ export default {
     },
     data () {
         return {
-            formDisabled: true,
+            formDisabled: false,
             error: false,
-            loading: false,
             success: false,
             cardTitle: 'Connect Your IDX Broker Account'
         }
@@ -72,7 +70,7 @@ export default {
             this.formDisabled = true
             // To Do: user facing error checking
             if (this.formChanges) {
-                this.loading = true
+                this.formDisabled = false
                 try {
                     await this.generalRepository.post(this.formChanges)
                     this.saveAction()
@@ -82,7 +80,6 @@ export default {
                     this.error = true
                     this.success = false
                 }
-                this.loading = false
             } else {
                 this.continue()
             }
@@ -111,7 +108,6 @@ export default {
         }
     },
     mounted () {
-        this.formDisabled = false
         this.progressStepperUpdate([1, 0, 0, 0])
     }
 }

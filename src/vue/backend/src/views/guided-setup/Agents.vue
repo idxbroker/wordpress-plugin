@@ -54,7 +54,7 @@ export default {
     },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     computed: {
@@ -73,11 +73,11 @@ export default {
             this.formDisabled = true
             if (this.formChanges) {
                 const { status } = await this.agentSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
+                this.formDisabled = false
                 if (status === 204) {
                     this.saveAction()
                     this.$router.push({ path: this.continuePath })
                 } else {
-                    this.formDisabled = false
                     // To do: user feedback
                 }
             } else {
@@ -106,7 +106,6 @@ export default {
         ]
     },
     mounted () {
-        this.formDisabled = false
         this.progressStepperUpdate([4, 5, 1, 0])
     }
 }

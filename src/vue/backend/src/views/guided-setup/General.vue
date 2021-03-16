@@ -33,7 +33,7 @@ export default {
     },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     computed: {
@@ -56,11 +56,11 @@ export default {
             this.formDisabled = true
             if (this.formChanges) {
                 const { status } = await this.generalRepository.post(this.formChanges)
+                this.formDisabled = false
                 if (status === 200) {
                     this.saveAction()
                     this.$router.push({ path: '/guided-setup/connect/omnibar' })
                 } else {
-                    this.formDisabled = false
                     // To Do: form error handler
                 }
             } else {
@@ -91,7 +91,6 @@ export default {
         }
     },
     mounted () {
-        this.formDisabled = false
         this.progressStepperUpdate([2, 0, 0, 0])
     }
 }

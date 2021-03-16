@@ -40,7 +40,7 @@ export default {
     },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     computed: {
@@ -64,9 +64,6 @@ export default {
             { text: 'IDX Broker Middleware', href: 'https://middleware.idxbroker.com/mgmt/' },
             { text: 'Sign up for IDX Broker', href: 'https://signup.idxbroker.com/' } // Marketing may want a different entry
         ]
-    },
-    mounted () {
-        this.formDisabled = false
     }
 }
 </script>

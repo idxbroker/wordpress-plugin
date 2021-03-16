@@ -34,7 +34,7 @@ export default {
     },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     computed: {
@@ -85,7 +85,6 @@ export default {
         ]
     },
     mounted () {
-        this.formDisabled = false
         this.progressStepperUpdate([4, 4, 0, 0])
     }
 }

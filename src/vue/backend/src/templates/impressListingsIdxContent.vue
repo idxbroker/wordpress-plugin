@@ -1,8 +1,10 @@
 <template>
     <idx-block
         tag="fieldset"
-        :className="templateClass"
-        :formDisabled="formDisabled">
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <div>
             <idx-block className="form-content__title">Imported Listings</idx-block>
             <div>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</div>
@@ -182,11 +184,6 @@ export default {
         formDisabled: {
             type: Boolean,
             default: false
-        }
-    },
-    computed: {
-        templateClass () {
-            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

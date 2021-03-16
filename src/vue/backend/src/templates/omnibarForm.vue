@@ -1,8 +1,10 @@
 <template>
     <idx-block
         tag="fieldset"
-        :className="templateClass"
-        :formDisabled="formDisabled">
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-block className="form-content__header">
             <b>Do you want to set up IMPress Omnibar Search?</b>
             <br>
@@ -208,9 +210,6 @@ export default {
             return this.mlsMembership.map(x => {
                 return { value: x.value, label: x.name }
             })
-        },
-        templateClass () {
-            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

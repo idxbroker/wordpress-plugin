@@ -27,13 +27,14 @@ export default {
     },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     methods: {
         async saveHandler () {
             this.formDisabled = true
             const { status } = await this[repo].post(this.formChanges, 'advanced')
+            this.formDisabled = false
             if (status === 200) {
                 this.saveAction()
             }
@@ -45,9 +46,6 @@ export default {
         for (const key in data) {
             this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
         }
-    },
-    mounted () {
-        this.formDisabled = false
     }
 }
 </script>

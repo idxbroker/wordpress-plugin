@@ -4,7 +4,6 @@
             :apiKey="localStateValues.apiKey"
             :disabled="formDisabled"
             :error="error"
-            :loading="loading"
             :success="success"
             @form-field-update="formUpdate"
         />
@@ -38,9 +37,8 @@ export default {
     data () {
         return {
             error: false,
-            loading: false,
             success: false,
-            formDisabled: true
+            formDisabled: false
         }
     },
     methods: {
@@ -48,9 +46,9 @@ export default {
             // To Do: user facing error checking
             if (this.formChanges) {
                 this.formDisabled = true
-                this.loading = true
                 try {
                     await this.generalRepository.post(this.formChanges)
+                    this.formDisabled = false
                     this.saveAction()
                     this.success = true
                     this.error = false
@@ -63,7 +61,6 @@ export default {
                         // full form error response
                     }
                 }
-                this.loading = false
             } else {
                 this.continue()
             }
@@ -94,9 +91,6 @@ export default {
         for (const key in data) {
             this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
         }
-    },
-    mounted () {
-        this.formDisabled = false
     }
 }
 </script>

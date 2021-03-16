@@ -1,8 +1,10 @@
 <template>
     <idx-block
         tag="fieldset"
-        :className="templateClass"
-        :formDisabled="formDisabled">
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-block className="control-label form-content__label">
             <idx-block className="form-content__title">CSS Settings</idx-block>
             Detailed sentence or two describing deregistering IMPress Listing CSS files so that the installed theme’s CSS won’t have specificity issues.
@@ -189,11 +191,6 @@ export default {
         formDisabled: {
             type: Boolean,
             default: false
-        }
-    },
-    computed: {
-        templateClass () {
-            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {

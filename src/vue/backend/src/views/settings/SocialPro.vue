@@ -51,7 +51,7 @@ export default {
     },
     data () {
         return {
-            formDisabled: true
+            formDisabled: false
         }
     },
     computed: {
@@ -84,9 +84,6 @@ export default {
                 href: '#signUp'
             }
         ]
-    },
-    mounted () {
-        this.formDisabled = false
     }
 }
 </script>

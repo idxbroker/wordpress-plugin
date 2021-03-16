@@ -1,8 +1,10 @@
 <template>
     <idx-block
         tag="fieldset"
-        :className="templateClass"
-        :formDisabled="formDisabled">
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-form-group>
             <idx-form-label customClass="form-content__label" for="website-wrapper"><idx-block tag="h3" className="form-content__title">Name Your Global Website Wrapper</idx-block> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
             <idx-form-input
@@ -59,11 +61,6 @@ export default {
         formDisabled: {
             type: Boolean,
             default: false
-        }
-    },
-    computed: {
-        templateClass () {
-            return this.formDisabled ? 'form-content form-content--disabled' : 'form-content'
         }
     },
     created () {
