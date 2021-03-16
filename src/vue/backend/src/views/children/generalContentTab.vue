@@ -20,6 +20,7 @@ export default {
     name: 'listings-general-content-tab',
     inject: [PRODUCT_REFS.listingsSettings.repo],
     mixins: [pageGuard],
+    inheritAttrs: false,
     components: {
         ListingsGeneral
     },

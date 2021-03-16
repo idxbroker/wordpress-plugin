@@ -47,9 +47,9 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="$emit('form-field-update', { key: 'automaticImport', value: !automaticImport })"
                     :active="automaticImport"
                     :label="toggleLabels[0]"
+                    @toggle="$emit('form-field-update', { key: 'automaticImport', value: !automaticImport })"
                 ></idx-toggle-slider>
             </idx-block>
         </idx-form-group>
@@ -60,7 +60,7 @@
                 :options="defaultListingTemplateOptions"
                 :selected="defaultListingTemplateSelected"
                 :ariaLabel="defaultListingTemplateLabel"
-                @toggle="$emit('form-field-update', { key: 'defaultListingTemplateSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'defaultListingTemplateSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-form-group>
@@ -70,7 +70,7 @@
                 :options="importedListingsAuthorOptions"
                 :selected="importedListingsAuthorSelected"
                 :ariaLabel="importedListingsTemplateLabel"
-                @toggle="$emit('form-field-update', { key: 'importedListingsAuthorSelected', value: $event.value })"
+                @selected-item="$emit('form-field-update', { key: 'importedListingsAuthorSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-form-group>
@@ -79,9 +79,9 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="$emit('form-field-update', { key: 'displayIDXLink', value: !displayIDXLink })"
                     :active="displayIDXLink"
                     :label="toggleLabels[1]"
+                    @toggle="$emit('form-field-update', { key: 'displayIDXLink', value: !displayIDXLink })"
                 ></idx-toggle-slider>
             </idx-block>
         </idx-form-group>
@@ -106,9 +106,9 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="$emit('form-field-update', { key: 'advancedFieldData', value: !advancedFieldData })"
                     :active="advancedFieldData"
                     :label="toggleLabels[2]"
+                    @toggle="$emit('form-field-update', { key: 'advancedFieldData', value: !advancedFieldData })"
                 ></idx-toggle-slider>
             </idx-block>
         </idx-form-group>
@@ -118,9 +118,9 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="$emit('form-field-update', { key: 'displayAdvancedFields', value: !displayAdvancedFields })"
                     :active="displayAdvancedFields"
                     :label="toggleLabels[3]"
+                    @toggle="$emit('form-field-update', { key: 'displayAdvancedFields', value: !displayAdvancedFields })"
                 ></idx-toggle-slider>
             </idx-block>
         </idx-form-group>
@@ -156,7 +156,7 @@ export default {
             default: () => []
         },
         importedListingsAuthorSelected: {
-            type: String,
+            type: [String, Number],
             default: ''
         },
         importedListingsAuthorOptions: {
@@ -183,9 +183,9 @@ export default {
             { label: 'Do Not Update (Not Recommended)', value: 'no-update', description: 'Do not update any fields. Listing will be changed to sold status if it exists in the sold data feed. Displaying inaccurate MLS data may violate your IDX agreement.' }
         ]
         this.soldListingsOptions = [
-            { label: 'Keep All', value: 'keep-all', description: 'All imported listings will be kept and published with the status changed to reflect as sold' },
-            { label: 'Keep as Draft', value: 'keep-as-draft', description: 'All imported listings will be kept as a draft with the status changed to reflect as sold' },
-            { label: 'Delete Sold (Not Recommended)', value: 'delete-sold', description: 'Sold listings and attached featured images will be deleted from your WordPress database and media library' }
+            { label: 'Keep All', value: 'sold-keep', description: 'All imported listings will be kept and published with the status changed to reflect as sold' },
+            { label: 'Keep as Draft', value: 'sold-draft', description: 'All imported listings will be kept as a draft with the status changed to reflect as sold' },
+            { label: 'Delete Sold (Not Recommended)', value: 'sold-delete', description: 'Sold listings and attached featured images will be deleted from your WordPress database and media library' }
         ]
         this.toggleLabels = [
             'Automatically import new listings',
