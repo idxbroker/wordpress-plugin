@@ -53,16 +53,6 @@
                 ></idx-toggle-slider>
             </idx-block>
         </idx-form-group>
-        <idx-form-group>
-            <idx-form-label customClass="control-label form-content__label" for="google-maps">Google Maps API Key</idx-form-label>
-            <idx-form-input
-                type="text"
-                :disabled="formDisabled"
-                id="google-maps"
-                :value="googleMapsAPIKey"
-                @change="$emit('form-field-update', { key: 'googleMapsAPIKey', value: $event.target.value })"
-            />
-        </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Default Form Shortcode</idx-block>
             <p>Detailed sentence or two describing short code compatibility with Contact Form plugin. If no short code is entered the template uses default contact forms.</p>
