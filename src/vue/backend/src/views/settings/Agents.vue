@@ -48,7 +48,7 @@ export default {
     },
     computed: {
         ...mapState({
-            enabled: (state) => state.agentSettings.enabled
+            enabled: state => state.agentSettings.enabled
         })
     },
     methods: {
@@ -75,8 +75,10 @@ export default {
             { text: 'IDX Broker Middleware', href: 'https://middleware.idxbroker.com/mgmt/' },
             { text: 'Sign up for IDX Broker', href: 'https://signup.idxbroker.com/' } // Marketing may want a different entry
         ]
-        const { data } = await this.agentSettingsRepository.get()
-        this.updateState(data)
+        if (this.enabled) {
+            const { data } = await this.agentSettingsRepository.get()
+            this.updateState(data)
+        }
     }
 }
 </script>

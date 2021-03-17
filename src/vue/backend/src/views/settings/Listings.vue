@@ -45,7 +45,7 @@ export default {
     },
     computed: {
         ...mapState({
-            enabled: state => state.listingsSettings.enabled
+            enabled: state => state.listingsGeneral.enabled
         })
     },
     methods: {
@@ -60,7 +60,7 @@ export default {
         }
     },
     async created () {
-        this.module = 'listingsSettings'
+        this.module = 'listingsGeneral'
         this.links = [
             { text: 'Where can I find my API key?', href: 'https://support.idxbroker.com/s/article/api-key' },
             { text: 'IDX Broker Middleware', href: 'https://middleware.idxbroker.com/mgmt/' },
