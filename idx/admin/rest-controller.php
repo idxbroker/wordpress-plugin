@@ -144,7 +144,6 @@ class Rest_Controller {
 
 	/**
 	 * Maps object keys in an array for REST output.
-	 * TODO: Move to rest controller.
 	 *
 	 * @param array   $objects Array of objects or associative arrays.
 	 * @param array   $name_map Associative array of key pairs to map to.
