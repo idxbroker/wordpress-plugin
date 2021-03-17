@@ -53,12 +53,8 @@ export default {
             this.$router.push({ path: '/guided-setup/listings' })
         },
         async saveHandler () {
-<<<<<<< HEAD
             this.formDisabled = true
-            if (this.formChanges) {
-=======
             if (this.formIsUpdated) {
->>>>>>> release/3.0.0
                 const { status } = await this.generalRepository.post(this.formChanges)
                 this.formDisabled = false
                 if (status === 200) {

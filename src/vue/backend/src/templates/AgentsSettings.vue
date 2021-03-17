@@ -1,19 +1,14 @@
 <template>
-<<<<<<< HEAD
     <idx-block
         tag="fieldset"
         :className="{
             'form-content': true,
             'form-content--disabled': formDisabled
         }">
-        <idx-block className="form-content__header"><idx-block tag="h3" className="form-content__title">CSS Settings</idx-block> Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</idx-block>
-=======
-    <idx-block tag="fieldset" className="agents-settings form-content">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">CSS Settings</idx-block>
             <p>Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</p>
         </idx-block>
->>>>>>> release/3.0.0
         <idx-form-group>
             <idx-block className="form-content__toggle">
                 {{ cssLabel }}

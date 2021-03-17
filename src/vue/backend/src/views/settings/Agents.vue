@@ -13,17 +13,12 @@
                 ></idx-toggle-slider>
             </idx-block>
             <template v-if="enabled">
-<<<<<<< HEAD
                 <AgentsSettings
                     :formDisabled="formDisabled"
                     v-bind="localStateValues"
                     @form-field-update="formUpdate"
                 />
-                <idx-button theme="primary" @click="saveHandler">Save</idx-button>
-=======
-                <AgentsSettings v-bind="localStateValues" @form-field-update="formUpdate" />
                 <idx-button size="lg" @click="saveHandler">Save</idx-button>
->>>>>>> release/3.0.0
             </template>
         </idx-block>
         <template #related>
