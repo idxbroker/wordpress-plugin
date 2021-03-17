@@ -11,6 +11,7 @@
                 :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
+                @form-field-update-mls-membership="mlsChangeUpdate"
             />
         </template>
     </GuidedSetupContentCard>
@@ -20,13 +21,15 @@
 import { mapState, mapActions } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
+import omnibarMixin from '@/mixins/omnibarMixin'
 import omnibarForm from '@/templates/omnibarForm.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
     name: 'guided-setup-omnibar',
     mixins: [
         guidedSetupMixin,
-        pageGuard
+        pageGuard,
+        omnibarMixin
     ],
     components: {
         omnibarForm,
@@ -39,35 +42,18 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
-            cityListOptions: state => state.omnibar.cityListOptions,
-            cityListSelected: state => state.omnibar.cityListSelected,
-            countyListOptions: state => state.omnibar.countyListOptions,
-            countyListSelected: state => state.omnibar.countyListSelected,
-            postalCodeListOptions: state => state.omnibar.postalCodeListOptions,
-            postalCodeSelected: state => state.omnibar.postalCodeSelected,
-            defaultPropertyTypeSelected: state => state.omnibar.defaultPropertyTypeSelected,
-            mlsMembership: state => state.omnibar.mlsMembership,
-            autofillMLS: state => state.omnibar.autofillMLS,
-            customFieldsSelected: state => state.omnibar.customFieldsSelected,
-            customFieldsOptions: state => state.omnibar.customFieldsOptions,
-            customPlaceholder: state => state.omnibar.customPlaceholder,
-            defaultSortOrderSelected: state => state.omnibar.defaultSortOrderSelected
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange',
-            setItem: 'omnibar/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveOmnibarSettings: 'general/saveOmnibarSettings'
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
         async goContinue () {
             this.formDisabled = true
-            await this.saveOmnibarSettings()
-            this.saveAction()
+            // await this.saveOmnibarSettings()
             this.formDisabled = false
-            this.$router.push({ path: this.continuePath })
+            // to do: save handler
         }
     },
     created () {
