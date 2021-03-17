@@ -1,5 +1,10 @@
 <template>
-    <idx-block tag="fieldset" className="fieldset listings-advanced form-content">
+    <idx-block
+        tag="fieldset"
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">CSS Settings</idx-block>
             <p>Detailed sentence or two describing deregistering IMPress Listing CSS files so that the installed theme’s CSS won’t have specificity issues.</p>
@@ -12,6 +17,7 @@
                     checkedState="Yes"
                     @toggle="$emit('form-field-update', { key: 'deregisterMainCss', value: !deregisterMainCss })"
                     :active="deregisterMainCss"
+                    :disabled="formDisabled"
                     :label="mainCssLabel"
                 ></idx-toggle-slider>
             </idx-block>
@@ -24,6 +30,7 @@
                     checkedState="Yes"
                     @toggle="$emit('form-field-update', { key: 'deregisterWidgetCss', value: !deregisterWidgetCss })"
                     :active="deregisterWidgetCss"
+                    :disabled="formDisabled"
                     :label="widgetsCssLabel"
                 ></idx-toggle-slider>
             </idx-block>
@@ -41,6 +48,7 @@
                     checkedState="Yes"
                     @toggle="$emit('form-field-update', { key: 'sendFormSubmission', value: !sendFormSubmission })"
                     :active="sendFormSubmission"
+                    :disabled="formDisabled"
                     :label="sendFormLabel"
                 ></idx-toggle-slider>
             </idx-block>
@@ -54,6 +62,7 @@
             <idx-form-input
                 type="text"
                 id="form-shortcode"
+                :disabled="formDisabled"
                 :value="formShortcode"
                 @change="$emit('form-field-update', { key: 'formShortcode', value: $event.target.value })"
             />
@@ -69,6 +78,7 @@
             <idx-form-input
                 type="text"
                 id="google-maps"
+                :disabled="formDisabled"
                 :value="googleMapsAPIKey"
                 @change="$emit('form-field-update', { key: 'googleMapsAPIKey', value: $event.target.value })"
             />
@@ -86,6 +96,7 @@
                     checkedState="Yes"
                     @toggle="$emit('form-field-update', { key: 'useCustomWrapper', value: !useCustomWrapper })"
                     :active="useCustomWrapper"
+                    :disabled="formDisabled"
                     :label="useCustomWrapperLabel"
                 ></idx-toggle-slider>
             </idx-block>
@@ -93,7 +104,7 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label" for="wrapper-start-html">Wrapper Start HTML</idx-form-label>
             <idx-form-input
-                :disabled="!useCustomWrapper"
+                :disabled="!useCustomWrapper || formDisabled"
                 type="text"
                 id="wrapper-start-html"
                 :value="wrapperStart"
@@ -103,7 +114,7 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label" for="wrapper-end-html">Wrapper End HTML</idx-form-label>
             <idx-form-input
-                :disabled="!useCustomWrapper"
+                :disabled="!useCustomWrapper || formDisabled"
                 type="text"
                 id="wrapper-end-html"
                 :value="wrapperEnd"
@@ -123,6 +134,7 @@
                     checkedState="Yes"
                     @toggle="$emit('form-field-update', { key: 'deletePluginDataOnUninstall', value: !deletePluginDataOnUninstall })"
                     :active="deletePluginDataOnUninstall"
+                    :disabled="formDisabled"
                     :label="pluginUninstallationLabel"
                 ></idx-toggle-slider>
             </idx-block>
@@ -167,6 +179,10 @@ export default {
             default: false
         },
         useCustomWrapper: {
+            type: Boolean,
+            default: false
+        },
+        formDisabled: {
             type: Boolean,
             default: false
         }

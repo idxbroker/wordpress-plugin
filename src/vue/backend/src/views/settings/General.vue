@@ -6,12 +6,14 @@
         </idx-block>
         <APIKey
             :apiKey="localStateValues.apiKey"
+            :disabled="formDisabled"
             :error="error"
-            :loading="loading"
+            :loading="formDisabled"
             :success="success"
             @form-field-update="formUpdate"
         />
         <GeneralSettings
+            :formDisabled="formDisabled"
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         />
@@ -40,21 +42,23 @@ export default {
     data () {
         return {
             error: false,
-            loading: false,
-            success: false
+            success: false,
+            formDisabled: false
         }
     },
     methods: {
         async saveHandler () {
             // To Do: user facing error checking
             if (this.formIsUpdated) {
-                this.loading = true
+                this.formDisabled = true
                 try {
                     await this.generalRepository.post(this.formChanges)
+                    this.formDisabled = false
                     this.saveAction()
                     this.success = true
                     this.error = false
                 } catch (error) {
+                    this.formDisabled = false
                     if (error.response.status === 401) {
                         this.error = true
                         this.success = false
@@ -62,7 +66,6 @@ export default {
                         // full form error response
                     }
                 }
-                this.loading = false
             } else {
                 this.continue()
             }

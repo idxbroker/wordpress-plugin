@@ -8,6 +8,7 @@
         @continue="goContinue">
         <template v-slot:controls>
             <omnibarForm
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
                 @form-field-update-mls-membership="mlsChangeUpdate"
@@ -34,6 +35,11 @@ export default {
         omnibarForm,
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: false
+        }
+    },
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
@@ -44,6 +50,9 @@ export default {
             progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
         async goContinue () {
+            this.formDisabled = true
+            // await this.saveOmnibarSettings()
+            this.formDisabled = false
             // to do: save handler
         }
     },

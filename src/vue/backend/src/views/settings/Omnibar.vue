@@ -2,6 +2,7 @@
     <TwoColumn title="Omnibar Settings">
         <idx-block className="form-content">
             <omnibar-form
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
                 @form-field-update-mls-membership="mlsChangeUpdate"
@@ -31,6 +32,11 @@ export default {
         TwoColumn,
         OmnibarForm,
         RelatedLinks
+    },
+    data () {
+        return {
+            formDisabled: false
+        }
     },
     methods: {
         saveHandler () {

@@ -1,13 +1,14 @@
 <template>
     <div>
         <impress-listings-idx-content
+            :formDisabled="formDisabled"
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></impress-listings-idx-content>
         <idx-button
             customClass="settings-button__save"
             size="lg"
-            @click="saveHandler"            
+            @click="saveHandler"
         >
             Save
         </idx-button>
@@ -24,6 +25,11 @@ export default {
     inheritAttrs: false,
     components: {
         impressListingsIdxContent
+    },
+    data () {
+        return {
+            formDisabled: false
+        }
     },
     methods: {
         async saveHandler () {

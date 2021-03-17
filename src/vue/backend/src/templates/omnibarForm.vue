@@ -1,5 +1,10 @@
 <template>
-    <idx-block className="omnibar-form form-content">
+    <idx-block
+        tag="fieldset"
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Do you want to set up IMPress Omnibar Search?</idx-block>
             <p>A short paragraph detailing the IMPress Omnibar Search feature. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit vulputate.</p>
@@ -198,6 +203,10 @@ export default {
         defaultSortOrderSelected: {
             type: String,
             default: ''
+        },
+        formDisabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -235,21 +244,16 @@ export default {
             // Take the custom field options and modify the options to contain
             // a user friendly label and the IDX ID of the mls it is a part of
             const options = []
-
             // Loop through the custom field options prop
             for (let x = 0; x < this.customFieldsOptions.length; x++) {
-
                 // Get the object containing the information about the specific
                 // MLS this option is in
                 const MLSName = this.findMLSName(this.customFieldsOptions[x].idxID)
-
                 // For all the fields available, we want the options to have the
                 // MLS value and the user friendly label
                 this.customFieldsOptions[x].fieldNames.forEach(option => {
-
                     // If the option is one of the selected mls specific property types
                     if (option.mlsPtID === this.mlsSpecificPropTypes[MLSName.value]) {
-
                         // Add the option with a user friendly label and MLS value
                         options.push({
                             ...this.addCleanLabel(option, MLSName),
@@ -273,7 +277,6 @@ export default {
     methods: {
         addCleanLabel (item, MLSName) {
             // Adds a label with the user friendly name
-            
             // Save original label used on the backend
             const cleanLabel = item.label
             // Finds the property type the item is in

@@ -14,8 +14,9 @@
                 <idx-form-group>
                     <idx-form-label customClass="form-content__label" for="ApiKey">API Key</idx-form-label>
                     <APIKey
+                        :disabled="formDisabled"
                         :error="error"
-                        :loading="loading"
+                        :loading="formDisabled"
                         :success="success"
                         :apiKey="localStateValues.apiKey"
                         @form-field-update="formUpdate"
@@ -42,8 +43,8 @@ export default {
     },
     data () {
         return {
+            formDisabled: false,
             error: false,
-            loading: false,
             success: false,
             cardTitle: 'Connect Your IDX Broker Account'
         }
@@ -72,18 +73,19 @@ export default {
             }, 3000)
         },
         async saveHandler () {
+            this.formDisabled = true
             // To Do: user facing error checking
             if (this.formIsUpdated) {
-                this.loading = true
                 try {
                     await this.generalRepository.post(this.formChanges)
+                    this.formDisabled = false
                     this.saveAction()
                     this.continue()
                 } catch (error) {
+                    this.formDisabled = false
                     this.error = true
                     this.success = false
                 }
-                this.loading = false
             } else {
                 this.continue()
             }

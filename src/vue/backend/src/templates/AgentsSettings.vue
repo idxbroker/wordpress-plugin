@@ -1,5 +1,10 @@
 <template>
-    <idx-block tag="fieldset" className="agents-settings form-content">
+    <idx-block
+        tag="fieldset"
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">CSS Settings</idx-block>
             <p>Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</p>
@@ -12,6 +17,7 @@
                     checkedState="Yes"
                     @toggle="$emit('form-field-update', { key: 'deregisterMainCss', value: !deregisterMainCss })"
                     :active="deregisterMainCss"
+                    :disabled="formDisabled"
                     :label="cssLabel"
                 ></idx-toggle-slider>
             </idx-block>
@@ -24,6 +30,7 @@
             <idx-form-label customClass="form-content__label" for="number-of-posts">Default Number of Posts</idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 id="number-of-posts"
                 :value="numberOfPosts"
                 @change="$emit('form-field-update', { key: 'numberOfPosts', value: $event.target.value })"
@@ -37,6 +44,7 @@
             <idx-form-label customClass="form-content__label" for="directory-slug">Directory Slug</idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 id="directory-slug"
                 :value="directorySlug"
                 @change="$emit('form-field-update', { key: 'directorySlug', value: $event.target.value })"
@@ -50,6 +58,7 @@
             <idx-form-label customClass="form-content__label" for="wrapper-start">Wrapper Start HTML</idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 id="wrapper-start"
                 :value="wrapperStart"
                 @change="$emit('form-field-update', { key: 'wrapperStart', value: $event.target.value })"
@@ -59,6 +68,7 @@
             <idx-form-label customClass="form-content__label" for="wrapper-end">Wrapper End HTML</idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 id="wrapper-end"
                 :value="wrapperEnd"
                 @change="$emit('form-field-update', { key: 'wrapperEnd', value: $event.target.value })"
@@ -89,6 +99,10 @@ export default {
         wrapperEnd: {
             type: String,
             default: ''
+        },
+        formDisabled: {
+            type: Boolean,
+            default: false
         }
     },
     created () {

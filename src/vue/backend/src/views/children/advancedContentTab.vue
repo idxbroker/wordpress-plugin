@@ -1,6 +1,7 @@
 <template>
     <div>
         <impress-listings-advanced-content
+            :formDisabled="formDisabled"
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></impress-listings-advanced-content>
@@ -24,9 +25,16 @@ export default {
     components: {
         impressListingsAdvancedContent
     },
+    data () {
+        return {
+            formDisabled: false
+        }
+    },
     methods: {
         async saveHandler () {
+            this.formDisabled = true
             const { status } = await this[repo].post(this.formChanges, 'advanced')
+            this.formDisabled = false
             if (status === 200) {
                 this.saveAction()
             }

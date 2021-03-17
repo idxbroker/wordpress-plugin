@@ -1,5 +1,10 @@
 <template>
-    <idx-block className="form-content">
+    <idx-block
+        tag="fieldset"
+        :className="{
+            'form-content': true,
+            'form-content--disabled': formDisabled
+        }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Imported Listings</idx-block>
             <p>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</p>
@@ -13,6 +18,7 @@
                 :description="option.description"
                 :radio="false"
                 :checked="updateListings === option.value"
+                :disabled="formDisabled"
                 @change="$emit('form-field-update', {
                     key: 'updateListings',
                     value: option.value
@@ -28,6 +34,7 @@
                 :description="option.description"
                 :radio="false"
                 :checked="soldListings === option.value"
+                :disabled="formDisabled"
                 @change="$emit('form-field-update', {
                     key: 'soldListings',
                     value: option.value
@@ -48,6 +55,7 @@
                     uncheckedState="No"
                     checkedState="Yes"
                     :active="automaticImport"
+                    :disabled="formDisabled"
                     :label="toggleLabels[0]"
                     @toggle="$emit('form-field-update', { key: 'automaticImport', value: !automaticImport })"
                 ></idx-toggle-slider>
@@ -60,6 +68,7 @@
                 :options="defaultListingTemplateOptions"
                 :selected="defaultListingTemplateSelected"
                 :ariaLabel="defaultListingTemplateLabel"
+                :disabled="formDisabled"
                 @selected-item="$emit('form-field-update', { key: 'defaultListingTemplateSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
@@ -70,16 +79,18 @@
                 :options="importedListingsAuthorOptions"
                 :selected="importedListingsAuthorSelected"
                 :ariaLabel="importedListingsTemplateLabel"
+                :disabled="formDisabled"
                 @selected-item="$emit('form-field-update', { key: 'importedListingsAuthorSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="idx-content-settings__toggle form-content__toggle">
+            <idx-block className="form-content__toggle">
                 {{ toggleLabels[1] }}
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
                     :active="displayIDXLink"
+                    :disabled="formDisabled"
                     :label="toggleLabels[1]"
                     @toggle="$emit('form-field-update', { key: 'displayIDXLink', value: !displayIDXLink })"
                 ></idx-toggle-slider>
@@ -92,6 +103,7 @@
             </idx-form-label>
             <idx-form-input
                 type="text"
+                :disabled="formDisabled"
                 :value="importTitle"
                 @change="$emit('form-field-update', { key: 'importTitle', value: $event.target.value })"
             ></idx-form-input>
@@ -107,6 +119,7 @@
                     uncheckedState="No"
                     checkedState="Yes"
                     :active="advancedFieldData"
+                    :disabled="formDisabled"
                     :label="toggleLabels[2]"
                     @toggle="$emit('form-field-update', { key: 'advancedFieldData', value: !advancedFieldData })"
                 ></idx-toggle-slider>
@@ -119,6 +132,7 @@
                     uncheckedState="No"
                     checkedState="Yes"
                     :active="displayAdvancedFields"
+                    :disabled="formDisabled"
                     :label="toggleLabels[3]"
                     @toggle="$emit('form-field-update', { key: 'displayAdvancedFields', value: !displayAdvancedFields })"
                 ></idx-toggle-slider>
@@ -172,6 +186,10 @@ export default {
             default: false
         },
         displayAdvancedFields: {
+            type: Boolean,
+            default: false
+        },
+        formDisabled: {
             type: Boolean,
             default: false
         }
