@@ -1,19 +1,11 @@
 @import '~bootstrap/scss/forms';
 .form-content {
-    --space-form-label: 5px;
-    --space-form-height: 43px;
-    display: flex;
-    flex-direction: column;
-    grid-gap: 40px;
     font-size: 1rem;
     color: $gray-875;
-    h3,
-    strong {
-        font-weight: 600;
-    }
     hr {
-        border-top: 1px solid $gray-150;
-        width: 100%;
+        border-top: 1px solid $gray-250;
+        margin-bottom: var(--space-form-section);
+        margin-top: var(--space-form-section);
     }
     &__toggle {
         display: flex;
@@ -39,20 +31,25 @@
     &__title {
         font-size: 1em;
         display: block;
-        text-transform: uppercase;
-        letter-spacing: 1.6px;
         font-weight: 700;
+        margin-bottom: var(--space-form-title);
     }
     &__header {
-        margin-bottom: 0px;
+        margin-bottom: var(--space-form-section);
+        margin-top: var(--space-form-section);
     }
     &__label {
+        font-size: 1em;
         margin-bottom: var(--space-form-label);
         width: 100%;
+        *:last-child {
+            margin-bottom: 0;
+        }
     }
     .form-control,
     input {
         border: 1px solid $gray-250;
+        border-radius: 4px;
         padding-left: 15px;
     }
     input:focus,
@@ -62,25 +59,39 @@
     }
     .autocomplete {
         &__results {
-            margin-top: var(--space-form-height);
+            margin-top: var(--form-control-height);
         }
     }
+    .form-control.is-valid {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        border-color: $green;
+    }
+    .form-control.is-valid:focus {
+        border-color: $green;
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+    }
+    .form-control.is-invalid {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        border-color: $red;
+    }
+    .form-control.is-invalid:focus {
+        border-color: $red;
+        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    }
 }
-.settings-button__save {
-    width: 155px;
-    height: 50px;
-    margin-top: 40px;
+.btn.btn-link,
+.btn.btn-link:hover {
+    color: $gray-875;
 }
-.btn.btn-link {
-    background-color: transparent;
-    border-color: transparent;
+.form-content + .btn.btn-primary {
+    margin-top: var(--space-form-section);
 }
-.custom-select__options {
+.custom-select__options,
+.autocomplete__results {
 	max-height: 300px;
 	overflow: auto;
 }
 .form-group {
-    margin-bottom: 0px;
     position: relative;
 }
 .invalid-feedback {

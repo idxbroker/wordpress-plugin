@@ -12,6 +12,9 @@ export default {
         },
         routeCanLeave () {
             return isEqual({ ...this.$store.state[this.module] }, this.localStateValues)
+        },
+        formIsUpdated () {
+            return Object.keys(this.formChanges).length > 0
         }
     },
     methods: {
@@ -21,10 +24,13 @@ export default {
             }
             this.formChanges = { ...this.formChanges, ...change }
         },
-        saveAction () {
-            for (const key in this.formChanges) {
-                this.$store.dispatch(`${this.module}/setItem`, { key, value: this.formChanges[key] })
+        updateState (changes) {
+            for (const key in changes) {
+                this.$store.dispatch(`${this.module}/setItem`, { key, value: changes[key] })
             }
+        },
+        saveAction () {
+            this.updateState(this.formChanges)
             this.formChanges = {}
         }
     },

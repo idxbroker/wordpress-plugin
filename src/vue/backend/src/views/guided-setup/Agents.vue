@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler">
         <template v-slot:description>
             <p><strong>This is optional.</strong> A sentence or two about why you should install IMPress Listings to your WordPress site. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
@@ -36,11 +36,14 @@
 </template>
 
 <script>
+import { PRODUCT_REFS } from '@/data/productTerms'
 import { mapState, mapActions } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    inject: [PRODUCT_REFS.agentSettings.repo],
+    name: 'guided-setup-agents',
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -51,25 +54,33 @@ export default {
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
-        })
+        }),
+        continuePath () {
+            return this.localStateValues.enabled ? '/guided-setup/agents/configure' : this.skipPath
+        }
     },
     methods: {
         ...mapActions({
-            setItem: 'agentSettings/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            enableAgentsPlugin: 'agentSettings/enableAgentsPlugin'
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
-        async goContinue () {
-            await this.enableAgentsPlugin()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
+        async saveHandler () {
+            if (this.formIsUpdated) {
+                const { status } = await this.agentSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
+                if (status === 204) {
+                    this.saveAction()
+                    this.$router.push({ path: this.continuePath })
+                } else {
+                    // To do: user feedback
+                }
+            } else {
+                this.$router.push({ path: this.continuePath })
+            }
         }
     },
     created () {
         this.module = 'agentSettings'
         this.cardTitle = 'Enable IMPress Agents'
         this.activateLabel = 'Enable'
-        this.continuePath = '/guided-setup/agents/configure'
         this.skipPath = '/guided-setup/social-pro'
         this.links = [
             {
@@ -97,7 +108,7 @@ export default {
 @import '@/styles/formContentStyles.scss';
 .list-featured {
     column-count: 2;
-    font-weight: 600;
+    font-weight: 700;
     list-style-type: circle;
     padding-left: 1.125em;
 }

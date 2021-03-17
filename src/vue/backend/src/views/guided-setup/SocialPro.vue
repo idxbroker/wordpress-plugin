@@ -41,6 +41,7 @@ import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-social-pro',
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -97,7 +98,7 @@ export default {
 @import '@/styles/formContentStyles.scss';
 .list-featured {
     column-count: 2;
-    font-weight: 600;
+    font-weight: 700;
     list-style-type: circle;
     padding-left: 1.125em;
 }

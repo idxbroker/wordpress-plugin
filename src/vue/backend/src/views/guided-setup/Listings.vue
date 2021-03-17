@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler">
         <template v-slot:description>
             <p><strong>This is optional.</strong> A sentence or two about why you should install IMPress Listings to your WordPress site. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
@@ -36,11 +36,14 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
+import { mapActions, mapState } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-listings',
+    inject: [PRODUCT_REFS.listingsSettings.repo],
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -51,25 +54,33 @@ export default {
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
-        })
+        }),
+        continuePath () {
+            return this.localStateValues.enabled ? '/guided-setup/listings/general' : this.skipPath
+        }
     },
     methods: {
         ...mapActions({
-            setItem: 'listingsSettings/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            enableListingsPlugin: 'listingsSettings/enableListingsPlugin'
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
-        async goContinue () {
-            await this.enableListingsPlugin()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
+        async saveHandler () {
+            if (this.formIsUpdated) {
+                const { status } = await this.listingsSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
+                if (status === 204) {
+                    this.saveAction()
+                    this.$router.push({ path: this.continuePath })
+                } else {
+                    // To do: user feedback
+                }
+            } else {
+                this.$router.push({ path: this.continuePath })
+            }
         }
     },
     created () {
         this.module = 'listingsSettings'
         this.cardTitle = 'Enable IMPress Listings'
         this.activateLabel = 'Enable'
-        this.continuePath = '/guided-setup/listings/general'
         this.skipPath = '/guided-setup/agents'
         this.links = [
             {
@@ -97,7 +108,7 @@ export default {
 @import '@/styles/formContentStyles.scss';
 .list-featured {
     column-count: 2;
-    font-weight: 600;
+    font-weight: 700;
     list-style-type: circle;
     padding-left: 1.125em;
 }

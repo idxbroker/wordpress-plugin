@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler">
         <template v-slot:controls>
             <ListingsGeneral
                 v-bind="localStateValues"
@@ -17,11 +17,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import ListingsGeneral from '@/templates/impressListingsGeneralContent.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-listings-general',
+    inject: [PRODUCT_REFS.listingsSettings.repo],
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -32,28 +35,28 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
-            currencyCodeSelected: state => state.listingsSettings.currencyCodeSelected,
-            currencySymbolSelected: state => state.listingsSettings.currencySymbolSelected,
-            defaultDisclaimer: state => state.listingsSettings.defaultDisclaimer,
-            numberOfPosts: state => state.listingsSettings.numberOfPosts,
-            listingSlug: state => state.listingsSettings.listingSlug,
-            defaultState: state => state.listingsSettings.defaultState
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            setItem: 'listingsSettings/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveGeneralListingsSettings: 'listingsSettings/saveGeneralListingsSettings'
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
-        async goContinue () {
-            await this.saveGeneralListingsSettings()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
+        async saveHandler () {
+            if (this.formIsUpdated) {
+                const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'general')
+                if (status === 204) {
+                    this.saveAction()
+                    this.$router.push({ path: this.continuePath })
+                } else {
+                    // To do: user feedback
+                }
+            } else {
+                this.$router.push({ path: this.continuePath })
+            }
         }
     },
-    created () {
+    async created () {
         this.module = 'listingsSettings'
         this.cardTitle = 'Configure IMPress Listings'
         this.continuePath = '/guided-setup/listings/idx'
@@ -72,6 +75,8 @@ export default {
                 href: '#signUp'
             }
         ]
+        const { data } = await this.listingsSettingsRepository.get('general')
+        this.updateState(data)
     },
     mounted () {
         this.progressStepperUpdate([4, 2, 0, 0])

@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler">
         <template v-slot:controls>
             <ListingsAdvanced
                 v-bind="localStateValues"
@@ -17,11 +17,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import ListingsAdvanced from '@/templates/impressListingsAdvancedContent.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-listings-advanced',
+    inject: [PRODUCT_REFS.listingsSettings.repo],
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -32,30 +35,28 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
-            deregisterMainCss: state => state.listingsSettings.deregisterMainCss,
-            deregisterWidgetCss: state => state.listingsSettings.deregisterWidgetCss,
-            sendFormSubmission: state => state.listingsSettings.sendFormSubmission,
-            formShortcode: state => state.listingsSettings.formShortcode,
-            googleMapsAPIKey: state => state.listingsSettings.googleMapsAPIKey,
-            wrapperStart: state => state.listingsSettings.wrapperStart,
-            wrapperEnd: state => state.listingsSettings.wrapperEnd,
-            deletePluginDataOnUninstall: state => state.listingsSettings.deletePluginDataOnUninstall
+            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            setItem: 'listingsSettings/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveAdvancedListingsSettings: 'listingsSettings/saveAdvancedListingsSettings'
+            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
         }),
-        async goContinue () {
-            await this.saveAdvancedListingsSettings()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
+        async saveHandler () {
+            if (this.formIsUpdated) {
+                const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'advanced')
+                if (status === 204) {
+                    this.saveAction()
+                    this.$router.push({ path: this.continuePath })
+                } else {
+                    // To do: user feedback
+                }
+            } else {
+                this.$router.push({ path: this.continuePath })
+            }
         }
     },
-    created () {
+    async created () {
         this.module = 'listingsSettings'
         this.cardTitle = 'Configure IMPress Listings'
         this.continuePath = '/guided-setup/agents'
@@ -74,6 +75,8 @@ export default {
                 href: '#signUp'
             }
         ]
+        const { data } = await this.listingsSettingsRepository.get('advanced')
+        this.updateState(data)
     },
     mounted () {
         this.progressStepperUpdate([4, 4, 0, 0])

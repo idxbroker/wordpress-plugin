@@ -65,7 +65,7 @@
 
 .v-nav--item {
     font-size: 14px;
-    font-weight: 600 !important;
+    font-weight: 700;
     letter-spacing: .1rem;
 
     a {
@@ -79,7 +79,7 @@
         }
 
         &.router-link-exact-active {
-            font-weight: 600;
+            font-weight: 700;
 
             &:before {
                 content: "";

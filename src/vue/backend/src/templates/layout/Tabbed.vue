@@ -42,7 +42,7 @@ export default {
     }
     &__action {
         padding: 8px 12px;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.4px;
     }
     .tab-container {

@@ -176,6 +176,8 @@ class Rest_Controller {
 new Apis\Agents_Settings();
 new Apis\Enable_Addons();
 new Apis\Import_Agents();
+new Apis\Import_Listings();
+new Apis\Listings_IDX_Settings();
 new Apis\Listings_Advanced_Settings();
 new Apis\Listings_Settings();
 new Apis\Omnibar_Settings();

@@ -34,7 +34,7 @@ class Impress_Lead_Signup_Shortcode {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-lead-signup', plugins_url( '../assets/css/widgets/impress-lead-signup.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-signup', plugins_url( '../assets/css/widgets/impress-lead-signup.min.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! isset( $new_window ) ) {

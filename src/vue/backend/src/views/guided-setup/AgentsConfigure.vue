@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler">
         <template v-slot:controls>
             <AgentsSettings
                 v-bind="localStateValues"
@@ -17,11 +17,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import AgentsSettings from '@/templates/AgentsSettings.vue'
 export default {
+    inject: [PRODUCT_REFS.agentSettings.repo],
+    name: 'guided-setup-agents-configure',
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -41,13 +44,21 @@ export default {
             progressStepperUpdate: 'progressStepper/progressStepperUpdate',
             saveConfigureAgentSettings: 'agentSettings/saveConfigureAgentSettings'
         }),
-        async goContinue () {
-            await this.saveConfigureAgentSettings()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
+        async saveHandler () {
+            if (this.formIsUpdated) {
+                const { status } = await this.agentSettingsRepository.post(this.formChanges)
+                if (status === 200) {
+                    this.saveAction()
+                    this.$router.push({ path: this.continuePath })
+                } else {
+                    // To do: user feedback
+                }
+            } else {
+                this.$router.push({ path: this.continuePath })
+            }
         }
     },
-    created () {
+    async created () {
         this.module = 'agentSettings'
         this.cardTitle = 'Configure IMPress Agents'
         this.continuePath = '/guided-setup/social-pro'
@@ -66,6 +77,8 @@ export default {
                 href: '#signUp'
             }
         ]
+        const { data } = await this.agentSettingsRepository.get()
+        this.updateState(data)
     },
     mounted () {
         this.progressStepperUpdate([4, 5, 2, 0])

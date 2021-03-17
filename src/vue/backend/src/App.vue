@@ -69,7 +69,12 @@ export default {
 }
 </script>
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;700&display=swap');
+body {
+    overflow-y: scroll;
+}
 .app {
+    font-family: 'Mulish', sans-serif;
     h2 {
         display: block;
         float: unset;

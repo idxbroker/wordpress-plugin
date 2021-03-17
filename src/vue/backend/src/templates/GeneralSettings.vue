@@ -1,7 +1,10 @@
 <template>
     <idx-block tag="fieldset" className="general-settings form-content">
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="website-wrapper"><idx-block tag="h3" className="form-content__title">Name Your Global Website Wrapper</idx-block> Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</idx-form-label>
+            <idx-form-label customClass="form-content__label" for="website-wrapper">
+                <idx-block tag="h2" className="form-content__title">Name Your Global Website Wrapper</idx-block>
+                <p>Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</p>
+            </idx-form-label>
             <idx-form-input
                 type="text"
                 id="website-wrapper"
@@ -10,7 +13,10 @@
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="form-content__label"><idx-block tag="h3" className="form-content__title">Google reCAPTCHA</idx-block> Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</idx-block>
+            <idx-block className="form-content__label">
+                <idx-block tag="h2" className="form-content__title">Google reCAPTCHA</idx-block>
+                <p>Google reCAPTCHA v3 helps to prevent spammers from filling out your forms.</p>
+            </idx-block>
             <idx-block className="form-content__toggle">
                 {{ toggleLabel }}
                 <idx-toggle-slider
@@ -23,7 +29,10 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-block className="form-content__label"><idx-block tag="h3" className="form-content__title">Update Frequency</idx-block> Choose how often IMPress gets updates from your IDX Broker account.</idx-block>
+            <idx-block className="form-content__label">
+                <idx-block tag="h2" className="form-content__title">Update Frequency</idx-block>
+                <p>Choose how often IMPress gets updates from your IDX Broker account.</p>
+            </idx-block>
             <idx-custom-select
                 ariaLabel="Update Frequency"
                 :selected="updateFrequency"

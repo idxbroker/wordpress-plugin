@@ -329,7 +329,7 @@ class Initiate_Plugin {
 	 */
 	public function load_admin_menu_styles() {
 		wp_enqueue_style( 'properticons', 'https://s3.amazonaws.com/properticons/css/properticons.css' );
-		return wp_enqueue_style( 'idx-menus', plugins_url( '/assets/css/idx-menus.css', dirname( __FILE__ ) ) );
+		return wp_enqueue_style( 'idx-menus', plugins_url( '/assets/css/idx-menus.min.css', dirname( __FILE__ ) ) );
 	}
 	/**
 	 * This adds the options page to the WP admin.
@@ -429,7 +429,7 @@ class Initiate_Plugin {
 	 */
 	public function idx_inject_script_and_style( $page ) {
 
-		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.css' );
+		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.min.css' );
 
 		if ( 'toplevel_page_idx-broker' !== $page ) {
 			return;
@@ -448,7 +448,7 @@ class Initiate_Plugin {
 				'wrapper_delete_nonce'   => wp_create_nonce( 'idx-settings-wrapper-delete-nonce' ),
 			]
 		);
-		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.css', dirname( __FILE__ ) ) );
+		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.min.css', dirname( __FILE__ ) ) );
 	}
 
 	/**

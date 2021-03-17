@@ -96,7 +96,7 @@ class Import_Agents extends \IDX\Admin\Rest_Controller {
 		$agent_importer = new \IMPress_Agents_Import();
 		$agent_importer->impress_agents_idx_create_post( $selected_ids );
 
-		return rest_ensure_response( null );
+		return new \WP_REST_Response( null, 204 );
 	}
 
 	/**
