@@ -141,11 +141,42 @@ class Rest_Controller {
 		}
 		return $error;
 	}
+
+	/**
+	 * Maps object keys in an array for REST output.
+	 * TODO: Move to rest controller.
+	 *
+	 * @param array   $objects Array of objects or associative arrays.
+	 * @param array   $name_map Associative array of key pairs to map to.
+	 * @param boolean $subset Only keep the keys included in the $name_map.
+	 * @return array Updated array of associative arrays.
+	 */
+	protected function map_keys( $objects, $name_map, $subset = false ) {
+		return array_map(
+			function( $collection ) use ( &$name_map, &$subset ) {
+				$collection = (array) $collection;
+				$new_obj    = [];
+				foreach ( $name_map as $old => $new ) {
+					$new_obj[ $new ] = $collection[ $old ];
+					if ( isset( $collection[ $old ] ) ) {
+						unset( $collection[ $old ] );
+					}
+				}
+				if ( $subset ) {
+					return $new_obj;
+				} else {
+					return array_merge( $collection, $new_obj );
+				}
+			},
+			$objects
+		);
+	}
 }
 
-new Apis\Enable_Addons();
-new Apis\Settings_General();
 new Apis\Agents_Settings();
+new Apis\Enable_Addons();
 new Apis\Import_Agents();
-new Apis\Listings_Settings();
 new Apis\Listings_Advanced_Settings();
+new Apis\Listings_Settings();
+new Apis\Omnibar_Settings();
+new Apis\Settings_General();
