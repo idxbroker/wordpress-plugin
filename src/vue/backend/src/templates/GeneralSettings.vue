@@ -28,10 +28,10 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="$emit('form-field-update',{ key: 'reCAPTCHA', value: !reCAPTCHA })"
                     :active="reCAPTCHA"
                     :disabled="formDisabled"
                     :label="toggleLabel"
+                    @toggle="$emit('form-field-update',{ key: 'reCAPTCHA', value: !reCAPTCHA })"
                 ></idx-toggle-slider>
             </idx-block>
         </idx-form-group>
@@ -48,6 +48,23 @@
                 @selected-item="$emit('form-field-update', { key: 'updateFrequency', value: $event.value })"
             />
         </idx-form-group>
+        <idx-form-group>
+            <idx-block className="form-content__label">
+                <idx-block tag="h2" className="form-content__title">Install Information Data Collection</idx-block>
+                <p>IDX Broker collects general install information to help improve our WordPress plugins.</p>
+            </idx-block>
+            <idx-block className="form-content__toggle">
+                {{ dataCollectionLabel }}
+                <idx-toggle-slider
+                    uncheckedState="No"
+                    checkedState="Yes"
+                    :active="dataCollection"
+                    :disabled="formDisabled"
+                    :label="dataCollectionLabel"
+                    @toggle="$emit('form-field-update',{ key: 'dataCollection', value: !dataCollection })"
+                ></idx-toggle-slider>
+            </idx-block>
+        </idx-form-group>
     </idx-block>
 </template>
 <script>
@@ -55,6 +72,10 @@
 export default {
     name: 'GeneralSettings',
     props: {
+        dataCollection: {
+            type: Boolean,
+            default: true
+        },
         reCAPTCHA: {
             type: Boolean,
             default: false
@@ -74,6 +95,7 @@ export default {
     },
     created () {
         this.toggleLabel = 'Enable Google reCAPTCHA'
+        this.dataCollectionLabel = 'Opt-Out'
         this.updateFrequencyOptions = [
             { value: 'five_minutes', label: 'Every 5 Minutes' },
             { value: 'hourly', label: 'Hourly' },
