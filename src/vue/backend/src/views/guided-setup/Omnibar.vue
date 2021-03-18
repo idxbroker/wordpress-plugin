@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler('omnibar')">
         <template v-slot:controls>
             <omnibarForm
                 :formDisabled="formDisabled"
@@ -42,24 +42,19 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps,
+            isValid: state => state.general.isValid
         })
     },
     methods: {
         ...mapActions({
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
-        }),
-        async goContinue () {
-            this.formDisabled = true
-            // await this.saveOmnibarSettings()
-            this.formDisabled = false
-            // to do: save handler
-        }
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
+        })
     },
     created () {
         this.module = 'omnibar'
         this.cardTitle = 'IMPress Omnibar Search'
-        this.continuePath = '/guided-setup/listings'
+        this.continuePath = this.isValid ? '/guided-setup/listings' : '/guided-setup/confirmation'
         this.skipPath = '/guided-setup/listings'
         this.links = [
             {
