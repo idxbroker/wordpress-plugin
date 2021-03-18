@@ -40,7 +40,7 @@ class Omnibar_Settings {
 		} else {
 			echo '<div class="loading" style="margin-top: 2rem; font-size: 1rem;">Loading Omnibar Settings...</div><div class="idx-loader"></div>';
 			// Tell JS to reload page when ready.
-			wp_localize_script( 'idx-omnibar-settings', 'loadOmnibarView', 'true' );
+			wp_localize_script( 'idx-omnibar-settings', 'loadOmnibarView', [ 'true' ] );
 		}
 		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
 		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
