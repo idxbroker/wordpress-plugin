@@ -12,11 +12,6 @@ function wp_listings_init() {
 
 	global $_wp_listings, $_wp_listings_taxonomies, $_wp_listings_templates;
 
-	define( 'BASE_PLUGINS_DIR', plugin_dir_path( __DIR__ ) );
-	define( 'WP_LISTINGS_URL', plugin_dir_url( __FILE__ ) );
-	define( 'WP_LISTINGS_DIR', plugin_dir_path( __FILE__ ) );
-	define( 'WP_LISTINGS_VERSION', '2.4.1' );
-
 	/** Load textdomain for translation */
 	load_plugin_textdomain( 'wp-listings', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 
@@ -123,7 +118,6 @@ function wp_listings_init() {
 				'impress-gmb-settings',
 				'impressGmbAdmin',
 				[
-					'wp_resource_url'                  => WP_LISTINGS_URL,
 					'nonce-gmb-post-now'               => wp_create_nonce( 'impress_gmb_post_now_nonce' ),
 					'nonce-gmb-clear-scheduled-posts'  => wp_create_nonce( 'wpl_clear_scheduled_posts_nonce' ),
 					'nonce-gmb-get-listing-posts'      => wp_create_nonce( 'impress_gmb_get_listing_posts_nonce' ),
