@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="saveHandler">
+        @continue="saveHandler('listingsIdx', 'listingsSettings', 'idx')">
         <template v-slot:controls>
             <ListingsIdx
                 :formDisabled="formDisabled"
@@ -41,31 +41,16 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
-        }),
-        async saveHandler () {
-            this.formDisabled = true
-            if (this.formChanges) {
-                const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'idx')
-                this.formDisabled = false
-                if (status === 204) {
-                    this.saveAction()
-                    this.$router.push({ path: this.continuePath })
-                } else {
-                    // To do: user feedback
-                }
-            } else {
-                this.$router.push({ path: this.continuePath })
-            }
-        }
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
+        })
     },
     async created () {
-        this.module = 'listingsSettings'
+        this.module = 'listingsIdx'
         this.cardTitle = 'Configure IMPress Listings'
         this.continuePath = '/guided-setup/listings/advanced'
         this.skipPath = '/guided-setup/agents'

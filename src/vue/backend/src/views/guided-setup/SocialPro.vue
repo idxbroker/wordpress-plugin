@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="enablePlugin">
         <template v-slot:description>
             <p>A sentence or two about Social Pro and general interest articles. Lorem Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id sem quis dui ornare fermentum ac non felis.</p>
         </template>
@@ -31,6 +31,9 @@
                         ></idx-toggle-slider>
                     </idx-block>
                 </idx-form-group>
+                <idx-block v-if="showError" className="form-content__error">
+                    We're experiencing a problem, please try again.
+                </idx-block>
             </idx-block>
         </template>
     </GuidedSetupContentCard>
@@ -52,33 +55,45 @@ export default {
     },
     data () {
         return {
+            showError: false,
             formDisabled: false
         }
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
-        })
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
+        }),
+        continuePath () {
+            return this.localStateValues.enabled ? '/guided-setup/social-pro/configure' : '/guided-setup/confirmation'
+        }
     },
     methods: {
         ...mapActions({
-            setItem: 'socialPro/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            enableSocialProPlugin: 'socialPro/enableSocialProPlugin'
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
         }),
-        async goContinue () {
+        async enablePlugin () {
+            this.showError = false
             this.formDisabled = true
-            await this.enableSocialProPlugin()
-            this.saveAction()
-            this.formDisabled = false
-            this.$router.push({ path: this.continuePath })
+            // There is no endpoint, so this is to-do
+            if (this.formIsUpdated) {
+                const status = 204 // endpoint call here
+                this.formDisabled = false
+                if (status === 204) {
+                    this.saveAction()
+                    this.$router.push({ path: this.continuePath })
+                } else {
+                    this.showError = true
+                    this.formChanges = {}
+                }
+            } else {
+                this.$router.push({ path: this.continuePath })
+            }
         }
     },
     created () {
         this.module = 'socialPro'
         this.cardTitle = 'Auto Publish & Syndicate with Social Pro'
         this.activateLabel = 'Enable General Interest Article Syndication'
-        this.continuePath = '/guided-setup/social-pro/configure'
         this.skipPath = '/guided-setup/confirmation'
         this.links = [
             {

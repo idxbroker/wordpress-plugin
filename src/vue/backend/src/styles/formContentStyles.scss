@@ -46,6 +46,9 @@
             margin-bottom: 0;
         }
     }
+    &__error {
+        color: $red;
+    }
     .form-control,
     input {
         border: 1px solid $gray-250;

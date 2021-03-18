@@ -1,10 +1,14 @@
 <?php
-/**
- * This file contains the methods for interacting with the IDX API
- * to import agent data
- */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+require_once IMPRESS_IDX_DIR . 'add-ons/utilities/background-processing/impress-agents-background-process.php';
+
+/**
+ * IMPress Agents Import
+ */
 class IMPress_Agents_Import {
 
 	/**
@@ -39,6 +43,7 @@ class IMPress_Agents_Import {
 			[
 				'post_type'      => $agent_post_slug,
 				'posts_per_page' => -1,
+				'post_status'    => [ 'publish', 'pending', 'draft', 'private' ],
 			]
 		);
 
@@ -51,30 +56,30 @@ class IMPress_Agents_Import {
 			}
 		}
 
+		$background_process = new IMPress_Agents_Import_Process();
+
 		// Loop through agents and import data.
 		foreach ( $agents['agent'] as $agent ) {
-
 			if ( in_array( $agent['agentID'], $imported_agents ) || ! in_array( $agent['agentID'], $agent_ids ) ) {
 				continue;
 			}
 
-			$opts = [
+			$import_data = [];
+
+			$import_data['post_data'] = [
 				'post_content' => $agent['bioDetails'],
 				'post_title'   => $agent['agentDisplayName'],
 				'post_status'  => 'publish',
-				'post_type'    => 'employee',
+				'post_type'    => $agent_post_slug,
 			];
 
-			$agent_post = wp_insert_post( $opts, true );
+			$import_data['meta_data'] = $agent;
 
-			if ( is_wp_error( $agent_post ) ) {
-				// Continue on to next agent if post creation failed.
-				continue;
-			} elseif ( $agent_post ) {
-				self::impress_agents_idx_insert_post_meta( $agent_post, $agent );
-			}
+			$background_process->push_to_queue( $import_data );
 
 		}
+
+		$background_process->save()->dispatch();
 	}
 
 	/**
@@ -119,8 +124,8 @@ class IMPress_Agents_Import {
 		}
 		// Loop through agents and update any that are already imported.
 		foreach ( $agents['agent'] as $agent ) {
-			if ( ! empty( $imported_agents[ agent['agentID'] ] ) ) {
-				self::impress_agents_idx_insert_post_meta( $imported_agents[ agent['agentID'] ], $agent, true, false );
+			if ( ! empty( $imported_agents[ $agent['agentID'] ] ) ) {
+				self::impress_agents_idx_insert_post_meta( $imported_agents[ $agent['agentID'] ], $agent, true, false );
 			}
 		}
 
@@ -247,7 +252,7 @@ class IMPress_Agents_Import {
 					'post_mime_type' => $wp_filetype['type'],
 					'post_title'     => $idx_agent_data['agentDisplayName'] . ' - ' . $idx_agent_data['agentID'],
 					'post_content'   => '',
-					'post_status'    => 'inherit'
+					'post_status'    => 'inherit',
 				];
 
 				// Create the attachment.

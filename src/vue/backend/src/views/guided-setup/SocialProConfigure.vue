@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler('socialPro')">
         <template v-slot:controls>
             <socialProForm
                 :formDisabled="formDisabled"
@@ -39,22 +39,13 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            setItem: 'socialPro/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveConfigureSocialProSettings: 'socialPro/saveConfigureSocialProSettings'
-        }),
-        async goContinue () {
-            this.formDisabled = true
-            await this.saveConfigureSocialProSettings()
-            this.saveAction()
-            this.formDisabled = false
-            this.$router.push({ path: this.continuePath })
-        }
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
+        })
     },
     created () {
         this.module = 'socialPro'

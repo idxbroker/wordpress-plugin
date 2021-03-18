@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="saveHandler">
+        @continue="enablePlugin">
         <template v-slot:description>
             <p><strong>This is optional.</strong> A sentence or two about why you should install IMPress Listings to your WordPress site. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
@@ -31,6 +31,9 @@
                         ></idx-toggle-slider>
                     </idx-block>
                 </idx-form-group>
+                <idx-block v-if="showError" className="form-content__error">
+                    We're experiencing a problem, please try again.
+                </idx-block>
             </idx-block>
         </template>
     </GuidedSetupContentCard>
@@ -54,12 +57,13 @@ export default {
     },
     data () {
         return {
-            formDisabled: false
+            formDisabled: false,
+            showError: false
         }
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
         }),
         continuePath () {
             return this.localStateValues.enabled ? '/guided-setup/agents/configure' : this.skipPath
@@ -67,9 +71,10 @@ export default {
     },
     methods: {
         ...mapActions({
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
         }),
-        async saveHandler () {
+        async enablePlugin () {
+            this.showError = false
             this.formDisabled = true
             if (this.formIsUpdated) {
                 const { status } = await this.agentSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
@@ -78,7 +83,8 @@ export default {
                     this.saveAction()
                     this.$router.push({ path: this.continuePath })
                 } else {
-                    // To do: user feedback
+                    this.formChanges = {}
+                    this.showError = true
                 }
             } else {
                 this.$router.push({ path: this.continuePath })

@@ -14,6 +14,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import ListingsGeneral from '@/templates/impressListingsGeneralContent'
 import pageGuard from '@/mixins/pageGuard'
 import { PRODUCT_REFS } from '@/data/productTerms'
@@ -30,6 +31,11 @@ export default {
             formDisabled: false
         }
     },
+    computed: {
+        ...mapState({
+            enabled: state => state.listingsGeneral.enabled
+        })
+    },
     methods: {
         async saveHandler () {
             this.formDisabled = true
@@ -42,9 +48,11 @@ export default {
         }
     },
     async created () {
-        this.module = 'listingsSettings'
-        const { data } = await this.listingsSettingsRepository.get('general')
-        this.updateState(data)
+        this.module = 'listingsGeneral'
+        if (this.enabled) {
+            const { data } = await this.listingsSettingsRepository.get('general')
+            this.updateState(data)
+        }
     }
 }
 </script>

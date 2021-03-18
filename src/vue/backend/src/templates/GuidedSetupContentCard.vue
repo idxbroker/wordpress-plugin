@@ -1,5 +1,5 @@
 <template>
-    <idx-dialog :show="showDialog" @dismiss="closeDialog" customClass="gs-dialog">
+    <idx-dialog :show="true" @dismiss="closeDialog" customClass="gs-dialog">
         <template v-slot:header>
             <idx-block className="dialog-header">
                 <idx-block className="dialog-header__title">{{ title }}</idx-block>
@@ -21,6 +21,7 @@
 
 <script>
 import ContentCard from '@/components/ContentCard.vue'
+import { mapActions, mapGetters } from 'vuex'
 export default {
     name: 'GuidedSetupContentCard',
     components: {
@@ -42,17 +43,33 @@ export default {
     },
     data () {
         return {
-            showDialog: true,
             title: 'IMPress for IDX Broker Setup'
         }
     },
+    computed: {
+        ...mapGetters({
+            changedModules: 'guidedSetup/changedModules'
+        })
+    },
     methods: {
-        openDialog () {
-            this.showDialog = true
-        },
+        ...mapActions({
+            setItem: 'guidedSetup/setItem'
+        }),
         closeDialog () {
+            for (let x = 0; x < this.changedModules.length; x++) {
+                this.setItem({
+                    key: this.changedModules[x].module,
+                    value: {
+                        changes: {},
+                        module: this.changedModules[x].module,
+                        path: this.changedModules[x].path
+                    }
+                })
+            }
             this.showDialog = false
-            this.$router.push({ path: '/settings/general' })
+            this.$router.push({ path: '/settings/general' }, () => {
+                location.reload()
+            })
         }
     }
 }
