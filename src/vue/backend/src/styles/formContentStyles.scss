@@ -87,6 +87,14 @@
 .btn.btn-link:hover {
     color: $gray-875;
 }
+.warning__link {
+    color: $cyan;
+    cursor: pointer;
+    &:hover {
+        color: darken($cyan, 10%);
+        text-decoration: underline;
+    }
+}
 .form-content + .btn.btn-primary {
     margin-top: var(--space-form-section);
 }
