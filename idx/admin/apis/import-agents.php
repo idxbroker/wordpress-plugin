@@ -69,11 +69,19 @@ class Import_Agents extends \IDX\Admin\Rest_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get() {
+		if ( get_site_transient( 'wp_background-processing-agents_process_lock' ) ) {
+			return rest_ensure_response(
+				[
+					'inProgress' => true,
+				]
+			);
+		}
 
 		$agent_import_lists = $this->generate_agent_import_lists();
 
 		return rest_ensure_response(
 			[
+				'inProgress' => false,
 				'imported'   => array_values( $agent_import_lists['imported'] ),
 				'unimported' => array_values( $agent_import_lists['unimported'] ),
 			]

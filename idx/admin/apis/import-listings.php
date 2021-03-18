@@ -69,9 +69,7 @@ class Import_Listings extends \IDX\Admin\Rest_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get() {
-		$import_in_progress = get_option( 'wp_listings_import_progress', false );
-
-		if ( $import_in_progress ) {
+		if ( get_site_transient( 'wp_background-processing-listings_process_lock' ) ) {
 			return rest_ensure_response(
 				[
 					'inProgress' => true,
