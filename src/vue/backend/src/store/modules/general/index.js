@@ -1,6 +1,6 @@
 const state = {
     apiKey: '',
-    isValid: false,
+    isValid: true,
     reCAPTCHA: false,
     updateFrequency: 'five_minutes',
     wrapperName: ''

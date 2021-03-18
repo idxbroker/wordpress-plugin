@@ -1,6 +1,6 @@
 /* eslint-disable object-property-newline */
 import { applyIdToArray } from '@utilityPath/GenerateId.js'
-import { AGENTS, API_KEY, LISTINGS, SOCIAL_PRO } from '@/data/productTerms'
+import { API_KEY, LISTINGS, SOCIAL_PRO } from '@/data/productTerms'
 
 const _navLinks = [
     {
@@ -13,10 +13,9 @@ const _navLinks = [
         label: 'Import',
         icon: 'cloud',
         collapsed: true,
-        requires: [AGENTS, LISTINGS],
         routes: [
-            { label: 'Agents', link: '/import/agents/', requires: [AGENTS] },
-            { label: 'Listings', link: '/import/listings/', requires: [LISTINGS] }
+            { label: 'Agents', link: '/import/agents/' },
+            { label: 'Listings', link: '/import/listings/' }
         ]
     },
     {

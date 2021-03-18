@@ -1,4 +1,4 @@
-import { LISTINGS, AGENTS, API_KEY } from '@/data/productTerms'
+import { LISTINGS } from '@/data/productTerms'
 /**
  * Route Meta
  * Uses:
@@ -40,21 +40,13 @@ export default {
                 path: '',
                 name: 'Unimported IDX Listings',
                 label: 'Unimported',
-                component: () => import('@/views/children/unimportedListings'),
-                meta: {
-                    requires: [LISTINGS, API_KEY],
-                    strict: true
-                }
+                component: () => import('@/views/children/unimportedListings')
             },
             {
                 path: 'imported',
                 name: 'Imported IDX Listings',
                 label: 'Imported',
-                component: () => import('@/views/children/importedListings'),
-                meta: {
-                    requires: [LISTINGS, API_KEY],
-                    strict: true
-                }
+                component: () => import('@/views/children/importedListings')
             }
         ],
         agents: [
@@ -62,21 +54,13 @@ export default {
                 path: '',
                 name: 'Unimported IDX Agents',
                 label: 'Unimported',
-                component: () => import('@/views/children/unimportedAgents'),
-                meta: {
-                    requires: [AGENTS, API_KEY],
-                    strict: true
-                }
+                component: () => import('@/views/children/unimportedAgents')
             },
             {
                 path: 'imported',
                 name: 'Imported IDX Agents',
                 label: 'Imported',
-                component: () => import('@/views/children/importedAgents'),
-                meta: {
-                    requires: [AGENTS, API_KEY],
-                    strict: true
-                }
+                component: () => import('@/views/children/importedAgents')
             }
         ]
     }

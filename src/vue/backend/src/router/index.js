@@ -26,8 +26,7 @@ const routes = [
                         children: routeMeta.imports.listings,
                         props: {
                             parentRoute: '/import/listings',
-                            tabbedRoutes: routeMeta.imports.listings,
-                            requires: [AGENTS, LISTINGS, API_KEY]
+                            tabbedRoutes: routeMeta.imports.listings
                         }
                     },
                     {
