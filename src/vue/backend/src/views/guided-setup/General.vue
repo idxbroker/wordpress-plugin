@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="saveHandler"
+        @continue="saveHandler('general')"
     >
         <template v-slot:controls>
             <GeneralSettings
@@ -21,12 +21,13 @@
 import { mapState, mapActions } from 'vuex'
 import { PRODUCT_REFS } from '@/data/productTerms'
 import pageGuard from '@/mixins/pageGuard'
+import guidedSetupMixin from '@/mixins/guidedSetup'
 import GeneralSettings from '@/templates/GeneralSettings.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
     name: 'guided-setup-general',
     inject: [PRODUCT_REFS.general.repo],
-    mixins: [pageGuard],
+    mixins: [pageGuard, guidedSetupMixin],
     components: {
         GeneralSettings,
         GuidedSetupContentCard
@@ -38,39 +39,20 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps,
+            apiKeyIsValid: state => state.general.isValid
         })
     },
     methods: {
         ...mapActions({
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
-        }),
-        goBackStep: function () {
-            // to-do: go back in history
-            this.$router.go(-1)
-        },
-        goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/listings' })
-        },
-        async saveHandler () {
-            this.formDisabled = true
-            if (this.formIsUpdated) {
-                const { status } = await this.generalRepository.post(this.formChanges)
-                this.formDisabled = false
-                if (status === 200) {
-                    this.saveAction()
-                    this.$router.push({ path: '/guided-setup/connect/omnibar' })
-                } else {
-                    // To Do: form error handler
-                }
-            } else {
-                this.$router.push({ path: '/guided-setup/connect/omnibar' })
-            }
-        }
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
+        })
     },
     async created () {
         this.module = 'general'
         this.cardTitle = 'General Settings'
+        this.skipPath = this.apiKeyIsValid ? '/guided-setup/confirmation' : '/guided-setup/listings'
+        this.continuePath = '/guided-setup/connect/omnibar'
         this.links = [
             {
                 text: 'Dynamic Wrappers',

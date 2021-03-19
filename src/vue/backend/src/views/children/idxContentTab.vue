@@ -15,6 +15,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import { PRODUCT_REFS } from '@/data/productTerms'
 import impressListingsIdxContent from '@/templates/impressListingsIdxContent.vue'
 import pageGuard from '@/mixins/pageGuard'
@@ -31,6 +32,11 @@ export default {
             formDisabled: false
         }
     },
+    computed: {
+        ...mapState({
+            enabled: state => state.listingsGeneral.enabled
+        })
+    },
     methods: {
         async saveHandler () {
             this.formDisabled = true
@@ -45,9 +51,11 @@ export default {
         }
     },
     async created () {
-        this.module = 'listingsSettings'
-        const { data } = await this.listingsSettingsRepository.get('idx')
-        this.updateState(data)
+        this.module = 'listingsIdx'
+        if (this.enabled) {
+            const { data } = await this.listingsSettingsRepository.get('idx')
+            this.updateState(data)
+        }
     }
 }
 </script>

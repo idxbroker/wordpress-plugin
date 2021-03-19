@@ -4,11 +4,13 @@ import agentSettings from './modules/agentSettings'
 import alerts from './modules/alerts'
 import general from './modules/general'
 import importContent from './modules/importContent'
-import listingsSettings from './modules/listingsSettings'
+import listingsGeneral from './modules/listingsGeneral'
+import listingsIdx from './modules/listingsIdx'
+import listingsAdvanced from './modules/listingsAdvanced'
 import omnibar from './modules/omnibar'
 import socialPro from './modules/socialPro'
 import routes from './modules/routes'
-import progressStepper from './modules/progressStepper'
+import guidedSetup from './modules/guidedSetup'
 
 // Common actions
 import commonActions from './common/actions'
@@ -20,11 +22,13 @@ const modules = {
     alerts,
     general,
     importContent,
-    listingsSettings,
+    listingsGeneral,
+    listingsAdvanced,
+    listingsIdx,
     omnibar,
     socialPro,
     routes,
-    progressStepper
+    guidedSetup
 }
 const applyCommonPieces = (storeModule) => {
     storeModule.actions = { ...commonActions, ...storeModule.actions }
