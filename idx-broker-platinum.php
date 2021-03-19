@@ -43,9 +43,13 @@ class Idx_Broker_Plugin {
 		}
 
 		// IMPress Listings.
-		include_once 'add-ons/listings/plugin.php';
+		if ( boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
+			include_once 'add-ons/listings/plugin.php';
+		}
 		// IMPress Agents.
-		include_once 'add-ons/agents/plugin.php';
+		if ( boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) ) {
+			include_once 'add-ons/agents/plugin.php';
+		}
 	}
 
 	/**
