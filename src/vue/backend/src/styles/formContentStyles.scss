@@ -46,6 +46,9 @@
             margin-bottom: 0;
         }
     }
+    &__error {
+        color: $red;
+    }
     .form-control,
     input {
         border: 1px solid $gray-250;
@@ -86,6 +89,14 @@
 .btn.btn-link,
 .btn.btn-link:hover {
     color: $gray-875;
+}
+.warning__link {
+    color: $cyan;
+    cursor: pointer;
+    &:hover {
+        color: darken($cyan, 10%);
+        text-decoration: underline;
+    }
 }
 .form-content + .btn.btn-primary {
     margin-top: var(--space-form-section);

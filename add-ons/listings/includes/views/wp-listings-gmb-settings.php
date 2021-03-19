@@ -20,7 +20,6 @@ if ( empty( $google_my_business_options['refresh_token'] ) ) {
 		'impress-gmb-login',
 		'impressGmbAdmin',
 		[
-			'wp_resource_url'          => WP_LISTINGS_URL,
 			'nonce-gmb-initial-tokens' => wp_create_nonce( 'wpl_gmb_set_initial_tokens_nonce' ),
 		]
 	);

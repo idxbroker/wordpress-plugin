@@ -31,12 +31,13 @@
 import { mapState, mapActions } from 'vuex'
 import { PRODUCT_REFS } from '@/data/productTerms'
 import pageGuard from '@/mixins/pageGuard'
+import guidedSetup from '@/mixins/guidedSetup'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import APIKey from '@/components/APIKey.vue'
 export default {
     name: 'guided-setup-api',
     inject: [PRODUCT_REFS.general.repo],
-    mixins: [pageGuard],
+    mixins: [pageGuard, guidedSetup],
     components: {
         APIKey,
         GuidedSetupContentCard
@@ -51,20 +52,16 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
-        })
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
+        }),
+        skipPath () {
+            return this.error ? '/guided-setup/confirmation' : '/guided-setup/listings'
+        }
     },
     methods: {
         ...mapActions({
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate'
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
         }),
-        goBackStep () {
-            // to-do: go back in history
-            this.$router.go(-1)
-        },
-        goSkipStep () {
-            this.$router.push({ path: '/guided-setup/listings' })
-        },
         continue () {
             this.success = true
             this.cardTitle = 'Account Connected!'
@@ -74,12 +71,14 @@ export default {
         },
         async saveHandler () {
             this.formDisabled = true
-            // To Do: user facing error checking
+            this.error = false
+            this.success = false
             if (this.formIsUpdated) {
                 try {
                     await this.generalRepository.post(this.formChanges)
                     this.formDisabled = false
                     this.saveAction()
+                    this.$store.dispatch(`${this.module}/setItem`, { key: 'isValid', value: true })
                     this.continue()
                 } catch (error) {
                     this.formDisabled = false
@@ -87,7 +86,7 @@ export default {
                     this.success = false
                 }
             } else {
-                this.continue()
+                this.$router.push({ path: '/guided-setup/connect/general' })
             }
         }
     },

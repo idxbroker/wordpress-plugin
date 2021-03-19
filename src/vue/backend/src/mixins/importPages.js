@@ -5,6 +5,17 @@ export default {
             itemsSelected: []
         }
     },
+    watch: {
+        clearSelections (newVal, oldVal) {
+            if (newVal) {
+                const checkboxList = this.$refs['card-checkbox']
+                for (let i = 0; i < checkboxList.length; i++) {
+                    checkboxList[i].$children[0].changeActions(this.masterList[i], false)
+                }
+                this.selected = false
+            }
+        }
+    },
     methods: {
         updateSelected (e) {
             const inArray = this.itemsSelected.indexOf(e[1])
@@ -16,8 +27,8 @@ export default {
                 this.itemsSelected.splice(inArray, 1)
             }
         },
-        selectAll (reference, masterList) {
-            const checkboxList = this.$refs[reference]
+        selectAll (masterList) {
+            const checkboxList = this.$refs['card-checkbox']
             for (let i = 0; i < checkboxList.length; i++) {
                 checkboxList[i].$children[0].changeActions(masterList[i], !this.selected)
             }

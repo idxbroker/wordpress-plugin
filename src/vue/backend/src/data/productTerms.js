@@ -8,18 +8,18 @@ const SUBSCRIBED = 'subscribed'
 export const PRODUCT_REFS = {
     general: {
         module: 'general',
-        term: 'apiKey',
-        termPath: '',
+        term: 'isValid',
+        termPath: 'apiKeyIsValid',
         get repo () {
             return `${this.module}Repository`
         }
     },
     listingsSettings: {
-        module: 'listingsSettings',
+        module: 'listingsGeneral',
         term: ENABLED,
         termPath: 'enable',
         get repo () {
-            return `${this.module}Repository`
+            return 'listingsSettingsRepository'
         }
     },
     agentSettings: {
@@ -37,10 +37,17 @@ export const PRODUCT_REFS = {
         get repo () {
             return `${this.module}Repository`
         }
+    },
+    importContent: {
+        module: 'importContent',
+        termPath: '',
+        get repo () {
+            return `${this.module}Repository`
+        }
     }
 }
 /* Todo: Clean this up. */
 export const SOCIAL_PRO = 'socialPro.subscribed'
 export const LISTINGS = 'listingsSettings.enabled'
 export const AGENTS = 'agentSettings.enabled'
-export const API_KEY = 'general.apiKey'
+export const API_KEY = 'general.isValid'
