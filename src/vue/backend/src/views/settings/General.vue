@@ -31,6 +31,7 @@ import RelatedLinks from '@/components/RelatedLinks.vue'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
 export default {
+    name: 'standalone-general-settings',
     inject: [PRODUCT_REFS.general.repo],
     mixins: [pageGuard],
     components: {

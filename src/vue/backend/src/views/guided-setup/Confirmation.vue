@@ -35,7 +35,8 @@ export default {
         PRODUCT_REFS.general.repo,
         PRODUCT_REFS.listingsSettings.repo,
         PRODUCT_REFS.agentSettings.repo,
-        PRODUCT_REFS.socialPro.repo
+        PRODUCT_REFS.socialPro.repo,
+        PRODUCT_REFS.omnibar.repo
     ],
     components: {
         SvgIcon

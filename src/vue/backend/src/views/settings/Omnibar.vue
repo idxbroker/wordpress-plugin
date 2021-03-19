@@ -20,13 +20,15 @@
     </TwoColumn>
 </template>
 <script>
+import { PRODUCT_REFS } from '@/data/productTerms'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
 import omnibarMixin from '@/mixins/omnibarMixin'
 import OmnibarForm from '@/templates/omnibarForm.vue'
 import RelatedLinks from '@/components/RelatedLinks.vue'
 export default {
-    name: 'omnibar',
+    name: 'standalone-omnibar-settings',
+    inject: [PRODUCT_REFS.omnibar.repo],
     mixins: [pageGuard, omnibarMixin],
     components: {
         TwoColumn,
@@ -39,11 +41,27 @@ export default {
         }
     },
     methods: {
-        saveHandler () {
-            // To Do: api connection
+        async saveHandler () {
+            // To Do: user facing error checking
+            if (this.formIsUpdated) {
+                this.formDisabled = true
+                try {
+                    await this.omnibarRepository.post(this.localStateValues)
+                    this.formDisabled = false
+                    this.saveAction()
+                } catch (error) {
+                    this.formDisabled = false
+                    if (error.response.status === 401) {
+                    } else {
+                        // full form error response
+                    }
+                }
+            } else {
+                // show save changes banner
+            }
         }
     },
-    created () {
+    async created () {
         this.module = 'omnibar'
         this.relatedLinks = [
             {
@@ -63,6 +81,12 @@ export default {
                 href: '#signUp'
             }
         ]
+        this.formDisabled = true
+        const { data } = await this.omnibarRepository.get()
+        for (const key in data) {
+            this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
+        }
+        this.formDisabled = false
     }
 }
 </script>

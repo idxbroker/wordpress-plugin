@@ -7,7 +7,7 @@ const state = {
     postalCodeSelected: '',
     defaultPropertyTypeSelected: '',
     mlsMembership: [],
-    autofillMLS: '',
+    autofillMLSSelected: [],
     customFieldsSelected: [],
     customFieldsOptions: [],
     customPlaceholder: 'City, Postal Code, Address, or Listing ID',

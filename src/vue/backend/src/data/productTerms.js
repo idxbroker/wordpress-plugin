@@ -44,6 +44,13 @@ export const PRODUCT_REFS = {
         get repo () {
             return `${this.module}Repository`
         }
+    },
+    omnibar: {
+        module: 'omnibar',
+        termPath: '',
+        get repo () {
+            return `${this.module}Repository`
+        }
     }
 }
 /* Todo: Clean this up. */

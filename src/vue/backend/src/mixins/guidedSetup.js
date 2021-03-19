@@ -18,7 +18,7 @@ export default {
                 this.$store.dispatch('guidedSetup/setItem', {
                     key: moduleKey,
                     value: {
-                        changes: this.formChanges,
+                        changes: moduleKey === 'omnibar' ? this.localStateValues : this.formChanges,
                         module: moduleName !== '' ? moduleName : this.module,
                         path
                     }
