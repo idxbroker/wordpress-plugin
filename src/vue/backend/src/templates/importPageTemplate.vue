@@ -38,12 +38,12 @@
 </template>
 <script>
 import BulkAction from '@/components/BulkAction.vue'
-import importPages from '@/mixins/importPages'
+import importTemplate from '@/mixins/importTemplate'
 import listingsCard from '@/components/listingsCard'
 import agentCard from '@/components/agentCard'
 export default {
     name: 'imported-templated',
-    mixins: [importPages],
+    mixins: [importTemplate],
     components: {
         BulkAction,
         listingsCard,
