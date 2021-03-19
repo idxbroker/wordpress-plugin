@@ -14,67 +14,23 @@ namespace IDX\Admin\Apis;
  */
 class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	/**
-	 * Registers routes.
+	 * Registers the route $prefix/$addon/enable and sets the wp_option idx_broker_$addon_enabled.
+	 * Converts kebab case (used in url) to snake case for wp_options.
 	 */
 	public function __construct() {
-		register_rest_route(
-			$this->namespace,
-			$this->route_name( 'settings/agents/enable' ),
-			[
-				'methods'             => 'GET',
-				'callback'            => [ $this, 'agents_get' ],
-				'permission_callback' => [ $this, 'admin_check' ],
-			]
-		);
-
-		register_rest_route(
-			$this->namespace,
-			$this->route_name( 'settings/agents/enable' ),
-			[
-				'methods'  => 'POST',
-				'callback' => [ $this, 'agents_post' ],
-				'args'     => [
-					'enabled' => [
-						'type'     => 'boolean',
-						'required' => true,
-					],
-				],
-			]
-		);
-
-		register_rest_route(
-			$this->namespace,
-			$this->route_name( 'settings/listings/enable' ),
-			[
-				'methods'             => 'GET',
-				'callback'            => [ $this, 'listings_get' ],
-				'permission_callback' => [ $this, 'admin_check' ],
-			]
-		);
-
-		register_rest_route(
-			$this->namespace,
-			$this->route_name( 'settings/listings/enable' ),
-			[
-				'methods'  => 'POST',
-				'callback' => [ $this, 'listings_post' ],
-				'args'     => [
-					'enabled' => [
-						'type'     => 'boolean',
-						'required' => true,
-					],
-				],
-			]
-		);
+		$this->register_route( 'agents' );
+		$this->register_route( 'listings' );
+		$this->register_route( 'social-pro' );
 	}
 
 	/**
-	 * IMPress Agents enabled GET request
+	 * Check add-on enable status.
 	 *
+	 * @param string $option_name Add-on wp_option enable flag.
 	 * @return WP_REST_Response
 	 */
-	public function agents_get() {
-		$enabled = boolval( get_option( 'idx_broker_agents_enabled', 0 ) );
+	public function get( $option_name ) {
+		$enabled = boolval( get_option( $option_name, 0 ) );
 
 		return rest_ensure_response(
 			[
@@ -84,46 +40,59 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	}
 
 	/**
-	 * IMPress Agents enabled POST request
+	 * Enable/Disable add-on POST.
 	 *
+	 * @param string $option_name Add-on to enable/disable.
 	 * @param string $payload To enable to disable.
 	 * @return WP_REST_Response
 	 */
-	public function agents_post( $payload ) {
-		$enabled = (int) filter_var( $payload['enabled'], FILTER_VALIDATE_BOOLEAN );
+	public function post( $option_name, $payload ) {
+		$enabled = (int) filter_var( $payload, FILTER_VALIDATE_BOOLEAN );
 
-		update_option( 'idx_broker_agents_enabled', $enabled );
+		update_option( $option_name, $enabled );
 
 		return new \WP_REST_Response( null, 204 );
 	}
 
 	/**
-	 * IMPress Listings enabled GET request
+	 * Register add-on routes.
 	 *
-	 * @return WP_REST_Response
+	 * @param string $addon Add-on name.
+	 * @param string $prefix Route prefix.
+	 * @return void
 	 */
-	public function listings_get() {
-		$enabled = boolval( get_option( 'idx_broker_listings_enabled', 0 ) );
+	private function register_route( $addon, $prefix = 'settings' ) {
+		$wp_option_name = 'idx_broker_' . $addon . '_enabled';
 
-		return rest_ensure_response(
+		register_rest_route(
+			$this->namespace,
+			$this->route_name( "$prefix/$addon/enable" ),
 			[
-				'enabled' => $enabled,
+				'methods'             => 'GET',
+				'callback'            => function () use ( &$wp_option_name ) {
+					return $this->get( $wp_option_name );
+				},
+				'permission_callback' => [ $this, 'admin_check' ],
 			]
 		);
-	}
 
-	/**
-	 * IMPress Listings enabled POST request
-	 *
-	 * @param string $payload To enable to disable.
-	 * @return WP_REST_Response
-	 */
-	public function listings_post( $payload ) {
-		$enabled = (int) filter_var( $payload['enabled'], FILTER_VALIDATE_BOOLEAN );
-
-		update_option( 'idx_broker_listings_enabled', $enabled );
-
-		return new \WP_REST_Response( null, 204 );
+		register_rest_route(
+			$this->namespace,
+			$this->route_name( "settings/$addon/enable" ),
+			[
+				'methods'             => 'POST',
+				'callback'            => function ( $payload ) use ( &$wp_option_name ) {
+					return $this->post( $wp_option_name, $payload['enabled'] );
+				},
+				'permission_callback' => [ $this, 'admin_check' ],
+				'args'                => [
+					'enabled' => [
+						'type'     => 'boolean',
+						'required' => true,
+					],
+				],
+			]
+		);
 	}
 }
 
