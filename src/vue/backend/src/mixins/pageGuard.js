@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual'
 export default {
     data () {
         return {
@@ -8,10 +7,10 @@ export default {
     },
     computed: {
         localStateValues () {
-            return { ...this.$store.state[this.module], ...this.formChanges }
+            return { ...this.$store.state[this.module], ...this.formChanges, ...this.$store.state.guidedSetup[this.module].changes }
         },
-        routeCanLeave () {
-            return isEqual({ ...this.$store.state[this.module] }, this.localStateValues)
+        formIsUpdated () {
+            return Object.keys(this.formChanges).length > 0
         }
     },
     methods: {
@@ -21,15 +20,18 @@ export default {
             }
             this.formChanges = { ...this.formChanges, ...change }
         },
-        saveAction () {
-            for (const key in this.formChanges) {
-                this.$store.dispatch(`${this.module}/setItem`, { key, value: this.formChanges[key] })
+        updateState (changes) {
+            for (const key in changes) {
+                this.$store.dispatch(`${this.module}/setItem`, { key, value: changes[key] })
             }
+        },
+        saveAction () {
+            this.updateState(this.formChanges)
             this.formChanges = {}
         }
     },
     beforeRouteLeave (to, from, next) {
-        if (this.routeCanLeave) {
+        if (!this.formIsUpdated) {
             next()
         } else {
             const answer = window.confirm('Do you really want to leave? You have unsaved changes!')

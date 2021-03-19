@@ -6,6 +6,7 @@ var stylish = require('jshint-stylish')
 var rename = require('gulp-rename')
 var concat = require('gulp-concat')
 var uglify = require('gulp-uglify')
+var cleanCss = require('gulp-clean-css')
 var notify = require('gulp-notify')
 var sourcemaps = require('gulp-sourcemaps')
 var glob = require('glob')
@@ -55,6 +56,10 @@ gulp.task('sass', function () {
     var tasks = files.map(function (entry) {
       return gulp.src(entry)
         .pipe(sass().on('error', sass.logError))
+        .pipe(cleanCss())
+        .pipe(rename(function (path) {
+          path.extname = '.min.css'
+        }))
         .pipe(gulp.dest('./assets/css/'))
         .pipe(notify({ message: 'Finished processing ' + entry }))
     })
@@ -62,9 +67,39 @@ gulp.task('sass', function () {
 });
 
 gulp.task('css', function () {
-  // concat CSS and put them in appropriate space
-  // will implement once we implement Sass
-  console.log('css task not implemented yet')
+  glob('./src/css/*.css', function (err, files) {
+    if (err) {
+      done(err)
+    }
+
+    var tasks = files.map(function (entry) {
+      return gulp.src(entry)
+        .pipe(cleanCss())
+        .pipe(rename(function (path) {
+          path.extname = '.min.css'
+        }))
+        .pipe(gulp.dest('./assets/css/'))
+        .pipe(notify({ message: 'Finished processing ' + entry }))
+    })
+  })
+})
+
+gulp.task('widget-css', function () {
+  glob('./src/css/widgets/*.css', function (err, files) {
+    if (err) {
+      done(err)
+    }
+
+    var tasks = files.map(function (entry) {
+      return gulp.src(entry)
+        .pipe(cleanCss())
+        .pipe(rename(function (path) {
+          path.extname = '.min.css'
+        }))
+        .pipe(gulp.dest('./assets/css/widgets/'))
+        .pipe(notify({ message: 'Finished processing ' + entry }))
+    })
+  })
 })
 
 gulp.task('readme', function () {
@@ -75,6 +110,8 @@ gulp.task('readme', function () {
 gulp.task('watch', function () {
   gulp.watch('./src/js/*.js', ['js'])
   gulp.watch('./src/scss/*.scss', ['sass'])
+  gulp.watch('./src/css/*.css', ['css'])
+  gulp.watch('./src/css/widgets/*.css', ['widget-css'])
 })
 
 gulp.task('default', ['js'], function () {})

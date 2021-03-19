@@ -38,7 +38,7 @@ if( isset($_GET['settings-updated']) ) { ?>
             	}
 
 				if ($options['impress_agents_stylesheet_load'] == 1)
-					echo '<p style="color:red; font-weight: bold;">The plugin\'s main stylesheet (impress-agents.css) has been deregistered<p>';
+					echo '<p style="color:red; font-weight: bold;">The plugin\'s main stylesheet (impress-agents.min.css) has been deregistered<p>';
 				?>
 				<form action="options.php" method="post" id="impress-agents-settings-options-form">
 					<?php
@@ -47,7 +47,7 @@ if( isset($_GET['settings-updated']) ) { ?>
 
 					_e('<h3>Include CSS?</h3>', 'impress_agents');
 					_e('<p>Here you can deregister the IMPress Agents CSS files and move to your theme\'s css file for ease of customization</p>', 'impress_agents');
-					_e('<p><input name="plugin_impress_agents_settings[impress_agents_stylesheet_load]" id="impress_agents_stylesheet_load" type="checkbox" value="1" class="code" ' . checked(1, $options['impress_agents_stylesheet_load'], false ) . ' /> Deregister IMPress Agents main CSS (impress-agents.css)?</p>', 'impress-agents' );
+					_e('<p><input name="plugin_impress_agents_settings[impress_agents_stylesheet_load]" id="impress_agents_stylesheet_load" type="checkbox" value="1" class="code" ' . checked(1, $options['impress_agents_stylesheet_load'], false ) . ' /> Deregister IMPress Agents main CSS (impress-agents.min.css)?</p>', 'impress-agents' );
 
 					_e("<h3>Default Number of Posts</h3><p>The default number of posts displayed on a employee archive page is 9. Here you can set a custom number. Enter <span style='color: #f00;font-weight: 700;'>-1</span> to display all employee posts.<br /><em>If you have more than 20-30 posts, it's not recommended to show all or your page will load slow.</em></p>", 'impress_agents' );
 				    _e('<p>Number of posts on employee archive page: <input name="plugin_impress_agents_settings[impress_agents_archive_posts_num]" id="impress_agents_archive_posts_num" type="text" value="' . $options['impress_agents_archive_posts_num'] . '" size="1" /></p><hr>', 'impress-agents' );

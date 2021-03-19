@@ -5,11 +5,13 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler('omnibar')">
         <template v-slot:controls>
             <omnibarForm
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
+                @form-field-update-mls-membership="mlsChangeUpdate"
             />
         </template>
     </GuidedSetupContentCard>
@@ -19,53 +21,40 @@
 import { mapState, mapActions } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
+import omnibarMixin from '@/mixins/omnibarMixin'
 import omnibarForm from '@/templates/omnibarForm.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-omnibar',
     mixins: [
         guidedSetupMixin,
-        pageGuard
+        pageGuard,
+        omnibarMixin
     ],
     components: {
         omnibarForm,
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: false
+        }
+    },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
-            cityListOptions: state => state.omnibar.cityListOptions,
-            cityListSelected: state => state.omnibar.cityListSelected,
-            countyListOptions: state => state.omnibar.countyListOptions,
-            countyListSelected: state => state.omnibar.countyListSelected,
-            postalCodeListOptions: state => state.omnibar.postalCodeListOptions,
-            postalCodeSelected: state => state.omnibar.postalCodeSelected,
-            defaultPropertyTypeOptions: state => state.omnibar.defaultPropertyTypeOptions,
-            defaultPropertyTypeSelected: state => state.omnibar.defaultPropertyTypeSelected,
-            mlsMembership: state => state.omnibar.mlsMembership,
-            autofillMLS: state => state.omnibar.autofillMLS,
-            customFieldsSelected: state => state.omnibar.customFieldsSelected,
-            customFieldsOptions: state => state.omnibar.customFieldsOptions,
-            customPlaceholder: state => state.omnibar.customPlaceholder,
-            defaultSortOrderSelected: state => state.omnibar.defaultSortOrderSelected
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps,
+            isValid: state => state.general.isValid
         })
     },
     methods: {
         ...mapActions({
-            generalSettingsStateChange: 'general/generalSettingsStateChange',
-            setItem: 'omnibar/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveOmnibarSettings: 'general/saveOmnibarSettings'
-        }),
-        async goContinue () {
-            await this.saveOmnibarSettings()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
-        }
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
+        })
     },
     created () {
         this.module = 'omnibar'
         this.cardTitle = 'IMPress Omnibar Search'
-        this.continuePath = '/guided-setup/listings'
+        this.continuePath = this.isValid ? '/guided-setup/listings' : '/guided-setup/confirmation'
         this.skipPath = '/guided-setup/listings'
         this.links = [
             {

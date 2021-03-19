@@ -27,19 +27,7 @@ export default {
 <style lang="scss">
 @import '@/styles/formContentStyles.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
-body {
-    overflow-y: scroll;
-}
 .content-page {
-  --font-size-h1: 31px;
-  --font-size-h2: 25px;
-  --font-size-p: 16px;
-  --font-size-p-large: 18px;
-  --header-height: 83px;
-  --line-height-h1: 28px;
-  --line-height-h2: 28px;
-  --line-height-p: 28px;
-  --line-height-p-large: 28px;
     padding: 50px;
     margin: 135px 30px 0 300px;
     background-color: $white;
@@ -54,17 +42,6 @@ body {
         color: inherit;
         display: block;
         float: unset;
-    }
-
-    h1 {
-        font-size: var(--font-size-h1);
-        font-weight: 300;
-        line-height: var(--line-height-h1);
-    }
-
-    h2 {
-        font-size: var(--font-size-h2);
-        line-height: var(--line-height-h2);
     }
 
     p {

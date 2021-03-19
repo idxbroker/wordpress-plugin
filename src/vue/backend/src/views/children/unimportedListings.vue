@@ -1,39 +1,26 @@
 <template>
-    <div>
-        <bulk-action
-            :selected="selected"
-            :description="description"
-            :disabled="listingsSelected.length === 0"
-            @select-all="selectAll('listing-checkbox', listings)"
-            @bulk-action="importListings"
-        ></bulk-action>
-        <idx-block className="listings-card__group">
-            <listings-card
-                v-for="listing in listings"
-                ref="listing-checkbox"
-                :key="listing.listingID"
-                :listing="listing"
-                @listing-selected="updateSelected($event, listingsSelected)"
-            >
-            </listings-card>
-        </idx-block>
-    </div>
+    <import-page-template
+        cardType="listings"
+        :masterList="listings"
+        :description="description"
+        :clearSelections="clearSelections"
+        @bulk-action="importListings"
+    ></import-page-template>
 </template>
 <script>
 import { mapState } from 'vuex'
-import importPages from '@/mixins/importPages'
-import BulkAction from '../../components/BulkAction.vue'
-import ListingsCard from '../../components/listingsCard.vue'
+import { PRODUCT_REFS } from '@/data/productTerms'
+import importPageTemplate from '@/templates/importPageTemplate'
 export default {
     name: 'unimported-listings',
-    mixins: [importPages],
+    inject: [PRODUCT_REFS.importContent.repo],
     components: {
-        BulkAction,
-        ListingsCard
+        importPageTemplate
     },
     data () {
         return {
-            listingsSelected: []
+            checkProgress: '',
+            clearSelections: false
         }
     },
     computed: {
@@ -42,8 +29,32 @@ export default {
         })
     },
     methods: {
-        importListings () {
-            // to do: POST request listing IDs to be imported
+        async importListings (e) {
+            this.clearSelections = false
+            const listingIds = e.map(x => {
+                return x.listingId
+            })
+            try {
+                await this.importContentRepository.post({ ids: listingIds }, 'listings/import')
+                let { data } = await this.importContentRepository.get('listings')
+                if (data.inProgress) {
+                    this.checkProgress = setInterval(async () => {
+                        if (data.inProgress) {
+                            const check = await this.importContentRepository.get('listings')
+                            data = check.data
+                            this.clearSelections = true
+                        } else {
+                            clearInterval(this.checkProgress)
+                            this.$store.dispatch('importContent/setItem', { key: 'listings', value: data })
+                        }
+                    }, 5000)
+                } else {
+                    this.clearSelections = true
+                    this.$store.dispatch('importContent/setItem', { key: 'listings', value: data })
+                }
+            } catch (error) {
+                // To-do: error banner
+            }
         }
     },
     created () {

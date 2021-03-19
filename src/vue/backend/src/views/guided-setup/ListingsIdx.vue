@@ -5,9 +5,10 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler('listingsIdx', 'listingsSettings', 'idx')">
         <template v-slot:controls>
             <ListingsIdx
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -17,11 +18,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import ListingsIdx from '@/templates/impressListingsIdxContent.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-listings-idx',
+    inject: [PRODUCT_REFS.listingsSettings.repo],
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -30,37 +34,23 @@ export default {
         ListingsIdx,
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: false
+        }
+    },
     computed: {
         ...mapState({
-            enabled: state => state.listingsSettings.enabled,
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
-            updateListings: state => state.listingsSettings.updateListings,
-            soldListings: state => state.listingsSettings.soldListings,
-            automaticImport: state => state.listingsSettings.automaticImport,
-            displayIDXLink: state => state.listingsSettings.displayIDXLink,
-            defaultListingTemplateSelected: state => state.listingsSettings.defaultListingTemplateSelected,
-            defaultListingTemplateOptions: state => state.listingsSettings.defaultListingTemplateOptions,
-            importedListingsAuthorSelected: state => state.listingsSettings.importedListingsAuthorSelected,
-            importedListingsAuthorOptions: state => state.listingsSettings.importedListingsAuthorOptions,
-            importTitle: state => state.listingsSettings.importTitle,
-            advancedFieldData: state => state.listingsSettings.advancedFieldData,
-            displayAdvancedFields: state => state.listingsSettings.displayAdvancedFields
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            setItem: 'listingsSettings/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveIDXListingsSettings: 'listingsSettings/saveIDXListingsSettings'
-        }),
-        async goContinue () {
-            await this.saveIDXListingsSettings()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
-        }
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
+        })
     },
-    created () {
-        this.module = 'listingsSettings'
+    async created () {
+        this.module = 'listingsIdx'
         this.cardTitle = 'Configure IMPress Listings'
         this.continuePath = '/guided-setup/listings/advanced'
         this.skipPath = '/guided-setup/agents'
@@ -78,6 +68,8 @@ export default {
                 href: '#signUp'
             }
         ]
+        const { data } = await this.listingsSettingsRepository.get('idx')
+        this.updateState(data)
     },
     mounted () {
         this.progressStepperUpdate([4, 3, 0, 0])

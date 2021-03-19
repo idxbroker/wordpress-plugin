@@ -34,7 +34,7 @@ class Impress_Lead_Signup_Shortcode {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-lead-signup', plugins_url( '../assets/css/widgets/impress-lead-signup.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-signup', plugins_url( '../assets/css/widgets/impress-lead-signup.min.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -47,7 +47,7 @@ class Impress_Lead_Signup_Shortcode {
 
 		// Validate fields
 		wp_register_script( 'impress-lead-signup', plugins_url( '../assets/js/idx-lead-signup.min.js', dirname( __FILE__ ) ) );
-		wp_localize_script( 'impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page() );
+		wp_localize_script( 'impress-lead-signup', 'idxLeadLoginUrl', [ $this->lead_login_page() ] );
 		wp_enqueue_script( 'impress-lead-signup' );
 
 		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {

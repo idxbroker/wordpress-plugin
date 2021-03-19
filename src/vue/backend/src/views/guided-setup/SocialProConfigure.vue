@@ -5,9 +5,10 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="saveHandler('socialPro')">
         <template v-slot:controls>
-            <AgentsSettings
+            <socialProForm
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -20,32 +21,31 @@ import { mapState, mapActions } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
-import AgentsSettings from '@/templates/AgentsSettings.vue'
+import socialProForm from '@/templates/socialProForm.vue'
 export default {
+    name: 'guided-setup-social-pro-configure',
     mixins: [
         guidedSetupMixin,
         pageGuard
     ],
     components: {
-        AgentsSettings,
+        socialProForm,
         GuidedSetupContentCard
+    },
+    data () {
+        return {
+            formDisabled: false
+        }
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
         })
     },
     methods: {
         ...mapActions({
-            setItem: 'socialPro/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveConfigureSocialProSettings: 'socialPro/saveConfigureSocialProSettings'
-        }),
-        async goContinue () {
-            await this.saveConfigureSocialProSettings()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
-        }
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
+        })
     },
     created () {
         this.module = 'socialPro'

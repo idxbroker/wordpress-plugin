@@ -5,10 +5,11 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue"
+        @continue="saveHandler('general')"
     >
         <template v-slot:controls>
             <GeneralSettings
+                :formDisabled="formDisabled"
                 v-bind="localStateValues"
                 @form-field-update="formUpdate"
             />
@@ -18,63 +19,58 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import pageGuard from '@/mixins/pageGuard'
+import guidedSetupMixin from '@/mixins/guidedSetup'
 import GeneralSettings from '@/templates/GeneralSettings.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
-    mixins: [pageGuard],
+    name: 'guided-setup-general',
+    inject: [PRODUCT_REFS.general.repo],
+    mixins: [pageGuard, guidedSetupMixin],
     components: {
         GeneralSettings,
         GuidedSetupContentCard
     },
     data () {
         return {
-            cardTitle: 'General Settings',
-            links: [
-                {
-                    text: 'Dynamic Wrappers',
-                    href: '#dynamic-wrappers'
-                },
-                {
-                    text: 'IDX Broker Middleware',
-                    href: 'https://middleware.idxbroker.com/mgmt/'
-                },
-                {
-                    text: 'Sign up for IDX Broker',
-                    href: '#signUp'
-                }
-            ]
+            formDisabled: false
         }
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps,
-            reCAPTCHA: state => state.general.reCAPTCHA,
-            updateFrequency: state => state.general.updateFrequency,
-            wrapperName: state => state.general.wrapperName
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps,
+            apiKeyIsValid: state => state.general.isValid
         })
     },
     methods: {
         ...mapActions({
-            setItem: 'general/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            saveGeneralSettings: 'general/saveGeneralSettings'
-        }),
-        goBackStep: function () {
-            // to-do: go back in history
-            this.$router.go(-1)
-        },
-        goSkipStep: function () {
-            this.$router.push({ path: '/guided-setup/listings' })
-        },
-        async goContinue () {
-            await this.saveGeneralSettings()
-            this.saveAction()
-            this.$router.push({ path: '/guided-setup/connect/omnibar' })
-        }
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
+        })
     },
-    created () {
+    async created () {
         this.module = 'general'
+        this.cardTitle = 'General Settings'
+        this.skipPath = this.apiKeyIsValid ? '/guided-setup/confirmation' : '/guided-setup/listings'
+        this.continuePath = '/guided-setup/connect/omnibar'
+        this.links = [
+            {
+                text: 'Dynamic Wrappers',
+                href: '#dynamic-wrappers'
+            },
+            {
+                text: 'IDX Broker Middleware',
+                href: 'https://middleware.idxbroker.com/mgmt/'
+            },
+            {
+                text: 'Sign up for IDX Broker',
+                href: '#signUp'
+            }
+        ]
+        const { data } = await this.generalRepository.get()
+        for (const key in data) {
+            this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
+        }
     },
     mounted () {
         this.progressStepperUpdate([2, 0, 0, 0])

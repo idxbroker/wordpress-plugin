@@ -1,48 +1,59 @@
 <template>
     <div>
         <impress-listings-idx-content
+            :formDisabled="formDisabled"
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></impress-listings-idx-content>
         <idx-button
             customClass="settings-button__save"
-            @click="saveAction"
+            size="lg"
+            @click="saveHandler"
         >
             Save
         </idx-button>
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import impressListingsIdxContent from '@/templates/impressListingsIdxContent.vue'
 import pageGuard from '@/mixins/pageGuard'
-import { mapActions, mapState } from 'vuex'
 export default {
     name: 'listings-idx-content-tab',
+    inject: [PRODUCT_REFS.listingsSettings.repo],
     mixins: [pageGuard],
-    components: { impressListingsIdxContent },
+    inheritAttrs: false,
+    components: {
+        impressListingsIdxContent
+    },
+    data () {
+        return {
+            formDisabled: false
+        }
+    },
     computed: {
         ...mapState({
-            updateListings: state => state.listingsSettings.updateListings,
-            soldListings: state => state.listingsSettings.soldListings,
-            automaticImport: state => state.listingsSettings.automaticImport,
-            displayIDXLink: state => state.listingsSettings.displayIDXLink,
-            defaultListingTemplateSelected: state => state.listingsSettings.defaultListingTemplateSelected,
-            defaultListingTemplateOptions: state => state.listingsSettings.defaultListingTemplateOptions,
-            importedListingsAuthorSelected: state => state.listingsSettings.importedListingsAuthorSelected,
-            importedListingsAuthorOptions: state => state.listingsSettings.importedListingsAuthorOptions,
-            importTitle: state => state.listingsSettings.importTitle,
-            advancedFieldData: state => state.listingsSettings.advancedFieldData,
-            displayAdvancedFields: state => state.listingsSettings.displayAdvancedFields
+            enabled: state => state.listingsGeneral.enabled
         })
     },
     methods: {
-        ...mapActions({
-            setItem: 'listingsSettings/setItem',
-            saveIDXListingsSettings: 'listingsSettings/saveIDXListingsSettings'
-        })
+        async saveHandler () {
+            this.formDisabled = true
+            const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'idx')
+            this.formDisabled = false
+            if (status === 204) {
+                this.saveAction()
+                // To Do: User feed back
+            }
+        }
     },
-    created () {
-        this.module = 'listingsSettings'
+    async created () {
+        this.module = 'listingsIdx'
+        if (this.enabled) {
+            const { data } = await this.listingsSettingsRepository.get('idx')
+            this.updateState(data)
+        }
     }
 }
 </script>

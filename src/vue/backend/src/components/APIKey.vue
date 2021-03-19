@@ -1,5 +1,5 @@
 <template>
-    <idx-block className="form-content form-content__api-key">
+    <idx-block className="form-content">
         <idx-form-group
             :customClass="{
                 'needs-validation': true,
@@ -7,10 +7,10 @@
             }"
             novalidate
         >
-            <idx-form-label customClass="form-content__label" for="ApiKey">API Key</idx-form-label>
             <idx-form-input
                 type="text"
                 id="ApiKey"
+                :disabled="disabled"
                 :placeholder="placeholder"
                 :customClass="{
                     'is-invalid': error,
@@ -55,6 +55,10 @@ export default {
         apiKey: {
             type: String,
             default: ''
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     }
 }

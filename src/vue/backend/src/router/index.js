@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Generic from '@/templates/layout/Generic'
 import Layout from '@/templates/layout/Layout'
 import routeMeta from './routeMeta'
-import { AGENTS, API_KEY, LISTINGS, SOCIAL_PRO } from '@/data/productTerms'
 import store from '../store'
 import { filterRequires } from '@/utilities'
 
@@ -26,8 +25,7 @@ const routes = [
                         children: routeMeta.imports.listings,
                         props: {
                             parentRoute: '/import/listings',
-                            tabbedRoutes: routeMeta.imports.listings,
-                            requires: [AGENTS, LISTINGS, API_KEY]
+                            tabbedRoutes: routeMeta.imports.listings
                         }
                     },
                     {
@@ -61,9 +59,6 @@ const routes = [
                         path: 'listings',
                         component: () => import('@/views/settings/Listings'),
                         children: routeMeta.settings.listings,
-                        meta: {
-                            requires: [LISTINGS]
-                        },
                         props: {
                             parentRoute: '/settings/listings',
                             tabbedRoutes: routeMeta.settings.listings
@@ -72,26 +67,17 @@ const routes = [
                     {
                         path: 'agents',
                         name: 'IMPress Agents Settings',
-                        component: () => import('@/views/settings/Agents'),
-                        meta: {
-                            requires: [AGENTS]
-                        }
+                        component: () => import('@/views/settings/Agents')
                     },
                     {
                         path: 'social-pro',
                         name: 'Social Pro Settings',
-                        component: () => import('@/views/settings/SocialPro'),
-                        meta: {
-                            requires: [API_KEY, SOCIAL_PRO]
-                        }
+                        component: () => import('@/views/settings/SocialPro')
                     },
                     {
                         path: 'gmb',
                         name: 'Google My Business',
-                        component: () => import('@/views/settings/GMB'),
-                        meta: {
-                            requires: [LISTINGS]
-                        }
+                        component: () => import('@/views/settings/GMB')
                     }
                 ]
             },
@@ -159,6 +145,11 @@ const routes = [
                         path: 'social-pro/configure',
                         name: 'Configure Social Pro',
                         component: () => import('@/views/guided-setup/SocialProConfigure')
+                    },
+                    {
+                        path: 'confirmation',
+                        name: 'Confirmation',
+                        component: () => import('@/views/guided-setup/Confirmation')
                     }
                 ]
             },

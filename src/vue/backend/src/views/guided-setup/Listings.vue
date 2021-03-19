@@ -5,7 +5,7 @@
         :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
-        @continue="goContinue">
+        @continue="enablePlugin">
         <template v-slot:description>
             <p><strong>This is optional.</strong> A sentence or two about why you should install IMPress Listings to your WordPress site. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </template>
@@ -26,21 +26,28 @@
                             checkedState="Yes"
                             @toggle="formUpdate({ key: 'enabled', value: !localStateValues.enabled })"
                             :active="localStateValues.enabled"
+                            :disabled="formDisabled"
                             :label="activateLabel"
                         ></idx-toggle-slider>
                     </idx-block>
                 </idx-form-group>
+                <idx-block v-if="showError" className="form-content__error">
+                    We're experiencing a problem, please try again.
+                </idx-block>
             </idx-block>
         </template>
     </GuidedSetupContentCard>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
+import { mapActions, mapState } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
+    name: 'guided-setup-listings',
+    inject: [PRODUCT_REFS.listingsSettings.repo],
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -48,28 +55,46 @@ export default {
     components: {
         GuidedSetupContentCard
     },
+    data () {
+        return {
+            formDisabled: false,
+            showError: false
+        }
+    },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.progressStepper.guidedSetupSteps
-        })
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
+        }),
+        continuePath () {
+            return this.localStateValues.enabled ? '/guided-setup/listings/general' : this.skipPath
+        }
     },
     methods: {
         ...mapActions({
-            setItem: 'listingsSettings/setItem',
-            progressStepperUpdate: 'progressStepper/progressStepperUpdate',
-            enableListingsPlugin: 'listingsSettings/enableListingsPlugin'
+            progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
         }),
-        async goContinue () {
-            await this.enableListingsPlugin()
-            this.saveAction()
-            this.$router.push({ path: this.continuePath })
+        async enablePlugin () {
+            this.showError = false
+            this.formDisabled = true
+            if (this.formIsUpdated) {
+                const { status } = await this.listingsSettingsRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
+                this.formDisabled = false
+                if (status === 204) {
+                    this.saveAction()
+                    this.$router.push({ path: this.continuePath })
+                } else {
+                    this.showError = true
+                    this.formChanges = {}
+                }
+            } else {
+                this.$router.push({ path: this.continuePath })
+            }
         }
     },
     created () {
-        this.module = 'listingsSettings'
+        this.module = 'listingsGeneral'
         this.cardTitle = 'Enable IMPress Listings'
         this.activateLabel = 'Enable'
-        this.continuePath = '/guided-setup/listings/general'
         this.skipPath = '/guided-setup/agents'
         this.links = [
             {
@@ -97,7 +122,7 @@ export default {
 @import '@/styles/formContentStyles.scss';
 .list-featured {
     column-count: 2;
-    font-weight: 600;
+    font-weight: 700;
     list-style-type: circle;
     padding-left: 1.125em;
 }

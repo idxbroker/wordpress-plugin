@@ -35,7 +35,7 @@ class Register_Shortcode_For_Ui {
 	 * @return void
 	 */
 	public function idx_set_shortcode_preview_nonce() {
-		wp_localize_script( 'idx-shortcode', 'IDXShortcodePreviewNonce', wp_create_nonce( 'idx-shortcode-preview-nonce' ) );
+		wp_localize_script( 'idx-shortcode', 'IDXShortcodePreviewNonce', [ wp_create_nonce( 'idx-shortcode-preview-nonce' ) ] );
 	}
 
 	/**
@@ -369,7 +369,7 @@ class Register_Shortcode_For_Ui {
 		$output .= '</div>';
 		// Styles and Scripts for Preview
 		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-lead-login.css', dirname( __FILE__ ) ) . '"];';
+		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ) . '"];';
 		$output .= '</script>';
 
 		return $output;
@@ -412,7 +412,7 @@ class Register_Shortcode_For_Ui {
 
 		// Styles and Scripts for Preview
 		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-lead-signup.css', dirname( __FILE__ ) ) . '"];';
+		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-lead-signup.min.css', dirname( __FILE__ ) ) . '"];';
 		$output .= '</script>';
 
 		// Password field
@@ -507,7 +507,7 @@ class Register_Shortcode_For_Ui {
 		$output .= "<p>Don't have any city lists? Go create some in your <a href=\"http://middleware.idxbroker.com/mgmt/citycountyziplists.php\" target=\"_blank\">IDX dashboard.</a></p>";
 		// Styles and Scripts for Preview
 		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-city-links.css', dirname( __FILE__ ) ) . '"];';
+		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-city-links.min.css', dirname( __FILE__ ) ) . '"];';
 		$output .= '</script>';
 
 		return $output;
@@ -608,7 +608,7 @@ class Register_Shortcode_For_Ui {
 
 		// Styles and Scripts for Preview
 		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-showcase.css', dirname( __FILE__ ) ) . '"];';
+		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-showcase.min.css', dirname( __FILE__ ) ) . '"];';
 		$output .= '</script>';
 
 		return $output;
@@ -699,8 +699,8 @@ class Register_Shortcode_For_Ui {
 
 		// Styles and Scripts for Preview
 		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/owl2.carousel.css', dirname( __FILE__ ) ) . '", "';
-		$output .= plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) . '"];';
+		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/owl2.carousel.min.css', dirname( __FILE__ ) ) . '", "';
+		$output .= plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) . '"];';
 		$output .= '</script>';
 		$output .= '<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>';
 		$output .= '<script src="' . plugins_url( '../assets/js/owl2.carousel.min.js', dirname( __FILE__ ) ) . '"></script>';

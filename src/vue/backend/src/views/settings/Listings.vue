@@ -5,9 +5,10 @@
             <idx-toggle-slider
                 uncheckedState="No"
                 checkedState="Yes"
-                @toggle="refreshPage"
-                :active="enabled"
                 label="Enable IMPress Listings"
+                :active="localStateValues.enabled"
+                :disabled="formDisabled"
+                @toggle="refreshPage"
             ></idx-toggle-slider>
         </idx-block>
         <template #related>
@@ -22,33 +23,44 @@
     </TwoColumn>
 </template>
 <script>
+import { PRODUCT_REFS } from '@/data/productTerms'
+import pageGuard from '@/mixins/pageGuard'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import TabbedMixin from '@/mixins/Tabbed'
 import Tabbed from '@/templates/layout/Tabbed'
 import RelatedLinks from '../../components/RelatedLinks.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
-    mixins: [TabbedMixin],
+    inject: [PRODUCT_REFS.listingsSettings.repo],
+    mixins: [TabbedMixin, pageGuard],
     components: {
         Tabbed,
         TwoColumn,
         RelatedLinks
     },
+    data () {
+        return {
+            formDisabled: false
+        }
+    },
     computed: {
         ...mapState({
-            enabled: state => state.listingsSettings.enabled
+            enabled: state => state.listingsGeneral.enabled
         })
     },
     methods: {
-        ...mapActions({
-            setItem: 'listingsSettings/setItem'
-        }),
         async refreshPage () {
-            await this.setItem({ key: 'enabled', value: !this.enabled })
-            location.reload()
+            this.formDisabled = true
+            this.formUpdate({ key: 'enabled', value: !this.enabled })
+            const { status } = await this.listingsSettingsRepository.post({ enabled: !this.enabled }, 'enable')
+            this.formDisabled = false
+            if (status === (204 || 200)) {
+                location.reload()
+            }
         }
     },
-    created () {
+    async created () {
+        this.module = 'listingsGeneral'
         this.links = [
             { text: 'Where can I find my API key?', href: 'https://support.idxbroker.com/s/article/api-key' },
             { text: 'IDX Broker Middleware', href: 'https://middleware.idxbroker.com/mgmt/' },

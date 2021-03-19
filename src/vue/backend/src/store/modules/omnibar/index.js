@@ -1,6 +1,3 @@
-import actions from './actions'
-import getters from './getters'
-
 const state = {
     cityListOptions: [],
     cityListSelected: '',
@@ -8,7 +5,6 @@ const state = {
     countyListSelected: '',
     postalCodeListOptions: [],
     postalCodeSelected: '',
-    defaultPropertyTypeOptions: [],
     defaultPropertyTypeSelected: '',
     mlsMembership: [],
     autofillMLS: '',
@@ -20,7 +16,5 @@ const state = {
 
 export default {
     namespaced: true,
-    actions,
-    getters,
     state
 }

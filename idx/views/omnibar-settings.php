@@ -33,14 +33,14 @@ class Omnibar_Settings {
 	public function idx_omnibar_settings_interface() {
 		// register omnibar settings script
 		wp_register_script( 'idx-omnibar-settings', plugins_url( '/assets/js/idx-omnibar-settings.min.js', dirname( dirname( __FILE__ ) ) ), 'jquery' );
-		wp_enqueue_style( 'idx-omnibar-settings', plugins_url( '/assets/css/idx-omnibar-settings.css', dirname( dirname( __FILE__ ) ) ) );
+		wp_enqueue_style( 'idx-omnibar-settings', plugins_url( '/assets/css/idx-omnibar-settings.min.css', dirname( dirname( __FILE__ ) ) ) );
 		wp_localize_script( 'idx-omnibar-settings', 'IDXOmnibarCustomFieldsNonce', wp_create_nonce( 'idx-omnibar-custom-field-nonce' ) );
 		if ( $this->idx_api->get_transient( 'idx_mls_approvedmls_cache' ) !== false ) {
 			$this->idx_preload_omnibar_settings_view();
 		} else {
 			echo '<div class="loading" style="margin-top: 2rem; font-size: 1rem;">Loading Omnibar Settings...</div><div class="idx-loader"></div>';
 			// Tell JS to reload page when ready.
-			wp_localize_script( 'idx-omnibar-settings', 'loadOmnibarView', 'true' );
+			wp_localize_script( 'idx-omnibar-settings', 'loadOmnibarView', [ 'true' ] );
 		}
 		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
 		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );

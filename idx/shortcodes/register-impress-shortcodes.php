@@ -53,7 +53,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -124,7 +124,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.min.css', dirname( __FILE__ ) ) );
 		}
 
 		$output = '';
@@ -501,11 +501,11 @@ class Register_Impress_Shortcodes {
 			)
 		);
 
-		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.css', dirname( __FILE__ ) ) );
+		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.min.css', dirname( __FILE__ ) ) );
 		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
 
 		if ( $styles ) {
-			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -704,7 +704,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-city-links', plugins_url( '../assets/css/widgets/impress-city-links.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-city-links', plugins_url( '../assets/css/widgets/impress-city-links.min.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! isset( $new_window ) ) {

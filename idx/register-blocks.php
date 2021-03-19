@@ -134,7 +134,7 @@ class Register_Blocks {
 	 * @return mixed
 	 */
 	public function register_block_shared_css() {
-		wp_enqueue_style( 'idx-shared-block-editor-css', plugins_url( '../assets/css/idx-block-edit.css', __FILE__ ), false, '1.0', 'all' );
+		wp_enqueue_style( 'idx-shared-block-editor-css', plugins_url( '../assets/css/idx-block-edit.min.css', __FILE__ ), false, '1.0', 'all' );
 	}
 
 	// Block Registration/Setup Functions.
@@ -158,7 +158,7 @@ class Register_Blocks {
 		);
 
 		$placeholder_image_url = plugins_url( '../assets/images/block-placeholder-images/idx-widgets-placeholder.png', __FILE__ );
-		wp_localize_script( 'idx-widgets-block', 'idx_widget_block_image_url', $placeholder_image_url );
+		wp_localize_script( 'idx-widgets-block', 'idx_widget_block_image_url', [ $placeholder_image_url ] );
 
 		$available_widgets = $this->get_widget_list_options();
 		wp_localize_script( 'idx-widgets-block', 'idx_widgets_list', $available_widgets );
@@ -219,7 +219,7 @@ class Register_Blocks {
 		);
 
 		$idx_wrapper_tags_image_url = plugins_url( '../assets/images/block-placeholder-images/wrapper-tag-placeholder.png', __FILE__ );
-		wp_localize_script( 'idx-wrapper-tags-block', 'idx_wrapper_tags_image_url', $idx_wrapper_tags_image_url );
+		wp_localize_script( 'idx-wrapper-tags-block', 'idx_wrapper_tags_image_url', [ $idx_wrapper_tags_image_url ] );
 		wp_enqueue_script( 'idx-wrapper-tags-block' );
 	}
 
@@ -262,7 +262,7 @@ class Register_Blocks {
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $available_agents );
 
 		$lead_signup_image_url = plugins_url( '../assets/images/block-placeholder-images/lead-signup-placeholder.png', __FILE__ );
-		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_image_url', $lead_signup_image_url );
+		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_image_url', [ $lead_signup_image_url ] );
 
 		wp_enqueue_script( 'impress-lead-signup-block' );
 	}
@@ -335,7 +335,7 @@ class Register_Blocks {
 		);
 
 		$lead_login_image_url = plugins_url( '../assets/images/block-placeholder-images/lead-login-placeholder.png', __FILE__ );
-		wp_localize_script( 'impress-lead-login-block', 'lead_login_image_url', $lead_login_image_url );
+		wp_localize_script( 'impress-lead-login-block', 'lead_login_image_url', [ $lead_login_image_url ] );
 		wp_enqueue_script( 'impress-lead-login-block' );
 	}
 
@@ -398,7 +398,7 @@ class Register_Blocks {
 		);
 
 		$impress_omnibar_image_url = plugins_url( '../assets/images/block-placeholder-images/omnibar-placeholder.png', __FILE__ );
-		wp_localize_script( 'impress-omnibar-block', 'impress_omnibar_image_url', $impress_omnibar_image_url );
+		wp_localize_script( 'impress-omnibar-block', 'impress_omnibar_image_url', [ $impress_omnibar_image_url ] );
 		wp_enqueue_script( 'impress-omnibar-block' );
 	}
 
@@ -467,7 +467,7 @@ class Register_Blocks {
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_saved_links', $saved_links_list );
 
 		$impress_carousel_image_url = plugins_url( '../assets/images/block-placeholder-images/carousel-placeholder.png', __FILE__ );
-		wp_localize_script( 'impress-carousel-block', 'impress_carousel_image_url', $impress_carousel_image_url );
+		wp_localize_script( 'impress-carousel-block', 'impress_carousel_image_url', [ $impress_carousel_image_url ] );
 
 		wp_enqueue_script( 'impress-carousel-block' );
 	}
@@ -555,7 +555,7 @@ class Register_Blocks {
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_saved_links', $saved_links_list );
 
 		$impress_showcase_image_url = plugins_url( '../assets/images/block-placeholder-images/showcase-placeholder.png', __FILE__ );
-		wp_localize_script( 'impress-showcase-block', 'impress_showcase_image_url', $impress_showcase_image_url );
+		wp_localize_script( 'impress-showcase-block', 'impress_showcase_image_url', [ $impress_showcase_image_url ] );
 
 		wp_enqueue_script( 'impress-showcase-block' );
 	}
@@ -640,7 +640,7 @@ class Register_Blocks {
 		);
 
 		$placeholder_image_url = plugins_url( '../assets/images/block-placeholder-images/impress-city-links.png', __FILE__ );
-		wp_localize_script( 'impress-city-links-block', 'impress_city_links_block_image_url', $placeholder_image_url );
+		wp_localize_script( 'impress-city-links-block', 'impress_city_links_block_image_url', [ $placeholder_image_url ] );
 
 		$mls_options = $this->get_mls_options();
 		wp_localize_script( 'impress-city-links-block', 'impress_city_links_mls_options', $mls_options );

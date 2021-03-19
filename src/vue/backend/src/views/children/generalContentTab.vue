@@ -1,45 +1,58 @@
 <template>
     <div>
         <listings-general
+            :formDisabled="formDisabled"
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         ></listings-general>
         <idx-button
-            customClass="settings-button__save"
-            @click="saveAction"
+            size="lg"
+            @click="saveHandler"
         >
             Save
         </idx-button>
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 import ListingsGeneral from '@/templates/impressListingsGeneralContent'
-import { mapState, mapActions } from 'vuex'
 import pageGuard from '@/mixins/pageGuard'
+import { PRODUCT_REFS } from '@/data/productTerms'
 export default {
     name: 'listings-general-content-tab',
+    inject: [PRODUCT_REFS.listingsSettings.repo],
     mixins: [pageGuard],
+    inheritAttrs: false,
     components: {
         ListingsGeneral
     },
+    data () {
+        return {
+            formDisabled: false
+        }
+    },
     computed: {
         ...mapState({
-            currencyCodeSelected: state => state.listingsSettings.currencyCodeSelected,
-            currencySymbolSelected: state => state.listingsSettings.currencySymbolSelected,
-            defaultDisclaimer: state => state.listingsSettings.defaultDisclaimer,
-            numberOfPosts: state => state.listingsSettings.numberOfPosts,
-            listingSlug: state => state.listingsSettings.listingSlug,
-            defaultState: state => state.listingsSettings.defaultState
+            enabled: state => state.listingsGeneral.enabled
         })
     },
     methods: {
-        ...mapActions({
-            setItem: 'listingsSettings/setItem',
-            saveGeneralListingsSettings: 'listingsSettings/saveGeneralListingsSettings'
-        })
+        async saveHandler () {
+            this.formDisabled = true
+            const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'general')
+            this.formDisabled = false
+            if (status === 204) {
+                this.saveAction()
+                // To Do: User feed back
+            }
+        }
     },
-    created () {
-        this.module = 'listingsSettings'
+    async created () {
+        this.module = 'listingsGeneral'
+        if (this.enabled) {
+            const { data } = await this.listingsSettingsRepository.get('general')
+            this.updateState(data)
+        }
     }
 }
 </script>
