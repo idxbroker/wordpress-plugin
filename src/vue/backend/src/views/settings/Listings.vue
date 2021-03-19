@@ -57,7 +57,6 @@ export default {
             if (status === (204 || 200)) {
                 location.reload()
             } else {
-                // To do: user feedback
                 this.errorAction()
             }
         }

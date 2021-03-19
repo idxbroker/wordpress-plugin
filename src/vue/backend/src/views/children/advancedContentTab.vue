@@ -44,7 +44,6 @@ export default {
             if (status === 200) {
                 this.saveAction()
             } else {
-                // To do: user feedback
                 this.errorAction()
             }
         }
