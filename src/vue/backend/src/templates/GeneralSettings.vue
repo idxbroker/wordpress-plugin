@@ -74,7 +74,7 @@ export default {
     props: {
         dataCollection: {
             type: Boolean,
-            default: true
+            default: false
         },
         reCAPTCHA: {
             type: Boolean,
