@@ -56,6 +56,9 @@ export default {
             this.formDisabled = false
             if (status === (204 || 200)) {
                 location.reload()
+            } else {
+                // To do: user feedback
+                this.errorAction()
             }
         }
     },

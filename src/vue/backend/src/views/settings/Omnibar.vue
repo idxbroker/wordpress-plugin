@@ -40,7 +40,16 @@ export default {
     },
     methods: {
         saveHandler () {
-            // To Do: api connection
+            this.formDisabled = true
+            if (this.formChanges) {
+                this.formDisabled = false
+                if (status === 204) {
+                    this.saveAction()
+                } else {
+                    // To do: user feedback
+                    this.errorAction()
+                }
+            }
         }
     },
     created () {

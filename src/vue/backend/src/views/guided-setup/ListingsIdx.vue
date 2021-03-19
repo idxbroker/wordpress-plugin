@@ -58,6 +58,7 @@ export default {
                     this.$router.push({ path: this.continuePath })
                 } else {
                     // To do: user feedback
+                    this.errorAction()
                 }
             } else {
                 this.$router.push({ path: this.continuePath })

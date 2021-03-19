@@ -29,9 +29,25 @@ export default {
                 this.$store.dispatch(`${this.module}/setItem`, { key, value: changes[key] })
             }
         },
+        scrollToTop () {
+            console.log('scroll')
+            window.scrollTo(0, 0)
+        },
         saveAction () {
             this.updateState(this.formChanges)
             this.formChanges = {}
+            this.scrollToTop()
+            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: false, text: 'Changes Saved' } })
+            setTimeout(() => {
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
+            }, 4000)
+        },
+        errorAction () {
+            this.scrollToTop()
+            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true } })
+            setTimeout(() => {
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
+            }, 4000)
         }
     },
     beforeRouteLeave (to, from, next) {

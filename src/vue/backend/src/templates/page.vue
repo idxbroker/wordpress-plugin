@@ -5,20 +5,24 @@
         }"
     >
         <SvgSprite/>
+        <notification :notification="notification"/>
         <slot></slot>
     </idx-block>
 </template>
 <script>
 import { mapState } from 'vuex'
+import Notification from '@/components/Notification.vue'
 import SvgSprite from '@/components/SvgSprite.vue'
 export default {
     name: 'page',
     components: {
+        Notification,
         SvgSprite
     },
     computed: {
         ...mapState({
-            expanded: state => state.routes.expanded
+            expanded: state => state.routes.expanded,
+            notification: state => state.alerts.notification
         })
     }
 }
@@ -28,14 +32,11 @@ export default {
 @import '@/styles/formContentStyles.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 .content-page {
-    padding: 50px;
-    margin: 135px 30px 0 300px;
-    background-color: $white;
     font-size: var(--font-size-p);
     line-height: var(--line-height-p);
+    margin: 135px 30px 0 300px;
     position: relative;
     transition: margin-left .5s ease;
-    overflow: auto;
 
     h1,h2,h3,h4,h5,h6 {
         // reset styles
@@ -51,6 +52,15 @@ export default {
         &.lead {
             font-weight: 400;
         }
+    }
+
+    > .notification {
+        margin-bottom: 50px;
+    }
+
+    > .section {
+        background-color: $white;
+        padding: 50px;
     }
 
     &--slide-left {
