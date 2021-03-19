@@ -1,6 +1,6 @@
 /* eslint-disable object-property-newline */
 import { applyIdToArray } from '@utilityPath/GenerateId.js'
-import { API_KEY, LISTINGS, SOCIAL_PRO } from '@/data/productTerms'
+import { LISTINGS } from '@/data/productTerms'
 
 const _navLinks = [
     {
@@ -27,7 +27,7 @@ const _navLinks = [
             { label: 'Omnibar', link: '/settings/omnibar' },
             { label: 'Listings', link: '/settings/listings' },
             { label: 'Agents', link: '/settings/agents' },
-            { label: 'Social Pro', link: '/settings/social-pro', requires: [API_KEY, SOCIAL_PRO] },
+            { label: 'Social Pro', link: '/settings/social-pro' },
             { label: 'Google My Business', link: '/settings/gmb', requires: [LISTINGS] }
         ]
     },

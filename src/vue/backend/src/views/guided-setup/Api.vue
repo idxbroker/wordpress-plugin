@@ -71,6 +71,8 @@ export default {
         },
         async saveHandler () {
             this.formDisabled = true
+            this.error = false
+            this.success = false
             if (this.formIsUpdated) {
                 try {
                     await this.generalRepository.post(this.formChanges)

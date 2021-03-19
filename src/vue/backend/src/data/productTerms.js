@@ -37,6 +37,13 @@ export const PRODUCT_REFS = {
         get repo () {
             return `${this.module}Repository`
         }
+    },
+    importContent: {
+        module: 'importContent',
+        termPath: '',
+        get repo () {
+            return `${this.module}Repository`
+        }
     }
 }
 /* Todo: Clean this up. */

@@ -17,10 +17,13 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import TabbedMixin from '@/mixins/Tabbed'
 import Tabbed from '@/templates/layout/Tabbed'
 import Feedback from '@/components/importFeedback.vue'
 export default {
+    name: 'import-idx-listings-container',
+    inject: [PRODUCT_REFS.importContent.repo],
     mixins: [TabbedMixin],
     components: {
         Tabbed,
@@ -28,7 +31,7 @@ export default {
     },
     computed: {
         ...mapState({
-            enabled: state => state.listingsSettings.enabled,
+            enabled: state => state.listingsGeneral.enabled,
             isValid: state => state.general.isValid
         }),
         title () {
@@ -44,6 +47,12 @@ export default {
                 closingStatement: 'and ensure that your API key is active'
             }
         }
+    },
+    async created () {
+        this.module = 'importContent'
+        this.description = 'Select the imported listings to be deleted from IMPress'
+        const { data } = await this.importContentRepository.get('listings')
+        this.$store.dispatch(`${this.module}/setItem`, { key: 'listings', value: data })
     }
 }
 </script>

@@ -1,4 +1,3 @@
-import { LISTINGS } from '@/data/productTerms'
 /**
  * Route Meta
  * Uses:
@@ -10,28 +9,19 @@ export default {
             path: '',
             name: 'IMPress Listings General Settings',
             label: 'General',
-            component: () => import('@/views/children/generalContentTab'),
-            meta: {
-                requires: [LISTINGS]
-            }
+            component: () => import('@/views/children/generalContentTab')
         },
         {
             path: 'idx',
             name: 'IMPress Listings IDX Settings',
             label: 'IDX',
-            component: () => import('@/views/children/idxContentTab'),
-            meta: {
-                requires: [LISTINGS]
-            }
+            component: () => import('@/views/children/idxContentTab')
         },
         {
             path: 'advanced',
             name: 'IMPress Listings Advanced Settings',
             label: 'Advanced',
-            component: () => import('@/views/children/advancedContentTab'),
-            meta: {
-                requires: [LISTINGS]
-            }
+            component: () => import('@/views/children/advancedContentTab')
         }]
     },
     imports: {
