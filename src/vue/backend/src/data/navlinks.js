@@ -1,6 +1,5 @@
 /* eslint-disable object-property-newline */
 import { applyIdToArray } from '@utilityPath/GenerateId.js'
-import { LISTINGS } from '@/data/productTerms'
 
 const _navLinks = [
     {
@@ -27,8 +26,7 @@ const _navLinks = [
             { label: 'Omnibar', link: '/settings/omnibar' },
             { label: 'Listings', link: '/settings/listings' },
             { label: 'Agents', link: '/settings/agents' },
-            { label: 'Social Pro', link: '/settings/social-pro' },
-            { label: 'Google My Business', link: '/settings/gmb', requires: [LISTINGS] }
+            { label: 'Social Pro', link: '/settings/social-pro' }
         ]
     },
     {
@@ -36,7 +34,6 @@ const _navLinks = [
         icon: 'flag',
         collapsed: true,
         routes: [
-            { label: 'FAQ', linkType: 'a', link: '#faq-tbd' },
             { label: 'Knowledgebase', linkType: 'a', link: 'https://support.idxbroker.com/s/', target: '_blank' },
             { label: 'IDX Support', linkType: 'a', link: 'https://support.idxbroker.com/s/contactsupport', target: '_blank' }
         ]
