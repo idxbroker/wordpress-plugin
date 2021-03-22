@@ -340,7 +340,7 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 	 * Triggers the cron to update location data.
 	 *
 	 * @param boolean $addresses_changed Tracks if address autocomplete has changed.
-	 * @return string|void The default prop type.
+	 * @return void
 	 */
 	private function update_location_data( $addresses_changed ) {
 		$update = $addresses_changed ? 'all' : 'custom';
