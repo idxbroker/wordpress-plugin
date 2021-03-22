@@ -82,7 +82,6 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 		$current_zipcode_list = get_option( 'idx_omnibar_current_zipcode_list', '' );
 		$placeholder          = get_option( 'idx_omnibar_placeholder', '' );
 		$sort                 = get_option( 'idx_omnibar_sort', '' );
-		$addresses            = get_option( 'idx_broker_omnibar_address_mls', [] );
 
 		// Map legacy data structures to the REST standard.
 		$city_lists    = $this->map_keys(
@@ -117,6 +116,7 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 		$omnibar_advanced_fields = $this->idx_omnibar_advanced_fields();
 		$mls_membership          = $this->mls_property_types( $omnibar_advanced_fields );
 		$default_prop_type       = $this->default_selected_property_type();
+		$address_mls_list        = $this->get_address_mls_list( $mls_membership );
 
 		// Map legacy data structures to the REST standard.
 		$custom_fields_options = $this->map_keys(
@@ -150,7 +150,7 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 				'postalCodeSelected'          => $current_zipcode_list,
 				'defaultPropertyTypeSelected' => $default_prop_type,
 				'mlsMembership'               => $mls_membership,
-				'autofillMLSSelected'         => $addresses,
+				'autofillMLSSelected'         => $address_mls_list,
 				'customFieldsSelected'        => $custom_lists,
 				'customFieldsOptions'         => $custom_fields_options,
 				'customPlaceholder'           => $placeholder,
@@ -299,17 +299,49 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 	/**
 	 * Update the Omnibar address autocomplete.
 	 *
+	 * @param array $mls_membership MLS membership object.
+	 * @return array Array of addresses in form { value => mlsID, label => mlsName }.
+	 */
+	private function get_address_mls_list( $mls_membership ) {
+		$mls_list = get_option( 'idx_broker_omnibar_address_mls', [] );
+		return array_map(
+			function( $address_mls ) use ( &$mls_membership ) {
+				$label = '';
+				foreach ( $mls_membership as $key => $mls ) {
+					if ( $address_mls === $mls['value'] ) {
+						$label = $mls['label'];
+						break;
+					}
+				}
+				return [
+					'value' => $address_mls,
+					'label' => $label,
+				];
+			},
+			$mls_list
+		);
+	}
+
+	/**
+	 * Update the Omnibar address autocomplete.
+	 *
 	 * @param array $payload New address fields.
 	 * @return boolean If the address has changed or not.
 	 */
 	private function update_addresses( $payload ) {
 		$address_change = false;
 		$existing       = get_option( 'idx_broker_omnibar_address_mls', [] );
-		sort( $payload );
+		$mls_list       = array_map(
+			function ( $mls ) {
+				return $mls['value'];
+			},
+			$payload
+		);
+		sort( $mls_list );
 		sort( $existing );
-		if ( $payload !== $existing ) {
+		if ( $mls_list !== $existing ) {
 			$address_change = true;
-			update_option( 'idx_broker_omnibar_address_mls', $payload, false );
+			update_option( 'idx_broker_omnibar_address_mls', $mls_list, false );
 		}
 		return $address_change;
 	}
