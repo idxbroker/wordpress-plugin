@@ -20,13 +20,15 @@
     </TwoColumn>
 </template>
 <script>
+import { PRODUCT_REFS } from '@/data/productTerms'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
 import omnibarMixin from '@/mixins/omnibarMixin'
 import OmnibarForm from '@/templates/omnibarForm.vue'
 import RelatedLinks from '@/components/RelatedLinks.vue'
 export default {
-    name: 'omnibar',
+    name: 'standalone-omnibar-settings',
+    inject: [PRODUCT_REFS.omnibar.repo],
     mixins: [pageGuard, omnibarMixin],
     components: {
         TwoColumn,
@@ -39,19 +41,27 @@ export default {
         }
     },
     methods: {
-        saveHandler () {
-            this.formDisabled = true
-            if (this.formChanges) {
-                this.formDisabled = false
-                if (status === 204) {
+        async saveHandler () {
+            // To Do: user facing error checking
+            if (this.formIsUpdated) {
+                this.formDisabled = true
+                try {
+                    await this.omnibarRepository.post(this.localStateValues)
+                    this.formDisabled = false
                     this.saveAction()
-                } else {
-                    this.errorAction()
+                } catch (error) {
+                    this.formDisabled = false
+                    if (error.response.status === 401) {
+                    } else {
+                        this.errorAction()
+                    }
                 }
+            } else {
+                this.saveAction()
             }
         }
     },
-    created () {
+    async created () {
         this.module = 'omnibar'
         this.relatedLinks = [
             {
@@ -71,6 +81,12 @@ export default {
                 href: '#signUp'
             }
         ]
+        this.formDisabled = true
+        const { data } = await this.omnibarRepository.get()
+        for (const key in data) {
+            this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
+        }
+        this.formDisabled = false
     }
 }
 </script>

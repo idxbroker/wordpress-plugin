@@ -8,7 +8,7 @@ export default {
             newValue.selected = payload.value[1]
 
             // Get a copy of the full membership array
-            const newArray = [...payload.value[3]]
+            const newArray = [...this.localStateValues.mlsMembership]
 
             // Replace the singular MLS object with the new one
             newArray.splice(payload.value[2], 1, newValue)

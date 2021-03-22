@@ -46,6 +46,9 @@ export default {
     },
     get importContentRepository () {
         return loadRepo('importContent')
+    },
+    get omnibarRepository () {
+        return loadRepo('omnibar')
     }
     /* Add more repositories here as they become available. */
 }

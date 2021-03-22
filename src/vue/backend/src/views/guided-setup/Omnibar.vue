@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { PRODUCT_REFS } from '@/data/productTerms'
 import { mapState, mapActions } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
@@ -26,6 +27,7 @@ import omnibarForm from '@/templates/omnibarForm.vue'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 export default {
     name: 'guided-setup-omnibar',
+    inject: [PRODUCT_REFS.omnibar.repo],
     mixins: [
         guidedSetupMixin,
         pageGuard,
@@ -51,7 +53,7 @@ export default {
             progressStepperUpdate: 'guidedSetup/progressStepperUpdate'
         })
     },
-    created () {
+    async created () {
         this.module = 'omnibar'
         this.cardTitle = 'IMPress Omnibar Search'
         this.continuePath = this.isValid ? '/guided-setup/listings' : '/guided-setup/confirmation'
@@ -70,6 +72,12 @@ export default {
                 href: '#signUp'
             }
         ]
+        this.formDisabled = true
+        const { data } = await this.omnibarRepository.get()
+        for (const key in data) {
+            this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
+        }
+        this.formDisabled = false
     },
     mounted () {
         this.progressStepperUpdate([3, 0, 0, 0])
