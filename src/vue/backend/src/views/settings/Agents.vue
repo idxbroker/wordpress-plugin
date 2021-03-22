@@ -61,10 +61,14 @@ export default {
         },
         async saveHandler () {
             this.formDisabled = true
-            const { status } = await this.agentSettingsRepository.post(this.formChanges)
-            this.formDisabled = false
-            if (status === 200) {
-                this.saveAction()
+            if (this.formChanges) {
+                const { status } = await this.agentSettingsRepository.post(this.formChanges)
+                this.formDisabled = false
+                if (status === 204) {
+                    this.saveAction()
+                } else {
+                    this.errorAction()
+                }
             }
         }
     },

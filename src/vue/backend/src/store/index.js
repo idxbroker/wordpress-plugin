@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import agentSettings from './modules/agentSettings'
+import alerts from './modules/alerts'
 import general from './modules/general'
 import importContent from './modules/importContent'
 import listingsGeneral from './modules/listingsGeneral'
@@ -18,6 +19,7 @@ import commonMutations from './common/mutations'
 Vue.use(Vuex)
 const modules = {
     agentSettings,
+    alerts,
     general,
     importContent,
     listingsGeneral,
