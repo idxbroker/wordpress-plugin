@@ -36,9 +36,9 @@ const _navLinks = [
         icon: 'flag',
         collapsed: true,
         routes: [
-            { label: 'FAQ', link: '#faq-tbd' },
-            { label: 'Knowledgebase', link: 'https://support.idxbroker.com/s/' },
-            { label: 'IDX Support', link: 'https://support.idxbroker.com/s/contactsupport' }
+            { label: 'FAQ', linkType: 'a', link: '#faq-tbd' },
+            { label: 'Knowledgebase', linkType: 'a', link: 'https://support.idxbroker.com/s/', target: '_blank' },
+            { label: 'IDX Support', linkType: 'a', link: 'https://support.idxbroker.com/s/contactsupport', target: '_blank' }
         ]
     }
 ]

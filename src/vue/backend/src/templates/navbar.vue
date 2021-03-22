@@ -28,6 +28,8 @@
                     v-bind="{
                         itemId: route.itemId,
                         label: route.label,
+                        linkType: route.linkType || 'router-link',
+                        target: route.target || null,
                         link: route.link || null,
                         icon: icons[route.icon],
                         routes: route.routes,
