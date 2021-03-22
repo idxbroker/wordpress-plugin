@@ -3,14 +3,19 @@
         cardType="agents"
         :masterList="agents"
         :description="description"
-        @bulk-action="importAgents"
+        :clearSelections="clearSelections"
+        @bulk-action="importItems($event, 'agents')"
     ></import-page-template>
 </template>
 <script>
 import { mapState } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
+import importActions from '@/mixins/importActions'
 import importPageTemplate from '@/templates/importPageTemplate'
 export default {
     name: 'unimported-agents',
+    inject: [PRODUCT_REFS.importContent.repo],
+    mixins: [importActions],
     components: {
         importPageTemplate
     },
@@ -18,11 +23,6 @@ export default {
         ...mapState({
             agents: state => state.importContent.agents.unimported
         })
-    },
-    methods: {
-        importAgents (e) {
-            // to do: POST request agent IDs to be imported
-        }
     },
     created () {
         this.description = 'Select the agents to import from IDX Broker'

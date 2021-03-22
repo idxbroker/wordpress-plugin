@@ -2,7 +2,7 @@
     <checkbox-label
         :option="option"
         customClass="agent-card"
-        @checked="$emit('agent-selected', [$event.data, agent.agentId])"
+        @checked="$emit('agent-selected', [$event.data, agent])"
     >
         <template v-slot:content>
             <idx-block :className="{
@@ -24,7 +24,7 @@
                 <idx-block className="agent-card__imported">
                     Imported <img :src="check">
                 </idx-block>
-                <idx-block @click.native.stop="$emit('remove-agent', agent.agentId)" className="agent-card__delete">
+                <idx-block @click.native.stop="$emit('remove-agent', [agent])" className="agent-card__delete">
                     <img :src="deleteIcon" alt="Remove Agent">
                 </idx-block>
             </idx-block>
@@ -89,6 +89,7 @@ export default {
     }
     &__image-wrap {
         grid-area: image;
+        align-self: baseline;
         position: relative;
         background-size: cover;
         background-position: center;
@@ -96,6 +97,7 @@ export default {
         width: 125px;
         height: 125px;
         z-index: 1;
+        overflow: hidden;
 
         img {
             position: absolute;
@@ -122,6 +124,8 @@ export default {
     &__content {
         grid-area: content;
         align-self: flex-start;
+        height: 100%;
+        overflow: auto;
     }
     &__name {
         font-size: 21px;
