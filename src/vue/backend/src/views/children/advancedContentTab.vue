@@ -43,6 +43,8 @@ export default {
             this.formDisabled = false
             if (status === 200) {
                 this.saveAction()
+            } else {
+                this.errorAction()
             }
         }
     },

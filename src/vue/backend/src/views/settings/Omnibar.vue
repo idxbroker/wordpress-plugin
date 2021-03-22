@@ -53,11 +53,11 @@ export default {
                     this.formDisabled = false
                     if (error.response.status === 401) {
                     } else {
-                        // full form error response
+                        this.errorAction()
                     }
                 }
             } else {
-                // show save changes banner
+                this.saveAction()
             }
         }
     },

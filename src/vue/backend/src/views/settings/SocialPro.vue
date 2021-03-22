@@ -64,7 +64,18 @@ export default {
     methods: {
         ...mapActions({
             setItem: 'socialPro/setItem'
-        })
+        }),
+        saveHandler () {
+            this.formDisabled = true
+            if (this.formChanges) {
+                this.formDisabled = false
+                if (status === 204) {
+                    this.saveAction()
+                } else {
+                    this.errorAction()
+                }
+            }
+        }
     },
     created () {
         this.module = 'socialPro'

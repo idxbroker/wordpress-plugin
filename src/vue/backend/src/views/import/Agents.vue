@@ -16,11 +16,14 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import TabbedMixin from '@/mixins/Tabbed'
 import Tabbed from '@/templates/layout/Tabbed'
 import Feedback from '@/components/importFeedback.vue'
 export default {
+    name: 'import-idx-agents-container',
     mixins: [TabbedMixin],
+    inject: [PRODUCT_REFS.importContent.repo],
     components: {
         Tabbed,
         Feedback
@@ -43,6 +46,12 @@ export default {
                 closingStatement: 'and ensure that your API key is active'
             }
         }
+    },
+    async created () {
+        this.module = 'importContent'
+        this.description = 'Select the agents to import from IDX Broker'
+        const { data } = await this.importContentRepository.get('agents')
+        this.$store.dispatch(`${this.module}/setItem`, { key: 'agents', value: data })
     }
 }
 </script>

@@ -65,6 +65,7 @@ export default {
                         this.success = false
                     } else {
                         // full form error response
+                        this.errorAction()
                     }
                 }
             } else {

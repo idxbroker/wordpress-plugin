@@ -60,6 +60,9 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 					'wrapperName'     => [
 						'type' => 'string',
 					],
+					'dataCollection'  => [
+						'type' => 'boolean',
+					],
 				],
 			]
 		);
@@ -87,6 +90,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 				'reCAPTCHA'       => boolval( get_option( 'idx_recaptcha_enabled', 0 ) ),
 				'updateFrequency' => get_option( 'idx_cron_schedule', '' ),
 				'wrapperName'     => get_option( 'idx_broker_dynamic_wrapper_page_name', '' ),
+				'dataCollection'  => boolval( get_option( 'impress_data_optout', 0 ) ? 0 : 1 ),
 			]
 		);
 	}
@@ -121,6 +125,10 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 			if ( is_wp_error( $error ) ) {
 				return rest_ensure_response( $error );
 			}
+		}
+
+		if ( isset( $payload['dataCollection'] ) ) {
+			update_option( 'impress_data_optout', filter_var( $payload['dataCollection'], FILTER_VALIDATE_BOOLEAN ) ? 0 : 1 );
 		}
 		return new \WP_REST_Response( null, 204 );
 	}
