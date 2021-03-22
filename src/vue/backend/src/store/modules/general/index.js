@@ -1,6 +1,6 @@
 const state = {
     apiKey: '',
-    dataCollection: true,
+    optOut: false,
     isValid: true,
     reCAPTCHA: false,
     updateFrequency: 'five_minutes',
