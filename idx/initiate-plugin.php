@@ -80,6 +80,8 @@ class Initiate_Plugin {
 		}
 		// Check if reCAPTCHA option has been set. If it does not exist, a default of 1 will be set.
 		get_option( 'idx_recaptcha_enabled', 1 );
+
+		$this->register_cron_schedules();
 	}
 
 	/**
@@ -594,5 +596,66 @@ EOD;
 
 	public function idx_broker_register_rest_routes() {
 		new \IDX\Admin\Rest_Controller();
+	}
+
+	/**
+	 * Sets custom cron schedles.
+	 *
+	 * @param array $schedules Schedules array to update.
+	 * @return array Updates schedules.
+	 */
+	public function custom_cron_schedules( $schedules ) {
+		if ( ! isset( $schedules['five_minutes'] ) ) {
+			$schedules['five_minutes'] = [
+				'interval' => 5 * 60,
+				'display'  => __( 'Once every 5 minutes' ),
+			];
+		}
+		if ( ! isset( $schedules['hourly'] ) ) {
+			$schedules['hourly'] = [
+				'interval' => 60 * 60,
+				'display'  => __( 'Once every hour' ),
+			];
+		}
+		if ( ! isset( $schedules['twice_daily'] ) ) {
+			$schedules['twice_daily'] = [
+				'interval' => 60 * 60 * 12,
+				'display'  => __( 'Twice a day' ),
+			];
+		}
+		if ( ! isset( $schedules['daily'] ) ) {
+			$schedules['daily'] = [
+				'interval' => 60 * 60 * 24,
+				'display'  => __( 'Once every days' ),
+			];
+		}
+		if ( ! isset( $schedules['weekly'] ) ) {
+			$schedules['weekly'] = [
+				'interval' => 60 * 60 * 7,
+				'display'  => __( 'Once every week' ),
+			];
+		}
+		if ( ! isset( $schedules['two_weeks'] ) ) {
+			$schedules['two_weeks'] = [
+				'interval' => 60 * 60 * 7 * 2,
+				'display'  => __( 'Once every two weeks' ),
+			];
+		}
+		if ( ! isset( $schedules['monthly'] ) ) {
+			$schedules['monthly'] = [
+				'interval' => 60 * 60 * 30,
+				'display'  => __( 'Once every thirty days' ),
+			];
+		}
+		return $schedules;
+	}
+
+	/**
+	 * Register cron schedules filter.
+	 *
+	 * @return void.
+	 */
+	public function register_cron_schedules() {
+		add_filter( 'cron_schedules', [ $this, 'custom_cron_schedules' ] );
 	}
 }

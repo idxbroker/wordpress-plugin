@@ -46,10 +46,10 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 					],
 					'updateFrequency' => [
 						'type' => 'string',
-						// TODO: Create whitelist of timings and sync this list.
 						'enum' => [
 							'five_minutes',
 							'hourly',
+							'daily',
 							'twice_daily',
 							'weekly',
 							'two_weeks',
@@ -193,7 +193,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 	 */
 	private function update_cron_frequency( $timing ) {
 		$schedules = wp_get_schedules();
-		if ( isset( $schedules[ $timing ] ) ) {
+		if ( isset( $schedules[ $timing ] ) || 'disabled' === $timing ) {
 			update_option( 'idx_cron_schedule', $timing );
 			return null;
 		}
