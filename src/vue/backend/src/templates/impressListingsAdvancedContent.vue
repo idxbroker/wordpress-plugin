@@ -7,7 +7,7 @@
         }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">CSS Settings</idx-block>
-            <p>Detailed sentence or two describing deregistering IMPress Listing CSS files so that the installed theme’s CSS won’t have specificity issues.</p>
+            <p>Here you can deregister the WP Listings CSS files and move to your theme's css file for ease of customization.</p>
         </idx-block>
         <idx-form-group>
             <idx-block className="form-content__toggle">
@@ -55,7 +55,11 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Default Form Shortcode</idx-block>
-            <p>Detailed sentence or two describing short code compatibility with Contact Form plugin. If no short code is entered the template uses default contact forms.</p>
+            <p>
+                If you use a Contact Form plugin, you may enter the form shortcode here to display
+                on all listings. Additionally, each listing can use a custom form. If no short code
+                is entered the template uses default contact forms.
+            </p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}form-shortcode`">Form Shortcode</idx-form-label>
@@ -86,7 +90,7 @@
         <hr/>
         <idx-block className="form-content__label">
             <idx-block tag="h2" className="form-content__title">Custom Wrapper</idx-block>
-            <p>Detailed sentence or two describing how custom wrappers can be used and how to set them up properly.</p>
+            <p>If your theme's content HTML ID's and Classes are different than the included template, you can enter the HTML of your content wrapper beginning and end.</p>
         </idx-block>
         <idx-form-group>
             <idx-block className="form-content__toggle">

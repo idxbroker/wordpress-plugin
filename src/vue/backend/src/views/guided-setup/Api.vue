@@ -7,7 +7,7 @@
         @skip-step="goSkipStep"
         @continue="saveHandler">
         <template v-slot:description>
-            <p><strong>This step is optional.</strong> A sentence or two about why you should connect IMPress for IDX Broker to your IDX Broker account. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>{{ description }}</p>
         </template>
         <template v-slot:controls>
             <idx-block className="form-content">
@@ -47,7 +47,8 @@ export default {
             formDisabled: false,
             error: false,
             success: false,
-            cardTitle: 'Connect Your IDX Broker Account'
+            cardTitle: 'Connect Your IDX Broker Account',
+            description: 'By providing your API Key, you’ll have access to all your IDX Broker data, including listing, agent, and office data within WordPress. If you do not have an IDX Broker account, skip this step and enter your data manually.'
         }
     },
     computed: {
@@ -65,6 +66,7 @@ export default {
         continue () {
             this.success = true
             this.cardTitle = 'Account Connected!'
+            this.description = 'You now have access to all your IDX Broker data, including listing, agent, and office data, within WordPress.'
             setTimeout(() => {
                 this.$router.push({ path: '/guided-setup/connect/general' })
             }, 3000)

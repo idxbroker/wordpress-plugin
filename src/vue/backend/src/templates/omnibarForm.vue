@@ -7,7 +7,7 @@
         }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Do you want to set up IMPress Omnibar Search?</idx-block>
-            <p>A short paragraph detailing the IMPress Omnibar Search feature. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit vulputate.</p>
+            <p>Omnibar is a powerful search tool, which allows for a simple search bar to automatically search for properties in your MLS with a single query.</p>
         </idx-block>
         <hr/>
         <idx-block className="form-content__header">

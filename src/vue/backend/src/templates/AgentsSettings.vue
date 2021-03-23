@@ -7,7 +7,7 @@
         }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">CSS Settings</idx-block>
-            <p>Detailed sentence or two describing deregistering IMPress Agents CSS files so that the installed theme’s CSS won’t have specificity issues.</p>
+            <p>Here you can deregister the IMPress Agents CSS files and move to your theme's css file for ease of customization.</p>
         </idx-block>
         <idx-form-group>
             <idx-block className="form-content__toggle">
@@ -24,7 +24,10 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Default Number of Posts</idx-block>
-            <p>Default Number of Posts Description of the Default Number of Posts setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>
+                The default number of posts displayed on a employee archive page is 9. Here you can set a custom number. Enter -1 to display all employee posts.
+                <i>If you have more than 20-30 posts, it's not recommended to show all or your page will load slow.</i>
+            </p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}number-of-posts`">Default Number of Posts</idx-form-label>
@@ -38,7 +41,14 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Directory Slug</idx-block>
-            <p>Directory Slug Description of the Employee Slug setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>
+                Optionally change the slug of the employee post type.
+                Don't forget to
+                <a href="../wp-admin/options-permalink.php" target="_blank">
+                    reset your permalinks
+                </a>
+                if you change the slug!
+            </p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}directory-slug`">Directory Slug</idx-form-label>

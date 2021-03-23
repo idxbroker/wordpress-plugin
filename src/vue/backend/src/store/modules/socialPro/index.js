@@ -2,8 +2,8 @@ import actions from './actions'
 import getters from './getters'
 
 const state = {
-    subscribed: false,
-    enabled: false,
+    subscribed: true,
+    enabled: true,
     autopublish: 'autopublish',
     postDay: 'sun',
     postType: 'post'

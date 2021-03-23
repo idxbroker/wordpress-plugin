@@ -7,19 +7,22 @@
         @skip-step="goSkipStep"
         @continue="enablePlugin">
         <template v-slot:description>
-            <p>A sentence or two about Social Pro and general interest articles. Lorem Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id sem quis dui ornare fermentum ac non felis.</p>
+            <p>
+                A Social Pro™ subscription is required to access this feature.
+                Once you’ve subscribed to Social Pro from your IDX Broker Account, you
+                can push automated blog posts and listing videos to your WordPress
+                pages and social media sites.
+            </p>
         </template>
         <template v-slot:controls>
-            <p>Enabling Social Pro will:</p>
-            <idx-list customClass="list-featured">
-                <idx-list-item>Add Feature 1</idx-list-item>
-                <idx-list-item>Enable Feature 2</idx-list-item>
-                <idx-list-item>Import Feature 3</idx-list-item>
-                <idx-list-item>Automate Feature 4</idx-list-item>
-            </idx-list>
-            <idx-block className="form-content">
+            <idx-block v-if="subscribed" className="form-content">
                 <idx-form-group>
-                    <idx-block className="form-content__toggle">
+                    <idx-block
+                        :className="{
+                            'form-content__toggle': true,
+                            'form-content--disabled': formDisabled
+                        }"
+                    >
                         {{ activateLabel }}
                         <idx-toggle-slider
                             uncheckedState="No"
@@ -34,6 +37,9 @@
                 <idx-block v-if="showError" className="form-content__error">
                     We're experiencing a problem, please try again.
                 </idx-block>
+            </idx-block>
+            <idx-block v-else>
+                You're not subscribed, go to middleware to subscribe.
             </idx-block>
         </template>
     </GuidedSetupContentCard>
@@ -61,7 +67,8 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps,
+            subscribed: state => state.socialPro.subscribed
         }),
         continuePath () {
             return this.localStateValues.enabled ? '/guided-setup/social-pro/configure' : '/guided-setup/confirmation'
@@ -92,7 +99,7 @@ export default {
     },
     created () {
         this.module = 'socialPro'
-        this.cardTitle = 'Auto Publish & Syndicate with Social Pro'
+        this.cardTitle = 'Social Pro'
         this.activateLabel = 'Enable General Interest Article Syndication'
         this.skipPath = '/guided-setup/confirmation'
         this.links = [
