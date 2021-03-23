@@ -1,5 +1,5 @@
 <template>
-    <idx-block className="form-content">
+    <idx-block className="form-content form-content__api-key">
         <idx-form-group
             :customClass="{
                 'needs-validation': true,
@@ -28,6 +28,14 @@
             </idx-block>
             <idx-block className="invalid-feedback" v-if="error">We couldn't find an account with the provided API key</idx-block>
         </idx-form-group>
+        <idx-button
+            v-if="showRefresh"
+            size="sm"
+            :disabled="disabled"
+            @click="$emit('refreshPluginOptions')"
+        >
+            Refresh Plugin Options
+        </idx-button>
     </idx-block>
 </template>
 
@@ -39,6 +47,10 @@ export default {
         placeholder: {
             type: String,
             default: 'Enter Your API Key'
+        },
+        showRefresh: {
+            type: Boolean,
+            default: false
         },
         error: {
             type: Boolean,
@@ -63,3 +75,8 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.form-content__api-key {
+    margin-bottom: 1rem;
+}
+</style>

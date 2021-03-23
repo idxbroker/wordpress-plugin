@@ -71,6 +71,7 @@
 
 export default {
     name: 'GeneralSettings',
+    inheritAttrs: false,
     props: {
         optOut: {
             type: Boolean,
