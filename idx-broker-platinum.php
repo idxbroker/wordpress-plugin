@@ -123,7 +123,7 @@ class Idx_Broker_Plugin {
 		$wrappers->register_wrapper_post_type();
 
 		// IMPress Listings.
-		if ( ! post_type_exists( 'listing' ) ) {
+		if ( boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
 			wp_listings_init();
 			global $_wp_listings, $_wp_listings_taxonomies, $_wp_listings_templates;
 			$_wp_listings->create_post_type();
@@ -136,7 +136,7 @@ class Idx_Broker_Plugin {
 		}
 
 		// IMPress Agents.
-		if ( ! post_type_exists( 'employee' ) ) {
+		if ( boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) ) {
 			impress_agents_init();
 			global $_impress_agents, $_impress_agents_taxonomies;
 			$_impress_agents->create_post_type();
