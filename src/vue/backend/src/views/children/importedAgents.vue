@@ -6,6 +6,7 @@
         :description="description"
         :imported="true"
         :clearSelections="clearSelections"
+        :loading="loading"
         @bulk-action="unimportItems($event, 'agents')"
         @remove-agent="unimportItems($event, 'agents')"
     ></import-page-template>

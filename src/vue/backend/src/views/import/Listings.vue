@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <idx-block className="section">
         <template v-if="!enabled || !isValid">
             <feedback
                 :title="title"
@@ -13,7 +13,7 @@
             <h2>Import IDX Listings</h2>
             <Tabbed v-bind="$props" />
         </template>
-    </section>
+    </idx-block>
 </template>
 <script>
 import { mapState } from 'vuex'

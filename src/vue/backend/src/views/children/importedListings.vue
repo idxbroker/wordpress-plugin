@@ -5,6 +5,7 @@
         :masterList="listings"
         :description="description"
         :clearSelections="clearSelections"
+        :loading="loading"
         @bulk-action="unimportItems($event, 'listings')"
     ></import-page-template>
 </template>
