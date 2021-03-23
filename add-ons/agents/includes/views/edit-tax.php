@@ -19,7 +19,7 @@ if ( array_key_exists( $_REQUEST['id'], (array) $options ) ) {
 		<td>
 		<input type="text" value="<?php echo esc_html( $_REQUEST['id'] ); ?>" size="40" disabled="disabled" />
 		<input name="impress_agents_taxonomy[id]" id="impress_agents_taxonomy[id]" type="hidden" value="<?php echo esc_html( $_REQUEST['id'] ); ?>" size="40" />
-		<p class="description"><?php _e( 'The unique ID is used to register the taxonomy. (cannot be changed)', 'impress_agents' ); ?></p></td>
+		<p class="description"><?php _e( 'The unique ID used to register a taxonomy cannot be changed.', 'impress_agents' ); ?></p></td>
 	</tr>
 
 	<tr class="form-field">

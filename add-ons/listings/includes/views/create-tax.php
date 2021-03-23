@@ -39,7 +39,7 @@
 					<?php if ( isset( $data['editable'] ) && 0 === $data['editable'] ) : ?>
 						<?php echo '<strong>' . esc_html( $id ) . '</strong><br /><br />'; ?>
 					<?php else : ?>
-						<?php printf( '<a class="row-title" href="%s" title="Edit %s">%s</a>', admin_url( 'admin.php?page=' . $this->menu_page . '&amp;action=edit&amp;id=' . esc_html( $id ) ), esc_html( $id ), esc_html( $id ) ); ?>
+						<?php printf( '<a class="row-title" href="%s" title="Edit %s">%s</a>', admin_url( 'admin.php?page=' . $this->menu_page . '&amp;view=edit&amp;id=' . esc_html( $id ) ), esc_html( $id ), esc_html( $id ) ); ?>
 
 						<br />
 
@@ -73,8 +73,8 @@
 
 			<div class="form-field">
 				<label for="taxonomy-id"><?php _e( 'ID', 'wp-listings' ); ?></label>
-				<input name="wp_listings_taxonomy[id]" id="taxonomy-id" type="text" value="" size="40" />
-				<p><?php _e( 'The unique ID is used to register the taxonomy.<br />(no spaces, underscores, or special characters)', 'wp-listings' ); ?></p>
+				<input name="wp_listings_taxonomy[id]" id="taxonomy-id" type="text" value="" size="40" maxlength="32" onkeypress="return /[a-z\-]/i.test(event.key)"/>
+				<p><?php _e( 'A unique ID used to register the taxonomy.<br />(letters and dashes only, 32 character limit)', 'wp-listings' ); ?></p>
 			</div>
 
 			<div class="form-field form-required">
