@@ -17,7 +17,7 @@
             v-bind="localStateValues"
             @form-field-update="formUpdate"
         />
-        <idx-button size="lg" @click="saveHandler">Save</idx-button>
+        <idx-button size="lg" @click="save">Save</idx-button>
         <template #related>
             <RelatedLinks :relatedLinks="relatedLinks"/>
         </template>

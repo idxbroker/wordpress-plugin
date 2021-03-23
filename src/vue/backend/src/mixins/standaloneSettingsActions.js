@@ -38,9 +38,9 @@ export default {
         },
         errorAction () {
             this.scrollToTop()
-            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true } })
+            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true, text: 'We\'re experiencing a problem, please try again.' } })
             setTimeout(() => {
-                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: true } })
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: true, text: 'We\'re experiencing a problem, please try again.' } })
             }, 3000)
         },
         async saveHandler (repo, path = '', changes = this.formChanges) {
