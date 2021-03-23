@@ -73,7 +73,7 @@ class Create_Omnibar {
 		return <<<EOD
         <form class="idx-omnibar-form idx-omnibar-original-form">
           <label for="omnibar" class="screen-reader-text">$placeholder</label>
-          <input id="omnibar" class="idx-omnibar-input" type="text" placeholder="$placeholder"><button type="submit" value="Search"><i class="fas fa-search"></i><span>Search</span></button>
+          <input id="omnibar" class="idx-omnibar-input" type="text" placeholder="$placeholder"><button type="submit" value="Search" aria-label="Submit Search"><i class="fas fa-search"></i><span>Search</span></button>
           <div class="idx-omnibar-extra idx-omnibar-price-container" style="display: none;"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0" step="10000"></div><div class="idx-omnibar-extra idx-omnibar-bed-container" style="display: none;"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0" step="1"></div><div class="idx-omnibar-extra idx-omnibar-bath-container" style="display: none;"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="1"></div>
         </form>
 EOD;
@@ -134,7 +134,7 @@ EOD;
       <label for="omnibar" class="screen-reader-text">$placeholder</label>
       <input id="omnibar" class="idx-omnibar-input idx-omnibar-extra-input" type="text" placeholder="$placeholder">
       $price_field<div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0" step="1"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="1" title="Only numbers and decimals are allowed"></div>
-      <button class="idx-omnibar-extra-button" type="submit" value="Search"><i class="fas fa-search"></i><span>Search</span></button>
+      <button class="idx-omnibar-extra-button" type="submit" value="Search" aria-label="Submit Search"><i class="fas fa-search"></i><span>Search</span></button>
     </form>
 EOD;
 	}
