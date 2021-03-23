@@ -6,7 +6,7 @@
             'form-content--disabled': formDisabled
         }">
         <idx-form-group>
-            <idx-block customClass="form-content__label">
+            <idx-block className="form-content__label">
                 <idx-block id="wrapperNameLabel" tag="h2" className="form-content__title">Name Your Global Website Wrapper</idx-block>
                 <p>Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</p>
             </idx-block>

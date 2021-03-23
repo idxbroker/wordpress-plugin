@@ -97,10 +97,10 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label">
+            <idx-block className="form-content__label">
                 <idx-block tag="h3" id="importTitleLabel" className="form-content__title">Import Title</idx-block>
                 <p>By default, your imported listings will use the street address as the page title and permalink</p>
-            </idx-form-label>
+            </idx-block>
             <idx-form-input
                 type="text"
                 aria-labelledby="importTitleLabel"
