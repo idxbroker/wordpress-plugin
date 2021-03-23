@@ -8,7 +8,7 @@
         <idx-button
             customClass="settings-button__save"
             size="lg"
-            @click="saveHandler"
+            @click="save"
         >
             Save
         </idx-button>
@@ -19,10 +19,12 @@ import { mapState } from 'vuex'
 import { PRODUCT_REFS } from '@/data/productTerms'
 import impressListingsIdxContent from '@/templates/impressListingsIdxContent.vue'
 import pageGuard from '@/mixins/pageGuard'
+import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
+const { listingsSettings: { repo } } = PRODUCT_REFS
 export default {
     name: 'listings-idx-content-tab',
-    inject: [PRODUCT_REFS.listingsSettings.repo],
-    mixins: [pageGuard],
+    inject: [repo],
+    mixins: [pageGuard, standaloneSettingsActions],
     inheritAttrs: false,
     components: {
         impressListingsIdxContent
@@ -38,22 +40,14 @@ export default {
         })
     },
     methods: {
-        async saveHandler () {
-            this.formDisabled = true
-            const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'idx')
-            this.formDisabled = false
-            if (status === 204) {
-                this.saveAction()
-            } else {
-                this.errorAction()
-            }
+        save () {
+            this.saveHandler(this[repo], 'idx')
         }
     },
     async created () {
         this.module = 'listingsIdx'
         if (this.enabled) {
-            const { data } = await this.listingsSettingsRepository.get('idx')
-            this.updateState(data)
+            this.loadData(this[repo], 'idx')
         }
     }
 }

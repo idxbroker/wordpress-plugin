@@ -9,7 +9,7 @@
             ></omnibar-form>
             <idx-button
                 size="lg"
-                @click="saveHandler"
+                @click="save"
             >
                 Save
             </idx-button>
@@ -24,12 +24,14 @@ import { PRODUCT_REFS } from '@/data/productTerms'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
 import omnibarMixin from '@/mixins/omnibarMixin'
+import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
 import OmnibarForm from '@/templates/omnibarForm.vue'
 import RelatedLinks from '@/components/RelatedLinks.vue'
+const { omnibar: { repo } } = PRODUCT_REFS
 export default {
     name: 'standalone-omnibar-settings',
-    inject: [PRODUCT_REFS.omnibar.repo],
-    mixins: [pageGuard, omnibarMixin],
+    inject: [repo],
+    mixins: [pageGuard, omnibarMixin, standaloneSettingsActions],
     components: {
         TwoColumn,
         OmnibarForm,
@@ -41,24 +43,8 @@ export default {
         }
     },
     methods: {
-        async saveHandler () {
-            // To Do: user facing error checking
-            if (this.formIsUpdated) {
-                this.formDisabled = true
-                try {
-                    await this.omnibarRepository.post(this.localStateValues)
-                    this.formDisabled = false
-                    this.saveAction()
-                } catch (error) {
-                    this.formDisabled = false
-                    if (error.response.status === 401) {
-                    } else {
-                        this.errorAction()
-                    }
-                }
-            } else {
-                this.saveAction()
-            }
+        save () {
+            this.saveHandler(this[repo], '', this.localStateValues)
         }
     },
     async created () {
@@ -81,12 +67,7 @@ export default {
                 href: '#signUp'
             }
         ]
-        this.formDisabled = true
-        const { data } = await this.omnibarRepository.get()
-        for (const key in data) {
-            this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
-        }
-        this.formDisabled = false
+        this.loadData(this[repo])
     }
 }
 </script>

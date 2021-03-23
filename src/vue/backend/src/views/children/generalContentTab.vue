@@ -7,7 +7,7 @@
         ></listings-general>
         <idx-button
             size="lg"
-            @click="saveHandler"
+            @click="save"
         >
             Save
         </idx-button>
@@ -15,21 +15,18 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import ListingsGeneral from '@/templates/impressListingsGeneralContent'
 import pageGuard from '@/mixins/pageGuard'
-import { PRODUCT_REFS } from '@/data/productTerms'
+import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
+const { listingsSettings: { repo } } = PRODUCT_REFS
 export default {
     name: 'listings-general-content-tab',
-    inject: [PRODUCT_REFS.listingsSettings.repo],
-    mixins: [pageGuard],
+    inject: [repo],
+    mixins: [pageGuard, standaloneSettingsActions],
     inheritAttrs: false,
     components: {
         ListingsGeneral
-    },
-    data () {
-        return {
-            formDisabled: false
-        }
     },
     computed: {
         ...mapState({
@@ -37,22 +34,14 @@ export default {
         })
     },
     methods: {
-        async saveHandler () {
-            this.formDisabled = true
-            const { status } = await this.listingsSettingsRepository.post(this.formChanges, 'general')
-            this.formDisabled = false
-            if (status === 204) {
-                this.saveAction()
-            } else {
-                this.errorAction()
-            }
+        save () {
+            this.saveHandler(this[repo], 'general')
         }
     },
-    async created () {
+    created () {
         this.module = 'listingsGeneral'
         if (this.enabled) {
-            const { data } = await this.listingsSettingsRepository.get('general')
-            this.updateState(data)
+            this.loadData(this[repo], 'general')
         }
     }
 }

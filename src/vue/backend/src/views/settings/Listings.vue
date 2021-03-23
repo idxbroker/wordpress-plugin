@@ -8,7 +8,7 @@
                 label="Enable IMPress Listings"
                 :active="localStateValues.enabled"
                 :disabled="formDisabled"
-                @toggle="refreshPage"
+                @toggle="enablePlugin"
             ></idx-toggle-slider>
         </idx-block>
         <template #related>
@@ -23,16 +23,18 @@
     </TwoColumn>
 </template>
 <script>
+import { mapState } from 'vuex'
 import { PRODUCT_REFS } from '@/data/productTerms'
 import pageGuard from '@/mixins/pageGuard'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import TabbedMixin from '@/mixins/Tabbed'
+import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
 import Tabbed from '@/templates/layout/Tabbed'
 import RelatedLinks from '../../components/RelatedLinks.vue'
-import { mapState } from 'vuex'
+const { listingsSettings: { repo } } = PRODUCT_REFS
 export default {
-    inject: [PRODUCT_REFS.listingsSettings.repo],
-    mixins: [TabbedMixin, pageGuard],
+    inject: [repo],
+    mixins: [TabbedMixin, pageGuard, standaloneSettingsActions],
     components: {
         Tabbed,
         TwoColumn,
@@ -49,16 +51,8 @@ export default {
         })
     },
     methods: {
-        async refreshPage () {
-            this.formDisabled = true
-            this.formUpdate({ key: 'enabled', value: !this.enabled })
-            const { status } = await this.listingsSettingsRepository.post({ enabled: !this.enabled }, 'enable')
-            this.formDisabled = false
-            if (status === (204 || 200)) {
-                location.reload()
-            } else {
-                this.errorAction()
-            }
+        enablePlugin () {
+            this.enablePluginAction(this[repo])
         }
     },
     async created () {

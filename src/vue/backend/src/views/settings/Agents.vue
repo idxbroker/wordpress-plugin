@@ -6,10 +6,10 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    @toggle="refreshPage"
                     :active="localStateValues.enabled"
                     :disabled="formDisabled"
                     label="Enable IMPress Listings"
+                    @toggle="enablePlugin"
                 ></idx-toggle-slider>
             </idx-block>
             <template v-if="enabled">
@@ -18,7 +18,7 @@
                     v-bind="localStateValues"
                     @form-field-update="formUpdate"
                 />
-                <idx-button size="lg" @click="saveHandler">Save</idx-button>
+                <idx-button size="lg" @click="save">Save</idx-button>
             </template>
         </idx-block>
         <template #related>
@@ -32,10 +32,12 @@ import { PRODUCT_REFS } from '@/data/productTerms'
 import AgentsSettings from '@/templates/AgentsSettings'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
+import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
 import RelatedLinks from '@/components/RelatedLinks.vue'
+const { agentSettings: { repo } } = PRODUCT_REFS
 export default {
-    inject: [PRODUCT_REFS.agentSettings.repo],
-    mixins: [pageGuard],
+    inject: [repo],
+    mixins: [pageGuard, standaloneSettingsActions],
     components: {
         AgentsSettings,
         RelatedLinks,
@@ -52,27 +54,14 @@ export default {
         })
     },
     methods: {
-        async refreshPage () {
-            this.formUpdate({ key: 'enabled', value: !this.enabled })
-            const { status } = await this.agentSettingsRepository.post({ enabled: !this.enabled }, 'enable')
-            if (status === (204 || 200)) {
-                location.reload()
-            }
+        enablePlugin () {
+            this.enablePluginAction(this[repo])
         },
-        async saveHandler () {
-            this.formDisabled = true
-            if (this.formChanges) {
-                const { status } = await this.agentSettingsRepository.post(this.formChanges)
-                this.formDisabled = false
-                if (status === 204) {
-                    this.saveAction()
-                } else {
-                    this.errorAction()
-                }
-            }
+        save () {
+            this.saveHandler(this[repo])
         }
     },
-    async created () {
+    created () {
         this.module = 'agentSettings'
         this.links = [
             { text: 'IMPress Agents Features', href: '#' },
@@ -80,8 +69,7 @@ export default {
             { text: 'Sign up for IDX Broker', href: 'https://signup.idxbroker.com/' } // Marketing may want a different entry
         ]
         if (this.enabled) {
-            const { data } = await this.agentSettingsRepository.get()
-            this.updateState(data)
+            this.loadData(this[repo])
         }
     }
 }

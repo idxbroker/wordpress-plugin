@@ -7,7 +7,7 @@
         ></impress-listings-advanced-content>
         <idx-button
             size="lg"
-            @click="saveHandler"
+            @click="save"
         >
             Save
         </idx-button>
@@ -18,11 +18,12 @@ import { PRODUCT_REFS } from '@/data/productTerms'
 import { mapState } from 'vuex'
 import impressListingsAdvancedContent from '@/templates/impressListingsAdvancedContent.vue'
 import pageGuard from '@/mixins/pageGuard'
+import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
 const { listingsSettings: { repo } } = PRODUCT_REFS
 export default {
     name: 'listings-advanced-content-tab',
     inject: [repo],
-    mixins: [pageGuard],
+    mixins: [pageGuard, standaloneSettingsActions],
     components: {
         impressListingsAdvancedContent
     },
@@ -31,28 +32,20 @@ export default {
             formDisabled: false
         }
     },
+    methods: {
+        save () {
+            this.saveHandler(this[repo], 'advanced')
+        }
+    },
     computed: {
         ...mapState({
             enabled: state => state.listingsGeneral.enabled
         })
     },
-    methods: {
-        async saveHandler () {
-            this.formDisabled = true
-            const { status } = await this[repo].post(this.formChanges, 'advanced')
-            this.formDisabled = false
-            if (status === 200) {
-                this.saveAction()
-            } else {
-                this.errorAction()
-            }
-        }
-    },
     async created () {
         this.module = 'listingsAdvanced'
         if (this.enabled) {
-            const { data } = await this[repo].get('advanced')
-            this.updateState(data)
+            this.loadData(this[repo], 'advanced')
         }
     }
 }

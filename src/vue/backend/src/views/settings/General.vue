@@ -30,10 +30,12 @@ import GeneralSettings from '@/templates/GeneralSettings'
 import RelatedLinks from '@/components/RelatedLinks.vue'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
+import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
+const { general: { repo } } = PRODUCT_REFS
 export default {
     name: 'standalone-general-settings',
-    inject: [PRODUCT_REFS.general.repo],
-    mixins: [pageGuard],
+    inject: [repo],
+    mixins: [pageGuard, standaloneSettingsActions],
     components: {
         APIKey,
         GeneralSettings,
@@ -43,37 +45,15 @@ export default {
     data () {
         return {
             error: false,
-            success: false,
-            formDisabled: false
+            success: false
         }
     },
     methods: {
-        async saveHandler () {
-            // To Do: user facing error checking
-            if (this.formIsUpdated) {
-                this.formDisabled = true
-                try {
-                    await this.generalRepository.post(this.formChanges)
-                    this.formDisabled = false
-                    this.saveAction()
-                    this.success = true
-                    this.error = false
-                } catch (error) {
-                    this.formDisabled = false
-                    if (error.response.status === 401) {
-                        this.error = true
-                        this.success = false
-                    } else {
-                        // full form error response
-                        this.errorAction()
-                    }
-                }
-            } else {
-                this.continue()
-            }
+        save () {
+            this.saveHandler(this[repo])
         }
     },
-    async created () {
+    created () {
         this.module = 'general'
         this.relatedLinks = [
             {
@@ -94,10 +74,7 @@ export default {
             }
         ]
         this.errorMessage = 'We couldn’t find an account with the provided API key'
-        const { data } = await this.generalRepository.get()
-        for (const key in data) {
-            this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
-        }
+        this.loadData(this[repo])
     }
 }
 </script>

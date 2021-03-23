@@ -12,6 +12,11 @@ export default {
         goSkipStep () {
             this.$router.push({ path: this.skipPath })
         },
+        updateState (data) {
+            for (const key in data) {
+                this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
+            }
+        },
         saveHandler (moduleKey, moduleName = '', path = '') {
             if (this.formIsUpdated) {
                 this.$store.dispatch('guidedSetup/setItem', { key: 'hasChanges', value: true })
@@ -23,7 +28,7 @@ export default {
                         path
                     }
                 })
-                this.saveAction()
+                this.formChanges = {}
                 this.$router.push({ path: this.continuePath })
             } else {
                 this.$router.push({ path: this.continuePath })
