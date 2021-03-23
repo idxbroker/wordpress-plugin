@@ -19,34 +19,6 @@ export default {
                 [e.key]: e.value
             }
             this.formChanges = { ...this.formChanges, ...change }
-        },
-        updateState (changes) {
-            for (const key in changes) {
-                this.$store.dispatch(`${this.module}/setItem`, { key, value: changes[key] })
-            }
-        },
-        scrollToTop () {
-            window.scrollTo({
-                top: 0,
-                left: 0,
-                behavior: 'smooth'
-            })
-        },
-        saveAction () {
-            this.updateState(this.formChanges)
-            this.formChanges = {}
-            this.scrollToTop()
-            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: false, text: 'Changes Saved' } })
-            setTimeout(() => {
-                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
-            }, 4000)
-        },
-        errorAction () {
-            this.scrollToTop()
-            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true } })
-            setTimeout(() => {
-                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
-            }, 4000)
         }
     },
     beforeRouteLeave (to, from, next) {

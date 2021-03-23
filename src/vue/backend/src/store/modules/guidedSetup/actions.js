@@ -8,7 +8,8 @@ const progressStepperUpdate = ({ commit, state }, payload) => {
             name: step.name,
             icon: step.icon,
             total: step.total,
-            active: payload[key]
+            active: payload[key],
+            hideProgress: step.hideProgress
         }
     })
     commit(types.SET_ITEM, {

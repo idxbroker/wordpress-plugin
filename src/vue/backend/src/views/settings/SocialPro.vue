@@ -9,14 +9,14 @@
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        @toggle="setItem({ key: 'enabled', value: !enabled })"
                         :active="enabled"
                         :disabled="formDisabled"
                         :label="toggleLabel"
+                        @toggle="enablePlugin"
                     ></idx-toggle-slider>
                 </idx-block>
             </div>
-            <div v-show="enabled">
+            <div v-if="enabled">
                 <SocialProForm
                     :formDisabled="formDisabled"
                     v-bind="localStateValues"
@@ -24,7 +24,7 @@
                 />
                 <idx-button
                     size="lg"
-                    @click="saveAction"
+                    @click="save"
                 >
                     Save
                 </idx-button>
@@ -36,13 +36,18 @@
     </TwoColumn>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
+import { PRODUCT_REFS } from '@/data/productTerms'
 import SocialProForm from '@/templates/socialProForm'
 import RelatedLinks from '@/components/RelatedLinks.vue'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
+import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
+const { socialPro: { repo } } = PRODUCT_REFS
 export default {
-    mixins: [pageGuard],
+    name: 'standalone-social-pro-settings',
+    inject: [repo],
+    mixins: [pageGuard, standaloneSettingsActions],
     components: {
         SocialProForm,
         TwoColumn,
@@ -55,26 +60,15 @@ export default {
     },
     computed: {
         ...mapState({
-            enabled: state => state.socialPro.enabled,
-            autopublish: state => state.socialPro.autopublish,
-            postDay: state => state.socialPro.postDay,
-            postType: state => state.socialPro.postType
+            enabled: state => state.socialPro.enabled
         })
     },
     methods: {
-        ...mapActions({
-            setItem: 'socialPro/setItem'
-        }),
-        saveHandler () {
-            this.formDisabled = true
-            if (this.formChanges) {
-                this.formDisabled = false
-                if (status === 204) {
-                    this.saveAction()
-                } else {
-                    this.errorAction()
-                }
-            }
+        enablePlugin () {
+            this.enablePluginAction(this[repo])
+        },
+        save () {
+            this.saveHandler(this[repo])
         }
     },
     created () {
@@ -94,6 +88,9 @@ export default {
                 href: '#signUp'
             }
         ]
+        if (this.enabled) {
+            this.loadData(this[repo])
+        }
     }
 }
 </script>
