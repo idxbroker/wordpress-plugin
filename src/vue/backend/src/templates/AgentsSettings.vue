@@ -27,7 +27,7 @@
             <p>Default Number of Posts Description of the Default Number of Posts setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="number-of-posts">Default Number of Posts</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="number-of-posts">Default Number of Posts</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"
@@ -41,7 +41,7 @@
             <p>Directory Slug Description of the Employee Slug setting in IMPress Agents. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="directory-slug">Directory Slug</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="directory-slug">Directory Slug</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"
@@ -55,7 +55,7 @@
             <p>Detailed sentence or two describing how custom wrappers can be used and how to set them up properly.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="wrapper-start">Wrapper Start HTML</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="wrapper-start">Wrapper Start HTML</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"
@@ -65,7 +65,7 @@
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="wrapper-end">Wrapper End HTML</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="wrapper-end">Wrapper End HTML</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"

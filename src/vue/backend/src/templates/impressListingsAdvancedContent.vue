@@ -58,7 +58,7 @@
             <p>Detailed sentence or two describing short code compatibility with Contact Form plugin. If no short code is entered the template uses default contact forms.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="form-shortcode">Form Shortcode</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="form-shortcode">Form Shortcode</idx-form-label>
             <idx-form-input
                 type="text"
                 id="form-shortcode"
@@ -74,7 +74,7 @@
             <a target="_blank" href="https://developers.google.com/maps/documentation/javascript/get-api-key">click here</a> to register.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="google-maps">Google Maps API Key</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="google-maps">Google Maps API Key</idx-form-label>
             <idx-form-input
                 type="text"
                 id="google-maps"
@@ -102,7 +102,7 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="wrapper-start-html">Wrapper Start HTML</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="wrapper-start-html">Wrapper Start HTML</idx-form-label>
             <idx-form-input
                 :disabled="!useCustomWrapper || formDisabled"
                 type="text"
@@ -112,7 +112,7 @@
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="wrapper-end-html">Wrapper End HTML</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="wrapper-end-html">Wrapper End HTML</idx-form-label>
             <idx-form-input
                 :disabled="!useCustomWrapper || formDisabled"
                 type="text"

@@ -10,7 +10,7 @@
             <p>Description of the Default State setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="default-state">Choose Default State</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="default-state">Choose Default State</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"
@@ -51,7 +51,7 @@
             <p>Description of the Default Number of Posts setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="default-posts">Number of Posts on Listing Archive Page</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="default-posts">Number of Posts on Listing Archive Page</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"
@@ -65,7 +65,7 @@
             <p>Description of the Default Disclaimer setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="default-disclaimer">Default Disclaimer</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="default-disclaimer">Default Disclaimer</idx-form-label>
             <idx-textarea
                 type="text"
                 :disabled="formDisabled"
@@ -81,7 +81,7 @@
             <p>Description of the Listings Slug setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="listings-slug">Listings Slug</idx-form-label>
+            <idx-form-label customClass="form-content__label" target="listings-slug">Listings Slug</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"

@@ -12,7 +12,7 @@
         <template v-slot:controls>
             <idx-block className="form-content">
                 <idx-form-group>
-                    <idx-form-label customClass="form-content__label" for="ApiKey">API Key</idx-form-label>
+                    <idx-form-label customClass="form-content__label" target="ApiKey">API Key</idx-form-label>
                     <APIKey
                         :disabled="formDisabled"
                         :error="error"
