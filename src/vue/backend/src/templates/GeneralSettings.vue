@@ -58,10 +58,10 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
-                    :active="dataCollection"
+                    :active="optOut"
                     :disabled="formDisabled"
                     :label="dataCollectionLabel"
-                    @toggle="$emit('form-field-update',{ key: 'dataCollection', value: !dataCollection })"
+                    @toggle="$emit('form-field-update',{ key: 'optOut', value: !optOut })"
                 ></idx-toggle-slider>
             </idx-block>
         </idx-form-group>
@@ -72,7 +72,7 @@
 export default {
     name: 'GeneralSettings',
     props: {
-        dataCollection: {
+        optOut: {
             type: Boolean,
             default: false
         },
