@@ -4,6 +4,7 @@
         :masterList="agents"
         :description="description"
         :clearSelections="clearSelections"
+        :loading="loading"
         @bulk-action="importItems($event, 'agents')"
     ></import-page-template>
 </template>
@@ -25,7 +26,7 @@ export default {
         })
     },
     created () {
-        this.description = 'Select the agents to import from IDX Broker'
+        this.description = 'Select the agents to import from IDX Broker. Please note that it may take up to 15 minutes to complete your import, depending on file size.'
     }
 }
 </script>

@@ -2,12 +2,23 @@ export default {
     data () {
         return {
             checkProgress: '',
-            clearSelections: false
+            clearSelections: false,
+            loading: false
         }
     },
     methods: {
+        scrollToTop () {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            })
+        },
         async importItems (items, key) {
             this.clearSelections = false
+            this.loading = true
+            this.scrollToTop()
+            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: false, text: 'Your Import Is In Progress' } })
             const itemIds = items.map(x => {
                 return key === 'listings' ? x.listingId : x.agentId
             })
@@ -22,23 +33,37 @@ export default {
                             this.clearSelections = true
                         } else {
                             clearInterval(this.checkProgress)
-                            this.$store.dispatch('importContent/setItem', { key, value: data })
+                            setTimeout(() => {
+                                this.$store.dispatch('importContent/setItem', { key, value: data })
+                                this.loading = false
+                                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
+                            }, 800)
                         }
                     }, 5000)
                 } else {
-                    this.clearSelections = true
-                    this.$store.dispatch('importContent/setItem', { key, value: data })
+                    setTimeout(() => {
+                        this.clearSelections = true
+                        this.$store.dispatch('importContent/setItem', { key, value: data })
+                        this.loading = false
+                        this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
+                    }, 800)
                 }
             } catch (error) {
-                // To-do: error banner
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true } })
             }
         },
         async unimportItems (items, key) {
             this.clearSelections = false
+            this.loading = true
+            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: false, text: 'Your Deletion Is In Progress' } })
             const itemIds = items.map(x => { return x.postId })
             const { data } = await this.importContentRepository.delete({ ids: itemIds }, `${key}/delete`)
-            this.$store.dispatch(`${this.module}/setItem`, { key, value: data })
-            this.clearSelections = true
+            setTimeout(() => {
+                this.$store.dispatch(`${this.module}/setItem`, { key, value: data })
+                this.clearSelections = true
+                this.loading = false
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
+            }, 800)
         }
     },
     created () {

@@ -1,10 +1,15 @@
 <template>
-    <div>
+    <idx-block
+        :className="{
+            'import-page-template': true,
+            'import-page-template--loading': loading
+        }">
         <bulk-action
             :action="action"
             :selected="selected"
             :description="description"
             :disabled="itemsSelected.length === 0"
+            :loading="loading"
             @select-all="selectAll( masterList)"
             @bulk-action="$emit('bulk-action', itemsSelected)"
         ></bulk-action>
@@ -30,11 +35,19 @@
                 >
                 </agent-card>
             </template>
+            <idx-block className="spinner-border" role="status" v-if="loading">
+                <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
+            </idx-block>
         </idx-block>
         <idx-block v-else>
-            There are no {{ cardType }} available.
+            <idx-block className="spinner-border" role="status" v-if="itemsSelected.length > 0">
+                <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
+            </idx-block>
+            <idx-block v-else>
+                There are no {{ cardType }} available.
+            </idx-block>
         </idx-block>
-    </div>
+    </idx-block>
 </template>
 <script>
 import BulkAction from '@/components/BulkAction.vue'
@@ -73,15 +86,46 @@ export default {
         clearSelections: {
             type: Boolean,
             default: false
+        },
+        loading: {
+            type: Boolean,
+            default: false
         }
     }
 }
 </script>
 <style lang="scss">
-.import-card__group {
-    display: flex;
-    flex-wrap: wrap;
-    grid-gap: 15px;
-    margin-top: 30px;
+.import-page-template {
+
+    .import-card__group {
+        display: flex;
+        flex-wrap: wrap;
+        grid-gap: 15px;
+        margin-top: 30px;
+        position: relative;
+
+        .spinner-border {
+            bottom: 50%;
+            margin-bottom: -2rem;
+            margin-right: -2rem;
+            position: absolute;
+            right: 50%;
+        }
+    }
+
+    .spinner-border {
+        border-width: 4px;
+        height: 4rem;
+        width: 4rem;
+    }
+
+    &--loading {
+
+        .import-card__group .import-listings,
+        .import-card__group .agent-card {
+            filter: grayscale(1);
+            opacity: .2;
+        }
+    }
 }
 </style>
