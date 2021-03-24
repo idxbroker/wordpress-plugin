@@ -11,7 +11,7 @@
                 v-bind="listing"
             >
             <template v-slot:propertyCardImage>
-                    <img class="property-card__image" :src="listing.image" alt="listing image">
+                    <img class="property-card__image" :src="listing.image" :alt="`image of ${listing.address}`">
                 </template>
             </idx-single-property-card>
         </template>
