@@ -40,7 +40,12 @@
             </idx-block>
         </idx-block>
         <idx-block v-else>
-            There are no {{ cardType }} available.
+            <idx-block className="spinner-border" role="status" v-if="itemsSelected.length > 0">
+                <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
+            </idx-block>
+            <idx-block v-else>
+                There are no {{ cardType }} available.
+            </idx-block>
         </idx-block>
     </idx-block>
 </template>
@@ -98,16 +103,19 @@ export default {
         grid-gap: 15px;
         margin-top: 30px;
         position: relative;
+
+        .spinner-border {
+            bottom: 50%;
+            margin-bottom: -2rem;
+            margin-right: -2rem;
+            position: absolute;
+            right: 50%;
+        }
     }
 
     .spinner-border {
         border-width: 4px;
-        bottom: 50%;
         height: 4rem;
-        margin-bottom: -2rem;
-        margin-right: -2rem;
-        position: absolute;
-        right: 50%;
         width: 4rem;
     }
 

@@ -11,7 +11,7 @@
             <idx-block
                 className="import-header__select-all"
                 @click="$emit('select-all', selected)"
-                v-if="!loading"
+                v-else
             >
                 {{ selected ? 'Deselect All' : 'Select All' }}
             </idx-block>
