@@ -1,5 +1,5 @@
 <template>
-    <div id="layout">
+    <div :id="`${$idxStrap.prefix}layout`">
         <Navbar></Navbar>
         <Page>
             <Generic />

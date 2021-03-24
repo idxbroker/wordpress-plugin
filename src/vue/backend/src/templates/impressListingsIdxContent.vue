@@ -98,13 +98,13 @@
         </idx-form-group>
         <idx-form-group>
             <idx-block className="form-content__label">
-                <idx-block tag="h3" id="importTitleLabel" className="form-content__title">Import Title</idx-block>
+                <idx-block tag="h3" :id="`${$idxStrap.prefix}importTitleLabel`" className="form-content__title">Import Title</idx-block>
                 <p>By default, your imported listings will use the street address as the page title and permalink</p>
             </idx-block>
             <idx-form-input
                 type="text"
                 aria-labelledby="importTitleLabel"
-                id="importTitle"
+                :id="`${$idxStrap.prefix}importTitle`"
                 :disabled="formDisabled"
                 :value="importTitle"
                 @change="$emit('form-field-update', { key: 'importTitle', value: $event.target.value })"

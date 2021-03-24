@@ -9,7 +9,7 @@
         >
             <idx-form-input
                 type="text"
-                id="ApiKey"
+                :id="`${$idxStrap.prefix}ApiKey`"
                 :disabled="disabled"
                 :placeholder="placeholder"
                 :customClass="{
