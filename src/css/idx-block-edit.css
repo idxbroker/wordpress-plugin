@@ -1,6 +1,5 @@
-.idx-block-placeholder-container {
-	text-align: center;
-	padding-top: 12px;
+.idx-block-placeholder-container img {
+	width: 100%;
 }
 
 /* Used to change the size of the size of the dashicon used for the IMPress Carousel, it is the only block not using a Font Awesome icon */
