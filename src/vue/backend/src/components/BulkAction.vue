@@ -3,15 +3,11 @@
         <idx-block className="import-header__description">{{ description }}</idx-block>
         <idx-block className="import-header__actions-bar">
             <idx-block
-                className="import-header__select-all import-header__select-all--loading"
-                v-if="loading"
-            >
-                {{ selected ? 'Deselect All' : 'Select All' }}
-            </idx-block>
-            <idx-block
-                className="import-header__select-all"
-                @click="$emit('select-all', selected)"
-                v-else
+                :className="{
+                    'import-header__select-all': true,
+                    'import-header__select-all--loading': loading
+                }"
+                @click="loading ? false : $emit('select-all', selected)"
             >
                 {{ selected ? 'Deselect All' : 'Select All' }}
             </idx-block>
