@@ -11,7 +11,7 @@
                 <p>Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</p>
             </idx-block>
             <idx-form-input
-                aria-labelledby="wrapperNameLabel"
+                :aria-labelledby="`${$idxStrap.prefix}wrapperNameLabel`"
                 type="text"
                 :disabled="formDisabled"
                 :id="`${$idxStrap.prefix}wrapperName`"
