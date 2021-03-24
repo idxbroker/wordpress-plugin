@@ -64,7 +64,6 @@ class Initiate_Plugin {
 		new Shortcodes\Register_Impress_Shortcodes();
 		new Widgets\Omnibar\Create_Omnibar();
 		new Shortcodes\Shortcode_Ui();
-		new Help();
 		new \IDX\Views\Omnibar_Settings();
 		new Dashboard_Widget();
 		new Backward_Compatibility\Add_Uid_To_Idx_Pages();
