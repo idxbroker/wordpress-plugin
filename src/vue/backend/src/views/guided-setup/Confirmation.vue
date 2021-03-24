@@ -97,57 +97,56 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    @import '~@idxbrokerllc/idxstrap/dist/styles/components/fullscreen';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/fullscreen';
+.gs,
+.gs .gs__hero,
+.gs .gs__icon {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
 
-    .gs,
-    .gs .gs__hero,
-    .gs .gs__icon {
-        align-items: center;
-        display: flex;
-        justify-content: center;
+.gs {
+    bottom: 0;
+    height: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: auto;
+
+    &.fullscreen {
+        z-index: 9999;
     }
 
-    .gs {
-        bottom: 0;
-        height: auto;
-        left: 0;
-        right: 0;
-        top: 0;
-        width: auto;
+    &__hero {
+        flex-direction: column;
+        gap: var(--space-7);
+        text-align: center;
 
-        &.fullscreen {
-            z-index: 9999;
+        h1 {
+            letter-spacing: var(--letter-spacing-h1);
+            text-transform: uppercase;
         }
+    }
 
-        &__hero {
-            flex-direction: column;
-            gap: var(--space-7);
-            text-align: center;
-
-            h1 {
-                letter-spacing: var(--letter-spacing-h1);
-                text-transform: uppercase;
-            }
-        }
-
-        &__icon {
-            border: 5px solid;
-            border-radius: 50%;
+    &__icon {
+        border: 5px solid;
+        border-radius: 50%;
+        font-size: 80px;
+        height: 156px;
+        width: 156px;
+        &--error {
             font-size: 80px;
-            height: 156px;
-            width: 156px;
-            &--error {
-                font-size: 80px;
-                svg {
-                    width: 1.5em;
-                }
+            svg {
+                width: 1.5em;
             }
         }
-        .spinner-border {
-            position: unset;
-            height: 4rem;
-            width: 4rem;
-            border-right-color: $white;
-        }
     }
+    .spinner-border {
+        position: unset;
+        height: 4rem;
+        width: 4rem;
+        border-right-color: $white;
+    }
+}
 </style>

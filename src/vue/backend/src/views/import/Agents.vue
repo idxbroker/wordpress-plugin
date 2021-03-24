@@ -50,8 +50,10 @@ export default {
     async created () {
         this.module = 'importContent'
         this.description = 'Select the agents to import from IDX Broker'
+        this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: true })
         const { data } = await this.importContentRepository.get('agents')
         this.$store.dispatch(`${this.module}/setItem`, { key: 'agents', value: data })
+        this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: false })
     }
 }
 </script>

@@ -13,7 +13,7 @@
             </idx-block>
             <idx-button
                 customClass="import-header__action"
-                :disabled="disabled"
+                :disabled="disabled || loading"
                 @click="$emit('bulk-action')"
             >
                 {{ action }} Selected

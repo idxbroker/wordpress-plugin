@@ -9,7 +9,7 @@
                 :icon="plus"
                 @click.native="horizontalExpand"
             ></idx-v-icon>
-            <idx-navbar-brand link="/">
+            <idx-navbar-brand  tag="router-link" to="/guided-setup/welcome">
                 <img :src="idxBrand" alt="IDX Broker Logo" loading="lazy">
             </idx-navbar-brand>
         </idx-navbar>
