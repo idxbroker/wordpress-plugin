@@ -27,28 +27,30 @@ export default {
                 behavior: 'smooth'
             })
         },
-        saveAction () {
+        saveAction (saveText = '') {
+            saveText = saveText === '' ? 'Changes Saved' : saveText
             this.updateState(this.formChanges)
             this.formChanges = {}
             this.scrollToTop()
-            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: false, text: 'Changes Saved' } })
+            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: false, text: saveText } })
             setTimeout(() => {
-                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: false, text: 'Changes Saved' } })
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: false, text: saveText } })
             }, 3000)
         },
         errorAction () {
+            const errorText = 'We\'re experiencing a problem, please try again'
             this.scrollToTop()
-            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true, text: 'We\'re experiencing a problem, please try again.' } })
+            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true, text: errorText } })
             setTimeout(() => {
-                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: true, text: 'We\'re experiencing a problem, please try again.' } })
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: true, text: errorText } })
             }, 3000)
         },
-        async saveHandler (repo, path = '', changes = this.formChanges) {
+        async saveHandler (repo, path = '', changes = this.formChanges, saveText = '') {
             this.formDisabled = true
             try {
                 const { status } = await repo.post(changes, path)
                 if (status === 204) {
-                    this.saveAction()
+                    this.saveAction(saveText)
                 } else {
                     this.errorAction()
                 }

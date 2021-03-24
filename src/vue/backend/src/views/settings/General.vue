@@ -10,6 +10,8 @@
             :error="error"
             :loading="formDisabled"
             :success="success"
+            :showRefresh="true"
+            @refreshPluginOptions="refreshPluginOptions"
             @form-field-update="formUpdate"
         />
         <GeneralSettings
@@ -51,6 +53,9 @@ export default {
     methods: {
         save () {
             this.saveHandler(this[repo])
+        },
+        refreshPluginOptions () {
+            this.saveHandler(this[repo], '', this.localStateValues.APIKey, 'Plugin Options have been refreshed.')
         }
     },
     created () {
