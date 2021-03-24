@@ -1,5 +1,6 @@
 <template>
-    <idx-block :className="{
+    <idx-block
+        :className="{
             'import-page-template': true,
             'import-page-template--loading': loading
         }">
@@ -8,6 +9,7 @@
             :selected="selected"
             :description="description"
             :disabled="itemsSelected.length === 0"
+            :loading="loading"
             @select-all="selectAll( masterList)"
             @bulk-action="$emit('bulk-action', itemsSelected)"
         ></bulk-action>
