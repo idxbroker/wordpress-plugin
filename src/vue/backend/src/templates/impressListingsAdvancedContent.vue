@@ -58,10 +58,10 @@
             <p>Detailed sentence or two describing short code compatibility with Contact Form plugin. If no short code is entered the template uses default contact forms.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="form-shortcode">Form Shortcode</idx-form-label>
+            <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}form-shortcode`">Form Shortcode</idx-form-label>
             <idx-form-input
                 type="text"
-                id="form-shortcode"
+                :id="`${$idxStrap.prefix}form-shortcode`"
                 :disabled="formDisabled"
                 :value="formShortcode"
                 @change="$emit('form-field-update', { key: 'formShortcode', value: $event.target.value })"
@@ -74,10 +74,10 @@
             <a target="_blank" href="https://developers.google.com/maps/documentation/javascript/get-api-key">click here</a> to register.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="google-maps">Google Maps API Key</idx-form-label>
+            <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}google-maps`">Google Maps API Key</idx-form-label>
             <idx-form-input
                 type="text"
-                id="google-maps"
+                :id="`${$idxStrap.prefix}google-maps`"
                 :disabled="formDisabled"
                 :value="googleMapsAPIKey"
                 @change="$emit('form-field-update', { key: 'googleMapsAPIKey', value: $event.target.value })"
@@ -102,21 +102,21 @@
             </idx-block>
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="wrapper-start-html">Wrapper Start HTML</idx-form-label>
+            <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}wrapper-start-html`">Wrapper Start HTML</idx-form-label>
             <idx-form-input
                 :disabled="!useCustomWrapper || formDisabled"
                 type="text"
-                id="wrapper-start-html"
+                :id="`${$idxStrap.prefix}wrapper-start-html`"
                 :value="wrapperStart"
                 @change="$emit('form-field-update', { key: 'wrapperStart', value: $event.target.value })"
             />
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="wrapper-end-html">Wrapper End HTML</idx-form-label>
+            <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}wrapper-end-html`">Wrapper End HTML</idx-form-label>
             <idx-form-input
                 :disabled="!useCustomWrapper || formDisabled"
                 type="text"
-                id="wrapper-end-html"
+                :id="`${$idxStrap.prefix}wrapper-end-html`"
                 :value="wrapperEnd"
                 @change="$emit('form-field-update', { key: 'wrapperEnd', value: $event.target.value })"
             />

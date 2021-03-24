@@ -6,14 +6,15 @@
             'form-content--disabled': formDisabled
         }">
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" for="website-wrapper">
-                <idx-block tag="h2" className="form-content__title">Name Your Global Website Wrapper</idx-block>
+            <idx-block className="form-content__label">
+                <idx-block :id="`${$idxStrap.prefix}wrapperNameLabel`" tag="h2" className="form-content__title">Name Your Global Website Wrapper</idx-block>
                 <p>Wrappers set the overall styling of your IDX Broker pages, some words about maintaining a consistent design between WordPress and IDX Broker.</p>
-            </idx-form-label>
+            </idx-block>
             <idx-form-input
+                :aria-labelledby="`${$idxStrap.prefix}wrapperNameLabel`"
                 type="text"
                 :disabled="formDisabled"
-                id="website-wrapper"
+                :id="`${$idxStrap.prefix}wrapperName`"
                 :value="wrapperName"
                 @change="$emit('form-field-update',{ key: 'wrapperName', value: $event.target.value })"
             />

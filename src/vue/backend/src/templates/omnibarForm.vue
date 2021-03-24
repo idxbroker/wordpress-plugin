@@ -130,10 +130,11 @@
             Examples: “Search for Properties”, “Location, School, Address, or Listing ID”.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label">Custom Placeholder</idx-form-label>
+            <idx-form-label :target="`${$idxStrap.prefix}customPlaceholder`" customClass="form-content__label">Custom Placeholder</idx-form-label>
             <idx-form-input
                 type="text"
                 customClass=""
+                :id="`${$idxStrap.prefix}customPlaceholder`"
                 :value="customPlaceholder"
                 @change="$emit('form-field-update', { key: 'customPlaceholder', value: $event.target.value })"
             ></idx-form-input>
