@@ -103,7 +103,7 @@
             </idx-block>
             <idx-form-input
                 type="text"
-                aria-labelledby="importTitleLabel"
+                :aria-labelledby="`${$idxStrap.prefix}importTitleLabel`"
                 :id="`${$idxStrap.prefix}importTitle`"
                 :disabled="formDisabled"
                 :value="importTitle"
