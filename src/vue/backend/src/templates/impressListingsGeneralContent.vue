@@ -10,11 +10,11 @@
             <p>Description of the Default State setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" target="default-state">Choose Default State</idx-form-label>
+            <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}default-state`">Choose Default State</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"
-                id="default-state"
+                :id="`${$idxStrap.prefix}default-state`"
                 placeholder="Enter your default state"
                 :value="defaultState"
                 @change="$emit('form-field-update', { key: 'defaultState', value: $event.target.value })"
@@ -51,11 +51,11 @@
             <p>Description of the Default Number of Posts setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" target="default-posts">Number of Posts on Listing Archive Page</idx-form-label>
+            <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}default-posts`">Number of Posts on Listing Archive Page</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"
-                id="default-posts"
+                :id="`${$idxStrap.prefix}default-posts`"
                 :value="numberOfPosts"
                 @change="$emit('form-field-update', { key: 'numberOfPosts', value: $event.target.value })"
             />
@@ -65,11 +65,11 @@
             <p>Description of the Default Disclaimer setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" target="default-disclaimer">Default Disclaimer</idx-form-label>
+            <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}default-disclaimer`">Default Disclaimer</idx-form-label>
             <idx-textarea
                 type="text"
                 :disabled="formDisabled"
-                id="default-disclaimer"
+                :id="`${$idxStrap.prefix}default-disclaimer`"
                 placeholder="Disclaimer text"
                 rows="3"
                 :value="defaultDisclaimer"
@@ -81,11 +81,11 @@
             <p>Description of the Listings Slug setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label" target="listings-slug">Listings Slug</idx-form-label>
+            <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}listings-slug`">Listings Slug</idx-form-label>
             <idx-form-input
                 type="text"
                 :disabled="formDisabled"
-                id="listings-slug"
+                :id="`${$idxStrap.prefix}listings-slug`"
                 :value="listingSlug"
                 @change="$emit('form-field-update', { key: 'listingSlug', value: $event.target.value })"
             />
