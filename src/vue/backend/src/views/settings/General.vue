@@ -6,6 +6,7 @@
         </idx-block>
         <APIKey
             :apiKey="localStateValues.apiKey"
+            :devPartnerKey="localStateValues.devPartnerKey"
             :disabled="formDisabled"
             :error="error"
             :loading="formDisabled || loading"
