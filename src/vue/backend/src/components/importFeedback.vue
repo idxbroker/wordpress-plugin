@@ -50,8 +50,7 @@ export default {
         },
         link: {
             type: String,
-            default: '',
-            required: true
+            default: ''
         },
         content: {
             type: Object,

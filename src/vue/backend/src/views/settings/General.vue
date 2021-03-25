@@ -8,7 +8,7 @@
             :apiKey="localStateValues.apiKey"
             :disabled="formDisabled"
             :error="error"
-            :loading="formDisabled"
+            :loading="formDisabled || loading"
             :success="success"
             :showRefresh="true"
             @refreshPluginOptions="refreshPluginOptions"
@@ -26,6 +26,7 @@
     </TwoColumn>
 </template>
 <script>
+import { mapState } from 'vuex'
 import { PRODUCT_REFS } from '@/data/productTerms'
 import APIKey from '@/components/APIKey.vue'
 import GeneralSettings from '@/templates/GeneralSettings'
@@ -47,15 +48,32 @@ export default {
     data () {
         return {
             error: false,
-            success: false
+            success: false,
+            loading: false
         }
     },
+    computed: {
+        ...mapState({
+            isValid: state => state.general.isValid
+        })
+    },
     methods: {
-        save () {
-            this.saveHandler(this[repo])
+        save (path = '', changes = this.formChanges, saveText = '') {
+            this.error = false
+            this.success = false
+            this.loading = true
+            this.saveHandler(this[repo], path, changes, saveText).then(async x => {
+                this.loading = true
+                const { data } = await this[repo].get('apiKeyIsValid')
+                this.$store.dispatch(`${this.module}/setItem`, { key: 'isValid', value: data.isValid })
+                this.loading = false
+                this.error = !data.isValid
+                this.success = data.isValid
+                this.scrollToTop()
+            })
         },
         refreshPluginOptions () {
-            this.saveHandler(this[repo], '', this.localStateValues.APIKey, 'Plugin Options have been refreshed.')
+            this.save('', { apiKey: this.localStateValues.apiKey }, 'Plugin Options have been refreshed.')
         }
     },
     created () {

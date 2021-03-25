@@ -1,15 +1,31 @@
 <template>
-    <TwoColumn title="Social Pro Syndication Settings">
+    <idx-block className="section" v-if="!subscribed">
+        not subscribed in middleware
+    </idx-block>
+    <idx-block className="section" v-else-if="!isValid">
+        <feedback
+            :title="title"
+            :missingAPI="!isValid"
+            :content="content"
+        >
+        </feedback>
+    </idx-block>
+    <TwoColumn v-else title="Social Pro Syndication Settings">
         <idx-block className="form-content">
             <div>
                 <b>Social Pro</b>
                 <div>Detailed sentence or two describing Social Pro General Interest Articles. Lorem ipsum dolor sit amet.</div>
-                <idx-block className="form-content__toggle">
+                <idx-block
+                    :className="{
+                        'form-content__toggle': true,
+                        'form-content--disabled': formDisabled
+                    }"
+                >
                     {{ toggleLabel }}
                     <idx-toggle-slider
                         uncheckedState="No"
                         checkedState="Yes"
-                        :active="enabled"
+                        :active="localStateValues.enabled"
                         :disabled="formDisabled"
                         :label="toggleLabel"
                         @toggle="enablePlugin"
@@ -40,6 +56,7 @@ import { mapState } from 'vuex'
 import { PRODUCT_REFS } from '@/data/productTerms'
 import SocialProForm from '@/templates/socialProForm'
 import RelatedLinks from '@/components/RelatedLinks.vue'
+import Feedback from '@/components/importFeedback.vue'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
 import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
@@ -51,7 +68,8 @@ export default {
     components: {
         SocialProForm,
         TwoColumn,
-        RelatedLinks
+        RelatedLinks,
+        Feedback
     },
     data () {
         return {
@@ -60,6 +78,8 @@ export default {
     },
     computed: {
         ...mapState({
+            subscribed: state => state.socialPro.subscribed,
+            isValid: state => state.general.isValid,
             enabled: state => state.socialPro.enabled
         })
     },
@@ -74,6 +94,10 @@ export default {
     created () {
         this.module = 'socialPro'
         this.toggleLabel = 'Enable General Interest Article Syndication'
+        this.title = 'API Key Required'
+        this.content = {
+            startingStatement: 'To use Social Pro, you need to'
+        }
         this.relatedLinks = [
             {
                 text: 'Social Pro with IDX Broker',
@@ -88,7 +112,7 @@ export default {
                 href: '#signUp'
             }
         ]
-        if (this.enabled) {
+        if (this.enabled && this.subscribed && this.isValid) {
             this.loadData(this[repo])
         }
     }

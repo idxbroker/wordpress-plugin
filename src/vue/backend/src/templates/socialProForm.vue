@@ -30,14 +30,45 @@
             ></idx-custom-select>
         </idx-form-group>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label">General Interest Article Post Type</idx-form-label>
-            <idx-custom-select
-                ariaLabel="Select post type"
+            <idx-form-label
+                :id="`${$idxStrap.prefix}article-post-type`"
+                customClass="form-content__label"
+            >
+                General Interest Article Post Type
+            </idx-form-label>
+            <idx-form-input
+                :id="`${$idxStrap.prefix}article-post-type__input`"
+                type="text"
+                :aria-labelledby="`${$idxStrap.prefix}article-post-type`"
                 :disabled="formDisabled"
-                :selected="postType"
-                :options="postTypeOptions"
-                @selected-item="$emit('form-field-update', { key: 'postType', value: $event.value })"
+                :value="postType"
+                @change="$emit('form-field-update',{ key: 'postType', value: $event.target.value })"
+            />
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label customClass="form-content__label">General Interest Article Author</idx-form-label>
+            <idx-custom-select
+                ariaLabel="Select author"
+                :disabled="formDisabled"
+                :selected="selectedAuthor"
+                :options="authors"
+                @selected-item="$emit('form-field-update', { key: 'selectedAuthor', value: $event.value })"
             ></idx-custom-select>
+        </idx-form-group>
+        <idx-form-group>
+            <idx-form-label
+                :customClass="{
+                    ['form-content__label']: true,
+                    ['form-content--disabled']: formDisabled
+                }"
+            >
+                General Interest Article Categories
+            </idx-form-label>
+            <idx-input-tag-autocomplete
+                :previousSelections="selectedCategories"
+                :resultsList="categories"
+                @tag-list="$emit('form-field-update', { key: 'selectedCategories', value: $event })"
+            ></idx-input-tag-autocomplete>
         </idx-form-group>
     </idx-block>
 </template>
@@ -56,6 +87,22 @@ export default {
         postType: {
             type: String,
             default: 'post'
+        },
+        authors: {
+            type: Array,
+            default: () => []
+        },
+        selectedAuthor: {
+            type: String,
+            default: ''
+        },
+        categories: {
+            type: Array,
+            default: () => []
+        },
+        selectedCategories: {
+            type: Array,
+            default: () => []
         },
         formDisabled: {
             type: Boolean,
@@ -76,13 +123,13 @@ export default {
             { label: 'Friday', value: 'fri' },
             { label: 'Saturday', value: 'sat' }
         ]
-        this.postTypeOptions = [
-            { label: 'Post', value: 'post' }
-        ]
     }
 }
 </script>
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/toggleSlider.scss';
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/customSelect.scss';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTagAutocomplete.scss';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/inputTags.scss';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/autocomplete.scss';
 </style>
