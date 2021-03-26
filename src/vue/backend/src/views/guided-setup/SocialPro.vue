@@ -38,9 +38,7 @@
                     We're experiencing a problem, please try again.
                 </idx-block>
             </idx-block>
-            <idx-block v-else>
-                You're not subscribed, go to middleware to subscribe.
-            </idx-block>
+            <social-pro-upgrade v-else></social-pro-upgrade>
         </template>
     </GuidedSetupContentCard>
 </template>
@@ -50,6 +48,7 @@ import { mapState, mapActions } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
 import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
+import SocialProUpgrade from '@/components/socialProUpgrade.vue'
 export default {
     name: 'guided-setup-social-pro',
     mixins: [
@@ -57,7 +56,8 @@ export default {
         pageGuard
     ],
     components: {
-        GuidedSetupContentCard
+        GuidedSetupContentCard,
+        SocialProUpgrade
     },
     data () {
         return {
