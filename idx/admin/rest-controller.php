@@ -53,20 +53,31 @@ class Rest_Controller {
 	}
 
 	/**
-	 * Checks if IMPress Agents is enabled.
+	 * Add-on enabled check.
 	 *
-	 * @return WP_Error|bool
+	 * @param string $wp_option wp_option to check against.
+	 * @param string $human_readable Human readable add-on name.
+	 * @return bool|WP_Error enabled or not.
 	 */
-	public function agents_enabled() {
+	private function addon_enabled_check( $wp_option, $human_readable ) {
 		$admin_permissions = $this->admin_check();
 		if ( true !== $admin_permissions ) {
 			return $admin_permissions;
 		}
 
-		if ( ! boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) ) {
-			return $this->addon_not_enabled_error( 'IMPress Agents' );
+		if ( ! boolval( get_option( $wp_option, 0 ) ) ) {
+			return $this->addon_not_enabled_error( $human_readable );
 		}
 		return true;
+	}
+
+	/**
+	 * Checks if IMPress Agents is enabled.
+	 *
+	 * @return WP_Error|bool
+	 */
+	public function agents_enabled() {
+		return $this->addon_enabled_check( 'idx_broker_agents_enabled', 'IMPress Agents' );
 	}
 
 	/**
@@ -75,15 +86,16 @@ class Rest_Controller {
 	 * @return bool
 	 */
 	public function listings_enabled() {
-		$admin_permissions = $this->admin_check();
-		if ( true !== $admin_permissions ) {
-			return $admin_permissions;
-		}
+		return $this->addon_enabled_check( 'idx_broker_listings_enabled', 'IMPress Listings' );
+	}
 
-		if ( ! boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
-			return $this->addon_not_enabled_error( 'IMPress Listings' );
-		}
-		return true;
+	/**
+	 * Checks if Social Pro is enabled.
+	 *
+	 * @return bool
+	 */
+	public function social_pro_enabled() {
+		return $this->addon_enabled_check( 'idx_broker_social_pro_enabled', 'Social Pro' );
 	}
 
 	/**
@@ -181,3 +193,4 @@ new Apis\Listings_Advanced_Settings();
 new Apis\Listings_Settings();
 new Apis\Omnibar_Settings();
 new Apis\Settings_General();
+new Apis\Social_Pro_Settings();

@@ -20,7 +20,18 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	public function __construct() {
 		$this->register_route( 'agents' );
 		$this->register_route( 'listings' );
-		$this->register_route( 'social-pro' );
+		$this->register_route( 'social-pro', 'settings', false, true );
+
+		// Custom registrations.
+		register_rest_route(
+			$this->namespace,
+			$this->route_name( 'settings/social-pro/enable' ),
+			[
+				'methods'             => 'GET',
+				'callback'            => [ $this, 'social_pro_get' ],
+				'permission_callback' => [ $this, 'admin_check' ],
+			]
+		);
 	}
 
 	/**
@@ -59,38 +70,62 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	 *
 	 * @param string $addon Add-on name.
 	 * @param string $prefix Route prefix.
+	 * @param bool   $get Register GET request.
+	 * @param bool   $post Register POST request.
 	 * @return void
 	 */
-	private function register_route( $addon, $prefix = 'settings' ) {
+	private function register_route( $addon, $prefix = 'settings', $get = true, $post = true ) {
 		$wp_option_name = 'idx_broker_' . $addon . '_enabled';
 
-		register_rest_route(
-			$this->namespace,
-			$this->route_name( "$prefix/$addon/enable" ),
-			[
-				'methods'             => 'GET',
-				'callback'            => function () use ( &$wp_option_name ) {
-					return $this->get( $wp_option_name );
-				},
-				'permission_callback' => [ $this, 'admin_check' ],
-			]
-		);
+		if ( $get ) {
+			register_rest_route(
+				$this->namespace,
+				$this->route_name( "$prefix/$addon/enable" ),
+				[
+					'methods'             => 'GET',
+					'callback'            => function () use ( &$wp_option_name ) {
+						return $this->get( $wp_option_name );
+					},
+					'permission_callback' => [ $this, 'admin_check' ],
+				]
+			);
+		}
 
-		register_rest_route(
-			$this->namespace,
-			$this->route_name( "settings/$addon/enable" ),
-			[
-				'methods'             => 'POST',
-				'callback'            => function ( $payload ) use ( &$wp_option_name ) {
-					return $this->post( $wp_option_name, $payload['enabled'] );
-				},
-				'permission_callback' => [ $this, 'admin_check' ],
-				'args'                => [
-					'enabled' => [
-						'type'     => 'boolean',
-						'required' => true,
+		if ( $post ) {
+			register_rest_route(
+				$this->namespace,
+				$this->route_name( "settings/$addon/enable" ),
+				[
+					'methods'             => 'POST',
+					'callback'            => function ( $payload ) use ( &$wp_option_name ) {
+						return $this->post( $wp_option_name, $payload['enabled'] );
+					},
+					'permission_callback' => [ $this, 'admin_check' ],
+					'args'                => [
+						'enabled' => [
+							'type'     => 'boolean',
+							'required' => true,
+						],
 					],
-				],
+				]
+			);
+		}
+	}
+
+
+	/**
+	 * Enable/Disable add-on POST.
+	 *
+	 * @return bool
+	 */
+	public function social_pro_get() {
+		$enabled    = boolval( get_option( 'idx_broker_social_pro_enabled', 0 ) );
+		$social_pro = new \IDX\Social_Pro();
+
+		return rest_ensure_response(
+			[
+				'enabled'    => $enabled,
+				'subscribed' => $social_pro->get_subscribed_status(),
 			]
 		);
 	}

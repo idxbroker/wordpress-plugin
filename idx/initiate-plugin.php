@@ -44,6 +44,10 @@ class Initiate_Plugin {
 
 		add_action( 'rest_api_init', array( $this, 'idx_broker_register_rest_routes' ) );
 
+		$social_pro = new \IDX\Social_Pro();
+		$social_pro->initialize_hooks();
+		$social_pro->setup_cron();
+
 		$this->instantiate_classes();
 	}
 
