@@ -76,6 +76,7 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	 */
 	private function register_route( $addon, $prefix = 'settings', $get = true, $post = true ) {
 		$wp_option_name = 'idx_broker_' . $addon . '_enabled';
+		$wp_option_name = str_replace( '-', '_', $wp_option_name );
 
 		if ( $get ) {
 			register_rest_route(
