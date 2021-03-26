@@ -66,15 +66,9 @@ export default {
     },
     watch: {
         $route (newVal, oldVal) {
-            if (newVal.matched && Array.isArray(newVal.matched)) {
-                this.getRouteByPath(newVal.matched[0].path)
-                if (this.handleResize()) {
-                    this.toggleSidebar({
-                        key: 'expanded',
-                        value: false
-                    })
-                }
-            }
+            this.$nextTick(() => {
+                this.routerActivePage()
+            })
         }
     },
     computed: {
@@ -131,10 +125,29 @@ export default {
             if (!routes || !routes.length) {
                 this.expandRoute(id)
             }
+        },
+        routerActivePage () {
+            const currentPage = `${window.location.hash}`
+            for (const x in this.routes) {
+                const routes = this.routes[x].routes
+                if (routes) {
+                    routes.map(x => {
+                        if (currentPage.includes(x.link)) {
+                            const activeNavItem = document.querySelector(`.${this.$idxStrap.prefix}v-nav--item a[href="#${x.link}"]`)
+                            activeNavItem.classList.add('router-link-exact-active')
+                        }
+                    })
+                }
+            }
         }
     },
     created () {
         this.gatherRoutes()
+    },
+    mounted () {
+        this.$nextTick(() => {
+            this.routerActivePage()
+        })
     }
 }
 </script>
