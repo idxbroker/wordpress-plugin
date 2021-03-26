@@ -3,8 +3,6 @@ import VueRouter from 'vue-router'
 import Generic from '@/templates/layout/Generic'
 import Layout from '@/templates/layout/Layout'
 import routeMeta from './routeMeta'
-import store from '../store'
-import { filterRequires } from '@/utilities'
 
 Vue.use(VueRouter)
 
@@ -166,17 +164,10 @@ const router = new VueRouter({
     routes
 })
 
-router.beforeEach((to, from, next) => {
-    if (to.meta && to.meta.requires && to.meta.strict) {
-        const { state } = store
-        const { meta } = to
-        const result = filterRequires(meta, state)
-        if (!result) {
-            next({ name: '404' })
-        }
-    } else {
-        next()
-    }
+router.afterEach((to, from) => {
+    window.scrollTo({
+        top: 0,
+        left: 0
+    })
 })
-
 export default router

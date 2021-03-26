@@ -33,23 +33,19 @@ export default {
                             this.clearSelections = true
                         } else {
                             clearInterval(this.checkProgress)
-                            setTimeout(() => {
-                                this.$store.dispatch('importContent/setItem', { key, value: data })
-                                this.loading = false
-                                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
-                            }, 800)
+                            this.$store.dispatch('importContent/setItem', { key, value: data })
+                            this.loading = false
+                            this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: false, text: 'Your Import Is In Progress' } })
                         }
                     }, 5000)
                 } else {
-                    setTimeout(() => {
-                        this.clearSelections = true
-                        this.$store.dispatch('importContent/setItem', { key, value: data })
-                        this.loading = false
-                        this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
-                    }, 800)
+                    this.clearSelections = true
+                    this.$store.dispatch('importContent/setItem', { key, value: data })
+                    this.loading = false
+                    this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: false, text: 'Your Import Is In Progress' } })
                 }
             } catch (error) {
-                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true } })
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true, text: 'We\'re experiencing a problem, please try again' } })
             }
         },
         async unimportItems (items, key) {
@@ -57,13 +53,15 @@ export default {
             this.loading = true
             this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: false, text: 'Your Deletion Is In Progress' } })
             const itemIds = items.map(x => { return x.postId })
-            const { data } = await this.importContentRepository.delete({ ids: itemIds }, `${key}/delete`)
-            setTimeout(() => {
+            try {
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: false, text: 'Your Deletion Is In Progress' } })
+                const { data } = await this.importContentRepository.delete({ ids: itemIds }, `${key}/delete`)
                 this.$store.dispatch(`${this.module}/setItem`, { key, value: data })
                 this.clearSelections = true
                 this.loading = false
-                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false } })
-            }, 800)
+            } catch (error) {
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true, text: 'We\'re experiencing a problem, please try again' } })
+            }
         }
     },
     created () {

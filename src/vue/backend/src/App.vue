@@ -22,10 +22,9 @@ export default {
     },
     methods: {
         checkSocialPro () {
-            this[PRODUCT_REFS.socialPro.repo].get()
+            this[PRODUCT_REFS.socialPro.repo].get('enable')
                 .then((results) => this.handleResults(results, PRODUCT_REFS.socialPro))
                 .catch((error) => {
-                    /* Todo: handle error - pass to state? */
                     console.log('error %o', error)
                 })
         },

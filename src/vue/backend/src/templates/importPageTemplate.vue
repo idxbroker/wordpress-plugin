@@ -2,18 +2,23 @@
     <idx-block
         :className="{
             'import-page-template': true,
-            'import-page-template--loading': loading
+            'import-page-template--loading': loading || mainLoading
         }">
         <bulk-action
             :action="action"
             :selected="selected"
             :description="description"
             :disabled="itemsSelected.length === 0"
-            :loading="loading"
+            :loading="loading || mainLoading"
             @select-all="selectAll( masterList)"
             @bulk-action="$emit('bulk-action', itemsSelected)"
         ></bulk-action>
-        <idx-block v-if="masterList.length" :className="['import-card__group', `import-card__group-${cardType}`]">
+        <idx-block v-if="mainLoading" className="import-card__group">
+            <idx-block className="spinner-border" role="status">
+                <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
+            </idx-block>
+        </idx-block>
+        <idx-block v-else-if="masterList.length" :className="['import-card__group', `import-card__group-${cardType}`]">
             <template v-if="cardType === 'listings'">
                 <listings-card
                     v-for="listing in masterList"
@@ -40,16 +45,14 @@
             </idx-block>
         </idx-block>
         <idx-block v-else>
-            <idx-block className="spinner-border" role="status" v-if="itemsSelected.length > 0">
-                <idx-block tag="span" className="visually-hidden">Loading...</idx-block>
-            </idx-block>
-            <idx-block v-else>
+            <idx-block>
                 There are no {{ cardType }} available.
             </idx-block>
         </idx-block>
     </idx-block>
 </template>
 <script>
+import { mapState } from 'vuex'
 import BulkAction from '@/components/BulkAction.vue'
 import importTemplate from '@/mixins/importTemplate'
 import listingsCard from '@/components/listingsCard'
@@ -91,12 +94,16 @@ export default {
             type: Boolean,
             default: false
         }
+    },
+    computed: {
+        ...mapState({
+            mainLoading: state => state.importContent.mainLoading
+        })
     }
 }
 </script>
 <style lang="scss">
 .import-page-template {
-
     .import-card__group {
         display: flex;
         flex-wrap: wrap;

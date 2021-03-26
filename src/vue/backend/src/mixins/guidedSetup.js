@@ -17,6 +17,10 @@ export default {
                 this.$store.dispatch(`${this.module}/setItem`, { key, value: data[key] })
             }
         },
+        saveAction () {
+            this.updateState(this.formChanges)
+            this.formChanges = {}
+        },
         saveHandler (moduleKey, moduleName = '', path = '') {
             if (this.formIsUpdated) {
                 this.$store.dispatch('guidedSetup/setItem', { key: 'hasChanges', value: true })
