@@ -36,6 +36,21 @@
         >
             Refresh Plugin Options
         </idx-button>
+        <idx-form-group v-if="developerPartner">
+            <idx-form-label
+                customClass="form-content__label"
+                :target="`${$idxStrap.prefix}developer-partner-key`"
+            >
+                Enter Your Developer Partner Key
+            </idx-form-label>
+            <idx-form-input
+                type="text"
+                :id="`${$idxStrap.prefix}developer-partner-key`"
+                :disabled="disabled"
+                :value="devPartnerKey"
+                @change="$emit('form-field-update', { key: 'devPartnerKey', value: $event.target.value })"
+            />
+        </idx-form-group>
     </idx-block>
 </template>
 
@@ -68,9 +83,18 @@ export default {
             type: String,
             default: ''
         },
+        devPartnerKey: {
+            type: String,
+            default: ''
+        },
         disabled: {
             type: Boolean,
             default: false
+        }
+    },
+    computed: {
+        developerPartner () {
+            return Object.keys(this.$route.query).includes('idxdev')
         }
     }
 }
@@ -78,5 +102,8 @@ export default {
 <style lang="scss">
 .form-content__api-key {
     margin-bottom: 1rem;
+    .btn-sm {
+        margin-bottom: 1rem;
+    }
 }
 </style>

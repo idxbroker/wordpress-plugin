@@ -1,5 +1,6 @@
 const state = {
     apiKey: '',
+    devPartnerKey: '',
     optOut: false,
     isValid: true,
     reCAPTCHA: false,

@@ -19,6 +19,7 @@
                         :loading="formDisabled"
                         :success="success"
                         :apiKey="localStateValues.apiKey"
+                        :devPartnerKey="localStateValues.devPartnerKey"
                         @form-field-update="formUpdate"
                     />
                 </idx-form-group>
