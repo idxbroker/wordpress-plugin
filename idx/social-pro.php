@@ -25,7 +25,7 @@ class Social_Pro {
 	/**
 	 * IDX Broker API object.
 	 *
-	 * @var object
+	 * @var IDX\IDX_Api
 	 */
 	private $idx_api;
 
@@ -38,7 +38,7 @@ class Social_Pro {
 
 
 	/**
-	 * Checks social pro status.
+	 * Initialize member variables.
 	 */
 	public function __construct() {
 		$this->cron_hook = 'idx_broker_create_social_pro_article';
