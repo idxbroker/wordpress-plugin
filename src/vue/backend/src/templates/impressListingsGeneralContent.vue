@@ -7,7 +7,12 @@
         }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Default State</idx-block>
-            <p>Description of the Default State setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</p>
+            <p>
+                You can enter a default state that will automatically be output on template pages
+                and widgets that show the state. When you create a listing and leave the state field
+                empty, the default below will be shown. You can override the default on each listing
+                by entering a value into the state field.
+            </p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}default-state`">Choose Default State</idx-form-label>
@@ -22,7 +27,7 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Default Currency</idx-block>
-            <p>Description of the Default Currency setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</p>
+            <p>Select a default currency symbol and optional currency code to display on listings.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">Currency Symbol</idx-form-label>
@@ -48,7 +53,10 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Default Number of Posts</idx-block>
-            <p>Description of the Default Number of Posts setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>
+                The default number of posts displayed on a listing archive page is 9. Here you can set a custom number. Enter -1 to display all listing posts.
+                <i>If you have more than 20-30 posts, it's not recommended to show all or your page will load slow.</i>
+            </p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}default-posts`">Number of Posts on Listing Archive Page</idx-form-label>
@@ -62,7 +70,7 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Default Disclaimer</idx-block>
-            <p>Description of the Default Disclaimer setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>Optionally enter a disclaimer to show on single listings. This can be overridden on individual listings.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}default-disclaimer`">Default Disclaimer</idx-form-label>
@@ -78,7 +86,13 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Listings Slug</idx-block>
-            <p>Description of the Listings Slug setting in IMPress Listings. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>
+                Optionally change the slug of the listing post type. Don't forget to
+                <a href="../wp-admin/options-permalink.php" target="_blank">
+                    reset your permalinks
+                </a>
+                if you change the slug!
+            </p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}listings-slug`">Listings Slug</idx-form-label>

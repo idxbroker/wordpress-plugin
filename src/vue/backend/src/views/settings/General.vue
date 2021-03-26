@@ -2,7 +2,7 @@
     <TwoColumn title="General Settings">
         <idx-block className="form-content__label">
             <idx-block tag="h2" className="form-content__title">Connect Your IDX Broker Account</idx-block>
-            <p>Description of API key and why it’s needed.</p>
+            <p>Your API Key is required to access data from the API. The API allows you to use the plugin to access feature properties, custom city lists, and more.</p>
         </idx-block>
         <APIKey
             :apiKey="localStateValues.apiKey"

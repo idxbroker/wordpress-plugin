@@ -1,8 +1,15 @@
 <template>
     <idx-container fluid customClass="guided-setup__welcome">
         <idx-block className="gs__hero">
-            <h1>Welcome to IMPress for IDX Broker</h1>
-            <p>Add some description about how we will guide the user through setting up IMPress</p>
+            <h2>Guided Setup</h2>
+            <h1>IMPress for IDX Broker</h1>
+            <p>
+                Your IDX Broker account provides you with the IMPress
+                plugin. Once enabled, you can display your listings, agents,
+                and social media content directly on your WordPress website.
+                Get started with our guided setup or manage plugin components
+                independently from the main menu at the left of this screen.
+            </p>
         </idx-block>
         <idx-block className="gs__media">
             <idx-block className="gs__media-image">
@@ -10,12 +17,16 @@
             </idx-block>
             <idx-block className="gs__media-content">
                 <h2>What this guide covers</h2>
-                <idx-block>Cover the bases paragraph on what the install covers.</idx-block>
-                <idx-block>Lorem ipsum dolor sit amet,</idx-block>
+                <idx-block>
+                    In this guide, we’ll explain each of the five steps and walk you through the setup.
+                </idx-block>
                 <idx-list>
-                    <idx-list-item>Bullet list item 1</idx-list-item>
-                    <idx-list-item>Bullet list item 2</idx-list-item>
-                    <idx-list-item>Bullet list item 3</idx-list-item>
+                    <idx-block className="gs__bolded">Here's what to expect:</idx-block>
+                    <idx-list-item>Connect Your IDX Broker Account (Optional)</idx-list-item>
+                    <idx-list-item>Configure OmniBar Search for Your Site</idx-list-item>
+                    <idx-list-item>Enable and Configure IMPress Listings</idx-list-item>
+                    <idx-list-item>Enable and Configure IMPress Agents</idx-list-item>
+                    <idx-list-item>Connect to Social Pro</idx-list-item>
                 </idx-list>
                 <idx-button @click="startSetup" size="lg">Let's Get Started</idx-button>
             </idx-block>
@@ -48,26 +59,43 @@ export default {
         text-align: center;
 
         h1 {
+            letter-spacing: 1px;
             margin-bottom: var(--space-4);
             text-transform: uppercase;
+        }
+        h2 {
+            text-transform: uppercase;
+            font-weight: 700;
         }
     }
 
     &__media {
         font-size: var(--font-size-p-large);
         line-height: var(--line-height-p-large);
-        max-width: fit-content;
     }
-
+    &__bolded {
+        font-weight: 700;
+    }
     &__media-content {
+        display: flex;
+        flex-direction: column;
+        grid-gap: 20px;
         background-color: $white;
         box-shadow: 10px 10px 0px #00000019;
         color: $gray-800;
         padding: var(--space-6) var(--space-9);
 
         h2 {
+            text-transform: capitalize;
             margin-bottom: var(--space-4);
             text-align: center;
+        }
+
+        ul {
+            list-style-type: disc;
+            li {
+                margin-left: 22px;
+            }
         }
 
         .btn {
@@ -86,11 +114,6 @@ export default {
     }
 
     @media screen and (min-width: 1250px) {
-
-        &__hero {
-            margin-bottom: 158px;
-        }
-
         &__media {
             display: flex;
             justify-content: space-between;

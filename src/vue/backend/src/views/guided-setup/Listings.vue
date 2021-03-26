@@ -7,16 +7,13 @@
         @skip-step="goSkipStep"
         @continue="enablePlugin">
         <template v-slot:description>
-            <p><strong>This is optional.</strong> A sentence or two about why you should install IMPress Listings to your WordPress site. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>
+                Add your real estate listings manually or import them from your MLS Data feed.
+                Once setup is complete, add your listings to widgets or display them directly
+                on webpages using shortcodes.
+            </p>
         </template>
         <template v-slot:controls>
-            <p>Activating IMPress Listings will:</p>
-            <idx-list customClass="list-featured">
-                <idx-list-item>Feature 1</idx-list-item>
-                <idx-list-item>Feature 2</idx-list-item>
-                <idx-list-item>Feature 3</idx-list-item>
-                <idx-list-item>Feature 4</idx-list-item>
-            </idx-list>
             <idx-block className="form-content">
                 <idx-form-group>
                     <idx-block className="form-content__toggle">

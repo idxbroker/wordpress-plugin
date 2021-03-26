@@ -47,7 +47,6 @@
         <idx-form-group>
             <idx-form-label customClass="form-content__label">
                 <idx-block tag="h3" className="form-content__title">{{ toggleLabels[0] }}</idx-block>
-                <p>Description of the automatic import listings setting. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac purus eu ex lacinia placerat.</p>
             </idx-form-label>
             <idx-block className="idx-content-settings__toggle form-content__toggle">
                 {{ toggleLabels[0] }}
@@ -133,8 +132,11 @@
                 <idx-toggle-slider
                     uncheckedState="No"
                     checkedState="Yes"
+                    :customClass="{
+                        'form-content--disabled': !advancedFieldData
+                    }"
                     :active="displayAdvancedFields"
-                    :disabled="formDisabled"
+                    :disabled="formDisabled || !advancedFieldData"
                     :label="toggleLabels[3]"
                     @toggle="$emit('form-field-update', { key: 'displayAdvancedFields', value: !displayAdvancedFields })"
                 ></idx-toggle-slider>

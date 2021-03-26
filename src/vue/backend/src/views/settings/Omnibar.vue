@@ -55,10 +55,6 @@ export default {
                 href: '#'
             },
             {
-                text: 'Setting up a wrapper',
-                href: '#wrapper'
-            },
-            {
                 text: 'IDX Broker Middleware',
                 href: 'https://middleware.idxbroker.com/mgmt/'
             },
