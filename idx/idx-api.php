@@ -143,8 +143,11 @@ class Idx_Api {
 		);
 		$url    = Initiate_Plugin::IDX_API_URL . '/' . $level . '/' . $method;
 
-		if ( $request_type === 'POST' ) {
+		if ( 'POST' === $request_type ) {
 			$response = wp_safe_remote_post( $url, $params );
+		} elseif ( 'PUT' === $request_type ) {
+			$params['method'] = $request_type;
+			$response         = wp_remote_request( $url, $params );
 		} else {
 			$response = wp_remote_get( $url, $params );
 		}
@@ -165,7 +168,7 @@ class Idx_Api {
 			);
 		} else {
 			$data = (array) json_decode( (string) $response['body'], $json_decode_type );
-			if ( $request_type !== 'POST' ) {
+			if ( 'POST' !== $request_type && 'PUT' !== $request_type ) {
 				$this->set_transient( $cache_key, $data, $expiration );
 			}
 			// API call was successful, delete this option if it exists.
