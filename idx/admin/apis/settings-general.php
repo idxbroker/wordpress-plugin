@@ -87,6 +87,7 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 		return rest_ensure_response(
 			[
 				'apiKey'          => get_option( 'idx_broker_apikey', '' ),
+				'devPartnerKey'   => get_option( 'idx_broker_dev_partner_key', '' ),
 				'reCAPTCHA'       => boolval( get_option( 'idx_recaptcha_enabled', 0 ) ),
 				'updateFrequency' => get_option( 'idx_cron_schedule', '' ),
 				'wrapperName'     => get_option( 'idx_broker_dynamic_wrapper_page_name', '' ),
@@ -107,6 +108,11 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 			if ( is_wp_error( $error ) ) {
 				return rest_ensure_response( $error );
 			}
+		}
+
+		if ( isset( $payload['devPartnerKey'] ) ) {
+			$sanitized_key = sanitize_text_field( wp_unslash( $payload['devPartnerKey'] ) );
+			update_option( 'idx_broker_dev_partner_key', $sanitized_key, false );
 		}
 
 		if ( isset( $payload['reCAPTCHA'] ) ) {
