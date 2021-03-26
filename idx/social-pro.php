@@ -111,8 +111,7 @@ class Social_Pro {
 		$post_status = 'autopublish' === $this->settings['autopublish'] ? 'publish' : 'draft';
 		$article     = $this->get_article();
 
-		if ( is_wp_error( $article ) ) {
-			// TODO: Error logging.
+		if ( is_wp_error( $article ) || ! isset( $article['title1'] ) ) {
 			return;
 		}
 
@@ -217,9 +216,6 @@ class Social_Pro {
 			'PUT'
 		);
 
-		if ( is_wp_error( $data ) ) {
-			// TODO: Error logging.
-		}
 		return $data;
 	}
 
