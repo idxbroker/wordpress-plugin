@@ -86,6 +86,14 @@ export default {
             enabled: state => state.socialPro.enabled
         })
     },
+    watch: {
+        enabled () {
+            if (this.enabled && this.subscribed && this.isValid) {
+                console.log('load')
+                this.loadData(this[repo])
+            }
+        }
+    },
     methods: {
         enablePlugin () {
             this.enablePluginAction(this[repo])
@@ -115,9 +123,6 @@ export default {
                 href: '#signUp'
             }
         ]
-        if (this.enabled && this.subscribed && this.isValid) {
-            this.loadData(this[repo])
-        }
     }
 }
 </script>

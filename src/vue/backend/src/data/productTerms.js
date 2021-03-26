@@ -33,7 +33,7 @@ export const PRODUCT_REFS = {
     socialPro: {
         module: 'socialPro',
         term: SUBSCRIBED,
-        termPath: '',
+        termPath: 'enable',
         get repo () {
             return `${this.module}Repository`
         }

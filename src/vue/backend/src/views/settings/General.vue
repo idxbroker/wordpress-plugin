@@ -8,7 +8,7 @@
             :apiKey="localStateValues.apiKey"
             :devPartnerKey="localStateValues.devPartnerKey"
             :disabled="formDisabled"
-            :error="error"
+            :error="error || (!isValid && !loading)"
             :loading="formDisabled || loading"
             :success="success"
             :showRefresh="true"
