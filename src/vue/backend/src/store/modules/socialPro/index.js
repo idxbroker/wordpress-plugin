@@ -6,7 +6,11 @@ const state = {
     enabled: true,
     autopublish: 'autopublish',
     postDay: 'sun',
-    postType: 'post'
+    postType: 'post',
+    authors: [],
+    selectedAuthor: '',
+    categories: [],
+    selectedCategories: []
 }
 
 export default {

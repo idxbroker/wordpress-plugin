@@ -58,11 +58,13 @@ export default {
             } catch (error) {
                 this.formDisabled = false
                 if (error.response.status === 401) {
+                    this.errorAction()
                     return false
                 } else {
                     this.errorAction()
                 }
             }
+            return true
         },
         async enablePluginAction (repo) {
             this.formDisabled = true
