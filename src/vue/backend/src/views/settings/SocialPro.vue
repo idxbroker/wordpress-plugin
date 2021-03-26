@@ -1,6 +1,7 @@
 <template>
     <idx-block className="section" v-if="!subscribed">
-        not subscribed in middleware
+        <h1>Social Pro</h1>
+        <social-pro-upgrade></social-pro-upgrade>
     </idx-block>
     <idx-block className="section" v-else-if="!isValid">
         <feedback
@@ -57,6 +58,7 @@ import { PRODUCT_REFS } from '@/data/productTerms'
 import SocialProForm from '@/templates/socialProForm'
 import RelatedLinks from '@/components/RelatedLinks.vue'
 import Feedback from '@/components/importFeedback.vue'
+import socialProUpgrade from '@/components/socialProUpgrade.vue'
 import TwoColumn from '@/templates/layout/TwoColumn'
 import pageGuard from '@/mixins/pageGuard'
 import standaloneSettingsActions from '@/mixins/standaloneSettingsActions'
@@ -67,6 +69,7 @@ export default {
     mixins: [pageGuard, standaloneSettingsActions],
     components: {
         SocialProForm,
+        socialProUpgrade,
         TwoColumn,
         RelatedLinks,
         Feedback
