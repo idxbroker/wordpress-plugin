@@ -51,6 +51,17 @@
                 @selected-item="$emit('form-field-update', { key: 'currencyCodeSelected', value: $event.value })"
             />
         </idx-form-group>
+        <idx-form-group customClass="form-content__toggle">
+            Display Currency Code on Listings
+            <idx-toggle-slider
+                label="Display Currency Code on Listings"
+                uncheckedState="No"
+                checkedState="Yes"
+                :active="displayCurrencyCode"
+                :disabled="formDisabled"
+                @toggle="$emit('form-field-update', { key: 'displayCurrencyCode', value: !displayCurrencyCode })"
+            ></idx-toggle-slider>
+        </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Default Number of Posts</idx-block>
             <p>
@@ -119,6 +130,10 @@ export default {
         currencySymbolSelected: {
             type: String,
             default: 'none'
+        },
+        displayCurrencyCode: {
+            type: Boolean,
+            default: false
         },
         defaultDisclaimer: {
             type: String,
