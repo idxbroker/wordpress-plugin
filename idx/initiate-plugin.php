@@ -64,7 +64,6 @@ class Initiate_Plugin {
 		new Shortcodes\Register_Impress_Shortcodes();
 		new Widgets\Omnibar\Create_Omnibar();
 		new Shortcodes\Shortcode_Ui();
-		new \IDX\Views\Omnibar_Settings();
 		new Dashboard_Widget();
 		new Backward_Compatibility\Add_Uid_To_Idx_Pages();
 		new Backward_Compatibility\Migrate_Legacy_Widgets();
@@ -349,12 +348,7 @@ class Initiate_Plugin {
 			'none',
 			55.572
 		);
-		add_submenu_page( 'idx-broker', 'IMPress for IDX Broker Plugin Options', 'Initial Settings', 'administrator', 'idx-broker', array( $this, 'idx_broker_platinum_admin_page' ) );
-		// Only add Omnibar page if no errors in API
-		$systemlinks = $this->idx_api->idx_api_get_systemlinks();
-		if ( ! is_object( $systemlinks ) && ! empty( $systemlinks ) ) {
-			add_submenu_page( 'idx-broker', 'Omnibar Settings', 'Omnibar Settings', 'administrator', 'idx-omnibar-settings', array( $this, 'idx_omnibar_settings_interface' ) );
-		}
+		add_submenu_page( 'idx-broker', 'IMPress for IDX Broker Plugin Options', 'General Settings', 'administrator', 'idx-broker', array( $this, 'idx_broker_platinum_admin_page' ) );
 		add_action( 'admin_footer', array( $this, 'add_upgrade_center_link' ) );
 	}
 
@@ -398,17 +392,6 @@ class Initiate_Plugin {
 			'href'   => admin_url( 'admin.php?page=idx-broker' ),
 		);
 		$wp_admin_bar->add_node( $args );
-		$args = array(
-			'id'     => 'idx_admin_bar_menu_item_4',
-			'title'  => 'Omnibar Settings',
-			'parent' => 'idx_admin_bar_menu',
-			'href'   => admin_url( 'admin.php?page=idx-omnibar-settings' ),
-		);
-		// Only add Omnibar page if no errors in API
-		$systemlinks = $this->idx_api->idx_api_get_systemlinks();
-		if ( ! is_object( $systemlinks ) && ! empty( $systemlinks ) ) {
-			$wp_admin_bar->add_node( $args );
-		}
 		$args = array(
 			'id'     => 'idx_admin_bar_menu_item_5',
 			'title'  => 'Upgrade Account <svg width="8" height="10" class="update-plugins" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1675 971q0 51-37 90l-75 75q-38 38-91 38-54 0-90-38l-294-293v704q0 52-37.5 84.5t-90.5 32.5h-128q-53 0-90.5-32.5t-37.5-84.5v-704l-294 293q-36 38-90 38t-90-38l-75-75q-38-38-38-90 0-53 38-91l651-651q35-37 90-37 54 0 91 37l651 651q37 39 37 91z" fill="#fff"/></svg>',
