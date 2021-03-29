@@ -98,7 +98,9 @@ export default {
             }
         ]
         this.errorMessage = 'We couldn’t find an account with the provided API key'
+        this.loading = true
         this.loadData(this[repo])
+        this.loading = false
     }
 }
 </script>

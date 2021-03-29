@@ -16,7 +16,9 @@
 
         .toggle-switch {
             width: 65px;
-
+            &__slider {
+                width: 65px;
+            }
             &__checkbox:checked+.toggle-switch__slider:before {
                 transform: translateX(36px);
             }

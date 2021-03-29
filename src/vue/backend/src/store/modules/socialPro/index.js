@@ -3,7 +3,7 @@ import getters from './getters'
 
 const state = {
     subscribed: false,
-    enabled: false,
+    enabled: true,
     autopublish: 'autopublish',
     postDay: 'sun',
     postType: 'post',

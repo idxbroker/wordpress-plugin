@@ -29,6 +29,11 @@ export default {
         Tabbed,
         Feedback
     },
+    watch: {
+        enabled () {
+            this.loadListings()
+        }
+    },
     computed: {
         ...mapState({
             enabled: state => state.listingsGeneral.enabled,
@@ -48,13 +53,22 @@ export default {
             }
         }
     },
-    async created () {
+    methods: {
+        async loadListings () {
+            if (this.enabled && this.isValid) {
+                this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: true })
+                const { data } = await this.importContentRepository.get('listings')
+                this.$store.dispatch(`${this.module}/setItem`, { key: 'listings', value: data })
+                this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: false })
+            }
+        }
+    },
+    async mounted () {
+        this.loadListings()
+    },
+    created () {
         this.module = 'importContent'
         this.description = 'Select the imported listings to be deleted from IMPress'
-        this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: true })
-        const { data } = await this.importContentRepository.get('listings')
-        this.$store.dispatch(`${this.module}/setItem`, { key: 'listings', value: data })
-        this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: false })
     }
 }
 </script>
