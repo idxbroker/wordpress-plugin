@@ -86,6 +86,13 @@ export default {
             enabled: state => state.socialPro.enabled
         })
     },
+    watch: {
+        enabled () {
+            if (this.enabled && this.subscribed && this.isValid) {
+                this.loadData(this[repo])
+            }
+        }
+    },
     methods: {
         enablePlugin () {
             this.enablePluginAction(this[repo])

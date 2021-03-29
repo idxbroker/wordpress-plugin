@@ -28,6 +28,11 @@ export default {
         Tabbed,
         Feedback
     },
+    watch: {
+        enabled () {
+            this.loadAgents()
+        }
+    },
     computed: {
         ...mapState({
             enabled: state => state.agentSettings.enabled,
@@ -47,13 +52,22 @@ export default {
             }
         }
     },
-    async created () {
+    methods: {
+        async loadAgents () {
+            if (this.enabled && this.isValid) {
+                this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: true })
+                const { data } = await this.importContentRepository.get('agents')
+                this.$store.dispatch(`${this.module}/setItem`, { key: 'agents', value: data })
+                this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: false })
+            }
+        }
+    },
+    mounted () {
+        this.loadAgents()
+    },
+    created () {
         this.module = 'importContent'
         this.description = 'Select the agents to import from IDX Broker'
-        this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: true })
-        const { data } = await this.importContentRepository.get('agents')
-        this.$store.dispatch(`${this.module}/setItem`, { key: 'agents', value: data })
-        this.$store.dispatch(`${this.module}/setItem`, { key: 'mainLoading', value: false })
     }
 }
 </script>

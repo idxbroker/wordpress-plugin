@@ -93,7 +93,7 @@ export default {
             default: () => []
         },
         selectedAuthor: {
-            type: String,
+            type: [String, Number],
             default: ''
         },
         categories: {

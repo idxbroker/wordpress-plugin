@@ -8,7 +8,7 @@
             :apiKey="localStateValues.apiKey"
             :devPartnerKey="localStateValues.devPartnerKey"
             :disabled="formDisabled"
-            :error="error"
+            :error="error || (!isValid && !loading)"
             :loading="formDisabled || loading"
             :success="success"
             :showRefresh="true"
@@ -98,7 +98,9 @@ export default {
             }
         ]
         this.errorMessage = 'We couldn’t find an account with the provided API key'
+        this.loading = true
         this.loadData(this[repo])
+        this.loading = false
     }
 }
 </script>

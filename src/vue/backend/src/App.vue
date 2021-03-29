@@ -9,9 +9,7 @@ import { PRODUCT_REFS } from '@/data/productTerms'
 /* List of repositories to inject into this component. */
 const inject = Object.keys(PRODUCT_REFS).map(product => PRODUCT_REFS[product].repo)
 /* Strip out social pro since we'll only check if we have an API key. */
-const requiredProducts = Object.keys(PRODUCT_REFS)
-    .filter(product => product !== 'socialPro')
-    .map(product => PRODUCT_REFS[product])
+const requiredProducts = Object.keys(PRODUCT_REFS).map(product => PRODUCT_REFS[product])
 export default {
     name: 'app',
     inject,
@@ -33,27 +31,23 @@ export default {
             if (status !== 200) {
                 return false
             }
-            this.$store.dispatch(`${product.module}/setItem`, {
-                key: product.term,
-                value: data[product.term]
-            })
-        }
-    },
-    watch: {
-        apiKey (value) {
-            if (value) {
-                this.checkSocialPro()
+            for (const key in data) {
+                this.$store.dispatch(`${product.module}/setItem`, {
+                    key,
+                    value: data[key]
+                })
             }
         }
     },
     created () {
-        const [general, listings, agents] = requiredProducts
+        const [general, listings, agents, socialPro] = requiredProducts
         Promise.all([
             /* Need: general.apiKey, listings.enabled, agents.enabled */
             /* Ex: generalRepository.get(), listingsSettingsRepository.get('enabled') */
             this[general.repo].get(general.termPath),
             this[listings.repo].get(listings.termPath),
-            this[agents.repo].get(agents.termPath)
+            this[agents.repo].get(agents.termPath),
+            this[socialPro.repo].get(socialPro.termPath)
         ])
             .then((results) => {
                 requiredProducts.forEach((product, index) => {
