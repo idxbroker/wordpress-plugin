@@ -72,7 +72,6 @@ class IMPress_Agents {
 
 		add_action( 'admin_init', array( &$this, 'register_settings' ) );
 		add_action( 'admin_init', array( &$this, 'add_options' ) );
-		add_action( 'admin_menu', array( &$this, 'settings_init' ), 15 );
 
 	}
 
@@ -97,20 +96,6 @@ class IMPress_Agents {
 			add_option( 'plugin_impress_agents_settings', $new_options );
 		}
 
-	}
-
-	/**
-	 * Adds settings page and IDX Import page to admin menu
-	 */
-	function settings_init() {
-		add_submenu_page( 'edit.php?post_type=employee', __( 'Settings', 'impress_agents' ), __( 'Settings', 'impress_agents' ), 'manage_options', $this->settings_page, array( &$this, 'settings_page' ) );
-	}
-
-	/**
-	 * Creates display of settings page along with form fields
-	 */
-	function settings_page() {
-		include( dirname( __FILE__ ) . '/views/impress-agents-settings.php' );
 	}
 
 	/**
