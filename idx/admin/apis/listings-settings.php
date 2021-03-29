@@ -46,6 +46,9 @@ class Listings_Settings extends \IDX\Admin\Rest_Controller {
 					'currencyCodeSelected'   => [
 						'type' => 'string',
 					],
+					'displayCurrencyCode'    => [
+						'type' => 'boolean',
+					],
 					'numberOfPosts'          => [
 						'type' => 'string',
 					],
@@ -124,11 +127,8 @@ class Listings_Settings extends \IDX\Admin\Rest_Controller {
 			$settings['wp_listings_slug'] = $payload['listingSlug'];
 		}
 
-		// Set display currency code flag if currency code is set.
-		if ( ! $settings['wp_listings_currency_code'] || 'none' === $settings['wp_listings_currency_code'] ) {
-			$settings['wp_listings_display_currency_code'] = 0;
-		} else {
-			$settings['wp_listings_display_currency_code'] = 1;
+		if ( isset( $payload['displayCurrencyCode'] ) ) {
+				$settings['wp_listings_display_currency_code'] = (int) filter_var( $payload['displayCurrencyCode'], FILTER_VALIDATE_BOOLEAN );
 		}
 
 		update_option( 'plugin_wp_listings_settings', $settings );
