@@ -200,7 +200,7 @@ class Social_Pro {
 			return;
 		}
 		update_post_meta( $post_id, 'has_syndicated', true );
-		$custom_url = get_permalink( $post_id );
+		$custom_url = rawurlencode( get_permalink( $post_id ) );
 		$params     = [
 			'customUrl' => $custom_url,
 			'imageUrl'  => $meta_fields['image'][0],
