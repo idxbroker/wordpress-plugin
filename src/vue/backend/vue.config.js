@@ -14,8 +14,8 @@ module.exports = {
         progress: false,
         headers: { 'Access-Control-Allow-Origin': '*' }
     },
-    outputDir: path.resolve(__dirname, '../../../assets/vue/backend'),
-    publicPath: process.env.NODE_ENV === 'production' ? path.resolve(__dirname, '../../../assets/vue/backend') || '/' : `http://localhost:${devPort}/`,
+    outputDir:  process.env.NODE_ENV === 'production' ? path.resolve(__dirname, '../../../assets/vue/backend') : path.resolve(__dirname, '../../../assets/vue-dev/backend'),
+    publicPath: process.env.NODE_ENV === 'production' ? '/wp-content/plugins/idx-broker-platinum/assets/vue/backend' : `http://localhost:${devPort}/`,
     configureWebpack: {
         output: {
             filename: 'admin.js',

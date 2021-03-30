@@ -19,6 +19,7 @@ class Idx_Broker_Plugin {
 
 	// Placed here for convenient updating.
 	const IDX_WP_PLUGIN_VERSION = '3.0.0';
+	const VUE_DEV_MODE          = false;
 
 	/**
 	 * __construct function.
