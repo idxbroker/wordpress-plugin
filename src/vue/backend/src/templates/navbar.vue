@@ -128,6 +128,7 @@ export default {
         },
         routerActivePage () {
             const currentPage = `${window.location.hash}`
+            this.getRouteByPath(currentPage.substring(1))
             for (const x in this.routes) {
                 const routes = this.routes[x].routes
                 if (routes) {
@@ -135,6 +136,7 @@ export default {
                         if (currentPage.includes(x.link)) {
                             const activeNavItem = document.querySelector(`.${this.$idxStrap.prefix}v-nav--item a[href="#${x.link}"]`)
                             activeNavItem.classList.add('router-link-exact-active')
+                            this.getRouteByPath(x.link)
                         }
                     })
                 }
