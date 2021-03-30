@@ -470,8 +470,16 @@ class Initiate_Plugin {
 	 * @return void
 	 */
 	public function idx_broker_platinum_admin_page() {
-		wp_enqueue_script( 'idx-backend', plugins_url( '/assets/vue/backend/admin.js', dirname( __FILE__ ) ) );
-		wp_enqueue_style( 'idx-backend', plugins_url( '/assets/vue/backend/admin.css', dirname( __FILE__ ) ) );
+
+		$package_json = file_get_contents( IMPRESS_IDX_DIR . 'src/vue/backend/package.json' );
+		$package_json = json_decode( $package_json );
+		$version      = $package_json->version;
+		$dir          = '/assets/vue/backend';
+		if ( \Idx_Broker_Plugin::VUE_DEV_MODE ) {
+			$dir = 'assets/vue-dev/backend';
+		}
+		wp_enqueue_script( 'idx-backend', plugins_url( "$dir/admin.js", dirname( __FILE__ ) ), [], $version, true );
+		wp_enqueue_style( 'idx-backend', plugins_url( "$dir/admin.css", dirname( __FILE__ ) ), [], $version );
 		include plugin_dir_path( __FILE__ ) . 'views/admin.php';
 	}
 
