@@ -128,7 +128,7 @@ class Social_Pro_Settings extends \IDX\Admin\Rest_Controller {
 	 *
 	 * @return array
 	 */
-	public function get_authors() {
+	private function get_authors() {
 		$users = get_users();
 		return array_map(
 			function ( $user ) {
@@ -146,7 +146,7 @@ class Social_Pro_Settings extends \IDX\Admin\Rest_Controller {
 	 *
 	 * @return array
 	 */
-	public function get_categories() {
+	private function get_categories() {
 		$categories = get_categories(
 			[
 				'hide_empty' => 0,

@@ -443,27 +443,7 @@ class Initiate_Plugin {
 	 *  @param string $page: the current page
 	 */
 	public function idx_inject_script_and_style( $page ) {
-
 		wp_enqueue_style( 'idx-notice', IMPRESS_IDX_URL . '/assets/css/idx-notice.min.css' );
-
-		if ( 'toplevel_page_idx-broker' !== $page ) {
-			return;
-		}
-		wp_enqueue_script( 'idxjs', plugins_url( '/assets/js/idx-broker.min.js', dirname( __FILE__ ) ), 'jquery' );
-		wp_localize_script(
-			'idxjs',
-			'IDXAdminAjax',
-			[
-				'ajaxurl'                => admin_url( 'admin-ajax.php' ),
-				'refresh_api_nonce'      => wp_create_nonce( 'idx-settings-refresh-api-nonce' ),
-				'google_recaptcha_nonce' => wp_create_nonce( 'idx-settings-recaptcha-nonce' ),
-				'data_optout_nonce'      => wp_create_nonce( 'idx-settings-data-optout-nonce' ),
-				'dev_key_update_nonce'   => wp_create_nonce( 'idx-settings-dev-key-update-nonce' ),
-				'wrapper_create_nonce'   => wp_create_nonce( 'idx-settings-wrapper-create-nonce' ),
-				'wrapper_delete_nonce'   => wp_create_nonce( 'idx-settings-wrapper-delete-nonce' ),
-			]
-		);
-		wp_enqueue_style( 'idxcss', plugins_url( '/assets/css/idx-broker.min.css', dirname( __FILE__ ) ) );
 	}
 
 	/**
