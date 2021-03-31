@@ -9,6 +9,10 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '',
+        component: () => import('@/views/children/redirectPage')
+    },
+    {
+        path: '',
         component: Layout,
         children: [
             {
