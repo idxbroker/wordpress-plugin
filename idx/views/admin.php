@@ -8,7 +8,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 ?>
 
 <style>
-	#wpbody-content {
+	.update-nag {
 		display: none;
 	}
 	#wpfooter {

@@ -137,6 +137,11 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 
 == Changelog ==
 
+= 3.0.0 =
+* New: Now includes both IMPress Agents and IMPress Listings
+* New: Revamped wp-admin UI
+* New: Social Pro integration
+
 = 2.6.6 =
 * New: Omnibar step control increments increased
 * Fix: Gutenberg block menu padding
