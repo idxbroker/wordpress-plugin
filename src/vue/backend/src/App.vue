@@ -21,7 +21,9 @@ export default {
     methods: {
         checkSocialPro () {
             this[PRODUCT_REFS.socialPro.repo].get('enable')
-                .then((results) => this.handleResults(results, PRODUCT_REFS.socialPro))
+                .then((results) => {
+                    this.handleResults(results, PRODUCT_REFS.socialPro)
+                })
                 .catch((error) => {
                     console.log('error %o', error)
                 })
@@ -51,12 +53,17 @@ export default {
         ])
             .then((results) => {
                 requiredProducts.forEach((product, index) => {
-                    this.handleResults(results[index], product)
+                    if (product.module !== 'omnibar' && product.module !== 'importContent') {
+                        this.handleResults(results[index], product)
+                    }
                 })
             })
             .catch((error) => {
-                /* Todo: handle error - pass to state? */
                 console.log('error %o', error)
+                this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: true, error: true, text: 'We\'re experiencing a problem, please try again' } })
+                setTimeout(() => {
+                    this.$store.dispatch('alerts/setItem', { key: 'notification', value: { show: false, error: true, text: 'We\'re experiencing a problem, please try again' } })
+                }, 3000)
             })
     }
 }

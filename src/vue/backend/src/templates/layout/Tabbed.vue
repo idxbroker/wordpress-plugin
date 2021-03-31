@@ -50,7 +50,6 @@ export default {
             border-bottom: 1px solid $gray-150;
         }
         &__tabs {
-            justify-content: end;
             height: 50px;
             gap: 1rem;
             overflow: visible;

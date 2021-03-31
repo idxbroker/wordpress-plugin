@@ -18,7 +18,6 @@ const routes = [
                 children: [
                     {
                         path: 'listings',
-                        name: 'IDX Listings',
                         component: () => import('@/views/import/Listings'),
                         children: routeMeta.imports.listings,
                         props: {
@@ -28,7 +27,6 @@ const routes = [
                     },
                     {
                         path: 'agents',
-                        name: 'IDX Agents',
                         component: () => import('@/views/import/Agents'),
                         children: routeMeta.imports.agents,
                         props: {

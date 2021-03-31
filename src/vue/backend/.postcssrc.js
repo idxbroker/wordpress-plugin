@@ -5,7 +5,8 @@ module.exports = {
         'postcss-prefixer': {
             prefix: `${idxConfig.options.prefix}${idxConfig.options.separator}`,
             ignore: [
-            	'router-link'
+                'router-link',
+                'folded'
             ]
         }
     }
