@@ -84,7 +84,7 @@ class Dashboard_Widget {
 
 		// No key and no error (initial state of plugin after install but before API key is added).
 		if ( ! get_option( 'idx_broker_apikey' ) && null === $this->api_error ) {
-			echo '<a href="' . esc_url( admin_url() ) . 'admin.php?page=idx-broker">Enter your IDX Broker API key to get started</a>';
+			echo '<a href="' . esc_url( admin_url() ) . 'admin.php?page=idx-broker#/guided-setup/welcome">Enter your IDX Broker API key to get started</a>';
 		}
 	}
 
