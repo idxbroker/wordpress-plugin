@@ -71,7 +71,7 @@ export default {
             subscribed: state => state.socialPro.subscribed
         }),
         continuePath () {
-            return this.localStateValues.enabled ? '/guided-setup/social-pro/configure' : '/guided-setup/confirmation'
+            return (this.localStateValues.enabled && this.subscribed) ? '/guided-setup/social-pro/configure' : '/guided-setup/confirmation'
         }
     },
     methods: {

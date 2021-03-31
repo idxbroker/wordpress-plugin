@@ -38,15 +38,15 @@ export const PRODUCT_REFS = {
             return `${this.module}Repository`
         }
     },
-    importContent: {
-        module: 'importContent',
+    omnibar: {
+        module: 'omnibar',
         termPath: '',
         get repo () {
             return `${this.module}Repository`
         }
     },
-    omnibar: {
-        module: 'omnibar',
+    importContent: {
+        module: 'importContent',
         termPath: '',
         get repo () {
             return `${this.module}Repository`
