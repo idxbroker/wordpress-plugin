@@ -227,9 +227,14 @@ class Initiate_Plugin {
 	 * @return void
 	 */
 	public function idx_broker_platinum_plugin_actlinks( $links ) {
-		// Add a link to this plugin's settings page
-		$settings_link = '<a href="admin.php?page=idx-broker">Settings</a>';
-		array_unshift( $links, $settings_link );
+		// Add a link to this plugin's settings page.
+		array_unshift( $links, '<a href="admin.php?page=idx-broker#/settings/general">Settings</a>' );
+
+		// Add guided setup link if no API key is set.
+		if ( empty( $this->idx_api->api_key ) ) {
+			array_unshift( $links, '<a href="admin.php?page=idx-broker#/guided-setup/welcome">Guided Setup</a>' );
+		}
+
 		return $links;
 	}
 
@@ -366,21 +371,38 @@ class Initiate_Plugin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
+
+		// Set top level URL to guided setup if API key is not set, general settings if set.
+		$settings_url = empty( $this->idx_api->api_key ) ? 'admin.php?page=idx-broker#/guided-setup/welcome' : 'admin.php?page=idx-broker#/settings/general';
 		$args = array(
 			'id'     => 'idx_admin_bar_menu',
 			'title'  => '<span class="ab-icon properticons-logo-idx"></span>IMPress',
 			'parent' => false,
-			'href'   => admin_url( 'admin.php?page=idx-broker' ),
+			'href'   => admin_url( $settings_url ),
 		);
 		$wp_admin_bar->add_node( $args );
+
+		// Guided Setup page if no API key is set.
+		if ( empty( $this->idx_api->api_key ) ) {
+			$args = array(
+				'id'     => 'idx_admin_bar_menu_item_0',
+				'title'  => 'Guided Setup',
+				'parent' => 'idx_admin_bar_menu',
+				'href'   => admin_url( $settings_url )
+			);
+			$wp_admin_bar->add_node( $args );
+		}
+
+		// General Settings page.
 		$args = array(
 			'id'     => 'idx_admin_bar_menu_item_1',
-			'title'  => 'IDX Control Panel',
+			'title'  => 'General Settings',
 			'parent' => 'idx_admin_bar_menu',
-			'href'   => 'https://middleware.idxbroker.com/mgmt/login',
-			'meta'   => array( 'target' => '_blank' ),
+			'href'   => admin_url( 'admin.php?page=idx-broker#/settings/general' ),
 		);
 		$wp_admin_bar->add_node( $args );
+
+		// Knowledge Base link.
 		$args = array(
 			'id'     => 'idx_admin_bar_menu_item_2',
 			'title'  => 'Knowledgebase',
@@ -389,13 +411,18 @@ class Initiate_Plugin {
 			'meta'   => array( 'target' => '_blank' ),
 		);
 		$wp_admin_bar->add_node( $args );
+
+		// IDXB Control Panel link.
 		$args = array(
 			'id'     => 'idx_admin_bar_menu_item_3',
-			'title'  => 'Initial Settings',
+			'title'  => 'IDX Control Panel',
 			'parent' => 'idx_admin_bar_menu',
-			'href'   => admin_url( 'admin.php?page=idx-broker' ),
+			'href'   => 'https://middleware.idxbroker.com/mgmt/login',
+			'meta'   => array( 'target' => '_blank' ),
 		);
 		$wp_admin_bar->add_node( $args );
+
+		// Upgrade prompt link for Lite account users.
 		$args = array(
 			'id'     => 'idx_admin_bar_menu_item_5',
 			'title'  => 'Upgrade Account <svg width="8" height="10" class="update-plugins" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1675 971q0 51-37 90l-75 75q-38 38-91 38-54 0-90-38l-294-293v704q0 52-37.5 84.5t-90.5 32.5h-128q-53 0-90.5-32.5t-37.5-84.5v-704l-294 293q-36 38-90 38t-90-38l-75-75q-38-38-38-90 0-53 38-91l651-651q35-37 90-37 54 0 91 37l651 651q37 39 37 91z" fill="#fff"/></svg>',
