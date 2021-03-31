@@ -10,7 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@idxbrokerllc/idxstrap": "^3.2.1",
+    "@idxbrokerllc/idxstrap": "^4.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "lodash.get": "^4.4.2",
