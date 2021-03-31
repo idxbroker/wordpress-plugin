@@ -221,6 +221,16 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 	}
 
 	/**
+	 * Updates Omnibar location data. Called via cron.
+	 *
+	 * @param string $update Tells omnibar to update address locations or not. Accepts 'all' or 'custom'.
+	 * @return void
+	 */
+	public function get_locations( $update ) {
+		new \IDX\Widgets\Omnibar\Get_Locations( $update );
+	}
+
+	/**
 	 * Retrieves the Omnibar advanced fields.
 	 * TODO: Modernize this process.
 	 *
@@ -377,16 +387,6 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 	private function update_location_data( $addresses_changed ) {
 		$update = $addresses_changed ? 'all' : 'custom';
 		wp_schedule_single_event( time(), 'idx_get_new_location_data', [ $update ] );
-	}
-
-	/**
-	 * Updates Omnibar location data. Called via cron.
-	 *
-	 * @param string $update Tells omnibar to update address locations or not. Accepts 'all' or 'custom'.
-	 * @return void
-	 */
-	public function get_locations( $update ) {
-		new \IDX\Widgets\Omnibar\Get_Locations( $update );
 	}
 }
 

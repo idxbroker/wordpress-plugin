@@ -140,6 +140,39 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 	}
 
 	/**
+	 * Checks if API key is valid.
+	 *
+	 * @return bool
+	 */
+	public function api_valid_endpoint_callback() {
+		$api_key = get_option( 'idx_broker_apikey', '' );
+		$valid   = true;
+		$error   = false;
+
+		// TODO: Speed up this check by caching api_success in wp_options.
+		if ( ! $api_key ) {
+			$valid = false;
+		} else {
+			$idx_api = new \Idx\Idx_Api();
+			$error   = $this->api_error_test( $idx_api );
+			if ( $error ) {
+				$valid = false;
+			}
+		}
+
+		$output = [ 'isValid' => $valid ];
+		if ( $error ) {
+			$converted_error = $this->convert_idx_api_error( $error );
+			$output['error'] = [
+				'code'    => $converted_error->get_error_code(),
+				'message' => $converted_error->get_error_message(),
+				'data'    => $converted_error->get_error_data(),
+			];
+		}
+		return rest_ensure_response( $output );
+	}
+
+	/**
 	 * Checks if api key is valid.
 	 *
 	 * @param \IDX\IDX_Api $idx_api API object.
@@ -211,39 +244,6 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 				'status' => 500,
 			]
 		);
-	}
-
-	/**
-	 * Checks if API key is valid.
-	 *
-	 * @return bool
-	 */
-	public function api_valid_endpoint_callback() {
-		$api_key = get_option( 'idx_broker_apikey', '' );
-		$valid   = true;
-		$error   = false;
-
-		// TODO: Speed up this check by caching api_success in wp_options.
-		if ( ! $api_key ) {
-			$valid = false;
-		} else {
-			$idx_api = new \Idx\Idx_Api();
-			$error   = $this->api_error_test( $idx_api );
-			if ( $error ) {
-				$valid = false;
-			}
-		}
-
-		$output = [ 'isValid' => $valid ];
-		if ( $error ) {
-			$converted_error = $this->convert_idx_api_error( $error );
-			$output['error'] = [
-				'code'    => $converted_error->get_error_code(),
-				'message' => $converted_error->get_error_message(),
-				'data'    => $converted_error->get_error_data(),
-			];
-		}
-		return rest_ensure_response( $output );
 	}
 }
 

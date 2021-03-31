@@ -53,25 +53,6 @@ class Rest_Controller {
 	}
 
 	/**
-	 * Add-on enabled check.
-	 *
-	 * @param string $wp_option wp_option to check against.
-	 * @param string $human_readable Human readable add-on name.
-	 * @return bool|WP_Error enabled or not.
-	 */
-	private function addon_enabled_check( $wp_option, $human_readable ) {
-		$admin_permissions = $this->admin_check();
-		if ( true !== $admin_permissions ) {
-			return $admin_permissions;
-		}
-
-		if ( ! boolval( get_option( $wp_option, 0 ) ) ) {
-			return $this->addon_not_enabled_error( $human_readable );
-		}
-		return true;
-	}
-
-	/**
 	 * Checks if IMPress Agents is enabled.
 	 *
 	 * @return WP_Error|bool
@@ -99,18 +80,22 @@ class Rest_Controller {
 	}
 
 	/**
-	 * Provides the appropiate status code for failed auth.
+	 * Add-on enabled check.
 	 *
-	 * @return int Status code.
+	 * @param string $wp_option wp_option to check against.
+	 * @param string $human_readable Human readable add-on name.
+	 * @return bool|WP_Error enabled or not.
 	 */
-	public function authorization_failed_status_code() {
-		$status = 401;
-
-		if ( is_user_logged_in() ) {
-			$status = 403;
+	private function addon_enabled_check( $wp_option, $human_readable ) {
+		$admin_permissions = $this->admin_check();
+		if ( true !== $admin_permissions ) {
+			return $admin_permissions;
 		}
 
-		return $status;
+		if ( ! boolval( get_option( $wp_option, 0 ) ) ) {
+			return $this->addon_not_enabled_error( $human_readable );
+		}
+		return true;
 	}
 
 	/**
@@ -119,7 +104,7 @@ class Rest_Controller {
 	 * @param string $name Human readable value name for addon.
 	 * @return WP_Error
 	 */
-	public function addon_not_enabled_error( $name ) {
+	private function addon_not_enabled_error( $name ) {
 		return new \WP_Error(
 			'addon_disabled',
 			"$name is not enabled.",
@@ -130,12 +115,27 @@ class Rest_Controller {
 	}
 
 	/**
+	 * Provides the appropiate status code for failed auth.
+	 *
+	 * @return int Status code.
+	 */
+	private function authorization_failed_status_code() {
+		$status = 401;
+
+		if ( is_user_logged_in() ) {
+			$status = 403;
+		}
+
+		return $status;
+	}
+
+	/**
 	 * Converts the error returned from the IDX_API class to be more suitable for the REST endpoints.
 	 *
 	 * @param WP_Error $error WP_Error to convert.
 	 * @return WP_Error
 	 */
-	public function convert_idx_api_error( $error ) {
+	protected function convert_idx_api_error( $error ) {
 		if ( ! is_wp_error( $error ) ) {
 			return $error;
 		}

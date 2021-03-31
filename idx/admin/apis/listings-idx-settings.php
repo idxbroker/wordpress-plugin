@@ -164,7 +164,7 @@ class Listings_IDX_Settings extends \IDX\Admin\Rest_Controller {
 	 *
 	 * @return array
 	 */
-	public function generate_authors_list() {
+	private function generate_authors_list() {
 		$available_authors = [];
 		$users             = get_users();
 		foreach ( $users as $user ) {
@@ -182,12 +182,12 @@ class Listings_IDX_Settings extends \IDX\Admin\Rest_Controller {
 	 *
 	 * @return array
 	 */
-	public function generate_template_list() {
+	private function generate_template_list() {
 		$template_list            = [
 			[
 				'value' => '',
 				'label' => 'Default',
-			]
+			],
 		];
 		$listing_template_manager = new \Single_Listing_Template();
 
