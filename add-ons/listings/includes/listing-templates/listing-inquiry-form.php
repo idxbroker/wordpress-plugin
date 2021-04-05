@@ -1,5 +1,6 @@
 <?php
 
+add_action( 'wp_loaded', new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode() );
 /**
  * Listing Inquiry Form
  * Default inquiry form for listing posts.

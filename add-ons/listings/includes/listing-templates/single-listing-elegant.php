@@ -1246,14 +1246,10 @@ function single_listing_post_content() {
 				<div id="contact-form" <?php if(!function_exists('aeprofiles_connected_agents_markup')) { echo 'style="width: 100%;"'; }; ?>>
 					<?php 
 					$options = get_option('plugin_wp_listings_settings');
-					if (get_post_meta( $post->ID, '_listing_contact_form', true) != '') {
-
+					if ( get_post_meta( $post->ID, '_listing_contact_form', true ) != '' ) {
 						echo do_shortcode(get_post_meta( $post->ID, '_listing_contact_form', true) );
-
-					} elseif (isset($options['wp_listings_default_form']) && $options['wp_listings_default_form'] != '') {
- 
-						echo do_shortcode($options['wp_listings_default_form']);
-
+					} elseif ( ! empty( $options['wp_listings_default_form'] ) ) {
+						echo do_shortcode( $options['wp_listings_default_form'] );
 					} else {
 						include_once IMPRESS_IDX_DIR . 'add-ons/listings/includes/listing-templates/listing-inquiry-form.php';
 						listing_inquiry_form( $post );
@@ -1313,9 +1309,9 @@ function single_listing_post_content() {
 
 		<div id="listing-disclaimer">
 		<?php
-		if( get_post_meta($post->ID, '_listing_disclaimer', true) ) {
+		if ( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) {
 			echo '<p class="wp_listings_disclaimer">' . get_post_meta($post->ID, '_listing_disclaimer', true) . '</p>';
-		} elseif ($options['wp_listings_global_disclaimer'] != '' && $options['wp_listings_global_disclaimer'] != null) {
+		} elseif ( ! empty( $options['wp_listings_global_disclaimer'] ) ) {
 			echo '<p class="wp_listings_disclaimer">' . $options['wp_listings_global_disclaimer'] . '</p>';
 		}
 		echo (get_post_meta($post->ID, '_listing_courtesy', true)) ? '<p class="wp_listings_courtesy">' . get_post_meta($post->ID, '_listing_courtesy', true) . '</p>' : '';
