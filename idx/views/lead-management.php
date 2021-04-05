@@ -983,6 +983,12 @@ class Lead_Management {
 					// prepare notes for display
 					if ( $notes_array ) {
 						foreach ( $notes_array as $note ) {
+
+							// Skip large HTML table notes that are non-editable.
+							if ( strpos( $note['note'], 'class=&quot;mcnTextContentContainer&quot;' ) ) {
+								continue;
+							}
+
 							$nice_date = Carbon::parse( $note['created'] )->addHours( $offset )->toDayDateTimeString();
 
 							$notes .= '<tr id="note-id-' . $note['id'] . '" class="note-row note-id-' . $note['id'] . '">';
