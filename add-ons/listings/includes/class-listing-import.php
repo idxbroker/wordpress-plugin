@@ -317,7 +317,7 @@ class WPL_Idx_Listing {
 		update_post_meta( $id, '_listing_longitude', isset( $idx_featured_listing_data['longitude'] ) ? $idx_featured_listing_data['longitude'] : '' );
 
 		// Include advanced fields if setting is enabled.
-		if ( ! empty( $wpl_options['wp_listings_import_advanced_fields'] ) ) {
+		if ( ! empty( $wpl_options['wp_listings_import_advanced_fields'] ) && ! empty( $idx_featured_listing_data['advanced'] ) ) {
 			// Flatten advanced fields that have arrays for values.
 			foreach ( $idx_featured_listing_data['advanced'] as $key => $value ) {
 				if ( is_array( $value ) ) {
