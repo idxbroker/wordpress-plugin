@@ -159,7 +159,6 @@ function wp_listings_init() {
 			'nonce-gmb-update-location-settings' => wp_create_nonce( 'impress_gmb_update_location_settings_nonce' ),
 			'nonce-gmb-reset-post-time'          => wp_create_nonce( 'wpl_reset_next_post_time_request_nonce' ),
 			'nonce-gmb-clear-last-post-status'   => wp_create_nonce( 'wpl_clear_last_post_status_nonce' ),
-			'nonce-impress-listings-data-optout' => wp_create_nonce( 'impress_listings_data_optout_nonce' ),
 		) );
 
 		$localize_script = array(

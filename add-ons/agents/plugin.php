@@ -57,14 +57,7 @@ function impress_agents_init() {
     function impress_agents_admin_scripts_styles() {
         wp_enqueue_style( 'impress_agents_admin_css', IMPRESS_IDX_URL . 'assets/css/impress-agents-admin.min.css' );
 
-		wp_enqueue_script( 'impress-agents-admin', IMPRESS_IDX_URL . 'assets/js/agents-admin.js', 'media-views' );
-		wp_localize_script(
-			'impress-agents-admin',
-			'impressAgentsAdmin',
-			[
-				'nonce-impress-agents-data-optout' => wp_create_nonce( 'impress_agents_data_optout_nonce' ),
-			]
-		);
+		wp_enqueue_script( 'impress-agents-admin', IMPRESS_IDX_URL . 'assets/js/agents-admin.min.js', 'media-views' );
 
 		$localize_script = array(
 			'title'        => __( 'Set Term Image', 'impress_agents' ),
@@ -111,71 +104,3 @@ function impress_agents_register_widgets() {
 	}
 
 }
-
-/**
- * IMPress Agent Get Install Info.
- *
- * @since 1.1.5
- */
-function impress_agents_get_install_info() {
-	// Return early if IMPress for IDXB or IMPress Listings is installed and active or if optout is enabled.
-	if ( class_exists( 'IDX_Broker_Plugin' ) || class_exists( 'WP_Listings' ) || get_option( 'impress_data_optout' ) ) {
-		return;
-	}
-
-	$current_info_version         = '1.0.0';
-	$previously_sent_info_version = get_option( 'impress_data_sent' );
-	if ( empty( $previously_sent_info_version ) || version_compare( $previously_sent_info_version, $current_info_version ) < 0 ) {
-		global $wpdb;
-		$install_info = [
-			'php_version'       => phpversion(),
-			'wordpress_version' => get_bloginfo( 'version' ),
-			'theme_name'        => wp_get_theme()->get( 'Name' ),
-			'db_version'        => $wpdb->dbh->server_info,
-			'memory_limit'      => WP_MEMORY_LIMIT,
-			'api_key'           => get_option( 'idx_broker_apikey' ),
-			'site_url'          => get_site_url(),
-			'impress_listings'  => false,
-			'impress_agents'    => true,
-			'impress_idxb'      => false,
-		];
-
-		$response = wp_remote_post(
-			'https://hsstezluih.execute-api.us-east-1.amazonaws.com/v1/wp-data',
-			[
-				'headers' => [
-					'Content-Type' => 'application/json',
-				],
-				'body'    => wp_json_encode( $install_info ),
-			]
-		);
-
-		if ( ! is_wp_error( $response ) ) {
-			$response_code = wp_remote_retrieve_response_code( $response );
-			if ( 200 === $response_code ) {
-				update_option( 'impress_data_sent', $current_info_version );
-			}
-		}
-	}
-}
-add_action( 'admin_init', 'impress_agents_get_install_info' );
-
-/**
- * IMPress Agent Data Opt-Out.
- *
- * @since 1.1.5
- */
-function impress_agents_data_optout() {
-	// User capability check.
-	if ( ! current_user_can( 'publish_posts' ) || ! current_user_can( 'edit_posts' ) ) {
-		echo 'check permissions';
-		wp_die();
-	}
-	// Validate and process request.
-	if ( isset( $_POST['nonce'], $_POST['optout'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'impress_agents_data_optout_nonce' ) ) {
-		update_option( 'impress_data_optout', rest_sanitize_boolean( wp_unslash( $_POST['optout'] ) ) );
-		echo 'success';
-	}
-	wp_die();
-}
-add_action( 'wp_ajax_impress_agents_data_optout', 'impress_agents_data_optout' );
