@@ -243,6 +243,24 @@ class Social_Pro {
 	}
 
 	/**
+	 * Grabs beta program info.
+	 *
+	 * @return array
+	 */
+	public function get_beta_status() {
+		$status = $this->idx_api->idx_api( 'socialProStatus' );
+		if ( is_wp_error( $status ) || ! $status || ! isset( $status['restrictedByBeta'] ) ) {
+			return [
+				'restrictedByBeta' => false,
+			];
+		}
+		return [
+			'restrictedByBeta' => $status['restrictedByBeta'],
+			'optedInBeta'      => $status['optedInBeta'],
+		];
+	}
+
+	/**
 	 * Returns an array of selected category IDs.
 	 *
 	 * @return array
