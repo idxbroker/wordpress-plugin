@@ -38,6 +38,11 @@ export default {
             this.saveHandler(this[repo], 'general')
         }
     },
+    watch: {
+        enabled () {
+            this.loadData(this[repo], 'general')
+        }
+    },
     created () {
         this.module = 'listingsGeneral'
         if (this.enabled) {

@@ -2,7 +2,6 @@
     <GuidedSetupContentCard
         :cardTitle="cardTitle"
         :steps="guidedSetupSteps"
-        :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
         @continue="saveHandler('agentSettings')">
@@ -54,20 +53,6 @@ export default {
         this.cardTitle = 'Configure IMPress Agents'
         this.continuePath = '/guided-setup/social-pro'
         this.skipPath = '/guided-setup/social-pro'
-        this.links = [
-            {
-                text: 'IMPress Agents Features',
-                href: '#agents-features'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
-            }
-        ]
         const { data } = await this.agentSettingsRepository.get()
         this.updateState(data)
     },

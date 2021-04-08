@@ -5,10 +5,11 @@
             'form-content': true,
             'form-content--disabled': formDisabled
         }">
-        <idx-block className="form-content__header">
-            <idx-block tag="h2" className="form-content__title">Do you want to set up IMPress Omnibar Search?</idx-block>
-            <p>Omnibar is a powerful search tool, which allows for a simple search bar to automatically search for properties in your MLS with a single query.</p>
-        </idx-block>
+        <p>
+            Omnibar is a powerful search tool, which allows
+            for a simple search bar to automatically search
+            for properties in your MLS with a single query.
+        </p>
         <hr/>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">City, County, and Postal Code Lists</idx-block>

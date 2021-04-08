@@ -52,15 +52,11 @@ export default {
         this.relatedLinks = [
             {
                 text: 'IMPress Omnibar FAQs',
-                href: '#'
+                href: 'https://support.idxbroker.com/support/s/article/widget---wordpress-omnibar-search'
             },
             {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
+                text: 'Omnibar Shortcodes',
+                href: 'https://support.idxbroker.com/s/article/Shortcodes-IMPress-IDX-Broker'
             }
         ]
         this.loadData(this[repo])

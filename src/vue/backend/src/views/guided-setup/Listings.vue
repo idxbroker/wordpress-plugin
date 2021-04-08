@@ -2,7 +2,6 @@
     <GuidedSetupContentCard
         :cardTitle="cardTitle"
         :steps="guidedSetupSteps"
-        :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
         @continue="enablePlugin">
@@ -93,20 +92,6 @@ export default {
         this.cardTitle = 'Enable IMPress Listings'
         this.activateLabel = 'Enable'
         this.skipPath = '/guided-setup/agents'
-        this.links = [
-            {
-                text: 'IMPress Listings Features',
-                href: '#listings-features'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
-            }
-        ]
     },
     mounted () {
         this.progressStepperUpdate([4, 1, 0, 0])

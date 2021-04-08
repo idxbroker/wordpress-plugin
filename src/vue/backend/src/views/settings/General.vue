@@ -82,19 +82,11 @@ export default {
         this.relatedLinks = [
             {
                 text: 'Where can I find my API key?',
-                href: '#where'
+                href: 'https://support.idxbroker.com/s/article/api-key'
             },
             {
                 text: 'Setting up a wrapper',
-                href: '#wrapper'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
+                href: 'https://support.idxbroker.com/s/article/automatically-create-wordpress-dynamic-wrapper'
             }
         ]
         this.errorMessage = 'We couldn’t find an account with the provided API key'

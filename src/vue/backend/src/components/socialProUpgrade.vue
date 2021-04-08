@@ -1,14 +1,15 @@
 <template>
     <idx-block className="social-pro__upgrade">
         <p>
-            Cupcake ipsum dolor sit. Amet chupa chups croissant dessert
-            tootsie roll sugar plum sweet roll gummi bears pie. Jelly
-            donut sugar plum brownie chocolate bar tootsie roll bear claw.
+            A Social Pro subscription is required to access this feature.
+            Once you’ve enabled Social Pro from your IDX Broker account,
+            you can push automated blog posts and listing updates to your
+            WordPress pages and social media sites.
         </p>
         <idx-block
             tag="a"
             className="wp-btn btn-primary btn-lg"
-            href="#"
+            href="https://middleware.idxbroker.com/mgmt/upgrade#socialPro"
             target="_blank"
             role="button"
         >
@@ -23,7 +24,6 @@ export default {
 </script>
 <style lang="scss">
 .social-pro__upgrade {
-    text-align: center;
     a {
         height: 50px;
         line-height: 1.5;

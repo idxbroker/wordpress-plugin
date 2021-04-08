@@ -58,9 +58,7 @@ export default {
     async created () {
         this.module = 'listingsGeneral'
         this.links = [
-            { text: 'Where can I find my API key?', href: 'https://support.idxbroker.com/s/article/api-key' },
-            { text: 'IDX Broker Middleware', href: 'https://middleware.idxbroker.com/mgmt/' },
-            { text: 'Sign up for IDX Broker', href: 'https://signup.idxbroker.com/' } // Marketing may want a different entry
+            { text: 'Where can I find my API key?', href: 'https://support.idxbroker.com/s/article/api-key' }
         ]
     }
 }

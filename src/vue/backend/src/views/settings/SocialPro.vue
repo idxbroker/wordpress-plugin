@@ -15,7 +15,12 @@
         <idx-block className="form-content">
             <div>
                 <b>Social Pro</b>
-                <div>Detailed sentence or two describing Social Pro General Interest Articles. Lorem ipsum dolor sit amet.</div>
+                <div>
+                    Add content-rich blog posts to your social media
+                    platforms and website. Topics include life-style
+                    content, real estate content and market updates
+                    for your area.
+                </div>
                 <idx-block
                     :className="{
                         'form-content__toggle': true,
@@ -48,7 +53,7 @@
             </div>
         </idx-block>
         <template #related>
-            <RelatedLinks :relatedLinks="relatedLinks"/>
+            <RelatedLinks/>
         </template>
     </TwoColumn>
 </template>
@@ -108,20 +113,6 @@ export default {
         this.content = {
             startingStatement: 'To use Social Pro, you need to'
         }
-        this.relatedLinks = [
-            {
-                text: 'Social Pro with IDX Broker',
-                href: '#'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
-            }
-        ]
         if (this.enabled && this.subscribed && this.isValid) {
             this.loadData(this[repo])
         }

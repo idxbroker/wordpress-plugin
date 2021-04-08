@@ -98,15 +98,7 @@ export default {
         this.links = [
             {
                 text: 'Where can I find my API key?',
-                href: '#where'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
+                href: 'https://support.idxbroker.com/s/article/api-key'
             }
         ]
         this.errorMessage = 'We couldn’t find an account with the provided API key'
