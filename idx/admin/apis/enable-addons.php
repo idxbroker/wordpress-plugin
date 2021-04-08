@@ -122,13 +122,14 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	public function social_pro_get() {
 		$enabled    = boolval( get_option( 'idx_broker_social_pro_enabled', 0 ) );
 		$social_pro = new \IDX\Social_Pro();
+		$beta_info  = $social_pro->get_beta_status();
+		$output     = [
+			'enabled'    => $enabled,
+			'subscribed' => $social_pro->get_subscribed_status(),
+		];
+		$output     = array_merge( $output, $beta_info );
 
-		return rest_ensure_response(
-			[
-				'enabled'    => $enabled,
-				'subscribed' => $social_pro->get_subscribed_status(),
-			]
-		);
+		return rest_ensure_response( $output );
 	}
 }
 
