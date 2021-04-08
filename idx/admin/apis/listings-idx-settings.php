@@ -141,8 +141,8 @@ class Listings_IDX_Settings extends \IDX\Admin\Rest_Controller {
 			$settings['wp_listings_import_author'] = (int) filter_var( $payload['importedListingsAuthorSelected'], FILTER_VALIDATE_INT );
 		}
 
-		if ( isset( $payload['wp_listings_import_title'] ) ) {
-			$settings['wp_listings_import_title'] = sanitize_text_field( $payload['wp_listings_import_title'] );
+		if ( isset( $payload['importTitle'] ) ) {
+			$settings['wp_listings_import_title'] = sanitize_text_field( $payload['importTitle'] );
 		}
 
 		if ( isset( $payload['advancedFieldData'] ) ) {
