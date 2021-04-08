@@ -56,6 +56,7 @@ export default {
         font-size: var(--font-size-p-large);
         line-height: var(--line-height-p-large);
         margin-bottom: var(--space-10);
+        max-width: 1190px;
         text-align: center;
 
         h1 {
@@ -112,13 +113,18 @@ export default {
             height: 312px;
         }
     }
+}
 
-    @media screen and (min-width: 1250px) {
-        &__media {
-            display: flex;
-            justify-content: space-between;
-            grid-gap: var(--space-18);
-        }
+@media screen and (min-width: 1250px) {
+    .guided-setup__welcome {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .gs__media {
+        display: flex;
+        grid-gap: var(--space-18);
     }
 }
 </style>

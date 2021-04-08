@@ -14,11 +14,7 @@
                 >
                     Name Your Global Website Wrapper
                 </idx-block>
-                <p>
-                    Name Your Global Website Wrapper Wrappers set the overall styling of
-                    your IDX Broker pages, setting this up will match the IDX pages to your
-                    website design automatically every few hours.
-                </p>
+                <p>Wrappers set the overall styling of your IDX Broker pages, setting this up will match the IDX pages to your website design automatically every few hours.</p>
             </idx-block>
             <idx-form-input
                 :aria-labelledby="`${$idxStrap.prefix}wrapperNameLabel`"
