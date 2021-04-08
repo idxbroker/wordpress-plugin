@@ -16,6 +16,9 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	#wpfooter {
 		display: none;
 	}
+	#wpbody-content * :not('.idx-wp-app') {
+		visibility: hidden;
+	}
 </style>
 
 <div id="app"></div>
