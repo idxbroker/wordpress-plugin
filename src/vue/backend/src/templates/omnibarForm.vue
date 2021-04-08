@@ -126,7 +126,7 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Custom Placeholder</idx-block>
-            <p>This is a placeholder for the main input of Omibar Widgets.<br>
+            <p>This is a placeholder for the main input of Omnibar Widgets.<br>
             Examples: “Search for Properties”, “Location, School, Address, or Listing ID”.</p>
         </idx-block>
         <idx-form-group>
