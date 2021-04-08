@@ -62,7 +62,7 @@
         </idx-form-group>
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Custom Wrapper</idx-block>
-            <p>Detailed sentence or two describing how custom wrappers can be used and how to set them up properly.</p>
+            <p>If your theme's content HTML ID's and Classes are different than the included template, you can enter the HTML of your content wrapper beginning and end.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label" :target="`${$idxStrap.prefix}wrapper-start`">Wrapper Start HTML</idx-form-label>

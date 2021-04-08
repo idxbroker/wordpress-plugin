@@ -2,7 +2,6 @@
     <GuidedSetupContentCard
         :cardTitle="cardTitle"
         :steps="guidedSetupSteps"
-        :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
         @continue="saveHandler('socialPro')">
@@ -52,20 +51,6 @@ export default {
         this.cardTitle = 'Social Syndication Settings'
         this.continuePath = '/guided-setup/confirmation'
         this.skipPath = '/guided-setup/confirmation'
-        this.links = [
-            {
-                text: 'Social Pro with IDX Broker',
-                href: '#social-pro'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
-            }
-        ]
     },
     mounted () {
         this.progressStepperUpdate([4, 5, 3, 2])

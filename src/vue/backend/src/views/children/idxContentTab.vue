@@ -39,12 +39,17 @@ export default {
             enabled: state => state.listingsGeneral.enabled
         })
     },
+    watch: {
+        enabled () {
+            this.loadData(this[repo], 'idx')
+        }
+    },
     methods: {
         save () {
             this.saveHandler(this[repo], 'idx')
         }
     },
-    async created () {
+    created () {
         this.module = 'listingsIdx'
         if (this.enabled) {
             this.loadData(this[repo], 'idx')

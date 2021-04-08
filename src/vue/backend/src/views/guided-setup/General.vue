@@ -55,16 +55,8 @@ export default {
         this.continuePath = '/guided-setup/connect/omnibar'
         this.links = [
             {
-                text: 'Dynamic Wrappers',
-                href: '#dynamic-wrappers'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
+                text: 'Setting up a wrapper',
+                href: 'https://support.idxbroker.com/s/article/automatically-create-wordpress-dynamic-wrapper'
             }
         ]
         const { data } = await this.generalRepository.get()

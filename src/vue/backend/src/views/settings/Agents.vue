@@ -22,7 +22,7 @@
             </template>
         </idx-block>
         <template #related>
-            <RelatedLinks :relatedLinks="links" />
+            <RelatedLinks/>
         </template>
     </TwoColumn>
 </template>
@@ -61,13 +61,13 @@ export default {
             this.saveHandler(this[repo])
         }
     },
+    watch: {
+        enabled () {
+            this.loadData(this[repo])
+        }
+    },
     created () {
         this.module = 'agentSettings'
-        this.links = [
-            { text: 'IMPress Agents Features', href: '#' },
-            { text: 'IDX Broker Middleware', href: 'https://middleware.idxbroker.com/mgmt/' },
-            { text: 'Sign up for IDX Broker', href: 'https://signup.idxbroker.com/' } // Marketing may want a different entry
-        ]
         if (this.enabled) {
             this.loadData(this[repo])
         }

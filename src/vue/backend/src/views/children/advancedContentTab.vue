@@ -37,6 +37,11 @@ export default {
             this.saveHandler(this[repo], 'advanced')
         }
     },
+    watch: {
+        enabled () {
+            this.loadData(this[repo], 'advanced')
+        }
+    },
     computed: {
         ...mapState({
             enabled: state => state.listingsGeneral.enabled

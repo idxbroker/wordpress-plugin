@@ -7,7 +7,6 @@
         }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">General Interest Article Settings</idx-block>
-            <p>General Interest Articles come from Elevate writers and contain rich content related to homes and home life.</p>
         </idx-block>
         <idx-form-group>
             <idx-form-label customClass="form-content__label">Autopublish General Interest Articles</idx-form-label>

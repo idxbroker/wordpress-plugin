@@ -1,4 +1,9 @@
 export default {
+    data () {
+        return {
+            firstUpdate: true
+        }
+    },
     methods: {
         omnibarMLSStateChange (payload) {
             // payload: single MLS object, new selected value, key of object, full mlsMembership array
@@ -16,8 +21,13 @@ export default {
         },
         mlsChangeUpdate (event) {
             const updatedMLSMembership = this.omnibarMLSStateChange(event)
-            // Assumes that the page guard mixin is also imported
-            this.formUpdate({ key: 'mlsMembership', value: updatedMLSMembership })
+            if (this.firstUpdate) {
+                this.$store.dispatch(`${this.module}/setItem`, { key: 'mlsMembership', value: updatedMLSMembership })
+                this.firstUpdate = false
+            } else {
+                // Assumes that the page guard mixin is also imported
+                this.formUpdate({ key: 'mlsMembership', value: updatedMLSMembership })
+            }
         }
     }
 }

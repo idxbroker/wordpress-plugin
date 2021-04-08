@@ -2,7 +2,6 @@
     <GuidedSetupContentCard
         :cardTitle="cardTitle"
         :steps="guidedSetupSteps"
-        :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
         @continue="saveHandler('listingsGeneral','listingsSettings', 'general')">
@@ -54,20 +53,6 @@ export default {
         this.cardTitle = 'Configure IMPress Listings'
         this.continuePath = '/guided-setup/listings/idx'
         this.skipPath = '/guided-setup/agents'
-        this.links = [
-            {
-                text: 'IMPress Listings Features',
-                href: '#listings-features'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
-            }
-        ]
         const { data } = await this.listingsSettingsRepository.get('general')
         this.updateState(data)
     },

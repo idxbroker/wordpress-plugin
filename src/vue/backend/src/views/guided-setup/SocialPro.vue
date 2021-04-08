@@ -2,16 +2,15 @@
     <GuidedSetupContentCard
         :cardTitle="cardTitle"
         :steps="guidedSetupSteps"
-        :relatedLinks="links"
         @back-step="goBackStep"
         @skip-step="goSkipStep"
         @continue="enablePlugin">
         <template v-slot:description>
             <p>
-                A Social Pro™ subscription is required to access this feature.
-                Once you’ve subscribed to Social Pro from your IDX Broker Account, you
-                can push automated blog posts and listing videos to your WordPress
-                pages and social media sites.
+                Add content-rich blog posts to your social media
+                platforms and website. Topics include life-style
+                content, real estate content and market updates
+                for your area.
             </p>
         </template>
         <template v-slot:controls>
@@ -102,20 +101,6 @@ export default {
         this.cardTitle = 'Social Pro'
         this.activateLabel = 'Enable General Interest Article Syndication'
         this.skipPath = '/guided-setup/confirmation'
-        this.links = [
-            {
-                text: 'Social Pro with IDX Broker',
-                href: '#social-pro'
-            },
-            {
-                text: 'IDX Broker Middleware',
-                href: 'https://middleware.idxbroker.com/mgmt/'
-            },
-            {
-                text: 'Sign up for IDX Broker',
-                href: '#signUp'
-            }
-        ]
     },
     mounted () {
         this.progressStepperUpdate([4, 5, 3, 1])

@@ -6,6 +6,12 @@
                 <idx-list-item v-for="link in relatedLinks" :key="link.href">
                     <a :href="link.href" target="_blank">{{ link.text }}</a>
                 </idx-list-item>
+                <idx-list-item>
+                    <a href="https://middleware.idxbroker.com/mgmt/" target="_blank">IDX Broker Middleware</a>
+                </idx-list-item>
+                <idx-list-item>
+                    <a href="https://www.idxbroker.com/" target="_blank">Sign up for IDX Broker</a>
+                </idx-list-item>
             </idx-list>
         </idx-card-body>
     </idx-card>

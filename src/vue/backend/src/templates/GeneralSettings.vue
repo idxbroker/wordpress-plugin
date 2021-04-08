@@ -12,9 +12,13 @@
                     tag="h2"
                     className="form-content__title"
                 >
-                    Name Your Global Website Wrapper
+                    Create Your Global Website Wrapper
                 </idx-block>
-                <p>Wrappers set the overall styling of your IDX Broker pages, setting this up will match the IDX pages to your website design automatically every few hours.</p>
+                <p>
+                    Creating your Global Website Wrapper will set the overall styling of
+                    your IDX Broker pages. Setting this up will match the IDX pages to your
+                    website design automatically every few hours.
+                </p>
             </idx-block>
             <idx-form-input
                 :aria-labelledby="`${$idxStrap.prefix}wrapperNameLabel`"
