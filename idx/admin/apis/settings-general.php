@@ -195,6 +195,13 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 	 */
 	private function refresh_api( $api_key ) {
 		$sanitized_key = sanitize_text_field( wp_unslash( $api_key ) );
+		$old_key       = get_option( 'idx_broker_apikey', '' );
+
+		// If the key has changed, we need to clear MLS specific data.
+		if ( $old_key !== $sanitized_key ) {
+			$this->clear_existing_options();
+		}
+
 		update_option( 'idx_broker_apikey', $sanitized_key, false );
 
 		$idx_api = new \Idx\Idx_Api();
@@ -244,6 +251,25 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 				'status' => 500,
 			]
 		);
+	}
+
+	/**
+	 * Clears existing plugin options that are tied to a specific account key.
+	 * Pulls some data removal code from uninstall.php.
+	 *
+	 * @return void
+	 */
+	private function clear_existing_options() {
+		global $wpdb;
+		// Delete omnibar data.
+		$test = $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->options WHERE option_name LIKE %s", '%idx_omnibar%' ) );
+		// Delete the autocomplete table (new rest api autcomplete).
+		$autocomplete_table_name = $wpdb->prefix . 'idx_broker_autocomplete_values';
+		$wpdb->query( "DROP TABLE IF EXISTS $autocomplete_table_name" );
+
+		delete_option( 'idx_broker_omnibar_address_mls' );
+		delete_option( 'idx_default_property_types' );
+		delete_option( 'idx_broker_social_pro_enabled' );
 	}
 }
 
