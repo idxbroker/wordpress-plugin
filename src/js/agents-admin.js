@@ -172,17 +172,3 @@ jQuery(document).ready(function ($) {
 
   /* === End term image JS. === */
 })
-
-function impressAgentsDataCollectionOptOut (element) {
-  jQuery.post(
-    ajaxurl, {
-      action: 'impress_agents_data_optout',
-      nonce: impressAgentsAdmin['nonce-impress-agents-data-optout'],
-      optout: element.checked
-    }, function (response) {
-      if (response !== 'success') {
-        console.error(response)
-      }
-    }
-  )
-}

@@ -317,17 +317,3 @@ function clearLastPostStatus (event) {
     )
   }
 }
-
-function impressListingsDataCollectionOptOut () {
-  jQuery.post(
-    ajaxurl, {
-      action: 'impress_listings_data_optout',
-      nonce: wp_listings_adminL10n['nonce-impress-listings-data-optout'],
-      optout: document.querySelector('#impress-data-optout-checkbox').checked
-    }, function (response) {
-      if (response !== 'success') {
-        console.error(response)
-      }
-    }
-  )
-}
