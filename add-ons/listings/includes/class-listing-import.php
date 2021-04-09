@@ -447,13 +447,10 @@ function wp_listings_idx_listing_register_settings() {
  */
 function sync_listing_options() {
 
-	$listings_options  = get_option( 'plugin_wp_listings_settings' );
-	$listing_post_slug = empty( $listing_options['wp_listings_slug'] ) ? 'listing' : $impress_listing_options['wp_listings_slug'];
-
 	$listing_posts = get_posts(
 		[
 			'numberposts' => '-1',
-			'post_type'   => $listing_post_slug,
+			'post_type'   => 'listing',
 			'post_status' => [ 'publish', 'pending', 'draft', 'private' ],
 		]
 	);
