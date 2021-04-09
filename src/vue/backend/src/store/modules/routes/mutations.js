@@ -5,6 +5,9 @@ export default {
     SET_ITEM: (state, { key, value } = {}) => {
         state[key] = value
     },
+    SET_SOCIAL_PRO: (state, { key, value } = {}) => {
+        state.routes[key] = value
+    },
     TOGGLE_ROUTE: (state, { key } = {}) => {
         const expanded = Object.keys(state.routes).filter(key => state.routes[key].collapsed === false)
         if (expanded.length) {

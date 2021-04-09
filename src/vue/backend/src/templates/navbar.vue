@@ -21,7 +21,7 @@
             }"
         >
             <idx-block className="v-nav__icon-bar"></idx-block>
-            <idx-nav-list>
+            <idx-nav-list v-if="loadSideBar">
                 <idx-nav-item
                     v-for="(route, i) in routes"
                     :key="i"
@@ -39,6 +39,16 @@
                     @click.native="topLevelClick(route.itemId, route.routes)"
                     @icon-click="iconBarExpand"
                 ></idx-nav-item>
+            </idx-nav-list>
+            <idx-nav-list v-else>
+                <idx-skeleton-screen :loading="true" >
+                    <template v-slot:skeletonScreen>
+                        <idx-block className="sk-grow--75" />
+                        <idx-block className="sk-grow--75" />
+                        <idx-block className="sk-grow--75" />
+                        <idx-block className="sk-grow--75" />
+                    </template>
+                </idx-skeleton-screen>
             </idx-nav-list>
         </idx-v-nav>
     </idx-block>
@@ -69,6 +79,14 @@ export default {
             this.$nextTick(() => {
                 this.routerActivePage()
             })
+        },
+        loadSideBar (newVal) {
+            if (newVal) {
+                this.socialProBeta()
+            }
+            this.$nextTick(() => {
+                this.routerActivePage()
+            })
         }
     },
     computed: {
@@ -77,7 +95,10 @@ export default {
         }),
         ...mapState({
             childRoutes: state => state.routes.routes,
-            expanded: state => state.routes.expanded
+            expanded: state => state.routes.expanded,
+            restrictedByBeta: state => state.socialPro.restrictedByBeta,
+            optedInBeta: state => state.socialPro.optedInBeta,
+            loadSideBar: state => state.alerts.loadSideBar
         })
     },
     methods: {
@@ -85,7 +106,9 @@ export default {
             gatherRoutes: 'routes/gatherRoutes',
             expandRoute: 'routes/expandRoute',
             collapseRoutes: 'routes/collapseRoutes',
-            toggleSidebar: 'routes/toggleSidebar'
+            toggleSidebar: 'routes/toggleSidebar',
+            setSocialPro: 'routes/setSocialPro',
+            setRoutes: 'routes/setRoutes'
         }),
         handleResize () {
             return window.matchMedia('(max-width: 782px)').matches
@@ -141,6 +164,21 @@ export default {
                     })
                 }
             }
+        },
+        socialProBeta () {
+            if ((this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta) {
+                let socialPro
+                for (const route in this.routes) {
+                    if (this.routes[route].routes) {
+                        this.routes[route].routes.map(x => {
+                            if (x.label === 'Social Pro') {
+                                socialPro = x
+                            }
+                        })
+                    }
+                }
+                this.setSocialPro({ key: socialPro.itemId, value: { ...socialPro, hidden: false } })
+            }
         }
     },
     created () {
@@ -148,14 +186,25 @@ export default {
     },
     mounted () {
         this.$nextTick(() => {
-            this.routerActivePage()
+            if (this.loadSideBar) {
+                this.socialProBeta()
+                this.routerActivePage()
+            }
         })
     }
 }
 </script>
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/vNav';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/skeletonScreen';
 @import '../styles/verticalNavbar.scss';
 @import '~bootstrap/scss/navbar';
 @import '~bootstrap/scss/nav';
+.sk-grow--75 {
+    margin-left: 50px;
+    background-color: $gray-400;
+    &:first-child {
+        margin-top: 15px;
+    }
+}
 </style>

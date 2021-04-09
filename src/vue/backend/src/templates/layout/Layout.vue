@@ -10,11 +10,17 @@
 import Navbar from '@/templates/navbar'
 import Page from '@/templates/page'
 import Generic from '@/templates/layout/Generic'
+import { mapState } from 'vuex'
 export default {
     components: {
         Generic,
         Navbar,
         Page
+    },
+    computed: {
+        ...mapState({
+            loadSideBar: state => state.alerts.loadSideBar
+        })
     }
 }
 </script>

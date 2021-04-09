@@ -2,6 +2,8 @@ import actions from './actions'
 import getters from './getters'
 
 const state = {
+    restrictedByBeta: true,
+    optedInBeta: false,
     subscribed: false,
     enabled: true,
     autopublish: 'autopublish',

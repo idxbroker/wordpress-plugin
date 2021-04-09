@@ -16,6 +16,9 @@ export default {
     setRoutes: ({ commit }, payload) => {
         commit('SET_OBJECT', payload)
     },
+    setSocialPro: ({ commit }, payload) => {
+        commit('SET_SOCIAL_PRO', payload)
+    },
     setRouteKeys: ({ commit }, payload = []) => {
         commit('SET_ITEM', payload)
     },
