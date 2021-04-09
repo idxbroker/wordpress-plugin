@@ -98,7 +98,8 @@ export default {
             expanded: state => state.routes.expanded,
             restrictedByBeta: state => state.socialPro.restrictedByBeta,
             optedInBeta: state => state.socialPro.optedInBeta,
-            loadContent: state => state.alerts.loadContent
+            loadContent: state => state.alerts.loadContent,
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
         })
     },
     methods: {
@@ -178,6 +179,15 @@ export default {
                     }
                 }
                 this.setSocialPro({ key: socialPro.itemId, value: { ...socialPro, hidden: false } })
+                this.$store.dispatch('guidedSetup/setItem', {
+                    key: 'guidedSetupSteps',
+                    value: [
+                        { name: '1. Connect', icon: 'link', total: 4, active: 0 },
+                        { name: '2. Your Listings', icon: 'list', total: 5, active: 0 },
+                        { name: '3. Agents', icon: 'users', total: 3, active: 0 },
+                        { name: '4. Social', icon: 'thumbs-up', total: 3, active: 0, hideProgress: true }
+                    ]
+                })
             }
         }
     },

@@ -59,10 +59,19 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps,
+            restrictedByBeta: state => state.socialPro.restrictedByBeta,
+            optedInBeta: state => state.socialPro.optedInBeta
         }),
         continuePath () {
             return this.localStateValues.enabled ? '/guided-setup/agents/configure' : this.skipPath
+        },
+        skipPath () {
+            if ((this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta) {
+                return '/guided-setup/social-pro'
+            } else {
+                return '/guided-setup/confirmation'
+            }
         }
     },
     methods: {
@@ -91,7 +100,6 @@ export default {
         this.module = 'agentSettings'
         this.cardTitle = 'Enable IMPress Agents'
         this.activateLabel = 'Enable'
-        this.skipPath = '/guided-setup/social-pro'
     },
     mounted () {
         this.progressStepperUpdate([4, 5, 1, 0])

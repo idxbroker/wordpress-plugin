@@ -40,8 +40,24 @@ export default {
     },
     computed: {
         ...mapState({
-            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps
-        })
+            guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps,
+            restrictedByBeta: state => state.socialPro.restrictedByBeta,
+            optedInBeta: state => state.socialPro.optedInBeta
+        }),
+        skipPath () {
+            if ((this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta) {
+                return '/guided-setup/social-pro'
+            } else {
+                return '/guided-setup/confirmation'
+            }
+        },
+        continuePath () {
+            if ((this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta) {
+                return '/guided-setup/social-pro'
+            } else {
+                return '/guided-setup/confirmation'
+            }
+        }
     },
     methods: {
         ...mapActions({
@@ -51,8 +67,6 @@ export default {
     async created () {
         this.module = 'agentSettings'
         this.cardTitle = 'Configure IMPress Agents'
-        this.continuePath = '/guided-setup/social-pro'
-        this.skipPath = '/guided-setup/social-pro'
         const { data } = await this.agentSettingsRepository.get()
         this.updateState(data)
     },
