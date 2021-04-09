@@ -74,6 +74,9 @@ export default {
 body {
     overflow-y: scroll;
 }
+body.modal-open {
+    overflow: hidden;
+}
 .app {
     font-family: 'Mulish', sans-serif;
     h2 {

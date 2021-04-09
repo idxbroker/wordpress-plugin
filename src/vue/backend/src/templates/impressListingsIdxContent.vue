@@ -45,9 +45,6 @@
             <idx-block tag="h2" className="form-content__title">Additional Import Options</idx-block>
         </idx-block>
         <idx-form-group>
-            <idx-form-label customClass="form-content__label">
-                <idx-block tag="h3" className="form-content__title">{{ toggleLabels[0] }}</idx-block>
-            </idx-form-label>
             <idx-block className="idx-content-settings__toggle form-content__toggle">
                 {{ toggleLabels[0] }}
                 <idx-toggle-slider

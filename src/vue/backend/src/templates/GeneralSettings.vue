@@ -111,8 +111,8 @@ export default {
         this.updateFrequencyOptions = [
             { value: 'five_minutes', label: 'Every 5 Minutes' },
             { value: 'hourly', label: 'Hourly' },
-            { value: 'daily', label: 'Daily' },
             { value: 'twice_daily', label: 'Twice Daily' },
+            { value: 'daily', label: 'Daily' },
             { value: 'weekly', label: 'Weekly' },
             { value: 'two_weeks', label: 'Every 2 Weeks' },
             { value: 'monthly', label: 'Monthly' },

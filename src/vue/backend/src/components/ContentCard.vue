@@ -57,106 +57,112 @@ export default {
             type: Array,
             default: () => []
         }
+    },
+    mounted () {
+        document.body.classList.add(`${this.$idxStrap.prefix}modal-open`)
+    },
+    beforeDestroy () {
+        document.body.classList.remove(`${this.$idxStrap.prefix}modal-open`)
     }
 }
 </script>
 
 <style lang="scss">
-    @import '~@idxbrokerllc/idxstrap/dist/styles/components/vNav';
-    @import '~@idxbrokerllc/idxstrap/dist/styles/components/progressStepper';
-    @import '~@idxbrokerllc/idxstrap/dist/styles/components/progressBar';
-    @import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/vNav';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/progressStepper';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/progressBar';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/buttons';
 
-    .content-card {
-        --space-button: 16px;
-        --content-padding: var(--space-8) var(--space-8) 0;
-        --footer-margin: var(--space-8);
-        --footer-padding: var(--space-8) 0 var(--space-8);
-        --sidebar-margin: var(--space-8) var(--space-8) 0;
-        background-color: $white;
-        color: $gray-875;
-        display: grid;
-        font-size: var(--font-size-p);
-        grid-template-areas:
-            "header"
-            "content"
-            "sidebar"
-            "footer";
-        height: 100%;
-        line-height: var(--line-height-p);
-        min-height: 600px;
+.content-card {
+    --space-button: 16px;
+    --content-padding: var(--space-8) var(--space-8) 0;
+    --footer-margin: var(--space-8);
+    --footer-padding: var(--space-8) 0 var(--space-8);
+    --sidebar-margin: var(--space-8) var(--space-8) 0;
+    background-color: $white;
+    color: $gray-875;
+    display: grid;
+    font-size: var(--font-size-p);
+    grid-template-areas:
+        "header"
+        "content"
+        "sidebar"
+        "footer";
+    height: 100%;
+    line-height: var(--line-height-p);
+    min-height: 600px;
 
-        &__buttons {
-            display: flex;
-            gap: var(--space-button);
+    &__buttons {
+        display: flex;
+        gap: var(--space-button);
+    }
+
+    &__content {
+        grid-area: content;
+        overflow-y: auto;
+        padding: var(--content-padding);
+
+        h1 {
+            color: inherit;
+            display: block;
+            font-size: var(--font-size-h1);
+            font-weight: 300;
+            line-height: var(--line-height-h1);
+            margin-bottom: var(--space-4);
         }
 
-        &__content {
-            grid-area: content;
-            overflow-y: auto;
-            padding: var(--content-padding);
-
-            h1 {
-                color: inherit;
-                display: block;
-                font-size: var(--font-size-h1);
-                font-weight: 300;
-                line-height: var(--line-height-h1);
-                margin-bottom: var(--space-4);
-            }
-
-            p {
-                font-size: inherit;
-                line-height: inherit;
-                margin-bottom: var(--space-6);
-                max-width: 45em;
-            }
-        }
-
-        &__footer {
-            border-top: 2px solid $gray-250;
-            grid-area: footer;
-            margin: var(--footer-margin);
-            padding: var(--footer-padding);
-
-            .btn:first-of-type {
-                margin-right: auto;
-            }
-        }
-
-        &__sidebar {
-            grid-area: sidebar;
-            margin: var(--sidebar-margin);
-
-            .card-header {
-                border-bottom: 0 none;
-                line-height: var(--space-5);
-            }
-        }
-
-        &__stepper {
-            border-bottom: 2px solid $gray-250;
-            display: flex;
-            grid-area: header;
-            justify-content: center;
-            padding: var(--space-8);
-
-            .icon-users {
-                width:20px;
-            }
-        }
-
-        @media only screen and (min-width: 960px)   {
-            --content-padding: var(--space-10) var(--space-8) var(--space-9) var(--space-15);
-            --footer-margin: 0 var(--space-12);
-            --footer-padding: var(--space-8) 0 var(--space-8);
-            --sidebar-margin: var(--space-10) var(--space-9) var(--space-15) var(--space-8);
-            grid-template-columns: 1fr 1fr 360px;
-            grid-template-rows: auto 1fr auto;
-            grid-template-areas:
-                "header  header  header"
-                "content content sidebar"
-                "footer  footer  footer";
+        p {
+            font-size: inherit;
+            line-height: inherit;
+            margin-bottom: var(--space-6);
+            max-width: 45em;
         }
     }
+
+    &__footer {
+        border-top: 2px solid $gray-250;
+        grid-area: footer;
+        margin: var(--footer-margin);
+        padding: var(--footer-padding);
+
+        .btn:first-of-type {
+            margin-right: auto;
+        }
+    }
+
+    &__sidebar {
+        grid-area: sidebar;
+        margin: var(--sidebar-margin);
+
+        .card-header {
+            border-bottom: 0 none;
+            line-height: var(--space-5);
+        }
+    }
+
+    &__stepper {
+        border-bottom: 2px solid $gray-250;
+        display: flex;
+        grid-area: header;
+        justify-content: center;
+        padding: var(--space-8);
+
+        .icon-users {
+            width:20px;
+        }
+    }
+
+    @media only screen and (min-width: 960px) {
+        --content-padding: var(--space-10) var(--space-8) var(--space-9) var(--space-15);
+        --footer-margin: 0 var(--space-12);
+        --footer-padding: var(--space-8) 0 var(--space-8);
+        --sidebar-margin: var(--space-10) var(--space-9) var(--space-15) var(--space-8);
+        grid-template-columns: 1fr 1fr 360px;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            "header  header  header"
+            "content content sidebar"
+            "footer  footer  footer";
+    }
+}
 </style>
