@@ -3,7 +3,8 @@ const state = {
         show: false,
         error: false,
         text: ''
-    }
+    },
+    loadSideBar: false
 }
 
 export default {

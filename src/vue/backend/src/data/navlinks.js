@@ -26,7 +26,7 @@ const _navLinks = [
             { label: 'Omnibar', link: '/settings/omnibar' },
             { label: 'Listings', link: '/settings/listings' },
             { label: 'Agents', link: '/settings/agents' },
-            { label: 'Social Pro', link: '/settings/social-pro' }
+            { label: 'Social Pro', link: '/settings/social-pro', hidden: true }
         ]
     },
     {
