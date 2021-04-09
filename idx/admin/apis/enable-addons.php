@@ -60,6 +60,8 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 	public function post( $option_name, $payload ) {
 		$enabled = (int) filter_var( $payload, FILTER_VALIDATE_BOOLEAN );
 
+		$this->deactivate_legacy_plugin( $option_name );
+
 		update_option( $option_name, $enabled );
 
 		return new \WP_REST_Response( null, 204 );
@@ -130,6 +132,21 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 		$output     = array_merge( $output, $beta_info );
 
 		return rest_ensure_response( $output );
+	}
+
+	/**
+	 * Deactivates legacy IMPress plugins.
+	 *
+	 * @param string $addon wp_option enabled key.
+	 * @return void
+	 */
+	private function deactivate_legacy_plugin( $addon ) {
+		if ( 'idx_broker_listings_enabled' === $addon ) {
+			deactivate_plugins( 'wp-listings/plugin.php', true );
+		}
+		if ( 'idx_broker_agents_enabled' === $addon ) {
+			deactivate_plugins( 'impress-agents/plugin.php', true );
+		}
 	}
 }
 

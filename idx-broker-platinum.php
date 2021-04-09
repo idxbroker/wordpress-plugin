@@ -44,11 +44,11 @@ class Idx_Broker_Plugin {
 		}
 
 		// IMPress Listings.
-		if ( boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
+		if ( boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) && ! is_plugin_active( 'wp-listings/plugin.php' ) ) {
 			include_once 'add-ons/listings/plugin.php';
 		}
 		// IMPress Agents.
-		if ( boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) ) {
+		if ( boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) && ! is_plugin_active( 'impress-agents/plugin.php' ) ) {
 			include_once 'add-ons/agents/plugin.php';
 		}
 	}
@@ -124,7 +124,7 @@ class Idx_Broker_Plugin {
 		$wrappers->register_wrapper_post_type();
 
 		// IMPress Listings.
-		if ( boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
+		if ( boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) && ! is_plugin_active( 'wp-listings/plugin.php' ) ) {
 			wp_listings_init();
 			global $_wp_listings, $_wp_listings_taxonomies, $_wp_listings_templates;
 			$_wp_listings->create_post_type();
@@ -137,7 +137,7 @@ class Idx_Broker_Plugin {
 		}
 
 		// IMPress Agents.
-		if ( boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) ) {
+		if ( boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) && ! is_plugin_active( 'impress-agents/plugin.php' ) ) {
 			impress_agents_init();
 			global $_impress_agents, $_impress_agents_taxonomies;
 			$_impress_agents->create_post_type();
