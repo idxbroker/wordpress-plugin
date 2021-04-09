@@ -7,7 +7,7 @@ export default {
     },
     computed: {
         localStateValues () {
-            return { ...this.$store.state[this.module], ...this.formChanges, ...this.$store.state.guidedSetup[this.module].changes }
+            return { ...this.$store.state[this.module], ...this.$store.state.guidedSetup[this.module].changes, ...this.formChanges }
         },
         formIsUpdated () {
             return Object.keys(this.formChanges).length > 0
