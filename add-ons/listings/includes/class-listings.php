@@ -217,11 +217,7 @@ class WP_Listings {
 			]
 		);
 
-
-		$listings_options  = get_option( 'plugin_wp_listings_settings' );
-		$listing_post_slug = empty( $listing_options['wp_listings_slug'] ) ? 'listing' : $impress_listing_options['wp_listings_slug'];
-
-		register_post_type( $listing_post_slug, $args );
+		register_post_type( 'listing', $args );
 
 	}
 
@@ -248,10 +244,8 @@ class WP_Listings {
 
 	public function metabox_save( $post_id, $post ) {
 
-		$listings_options  = get_option( 'plugin_wp_listings_settings' );
-		$listing_post_slug = empty( $listing_options['wp_listings_slug'] ) ? 'listing' : $impress_listing_options['wp_listings_slug'];
-		/** Run only on listings post type save */
-		if ( $listing_post_slug !== $post->post_type ) {
+		/** Run only on listing post type save */
+		if ( 'listing' !== $post->post_type ) {
 			return;
 		}
 
@@ -354,10 +348,8 @@ class WP_Listings {
 	 * @return [type]          [description]
 	 */
 	public function save_post( $post_id, $post, $update ) {
-		$listings_options  = get_option( 'plugin_wp_listings_settings' );
-		$listing_post_slug = empty( $listing_options['wp_listings_slug'] ) ? 'listing' : $impress_listing_options['wp_listings_slug'];
 
-		if ( $listing_post_slug !== $post->post_type ) {
+		if ( 'listing' !== $post->post_type ) {
 			return;
 		}
 

@@ -216,12 +216,10 @@ class WPL_Google_My_Business {
 
 		// Validate and process request.
 		if ( isset( $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'impress_gmb_get_listing_posts_nonce' ) ) {
-			$impress_listings_options   = get_option( 'plugin_wp_listings_settings' );
-			$impress_listings_post_slug = ( empty( $impress_listing_options['wp_listings_slug'] ) ? 'listing' : $impress_listing_options['wp_listings_slug'] );
 
 			$listing_posts = get_posts(
 				[
-					'post_type'   => $impress_listings_post_slug,
+					'post_type'   => 'listing',
 					'post_status' => 'publish',
 					'numberposts' => -1,
 					'order'       => 'DESC',

@@ -120,12 +120,11 @@ class Import_Listings extends \IDX\Admin\Rest_Controller {
 		}
 
 		$listings_options  = get_option( 'plugin_wp_listings_settings' );
-		$listing_post_slug = empty( $listing_options['wp_listings_slug'] ) ? 'listing' : $impress_listing_options['wp_listings_slug'];
 
 		foreach ( $selected_ids as $post_id ) {
 			$post = get_post( $post_id );
 
-			if ( ! is_wp_error( $post ) && ! empty( $post->post_type ) && $post->post_type === $listing_post_slug ) {
+			if ( ! is_wp_error( $post ) && ! empty( $post->post_type ) && 'listing' === $post->post_type ) {
 				if ( has_post_thumbnail( $post->ID ) ) {
 					$image_id = get_post_thumbnail_id( $post->ID );
 					wp_delete_attachment( $image_id, true );
@@ -154,12 +153,9 @@ class Import_Listings extends \IDX\Admin\Rest_Controller {
 		$imported   = [];
 		$unimported = [];
 
-		$listings_options  = get_option( 'plugin_wp_listings_settings' );
-		$listing_post_slug = empty( $listing_options['wp_listings_slug'] ) ? 'listing' : $impress_listing_options['wp_listings_slug'];
-
 		$listing_posts = new \WP_Query(
 			[
-				'post_type'      => $listing_post_slug,
+				'post_type'      => 'listing',
 				'posts_per_page' => -1,
 				'post_status'    => [ 'publish', 'pending', 'draft', 'private' ],
 			]

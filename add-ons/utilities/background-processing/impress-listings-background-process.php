@@ -28,14 +28,12 @@ class IMPress_Listings_Import_Process extends WP_Background_Process {
 		$key      = $data['key'];
 		$opts     = $data['opts'];
 
-
-		$wpl_options       = get_option( 'plugin_wp_listings_settings' );
-		$listing_post_slug = empty( $wpl_options['wp_listings_slug'] ) ? 'listing' : $wpl_options['wp_listings_slug'];
+		$wpl_options = get_option( 'plugin_wp_listings_settings' );
 
 		$listing_posts = get_posts(
 			[
 				'numberposts' => '-1',
-				'post_type'   => $listing_post_slug,
+				'post_type'   => 'listing',
 				'post_status' => [ 'publish', 'pending', 'draft', 'private' ],
 			]
 		);

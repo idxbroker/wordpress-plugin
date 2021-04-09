@@ -37,11 +37,10 @@ class IMPress_Agents_Import {
 		}
 
 		// Find already imported agents.
-		$agent_post_slug = get_option( 'impress_agents_slug', 'employee' );
 		$imported_agents = [];
 		$agent_posts     = new \WP_Query(
 			[
-				'post_type'      => $agent_post_slug,
+				'post_type'      => 'employee',
 				'posts_per_page' => -1,
 				'post_status'    => [ 'publish', 'pending', 'draft', 'private' ],
 			]
@@ -70,7 +69,7 @@ class IMPress_Agents_Import {
 				'post_content' => $agent['bioDetails'],
 				'post_title'   => $agent['agentDisplayName'],
 				'post_status'  => 'publish',
-				'post_type'    => $agent_post_slug,
+				'post_type'    => 'employee',
 			];
 
 			$import_data['meta_data'] = $agent;
@@ -105,11 +104,10 @@ class IMPress_Agents_Import {
 			return;
 		}
 
-		$agent_post_slug = get_option( 'impress_agents_slug', 'employee' );
 		$imported_agents = [];
 		$agent_posts     = new \WP_Query(
 			[
-				'post_type'      => $agent_post_slug,
+				'post_type'      => 'employee',
 				'posts_per_page' => -1,
 			]
 		);

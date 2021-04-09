@@ -120,11 +120,10 @@ class Import_Agents extends \IDX\Admin\Rest_Controller {
 			$selected_ids = filter_var_array( $payload['ids'], FILTER_SANITIZE_NUMBER_INT );
 		}
 
-		$agent_post_slug = get_option( 'impress_agents_slug', 'employee' );
 		foreach ( $selected_ids as $post_id ) {
 			$post = get_post( $post_id );
 
-			if ( ! is_wp_error( $post ) && ! empty( $post->post_type ) && $post->post_type === $agent_post_slug ) {
+			if ( ! is_wp_error( $post ) && ! empty( $post->post_type ) && 'employee' === $post->post_type ) {
 
 				if ( has_post_thumbnail( $post->ID ) ) {
 					$image_id = get_post_thumbnail_id( $post->ID );
@@ -153,11 +152,10 @@ class Import_Agents extends \IDX\Admin\Rest_Controller {
 	public function generate_agent_import_lists() {
 		$imported        = [];
 		$unimported      = [];
-		$agent_post_slug = get_option( 'impress_agents_slug', 'employee' );
 
 		$agent_posts = new \WP_Query(
 			[
-				'post_type'      => $agent_post_slug,
+				'post_type'      => 'employee',
 				'posts_per_page' => -1,
 			]
 		);
