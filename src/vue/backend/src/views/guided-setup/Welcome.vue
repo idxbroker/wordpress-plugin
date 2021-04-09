@@ -26,7 +26,7 @@
                     <idx-list-item>Configure OmniBar Search for Your Site</idx-list-item>
                     <idx-list-item>Enable and Configure IMPress Listings</idx-list-item>
                     <idx-list-item>Enable and Configure IMPress Agents</idx-list-item>
-                    <idx-list-item>Connect to Social Pro</idx-list-item>
+                    <idx-list-item v-if="(this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta">Connect to Social Pro</idx-list-item>
                 </idx-list>
                 <idx-button @click="startSetup" size="lg">Let's Get Started</idx-button>
             </idx-block>
@@ -34,12 +34,19 @@
     </idx-container>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
     name: 'guided-setup-welcome',
     methods: {
         startSetup () {
             this.$router.push({ path: '/guided-setup/connect/api' })
         }
+    },
+    computed: {
+        ...mapState({
+            restrictedByBeta: state => state.socialPro.restrictedByBeta,
+            optedInBeta: state => state.socialPro.optedInBeta
+        })
     }
 }
 </script>
