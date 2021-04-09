@@ -57,7 +57,7 @@ export default {
                         this.handleResults(results[index], product)
                     }
                 })
-                this.$store.dispatch('alerts/setItem', { key: 'loadSideBar', value: true })
+                this.$store.dispatch('alerts/setItem', { key: 'loadContent', value: true })
             })
             .catch((error) => {
                 console.log('error %o', error)

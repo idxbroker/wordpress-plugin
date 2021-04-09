@@ -2,7 +2,18 @@
     <div :id="`${$idxStrap.prefix}layout`">
         <Navbar></Navbar>
         <Page>
-            <Generic />
+            <Generic v-if="loadContent"/>
+            <idx-block v-else className="section">
+                <idx-skeleton-screen :loading="true" >
+                    <template v-slot:skeletonScreen>
+                        <idx-block className="sk-grow--25"/>
+                        <idx-block className="sk-grow" />
+                        <idx-block className="sk-grow" />
+                        <idx-block className="sk-grow" />
+                        <idx-block className="sk-grow" />
+                    </template>
+                </idx-skeleton-screen>
+            </idx-block>
         </Page>
     </div>
 </template>
@@ -19,11 +30,12 @@ export default {
     },
     computed: {
         ...mapState({
-            loadSideBar: state => state.alerts.loadSideBar
+            loadContent: state => state.alerts.loadContent
         })
     }
 }
 </script>
 <style lang="scss">
 @import '~@idxbrokerllc/idxstrap/dist/styles/components/vNav';
+@import '~@idxbrokerllc/idxstrap/dist/styles/components/skeletonScreen';
 </style>

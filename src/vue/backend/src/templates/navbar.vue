@@ -21,7 +21,7 @@
             }"
         >
             <idx-block className="v-nav__icon-bar"></idx-block>
-            <idx-nav-list v-if="loadSideBar">
+            <idx-nav-list v-if="loadContent">
                 <idx-nav-item
                     v-for="(route, i) in routes"
                     :key="i"
@@ -80,7 +80,7 @@ export default {
                 this.routerActivePage()
             })
         },
-        loadSideBar (newVal) {
+        loadContent (newVal) {
             if (newVal) {
                 this.socialProBeta()
             }
@@ -98,7 +98,7 @@ export default {
             expanded: state => state.routes.expanded,
             restrictedByBeta: state => state.socialPro.restrictedByBeta,
             optedInBeta: state => state.socialPro.optedInBeta,
-            loadSideBar: state => state.alerts.loadSideBar
+            loadContent: state => state.alerts.loadContent
         })
     },
     methods: {
@@ -186,7 +186,7 @@ export default {
     },
     mounted () {
         this.$nextTick(() => {
-            if (this.loadSideBar) {
+            if (this.loadContent) {
                 this.socialProBeta()
                 this.routerActivePage()
             }

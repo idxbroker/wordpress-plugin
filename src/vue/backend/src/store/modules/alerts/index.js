@@ -4,7 +4,7 @@ const state = {
         error: false,
         text: ''
     },
-    loadSideBar: false
+    loadContent: false
 }
 
 export default {

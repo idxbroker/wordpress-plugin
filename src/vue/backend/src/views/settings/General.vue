@@ -91,8 +91,13 @@ export default {
         ]
         this.errorMessage = 'We couldn’t find an account with the provided API key'
         this.loading = true
+        this.error = false
+        this.success = false
         this.loadData(this[repo])
+        this.loadData(this[repo], 'apiKeyIsValid')
         this.loading = false
+        this.error = !this.isValid
+        this.success = this.isValid
     }
 }
 </script>
