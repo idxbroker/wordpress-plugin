@@ -115,7 +115,7 @@ class Search_Management {
 		} else {
 
 			// Add search via API
-			$api_url = 'https://api.idxbroker.com/clients/savedlinks';
+			$api_url = IDX_API_URL . '/clients/savedlinks';
 
 			$search_query = array(
 				'pt'    => $_POST['pt'],
@@ -196,7 +196,7 @@ class Search_Management {
 		} else {
 
 			// Add search via API
-			$api_url = 'https://api.idxbroker.com/leads/search/' . $_POST['leadID'];
+			$api_url = IDX_API_URL . '/leads/search/' . $_POST['leadID'];
 
 			$search_query = array(
 				'pt'    => $_POST['pt'],
@@ -265,7 +265,7 @@ class Search_Management {
 			echo 'error';
 		} else {
 			// Delete lead saved search via API
-			$api_url  = 'https://api.idxbroker.com/clients/savedlinks/' . $_POST['ssid'];
+			$api_url  = IDX_API_URL . '/clients/savedlinks/' . $_POST['ssid'];
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -519,7 +519,7 @@ class Search_Management {
 		} elseif ( ! empty( $_GET['leadID'] ) && is_numeric( $_GET['leadID'] ) ) {
 			$lead_id = $_GET['leadID'];
 			// Get Lead info
-			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 			?>
 			<h3>Add Lead Saved Search for <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
 			<form action="" method="post" id="add-lead-search" class="add-lead-search">
@@ -635,7 +635,7 @@ class Search_Management {
 	 * Output Agents as select options
 	 */
 	private function agents_select_list( $agent_id = null ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
 		if ( null !== $agent_id && ! is_wp_error( $agents_array ) ) {
 			$agents_list = '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';

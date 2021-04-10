@@ -186,7 +186,7 @@ class IDX_Leads_GF {
 					'actualCategory' => ( isset( $form_options['category'] ) ) ? $form_options['category'] : '',
 					'agentOwner'     => $agent_owner,
 				);
-				$api_url   = 'https://api.idxbroker.com/leads/lead';
+				$api_url   = IDX_API_URL . '/leads/lead';
 				$args      = array(
 					'method'    => 'PUT',
 					'headers'   => array(
@@ -230,7 +230,7 @@ class IDX_Leads_GF {
 						// Loop through leads to match email address
 						foreach ( $all_leads as $leads => $lead ) {
 							if ( $lead['email'] === $email ) {
-								$api_url  = 'https://api.idxbroker.com/leads/note/' . $lead['id'];
+								$api_url  = IDX_API_URL . '/leads/note/' . $lead['id'];
 								$args     = array_replace(
 									$args,
 									array(
@@ -247,7 +247,7 @@ class IDX_Leads_GF {
 					} else {
 						// Add note for new lead
 						$lead_id  = $decoded_response->newID;
-						$api_url  = 'https://api.idxbroker.com/leads/note/' . $lead_id;
+						$api_url  = IDX_API_URL . '/leads/note/' . $lead_id;
 						$args     = array_replace( $args, array( 'body' => http_build_query( $note ) ) );
 						$response = wp_remote_request( $api_url, $args );
 						if ( is_wp_error( $response ) ) {
