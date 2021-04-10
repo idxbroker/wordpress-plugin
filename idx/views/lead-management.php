@@ -138,7 +138,7 @@ class Lead_Management {
 		} else {
 
 			// Add lead via API
-			$api_url  = 'https://api.idxbroker.com/leads/lead';
+			$api_url  = IDX_API_URL . '/leads/lead';
 			$args     = array(
 				'method'    => 'PUT',
 				'headers'   => array(
@@ -181,7 +181,7 @@ class Lead_Management {
 		} else {
 
 			// Edit lead via API
-			$api_url  = 'https://api.idxbroker.com/leads/lead/' . $_POST['leadID'];
+			$api_url  = IDX_API_URL . '/leads/lead/' . $_POST['leadID'];
 			$args     = array(
 				'method'    => 'POST',
 				'headers'   => array(
@@ -218,7 +218,7 @@ class Lead_Management {
 		} else {
 
 			// Add lead note via API
-			$api_url  = 'https://api.idxbroker.com/leads/note/' . $_POST['id'];
+			$api_url  = IDX_API_URL . '/leads/note/' . $_POST['id'];
 			$args     = array(
 				'method'    => 'PUT',
 				'headers'   => array(
@@ -257,7 +257,7 @@ class Lead_Management {
 		} else {
 
 			// Update lead note via API
-			$api_url  = 'https://api.idxbroker.com/leads/note/' . $_POST['id'] . '/' . $_POST['noteid'];
+			$api_url  = IDX_API_URL . '/leads/note/' . $_POST['id'] . '/' . $_POST['noteid'];
 			$args     = array(
 				'method'    => 'POST',
 				'headers'   => array(
@@ -305,7 +305,7 @@ class Lead_Management {
 			);
 
 			// Add lead property via API
-			$api_url  = 'https://api.idxbroker.com/leads/property/' . $_POST['id'];
+			$api_url  = IDX_API_URL . '/leads/property/' . $_POST['id'];
 			$args     = array(
 				'method'    => 'PUT',
 				'headers'   => array(
@@ -353,7 +353,7 @@ class Lead_Management {
 			);
 
 			// Add lead property via API
-			$api_url  = 'https://api.idxbroker.com/leads/property/' . $_POST['id'] . '/' . $_POST['spid'];
+			$api_url  = IDX_API_URL . '/leads/property/' . $_POST['id'] . '/' . $_POST['spid'];
 			$args     = array(
 				'method'    => 'POST',
 				'headers'   => array(
@@ -391,7 +391,7 @@ class Lead_Management {
 			echo 'error';
 		} else {
 			// Delete lead via API
-			$api_url  = 'https://api.idxbroker.com/leads/lead/' . $_POST['id'];
+			$api_url  = IDX_API_URL . '/leads/lead/' . $_POST['id'];
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -428,7 +428,7 @@ class Lead_Management {
 			echo 'error';
 		} else {
 			// Delete lead note via API
-			$api_url  = 'https://api.idxbroker.com/leads/note/' . $_POST['id'] . '/' . $_POST['noteid'];
+			$api_url  = IDX_API_URL . '/leads/note/' . $_POST['id'] . '/' . $_POST['noteid'];
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -464,7 +464,7 @@ class Lead_Management {
 			echo 'error';
 		} else {
 			// Delete lead saved property via API
-			$api_url  = 'https://api.idxbroker.com/leads/property/' . $_POST['id'] . '/' . $_POST['spid'];
+			$api_url  = IDX_API_URL . '/leads/property/' . $_POST['id'] . '/' . $_POST['spid'];
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -500,7 +500,7 @@ class Lead_Management {
 			echo 'error';
 		} else {
 			// Delete lead saved search via API
-			$api_url  = 'https://api.idxbroker.com/leads/search/' . $_POST['id'] . '/' . $_POST['ssid'];
+			$api_url  = IDX_API_URL . '/leads/search/' . $_POST['id'] . '/' . $_POST['ssid'];
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -572,7 +572,7 @@ class Lead_Management {
 
 		$leads_array = array_reverse( $leads_array );
 
-		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
 		$leads = [];
 
@@ -815,7 +815,7 @@ class Lead_Management {
 			}
 
 			// Get Lead info
-			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 			?>
 			<h3>Edit Lead &raquo; <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
 
@@ -973,7 +973,7 @@ class Lead_Management {
 				<div class="mdl-tabs__panel" id="lead-notes">
 					<?php
 					// order newest first
-					$notes_array = $this->idx_api->idx_api( 'note/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+					$notes_array = $this->idx_api->idx_api( 'note/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$notes_array = array_reverse( $notes_array );
 
 					$notes = '';
@@ -1061,7 +1061,7 @@ class Lead_Management {
 				<div class="mdl-tabs__panel" id="lead-properties">
 					<?php
 					// order newest first
-					$properties_array = $this->idx_api->idx_api( 'property/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+					$properties_array = $this->idx_api->idx_api( 'property/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$properties_array = array_reverse( $properties_array );
 
 					// Get details URL
@@ -1185,7 +1185,7 @@ class Lead_Management {
 				<div class="mdl-tabs__panel" id="lead-searches">
 					<?php
 					// order newest first
-					$searches_array = $this->idx_api->idx_api( 'search/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+					$searches_array = $this->idx_api->idx_api( 'search/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$searches_array = ( isset( $searches_array['searchInformation'] ) ) ? array_reverse( $searches_array['searchInformation'] ) : null;
 
 					$searches = '';
@@ -1252,7 +1252,7 @@ class Lead_Management {
 				<div class="mdl-tabs__panel" id="lead-traffic">
 				<?php
 					// order newest first
-					$traffic_array = $this->idx_api->idx_api( 'leadtraffic/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+					$traffic_array = $this->idx_api->idx_api( 'leadtraffic/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$traffic_array = array_reverse( $traffic_array );
 
 					$traffic = '';
@@ -1308,7 +1308,7 @@ class Lead_Management {
 	 * Output Agents as select options
 	 */
 	private function agents_select_list( $agent_id = null ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
 		if ( $agent_id != null ) {
 			$agents_list = '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';

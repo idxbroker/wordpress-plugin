@@ -320,7 +320,7 @@ function listing_inquiry_request() {
 		'body'      => http_build_query( $note ),
 	];
 
-	$api_url = 'https://api.idxbroker.com/leads/note/' . $lead_id;
+	$api_url  = IDX_API_URL . '/leads/note/' . $lead_id;
 	$response = wp_remote_request( $api_url, $args );
 
 	wp_send_json( 'Success' );

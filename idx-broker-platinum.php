@@ -30,6 +30,8 @@ class Idx_Broker_Plugin {
 	public function __construct() {
 		define( 'IMPRESS_IDX_URL', plugin_dir_url( __FILE__ ) );
 		define( 'IMPRESS_IDX_DIR', plugin_dir_path( __FILE__ ) );
+		define( 'IDX_API_DEFAULT_VERSION', '1.7.0' );
+		define( 'IDX_API_URL', 'https://api.idxbroker.com' );
 
 		if ( $this->php_version_check() ) {
 			// IDX Autoloader.

@@ -378,7 +378,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 * @return int               The total number of occurances.
 	 */
 	public static function get_cumulative_property_count_from_mls( $city_id, $idx_id, $idx_api ) {
-		 $mls_cities = $idx_api->idx_api( 'cities/' . $idx_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24, 'GET', true );
+		 $mls_cities = $idx_api->idx_api( 'cities/' . $idx_id, IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24, 'GET', true );
 
 		// Loop through cities and add number to $occurances if $city_id matches.
 		$occurances = 0;
