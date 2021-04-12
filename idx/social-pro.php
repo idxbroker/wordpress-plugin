@@ -155,7 +155,7 @@ class Social_Pro {
 			'PUT'
 		);
 
-		if ( ! is_wp_error( $article ) ) {
+		if ( is_wp_error( $article ) ) {
 			return $this->convert_idx_api_error( $article );
 		}
 

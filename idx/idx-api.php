@@ -42,8 +42,9 @@ class Idx_Api {
 	public function apiResponse( $response ) {
 		if ( ! $response || ! is_array( $response ) || ! isset( $response['response'] ) ) {
 			return array(
-				'code'  => 'Generic',
-				'error' => 'Unable to complete API call.',
+				'code'       => 'Generic',
+				'error'      => 'Unable to complete API call.',
+				'rest_error' => 'Unable to complete API call.',
 			);
 		}
 		$response_code = $response['response']['code'];

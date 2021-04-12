@@ -142,12 +142,13 @@ class Rest_Controller {
 		$code    = $error->get_error_code();
 		$message = $error->get_error_message();
 		$data    = $error->get_error_data();
+		$status  = 'Generic' === $data['status'] ? 500 : $data['status'];
 		if ( 'idx_api_error' === $code ) {
 			return new \WP_Error(
 				$code,
 				$data['rest_error'],
 				[
-					'status' => $data['status'],
+					'status' => $status,
 				]
 			);
 		}

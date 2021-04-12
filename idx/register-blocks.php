@@ -819,9 +819,15 @@ class Register_Blocks {
 		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
 		$widget_list = [];
 
-		if ( $idx_widgets ) {
+		if ( $idx_widgets && ! is_wp_error( $idx_widgets ) ) {
 			foreach ( $idx_widgets as $widget ) {
-				array_push( $widget_list, [ 'label' => $widget->name, 'value' => $widget->uid ] );
+				array_push(
+					$widget_list,
+					[
+						'label' => $widget->name,
+						'value' => $widget->uid,
+					]
+				);
 			}
 		}
 		return $widget_list;
