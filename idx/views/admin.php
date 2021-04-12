@@ -16,8 +16,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	#wpfooter {
 		display: none;
 	}
-	#wpbody-content * :not('.idx-wp-app') {
-		visibility: hidden;
+	#wpbody-content>*:not(.idx-wp-app) {
+		display: none !important;
 	}
 </style>
 
