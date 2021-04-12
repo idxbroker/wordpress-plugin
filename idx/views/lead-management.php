@@ -1242,7 +1242,7 @@ class Lead_Management {
 							</form>
 						</dialog>';
 					echo '
-						<a href="' . admin_url( 'admin.php?page=edit-search&leadID=' . $lead_id ) . '" id="add-lead-search-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+						<a href="' . admin_url( 'admin.php?page=edit-idx-search&leadID=' . $lead_id ) . '" id="add-lead-search-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 							<i class="material-icons">add</i>
 							<div class="mdl-tooltip" data-mdl-for="add-lead-search-btn">Add Lead Saved Search</div>
 						</a>
