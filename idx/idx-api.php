@@ -40,7 +40,7 @@ class Idx_Api {
 	 * @return [array]           [keys: 'code' => response code, 'error' => false (default), or error message if one is found]
 	 */
 	public function apiResponse( $response ) {
-		if ( true || ! $response || ! is_array( $response ) || ! isset( $response['response'] ) ) {
+		if ( ! $response || ! is_array( $response ) || ! isset( $response['response'] ) ) {
 			return array(
 				'code'       => 'Generic',
 				'error'      => 'Unable to complete API call.',
