@@ -47,7 +47,7 @@ class Social_Pro_Settings extends \IDX\Admin\Rest_Controller {
 						'type' => 'string',
 					],
 					'selectedAuthor'     => [
-						'type' => 'string',
+						'type' => 'number',
 					],
 					'selectedCategories' => [
 						'type' => 'array',
