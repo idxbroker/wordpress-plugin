@@ -288,7 +288,7 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 							}
 						}
 					)
-				)[0];
+				);
 
 				$output = [
 					'label'         => $mls['mls_name'],
@@ -297,7 +297,7 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 				];
 
 				if ( ! empty( $selected ) ) {
-					$output['selected'] = $selected['mlsPtID'];
+					$output['selected'] = $selected[0]['mlsPtID'];
 				}
 
 				return $output;
@@ -376,6 +376,7 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 		if ( ! empty( $selected ) ) {
 			return $selected[0]['mlsPtID'];
 		}
+		return '';
 	}
 
 	/**
