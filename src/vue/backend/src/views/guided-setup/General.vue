@@ -51,7 +51,7 @@ export default {
     async created () {
         this.module = 'general'
         this.cardTitle = 'General Settings'
-        this.skipPath = this.apiKeyIsValid ? '/guided-setup/confirmation' : '/guided-setup/listings'
+        this.skipPath = this.apiKeyIsValid ? '/guided-setup/listings' : '/guided-setup/confirmation'
         this.continuePath = '/guided-setup/connect/omnibar'
         this.links = [
             {
