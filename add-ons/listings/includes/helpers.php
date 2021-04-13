@@ -192,7 +192,10 @@ function generate_adv_field_list( $post ) {
 				unset($adv_field_data[$key]);
 			}
 		}
+	} else {
+		return [];
 	}
+
 	$field_count = count( $adv_field_data );
 	$col1 = array_slice( $adv_field_data, 0, (($field_count / 2) + ($field_count % 2)) );
 	$col2 = array_slice( $adv_field_data, (($field_count / 2) + ($field_count % 2)), $field_count / 2 );
