@@ -79,7 +79,9 @@ function single_listing_post_content() {
 		if ( get_post_meta($post->ID, '_listing_hide_price', true) == 1 ) {
 			$listing_meta .= (get_post_meta($post->ID, '_listing_price_alt', true)) ? sprintf( '<li class="listing-price">%s</li>', get_post_meta( $post->ID, '_listing_price_alt', true ) ) : '';
 		} else {
-			$listing_meta .= sprintf( '<li class="listing-price">%s %s %s</li>', '<span class="currency-symbol">' . $options['wp_listings_currency_symbol'] . '</span>', get_post_meta( $post->ID, '_listing_price', true ), (isset($options['wp_listings_display_currency_code']) && $options['wp_listings_display_currency_code'] == 1) ? '<span class="currency-code">' . $options['wp_listings_currency_code'] . '</span>' : '' );
+			$currency_symbol = ( empty( $options['wp_listings_currency_symbol'] ) || $options['wp_listings_currency_symbol'] === 'none' ) ? '' : $options['wp_listings_currency_symbol'];
+			$currency_code   = ( ! empty( $options['wp_listings_display_currency_code'] ) && ! empty( $options['wp_listings_display_currency_code'] && $options['wp_listings_currency_code'] !== 'none' ) ) ? '<span class="currency-code">' . $options['wp_listings_currency_code'] . '</span>' : '';
+			$listing_meta   .= sprintf( '<li class="listing-price">%s %s %s</li>', '<span class="currency-symbol">' . $currency_symbol . '</span>', get_post_meta( $post->ID, '_listing_price', true ), $currency_code );
 		}
 
 		if ( '' != wp_listings_get_property_types() ) {
@@ -169,9 +171,10 @@ function single_listing_post_content() {
 				if ( get_post_meta( $post->ID, '_listing_hide_price', true ) == 1 ) {
 					echo ( get_post_meta( $post->ID, '_listing_price_alt', true ) ) ? '<tr class="wp_listings_listing_price"><td class="label">' . __('Price:', 'wp-listings') . '</td><td>'.get_post_meta( $post->ID, '_listing_price_alt', true ) .'</td></tr>' : '';
 				} elseif ( get_post_meta( $post->ID, '_listing_price', true ) ) {
-					echo '<tr class="wp_listings_listing_price"><td class="label">' . __('Price:', 'wp-listings') . '</td><td><span class="currency-symbol">' . $options['wp_listings_currency_symbol'] . '</span>';
-					echo get_post_meta( $post->ID, '_listing_price', true ) . ' ';
-					echo ( isset( $options['wp_listings_display_currency_code'] ) && $options['wp_listings_display_currency_code'] == 1 ) ? '<span class="currency-code">' . $options['wp_listings_currency_code'] . '</span>' : '';
+					$currency_symbol = ( empty( $options['wp_listings_currency_symbol'] ) || $options['wp_listings_currency_symbol'] === 'none' ) ? '' : $options['wp_listings_currency_symbol'];
+					$currency_code   = ( ! empty( $options['wp_listings_display_currency_code'] ) && ! empty( $options['wp_listings_display_currency_code'] && $options['wp_listings_currency_code'] !== 'none' ) ) ? '<span class="currency-code">' . $options['wp_listings_currency_code'] . '</span>' : '';
+					echo '<tr class="wp_listings_listing_price"><td class="label">' . __('Price:', 'wp-listings') . '</td><td><span class="currency-symbol">' . $currency_symbol . '</span>';
+					echo get_post_meta( $post->ID, '_listing_price', true ) . ' ' . $currency_code;
 					echo '</td></tr>';
 				}
 				echo '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';

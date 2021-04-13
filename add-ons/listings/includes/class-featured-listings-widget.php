@@ -107,7 +107,10 @@ class WP_Listings_Featured_Listings_Widget extends WP_Widget {
 				}
 
 				if ( '' != get_post_meta( $post->ID, '_listing_price', true ) ) {
-					$loop .= sprintf( '<span class="listing-price"><span class="currency-symbol">%s</span>%s %s</span>', $options['wp_listings_currency_symbol'], get_post_meta( $post->ID, '_listing_price', true ), (isset($options['wp_listings_display_currency_code']) && $options['wp_listings_display_currency_code'] == 1) ? '<span class="currency-code">' . $options['wp_listings_currency_code'] . '</span>': '' );
+					$currency_symbol = ( empty( $options['wp_listings_currency_symbol'] ) || $options['wp_listings_currency_symbol'] === 'none' ) ? '' : $options['wp_listings_currency_symbol'];
+					$currency_code   = ( ! empty( $options['wp_listings_display_currency_code'] ) && ! empty( $options['wp_listings_display_currency_code'] && $options['wp_listings_currency_code'] !== 'none' ) ) ? '<span class="currency-code">' . $options['wp_listings_currency_code'] . '</span>' : '';
+					$loop           .= '<style>.currency-symbol:empty{display:none!important;}</style>';
+					$loop           .= sprintf( '<span class="listing-price"><span class="currency-symbol" style="">%s</span>%s %s</span>', $currency_symbol, get_post_meta( $post->ID, '_listing_price', true ), $currency_code );
 				}
 
 				$loop .= sprintf( '</div><!-- .listing-thumb-meta --></div><!-- .listing-widget-thumb -->' );
