@@ -146,7 +146,7 @@ function single_listing_post_content() {
 
 				if( get_post_meta($post->ID, '_listing_disclaimer', true) ) {
 					echo '<p class="wp-listings-disclaimer">' . get_post_meta($post->ID, '_listing_disclaimer', true) . '</p>';
-				} elseif ($options['wp_listings_global_disclaimer'] != '' && $options['wp_listings_global_disclaimer'] != null) {
+				} elseif ( ! empty( $options['wp_listings_global_disclaimer'] ) ) {
 					echo '<p class="wp-listings-disclaimer">' . $options['wp_listings_global_disclaimer'] . '</p>';
 				}
 
@@ -354,14 +354,10 @@ function single_listing_post_content() {
 
 			<?php
 
-			if (get_post_meta( $post->ID, '_listing_contact_form', true) != '') {
-
-				echo do_shortcode(get_post_meta( $post->ID, '_listing_contact_form', true) );
-
-			} elseif (isset($options['wp_listings_default_form']) && $options['wp_listings_default_form'] != '') {
-
-				echo do_shortcode($options['wp_listings_default_form']);
-
+			if ( get_post_meta( $post->ID, '_listing_contact_form', true) != '' ) {
+				echo do_shortcode( get_post_meta( $post->ID, '_listing_contact_form', true ) );
+			} elseif ( ! empty( $options['wp_listings_default_form'] ) ) {
+				echo do_shortcode( $options['wp_listings_default_form'] );
 			} else {
 				include_once IMPRESS_IDX_DIR . 'add-ons/listings/includes/listing-templates/listing-inquiry-form.php';
 				listing_inquiry_form( $post );

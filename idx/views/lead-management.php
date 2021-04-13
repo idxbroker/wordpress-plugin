@@ -1072,22 +1072,24 @@ class Lead_Management {
 					$offset = get_option( 'gmt_offset', 0 );
 
 					// prepare properties for display
-					foreach ( $properties_array as $property ) {
-						$nice_created_date = Carbon::parse( $property['created'] )->addHours( $offset )->toDayDateTimeString();
-						$updates           = ( $property['receiveUpdates'] == 'y' ) ? 'Yes' : 'No';
+					if ( is_array( $properties_array ) ) {
+						foreach ( $properties_array as $property ) {
+							$nice_created_date = Carbon::parse( $property['created'] )->addHours( $offset )->toDayDateTimeString();
+							$updates           = ( $property['receiveUpdates'] == 'y' ) ? 'Yes' : 'No';
 
-						$properties .= '<tr class="property-row property-id-' . $property['id'] . '">';
-						$properties .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $details_url . '/' . $property['property']['idxID'] . '/' . $property['property']['listingID'] . '" target="_blank" id="view-property-' . $property['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-property-' . $property['id'] . '">View Property</div>' . stripslashes( $property['propertyName'] ) . '</a></td>';
-						$properties .= '<td class="mdl-data-table__cell--non-numeric">' . $updates . '</td>';
-						$properties .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_created_date . '</td>';
-						$properties .= '<td class="mdl-data-table__cell--non-numeric">
-									<a href="#TB_inline?width=600&height=500&inlineId=edit-lead-property" class="edit-property thickbox" id="edit-property-' . $property['id'] . '" data-id="' . $lead_id . '" data-spid="' . $property['id'] . '" data-name="' . stripslashes( $property['propertyName'] ) . '" data-updates="' . $property['receiveUpdates'] . '" data-idxid="' . $property['property']['idxID'] . '" data-listingid="' . $property['property']['listingID'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-property-' . $property['id'] . '">Edit Property</div></a>
+							$properties .= '<tr class="property-row property-id-' . $property['id'] . '">';
+							$properties .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $details_url . '/' . $property['property']['idxID'] . '/' . $property['property']['listingID'] . '" target="_blank" id="view-property-' . $property['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-property-' . $property['id'] . '">View Property</div>' . stripslashes( $property['propertyName'] ) . '</a></td>';
+							$properties .= '<td class="mdl-data-table__cell--non-numeric">' . $updates . '</td>';
+							$properties .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_created_date . '</td>';
+							$properties .= '<td class="mdl-data-table__cell--non-numeric">
+										<a href="#TB_inline?width=600&height=500&inlineId=edit-lead-property" class="edit-property thickbox" id="edit-property-' . $property['id'] . '" data-id="' . $lead_id . '" data-spid="' . $property['id'] . '" data-name="' . stripslashes( $property['propertyName'] ) . '" data-updates="' . $property['receiveUpdates'] . '" data-idxid="' . $property['property']['idxID'] . '" data-listingid="' . $property['property']['listingID'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-property-' . $property['id'] . '">Edit Property</div></a>
 
-									<a href="#" id="delete-property-' . $property['id'] . '" class="delete-property" data-id="' . $lead_id . '" data-spid="' . $property['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' . $property['id'] . '">Delete Saved Property</div></a>
+										<a href="#" id="delete-property-' . $property['id'] . '" class="delete-property" data-id="' . $lead_id . '" data-spid="' . $property['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' . $property['id'] . '">Delete Saved Property</div></a>
 
-									<a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' . $lead_id . '&spid=' . $property['id'] . '" id="edit-mw-' . $property['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $property['id'] . '">Edit Property in Middleware</div></a>
-									</td>';
-						$properties .= '</tr>';
+										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' . $lead_id . '&spid=' . $property['id'] . '" id="edit-mw-' . $property['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $property['id'] . '">Edit Property in Middleware</div></a>
+										</td>';
+							$properties .= '</tr>';
+						}
 					}
 
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-properties">';
@@ -1186,7 +1188,7 @@ class Lead_Management {
 					<?php
 					// order newest first
 					$searches_array = $this->idx_api->idx_api( 'search/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
-					$searches_array = ( isset( $searches_array['searchInformation'] ) ) ? array_reverse( $searches_array['searchInformation'] ) : null;
+					$searches_array = ( isset( $searches_array['searchInformation'] ) && is_array( $searches_array['searchInformation'] ) ) ? array_reverse( $searches_array['searchInformation'] ) : null;
 
 					$searches = '';
 

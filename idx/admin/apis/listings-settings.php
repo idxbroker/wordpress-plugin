@@ -128,7 +128,7 @@ class Listings_Settings extends \IDX\Admin\Rest_Controller {
 		}
 
 		if ( isset( $payload['displayCurrencyCode'] ) ) {
-				$settings['wp_listings_display_currency_code'] = (int) filter_var( $payload['displayCurrencyCode'], FILTER_VALIDATE_BOOLEAN );
+			$settings['wp_listings_display_currency_code'] = (int) filter_var( $payload['displayCurrencyCode'], FILTER_VALIDATE_BOOLEAN );
 		}
 
 		update_option( 'plugin_wp_listings_settings', $settings );

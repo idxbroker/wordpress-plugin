@@ -163,7 +163,7 @@ class Idx_Api {
 				__( 'Error ' ) . $code . __( ': ' ) . $error,
 				array(
 					'status'     => $code,
-					'rest_error' => $rest_error,
+					'rest_error' => $error,
 				)
 			);
 		} else {
