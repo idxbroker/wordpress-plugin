@@ -2,7 +2,8 @@
 
 namespace IDX\Notice;
 
-/* Has a bulk add notice method and holds all notice conditions.
+/*
+ Has a bulk add notice method and holds all notice conditions.
  *
  * Currently supports detection and creation of specific plugins notices:
  *   Yoast,
@@ -22,13 +23,13 @@ class Notice_Handler {
 				$name,
 				__( 'Yoast is not allowing your pages to be indexed!', 'idxbroker' ),
 				'error',
-				'https://support.idxbroker.com/customer/portal/articles/2925410-fix-no-index',
+				'https://support.idxbroker.com/s/article/fix-no-index',
 				__( 'How can I fix this?', 'idxbroker' )
 			);
 		}
 
-		if (count($notices) > 0) {
-       		add_action('admin_enqueue_scripts', ['\IDX\Notice\Notice_Handler', 'notice_script_styles']);
+		if ( count( $notices ) > 0 ) {
+			add_action( 'admin_enqueue_scripts', [ '\IDX\Notice\Notice_Handler', 'notice_script_styles' ] );
 		}
 
 		return $notices;
@@ -62,8 +63,8 @@ class Notice_Handler {
 		// Yoast stores their noindex flag for page types in wpseo_titles
 		$data = get_option( 'wpseo_titles' );
 
-		$wrapper_no_index   = (boolean) $data['noindex-idx-wrapper'];
-		$idx_pages_no_index = (boolean) $data['noindex-idx_page'];
+		$wrapper_no_index   = (bool) $data['noindex-idx-wrapper'];
+		$idx_pages_no_index = (bool) $data['noindex-idx_page'];
 
 		if ( $wrapper_no_index || $idx_pages_no_index ) {
 			if ( self::is_dismissed( $name ) ) {

@@ -13,7 +13,8 @@ class Idx_Api {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->api_key = get_option( 'idx_broker_apikey' );
+		$this->api_key         = get_option( 'idx_broker_apikey' );
+		$this->dev_partner_key = get_option( 'idx_broker_dev_partner_key' );
 	}
 
 	/**
@@ -23,6 +24,15 @@ class Idx_Api {
 	 * @access public
 	 */
 	public $api_key;
+
+	/**
+	 * developer_partner_key
+	 * 
+	 * @var mixed
+	 * @access public
+	 */
+	public $dev_partner_key;
+
 	/**
 	 * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
 	 *
@@ -87,6 +97,12 @@ class Idx_Api {
 		$request_type = 'GET',
 		$json_decode_type = false
 	) {
+
+		// If no API key is set, return early.
+		if ( empty( $this->api_key ) || empty( str_replace( ' ', '', $this->api_key ) ) ) {
+			return [];
+		}
+
 		$cache_key = 'idx_' . $level . '_' . $method . '_cache';
 
 		if ( $this->get_transient( $cache_key ) !== false ) {
@@ -101,6 +117,10 @@ class Idx_Api {
 			'apiversion'    => $apiversion,
 			'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
 		);
+
+		if ( ! empty( $this->dev_partner_key ) && is_string( $this->dev_partner_key ) ) {
+			$headers['ancillarykey'] = $this->dev_partner_key;
+		}
 
 		$params = array_merge(
 			array(
@@ -531,16 +551,90 @@ class Idx_Api {
 	}
 
 	/**
-	 * client_properties function.
-	 *
+	 * Client_properties function.
+	 * Expected $type posibilities: featured, soldpending, supplemental.
+	 * 
 	 * @access public
-	 * @param mixed $type
-	 * @return void
+	 * @param string $type
+	 * @return array
 	 */
 	public function client_properties( $type ) {
-		$properties = $this->idx_api( $type . '?disclaimers=true', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		// Handle supplemental listings.
+		if ( 'supplemental' === $type ) {
+			// Pass 'featured' to get just the active supplemental listings.
+			return $this->get_client_supplementals( 'featured' );
+		}
 
+		$properties        = [];
+		$download_complete = false;
+
+		// Make initial API request for listings.
+		$listing_data = $this->idx_api( "$type?disclaimers=true", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+
+		if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
+			$properties = $listing_data['data'];
+		}
+
+		// Download remaining listings if available.
+		while ( ! $download_complete ) {
+			// Check if there is a next URL to request more listings.
+			if ( empty( $listing_data['next'] ) ) {
+				$download_complete = true;
+				continue;
+			}
+			// Explode $listing_data['next'] on '/clients/', index 1 of the resulting array will have the fragment needed to make the next API request.
+			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1], Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+			// If $listing_data['data'] is an array, merge it with the existing listings/properties array.
+			if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
+				$properties = array_merge( $properties, $listing_data['data'] );
+			}
+		}
+
+		// Add supplemental listings to featured and soldpending types.
+		if ( strpos( $type, 'featured' ) !== false || strpos( $type, 'soldpending' ) !== false ) {
+			return array_merge( $properties, $this->get_client_supplementals( $type ) );
+		}
+
+		// Fallback, return $properties array.
 		return $properties;
+	}
+
+
+	/**
+	 * Get_Client_Supplementals function.
+	 * Helper function to gather supplemental listings.
+	 *
+	 * @access public
+	 * @param string $status - defaults to all listings if not set, 'featured' will pull in active supplemental listings and 'soldpending' will get non-active supplementals.
+	 * @return array
+	 */
+	public function get_client_supplementals( $status = '' ) {
+		$listing_data = $this->idx_api( 'supplemental', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+
+		// Return empty array if no listings are returned.
+		if ( empty( $listing_data ) || ! is_array( $listing_data ) ) {
+			return [];
+		}
+
+		// If no $status is provided, return all supplemental listings.
+		if ( empty( $status ) ) {
+			return $listing_data;
+		}
+
+		// If a $status is provided, return filtered results.
+		return array_filter(
+			$listing_data,
+			function ( $listing ) use ( &$status ) {
+				// If $status is featured, match for active listings.
+				if ( strpos( $status, 'featured' ) !== false && 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] || 'ACTIVE' === $listing['status'] ) {
+					return true;
+				}
+				// If $status is soldpending, match for non-active listings.
+				if ( strpos( $status, 'soldpending' ) !== false && 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] && 'ACTIVE' !== $listing['status'] ) {
+					return true;
+				}
+			}
+		);
 	}
 
 	/**
@@ -706,54 +800,180 @@ class Idx_Api {
 	}
 
 	/**
-	 * platinum_account_type function.
+	 * Platinum_account_type function.
 	 *
 	 * @access public
 	 * @return bool
 	 */
 	public function platinum_account_type() {
 		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
-		if ( 'object' !== gettype( $account_type ) && ( 'IDX Broker Platinum' === $account_type[0] || 'IDX Broker Platinum Legacy' === $account_type[0] || 'IDX Broker HOME' === $account_type[0] || 'IDX Broker HOME Legacy' === $account_type[0] ) ) {
+		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'plat' ) || stripos( $account_type[0], 'home' ) ) ) {
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * get_leads function.
+	 * Get_leads function.
 	 *
 	 * @access public
-	 * @param mixed  $timeframe (default: null)
-	 * @param string $start_date (default: '')
-	 * @return void
+	 * @param mixed  $timeframe (default: null).
+	 * @param string $start_date (default: '').
+	 * @return array
 	 */
 	public function get_leads( $timeframe = null, $start_date = '' ) {
+		// API return limit and offset.
+		$limit  = 500;
+		$offset = 0;
+
+		// Raw lead data and parsed leads.
+		$lead_data = [];
+		$leads     = [];
+
+		$api_method = '';
+
 		if ( ! empty( $start_date ) ) {
 			$start_date = "&startDatetime=$start_date";
 		}
+
 		if ( ! empty( $timeframe ) ) {
-			$leads = $this->idx_api( "lead?interval=$timeframe$start_date", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+			$api_method = "lead?interval=$timeframe$start_date&offset=";
 		} else {
-			$leads = $this->idx_api( 'lead', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+			$api_method = 'lead?offset=';
 		}
-		return $leads['data'];
+
+		$lead_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( array_key_exists( 'data', $lead_data ) && array_key_exists( 'total', $lead_data ) ) {
+			$leads = $lead_data['data'];
+
+			while ( ( $offset + $limit ) < $lead_data['total'] ) {
+				$offset    = $offset + $limit;
+				$lead_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+				// If no leads are returned, stop requesting more.
+				if ( empty( $lead_data['data'] ) ) {
+					break;
+				}
+				$leads = array_merge( $leads, $lead_data['data'] );
+			}
+		}
+
+		return $leads;
 	}
 
-	public function get_featured_listings( $listing_type = 'featured', $timeframe = null ) {
-		// Force type to array.
-		if ( ! empty( $timeframe ) ) {
-			$listings = $this->idx_api( "$listing_type?interval=$timeframe", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
-		} else {
-			$listings = $this->idx_api( $listing_type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
+	/**
+	 * Get_leads_total function.
+	 *
+	 * @access public
+	 * @return int
+	 */
+	public function get_leads_total() {
+
+		$lead_count = 0;
+
+		$lead_data = $this->idx_api( 'lead?offset=0', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( array_key_exists( 'total', $lead_data ) && 'integer' === gettype( $lead_data['total'] ) ) {
+			$lead_count = $lead_data['total'];
 		}
 
-		return $listings;
+		return $lead_count;
+	}
+
+	/**
+	 * Get_recent_leads function.
+	 *
+	 * @access public
+	 * @param string $date_type (default: 'subscribeDate').
+	 * @param int    $lead_count (default: 5).
+	 * @return array
+	 */
+	public function get_recent_leads( $date_type = 'subscribeDate', $lead_count = 5 ) {
+		// Get first page of leads.
+		$lead_data = $this->idx_api( 'lead?offset=0&dateType=' . $date_type, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( is_wp_error( $lead_data ) || empty( $lead_data['data'] ) ) {
+			return [];
+		}
+
+		// If 'first' and 'last' are the same URL, return the results. If not, request leads with the 'last' URL and return those.
+		if ( $lead_data['first'] === $lead_data['last'] ) {
+			return array_reverse( array_slice( $lead_data['data'], -$lead_count ) );
+		}
+
+		// Get last page of leads.
+		$api_method = 'lead' . substr( $lead_data['last'], strpos( $lead_data['last'], '?' ) ) . '&dateType=' . $date_type;
+		$lead_data  = $this->idx_api( $api_method, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( is_wp_error( $lead_data ) || empty( $lead_data['data'] ) ) {
+			return [];
+		}
+
+		// If returned listings from last page is enough to cover the $lead_count, return results.
+		if ( count( $lead_data['data'] ) >= $lead_count ) {
+			return array_reverse( array_slice( $lead_data['data'], -$lead_count ) );
+		}
+
+		// If there are not enough leads on the last page to match the $lead_count, store the current leads and call the previous-to-last page to get the rest.
+		$returned_leads = array_reverse( array_slice( $lead_data['data'], $lead_count ) );
+
+		// Get 2nd-to-last page of leads if needed.
+		$api_method = 'lead' . substr( $lead_data['previous'], strpos( $lead_data['previous'], '?' ) ) . '&dateType=' . $date_type;
+		$lead_data  = $this->idx_api( $api_method, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads' );
+
+		if ( ! is_wp_error( $lead_data ) && ! empty( $lead_data['data'] ) ) {
+			return array_merge( $returned_leads, array_reverse( array_slice( $lead_data['data'], -( $lead_count - count( $returned_leads ) ) ) ) );
+		}
+
+		return [];
+	}
+
+	/**
+	 * Get_featured_listings function.
+	 *
+	 * @access public
+	 * @param string $listing_type (default: 'featured').
+	 * @param string $timeframe (default: null).
+	 * @return array
+	 */
+	public function get_featured_listings( $listing_type = 'featured', $timeframe = null ) {
+		// API return limit and offset.
+		$limit  = 50;
+		$offset = 0;
+		// Returned data from IDXB featured listings call.
+		$listing_data = [];
+		// Property listings taken from $listing_data['data'].
+		$properties = [];
+		// API method string.
+		$api_method = '';
+		if ( ! empty( $timeframe ) ) {
+			$api_method = "$listing_type?interval=$timeframe&offset=";
+		} else {
+			$api_method = "$listing_type?offset=";
+		}
+
+		// Initial request.
+		$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
+
+		if ( array_key_exists( 'data', $listing_data ) && ! empty( $listing_data['data'] ) ) {
+			// Assign returned listings to $properties.
+			$properties = $listing_data['data'];
+
+			// Get rest of listings if there are more than 50.
+			while ( ( $offset + $limit ) < $listing_data['total'] ) {
+				$offset       = $offset + $limit;
+				$listing_data = $this->idx_api( $api_method . $offset, Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
+				$properties   = array_merge( $properties, $listing_data['data'] );
+			}
+		}
+
+		return $properties;
 	}
 
 	/**
 	 * Returns agents wrapped in option tags
 	 *
-	 * @param  int $agent_id Instance agentID if exists
+	 * @param  int $agent_id Instance agentID if exists.
 	 * @return str           HTML options tags of agents ids and names
 	 */
 	public function get_agents_select_list( $agent_id ) {

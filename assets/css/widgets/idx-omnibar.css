@@ -36,10 +36,6 @@ input[type=text].idx-omnibar-input {
     margin-left: .5rem;
 }
 
-.idx-omnibar-form i.fa {
-    font-family: FontAwesome;
-}
-
 .idx-omnibar-form input[placeholder] {
     text-overflow: ellipsis;
     font-family: inherit;

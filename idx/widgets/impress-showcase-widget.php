@@ -140,8 +140,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 		foreach ( $properties as $prop ) {
 
-			if ( isset( $instance['agentID'], $prop['userAgentID'] ) && ! empty( $instance['agentID'] ) ) {
-				if ( $instance['agentID'] !== (int) $prop['userAgentID'] ) {
+			if ( ! empty( $instance['agentID'] ) ) {
+				if ( empty( $prop['userAgentID'] ) || (int) $instance['agentID'] !== (int) $prop['userAgentID'] ) {
 					continue;
 				}
 			}

@@ -5,7 +5,7 @@ class Omnibar_Settings {
 
 
 	public function __construct() {
-		 $this->idx_api            = new \IDX\Idx_Api();
+		$this->idx_api             = new \IDX\Idx_Api();
 		$this->mls_list            = $this->idx_api->approved_mls();
 		$this->defaults['address'] = get_option( 'idx_broker_omnibar_address_mls', [] );
 		if ( ! is_array( $this->defaults['address'] ) ) {
@@ -34,6 +34,7 @@ class Omnibar_Settings {
 		// register omnibar settings script
 		wp_register_script( 'idx-omnibar-settings', plugins_url( '/assets/js/idx-omnibar-settings.min.js', dirname( dirname( __FILE__ ) ) ), 'jquery' );
 		wp_enqueue_style( 'idx-omnibar-settings', plugins_url( '/assets/css/idx-omnibar-settings.css', dirname( dirname( __FILE__ ) ) ) );
+		wp_localize_script( 'idx-omnibar-settings', 'IDXOmnibarCustomFieldsNonce', wp_create_nonce( 'idx-omnibar-custom-field-nonce' ) );
 		if ( $this->idx_api->get_transient( 'idx_mls_approvedmls_cache' ) !== false ) {
 			$this->idx_preload_omnibar_settings_view();
 		} else {
@@ -389,17 +390,27 @@ EOT;
 	}
 
 	public function idx_update_omnibar_custom_fields() {
-		// Strip out HTML Special Characters before updating db to avoid security or formatting issues
-		if ( ! empty( $_POST['fields'] ) ) {
-			$fields = $_POST['fields'];
-		} else {
-			$fields = array();
+		// User capability check.
+		if ( ! current_user_can( 'manage_categories' ) ) {
+			wp_die();
 		}
-		update_option( 'idx_omnibar_custom_fields', $fields, false );
-		$output = $this->has_property_type_changed();
-		update_option( 'idx_default_property_types', $_POST['mlsPtIDs'], false );
-		update_option( 'idx_omnibar_placeholder', htmlspecialchars( $_POST['placeholder'] ), false );
-		wp_die( $output );
+		// Validate and process request.
+		if ( isset( $_POST['mlsPtIDs'], $_POST['placeholder'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-omnibar-custom-field-nonce' ) ) {
+
+			$fields = [];
+			// Sanitize fields data.
+			if ( ! empty( $_POST['fields'] ) && is_array( $_POST['fields'] ) ) {
+				$fields = filter_var_array( wp_unslash( $_POST['fields'] ), FILTER_SANITIZE_STRING );
+			}
+
+			update_option( 'idx_omnibar_custom_fields', $fields, false );
+			// Has_property_type_changed function must fire before the idx_default_property_types and idx_omnibar_placeholder options are updated.
+			$output = $this->has_property_type_changed();
+			update_option( 'idx_default_property_types', filter_var_array( wp_unslash( $_POST['mlsPtIDs'] ), FILTER_SANITIZE_STRING ), false );
+			update_option( 'idx_omnibar_placeholder', sanitize_text_field( wp_unslash( $_POST['placeholder'] ) ), false );
+			wp_die( esc_attr( $output ) );
+		}
+		wp_die();
 	}
 
 	public function idx_update_sort_order() {

@@ -39,9 +39,13 @@ class Create_Omnibar {
 		$upload_dir  = wp_upload_dir();
 		$idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
 
+		// Check if SSL is enabled but not set correctly in the WP Dashboard.
+		if ( strpos( $idx_dir_url, 'https://' ) === false && $this->omnibar_ssl_check() ) {
+			$idx_dir_url = str_replace( 'http://', 'https://', $idx_dir_url );
+		}
+
 		// css and js have been minified and combined to help performance
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
 		}
@@ -70,7 +74,7 @@ class Create_Omnibar {
         <form class="idx-omnibar-form idx-omnibar-original-form">
           <label for="omnibar" class="screen-reader-text">$placeholder</label>
           <input id="omnibar" class="idx-omnibar-input" type="text" placeholder="$placeholder"><button type="submit" value="Search"><i class="fas fa-search"></i><span>Search</span></button>
-          <div class="idx-omnibar-extra idx-omnibar-price-container" style="display: none;"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bed-container" style="display: none;"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container" style="display: none;"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01"></div>
+          <div class="idx-omnibar-extra idx-omnibar-price-container" style="display: none;"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0" step="10000"></div><div class="idx-omnibar-extra idx-omnibar-bed-container" style="display: none;"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0" step="1"></div><div class="idx-omnibar-extra idx-omnibar-bath-container" style="display: none;"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="1"></div>
         </form>
 EOD;
 	}
@@ -98,11 +102,10 @@ EOD;
 
 		// css and js have been minified and combined to help performance
 		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-		wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
 		}
-		wp_register_script( 'idx-omnibar-js', plugins_url( '../../assets/js/idx-omnibar.min.js', dirname( __FILE__ ) ), array(), false, true );
+		wp_register_script( 'idx-omnibar-js', plugins_url( '../../assets/js/idx-omnibar.min.js', dirname( __FILE__ ) ), array( 'wp-api' ), false, true );
 		// inserts inline variable for the results page url
 		wp_localize_script( 'idx-omnibar-js', 'idxUrl', $idx_url );
 		wp_localize_script( 'idx-omnibar-js', 'sortOrder', $sort_order );
@@ -130,7 +133,7 @@ EOD;
     <form class="idx-omnibar-form idx-omnibar-extra-form">
       <label for="omnibar" class="screen-reader-text">$placeholder</label>
       <input id="omnibar" class="idx-omnibar-input idx-omnibar-extra-input" type="text" placeholder="$placeholder">
-      $price_field<div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="0.01" title="Only numbers and decimals are allowed"></div>
+      $price_field<div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0" step="1"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="1" title="Only numbers and decimals are allowed"></div>
       <button class="idx-omnibar-extra-button" type="submit" value="Search"><i class="fas fa-search"></i><span>Search</span></button>
     </form>
 EOD;
@@ -145,9 +148,9 @@ EOD;
 	 */
 	public function price_field( $min_price ) {
 		if ( empty( $min_price ) ) {
-			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
+			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0" step="10000"></div>';
 		} else {
-			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-min-price-container"><label>Price Min</label><input class="idx-omnibar-min-price" type="number" min="0"></div><div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-max-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0"></div>';
+			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-min-price-container"><label>Price Min</label><input class="idx-omnibar-min-price" type="number" min="0" step="10000"></div><div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-max-price-container"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0" step="10000"></div>';
 		}
 
 		return $price_field;
@@ -166,7 +169,7 @@ EOD;
 			$mlsPtIDs = array(
 				array(
 					'idxID'   => '',
-					'mlsPtID' => 1,
+					'mlsPtID' => 'all',
 				),
 			);
 		}
@@ -295,16 +298,40 @@ EOD;
 		add_action(
 			'rest_api_init',
 			function() {
-				// Query string can be anything
+				// Query string can be anything.
 				register_rest_route(
 					'idxbroker/v1',
 					'/omnibar/autocomplete/(?P<query>(.*)+)',
-					array(
-						'methods'  => 'GET',
-						'callback' => [ new \IDX\Widgets\Omnibar\Autocomplete(), 'get_autocomplete_data' ],
-					)
+					[
+						'methods'             => 'GET',
+						'callback'            => [ new \IDX\Widgets\Omnibar\Autocomplete(), 'get_autocomplete_data' ],
+						'permission_callback' => '__return_true',
+					]
 				);
 			}
 		);
 	}
+
+	/**
+	 * Omnibar_SSL_Check
+	 *
+	 * Checks if SSL is enabled but not correctly set in the WP dashboard.
+	 */
+	private function omnibar_ssl_check() {
+		// Cloudflare.
+		if ( ! empty( $_SERVER['HTTP_CF_VISITOR'] ) ) {
+			$cfo = json_decode( $_SERVER['HTTP_CF_VISITOR'] );
+			if ( isset( $cfo->scheme ) && 'https' === $cfo->scheme ) {
+				return true;
+			}
+		}
+
+		// Other proxy.
+		if ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+			return true;
+		}
+
+		return function_exists( 'is_ssl' ) ? is_ssl() : false;
+	}
+
 }

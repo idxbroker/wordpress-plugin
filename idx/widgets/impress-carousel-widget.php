@@ -65,13 +65,12 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			$instance = $this->defaults;
 		}
 
-		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fa fa-caret-left\"></i><span>Prev</span>', 'idxbroker' ) );
-		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fa fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
+		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fas fa-caret-left\"></i><span>Prev</span>', 'idxbroker' ) );
+		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
 
 		if ( $instance['styles'] ) {
 			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
 			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-			wp_enqueue_style( 'font-awesome-v4-shim', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/v4-shims.min.css', array(), 'fa-v4-shim' );
 		}
 
 		$output = '';
@@ -111,40 +110,38 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$target = $this->target( $instance['new_window'] );
 
 		$output .= '
-        <script>
-          window.addEventListener("DOMContentLoaded", (event) => {
-            jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
-                items: ' . $display . ',
-                ' . $autoplay . '
-                nav: true,
-                navText: ["' . $prev_link . '", "' . $next_link . '"],
-                loop: true,
-                lazyLoad: true,
-                addClassActive: true,
-                itemsScaleUp: true,
-                addClassActive: true,
-                itemsScaleUp: true,
-                navContainerClass: "owl-controls owl-nav",
-                responsiveClass:true,
-                responsive:{
-                    0:{
-                        items: 1,
-                        nav: true,
-                        margin: 0
-                    },
-                    450:{
-                        items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
-                      	loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
-                    },
-                    800:{
-                        items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
-                      	loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
-                    }
-                }
-            });
-          });
-        </script>
-        ';
+			<script>
+				window.addEventListener("DOMContentLoaded", function(event) {
+					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+						items: ' . $display . ',
+						' . $autoplay . '
+						nav: true,
+						navText: ["' . $prev_link . '", "' . $next_link . '"],
+						loop: true,
+						lazyLoad: true,
+						addClassActive: true,
+						itemsScaleUp: true,
+						navContainerClass: "owl-controls owl-nav",
+						responsiveClass:true,
+						responsive:{
+							0:{
+								items: 1,
+								nav: true,
+								margin: 0
+							},
+							450:{
+								items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+								loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
+							},
+							800:{
+								items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+								loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
+							}
+						}
+					});
+				});
+			</script>
+		';
 
 		if ( 'low-high' == $instance['order'] ) {
 			// sort low to high
@@ -197,25 +194,25 @@ class Impress_Carousel_Widget extends \WP_Widget {
 				'impress_carousel_property_html',
 				sprintf(
 					'<div class="impress-carousel-property">
-                    <a href="%2$s" class="impress-carousel-photo" target="%16$s">
-                        <img class="lazyOwl owl-lazy" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
-                        <span class="impress-price">%1$s</span>
-                    </a>
-                    <a href="%2$s" target="%16$s">
-                        <p class="impress-address">
-                            <span class="impress-street">%5$s %6$s %7$s %8$s</span>
-                            <span class="impress-cityname">%9$s</span>,
-                            <span class="impress-state"> %10$s</span>
-                        </p>
-                    </a>
-                    <p class="impress-beds-baths-sqft">
-                        %11$s
-                        %12$s
-                        %13$s
-                        %14$s
-                    </p>
-                    %15$s
-                    </div><!-- end .impress-carousel-property -->',
+					<a href="%2$s" class="impress-carousel-photo" target="%16$s">
+						<img class="lazyOwl owl-lazy" data-src="%3$s" alt="%4$s" title="%5$s %6$s %7$s %8$s %9$s, %10$s" />
+						<span class="impress-price">%1$s</span>
+					</a>
+					<a href="%2$s" target="%16$s">
+						<p class="impress-address">
+							<span class="impress-street">%5$s %6$s %7$s %8$s</span>
+							<span class="impress-cityname">%9$s</span>,
+							<span class="impress-state"> %10$s</span>
+						</p>
+					</a>
+					<p class="impress-beds-baths-sqft">
+						%11$s
+						%12$s
+						%13$s
+						%14$s
+					</p>
+					%15$s
+					</div><!-- end .impress-carousel-property -->',
 					$prop['listingPrice'],
 					$url,
 					$prop_image_url,

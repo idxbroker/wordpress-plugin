@@ -15,6 +15,16 @@ window.addEventListener('load', function() {
         }
     }
 
+    // Load new leads and popular listings data.
+    jQuery.ajax({
+        url: ajaxurl,
+        data: {action: 'side_overview_data'}
+    }).done(function(jsonData){
+        var sideOverviewData = JSON.parse(jsonData).data
+        document.querySelector('.new-leads ul').innerHTML = sideOverviewData.leads
+        document.querySelector('.popular-listings ul').innerHTML = sideOverviewData.listings
+    })
+
     function leadsChart() {
         //Show loader.
         loader.style.display = 'block';

@@ -1,6 +1,7 @@
 <?php
 
 namespace IDX\Views;
+
 use IDX;
 
 // Outputs notice box for the admin_notice action
