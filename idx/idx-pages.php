@@ -337,9 +337,11 @@ class Idx_Pages {
 	 * @return void
 	 */
 	public function get_all_api_idx_uids( $idx_pages ) {
-		$uids = array();
-		foreach ( $idx_pages as $idx_page ) {
-			$uids[] = $idx_page->uid;
+		$uids = [];
+		if ( ! empty( $idx_pages ) && is_array( $idx_pages ) ) {
+			foreach ( $idx_pages as $idx_page ) {
+				$uids[] = $idx_page->uid;
+			}
 		}
 		return $uids;
 	}
