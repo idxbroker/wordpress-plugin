@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { PRODUCT_REFS } from '@/data/productTerms'
 import { mapState, mapActions } from 'vuex'
 import guidedSetupMixin from '@/mixins/guidedSetup'
 import pageGuard from '@/mixins/pageGuard'
@@ -50,6 +51,7 @@ import GuidedSetupContentCard from '@/templates/GuidedSetupContentCard.vue'
 import SocialProUpgrade from '@/components/socialProUpgrade.vue'
 export default {
     name: 'guided-setup-social-pro',
+    inject: [PRODUCT_REFS.socialPro.repo],
     mixins: [
         guidedSetupMixin,
         pageGuard
@@ -80,9 +82,8 @@ export default {
         async enablePlugin () {
             this.showError = false
             this.formDisabled = true
-            // There is no endpoint, so this is to-do
             if (this.formIsUpdated) {
-                const status = 204 // endpoint call here
+                const { status } = await this.socialProRepository.post({ enabled: this.localStateValues.enabled }, 'enable')
                 this.formDisabled = false
                 if (status === 204) {
                     this.saveAction()

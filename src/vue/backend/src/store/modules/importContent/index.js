@@ -1,7 +1,3 @@
-import actions from './actions'
-import getters from './getters'
-import mutations from './mutations'
-
 const state = {
     mainLoading: false,
     listings: {
@@ -16,8 +12,5 @@ const state = {
 
 export default {
     namespaced: true,
-    actions,
-    getters,
-    mutations,
     state
 }

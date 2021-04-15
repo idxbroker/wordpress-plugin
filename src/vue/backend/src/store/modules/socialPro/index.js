@@ -1,6 +1,3 @@
-import actions from './actions'
-import getters from './getters'
-
 const state = {
     restrictedByBeta: true,
     optedInBeta: false,
@@ -17,7 +14,5 @@ const state = {
 
 export default {
     namespaced: true,
-    actions,
-    getters,
     state
 }
