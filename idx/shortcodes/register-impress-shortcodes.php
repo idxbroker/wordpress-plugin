@@ -196,8 +196,8 @@ class Register_Impress_Shortcodes {
 
 		foreach ( $properties as $prop ) {
 
-			if ( isset( $agent_id, $prop['userAgentID'] ) && ! empty( $agent_id ) ) {
-				if ( (int) $agent_id !== (int) $prop['userAgentID'] ) {
+			if ( ! empty( $agent_id ) ) {
+				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
 					continue;
 				}
 			}
@@ -566,8 +566,6 @@ class Register_Impress_Shortcodes {
 			    navText: ["' . $prev_link . '", "' . $next_link . '"],
 			    loop: true,
 			    lazyLoad: true,
-			    addClassActive: true,
-			    itemsScaleUp: true,
 			    addClassActive: true,
 			    itemsScaleUp: true,
 			    navContainerClass: "owl-controls owl-nav",

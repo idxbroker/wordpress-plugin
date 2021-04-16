@@ -121,8 +121,6 @@ class Impress_Carousel_Widget extends \WP_Widget {
 						lazyLoad: true,
 						addClassActive: true,
 						itemsScaleUp: true,
-						addClassActive: true,
-						itemsScaleUp: true,
 						navContainerClass: "owl-controls owl-nav",
 						responsiveClass:true,
 						responsive:{

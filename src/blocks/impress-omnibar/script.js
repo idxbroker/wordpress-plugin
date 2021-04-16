@@ -1,7 +1,7 @@
 const { __ } = wp.i18n
 const { registerBlockType } = wp.blocks
 const { InspectorControls } = wp.blockEditor
-const { CheckboxControl } = wp.components
+const { CheckboxControl, Panel, PanelBody } = wp.components
 const icon = () => (<i className='fas fa-search fa-2x' />)
 
 registerBlockType(
@@ -31,24 +31,28 @@ registerBlockType(
           </div>
 
           <InspectorControls>
-            <CheckboxControl
-              label={__('Default Styles?', 'idx-broker-platinum')}
-              value={attributes.styles}
-              checked={(attributes.styles > 0)}
-              onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Extra Fields?', 'idx-broker-platinum')}
-              value={attributes.extra}
-              checked={(attributes.extra > 0)}
-              onChange={(value) => { setAttributes({ extra: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Include Min Price? (If Extra Fields is enabled)', 'idx-broker-platinum')}
-              value={attributes.min_price}
-              checked={(attributes.min_price > 0)}
-              onChange={(value) => { setAttributes({ min_price: (value > 0 ? 1 : 0) }) }}
-            />
+            <Panel>
+              <PanelBody title='Settings' initialOpen={true}>
+                <CheckboxControl
+                  label={__('Default Styles?', 'idx-broker-platinum')}
+                  value={attributes.styles}
+                  checked={(attributes.styles > 0)}
+                  onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Extra Fields?', 'idx-broker-platinum')}
+                  value={attributes.extra}
+                  checked={(attributes.extra > 0)}
+                  onChange={(value) => { setAttributes({ extra: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Include Min Price? (If Extra Fields is enabled)', 'idx-broker-platinum')}
+                  value={attributes.min_price}
+                  checked={(attributes.min_price > 0)}
+                  onChange={(value) => { setAttributes({ min_price: (value > 0 ? 1 : 0) }) }}
+                />
+              </PanelBody>
+            </Panel>
           </InspectorControls>
         </div>
       )

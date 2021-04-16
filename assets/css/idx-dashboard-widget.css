@@ -241,7 +241,9 @@
 #idx_dashboard_widget .side-overview a {
     color: #444;
 }
-#idx_dashboard_widget .side-overview .fa {
+#idx_dashboard_widget .side-overview .fas,
+#idx_dashboard_widget .side-overview .far,
+#idx_dashboard_widget .side-overview .fab {
     font-size: 24px;
     height: 16px;
     position: absolute;

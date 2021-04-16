@@ -52,7 +52,7 @@ if ( $wrapper_page_id ) {
 					<div class="inlineBlock">
 						<div>
 							<label for="idx_broker_apikey">Enter Your API Key: </label>
-							<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" value="<?php echo get_option( 'idx_broker_apikey' ); ?>" />
+							<input name="idx_broker_apikey" type="text" id="idx_broker_apikey" class="admin-text-input-field" value="<?php echo get_option( 'idx_broker_apikey' ); ?>" />
 							<input type="button" name="api_update" id="api_update" value="Refresh Plugin Options" class="button-primary" />
 							<span class="refresh_status"></span>
 						</div>
@@ -93,7 +93,7 @@ if ( $wrapper_page_id ) {
 					<h3>Create the Global Wrapper<a href="http://support.idxbroker.com/customer/en/portal/articles/1919274-automatically-create-wordpress-dynamic-wrapper" target="_blank"><img class="help-icon" src="<?php echo plugins_url( '../../assets/images/helpIcon.svg', __FILE__ ); ?>" alt="help"></a></h3>
 					<div class="help-text">Setting this up will match the IDX pages to your website design automatically every few hours.<div>Example: Properties</div></div>
 					<label for="idx_broker_dynamic_wrapper_page_name">Page Name:</label>
-					<input name="idx_broker_dynamic_wrapper_page_name" type="text" id="idx_broker_dynamic_wrapper_page_name" value="<?php echo $post_title; ?>" />
+					<input name="idx_broker_dynamic_wrapper_page_name" type="text" id="idx_broker_dynamic_wrapper_page_name" class="admin-text-input-field " value="<?php echo $post_title; ?>" />
 					<input name="idx_broker_dynamic_wrapper_page_id" type="hidden" id="idx_broker_dynamic_wrapper_page_id" value="<?php echo get_option( 'idx_broker_dynamic_wrapper_page_id' ); ?>" />
 					<input type="button" class="button-primary" id="idx_broker_create_wrapper_page" value="<?php echo $post_title ? 'Update' : 'Create'; ?>" />
 					<?php
@@ -109,19 +109,52 @@ if ( $wrapper_page_id ) {
 					<input id="page_link" class="hidden" type="text" value="<?php echo $wrapper_page_url; ?>" readonly>
 				</div>
 
-				<!-- Add reCAPTCHA field if a key has not already been entered in WP Listings settings -->
-				<?php if ( $wpl_options['wp_listings_captcha_site_key'] == '' || $wpl_options['wp_listings_captcha_site_key'] == null ) { ?>
-					<div id="recaptcha-key">
-						<h3>Add Google reCAPTCHA</h3>
-						<div class="help-text">You can choose to add Google reCAPTCHA v2 to prevent spam lead signups. To use Google reCAPTCHA, you must first <a href="https://www.google.com/recaptcha/admin" target="_blank">sign up for a v2 key</a>, then enter the site key below:</div>
-						<label for="idx_recaptcha_site_key">Site Key:</label>
-						<input name="idx_recaptcha_site_key" type="text" id="idx_recaptcha_site_key" size="40" value="<?php echo get_option( 'idx_recaptcha_site_key' ); ?>" />
-						<input type="button" class="button-primary" id="idx_update_recaptcha_key" value="Update" />
+				<?php
+				// Remove old recaptcha key if still present.
+				if ( get_option( 'idx_recaptcha_site_key' ) ) {
+					delete_option( 'idx_recaptcha_site_key' );
+				}
+				?>
+
+				<div id="idx-enable-recaptcha-container">
+					<h3>Enable Google reCAPTCHA</h3>
+					<div id="recaptcha-control-area">
+						<div class="help-text">Enable Google reCAPTCHA v3 to prevent spam lead signups:</div>
+						<div class="toggle-container">
+							<input id="enable-recaptcha-checkbox" type="checkbox" value="1" class="impress-settings-checkbox" onchange="updateRecaptchaSetting(this);" <?php echo ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) ? 'checked' : '' ); ?> >
+							<label for="enable-recaptcha-checkbox" class="checkbox-label-slider"></label>
+						</div>
+						<div id="recaptcha-save-indicator"></div>
 					</div>
-					<?php
-}
-		settings_fields( 'idx-platinum-settings-group' );
-?>
+				</div>
+
+				<div>
+					<h3>Install Information Data Collection</h3>
+					<div class="help-text">IDX Broker collects general install information to help improve our WordPress plugins.</div>
+					<div id="recaptcha-control-area">
+						<div class="help-text">Opt-out:</div>
+						<div class="toggle-container">
+							<input name="" id="enable-data-optout-checkbox" type="checkbox" value="1" class="impress-settings-checkbox" onchange="updateOptoutSetting(this);" <?php echo ( ! empty( get_option( 'impress_data_optout' ) ) ? 'checked' : '' ); ?> >
+							<label for="enable-data-optout-checkbox" class="checkbox-label-slider"></label>
+						</div>
+						<div id="recaptcha-save-indicator"></div>
+					</div>
+				</div>
+
+				<?php settings_fields( 'idx-platinum-settings-group' ); ?>
 	</form>
 
+</div>
+
+
+<div id="devSettings" class="hide">
+	<h3>IDX Broker Developer Partner API Key</h3>
+	<div class="inlineBlock">
+		<div>
+			<label for="idx-broker-dev-partner-key">Enter Your Developer Partner Key: </label>
+			<input name="idx-broker-dev-partner-key" type="text" id="idx-broker-dev-partner-key" class="admin-text-input-field" value="<?php echo esc_html( get_option( 'idx_broker_dev_partner_key' ) ); ?>" />
+			<input id="idx-dev-key-update-button" type="button" onclick="updateDevPartnerKey();" value="Save API Key" class="button-primary" />
+			<span class="idx-dev-key-refresh-status"></span>
+		</div>
+	</div>
 </div>

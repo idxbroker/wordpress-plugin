@@ -335,8 +335,8 @@ class Create_Impress_Widgets {
 		wp_enqueue_style( 'owl-css' );
 		wp_enqueue_script( 'owl' );
 
-		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fa fa-chevron-circle-left\"></i><span>Prev</span>', 'equity' ) );
-		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fa fa-chevron-circle-right\"></i><span>Next</span>', 'equity' ) );
+		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fas fa-chevron-circle-left\"></i><span>Prev</span>', 'equity' ) );
+		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-chevron-circle-right\"></i><span>Next</span>', 'equity' ) );
 
 		if ( ( $property_type ) == 'savedlink' ) {
 			$properties = $this->idx_api->saved_link_properties( $saved_link_id );

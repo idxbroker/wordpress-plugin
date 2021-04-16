@@ -50,29 +50,30 @@ class Impress_Lead_Signup_Shortcode {
 		wp_localize_script( 'impress-lead-signup', 'idxLeadLoginUrl', $this->lead_login_page() );
 		wp_enqueue_script( 'impress-lead-signup' );
 
-		if ( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key' ) != '' ) {
-			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js' );
+		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
+			wp_enqueue_script( 'idx-recaptcha', plugins_url( '../assets/js/idx-recaptcha.min.js', dirname(__FILE__) ) );
+			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], null, false );
+			wp_enqueue_script( 'jquery' );
 		}
 
 		$hidden_fields = ( $agent_id || has_filter( 'impress_lead_signup_agent_id_field' ) ) ? apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="agentOwner" value="' . $agent_id . '">' ) : '';
 
 		$widget = sprintf(
-			'
-            <form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup" id="LeadSignup">
-                %3$s
-                <input type="hidden" name="action" value="addLead">
-                <input type="hidden" name="signupWidget" value="true">
-                <input type="hidden" name="contactType" value="direct">
-                %4$s
+			'<form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup" id="LeadSignup">
+				%3$s
+				<input type="hidden" name="action" value="addLead">
+				<input type="hidden" name="signupWidget" value="true">
+				<input type="hidden" name="contactType" value="direct">
+				%4$s
 
-                <label id="impress-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName">First Name:</label>
-                <input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
+				<label id="impress-widgetfirstName-label" class="ie-only" for="IDX-widgetfirstName">First Name:</label>
+				<input id="impress-widgetfirstName" type="text" name="firstName" placeholder="First Name" required>
 
-                <label id="impress-widgetlastName-label" class="ie-only" for="IDX-widgetlastName">Last Name:</label>
-                <input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name" required>
+				<label id="impress-widgetlastName-label" class="ie-only" for="IDX-widgetlastName">Last Name:</label>
+				<input id="impress-widgetlastName" type="text" name="lastName" placeholder="Last Name" required>
 
-                <label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
-                <input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>',
+				<label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
+				<input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>',
 			$this->idx_api->subdomain_url(),
 			$target,
 			$this->error_message,
@@ -83,29 +84,34 @@ class Impress_Lead_Signup_Shortcode {
 			$widget .= sprintf(
 				'
 				<label for="impress-widgetPassword">Password:</label>
-                <input id="impress-widgetPassword" type="password" name="password" placeholder="Password">'
+				<input id="impress-widgetPassword" type="password" name="password" placeholder="Password">'
 			);
 		}
 
 		if ( $phone ) {
 			$widget .= sprintf(
 				'
-            <label id="impress-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
-            <input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">'
+			<label id="impress-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
+			<input id="impress-widgetphone" type="tel" name="phone" placeholder="Phone">'
 			);
 		}
 
-		if ( $wpl_options['wp_listings_captcha_site_key'] != '' || get_option( 'idx_recaptcha_site_key' ) != '' ) {
-			$site_key = ( $wpl_options['wp_listings_captcha_site_key'] != '' ) ? $wpl_options['wp_listings_captcha_site_key'] : get_option( 'idx_recaptcha_site_key' );
-			$widget  .= sprintf( '<div id="recaptcha" class="g-recaptcha" data-sitekey="%s"></div>', $site_key );
+		// Include Google reCAPTCHA hidden field if setting enabled.
+		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
+			$widget  .= sprintf(
+				'<input type="hidden" name="recaptchaToken" id="IDX-recaptcha-usersignup" data-action="usersignup" class="IDX-recaptchaToken" value>
+				 <input id="impress-widgetsubmit" type="submit" name="btnSubmit" data-action="submit" data-callback="onSubmit" data-sitekey="6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij"  value="%s">
+				 </form>
+				',
+				$button_text
+			);
+		} else {
+			$widget .= sprintf(
+				'<input id="impress-widgetsubmit" type="submit" name="btnSubmit" data-action="submit" value="%s">
+				 </form>',
+				$button_text
+			);
 		}
-
-		$widget .= sprintf(
-			'<input id="impress-widgetsubmit" type="submit" name="submit" value="%s">
-            </form>',
-			$button_text
-		);
-
 		return $widget;
 	}
 

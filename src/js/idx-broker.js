@@ -76,6 +76,12 @@
         })
       })
     })
+
+    // Unhide dev partner API key option if URL parameter is present.
+    if (window.location.search.includes('idxdev')) {
+      document.getElementById('devSettings').classList.remove('hide')
+    }
+
   })
 
   /**
@@ -114,29 +120,58 @@
   }
 })(window, undefined)
 
-jQuery(document).ready(function ($) {
-  // update recaptcha key
-  $('#idx_update_recaptcha_key').click(function (e) {
-    e.preventDefault()
-    var idx_recaptcha_site_key = $('#idx_recaptcha_site_key').val()
-    $.ajax({
-      type: 'post',
-      url: IDXAdminAjax.ajaxurl,
-      data: {
-        action: 'idx_update_recaptcha_key',
-        idx_recaptcha_site_key: idx_recaptcha_site_key,
-        nonce: IDXAdminAjax.google_recaptcha_nonce
-      },
-      success: function (result) {
-        if ($.isNumeric(result)) {
-          $('#idx_recaptcha_site_key').val(idx_recaptcha_site_key)
-          setTimeout(window.location.reload(), 1000)
-        } else {
-          $('#idx_recaptcha_site_key').val('')
-          setTimeout(window.location.reload(), 1000)
-        }
+function updateRecaptchaSetting (element) {
+  jQuery.post(
+    ajaxurl, {
+      action: 'idx_update_recaptcha_setting',
+      nonce: IDXAdminAjax['google_recaptcha_nonce'],
+      enable_recaptcha: (element.checked ? 1 : 0)
+    }, function (response) {
+      if (response !== 'success') {
+        window.location.reload()
       }
-    })
-    return false
-  })
-})
+    }
+  )
+}
+
+function updateOptoutSetting (element) {
+  jQuery.post(
+    ajaxurl, {
+      action: 'idx_update_data_optout_setting',
+      nonce: IDXAdminAjax['data_optout_nonce'],
+      optout: element.checked
+    }, function (response) {
+      if ( response !== 'success') {
+        window.location.reload()
+      }
+    }
+  )
+}
+
+function updateDevPartnerKey () {
+  var loadingIcon = "<span class='dashicons dashicons-update spin' style='color: #007cba;'></span>"
+  var successIcon = "<span class='dashicons dashicons-yes-alt' style='color:#bada55;'></span>"
+  var failIcon = "<span class='dashicons dashicons-dismiss' style='color: tomato;'></span>"
+  var statusContainer = jQuery('.idx-dev-key-refresh-status')
+  statusContainer.fadeIn('fast').html(loadingIcon + 'Saving Developer Partner API key...')
+  jQuery.post(
+    ajaxurl, {
+      action: 'idx_update_dev_partner_key',
+      nonce: IDXAdminAjax.dev_key_update_nonce,
+      key: document.getElementById('idx-broker-dev-partner-key').value
+    }, function (response) {
+      if ( response !== 'success') {
+        setTimeout(function () {
+          statusContainer.fadeIn('slow').html(failIcon + 'Save Failed! ' + response)
+        }, 700)
+      } else {
+        setTimeout(function () {
+          statusContainer.fadeIn('slow').html(successIcon + 'Saved!')
+        }, 700)
+      }
+      setTimeout(function () {
+        statusContainer.fadeOut('slow')
+      }, 2000)
+    }
+  )
+}

@@ -13,7 +13,8 @@ class Idx_Api {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->api_key = get_option( 'idx_broker_apikey' );
+		$this->api_key         = get_option( 'idx_broker_apikey' );
+		$this->dev_partner_key = get_option( 'idx_broker_dev_partner_key' );
 	}
 
 	/**
@@ -23,6 +24,15 @@ class Idx_Api {
 	 * @access public
 	 */
 	public $api_key;
+
+	/**
+	 * developer_partner_key
+	 * 
+	 * @var mixed
+	 * @access public
+	 */
+	public $dev_partner_key;
+
 	/**
 	 * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
 	 *
@@ -87,6 +97,12 @@ class Idx_Api {
 		$request_type = 'GET',
 		$json_decode_type = false
 	) {
+
+		// If no API key is set, return early.
+		if ( empty( $this->api_key ) || empty( str_replace( ' ', '', $this->api_key ) ) ) {
+			return [];
+		}
+
 		$cache_key = 'idx_' . $level . '_' . $method . '_cache';
 
 		if ( $this->get_transient( $cache_key ) !== false ) {
@@ -101,6 +117,10 @@ class Idx_Api {
 			'apiversion'    => $apiversion,
 			'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
 		);
+
+		if ( ! empty( $this->dev_partner_key ) && is_string( $this->dev_partner_key ) ) {
+			$headers['ancillarykey'] = $this->dev_partner_key;
+		}
 
 		$params = array_merge(
 			array(
@@ -531,45 +551,90 @@ class Idx_Api {
 	}
 
 	/**
-	 * client_properties function.
-	 *
+	 * Client_properties function.
+	 * Expected $type posibilities: featured, soldpending, supplemental.
+	 * 
 	 * @access public
-	 * @param mixed $type
-	 * @return void
+	 * @param string $type
+	 * @return array
 	 */
 	public function client_properties( $type ) {
-		// IDX Broker API v1.7.0 featured listings call is limited to 50 listings per request.
-		$limit  = 50;
-		$offset = 0;
-		// Returned data from IDXB featured listings call.
-		$listing_data = [];
-		// Property listings taken from $listing_data['data'].
-		$properties = [];
+		// Handle supplemental listings.
+		if ( 'supplemental' === $type ) {
+			// Pass 'featured' to get just the active supplemental listings.
+			return $this->get_client_supplementals( 'featured' );
+		}
 
-		// Initial request.
-		$listing_data = $this->idx_api( $type . "?disclaimers=true&offset=$offset", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-		// Assign returned listings to $properties.
+		$properties        = [];
+		$download_complete = false;
+
+		// Make initial API request for listings.
+		$listing_data = $this->idx_api( "$type?disclaimers=true", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+
 		if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 			$properties = $listing_data['data'];
 		}
 
-		// Get rest of listings if there are more than 50.
-		if ( isset( $listing_data['total'] ) ) {
-			while ( ( $offset + $limit ) < $listing_data['total'] ) {
-				$offset = $offset + $limit;
-				$listing_data = $this->idx_api( $type . "?disclaimers=true&offset=$offset", Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-				$properties   = array_merge( $properties, $listing_data['data'] );
+		// Download remaining listings if available.
+		while ( ! $download_complete ) {
+			// Check if there is a next URL to request more listings.
+			if ( empty( $listing_data['next'] ) ) {
+				$download_complete = true;
+				continue;
+			}
+			// Explode $listing_data['next'] on '/clients/', index 1 of the resulting array will have the fragment needed to make the next API request.
+			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1], Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+			// If $listing_data['data'] is an array, merge it with the existing listings/properties array.
+			if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
+				$properties = array_merge( $properties, $listing_data['data'] );
 			}
 		}
 
-		// Get any supplemental listings.
-		$supplemental_listings = $this->idx_api( 'supplemental', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-
-		if ( is_array( $supplemental_listings ) ) {
-			$properties = array_merge( $properties, $supplemental_listings );
+		// Add supplemental listings to featured and soldpending types.
+		if ( strpos( $type, 'featured' ) !== false || strpos( $type, 'soldpending' ) !== false ) {
+			return array_merge( $properties, $this->get_client_supplementals( $type ) );
 		}
 
+		// Fallback, return $properties array.
 		return $properties;
+	}
+
+
+	/**
+	 * Get_Client_Supplementals function.
+	 * Helper function to gather supplemental listings.
+	 *
+	 * @access public
+	 * @param string $status - defaults to all listings if not set, 'featured' will pull in active supplemental listings and 'soldpending' will get non-active supplementals.
+	 * @return array
+	 */
+	public function get_client_supplementals( $status = '' ) {
+		$listing_data = $this->idx_api( 'supplemental', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+
+		// Return empty array if no listings are returned.
+		if ( empty( $listing_data ) || ! is_array( $listing_data ) ) {
+			return [];
+		}
+
+		// If no $status is provided, return all supplemental listings.
+		if ( empty( $status ) ) {
+			return $listing_data;
+		}
+
+		// If a $status is provided, return filtered results.
+		return array_filter(
+			$listing_data,
+			function ( $listing ) use ( &$status ) {
+				// If $status is featured, match for active listings.
+				if ( strpos( $status, 'featured' ) !== false && 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] || 'ACTIVE' === $listing['status'] ) {
+					return true;
+				}
+				// If $status is soldpending, match for non-active listings.
+				if ( strpos( $status, 'soldpending' ) !== false && 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] && 'ACTIVE' !== $listing['status'] ) {
+					return true;
+				}
+			}
+		);
 	}
 
 	/**
@@ -742,7 +807,7 @@ class Idx_Api {
 	 */
 	public function platinum_account_type() {
 		$account_type = $this->idx_api( 'accounttype', Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
-		if ( 'object' !== gettype( $account_type ) && ( 'IDX Broker Platinum' === $account_type[0] || 'IDX Broker Platinum Legacy' === $account_type[0] || 'IDX Broker HOME' === $account_type[0] || 'IDX Broker HOME Legacy' === $account_type[0] ) ) {
+		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'plat' ) || stripos( $account_type[0], 'home' ) ) ) {
 			return true;
 		}
 		return false;

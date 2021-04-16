@@ -1,7 +1,7 @@
 const { __ } = wp.i18n
 const { registerBlockType } = wp.blocks
 const { InspectorControls } = wp.blockEditor
-const { SelectControl, CheckboxControl, TextControl } = wp.components
+const { SelectControl, CheckboxControl, TextControl, Panel, PanelBody } = wp.components
 
 registerBlockType(
   'idx-broker-platinum/impress-carousel-block', {
@@ -55,60 +55,64 @@ registerBlockType(
             <img src={impress_carousel_image_url} />
           </div>
           <InspectorControls>
-            <SelectControl
-              label={__('Properties to Display:', 'idx-broker-platinum')}
-              value={attributes.property_type}
-              options={propertiesToFeature}
-              onChange={(value) => { setAttributes({ property_type: value }) }}
-            />
-            <SelectControl
-              label={__('Choose a saved link (if selected above):', 'idx-broker-platinum')}
-              value={attributes.saved_link_id}
-              options={(impress_carousel_saved_links || [{ label: 'All', value: '' }])}
-              onChange={(value) => { setAttributes({ saved_link_id: value }) }}
-            />
-            <SelectControl
-              label={__('Limit by Agent:', 'idx-broker-platinum')}
-              value={attributes.agent_id}
-              options={(impress_carousel_agent_list || [{ label: 'All', value: '' }])}
-              onChange={(value) => { setAttributes({ agent_id: value }) }}
-            />
-            <TextControl
-              label={__('Listings to show without scrolling:', 'idx-broker-platinum')}
-              value={attributes.display}
-              type='number'
-              onChange={(value) => { setAttributes({ display: value }) }}
-            />
-            <TextControl
-              label={__('Max number of listings to show:', 'idx-broker-platinum')}
-              value={attributes.max}
-              type='number'
-              onChange={(value) => { setAttributes({ max: value }) }}
-            />
-            <SelectControl
-              label={__('Sort Order:', 'idx-broker-platinum')}
-              value={attributes.order}
-              options={sortOptions}
-              onChange={(value) => { setAttributes({ order: value }) }}
-            />
-            <CheckboxControl
-              label={__('Autoplay?', 'idx-broker-platinum')}
-              value={attributes.autoplay}
-              checked={(attributes.autoplay > 0)}
-              onChange={(value) => { setAttributes({ autoplay: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Open Listings in a New Window?', 'idx-broker-platinum')}
-              value={attributes.new_window}
-              checked={(attributes.new_window > 0)}
-              onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
-            />
-            <CheckboxControl
-              label={__('Default Styles?', 'idx-broker-platinum')}
-              value={attributes.styles}
-              checked={(attributes.styles > 0)}
-              onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
-            />
+            <Panel>
+              <PanelBody title='Settings' initialOpen={true}>
+                <SelectControl
+                  label={__('Properties to Display:', 'idx-broker-platinum')}
+                  value={attributes.property_type}
+                  options={propertiesToFeature}
+                  onChange={(value) => { setAttributes({ property_type: value }) }}
+                />
+                <SelectControl
+                  label={__('Choose a saved link (if selected above):', 'idx-broker-platinum')}
+                  value={attributes.saved_link_id}
+                  options={(impress_carousel_saved_links || [{ label: 'All', value: '' }])}
+                  onChange={(value) => { setAttributes({ saved_link_id: value }) }}
+                />
+                <SelectControl
+                  label={__('Limit by Agent:', 'idx-broker-platinum')}
+                  value={attributes.agent_id}
+                  options={(impress_carousel_agent_list || [{ label: 'All', value: '' }])}
+                  onChange={(value) => { setAttributes({ agent_id: value }) }}
+                />
+                <TextControl
+                  label={__('Listings to show without scrolling:', 'idx-broker-platinum')}
+                  value={attributes.display}
+                  type='number'
+                  onChange={(value) => { setAttributes({ display: value }) }}
+                />
+                <TextControl
+                  label={__('Max number of listings to show:', 'idx-broker-platinum')}
+                  value={attributes.max}
+                  type='number'
+                  onChange={(value) => { setAttributes({ max: value }) }}
+                />
+                <SelectControl
+                  label={__('Sort Order:', 'idx-broker-platinum')}
+                  value={attributes.order}
+                  options={sortOptions}
+                  onChange={(value) => { setAttributes({ order: value }) }}
+                />
+                <CheckboxControl
+                  label={__('Autoplay?', 'idx-broker-platinum')}
+                  value={attributes.autoplay}
+                  checked={(attributes.autoplay > 0)}
+                  onChange={(value) => { setAttributes({ autoplay: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Open Listings in a New Window?', 'idx-broker-platinum')}
+                  value={attributes.new_window}
+                  checked={(attributes.new_window > 0)}
+                  onChange={(value) => { setAttributes({ new_window: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Default Styles?', 'idx-broker-platinum')}
+                  value={attributes.styles}
+                  checked={(attributes.styles > 0)}
+                  onChange={(value) => { setAttributes({ styles: (value > 0 ? 1 : 0) }) }}
+                />
+              </PanelBody>
+            </Panel>
           </InspectorControls>
         </div>
       )

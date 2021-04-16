@@ -66,28 +66,46 @@ class Idx_Pages {
 	/** Schedule IDX Page update regularly. **/
 	public function schedule_idx_page_update() {
 		$idx_cron_schedule = get_option( 'idx_cron_schedule' );
-		$next_create_event = wp_next_scheduled( 'idx_create_idx_pages' );
-		$next_delete_event = wp_next_scheduled( 'idx_delete_idx_pages' );
+		
+		// Construct next_create_event/next_delete_event objects to replicate output from wp_get_scheduled_event() until we raise the supported WP version to 5.1.0 or above.
+		$next_create_event            = new \stdClass();
+		$next_create_event->schedule  = wp_get_schedule( 'idx_create_idx_pages' );
+		$next_create_event->timestamp = wp_next_scheduled( 'idx_create_idx_pages' );
 
-		if ( wp_next_scheduled( 'idx_create_idx_pages' ) !== $idx_cron_schedule ) {
-			wp_clear_scheduled_hook( 'idx_create_idx_pages' );
-			wp_clear_scheduled_hook( 'idx_delete_idx_pages' );
-			wp_unschedule_event( $next_create_event, 'idx_create_idx_pages' );
-			wp_unschedule_event( $next_delete_event, 'idx_delete_idx_pages' );
-		}
+		$next_delete_event            = new \stdClass();
+		$next_delete_event->schedule  = wp_get_schedule( 'idx_delete_idx_pages' );
+		$next_delete_event->timestamp = wp_next_scheduled( 'idx_delete_idx_pages' );
 
+		// If disabled, clear hooks and return early.
 		if ( 'disabled' === $idx_cron_schedule ) {
-			wp_unschedule_event( $next_create_event, 'idx_create_idx_pages' );
-			wp_unschedule_event( $next_delete_event, 'idx_delete_idx_pages' );
+			if ( $next_create_event ) {
+				wp_unschedule_event( $next_create_event->timestamp, 'idx_create_idx_pages' );
+			}
+			if ( $next_delete_event ) {
+				wp_unschedule_event( $next_delete_event->timestamp, 'idx_delete_idx_pages' );
+			}
 			return;
 		}
+
+		// If current event interval/schedule is different than the saved value, update events and return early.
+		if ( $next_create_event && $next_create_event->schedule !== $idx_cron_schedule ) {
+			wp_clear_scheduled_hook( 'idx_create_idx_pages' );
+			wp_clear_scheduled_hook( 'idx_delete_idx_pages' );
+			wp_schedule_event( time(), $idx_cron_schedule, 'idx_create_idx_pages' );
+			wp_schedule_event( time(), $idx_cron_schedule, 'idx_delete_idx_pages' );
+			return;
+		}
+
+		// Schedule any missing events.
 		if ( ! wp_next_scheduled( 'idx_create_idx_pages' ) ) {
 			wp_schedule_event( time(), $idx_cron_schedule, 'idx_create_idx_pages' );
 		}
+
 		if ( ! wp_next_scheduled( 'idx_delete_idx_pages' ) ) {
 			wp_schedule_event( time(), $idx_cron_schedule, 'idx_delete_idx_pages' );
 		}
 	}
+
 	// to be called on plugin deactivation
 	public static function unschedule_idx_page_update() {
 		wp_clear_scheduled_hook( 'idx_create_idx_pages' );
@@ -330,10 +348,10 @@ class Idx_Pages {
 	 * Deletes IDX pages that dont have a url or title matching a systemlink url or title
 	 */
 	public function delete_idx_pages() {
-		// Only schedule update once IDX pages have UID
+		// Only schedule update once IDX pages have UID.
 		$uid_added = get_option( 'idx_added_uid_to_idx_pages' );
 		if ( empty( $uid_added ) ) {
-			return $this->app->make( '\IDX\Backward_Compatibility\Add_Uid_To_Idx_Pages' );
+			return new Backward_Compatibility\Add_Uid_To_Idx_Pages();
 		}
 
 		$posts = get_posts(

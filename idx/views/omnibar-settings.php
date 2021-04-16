@@ -395,16 +395,20 @@ EOT;
 			wp_die();
 		}
 		// Validate and process request.
-		if ( isset( $_POST['mlsPtIDs'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-omnibar-custom-field-nonce' ) ) {
+		if ( isset( $_POST['mlsPtIDs'], $_POST['placeholder'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-omnibar-custom-field-nonce' ) ) {
+
 			$fields = [];
 			// Sanitize fields data.
 			if ( ! empty( $_POST['fields'] ) && is_array( $_POST['fields'] ) ) {
-				$fields = filter_var_array( $_POST['fields'], FILTER_SANITIZE_STRING );
+				$fields = filter_var_array( wp_unslash( $_POST['fields'] ), FILTER_SANITIZE_STRING );
 			}
+
 			update_option( 'idx_omnibar_custom_fields', $fields, false );
-			update_option( 'idx_default_property_types', htmlspecialchars( $_POST['mlsPtIDs'] ), false );
-			update_option( 'idx_omnibar_placeholder', htmlspecialchars( $_POST['placeholder'] ), false );
-			wp_die( esc_attr( $this->has_property_type_changed() ) );
+			// Has_property_type_changed function must fire before the idx_default_property_types and idx_omnibar_placeholder options are updated.
+			$output = $this->has_property_type_changed();
+			update_option( 'idx_default_property_types', filter_var_array( wp_unslash( $_POST['mlsPtIDs'] ), FILTER_SANITIZE_STRING ), false );
+			update_option( 'idx_omnibar_placeholder', sanitize_text_field( wp_unslash( $_POST['placeholder'] ) ), false );
+			wp_die( esc_attr( $output ) );
 		}
 		wp_die();
 	}

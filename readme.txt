@@ -4,8 +4,8 @@ Contributors: idxco
 Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 4.6
-Tested up to: 5.3.2
-Stable tag: 2.6.2
+Tested up to: 5.6.0
+Stable tag: 2.6.7
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -60,7 +60,7 @@ Back up your expertise with neighborhood and community pages. Write a story, or 
 Assign leads to your agents exactly the way you want. Choose from multiple lead routing options, including [round robin](http://www.idxbroker.com/features/round-robin-and-core-fields-lead-routing), custom assignments for neighborhood pages, using a [showcase widget](https://www.idxbroker.com/features/listing-showcase-and-slideshow-widget), or by creating a unique [bio page](http://www.idxbroker.com/features/agent-bio-page-wrapper) for each agent!
 
 <h4>Affordable Pricing</h4>
-IMPress for IDX Broker requires an IDX Broker account. Plans start at $50/mo for IDX Broker Lite and $70/mo for IDX Broker Platinum. [View all features now](http://www.idxbroker.com/compare-idx).
+IMPress for IDX Broker requires an IDX Broker account. Lite plans start at $50/mo and offer the essential features and functionality needed for home search. Platinum plans start at $80/mo and include the features of Lite plus map search widgets, Market Reports, Sold Data and much more.
 
 IDX Broker also offers fully-hosted real estate websites – IDX Broker HOME – which include IDX Broker Platinum and live support starting at $150 per month.
 
@@ -103,8 +103,13 @@ Yes. All IDX feeds require approval from a local board or MLS. If you (or your c
 No. IDX Broker requires a month-to-month agreement only. 
  
 = What is the pricing for IDX Broker services? =
-There are three monthly account levels - Agent ($39.99+), Team ($69.99+), and Office ($98.99+). <a href="https://www.idxbroker.com/idx_broker">Read more about pricing.</a>
- 
+IDX Broker offers three account levels: Lite, Platinum and HOME. 
+- Lite monthly subscriptions: Agent ($50+), Team ($70+), and Office ($100+)
+- Platinum monthly subscriptions: Agent ($80+), Team ($100+), and Office ($130+)
+- HOME monthly subscriptions: Agent ($150+), Team ($170+), and Office ($200+)
+
+<a target="_blank" href="https://idxbroker.com/idx_broker#lite">Read more about pricing.</a>
+
 = What can I expect if I decide to get my IDX feed through IDX Broker? =
 When you sign up for a new account our MLS team will send you a Docusign email (or PDF). Simply add your signature to the Docusign file or PDF in order to proceed. If you are not a Principal Broker, and have provided us with your Broker name and contact information, we will then forward the same paperwork to your Broker for approval. Once we receive the paperwork from your Broker, we will send to the MLS for data approval. MLS approval can take anywhere from 3-10 days. Once approved, we will activate your account, integrate your site's design into IDX pages, and send you IDX Broker login credentials so that you can use this plugin to add links and Widgets to your site or blog.
  
@@ -131,6 +136,31 @@ This plugin requires a PHP version higher than 5.6. For security reasons, we rec
 13. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+
+= 2.6.7 =
+* Fix: Issues with the Omnibar widget not creating the required locationlist.js file
+* Fix: IMPress Showcase widget not correctly filtering by agent
+* Fix: Market Report and Virtual Tour IDX Broker widgets now load correctly
+* New: Option to include a developer partner API key (field appears by adding '&idxdev' to the URL on the IDX IMPress > Initial Settings page)
+
+= 2.6.6 =
+* New: Omnibar step control increments increased
+* Fix: Gutenberg block menu padding
+* Fix: Resolves bug that caused some cron scheduling issues
+* Fix: Resolves rest route registration warnings
+
+= 2.6.5 =
+* New: Pricing information changes
+
+= 2.6.4 =
+* Fix: Resolves issue with IDX Broker API that prevented supplemental listings from importing when using IMPress Listings.
+
+= 2.6.3 =
+* New: reCAPTCHA v3 support added to the IMPress Lead Signup widget.
+* Fix: Add IDX Shortcode button blocks other buttons when using the classic editor.
+* Fix: Resolves omnibar issues that could prevent the default property type from saving.
+* Fix: Resolves issue where addresses used for omnibar searches would not save correctly.
+* Fix: Sold supplemental listings being included with active results for IMPress Carousel and Showcase widgets.
 
 = 2.6.2 =
 * Fix: Resolves potential security issues in settings forms and adds additional capability checks.
