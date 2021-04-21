@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PostCell from './PostCell.js'
 import LoadingSpinner from './LoadingSpinner.js'
 import styled from 'styled-components'
@@ -69,28 +69,25 @@ const Line = styled.line`
   stroke-linecap: round;
 `
 
-class SavedPostsPane extends Component {
-  constructor () {
-    super()
-    this.cellScrollerRef = React.createRef()
-  }
+function SavedPostsPane (props) {
+  const cellScrollerRef = React.createRef()
 
-  leftArrowPressed () {
-    this.cellScrollerRef.current.scrollBy({
+  const leftArrowPressed = () => {
+    cellScrollerRef.current.scrollBy({
       left: -400,
       behavior: 'smooth'
     })
   }
 
-  rightArrowPressed () {
-    this.cellScrollerRef.current.scrollBy({
+  const rightArrowPressed = () => {
+    cellScrollerRef.current.scrollBy({
       left: 400,
       behavior: 'smooth'
     })
   }
 
-  hideButtons () {
-    const cellCount = this.props.posts.allIds.length
+  const hideButtons = () => {
+    const cellCount = props.posts.allIds.length
     // '249' is cell width (199px) + right margin (50px).
     const combinedCellWidth = cellCount * 249
 
@@ -99,85 +96,84 @@ class SavedPostsPane extends Component {
     }
 
     // Account for WP sidebar (360px) on screens above 959px wide.
-    if (this.props.screenSize.width > 959) {
-      if ((this.props.screenSize.width - 360) < combinedCellWidth) {
+    if (props.screenSize.width > 959) {
+      if ((props.screenSize.width - 360) < combinedCellWidth) {
         return false
       } else {
         return true
       }
     } else {
-      if (this.props.screenSize.width < combinedCellWidth) {
+      if (props.screenSize.width < combinedCellWidth) {
         return false
       } else {
         return true
       }
     }
-
   }
 
-  render () {
-    const { isLoaded, updatePostEditor, deletePost, cellDrag } = this.props
-    const posts = this.props.posts.byId
+  const { isLoaded, updatePostEditor, deletePost, cellDrag } = props
+  const posts = props.posts.byId
 
-    let loadingIndicator, leftButton, rightButton
-
-    if (!isLoaded) {
-      loadingIndicator = <LoadingSpinner />
-    }
-
-    if (!this.hideButtons()) {
-      leftButton =
-        <Button onClick={() => this.leftArrowPressed()}>
+  const leftButton = () => {
+    if (!hideButtons()) {
+      return (
+        <Button onClick={() => leftArrowPressed()}>
           <ButtonIcon height='18' width='18'>
             <Circle cx='18' cy='18' r='31.5' />
             <Line x1='8' y1='18' x2='24' y2='3' />
             <Line x1='8' y1='18' x2='24' y2='33' />
           </ButtonIcon>
         </Button>
+      )
+    }
+  }
 
-      rightButton =
-        <Button onClick={() => this.rightArrowPressed()}>
+  const rightButton = () => {
+    if (!hideButtons()) {
+      return (
+        <Button onClick={() => rightArrowPressed()}>
           <ButtonIcon height='18' width='18'>
             <Circle cx='18' cy='18' r='31' strokeWidth='4' />
             <Line x1='28' y1='18' x2='12' y2='3' strokeLinecap='round' />
             <Line x1='28' y1='18' x2='12' y2='33' strokeLinecap='round' />
           </ButtonIcon>
         </Button>
+      )
     }
-
-    return (
-      <>
-        <SavedPostsContainer>
-          <HeaderContainer>
-            <Header>Saved Posts</Header>
-          </HeaderContainer>
-          {loadingIndicator}
-          <CarouselContainer>
-            {leftButton}
-            <CustomPostCellsContainer ref={this.cellScrollerRef} hideButtons={this.hideButtons()}>
-              {Object.keys(posts).reverse().map(id => (
-                <PostCell
-                  key={id}
-                  id={id}
-                  title={posts[id].title}
-                  postUrl={posts[id].postUrl}
-                  imageUrl={posts[id].imageUrl}
-                  summary={posts[id].summary}
-                  date={posts[id].lastPublished}
-                  updatePostEditor={updatePostEditor}
-                  removalHandler={deletePost}
-                  cellDrag={cellDrag}
-                  dragOperationType='addToSchedule'
-                  editingMode
-                />
-              ))}
-            </CustomPostCellsContainer>
-            {rightButton}
-          </CarouselContainer>
-        </SavedPostsContainer>
-      </>
-    )
   }
+
+  return (
+    <>
+      <SavedPostsContainer>
+        <HeaderContainer>
+          <Header>Saved Posts</Header>
+        </HeaderContainer>
+        {(!isLoaded) ? <LoadingSpinner /> : ''}
+        <CarouselContainer>
+          {leftButton()}
+          <CustomPostCellsContainer ref={cellScrollerRef} hideButtons={hideButtons()}>
+            {Object.keys(posts).reverse().map(id => (
+              <PostCell
+                key={id}
+                id={id}
+                title={posts[id].title}
+                postUrl={posts[id].postUrl}
+                imageUrl={posts[id].imageUrl}
+                summary={posts[id].summary}
+                date={posts[id].lastPublished}
+                updatePostEditor={updatePostEditor}
+                removalHandler={deletePost}
+                cellDrag={cellDrag}
+                dragOperationType='addToSchedule'
+                editingMode
+              />
+            ))}
+          </CustomPostCellsContainer>
+          {rightButton()}
+        </CarouselContainer>
+      </SavedPostsContainer>
+    </>
+  )
 }
 
 export default SavedPostsPane

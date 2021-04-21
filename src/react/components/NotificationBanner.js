@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const BannerContainer = styled.div`
@@ -48,21 +48,19 @@ const Line = styled.line`
   stroke-width: 4;
 `
 
-class NotificationBanner extends Component {
-  render () {
-    return (
-      <BannerContainer>
-        <BannerLabel>Create a new post or drag a listing to &ldquo;Scheduled Posts&rdquo; to get started.</BannerLabel>
-        <Button onClick={() => this.props.dismissBanner()}>
-          <ButtonIcon height='18' width='18'>
-            <Circle cx='9' cy='9' r='27' strokeWidth='3' fillOpacity='0' />
-            <Line x1='0' y1='0' x2='18' y2='18' strokeLinecap='round' />
-            <Line x1='18' y1='0' x2='0' y2='18' strokeLinecap='round' />
-          </ButtonIcon>
-        </Button>
-      </BannerContainer>
-    )
-  }
+function NotificationBanner (props) {
+  return (
+    <BannerContainer>
+      <BannerLabel>Create a new post or drag a listing to &ldquo;Scheduled Posts&rdquo; to get started.</BannerLabel>
+      <Button onClick={() => props.dismissBanner()}>
+        <ButtonIcon height='18' width='18'>
+          <Circle cx='9' cy='9' r='27' strokeWidth='3' fillOpacity='0' />
+          <Line x1='0' y1='0' x2='18' y2='18' strokeLinecap='round' />
+          <Line x1='18' y1='0' x2='0' y2='18' strokeLinecap='round' />
+        </ButtonIcon>
+      </Button>
+    </BannerContainer>
+  )
 }
 
 export default NotificationBanner
