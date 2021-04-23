@@ -118,6 +118,7 @@ class Register_Impress_Shortcodes {
 					'agent_id'      => '',
 					'styles'        => 1,
 					'new_window'    => 0,
+					'colistings'    => 1,
 				),
 				$atts
 			)
@@ -194,11 +195,33 @@ class Register_Impress_Shortcodes {
 			$properties = array_reverse( $properties );
 		}
 
+		// Used to hold agent data when matching for colistings.
+		$agent_data;
+
 		foreach ( $properties as $prop ) {
 
 			if ( ! empty( $agent_id ) ) {
+				// Check if listing agent ID matches agent's IDX ID.
 				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
-					continue;
+					// If colistings is enabled, check for match.
+					if ( $colistings ) {
+						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
+							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
+							if ( empty( $agent_data ) ) {
+								$agent_data = $this->idx_api->idx_api( 'agents?filterField=agentID&filterValue=' . $agent_id, IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
+							}
+							// Check the listing's coListingAgentID against the agent's raw MLS-provided ID, continues if no match.
+							if ( empty( $agent_data['agent'][0]['listingAgentID'] ) || $agent_data['agent'][0]['listingAgentID'] !== $prop['coListingAgentID'] ) {
+								continue;
+							}
+						} else {
+							// Listing does not have coListingAgentID field data to match against.
+							continue;
+						}
+					} else {
+						// Colistings setting is not enabled.
+						continue;
+					}
 				}
 			}
 
@@ -283,10 +306,10 @@ class Register_Impress_Shortcodes {
 						$prop['unitNumber'],
 						$prop['cityName'],
 						$prop['state'],
-						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+						$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
+						$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
+						$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
+						$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 						$this->maybe_add_disclaimer_and_courtesy( $prop ),
 						$column_class,
 						$target
@@ -329,10 +352,10 @@ class Register_Impress_Shortcodes {
 						$prop['unitNumber'],
 						$prop['cityName'],
 						$prop['state'],
-						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+						$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
+						$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
+						$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
+						$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 						$column_class,
 						$target
 					),
@@ -494,6 +517,7 @@ class Register_Impress_Shortcodes {
 					'property_type' => 'featured',
 					'saved_link_id' => '',
 					'agent_id'      => '',
+					'colistings'    => 1,
 					'styles'        => 1,
 					'new_window'    => 0,
 				),
@@ -594,11 +618,32 @@ class Register_Impress_Shortcodes {
 
 		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $display );
 
+		// Used to hold agent data when matching for colistings.
+		$agent_data;
+
 		foreach ( $properties as $prop ) {
 
-			if ( isset( $agent_id, $prop['userAgentID'] ) && ! empty( $agent_id ) ) {
-				if ( (int) $agent_id !== (int) $prop['userAgentID'] ) {
-					continue;
+			if ( ! empty( $agent_id ) ) {
+				// Check if listing agent ID matches agent's IDX ID.
+				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
+					// If colistings is enabled, check for match.
+					if ( $colistings ) {
+						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
+							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
+							if ( empty( $agent_data ) ) {
+								$agent_data = $this->idx_api->idx_api( 'agents?filterField=agentID&filterValue=' . $agent_id, IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
+							}
+							// And finally, check the listing's coListingAgentID against the agent's raw MLS-provided ID.
+							if ( empty( $agent_data['agent'][0]['listingAgentID'] ) || $agent_data['agent'][0]['listingAgentID'] !== $prop['coListingAgentID'] ) {
+								continue;
+							}
+						} else {
+							// Continue as the listing does not have coListingAgentID field data to match against.
+							continue;
+						}
+					} else {
+						continue;
+					}
 				}
 			}
 
@@ -660,10 +705,10 @@ class Register_Impress_Shortcodes {
 					$prop['unitNumber'],
 					$prop['cityName'],
 					$prop['state'],
-					$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-					$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-					$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-					$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+					$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
+					$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
+					$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
+					$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 					$disclaimer,
 					$target
 				),
@@ -842,6 +887,16 @@ class Register_Impress_Shortcodes {
 							'attr'  => 'agent_id',
 							'type'  => 'text',
 							'value' => '',
+						),
+						array(
+							'label' => 'Include selected agent\'s colistings',
+							'attr'  => 'colistings',
+							'type'    => 'radio',
+							'value'   => 1,
+							'options' => array(
+								1 => 'Yes',
+								0 => 'No',
+							),
 						),
 					),
 				)

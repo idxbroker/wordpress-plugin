@@ -44,6 +44,10 @@ registerBlockType(
       agent_id: {
         type: 'string',
         default: ''
+      },
+      colistings: {
+        type: 'int',
+        default: 1
       }
     },
     edit: ({ attributes, setAttributes }) => {
@@ -74,6 +78,12 @@ registerBlockType(
                   value={attributes.agent_id}
                   options={(impress_carousel_agent_list || [{ label: 'All', value: '' }])}
                   onChange={(value) => { setAttributes({ agent_id: value }) }}
+                />
+                <CheckboxControl
+                  label={__('Include colistings for selected agent?', 'idx-broker-platinum')}
+                  value={attributes.colistings}
+                  checked={(attributes.colistings > 0)}
+                  onChange={(value) => { setAttributes({ colistings: (value > 0 ? 1 : 0) }) }}
                 />
                 <TextControl
                   label={__('Listings to show without scrolling:', 'idx-broker-platinum')}

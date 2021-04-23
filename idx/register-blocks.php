@@ -511,6 +511,9 @@ class Register_Blocks {
 					'agent_id' => [
 						'type' => 'string',
 					],
+					'colistings' => [
+						'type' => 'integer',
+					],
 				],
 				'editor_script'   => 'impress-carousel-block',
 				'render_callback' => [ $this, 'impress_carousel_block_render' ],
@@ -595,6 +598,9 @@ class Register_Blocks {
 					],
 					'agent_id' => [
 						'type' => 'string',
+					],
+					'colistings' => [
+						'type' => 'integer',
 					],
 					'styles' => [
 						'type' => 'integer',
