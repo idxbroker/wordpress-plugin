@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import FrequencySlider from './FrequencySlider.js'
 import ScheduleCellsContainer from './ScheduleCellsContainer.js'
 import styled from 'styled-components'
@@ -34,28 +34,26 @@ const Label = styled.div`
   margin-top: 12px;
 `
 
-class SchedulePane extends Component {
-  render () {
-    const { frequencySliderValue } = this.props.postingDateSettings
-    return (
-      <SchedulePaneContainer>
-        <Header>Scheduled Posts</Header>
-        <Label>Frequency</Label>
-        <SubHeader>Posts expire in 7 days.</SubHeader>
-        <FrequencySlider updateFrequency={this.props.updateFrequency} frequencySliderValue={frequencySliderValue} />
-        <ScheduleCellsContainer
-          posts={this.props.posts}
-          updatePostEditor={this.props.updatePostEditor}
-          removeFromSchedule={this.props.removeFromSchedule}
-          postingDateSettings={this.props.postingDateSettings}
-          cellDrag={this.props.cellDrag}
-          cellDrop={this.props.cellDrop}
-          addScheduleCells={this.props.addScheduleCells}
-          isLoaded={this.props.isLoaded}
-        />
-      </SchedulePaneContainer>
-    )
-  }
+function SchedulePane (props) {
+  const { frequencySliderValue } = props.postingDateSettings
+  return (
+    <SchedulePaneContainer>
+      <Header>Scheduled Posts</Header>
+      <Label>Frequency</Label>
+      <SubHeader>Posts expire in 7 days.</SubHeader>
+      <FrequencySlider updateFrequency={props.updateFrequency} frequencySliderValue={frequencySliderValue} />
+      <ScheduleCellsContainer
+        posts={props.posts}
+        updatePostEditor={props.updatePostEditor}
+        removeFromSchedule={props.removeFromSchedule}
+        postingDateSettings={props.postingDateSettings}
+        cellDrag={props.cellDrag}
+        cellDrop={props.cellDrop}
+        addScheduleCells={props.addScheduleCells}
+        isLoaded={props.isLoaded}
+      />
+    </SchedulePaneContainer>
+  )
 }
 
 export default SchedulePane

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import SettingsPageWrapper from '../components/SettingsPageWrapper.js'
 import NotificationBanner from '../components/NotificationBanner.js'
@@ -43,230 +43,180 @@ const SettingsRow = styled.div`
   }
 `
 
-class GoogleMyBusinessSettings extends Component {
-  constructor () {
-    super()
-    let initialSliderValue
-    switch (impressGmbAdmin['auto-post-frequency']) {
+function GoogleMyBusinessSettings (props) {
+  const getInitialSliderValue = (currentSetting) => {
+    switch (currentSetting) {
       case 'weekly':
-        initialSliderValue = 0
-        break
+        return 0
       case 'biweekly':
-        initialSliderValue = 1
-        break
+        return 1
       case 'monthly':
-        initialSliderValue = 2
-        break
+        return 2
       default:
-        initialSliderValue = 1
+        return 1
     }
-    this.state = {
-      bannerDismissed: impressGmbAdmin['instruction-banner-dismissed'],
-      postDataReady: false,
-      savingToServer: false,
-      growlerText: '',
-      postingDateSettings: {
-        postFrequency: impressGmbAdmin['auto-post-frequency'],
-        nextPostTimestamp: impressGmbAdmin['next-scheduled-post-date'],
-        frequencySliderValue: initialSliderValue
-      },
-      formData: {
-        id: null,
-        title: '',
-        imageUrl: '',
-        postUrl: '',
-        summary: '',
-        editingMode: false
-      },
-      posts: {
-        byId: {},
-        allIds: [],
-        scheduledIds: []
-      },
-      screenSize: {
-        height: window.innerHeight,
-        width: window.innerWidth
-      }
-    }
-    this.updatePostEditor = this.updatePostEditor.bind(this)
-    this.dismissBanner = this.dismissBanner.bind(this)
-    this.removeFromSchedule = this.removeFromSchedule.bind(this)
-    this.deletePost = this.deletePost.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.cellDrag = this.cellDrag.bind(this)
-    this.cellDrop = this.cellDrop.bind(this)
-    this.addScheduleCells = this.addScheduleCells.bind(this)
-    this.updateSchedule = this.updateSchedule.bind(this)
-    this.savePost = this.savePost.bind(this)
-    this.postNow = this.postNow.bind(this)
-    this.updateFrequency = this.updateFrequency.bind(this)
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
-    this.editorRef = React.createRef()
-    this.getPostsData()
   }
 
-  componentDidMount () {
-    this.updateWindowDimensions()
-    window.addEventListener('resize', this.updateWindowDimensions)
-  }
+  const editorRef = useRef(null)
+  const [bannerDismissed, setBannerDismissed] = useState(impressGmbAdmin['instruction-banner-dismissed'])
+  const [postDataReady, setPostDataReady] = useState(false)
+  const [savingToServer, setSavingToServer] = useState(false)
+  const [growlerText, setGrowlerText] = useState('')
+  const [postingDateSettings, setPostingDateSettings] = useState({
+    postFrequency: impressGmbAdmin['auto-post-frequency'],
+    nextPostTimestamp: impressGmbAdmin['next-scheduled-post-date'],
+    frequencySliderValue: getInitialSliderValue(impressGmbAdmin['auto-post-frequency'])
+  })
+  const [formData, setFormData] = useState({
+    id: null,
+    title: '',
+    imageUrl: '',
+    postUrl: '',
+    summary: '',
+    editingMode: false
+  })
+  const [posts, setPosts] = useState({
+    byId: {},
+    allIds: [],
+    scheduledIds: []
+  })
+  const [screenSize, setScreenSize] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth
+  })
 
-  componentWillUnmount () {
-    window.removeEventListener('resize', this.updateWindowDimensions)
-  }
+  useEffect(() => {
+    updateWindowDimensions()
+    window.addEventListener('resize', updateWindowDimensions())
+    getPostsData()
+  }, [])
 
-  updateWindowDimensions () {
-    this.setState({
-      screenSize: {
-        width: window.innerWidth,
-        height: window.innerHeight
-      }
+  const updateWindowDimensions = () => {
+    setScreenSize({
+      width: window.innerWidth,
+      height: window.innerHeight
     })
   }
 
-  getPostsData () {
-    const formData = new FormData()
-    formData.append('action', 'impress_gmb_get_posts_data')
-    formData.append('nonce', impressGmbAdmin['nonce-gmb-get-posts-data'])
-    axios.post(ajaxurl, formData)
+  const getPostsData = () => {
+    const requestFormData = new FormData()
+    requestFormData.append('action', 'impress_gmb_get_posts_data')
+    requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-get-posts-data'])
+    axios.post(ajaxurl, requestFormData)
       .then((response) => {
         // Return early for non-200 status
         if (response.status !== 200) {
-          this.setState({
-            postDataReady: true
-          })
+          setPostDataReady(true)
           return
         }
-        this.setState({
-          posts: response.data,
-          postDataReady: true
-        })
+        setPosts(response.data)
+        setPostDataReady(true)
 
         if (response.data.scheduledIds.length < 4) {
           const currentSchedule = response.data.scheduledIds
           while (currentSchedule.length < 4) currentSchedule.push('-')
-          this.setState({
-            posts: {
-              ...this.state.posts,
-              scheduledIds: currentSchedule
-            }
+          setPosts({
+            ...posts,
+            scheduledIds: currentSchedule
           })
         }
       }, (error) => {
         // If error occurs, log to console for troubleshooting
-        this.setState({
-          postDataReady: true
-        })
+        setPostDataReady(true)
         console.log(error)
       })
   }
 
-  cellDrag (event, cellData) {
+  const cellDrag = (event, cellData) => {
     event.dataTransfer.setData('cellData', JSON.stringify(cellData))
   }
 
-  cellDrop (event, targetIndex) {
-    if (this.state.savingToServer) {
+  const cellDrop = (event, targetIndex) => {
+    if (savingToServer) {
       return
     }
     const { id, dragOperationType, positionIndex, title, postUrl, imageUrl, summary, editingMode } = JSON.parse(event.dataTransfer.getData('cellData'))
 
     if (dragOperationType === 'scheduleReorder') {
-      const currentSchedule = this.state.posts.scheduledIds
+      const currentSchedule = posts.scheduledIds
       const destinationItem = currentSchedule[targetIndex]
       currentSchedule[targetIndex] = currentSchedule[positionIndex]
       currentSchedule[positionIndex] = destinationItem
-      this.setState({
-        posts: {
-          ...this.state.posts,
-          scheduledIds: currentSchedule
-        }
+      setPosts({
+        ...posts,
+        scheduledIds: currentSchedule
       })
-      this.updateSchedule(currentSchedule)
+      updateSchedule(currentSchedule)
     }
 
     if (dragOperationType === 'addToSchedule') {
-      const currentSchedule = this.state.posts.scheduledIds
+      const currentSchedule = posts.scheduledIds
       currentSchedule[targetIndex] = id
-      this.setState({
-        posts: {
-          ...this.state.posts,
-          scheduledIds: currentSchedule
-        }
+      setPosts({
+        ...posts,
+        scheduledIds: currentSchedule
       })
-      this.updateSchedule(currentSchedule)
+      updateSchedule(currentSchedule)
     }
 
     if (dragOperationType === 'createFromListing') {
-      this.updatePostEditor(event, { title, postUrl, imageUrl, summary, editingMode })
+      updatePostEditor(event, { title, postUrl, imageUrl, summary, editingMode })
     }
   }
 
-  addScheduleCells () {
-    this.setState({
-      posts: {
-        ...this.state.posts,
-        scheduledIds: this.state.posts.scheduledIds.concat(['-', '-', '-', '-'])
-      }
+  const addScheduleCells = () => {
+    setPosts({
+      ...posts,
+      scheduledIds: posts.scheduledIds.concat(['-', '-', '-', '-'])
     })
   }
 
-  updateSchedule (schedule) {
-    this.setState({
-      savingToServer: true,
-      growlerText: 'Saving...'
-    })
-    const formData = new FormData()
-    formData.append('action', 'impress_gmb_update_scheduled_posts')
-    formData.append('nonce', impressGmbAdmin['nonce-gmb-update-scheduled-posts'])
-    formData.append('scheduled_posts', schedule)
-    axios.post(ajaxurl, formData)
+  const updateSchedule = (schedule) => {
+    setSavingToServer(true)
+    setGrowlerText('Saving...')
+    const requestFormData = new FormData()
+    requestFormData.append('action', 'impress_gmb_update_scheduled_posts')
+    requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-update-scheduled-posts'])
+    requestFormData.append('scheduled_posts', schedule)
+    axios.post(ajaxurl, requestFormData)
       .then((response) => {
         // Return early for non-200 status
         if (response.status !== 200) {
-          this.setState({
-            savingToServer: false,
-            growlerText: 'Save failed'
-          })
+          setSavingToServer(false)
+          setGrowlerText('Save failed')
           return
         }
         // Update state on success
-        this.setState({
-          savingToServer: false,
-          growlerText: 'Saved!',
-          posts: {
-            ...this.state.posts,
-            scheduledIds: response.data
-          }
+        setSavingToServer(false)
+        setGrowlerText('Saved!')
+        setPosts({
+          ...posts,
+          scheduledIds: response.data
         })
       }, (error) => {
-        this.setState({
-          savingToServer: false,
-          growlerText: 'Error: ' + error.response
-        })
+        setSavingToServer(false)
+        setGrowlerText('Error: ' + error.response)
       })
   }
 
-  updateFrequency (event) {
-    this.setState({
-      postingDateSettings: {
-        ...this.state.postingDateSettings,
-        frequencySliderValue: event.target.value,
-        postFrequency: this.getFrequencyString(event.target.value)
-      }
+  const updateFrequency = (event) => {
+    setPostingDateSettings({
+      ...postingDateSettings,
+      frequencySliderValue: event.target.value,
+      postFrequency: getFrequencyString(event.target.value)
     })
-    const formData = new FormData()
-    formData.append('action', 'impress_gmb_change_posting_frequency')
-    formData.append('nonce', impressGmbAdmin['nonce-gmb-update-post-frequency'])
-    formData.append('interval', event.target.value)
-    axios.post(ajaxurl, formData)
+    const requestFormData = new FormData()
+    requestFormData.append('action', 'impress_gmb_change_posting_frequency')
+    requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-update-post-frequency'])
+    requestFormData.append('interval', event.target.value)
+    axios.post(ajaxurl, requestFormData)
       .then((response) => {
       }, (error) => {
         console.log(error)
       })
   }
 
-  getFrequencyString (value) {
+  const getFrequencyString = (value) => {
     switch (parseInt(value)) {
       case 0:
         return 'weekly'
@@ -279,345 +229,303 @@ class GoogleMyBusinessSettings extends Component {
     }
   }
 
-  handleChange (event) {
-    this.setState({
-      formData: {
-        ...this.state.formData,
-        [event.target.name]: event.target.value
-      }
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
     })
   }
 
-  handleSubmit (event) {
+  const handleSubmit = (event) => {
     event.preventDefault()
   }
 
-  removeFromSchedule (event, cellData) {
+  const removeFromSchedule = (event, cellData) => {
     event.stopPropagation()
-    if (this.state.savingToServer) {
+    if (savingToServer) {
       return
     }
 
     const { positionIndex } = cellData
-    const currentSchedule = this.state.posts.scheduledIds
+    const currentSchedule = posts.scheduledIds
 
-    if (this.state.posts.scheduledIds[parseInt(positionIndex)] !== '-') {
+    if (posts.scheduledIds[parseInt(positionIndex)] !== '-') {
       currentSchedule.splice(parseInt(positionIndex), 1, '-')
     } else {
       currentSchedule.splice(parseInt(positionIndex), 1)
     }
 
-    this.setState({
-      savingToServer: true,
-      growlerText: 'Removing...',
-      posts: {
-        ...this.state.posts,
-        scheduledIds: currentSchedule
-      }
+    setSavingToServer(true)
+    setGrowlerText('Removing...')
+    setPosts({
+      ...posts,
+      scheduledIds: currentSchedule
     })
-    const formData = new FormData()
-    formData.append('action', 'impress_gmb_remove_from_schedule')
-    formData.append('nonce', impressGmbAdmin['nonce-gmb-remove-from-schedule'])
-    formData.append('index', positionIndex)
-    axios.post(ajaxurl, formData)
+    const requestFormData = new FormData()
+    requestFormData.append('action', 'impress_gmb_remove_from_schedule')
+    requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-remove-from-schedule'])
+    requestFormData.append('index', positionIndex)
+    axios.post(ajaxurl, requestFormData)
       .then((response) => {
         // Return early for non-200 status
         if (response.status !== 200) {
-          this.setState({
-            savingToServer: false,
-            growlerText: 'Change failed'
-          })
+          setSavingToServer(false)
+          setGrowlerText('Change failed')
           // Get fresh copy of server data in case of failure
-          this.getPostsData()
+          getPostsData()
           return
         }
         // Update state on success
-        this.setState({
-          savingToServer: false,
-          growlerText: 'Removed!'
-        })
+        setSavingToServer(false)
+        setGrowlerText('Removed!')
       }, (error) => {
-        this.setState({
-          savingToServer: false,
-          growlerText: 'Error: ' + error.response
-        })
+        setSavingToServer(false)
+        setGrowlerText('Error: ' + error.response)
         // Get fresh copy of server data in case of failure
-        this.getPostsData()
+        getPostsData()
       })
   }
 
-  deletePost (event, cellData) {
+  const deletePost = (event, cellData) => {
     event.stopPropagation()
-    if (this.state.savingToServer) {
+    if (savingToServer) {
       return
     }
     const { id } = cellData
     const confirmation = confirm('Delete post?')
     if (confirmation) {
-      const posts = this.state.posts.byId
-      delete posts[parseInt(id)]
+      const currentPosts = posts.byId
+      delete currentPosts[parseInt(id)]
 
       // Clear form if deleted cell happened to be in the editor at the time.
-      if (this.state.formData.id === id) {
-        this.setState({
-          formData: {
-            id: null,
-            title: '',
-            imageUrl: '',
-            postUrl: '',
-            summary: '',
-            editingMode: false
-          }
+      if (formData.id === id) {
+        setFormData({
+          id: null,
+          title: '',
+          imageUrl: '',
+          postUrl: '',
+          summary: '',
+          editingMode: false
         })
       }
 
-      this.setState({
-        savingToServer: true,
-        growlerText: 'Deleting post...',
-        posts: {
-          ...this.state.posts,
-          byId: posts,
-          allIds: this.state.posts.allIds.filter(i => i.toString() !== id),
-          scheduledIds: this.state.posts.scheduledIds.filter(i => i.toString() !== id)
-        }
+      setSavingToServer(true)
+      setGrowlerText('Deleting post...')
+      setPosts({
+        ...posts,
+        byId: currentPosts,
+        allIds: posts.allIds.filter(i => i.toString() !== id),
+        scheduledIds: posts.scheduledIds.filter(i => i.toString() !== id)
       })
-      const formData = new FormData()
-      formData.append('action', 'impress_gmb_delete_custom_post')
-      formData.append('nonce', impressGmbAdmin['nonce-gmb-delete-custom-post'])
-      formData.append('postId', parseInt(id))
-      axios.post(ajaxurl, formData)
+
+      const requestFormData = new FormData()
+      requestFormData.append('action', 'impress_gmb_delete_custom_post')
+      requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-delete-custom-post'])
+      requestFormData.append('postId', parseInt(id))
+      axios.post(ajaxurl, requestFormData)
         .then((response) => {
           // Return early for non-200 status
           if (response.status !== 200) {
-            this.setState({
-              savingToServer: false,
-              growlerText: 'Deletion failed'
-            })
+            setSavingToServer(false)
+            setGrowlerText('Deletion failed')
             // Get fresh copy of server data in case of failure
-            this.getPostsData()
+            getPostsData()
             return
           }
           // Update state on success
-          this.setState({
-            savingToServer: false,
-            growlerText: 'Deleted!'
-          })
+          setSavingToServer(false)
+          setGrowlerText('Deleted!')
         }, (error) => {
-          this.setState({
-            savingToServer: false,
-            growlerText: 'Error: ' + error.response
-          })
+          setSavingToServer(false)
+          setGrowlerText('Error: ' + error.response)
           // Get fresh copy of server data in case of failure
-          this.getPostsData()
+          getPostsData()
         })
     }
   }
 
-  savePost (event) {
-    const { id, title, imageUrl, postUrl, summary } = this.state.formData
+  const savePost = (event) => {
+    const { id, title, imageUrl, postUrl, summary } = formData
     if (!title || !imageUrl || !postUrl || !summary) {
       return
     }
-    this.setState({
-      savingToServer: true,
-      growlerText: 'Saving post...'
-    })
-    const formData = new FormData()
-    formData.append('action', 'impress_gmb_save_custom_post')
-    formData.append('nonce', impressGmbAdmin['nonce-gmb-save-custom-post'])
-    formData.append('title', title)
-    formData.append('postUrl', postUrl)
-    formData.append('imageUrl', imageUrl)
-    formData.append('summary', summary)
+    setSavingToServer(true)
+    setGrowlerText('Saving post...')
+    const requestFormData = new FormData()
+    requestFormData.append('action', 'impress_gmb_save_custom_post')
+    requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-save-custom-post'])
+    requestFormData.append('title', title)
+    requestFormData.append('postUrl', postUrl)
+    requestFormData.append('imageUrl', imageUrl)
+    requestFormData.append('summary', summary)
     if (id) {
-      formData.append('id', id)
+      requestFormData.append('id', id)
     }
-    axios.post(ajaxurl, formData)
+    axios.post(ajaxurl, requestFormData)
       .then((response) => {
         // Return early for non-200 status
         if (response.status !== 200) {
-          this.setState({
-            savingToServer: false,
-            growlerText: 'Save failed'
-          })
+          setSavingToServer(false)
+          setGrowlerText('Save failed')
           return
         }
         // Update state on success
         let updatedScheduleIds
-        if (!this.state.formData.editingMode) {
-          const blankEntryIndex = this.state.posts.scheduledIds.indexOf('-')
+        if (!formData.editingMode) {
+          const blankEntryIndex = posts.scheduledIds.indexOf('-')
           if (blankEntryIndex === -1) {
-            updatedScheduleIds = [...this.state.posts.scheduledIds, [response.data.id]]
+            updatedScheduleIds = [...posts.scheduledIds, [response.data.id]]
           } else {
-            updatedScheduleIds = this.state.posts.scheduledIds
+            updatedScheduleIds = posts.scheduledIds
             updatedScheduleIds[blankEntryIndex] = response.data.id
           }
         }
-        this.setState({
-          savingToServer: false,
-          growlerText: 'Saved!',
-          formData: {
-            id: null,
-            title: '',
-            imageUrl: '',
-            postUrl: '',
-            summary: '',
-            editingMode: false
-          },
-          posts: {
-            ...this.state.posts,
-            byId: { ...this.state.posts.byId, [response.data.id]: { title: response.data.title, postUrl: response.data.postUrl, imageUrl: response.data.imageUrl, summary: response.data.summary } },
-            allIds: [...this.state.posts.allIds, [response.data.id]],
-            scheduledIds: updatedScheduleIds || this.state.posts.scheduledIds
-          }
+        setSavingToServer(false)
+        setGrowlerText('Saved!')
+        setFormData({
+          id: null,
+          title: '',
+          imageUrl: '',
+          postUrl: '',
+          summary: '',
+          editingMode: false
+        })
+        setPosts({
+          ...posts,
+          byId: { ...posts.byId, [response.data.id]: { title: response.data.title, postUrl: response.data.postUrl, imageUrl: response.data.imageUrl, summary: response.data.summary } },
+          allIds: [...posts.allIds, [response.data.id]],
+          scheduledIds: updatedScheduleIds || posts.scheduledIds
         })
       }, (error) => {
-        this.setState({
-          savingToServer: false,
-          growlerText: 'Error: ' + error.response
-        })
+        setSavingToServer(false)
+        setGrowlerText('Error: ' + error.response)
       })
   }
 
-  postNow (event) {
-    const { id, title, imageUrl, postUrl, summary, editingMode } = this.state.formData
+  const postNow = (event) => {
+    const { id, title, imageUrl, postUrl, summary, editingMode } = formData
     if (!title || !imageUrl || !postUrl || !summary) {
       return
     }
     const confirmation = confirm('Post now?')
     if (confirmation) {
-      this.setState({
-        savingToServer: true,
-        growlerText: 'Submiting Post...'
-      })
-      const formData = new FormData()
-      formData.append('action', 'impress_gmb_post_now')
-      formData.append('nonce', impressGmbAdmin['nonce-gmb-post-now'])
-      formData.append('title', title)
-      formData.append('postUrl', postUrl)
-      formData.append('imageUrl', imageUrl)
-      formData.append('summary', summary)
+      setSavingToServer(true)
+      setGrowlerText('Submiting Post...')
+      const requestFormData = new FormData()
+      requestFormData.append('action', 'impress_gmb_post_now')
+      requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-post-now'])
+      requestFormData.append('title', title)
+      requestFormData.append('postUrl', postUrl)
+      requestFormData.append('imageUrl', imageUrl)
+      requestFormData.append('summary', summary)
       if (id && editingMode) {
-        formData.append('id', id)
+        requestFormData.append('id', id)
       }
 
-      axios.post(ajaxurl, formData)
+      axios.post(ajaxurl, requestFormData)
         .then((response) => {
           // Return early for non-200 status
           if (response.status !== 200) {
-            this.setState({
-              savingToServer: false,
-              growlerText: 'Submission failed: check Listings > Settings > IDX > Google My Business for more details'
-            })
+            setSavingToServer(true)
+            setGrowlerText('Submission failed: check Listings > Settings > IDX > Google My Business for more details')
             return
           }
           // Update state on success
-          this.setState({
-            savingToServer: false,
-            growlerText: 'Submission complete!',
-            formData: {
-              id: null,
-              title: '',
-              imageUrl: '',
-              postUrl: '',
-              summary: '',
-              editingMode: false
-            }
+          setSavingToServer(false)
+          setGrowlerText('Submission complete!')
+          setFormData({
+            id: null,
+            title: '',
+            imageUrl: '',
+            postUrl: '',
+            summary: '',
+            editingMode: false
           })
         }, (error) => {
-          this.setState({
-            savingToServer: false,
-            growlerText: 'Error: ' + error.response
-          })
+          setSavingToServer(false)
+          setGrowlerText('Error: ' + error.response)
         })
     }
   }
 
-  dismissBanner () {
-    this.setState({
-      bannerDismissed: true,
-      savingToServer: true
-    })
-    const formData = new FormData()
-    formData.append('action', 'impress_gmb_dismiss_banner')
-    formData.append('nonce', impressGmbAdmin['nonce-gmb-dismiss-banner'])
-    axios.post(ajaxurl, formData)
+  const dismissBanner = () => {
+    setBannerDismissed(true)
+    setSavingToServer(true)
+    const requestFormData = new FormData()
+    requestFormData.append('action', 'impress_gmb_dismiss_banner')
+    requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-dismiss-banner'])
+    axios.post(ajaxurl, requestFormData)
       .then((response) => {
-        this.setState({
-          savingToServer: true
-        })
+        setSavingToServer(true)
       }, (error) => {
         console.log(error)
       })
   }
 
-  updatePostEditor (event, cellData) {
+  const updatePostEditor = (event, cellData) => {
     event.preventDefault()
     event.stopPropagation()
     const { id, title, imageUrl, postUrl, summary, editingMode } = cellData
-    this.setState({
-      formData: {
-        id,
-        title,
-        imageUrl,
-        postUrl,
-        summary,
-        editingMode
-      }
+    setFormData({
+      id,
+      title,
+      imageUrl,
+      postUrl,
+      summary,
+      editingMode
     })
     window.scroll({ top: 70, left: 0, behavior: 'smooth' })
   }
 
-  render () {
-    return (
-      <div>
-        <SettingsPageWrapper title='IMPress Listings - Google My Business Settings'>
-          <SettingsContainer>
-            {this.state.bannerDismissed ? null : <NotificationBanner dismissBanner={this.dismissBanner} />}
-            <SettingsRow>
-              <PostEditorWrapper ref={this.editorRef}>
-                <PostEditor
-                  formData={this.state.formData}
-                  savingToServer={this.state.savingToServer}
-                  onFormChange={this.handleChange}
-                  onFormSubmit={this.handleSubmit}
-                  savePost={this.savePost}
-                  postNow={this.postNow}
-                />
-              </PostEditorWrapper>
-              <SchedulePane
-                posts={this.state.posts}
-                removeFromSchedule={this.removeFromSchedule}
-                updatePostEditor={this.updatePostEditor}
-                updateFrequency={this.updateFrequency}
-                postingDateSettings={this.state.postingDateSettings}
-                cellDrag={this.cellDrag}
-                cellDrop={this.cellDrop}
-                addScheduleCells={this.addScheduleCells}
-                isLoaded={this.state.postDataReady}
+  return (
+    <div>
+      <SettingsPageWrapper title='IMPress Listings - Google My Business Settings'>
+        <SettingsContainer>
+          {bannerDismissed ? null : <NotificationBanner dismissBanner={dismissBanner} />}
+          <SettingsRow>
+            <PostEditorWrapper ref={editorRef}>
+              <PostEditor
+                formData={formData}
+                savingToServer={savingToServer}
+                onFormChange={handleChange}
+                onFormSubmit={handleSubmit}
+                savePost={savePost}
+                postNow={postNow}
               />
-            </SettingsRow>
-            <HorizontalRule />
-            <SettingsRow>
-              <SavedPostsPane
-                posts={this.state.posts}
-                isLoaded={this.state.postDataReady}
-                updatePostEditor={this.updatePostEditor}
-                deletePost={this.deletePost}
-                cellDrag={this.cellDrag}
-                screenSize={this.state.screenSize}
-              />
-            </SettingsRow>
-            <HorizontalRule />
-            <SettingsRow>
-              <ListingPostsPane updatePostEditor={this.updatePostEditor} cellDrag={this.cellDrag} />
-            </SettingsRow>
-          </SettingsContainer>
-        </SettingsPageWrapper>
-        <GrowlerNotification text={this.state.growlerText} showGrowler={this.state.savingToServer} />
-      </div>
-    )
-  }
+            </PostEditorWrapper>
+            <SchedulePane
+              posts={posts}
+              removeFromSchedule={removeFromSchedule}
+              updatePostEditor={updatePostEditor}
+              updateFrequency={updateFrequency}
+              postingDateSettings={postingDateSettings}
+              cellDrag={cellDrag}
+              cellDrop={cellDrop}
+              addScheduleCells={addScheduleCells}
+              isLoaded={postDataReady}
+            />
+          </SettingsRow>
+          <HorizontalRule />
+          <SettingsRow>
+            <SavedPostsPane
+              posts={posts}
+              isLoaded={postDataReady}
+              updatePostEditor={updatePostEditor}
+              deletePost={deletePost}
+              cellDrag={cellDrag}
+              screenSize={screenSize}
+            />
+          </SettingsRow>
+          <HorizontalRule />
+          <SettingsRow>
+            <ListingPostsPane updatePostEditor={updatePostEditor} cellDrag={cellDrag} />
+          </SettingsRow>
+        </SettingsContainer>
+      </SettingsPageWrapper>
+      <GrowlerNotification text={growlerText} showGrowler={savingToServer} />
+    </div>
+  )
+
 }
 
 export default GoogleMyBusinessSettings

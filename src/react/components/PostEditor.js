@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import UploadImageIcon from './UploadImageIcon.js'
 
@@ -102,9 +102,9 @@ const SelectedImage = styled.img`
   }
 `
 
-class PostEditor extends Component {
+function PostEditor (props) {
 
-  chooseImage () {
+  const chooseImage = () => {
     const imageFrame = wp.media({
       title: 'Select Media',
       multiple: false,
@@ -123,38 +123,37 @@ class PostEditor extends Component {
             value: imageFrame.state().get('selection').first().toJSON().url
           }
         }
-        this.props.onFormChange(event)
+        props.onFormChange(event)
       }
     })
 
     imageFrame.open()
   }
 
-  render () {
-    const { title, imageUrl, postUrl, summary, editingMode } = this.props.formData
+  const { title, imageUrl, postUrl, summary, editingMode } = props.formData
 
-    return (
-      <EditorContainer>
-        <Header>{editingMode ? 'Edit Post' : 'Create a Post'}</Header>
-        <form onSubmit={(event) => this.props.onFormSubmit(event)}>
-          <ImageSelectionWrapper onClick={() => this.chooseImage()}>
-            <UploadImageIcon style={imageUrl ? { fill: 'white', paddingTop: '44px' } : { fill: '#b4b9be' }} />
-            <ImageSelectLabel>Upload Image</ImageSelectLabel>
-            <SelectedImage src={imageUrl} />
-          </ImageSelectionWrapper>
+  return (
+    <EditorContainer>
+      <Header>{editingMode ? 'Edit Post' : 'Create a Post'}</Header>
+      <form onSubmit={(event) => props.onFormSubmit(event)}>
+        <ImageSelectionWrapper onClick={() => chooseImage()}>
+          <UploadImageIcon style={imageUrl ? { fill: 'white', paddingTop: '44px' } : { fill: '#b4b9be' }} />
+          <ImageSelectLabel>Upload Image</ImageSelectLabel>
+          <SelectedImage src={imageUrl} />
+        </ImageSelectionWrapper>
 
-          <TextInputField id='post-title' type='text' placeholder='Title' name='title' value={title} onChange={(event) => this.props.onFormChange(event)} required />
-          <TextInputField type='url' placeholder='URL' name='postUrl' value={postUrl} onChange={(event) => this.props.onFormChange(event)} required />
-          <TextAreaField maxLength='1500' placeholder='Description' name='summary' value={summary} onChange={(event) => this.props.onFormChange(event)} required />
+        <TextInputField id='post-title' type='text' placeholder='Title' name='title' value={title} onChange={(event) => props.onFormChange(event)} required />
+        <TextInputField type='url' placeholder='URL' name='postUrl' value={postUrl} onChange={(event) => props.onFormChange(event)} required />
+        <TextAreaField maxLength='1500' placeholder='Description' name='summary' value={summary} onChange={(event) => props.onFormChange(event)} required />
 
-          <ButtonContainer>
-            <Button onClick={(event) => this.props.savePost(event)} type='submit' disabled={this.props.savingToServer}>Save Post</Button>
-            <Button onClick={(event) => this.props.postNow(event)} type='submit' disabled={this.props.savingToServer}>Post Now</Button>
-          </ButtonContainer>
-        </form>
-      </EditorContainer>
-    )
-  }
+        <ButtonContainer>
+          <Button onClick={(event) => props.savePost(event)} type='submit' disabled={props.savingToServer}>Save Post</Button>
+          <Button onClick={(event) => props.postNow(event)} type='submit' disabled={props.savingToServer}>Post Now</Button>
+        </ButtonContainer>
+      </form>
+    </EditorContainer>
+  )
+
 }
 
 export default PostEditor

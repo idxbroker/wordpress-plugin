@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const CellContainer = styled.div`
@@ -73,30 +73,28 @@ const PhotoArea = styled.div`
   align-items: center;
 `
 
-class ScheduleCell extends Component {
-  render () {
-    return (
-      <CellContainer
-        onDrop={(event) => this.props.cellDrop(event, this.props.positionIndex)}
-        onDragOver={(event) => event.preventDefault()}
-        onClick={(event) => this.props.updatePostEditor(event, { id: null, title: '', imageUrl: '', postUrl: '', summary: '', editingMode: false })}
-      >
-        {this.props.children}
-        <InnerWrapper>
-          <ButtonSection className='button-container'>
-            <RemoveButton className='removal-button' onClick={(event) => this.props.removalHandler(event, this.props)}>
-              <span className='dashicons dashicons-no' />
-            </RemoveButton>
-          </ButtonSection>
-          <PhotoArea>No Post Scheduled</PhotoArea>
-          <LabelsContainer>
-            <TitleLabel>Title</TitleLabel>
-            <SubLabel>{this.props.date}</SubLabel>
-          </LabelsContainer>
-        </InnerWrapper>
-      </CellContainer>
-    )
-  }
+function ScheduleCell (props) {
+  return (
+    <CellContainer
+      onDrop={(event) => props.cellDrop(event, props.positionIndex)}
+      onDragOver={(event) => event.preventDefault()}
+      onClick={(event) => props.updatePostEditor(event, { id: null, title: '', imageUrl: '', postUrl: '', summary: '', editingMode: false })}
+    >
+      {props.children}
+      <InnerWrapper>
+        <ButtonSection className='button-container'>
+          <RemoveButton className='removal-button' onClick={(event) => props.removalHandler(event, props)}>
+            <span className='dashicons dashicons-no' />
+          </RemoveButton>
+        </ButtonSection>
+        <PhotoArea>No Post Scheduled</PhotoArea>
+        <LabelsContainer>
+          <TitleLabel>Title</TitleLabel>
+          <SubLabel>{props.date}</SubLabel>
+        </LabelsContainer>
+      </InnerWrapper>
+    </CellContainer>
+  )
 }
 
 export default ScheduleCell

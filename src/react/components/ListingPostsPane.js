@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import PostCell from './PostCell.js'
 import LoadingSpinner from './LoadingSpinner.js'
 import axios from 'axios'
@@ -55,61 +55,46 @@ const PostsGrid = styled.div`
   }
 `
 
-class ListingPostsPane extends Component {
-  constructor () {
-    super()
-    this.state = {
-      error: null,
-      isLoaded: false,
-      listings: []
-    }
-  }
+function ListingPostsPane (props) {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [listings, setListings] = useState([])
 
-  componentDidMount () {
+  useEffect(() => {
     const formData = new FormData()
     formData.append('action', 'impress_gmb_get_listing_posts')
     formData.append('nonce', impressGmbAdmin['nonce-gmb-get-listing-posts'])
     axios.post(ajaxurl, formData)
       .then((response) => {
-        this.setState({
-          isLoaded: true,
-          listings: response.data
-        })
+        setIsLoaded(true)
+        setListings(response.data)
       }, (error) => {
         console.log(error)
       })
-  }
+  }, [])
 
-  render () {
-    const isLoaded = this.state.isLoaded
-    let loadingIndicator
-    if (!isLoaded) {
-      loadingIndicator = <LoadingSpinner />
-    }
-    return (
-      <ListingPostsContainer>
-        <HeaderContainer>
-          <Header>Listings</Header>
-        </HeaderContainer>
-        {loadingIndicator}
-        <PostsGrid>
-          {this.state.listings.map(listing => (
-            <PostCell
-              key={listing.id}
-              id={listing.id}
-              title={listing.title}
-              postUrl={listing.postUrl}
-              imageUrl={listing.imageUrl}
-              summary={listing.summary}
-              updatePostEditor={this.props.updatePostEditor}
-              dragOperationType='createFromListing'
-              cellDrag={this.props.cellDrag}
-            />
-          ))}
-        </PostsGrid>
-      </ListingPostsContainer>
-    )
-  }
+  return (
+    <ListingPostsContainer>
+      <HeaderContainer>
+        <Header>Listings</Header>
+      </HeaderContainer>
+      {(!isLoaded) ? <LoadingSpinner /> : ''}
+      <PostsGrid>
+        {listings.map(listing => (
+          <PostCell
+            key={listing.id}
+            id={listing.id}
+            title={listing.title}
+            postUrl={listing.postUrl}
+            imageUrl={listing.imageUrl}
+            summary={listing.summary}
+            updatePostEditor={props.updatePostEditor}
+            dragOperationType='createFromListing'
+            cellDrag={props.cellDrag}
+          />
+        ))}
+      </PostsGrid>
+    </ListingPostsContainer>
+  )
 }
 
 export default ListingPostsPane

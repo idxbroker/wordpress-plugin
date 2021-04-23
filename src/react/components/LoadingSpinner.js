@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
 const LoadingContainer = styled.div`
@@ -23,14 +23,12 @@ const LoadingIcon = styled.span`
   width: 50px;
 `
 
-class LoadingSpinner extends Component {
-  render () {
-    return (
-      <LoadingContainer>
-        <LoadingIcon className='dashicons dashicons-update' />
-      </LoadingContainer>
-    )
-  }
+function LoadingSpinner () {
+  return (
+    <LoadingContainer>
+      <LoadingIcon className='dashicons dashicons-update' />
+    </LoadingContainer>
+  )
 }
 
 export default LoadingSpinner

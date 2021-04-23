@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const CellContainer = styled.div`
@@ -69,29 +69,26 @@ const PhotoArea = styled.img`
   width: 100%;
   pointer-events: none;
 `
-
-class PostCell extends Component {
-  render () {
-    return (
-      <CellContainer
-        className='post-cell'
-        onClick={(event) => this.props.updatePostEditor(event, this.props)}
-        onDragStart={(event) => this.props.cellDrag(event, this.props)}
-        draggable
-      >
-        <ButtonSection className='button-container'>
-          <RemoveButton className='removal-button' onClick={(event) => this.props.removalHandler(event, this.props)}>
-            <span className='dashicons dashicons-no' />
-          </RemoveButton>
-        </ButtonSection>
-        <PhotoArea src={this.props.imageUrl ? this.props.imageUrl : null} />
-        <LabelsContainer>
-          <TitleLabel>{this.props.title}</TitleLabel>
-          <SubLabel>{this.props.date}</SubLabel>
-        </LabelsContainer>
-      </CellContainer>
-    )
-  }
+function PostCell (props) {
+  return (
+    <CellContainer
+      className='post-cell'
+      onClick={(event) => props.updatePostEditor(event, props)}
+      onDragStart={(event) => props.cellDrag(event, props)}
+      draggable
+    >
+      <ButtonSection className='button-container'>
+        <RemoveButton className='removal-button' onClick={(event) => props.removalHandler(event, props)}>
+          <span className='dashicons dashicons-no' />
+        </RemoveButton>
+      </ButtonSection>
+      <PhotoArea src={props.imageUrl ? props.imageUrl : null} />
+      <LabelsContainer>
+        <TitleLabel>{props.title}</TitleLabel>
+        <SubLabel>{props.date}</SubLabel>
+      </LabelsContainer>
+    </CellContainer>
+  )
 }
 
 export default PostCell

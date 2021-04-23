@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const LabelsContainer = styled.div`
@@ -61,24 +61,22 @@ const SliderDecoration = styled.span`
   margin-bottom: 20px;
 `
 
-class FrequencySlider extends Component {
-  render () {
-    return (
-      <>
-        <Slider type='range' min='0' max='2' step='1' onChange={(event) => this.props.updateFrequency(event)} value={this.props.frequencySliderValue}/>
-        <DecorationContainer>
-          <SliderDecoration />
-          <SliderDecoration />
-          <SliderDecoration />
-        </DecorationContainer>
-        <LabelsContainer>
-          <Label>Weekly</Label>
-          <Label>Bi-weekly</Label>
-          <Label>Monthly</Label>
-        </LabelsContainer>
-      </>
-    )
-  }
+function FrequencySlider (props) {
+  return (
+    <>
+      <Slider type='range' min='0' max='2' step='1' onChange={(event) => props.updateFrequency(event)} value={props.frequencySliderValue}/>
+      <DecorationContainer>
+        <SliderDecoration />
+        <SliderDecoration />
+        <SliderDecoration />
+      </DecorationContainer>
+      <LabelsContainer>
+        <Label>Weekly</Label>
+        <Label>Bi-weekly</Label>
+        <Label>Monthly</Label>
+      </LabelsContainer>
+    </>
+  )
 }
 
 export default FrequencySlider

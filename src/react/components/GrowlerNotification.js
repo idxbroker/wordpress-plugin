@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 const GrowlerContainer = styled.div`
@@ -6,7 +6,7 @@ const GrowlerContainer = styled.div`
   min-width: 200px;
   padding: 3px 8px;
   margin-bottom: -41px;
-  transition: ${props => props.startingTransition ? 'margin .5s' : 'margin 1.7s'};
+  transition: ${props => props.startingTransition ? 'margin 0.1s' : 'margin 2.0s'};
   background-color: #00a0d2;
   position: fixed;
   bottom: 0;
@@ -22,14 +22,12 @@ const GrowlerContainer = styled.div`
   }
 `
 
-class GrowlerNotification extends Component {
-  render () {
-    return (
-      <GrowlerContainer className={this.props.showGrowler ? 'growler-active' : ''} startingTransition={this.props.showGrowler} textSet={this.props.text}>
-        {this.props.text}
-      </GrowlerContainer>
-    )
-  }
+function GrowlerNotification (props) {
+  return (
+    <GrowlerContainer className={props.showGrowler ? 'growler-active' : ''} startingTransition={props.showGrowler} textSet={props.text}>
+      {props.text}
+    </GrowlerContainer>
+  )
 }
 
 export default GrowlerNotification

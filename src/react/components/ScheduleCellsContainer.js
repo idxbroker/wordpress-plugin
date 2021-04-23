@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useCallback } from 'react'
 import PostCell from './PostCell.js'
 import ScheduleCell from './ScheduleCell.js'
 import LoadingSpinner from './LoadingSpinner.js'
@@ -66,15 +66,11 @@ const Line = styled.line`
   stroke-width: 5;
 `
 
-class ScheduleCellsContainer extends Component {
-  constructor () {
-    super()
-    this.generateDate = this.generateDate.bind(this)
-  }
-
-  generateDate (index, nextPostTimestamp) {
+function ScheduleCellsContainer (props) {
+  
+  const generateDate = useCallback((index, nextPostTimestamp) => {
     let step
-    switch (this.props.postingDateSettings.postFrequency) {
+    switch (props.postingDateSettings.postFrequency) {
       case 'weekly':
         step = 604800
         break
@@ -101,71 +97,73 @@ class ScheduleCellsContainer extends Component {
     const day = date.getUTCDate()
     const formattedDate = month + '/' + day + '/' + year
     return formattedDate
-  }
+  }, [props.postingDateSettings.postFrequency])
 
-  render () {
-    const { updatePostEditor, removeFromSchedule, cellDrag } = this.props
-    const posts = this.props.posts.byId
-    const scheduledIds = this.props.posts.scheduledIds
-    let addRowButton
-    if (this.props.isLoaded) {
-      addRowButton =
-        <Button onClick={(event) => this.props.addScheduleCells(event)}>
+  const { updatePostEditor, removeFromSchedule, cellDrag } = props
+  const posts = props.posts.byId
+  const scheduledIds = props.posts.scheduledIds
+
+  const addRowButton = () => {
+    if (props.isLoaded) {
+      return (
+        <Button onClick={(event) => props.addScheduleCells(event)}>
           <ButtonIcon height='18' width='18'>
             <Circle cx='16' cy='16' r='31.5' strokeWidth='5' />
             <Line x1='16' y1='0' x2='16' y2='32' strokeLinecap='round' />
             <Line x1='0' y1='16' x2='32' y2='16' strokeLinecap='round' />
           </ButtonIcon>
         </Button>
+      )
     } else {
-      addRowButton = <LoadingSpinner />
+      return <LoadingSpinner />
     }
-
-    return (
-      <>
-        <CellContainer>
-          {
-            scheduledIds.map((id, index) => {
-              let postCell
-              if (id !== '-') {
-                postCell =
-                  <PostCell
-                    key={id}
-                    id={id}
-                    positionIndex={index}
-                    title={posts[id].title}
-                    postUrl={posts[id].postUrl}
-                    imageUrl={posts[id].imageUrl}
-                    summary={posts[id].summary}
-                    date={this.generateDate(index, parseInt(this.props.postingDateSettings.nextPostTimestamp))}
-                    updatePostEditor={updatePostEditor}
-                    removalHandler={removeFromSchedule}
-                    dragOperationType='scheduleReorder'
-                    cellDrag={cellDrag}
-                    editingMode
-                  />
-              }
-              return (
-                <ScheduleCell
-                  key={index}
-                  positionIndex={index}
-                  date={this.generateDate(index, parseInt(this.props.postingDateSettings.nextPostTimestamp))}
-                  cellDrop={(event) => this.props.cellDrop(event, index)}
-                  removalHandler={removeFromSchedule}
-                  updatePostEditor={updatePostEditor}
-                >
-                  {postCell}
-                </ScheduleCell>
-              )
-            })
-          }
-        </CellContainer>
-        <ButtonRow>
-          {addRowButton}
-        </ButtonRow>
-      </>
-    )
   }
+
+  return (
+    <>
+      <CellContainer>
+        {
+          scheduledIds.map((id, index) => {
+            let postCell
+            if (id !== '-') {
+              postCell =
+                <PostCell
+                  key={id}
+                  id={id}
+                  positionIndex={index}
+                  title={posts[id].title}
+                  postUrl={posts[id].postUrl}
+                  imageUrl={posts[id].imageUrl}
+                  summary={posts[id].summary}
+                  date={generateDate(index, parseInt(props.postingDateSettings.nextPostTimestamp))}
+                  updatePostEditor={updatePostEditor}
+                  removalHandler={removeFromSchedule}
+                  dragOperationType='scheduleReorder'
+                  cellDrag={cellDrag}
+                  editingMode
+                />
+            }
+            return (
+              <ScheduleCell
+                key={index}
+                positionIndex={index}
+                date={generateDate(index, parseInt(props.postingDateSettings.nextPostTimestamp))}
+                cellDrop={(event) => props.cellDrop(event, index)}
+                removalHandler={removeFromSchedule}
+                updatePostEditor={updatePostEditor}
+              >
+                {postCell}
+              </ScheduleCell>
+            )
+          })
+        }
+      </CellContainer>
+      <ButtonRow>
+        {addRowButton()}
+      </ButtonRow>
+    </>
+  )
+
 }
 
 export default ScheduleCellsContainer
