@@ -530,6 +530,7 @@ class Register_Shortcode_For_Ui {
 			'property_type' => 'featured',
 			'saved_link_id' => '',
 			'agent_id'      => '',
+			'colistings'    => 1,
 			'styles'        => 1,
 			'new_window'    => 0,
 		);
@@ -561,6 +562,12 @@ class Register_Shortcode_For_Ui {
 		$output .= $this->get_agents_select_list( $defaults['agent_id'] );
 		$output .= '</select>';
 		$output .= '</div>';
+
+		// Colistings
+		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+		$output .= '<input type="checkbox" id="colistings" data-short-name="colistings">';
+		$output .= '<label for"colistings">Include colistings for selected agent?</label>';
+		$output .= '</div>';	
 
 		// Images
 		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
@@ -630,6 +637,7 @@ class Register_Shortcode_For_Ui {
 			'property_type' => 'featured',
 			'saved_link_id' => '',
 			'agent_id'      => '',
+			'colistings'    => 1,
 			'styles'        => 1,
 			'new_window'    => 0,
 		);
@@ -660,6 +668,12 @@ class Register_Shortcode_For_Ui {
 		$output .= '<select id="agent_id" data-short-name="agent_id">';
 		$output .= $this->get_agents_select_list( $defaults['agent_id'] );
 		$output .= '</select>';
+		$output .= '</div>';
+
+		// Colistings
+		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
+		$output .= '<input type="checkbox" id="colistings" data-short-name="colistings">';
+		$output .= '<label for"colistings">Include colistings for selected agent?</label>';
 		$output .= '</div>';
 
 		// Per row

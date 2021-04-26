@@ -50,6 +50,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		'order'            => 'default',
 		'styles'           => 1,
 		'new_window'       => 0,
+		'colistings'       => 1,
 	);
 
 	/**
@@ -138,11 +139,32 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			}
 		}
 
+		// Used to hold agent data when matching for co-listings.
+		$agent_data;
+
 		foreach ( $properties as $prop ) {
 
 			if ( ! empty( $instance['agentID'] ) ) {
 				if ( empty( $prop['userAgentID'] ) || (int) $instance['agentID'] !== (int) $prop['userAgentID'] ) {
-					continue;
+					if ( $instance['colistings'] ) {
+						// Check if coListingAgentID exists since the initial agent ID match failed.
+						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
+							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
+							if ( empty( $agent_data ) ) {
+								$agent_data = $this->idx_api->idx_api( 'agents?filterField=agentID&filterValue=' . $instance['agentID'], IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
+							}
+							// Check the listing's coListingAgentID against the agent's raw MLS-provided ID, continues if no match.
+							if ( empty( $agent_data['agent'][0]['listingAgentID'] ) || $agent_data['agent'][0]['listingAgentID'] !== $prop['coListingAgentID'] ) {
+								continue;
+							}
+						} else {
+							// Listing does not have coListingAgentID field data to match against.
+							continue;
+						}
+					} else {
+						// Colistings setting is not enabled.
+						continue;
+					}
 				}
 			}
 
@@ -218,10 +240,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 						$prop['unitNumber'],
 						$prop['cityName'],
 						$prop['state'],
-						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+						$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
+						$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
+						$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
+						$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 						$this->maybe_add_disclaimer_and_courtesy( $prop ),
 						$column_class,
 						$target
@@ -264,10 +286,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 						$prop['unitNumber'],
 						$prop['cityName'],
 						$prop['state'],
-						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+						$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
+						$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
+						$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
+						$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 						$column_class,
 						$target
 					),
@@ -494,6 +516,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		$instance['properties']       = wp_strip_all_tags( $new_instance['properties'] );
 		$instance['saved_link_id']    = (int) ( $new_instance['saved_link_id'] );
 		$instance['agentID']          = (int) $new_instance['agentID'];
+		$instance['colistings']       = (bool) $new_instance['colistings'];
 		$instance['show_image']       = (bool) $new_instance['show_image'];
 		$instance['listings_per_row'] = (int) $new_instance['listings_per_row'];
 		$instance['max']              = wp_strip_all_tags( $new_instance['max'] );
@@ -547,6 +570,11 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
 				<?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
+		</p>
+
+		<p>
+			<input type="checkbox" id="<?php echo $this->get_field_id( 'colistings' ); ?>" name="<?php echo $this->get_field_name( 'colistings' ); ?>" value="1" <?php checked( $instance['colistings'], true ); ?>>
+			<label for="<?php echo $this->get_field_id( 'colistings' ); ?>"><?php _e( 'Include colistings for selected agent?', 'idxbroker' ); ?></label>
 		</p>
 
 		<p>

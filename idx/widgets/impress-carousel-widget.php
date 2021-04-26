@@ -43,6 +43,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		'properties'    => 'featured',
 		'saved_link_id' => '',
 		'agentID'       => '',
+		'colistings'    => 1,
 		'display'       => 3,
 		'max'           => 15,
 		'order'         => 'default',
@@ -160,11 +161,32 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s owl-carousel owl-theme">', $instance['display'] );
 
+		// Used to hold agent data when matching for co-listings.
+		$agent_data;
+
 		foreach ( $properties as $prop ) {
 
-			if ( isset( $instance['agentID'], $prop['userAgentID'] ) && ! empty( $instance['agentID'] ) ) {
-				if ( $instance['agentID'] !== (int) $prop['userAgentID'] ) {
-					continue;
+			if ( ! empty( $instance['agentID'] ) ) {
+				if ( empty( $prop['userAgentID'] ) || (int) $instance['agentID'] !== (int) $prop['userAgentID'] ) {
+					if ( $instance['colistings'] ) {
+						// Check if coListingAgentID exists since the initial agent ID match failed.
+						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
+							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
+							if ( empty( $agent_data ) ) {
+								$agent_data = $this->idx_api->idx_api( 'agents?filterField=agentID&filterValue=' . $instance['agentID'], IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
+							}
+							// Check the listing's coListingAgentID against the agent's raw MLS-provided ID, continues if no match.
+							if ( empty( $agent_data['agent'][0]['listingAgentID'] ) || $agent_data['agent'][0]['listingAgentID'] !== $prop['coListingAgentID'] ) {
+								continue;
+							}
+						} else {
+							// Listing does not have coListingAgentID field data to match against.
+							continue;
+						}
+					} else {
+						// Colistings setting is not enabled.
+						continue;
+					}
 				}
 			}
 
@@ -416,6 +438,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$instance['properties']    = strip_tags( $new_instance['properties'] );
 		$instance['saved_link_id'] = (int) $new_instance['saved_link_id'];
 		$instance['agentID']       = (int) $new_instance['agentID'];
+		$instance['colistings']    = (bool) $new_instance['colistings'];
 		$instance['display']       = (int) $new_instance['display'];
 		$instance['max']           = (int) $new_instance['max'];
 		$instance['order']         = strip_tags( $new_instance['order'] );
@@ -468,6 +491,11 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
 				<?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
+		</p>
+
+		<p>
+			<input type="checkbox" id="<?php echo $this->get_field_id( 'colistings' ); ?>" name="<?php echo $this->get_field_name( 'colistings' ); ?>" value="1" <?php checked( $instance['colistings'], true ); ?>>
+			<label for="<?php echo $this->get_field_id( 'colistings' ); ?>"><?php _e( 'Include colistings for selected agent?', 'idxbroker' ); ?></label>
 		</p>
 
 		<p>

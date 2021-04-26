@@ -43,6 +43,10 @@ registerBlockType(
         type: 'string',
         default: ''
       },
+      colistings: {
+        type: 'int',
+        default: 1
+      },
       styles: {
         type: 'int',
         default: 1
@@ -81,6 +85,12 @@ registerBlockType(
                   value={attributes.agent_id}
                   options={(impress_showcase_agent_list || [ { label: 'All', value: '' } ])}
                   onChange={(value) => { setAttributes({ agent_id: value }) }}
+                />
+                <CheckboxControl
+                  label={__('Include colistings for selected agent?', 'idx-broker-platinum')}
+                  value={attributes.colistings}
+                  checked={(attributes.colistings > 0)}
+                  onChange={(value) => { setAttributes({ colistings: (value > 0 ? 1 : 0) }) }}
                 />
                 <CheckboxControl
                   label={__('Show image?', 'idx-broker-platinum')}
