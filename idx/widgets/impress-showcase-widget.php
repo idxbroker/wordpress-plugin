@@ -22,6 +22,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				'customize_selective_refresh' => true,
 			)
 		);
+		// Include helper functions file.
+		include_once IMPRESS_IDX_DIR . 'idx/widgets/impress-widget-helper.php';
 	}
 
 	/**
@@ -229,7 +231,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
                         </p>
                         %16$s
                         </div>',
-						$prop['listingPrice'],
+						price_selector( $prop ),
 						$prop['propStatus'],
 						$url,
 						$prop_image_url,
@@ -278,7 +280,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
                             </p>
                         </a>
                     </li>',
-						$prop['listingPrice'],
+						price_selector( $prop ),
 						$url,
 						$prop['streetNumber'],
 						$prop['streetDirection'],

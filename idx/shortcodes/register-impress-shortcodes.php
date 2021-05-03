@@ -29,9 +29,9 @@ class Register_Impress_Shortcodes {
 		add_shortcode( 'impress_property_showcase', array( $this, 'property_showcase_shortcode' ) );
 		add_shortcode( 'impress_property_carousel', array( $this, 'property_carousel_shortcode' ) );
 		add_shortcode( 'impress_city_links', array( $this, 'city_links_shortcode' ) );
-
+		// Include helper functions file.
+		include_once IMPRESS_IDX_DIR . 'idx/widgets/impress-widget-helper.php';
 	}
-
 
 	/**
 	 * lead_login_shortcode function.
@@ -295,7 +295,7 @@ class Register_Impress_Shortcodes {
                         </p>
                         %16$s
                         </div>',
-						$prop['listingPrice'],
+						price_selector( $prop ),
 						$prop['propStatus'],
 						$url,
 						$prop_image_url,
@@ -344,7 +344,7 @@ class Register_Impress_Shortcodes {
                             </p>
                         </a>
                     </li>',
-						$prop['listingPrice'],
+						price_selector( $prop ),
 						$url,
 						$prop['streetNumber'],
 						$prop['streetDirection'],
@@ -695,7 +695,7 @@ class Register_Impress_Shortcodes {
                     </p>
                     %15$s
                     </div><!-- end .impress-carousel-property -->',
-					$prop['listingPrice'],
+					price_selector( $prop ),
 					$url,
 					$prop_image_url,
 					$image_alt_tag,
