@@ -22,6 +22,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 				'customize_selective_refresh' => true,
 			)
 		);
+		// Include helper functions file.
+		include_once IMPRESS_IDX_DIR . 'idx/widgets/impress-widget-helper.php';
 	}
 
 	/**
@@ -235,7 +237,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 					</p>
 					%15$s
 					</div><!-- end .impress-carousel-property -->',
-					$prop['listingPrice'],
+					price_selector( $prop ),
 					$url,
 					$prop_image_url,
 					$image_alt_tag,
