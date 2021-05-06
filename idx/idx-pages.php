@@ -138,14 +138,14 @@ class Idx_Pages {
 
 		// disable ability to add new or delete IDX Pages
 		$capabilities = array(
-			'publish_posts'       => false,
+			'publish_posts'       => 'publish_idx_pages',
 			'edit_posts'          => 'edit_idx_pages',
 			'edit_others_posts'   => 'edit_others_idx_pages',
 			'delete_posts'        => false,
 			'delete_others_posts' => false,
 			'read_private_posts'  => 'read_private_idx_pages',
 			'edit_post'           => 'edit_idx_page',
-			'delete_post'         => false,
+			'delete_post'         => 'edit_idx_page',
 			'read_post'           => 'read_idx_pages',
 			'create_posts'        => false,
 		);
@@ -459,6 +459,7 @@ class Idx_Pages {
 			array(
 				'post_type'   => 'idx_page',
 				'numberposts' => -1,
+				'post_status' => 'any',
 			)
 		);
 

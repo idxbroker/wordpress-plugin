@@ -32,6 +32,7 @@ function idx_delete_plugin_data() {
 		array(
 			'post_type'   => 'idx_page',
 			'numberposts' => -1,
+			'post_status' => 'any',
 		)
 	);
 	foreach ( $idx_pages as $post ) {
