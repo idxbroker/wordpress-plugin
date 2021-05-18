@@ -348,13 +348,13 @@ class Initiate_Plugin {
 		add_menu_page(
 			'IMPress for IDX Broker Settings',
 			\IDX\Views\Notice::menu_text_notice( 'IMPress', $notice_num ),
-			'administrator',
+			'manage_options',
 			'idx-broker',
 			array( $this, 'idx_broker_platinum_admin_page' ),
 			'none',
 			55.572
 		);
-		add_submenu_page( 'idx-broker', 'IMPress for IDX Broker Plugin Options', 'General Settings', 'administrator', 'idx-broker', array( $this, 'idx_broker_platinum_admin_page' ) );
+		add_submenu_page( 'idx-broker', 'IMPress for IDX Broker Plugin Options', 'General Settings', 'manage_options', 'idx-broker', array( $this, 'idx_broker_platinum_admin_page' ) );
 		add_action( 'admin_footer', array( $this, 'add_upgrade_center_link' ) );
 	}
 
