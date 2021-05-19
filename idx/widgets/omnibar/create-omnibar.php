@@ -53,7 +53,7 @@ class Create_Omnibar {
 		// inserts inline variable for the results page url
 		wp_localize_script( 'idx-omnibar-js', 'idxUrl', [ $idx_url ] );
 		wp_localize_script( 'idx-omnibar-js', 'sortOrder', [ $sort_order ] );
-		wp_localize_script( 'idx-omnibar-js', 'mlsPtIDs', [ $mlsPtIDs ] );
+		wp_localize_script( 'idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs );
 		wp_localize_script( 'idx-omnibar-js', 'idxOmnibarPlaceholder', [ $placeholder ] );
 		// Adds agent header ID if multisite + not main site + it's set
 		if ( is_multisite() ) {
@@ -109,7 +109,7 @@ EOD;
 		// inserts inline variable for the results page url
 		wp_localize_script( 'idx-omnibar-js', 'idxUrl', [ $idx_url ] );
 		wp_localize_script( 'idx-omnibar-js', 'sortOrder', [ $sort_order ] );
-		wp_localize_script( 'idx-omnibar-js', 'mlsPtIDs', [ $mlsPtIDs ] );
+		wp_localize_script( 'idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs );
 		wp_localize_script( 'idx-omnibar-js', 'idxOmnibarPlaceholder', [ $placeholder ] );
 		// Adds agent header ID if multisite + not main site + it's set
 		if ( is_multisite() ) {
