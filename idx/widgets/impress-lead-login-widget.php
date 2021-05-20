@@ -38,12 +38,13 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	 * @var mixed
 	 * @access public
 	 */
-	public $defaults = array(
-		'title'       => 'Account Login',
-		'custom_text' => '',
-		'styles'      => 1,
-		'new_window'  => 0,
-	);
+	public $defaults = [
+		'title'          => 'Account Login',
+		'custom_text'    => '',
+		'styles'         => 1,
+		'new_window'     => 0,
+		'password_field' => false,
+	];
 
 	/**
 	 * Front-end display of widget.
