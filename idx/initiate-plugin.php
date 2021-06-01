@@ -44,11 +44,36 @@ class Initiate_Plugin {
 
 		add_action( 'rest_api_init', array( $this, 'idx_broker_register_rest_routes' ) );
 
+		add_action( 'wp_print_scripts', [ $this, 'dequeue_conflicts' ] );
+
 		$social_pro = new \IDX\Social_Pro();
 		$social_pro->initialize_hooks();
 		$social_pro->setup_cron();
 
 		$this->instantiate_classes();
+	}
+
+	/**
+	 * Dequeue Conflicts.
+	 * Used to deal with conflicting plugin scripts.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function dequeue_conflicts() {
+		// Only dequeues scripts on the IDX IMPress > General Settings page.
+		if ( ! empty( $_GET['page'] ) && 'idx-broker' === $_GET['page'] ) {
+			// uListings plugin.
+			wp_dequeue_script( 'vue.js' );
+			wp_deregister_script( 'vue.js' );
+			wp_dequeue_script( 'stm-listing-admin' );
+			wp_deregister_script( 'stm-listing-admin' );
+			wp_dequeue_script( 'stm-map-settings' );
+			wp_deregister_script( 'stm-map-settings' );
+			// Graphs & Charts plugin.
+			wp_dequeue_script( 'Graphs & Charts' );
+			wp_deregister_script( 'Graphs & Charts' );
+		}
 	}
 
 	/**
