@@ -648,11 +648,11 @@ class Idx_Api {
 			$listing_data,
 			function ( $listing ) use ( &$status ) {
 				// If $status is featured, match for active listings.
-				if ( strpos( $status, 'featured' ) !== false && 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] || 'ACTIVE' === $listing['status'] ) {
+				if ( strpos( $status, 'featured' ) !== false && ( 'Active' === $listing['status'] || 'A' === $listing['status'] || 'active' === $listing['status'] || 'ACTIVE' === $listing['status'] ) ) {
 					return true;
 				}
 				// If $status is soldpending, match for non-active listings.
-				if ( strpos( $status, 'soldpending' ) !== false && 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] && 'ACTIVE' !== $listing['status'] ) {
+				if ( strpos( $status, 'soldpending' ) !== false && ( 'Active' !== $listing['status'] && 'A' !== $listing['status'] && 'active' !== $listing['status'] && 'ACTIVE' !== $listing['status'] ) ) {
 					return true;
 				}
 			}
