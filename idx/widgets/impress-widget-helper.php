@@ -35,7 +35,12 @@ function price_selector( $property ) {
 		return $listing_price;
 	}
 
-	$prop_type = empty( $property['propType'] ) ? $property['idxPropType'] : $property['propType'];
+	$prop_type = empty( $property['propType'] ) ? '' : $property['propType'];
+
+	// If $prop_type is empty, try for idxPropType.
+	if ( empty( $prop_type ) ) {
+		$prop_type = empty( $property['idxPropType'] ) ? '' : $property['idxPropType'];
+	}
 
 	// Active non-supplemental listings.
 	if ( ! empty( $property['idxStatus'] ) && 'active' === $property['idxStatus'] ) {
