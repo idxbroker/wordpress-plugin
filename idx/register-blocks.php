@@ -718,7 +718,12 @@ class Register_Blocks {
 	 * @return array
 	 */
 	public function get_saved_links_list() {
-		$saved_links_list = [];
+		$saved_links_list = [
+			[
+				'label' => '-',
+				'value' => '0',
+			],
+		];
 
 		// Check for API key before making call.
 		if ( get_option( 'idx_broker_apikey' ) ) {
@@ -782,7 +787,12 @@ class Register_Blocks {
 	 */
 	public function get_city_list_options( ) {
 		$lists  = $this->idx_api->city_list_names();
-		$impress_city_lists = [];
+		$impress_city_lists = [
+			[
+				'label' => '-',
+				'value' => 'a000',
+			],
+		];
 
 		if ( ! is_array( $lists ) ) {
 			return;
@@ -804,7 +814,12 @@ class Register_Blocks {
 	 */
 	public function get_mls_options() {
 		$approved_mls = $this->idx_api->approved_mls();
-		$mls_list = [];
+		$mls_list     = [
+			[
+				'label' => '-',
+				'value' => 'a000',
+			],
+		];
 
 		if ( ! is_array( $approved_mls ) ) {
 			return;
@@ -823,7 +838,12 @@ class Register_Blocks {
 	 */
 	public function get_widget_list_options() {
 		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
-		$widget_list = [];
+		$widget_list = [
+			[
+				'label' => '-',
+				'value' => '0',
+			],
+		];
 
 		if ( $idx_widgets && ! is_wp_error( $idx_widgets ) ) {
 			foreach ( $idx_widgets as $widget ) {
