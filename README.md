@@ -121,6 +121,8 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 ## Changelog ##
 
 ### 3.0.2 ###
+* Fix: Resolves multiple IMPress Showcase/Carousel/Omnibar widget display issues
+* Fix: Prevents menu conflicts with some 3rd party plugins
 
 ### 3.0.1 ###
 * Fix: Omnibar not setting a property type for some searches
