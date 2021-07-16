@@ -112,6 +112,7 @@ class Enable_Addons extends \IDX\Admin\Rest_Controller {
 					],
 				]
 			);
+			flush_rewrite_rules();
 		}
 	}
 
