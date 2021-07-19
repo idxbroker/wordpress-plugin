@@ -511,7 +511,7 @@ add_action( 'admin_init', 'wp_listings_idx_update_schedule' );
 
 $wpl_options = get_option( 'plugin_wp_listings_settings' );
 
-if ( isset( $wpl_options['wp_listings_auto_import'] ) && $wpl_options['wp_listings_auto_import'] == true ) {
+if ( ! empty( $wpl_options['wp_listings_auto_import'] ) ) {
 	add_action( 'admin_init', 'wp_listings_idx_auto_import_schedule' );
 }
 

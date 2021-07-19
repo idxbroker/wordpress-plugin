@@ -127,6 +127,10 @@ class Listings_IDX_Settings extends \IDX\Admin\Rest_Controller {
 
 		if ( isset( $payload['automaticImport'] ) ) {
 			$settings['wp_listings_auto_import'] = (int) filter_var( $payload['automaticImport'], FILTER_VALIDATE_BOOLEAN );
+			// Clear schedule if disabled.
+			if ( ! $payload['automaticImport'] ) {
+				wp_clear_scheduled_hook( 'wp_listings_idx_auto_import' );
+			}
 		}
 
 		if ( isset( $payload['defaultListingTemplateSelected'] ) ) {
