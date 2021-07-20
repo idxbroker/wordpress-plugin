@@ -108,6 +108,8 @@ registerBlockType(
                   label={__('Listings per row', 'idx-broker-platinum')}
                   value={attributes.num_per_row}
                   type='number'
+                  min='0'
+                  max='4'
                   onChange={(value) => { setAttributes({ num_per_row: value }) }}
                 />
                 <TextControl
