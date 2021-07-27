@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 5.3
 **Tested up to:** 5.7
-**Stable tag:** 3.0.3
+**Stable tag:** 3.0.4
 **Minimum PHP:** 7.0
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
@@ -120,7 +120,12 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 
 ## Changelog ##
 
+### 3.0.4 ###
+
 ### 3.0.3 ###
+* Fix: Listings auto-import scheduled task not disabling correctly
+* Fix: Missing closing tag on IMPress Showcase widgets when only one listing is displayed
+* Fix: Listing post archive page no longer requires visiting the permalinks settings page after enabling
 
 ### 3.0.2 ###
 * Fix: Resolves multiple IMPress Showcase/Carousel/Omnibar widget display issues
