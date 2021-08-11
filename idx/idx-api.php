@@ -796,11 +796,7 @@ class Idx_Api {
 		$a = $this->clean_price( $a['listingPrice'] );
 		$b = $this->clean_price( $b['listingPrice'] );
 
-		if ( $a === $b ) {
-			return 0;
-		}
-
-		return ( $a < $b ) ? -1 : 1;
+		return $a <=> $b;
 	}
 
 	/**
