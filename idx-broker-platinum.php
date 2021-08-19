@@ -53,13 +53,37 @@ class Idx_Broker_Plugin {
 		if ( boolval( get_option( 'idx_broker_agents_enabled', 0 ) ) && ! is_plugin_active( 'impress-agents/plugin.php' ) ) {
 			include_once 'add-ons/agents/plugin.php';
 		}
+
+		// Hide legacy widgets from the legacy block to prevent double-entries when searching for widgets.
+		add_filter( 'widget_types_to_hide_from_legacy_widget_block', [ $this, 'hide_from_legacy_block' ] );
+	}
+
+	/**
+	 * Hide from legacy block.
+	 * Prevents existing block widgets from appearing as an option in the legacy widget block.
+	 *
+	 * @access public
+	 * @param array $widget_types - Array of widget handles.
+	 * @return array
+	 */
+	public function hide_from_legacy_block( $widget_types ) {
+		$hidden_widget_list = [
+			'impress_showcase',
+			'impress_carousel',
+			'impress_idx_dashboard_widget',
+			'impress_city_links',
+			'impress_lead_login',
+			'impress_lead_signup',
+			'idx_omnibar_widget',
+		];
+		return array_merge( $widget_types, $hidden_widget_list );
 	}
 
 	/**
 	 * Check for versions less than PHP7.0 and display error.
 	 */
 	public function php_version_check() {
-		if ( PHP_VERSION < 7.0 ) {
+		if ( version_compare( PHP_VERSION, '7.0', '<' ) ) {
 			add_action( 'admin_init', array( $this, 'idx_deactivate_plugin' ) );
 			add_action( 'admin_notices', array( $this, 'incompatible_message' ) );
 			return false;
