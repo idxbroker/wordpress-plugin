@@ -31,7 +31,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -39,7 +39,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	public $idx_api;
 
 	/**
-	 * error_message
+	 * Error_message
 	 *
 	 * @var mixed
 	 * @access public
@@ -47,7 +47,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	public $error_message;
 
 	/**
-	 * defaults
+	 * Defaults
 	 *
 	 * @var mixed
 	 * @access public
@@ -64,7 +64,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	);
 
 	/**
-	 * Front-end display of widget.
+	 * Front-end display of widget
 	 *
 	 * @see WP_Widget::widget()
 	 *
@@ -97,7 +97,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 
 		$wpl_options = get_option( 'plugin_wp_listings_settings' );
 
-		// Validate fields
+		// Validate fields.
 		wp_register_script( 'impress-lead-signup', plugins_url( '../assets/js/idx-lead-signup.min.js', dirname( __FILE__ ) ) );
 		wp_localize_script( 'impress-lead-signup', 'idxLeadLoginUrl', [ $this->lead_login_page() ] );
 		wp_enqueue_script( 'impress-lead-signup' );
@@ -177,11 +177,11 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * target function.
+	 * Target
 	 *
 	 * @access public
-	 * @param mixed $new_window
-	 * @return void
+	 * @param mixed $new_window - New window settings value.
+	 * @return string
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
@@ -193,7 +193,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Sanitize widget form values as they are saved.
+	 * Sanitize widget form values as they are saved
 	 *
 	 * @see WP_Widget::update()
 	 *
@@ -202,6 +202,8 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
+		// Merge defaults and new_instance to avoid any missing index warnings when used with the legacy block widget.
+		$new_instance               = array_merge( $this->defaults, $new_instance );
 		$instance                   = array();
 		$instance['title']          = strip_tags( $new_instance['title'] );
 		$instance['custom_text']    = htmlentities( $new_instance['custom_text'] );
@@ -216,7 +218,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Back-end widget form.
+	 * Back-end widget form
 	 *
 	 * @see WP_Widget::form()
 	 * @param array $instance Previously saved values from database.
@@ -270,12 +272,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * lead_login_page function.
+	 * Lead_login_page
 	 *
 	 * @access public
-	 * @return void
+	 * @return mixed
 	 */
-	function lead_login_page() {
+	public function lead_login_page() {
 		$links = $this->idx_api->idx_api_get_systemlinks();
 		if ( empty( $links ) ) {
 			return '';
@@ -288,11 +290,11 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * For error handling since this is a cross domain request.
+	 * For error handling since this is a cross domain request
 	 *
 	 * @access public
 	 * @param mixed $error Error.
-	 * @return void
+	 * @return string
 	 */
 	public function handle_errors( $error ) {
 		$output = '';
@@ -315,8 +317,8 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 	/**
 	 * Returns agents wrapped in option tags
 	 *
-	 * @param  int $agent_id Instance agentID if exists
-	 * @return str           HTML options tags of agents ids and names
+	 * @param  int $agent_id Instance agentID if exists.
+	 * @return string HTML options tags of agents ids and names.
 	 */
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );

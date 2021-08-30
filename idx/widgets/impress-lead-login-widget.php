@@ -14,8 +14,8 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		parent::__construct(
-			'impress_lead_login', // Base ID
-			__( 'IMPress Lead Login', 'idxbroker' ), // Name
+			'impress_lead_login', // Base ID.
+			__( 'IMPress Lead Login', 'idxbroker' ), // Name.
 			array(
 				'description'                 => __( 'Lead login form', 'idxbroker' ),
 				'classname'                   => 'impress-idx-login-widget',
@@ -25,7 +25,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -33,7 +33,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	public $idx_api;
 
 	/**
-	 * defaults
+	 * Defaults
 	 *
 	 * @var mixed
 	 * @access public
@@ -47,7 +47,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	];
 
 	/**
-	 * Front-end display of widget.
+	 * Front-end display of widget
 	 *
 	 * @see WP_Widget::widget()
 	 *
@@ -89,7 +89,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 			echo '<p>', $custom_text, '</p>';
 		}
 
-		// Returns hidden if false or not set
+		// Returns hidden if false or not set.
 		$password_field_type = $password_field ? 'password' : 'hidden';
 
 		?>
@@ -110,7 +110,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * target function.
+	 * Target
 	 *
 	 * @access public
 	 * @param mixed $new_window
@@ -118,7 +118,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
-			// if enabled, open links in new tab/window
+			// If enabled, open links in new tab/window.
 			return '_blank';
 		} else {
 			return '_self';
@@ -126,7 +126,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Sanitize widget form values as they are saved.
+	 * Sanitize widget form values as they are saved
 	 *
 	 * @see WP_Widget::update()
 	 *
@@ -135,6 +135,8 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
+		// Merge defaults and new_instance to avoid any missing index warnings when used with the legacy block widget.
+		$new_instance               = array_merge( $this->defaults, $new_instance );
 		$instance                   = array();
 		$instance['title']          = strip_tags( $new_instance['title'] );
 		$instance['custom_text']    = htmlentities( $new_instance['custom_text'] );
@@ -146,7 +148,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Back-end widget form.
+	 * Back-end widget form
 	 *
 	 * @see WP_Widget::form()
 	 * @param array $instance Previously saved values from database.
