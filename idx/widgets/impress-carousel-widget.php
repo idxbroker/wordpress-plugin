@@ -14,8 +14,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		parent::__construct(
-			'impress_carousel', // Base ID
-			'IMPress Property Carousel', // Name
+			'impress_carousel', // Base ID.
+			'IMPress Property Carousel', // Name.
 			array(
 				'description'                 => 'Displays a carousel of properties',
 				'classname'                   => 'impress-carousel-widget',
@@ -27,7 +27,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_Api
 	 *
 	 * @var mixed
 	 * @access public
@@ -35,7 +35,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	public $idx_api;
 
 	/**
-	 * defaults
+	 * Defaults
 	 *
 	 * @var mixed
 	 * @access public
@@ -196,7 +196,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 				return $output;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
 			$image_alt_tag  = apply_filters( 'impress_carousel_image_alt_tag', esc_html( $prop['address'] ), $prop );
 
 			$count++;
@@ -266,7 +266,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		return $output;
 	}
 
-	// Hide fields that have no data to avoid fields such as 0 Baths from displaying
+	// Hide fields that have no data to avoid fields such as 0 Baths from displaying.
 	public function hide_empty_fields( $field, $display_name, $value ) {
 		if ( $value <= 0 ) {
 			return '';
@@ -276,11 +276,11 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * target function.
+	 * Target
 	 *
 	 * @access public
-	 * @param mixed $new_window
-	 * @return void
+	 * @param mixed $new_window - New Window settings value.
+	 * @return string
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
@@ -292,11 +292,11 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * set_missing_core_fields function.
+	 * Set_missing_core_fields
 	 *
 	 * @access public
-	 * @param mixed $prop
-	 * @return void
+	 * @param mixed $prop - Listing data.
+	 * @return array
 	 */
 	public function set_missing_core_fields( $prop ) {
 		$name_values   = array(
@@ -315,6 +315,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			'bedrooms',
 			'totalBaths',
 			'sqFt',
+			'acres',
 		);
 		foreach ( $name_values as $field ) {
 			if ( empty( $prop[ $field ] ) ) {
@@ -333,8 +334,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	/**
 	 * Compares the price fields of two arrays
 	 *
-	 * @param array $a
-	 * @param array $b
+	 * @param array $a - Listing 1.
+	 * @param array $b - Listing 2.
 	 * @return int
 	 */
 	public function price_cmp( $a, $b ) {
@@ -342,18 +343,14 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$a = $this->clean_price( $a['listingPrice'] );
 		$b = $this->clean_price( $b['listingPrice'] );
 
-		if ( $a == $b ) {
-			return 0;
-		}
-
-		return ( $a < $b ) ? -1 : 1;
+		return $a <=> $b;
 	}
 
 	/**
 	 * Removes the "$" and "," from the price field
 	 *
-	 * @param string $price
-	 * @return mixed $price the cleaned price
+	 * @param string $price - Price string.
+	 * @return string $price - Cleaned price string
 	 */
 	public function clean_price( $price ) {
 
@@ -385,8 +382,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		foreach ( $saved_links as $saved_link ) {
 
-			// display the link name if no link title has been assigned
-			$link_text = empty( $saved_link->linkTitle ) ? $saved_link->linkName : $saved_link->linkTitle;
+			// Display the link name if no link title has been assigned.
+			$link_text = $saved_link->linkTitle ?? $saved_link->linkName;
 
 			$output .= '<option ' . selected( $instance['saved_link_id'], $saved_link->id, 0 ) . ' value="' . $saved_link->id . '">' . $link_text . '</option>';
 
@@ -395,7 +392,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Front-end display of widget.
+	 * Front-end display of widget
 	 *
 	 * @see WP_Widget::widget()
 	 * @param array $args Widget arguments.
@@ -426,7 +423,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Sanitize widget form values as they are saved.
+	 * Sanitize widget form values as they are saved
 	 *
 	 * @see WP_Widget::update()
 	 *
@@ -435,6 +432,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
+		// Merge defaults and new_instance to avoid any missing index warnings when used with the legacy block widget.
+		$new_instance              = array_merge( $this->defaults, $new_instance );
 		$instance                  = array();
 		$instance['title']         = strip_tags( $new_instance['title'] );
 		$instance['properties']    = strip_tags( $new_instance['properties'] );
@@ -452,7 +451,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Back-end widget form.
+	 * Back-end widget form
 	 *
 	 * @see WP_Widget::form()
 	 * @param array $instance Previously saved values from database.
@@ -540,8 +539,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	/**
 	 * Returns agents wrapped in option tags
 	 *
-	 * @param  int $agent_id Instance agentID if exists
-	 * @return str           HTML options tags of agents ids and names
+	 * @param  int $agent_id Instance agentID if exists.
+	 * @return string HTML options tags of agents ids and names.
 	 */
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
@@ -568,8 +567,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	/**
 	 * Output disclaimer and courtesy if applicable
 	 *
-	 * @param  array $prop The current property in the loop
-	 * @return string       HTML of disclaimer, logo, and courtesy
+	 * @param  array $prop The current property in the loop.
+	 * @return string HTML of disclaimer, logo, and courtesy.
 	 */
 	public function maybe_add_disclaimer_and_courtesy( $prop ) {
 		// Add Disclaimer when applicable.
