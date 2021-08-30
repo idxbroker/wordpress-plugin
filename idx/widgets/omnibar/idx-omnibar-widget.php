@@ -80,6 +80,8 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	 * @return void
 	 */
 	public function update( $new_instance, $old_instance ) {
+		// Merge defaults and new_instance to avoid any missing index warnings when used with the legacy block widget.
+		$new_instance          = array_merge( $this->defaults, $new_instance );
 		$instance              = $old_instance;
 		$instance['title']     = $new_instance['title'];
 		$instance['styles']    = (int) $new_instance['styles'];
