@@ -997,7 +997,7 @@ class Idx_Api {
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
-		if ( ! is_array( $agents_array ) || ! isset( $agents_array['agent'] ) ) {
+		if ( empty( $agents_array['agent'] ) ) {
 			return;
 		}
 

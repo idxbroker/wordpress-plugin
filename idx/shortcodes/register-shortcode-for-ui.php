@@ -425,7 +425,7 @@ class Register_Shortcode_For_Ui {
 		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
 		$output .= '<label for"agent_id">Route to Agent:</label>';
 		$output .= '<select id="agent_id" data-short-name="agent_id">';
-		$output .= $this->get_agents_select_list( $defaults['agent_id'] );
+		$output .= $this->idx_api->get_agents_select_list( $defaults['agent_id'] );
 		$output .= '</select>';
 		$output .= '</div>';
 
@@ -559,7 +559,7 @@ class Register_Shortcode_For_Ui {
 		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
 		$output .= '<label for"agent_id">Limit by Agent:</label>';
 		$output .= '<select id="agent_id" data-short-name="agent_id">';
-		$output .= $this->get_agents_select_list( $defaults['agent_id'] );
+		$output .= $this->idx_api->get_agents_select_list( $defaults['agent_id'] );
 		$output .= '</select>';
 		$output .= '</div>';
 
@@ -666,7 +666,7 @@ class Register_Shortcode_For_Ui {
 		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
 		$output .= '<label for"agent_id">Limit by Agent:</label>';
 		$output .= '<select id="agent_id" data-short-name="agent_id">';
-		$output .= $this->get_agents_select_list( $defaults['agent_id'] );
+		$output .= $this->idx_api->get_agents_select_list( $defaults['agent_id'] );
 		$output .= '</select>';
 		$output .= '</div>';
 
@@ -722,33 +722,4 @@ class Register_Shortcode_For_Ui {
 		return $output;
 	}
 
-
-	/**
-	 * get_agents_select_list function.
-	 *
-	 * @access public
-	 * @param mixed $agent_id
-	 * @return void
-	 */
-	public function get_agents_select_list( $agent_id ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-
-		if ( ! is_array( $agents_array ) ) {
-			return;
-		}
-
-		if ( $agent_id != null ) {
-			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>Use default routing</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
-			}
-		} else {
-			$agents_list = '<option value="">All</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
-			}
-		}
-
-		return $agents_list;
-	}
 }

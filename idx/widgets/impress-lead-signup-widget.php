@@ -260,7 +260,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Route to Agent:', 'idxbroker' ); ?></label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
-				<?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
+				<?php echo $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
 		</p>
 		<p>
@@ -314,31 +314,4 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		return $output;
 	}
 
-	/**
-	 * Returns agents wrapped in option tags
-	 *
-	 * @param  int $agent_id Instance agentID if exists.
-	 * @return string HTML options tags of agents ids and names.
-	 */
-	public function get_agents_select_list( $agent_id ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-
-		if ( ! is_array( $agents_array ) ) {
-			return;
-		}
-
-		if ( $agent_id != null ) {
-			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>All</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
-			}
-		} else {
-			$agents_list = '<option value="">All</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
-			}
-		}
-
-		return $agents_list;
-	}
 }
