@@ -7,13 +7,38 @@
  */
 class WP_Listings_Search_Widget extends WP_Widget {
 
-	function __construct() {
+	public function __construct() {
 		$widget_ops = array( 'classname' => 'listings-search wp-listings-search', 'description' => __( 'Display listings search dropdown', 'wp-listings' ), 'customize_selective_refresh' => true );
 		$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'listings-search' );
 		parent::__construct( 'listings-search', __( 'IMPress Listings - Search', 'wp-listings' ), $widget_ops, $control_ops );
+		add_shortcode( 'impress-listings-search', [ $this, 'search_button_shortcode' ] );
 	}
 
-	function widget( $args, $instance ) {
+	public function search_button_shortcode( $atts ) {
+		extract(
+			shortcode_atts(
+				[
+					'title'       => '',
+					'button_text' => __( 'Search Listings', 'wp-listings' ),
+				],
+				$atts
+			)
+		);
+
+		$args = [
+			'before_widget' => '<div class="box widget">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<div class="widget-title">',
+			'after_title'   => '</div>',
+		];
+
+		ob_start();
+		$this->widget( array_merge( $atts, $args ), [] );
+		$output = ob_get_clean();
+		return $output;
+	}
+
+	public function widget( $args, $instance ) {
 
 		$instance = wp_parse_args( (array) $instance, array(
 			'title'			=> '',
@@ -57,11 +82,11 @@ class WP_Listings_Search_Widget extends WP_Widget {
 
 	}
 
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 		return $new_instance;
 	}
 
-	function form( $instance ) {
+	public function form( $instance ) {
 
 		$instance = wp_parse_args( (array) $instance, array(
 			'title'			=> '',
