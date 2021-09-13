@@ -8,13 +8,42 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 class IMPress_Agents_Widget extends WP_Widget {
 
-	function __construct() {
+	public function __construct() {
 		$widget_ops = array( 'classname' => 'featured-employee', 'description' => __( 'Display a featured employee or employees contact info.', 'impress_agents' ), 'customize_selective_refresh' => true );
 		$control_ops = array( 'width' => 300, 'height' => 350 );
 		parent::__construct( 'featured-employee', __( 'IMPress Agents', 'impress_agents' ), $widget_ops, $control_ops );
+		add_shortcode( 'impress-agent', [ $this, 'impress_agent_shortcode' ] );
 	}
 
-	function widget( $args, $instance ) {
+	public function impress_agent_shortcode( $atts ) {
+		extract(
+			shortcode_atts(
+				[
+					'post_id'     => '',
+					'title'       => '',
+					'show_agent'  => 0,
+					'show_number' => 1,
+					'orderby'     => '',
+					'order'       => '',
+				],
+				$atts
+			)
+		);
+
+		$args = [
+			'before_widget' => '<div class="box widget">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<div class="widget-title">',
+			'after_title'   => '</div>',
+		];
+
+		ob_start();
+		$this->widget( array_merge( $atts, $args ), [] );
+		$output = ob_get_clean();
+		return $output;
+	}
+
+	public function widget( $args, $instance ) {
 
 		global $post;
 
@@ -83,7 +112,7 @@ class IMPress_Agents_Widget extends WP_Widget {
 
 	}
 
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['show_number'] = (int)$new_instance['show_number'];
@@ -91,7 +120,7 @@ class IMPress_Agents_Widget extends WP_Widget {
 		return $new_instance;
 	}
 
-	function form( $instance ) {
+	public function form( $instance ) {
 
 		$instance = wp_parse_args( $instance, array(
 			'post_id'     => '',
