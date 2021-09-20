@@ -285,7 +285,7 @@ class Create_Impress_Widgets {
 				);
 			}
 
-			if ( 1 === $use_rows && ( 1 !== $count || 1 === $total ) ) {
+			if ( 1 == $use_rows && ( 1 !== $count || 1 === $total ) ) {
 
 				// close a row if..
 				// num_per_row is a factor of count OR

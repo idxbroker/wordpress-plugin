@@ -209,7 +209,7 @@ class WPL_Idx_Listing {
 			if ( isset( $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'] ) ) {
 
 				// Update property data.
-				self::wp_listings_idx_insert_post_meta( $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'], $sold_properties[ $key ], true, ( 'update-noimage' === $wpl_options['wp_listings_idx_update'] ) ? false : true, true );
+				self::wp_listings_idx_insert_post_meta( $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'], $sold_properties[ $key ], true, ( ! empty( $wpl_options['wp_listings_idx_update'] ) && 'update-noimage' === $wpl_options['wp_listings_idx_update'] ) ? false : true, true );
 
 				if ( isset( $wpl_options['wp_listings_idx_sold'] ) && 'sold-draft' === $wpl_options['wp_listings_idx_sold'] ) {
 
