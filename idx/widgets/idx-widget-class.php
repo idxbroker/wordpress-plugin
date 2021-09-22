@@ -84,9 +84,8 @@ class Idx_Widget_Class extends \WP_Widget {
 		// if no WP title and not specifically set to 'none', display IDX Widget title which is in $args param
 		// only load leaflet scripts and styles for map search widget. WP takes care of duplicates automatically
 		if ( strpos( $this->widget_url, 'mapwidgetjs.php' ) ) {
-			 wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', __FILE__ );
+			wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', __FILE__ );
 			wp_enqueue_script( 'custom-scriptLeafDraw', '//d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', __FILE__ );
-			wp_enqueue_script( 'custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
 			wp_enqueue_style( 'cssLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.css' );
 			wp_enqueue_style( 'cssLeafLabel', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
 			echo $after_title . "<script src=\"{$this->widget_url}\" defer></script>" . $after_widget;
