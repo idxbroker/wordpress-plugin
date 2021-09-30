@@ -168,6 +168,7 @@ class Register_Blocks {
 	 */
 	public function register_block_shared_css() {
 		wp_enqueue_style( 'idx-shared-block-editor-css', plugins_url( '../assets/css/idx-block-edit.min.css', __FILE__ ), false, '1.0', 'all' );
+		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
 	}
 
 	// Block Registration/Setup Functions.
