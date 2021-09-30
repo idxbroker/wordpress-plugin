@@ -4,7 +4,7 @@ Author: IDX, LLC
 Author URL: http://www.idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite  
 **Requires at least:** 5.3
-**Tested up to:** 5.7
+**Tested up to:** 5.8
 **Stable tag:** 3.0.4
 **Minimum PHP:** 7.0
 **License:** GPLv2 or later  
@@ -121,6 +121,9 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 ## Changelog ##
 
 ### 3.0.4 ###
+* New: IDX Map Search Widget provider changed to Azure maps
+* Fix: IMPress block widgets updated for WordPress 5.8 to prevent error log entries about enqueuing resources
+* Fix: Missing shortcode options for the legacy IMPress Listings and Agents widgets, the 'impress-listings-search' button and the imported 'impress-agent' list, have been added
 
 ### 3.0.3 ###
 * Fix: Listings auto-import scheduled task not disabling correctly
