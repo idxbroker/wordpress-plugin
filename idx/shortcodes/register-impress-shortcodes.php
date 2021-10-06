@@ -579,41 +579,6 @@ class Register_Impress_Shortcodes {
 			$autoplay_param = '';
 		}
 
-		// All Instance Values are strings for shortcodes but not widgets.
-		$output .= '
-            <script>
-		window.addEventListener("DOMContentLoaded", function(event) {
-                	jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
-			    items: ' . $display . ',
-			    ' . $autoplay_param . '
-			    nav: true,
-			    navText: ["' . $prev_link . '", "' . $next_link . '"],
-			    loop: true,
-			    lazyLoad: true,
-			    addClassActive: true,
-			    itemsScaleUp: true,
-			    navContainerClass: "owl-controls owl-nav",
-			    responsiveClass:true,
-			    responsive:{
-				0:{
-					items: 1,
-				    	nav: true,
-				    	margin: 0
-				},
-				450:{
-					items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
-					loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
-				},
-				800:{
-					items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
-					loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
-				}
-                    	}
-                });
-              });
-            </script>
-            ';
-
 		$count = 0;
 
 		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $display );
@@ -622,7 +587,6 @@ class Register_Impress_Shortcodes {
 		$agent_data;
 
 		foreach ( $properties as $prop ) {
-
 			if ( ! empty( $agent_id ) ) {
 				// Check if listing agent ID matches agent's IDX ID.
 				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
@@ -648,8 +612,7 @@ class Register_Impress_Shortcodes {
 			}
 
 			if ( ! empty( $max ) && $count == $max ) {
-				$output .= '</div><!-- end .impress-listing-carousel -->';
-				return $output;
+				break;
 			}
 
 			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
@@ -718,6 +681,41 @@ class Register_Impress_Shortcodes {
 				$disclaimer
 			);
 		}
+
+		// All Instance Values are strings for shortcodes but not widgets.
+		$output = '
+        	<script>
+				window.addEventListener("DOMContentLoaded", function(event) {
+					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+						items: ' . $display . ',
+						' . $autoplay_param . '
+						nav: true,
+						navText: ["' . $prev_link . '", "' . $next_link . '"],
+						loop: true,
+						lazyLoad: true,
+						addClassActive: true,
+						itemsScaleUp: true,
+						navContainerClass: "owl-controls owl-nav",
+						responsiveClass:true,
+						responsive:{
+							0:{
+								items: 1,
+								nav: true,
+								margin: 0
+							},
+							450:{
+								items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+								loop: ' . ( round( $display / 2 ) < $count ? 'true' : 'false' ) . '
+							},
+							800:{
+								items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+								loop: ' . ( $display < $count ? 'true' : 'false' ) . '
+							}
+						}
+					});
+				});
+            </script>
+        ' . $output;
 
 		$output .= '</div><!-- end .impress-carousel -->';
 
