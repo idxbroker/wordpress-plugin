@@ -55,7 +55,8 @@ class Migrate_Legacy_Widgets {
 	 * @return void
 	 */
 	public function convert_mw_widgets() {
-		$active_widgets = $this->get_active_mw_widgets();
+		$active_widgets    = $this->get_active_mw_widgets();
+		$widgets_converted = [];
 		if ( $active_widgets ) {
 			foreach ( $active_widgets as $active_widget ) {
 				$widgets_converted[] = $this->convert_widget( $active_widget );
@@ -174,7 +175,7 @@ class Migrate_Legacy_Widgets {
 			}
 		}
 
-		return ( $active_widgets ) ? $active_widgets : false;
+		return $active_widgets ?? false;
 	}
 
 	/**

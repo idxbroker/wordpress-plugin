@@ -65,7 +65,13 @@ class Create_Idx_Widgets {
                     }}";
 
 				eval( $eval );
-				add_action( 'widgets_init', create_function( '', "return register_widget('{$widget_class}');" ) ); // attach the newly created widget class to the WP widget initializier
+				// Attach the newly created widget class to the WP widget initializier.
+				add_action(
+					'widgets_init',
+					function () use ( $widget_class ) {
+						return register_widget( $widget_class );
+					}
+				);
 			}
 		}
 	}
