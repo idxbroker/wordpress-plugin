@@ -809,13 +809,17 @@ class Lead_Management {
 			<?php
 
 		} else {
-			$lead_id = $_GET['leadID'];
+			$lead_id = sanitize_text_field( $_GET['leadID'] );
 			if ( empty( $lead_id ) ) {
 				return;
 			}
 
 			// Get Lead info
 			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+			// Return early on error, if not an array, or first key is invalid lead ID message.
+			if ( is_wp_error( $lead ) || ! is_array( $lead ) || ( ! empty( $lead[0] ) && ' Required parameter missing or invalid.' === $lead[0] ) ) {
+				return;
+			}
 			?>
 			<h3>Edit Lead &raquo; <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
 
@@ -954,7 +958,7 @@ class Lead_Management {
 						</div>
 						<br />
 
-						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce( 'idx_lead_edit_nonce' ); ?>" data-lead-id="<?php echo $lead_id; ?>" type="submit">Save Lead</button>
+						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce( 'idx_lead_edit_nonce' ); ?>" data-lead-id="<?php echo esc_attr( $lead_id ); ?>" type="submit">Save Lead</button>
 						<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 						<div class="error-fail" style="display: none;">Lead update failed. Check all required fields or try again later.</div>
 						<div class="error-invalid-email" style="display: none;">Invalid email address detected. Please enter a valid email.</div>
@@ -995,7 +999,7 @@ class Lead_Management {
 							$notes .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric note"><div class="render-note-' . $note['id'] . '">' . str_replace( '&quot;', '"', str_replace( '&gt;', '>', str_replace( '&lt;', '<', $note['note'] ) ) ) . '</div></td>';
 							$notes .= '<td class="mdl-data-table__cell--non-numeric">
-										<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . $note['id'] . '" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-note="' . $note['note'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_note_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . $note['id'] . '">Edit Note</div></a>
+										<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . $note['id'] . '" data-id="' . esc_attr( $lead_id ) . '" data-noteid="' . $note['id'] . '" data-note="' . $note['note'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_note_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . $note['id'] . '">Edit Note</div></a>
 
 										<a href="#" id="delete-note-' . $note['id'] . '" class="delete-note" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_note_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' . $note['id'] . '">Delete Note</div></a>
 
