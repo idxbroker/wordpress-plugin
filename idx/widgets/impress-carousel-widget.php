@@ -112,40 +112,6 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		$target = $this->target( $instance['new_window'] );
 
-		$output .= '
-			<script>
-				window.addEventListener("DOMContentLoaded", function(event) {
-					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
-						items: ' . $display . ',
-						' . $autoplay . '
-						nav: true,
-						navText: ["' . $prev_link . '", "' . $next_link . '"],
-						loop: true,
-						lazyLoad: true,
-						addClassActive: true,
-						itemsScaleUp: true,
-						navContainerClass: "owl-controls owl-nav",
-						responsiveClass:true,
-						responsive:{
-							0:{
-								items: 1,
-								nav: true,
-								margin: 0
-							},
-							450:{
-								items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
-								loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
-							},
-							800:{
-								items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
-								loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
-							}
-						}
-					});
-				});
-			</script>
-		';
-
 		if ( 'low-high' == $instance['order'] ) {
 			// sort low to high
 			usort( $properties, array( $this, 'price_cmp' ) );
@@ -193,7 +159,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			}
 
 			if ( ! empty( $max ) && $count == $max ) {
-				return $output;
+				break;
 			}
 
 			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
@@ -260,6 +226,40 @@ class Impress_Carousel_Widget extends \WP_Widget {
 				$this->maybe_add_disclaimer_and_courtesy( $prop )
 			);
 		}
+
+		$output = '
+			<script>
+				window.addEventListener("DOMContentLoaded", function(event) {
+					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+						items: ' . $display . ',
+						' . $autoplay . '
+						nav: true,
+						navText: ["' . $prev_link . '", "' . $next_link . '"],
+						loop: true,
+						lazyLoad: true,
+						addClassActive: true,
+						itemsScaleUp: true,
+						navContainerClass: "owl-controls owl-nav",
+						responsiveClass:true,
+						responsive:{
+							0:{
+								items: 1,
+								nav: true,
+								margin: 0
+							},
+							450:{
+								items: ' . round( $display / 2 ) . ',
+								loop: ' . ( round( $display / 2 ) < $count ? 'true' : 'false' ) . '
+							},
+							800:{
+								items: ' . $display . ',
+								loop: ' . ( $display < $count ? 'true' : 'false' ) . '
+							}
+						}
+					});
+				});
+			</script>
+		' . $output;
 
 		$output .= '</div><!-- end .impress-carousel -->';
 
