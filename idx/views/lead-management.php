@@ -1001,7 +1001,7 @@ class Lead_Management {
 							$notes .= '<td class="mdl-data-table__cell--non-numeric">
 										<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . $note['id'] . '" data-id="' . esc_attr( $lead_id ) . '" data-noteid="' . $note['id'] . '" data-note="' . $note['note'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_note_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . $note['id'] . '">Edit Note</div></a>
 
-										<a href="#" id="delete-note-' . $note['id'] . '" class="delete-note" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_note_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' . $note['id'] . '">Delete Note</div></a>
+										<a href="#" id="delete-note-' . $note['id'] . '" class="delete-note" data-id="' . esc_attr( $lead_id ) . '" data-noteid="' . $note['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_note_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' . $note['id'] . '">Delete Note</div></a>
 
 										</td>';
 							$notes .= '</tr>';
@@ -1041,7 +1041,7 @@ class Lead_Management {
 								<textarea class="mdl-textfield__input" type="text" rows="4" id="note" name="note" autofocus></textarea>
 								<label class="mdl-textfield__label" for="note">Note <span class="is-required">(required)</span></label>
 							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_note_add_nonce' ); ?>" type="submit">Save Note</button>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-note" data-id="<?php echo esc_attr( $lead_id ); ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_note_add_nonce' ); ?>" type="submit">Save Note</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead note addition failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1055,7 +1055,7 @@ class Lead_Management {
 								<textarea class="mdl-textfield__input" type="text" rows="4" id="note" name="note" value="" autofocus></textarea>
 								<label class="mdl-textfield__label" for="note">Note <span class="is-required">(required)</span></label>
 							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_note_edit_nonce' ); ?>" type="submit">Save Note</button>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-note" data-id="<?php echo esc_attr( $lead_id ); ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_note_edit_nonce' ); ?>" type="submit">Save Note</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead note update failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1216,9 +1216,9 @@ class Lead_Management {
 							$searches .= '<td class="mdl-data-table__cell--non-numeric">
 										<!--<a href="' . admin_url( 'admin.php?page=edit-search&searchID=' . $search['id'] ) . '" id="edit-search-' . $search['id'] . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-search-' . $search['id'] . '">Edit Search</div></a>-->
 
-										<a href="#" id="delete-search-' . $search['id'] . '" class="delete-search" data-id="' . $lead_id . '" data-ssid="' . $search['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_search_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . $search['id'] . '">Delete Saved Search</div></a>
+										<a href="#" id="delete-search-' . $search['id'] . '" class="delete-search" data-id="' . esc_attr( $lead_id ) . '" data-ssid="' . $search['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_search_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . $search['id'] . '">Delete Saved Search</div></a>
 
-										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedsearch.php?id=' . $lead_id . '&ssid=' . $search['id'] . '" id="edit-mw-' . $search['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $search['id'] . '">Edit Search in Middleware</div></a>
+										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedsearch.php?id=' . esc_attr( $lead_id ) . '&ssid=' . $search['id'] . '" id="edit-mw-' . $search['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $search['id'] . '">Edit Search in Middleware</div></a>
 										</td>';
 							$searches .= '</tr>';
 						}
@@ -1248,7 +1248,7 @@ class Lead_Management {
 							</form>
 						</dialog>';
 					echo '
-						<a href="' . admin_url( 'admin.php?page=edit-idx-search&leadID=' . $lead_id ) . '" id="add-lead-search-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+						<a href="' . admin_url( 'admin.php?page=edit-idx-search&leadID=' . esc_attr( $lead_id ) ) . '" id="add-lead-search-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 							<i class="material-icons">add</i>
 							<div class="mdl-tooltip" data-mdl-for="add-lead-search-btn">Add Lead Saved Search</div>
 						</a>
