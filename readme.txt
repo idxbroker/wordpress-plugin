@@ -137,6 +137,8 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 == Changelog ==
 
 = 3.0.5 =
+* Fix: Resolves potential security issue on the Lead Management page
+* Fix: Duplicate entries in IMPress Carousel widget when there are too few items to display
 
 = 3.0.4 =
 * New: IDX Map Search Widget provider changed to Azure maps
