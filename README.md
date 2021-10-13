@@ -121,6 +121,7 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 ## Changelog ##
 
 ### 3.0.6 ###
+* Fix: Additional escaping added to Lead Management page
 
 ### 3.0.5 ###
 * Fix: Resolves potential security issue on the Lead Management page

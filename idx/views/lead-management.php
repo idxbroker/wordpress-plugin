@@ -1086,11 +1086,11 @@ class Lead_Management {
 							$properties .= '<td class="mdl-data-table__cell--non-numeric">' . $updates . '</td>';
 							$properties .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_created_date . '</td>';
 							$properties .= '<td class="mdl-data-table__cell--non-numeric">
-										<a href="#TB_inline?width=600&height=500&inlineId=edit-lead-property" class="edit-property thickbox" id="edit-property-' . $property['id'] . '" data-id="' . $lead_id . '" data-spid="' . $property['id'] . '" data-name="' . stripslashes( $property['propertyName'] ) . '" data-updates="' . $property['receiveUpdates'] . '" data-idxid="' . $property['property']['idxID'] . '" data-listingid="' . $property['property']['listingID'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-property-' . $property['id'] . '">Edit Property</div></a>
+										<a href="#TB_inline?width=600&height=500&inlineId=edit-lead-property" class="edit-property thickbox" id="edit-property-' . $property['id'] . '" data-id="' . esc_attr( $lead_id ) . '" data-spid="' . $property['id'] . '" data-name="' . stripslashes( $property['propertyName'] ) . '" data-updates="' . $property['receiveUpdates'] . '" data-idxid="' . $property['property']['idxID'] . '" data-listingid="' . $property['property']['listingID'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-property-' . $property['id'] . '">Edit Property</div></a>
 
-										<a href="#" id="delete-property-' . $property['id'] . '" class="delete-property" data-id="' . $lead_id . '" data-spid="' . $property['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' . $property['id'] . '">Delete Saved Property</div></a>
+										<a href="#" id="delete-property-' . $property['id'] . '" class="delete-property" data-id="' . esc_attr( $lead_id ) . '" data-spid="' . $property['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' . $property['id'] . '">Delete Saved Property</div></a>
 
-										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' . $lead_id . '&spid=' . $property['id'] . '" id="edit-mw-' . $property['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $property['id'] . '">Edit Property in Middleware</div></a>
+										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' . esc_attr( $lead_id ) . '&spid=' . $property['id'] . '" id="edit-mw-' . $property['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $property['id'] . '">Edit Property in Middleware</div></a>
 										</td>';
 							$properties .= '</tr>';
 						}
@@ -1149,7 +1149,7 @@ class Lead_Management {
 									<span class="mdl-switch__label">Receive Property Updates Off/On</span>
 								</label>
 							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-property" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_property_add_nonce' ); ?>" type="submit">Save Property</button>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-property" data-id="<?php echo esc_attr( $lead_id ); ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_property_add_nonce' ); ?>" type="submit">Save Property</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead saved property addition failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1181,7 +1181,7 @@ class Lead_Management {
 									<span class="mdl-switch__label">Receive Property Updates Off/On</span>
 								</label>
 							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-property" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_property_edit_nonce' ); ?>" type="submit">Save Property</button>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-property" data-id="<?php echo esc_attr( $lead_id ); ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_property_edit_nonce' ); ?>" type="submit">Save Property</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead saved property update failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
