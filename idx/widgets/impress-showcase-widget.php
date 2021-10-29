@@ -174,7 +174,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				return $output;
 			}
 
-			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			if ( 1 == $instance['use_rows'] && $count == 0 && $max != '1' ) {
 				$output .= '<div class="impress-row">';

@@ -383,7 +383,7 @@ class WP_Listings {
 	}
 
 	public function hide_empty_thumbnails() {
-		echo __( '<style>.listing_thumbnail>p>img[src=""]{content:url("//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png")}</style>' );
+		echo __( '<style>.listing_thumbnail>p>img[src=""]{content:url("' . plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' ) . '")}</style>' );
 	}
 
 }
