@@ -204,7 +204,7 @@ class Register_Idx_Shortcodes {
 	public function get_widget_url( $widget_uid ) {
 		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
 		foreach ( $idx_widgets as $widget ) {
-			if ( $widget_uid === $widget->uid ) {
+			if ( ! empty( $widget->uid ) && $widget_uid === $widget->uid ) {
 				return $widget->url;
 			}
 		}

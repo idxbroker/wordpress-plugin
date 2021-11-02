@@ -593,8 +593,10 @@ class Idx_Api {
 		// Make initial API request for listings.
 		$listing_data = $this->idx_api( "$type?disclaimers=true", IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
-		if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
+		if ( ! is_wp_error( $listing_data ) && isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 			$properties = $listing_data['data'];
+		} else {
+			return [];
 		}
 
 		// Download remaining listings if available.
@@ -607,7 +609,7 @@ class Idx_Api {
 			// Explode $listing_data['next'] on '/clients/', index 1 of the resulting array will have the fragment needed to make the next API request.
 			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1], IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 			// If $listing_data['data'] is an array, merge it with the existing listings/properties array.
-			if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
+			if ( ! is_wp_error( $listing_data ) && isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 				$properties = array_merge( $properties, $listing_data['data'] );
 			}
 		}
@@ -973,7 +975,7 @@ class Idx_Api {
 		// Initial request.
 		$listing_data = $this->idx_api( $api_method . $offset, IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
 
-		if ( array_key_exists( 'data', $listing_data ) && ! empty( $listing_data['data'] ) ) {
+		if ( ! is_wp_error( $listing_data ) && ! empty( $listing_data['data'] ) ) {
 			// Assign returned listings to $properties.
 			$properties = $listing_data['data'];
 
@@ -997,7 +999,7 @@ class Idx_Api {
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
-		if ( empty( $agents_array['agent'] ) ) {
+		if ( is_wp_error( $agents_array ) || empty( $agents_array['agent'] ) ) {
 			return;
 		}
 
