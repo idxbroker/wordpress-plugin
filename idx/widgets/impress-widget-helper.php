@@ -24,8 +24,7 @@ function price_selector( $property ) {
 	// Supplemental listings.
 	if ( ! empty( $property['idxID'] ) && 'a999' === $property['idxID'] ) {
 		// Sold supplemental listings.
-		$status = $property['status'] ?? $property['idxStatus'] ?? '';
-		if ( stripos( $status, 'sold' ) !== false || stripos( $status, 'closed' ) !== false ) {
+		if ( stripos( $property['status'], 'sold' ) !== false || stripos( $property['status'], 'closed' ) !== false ) {
 			return empty( $property['soldPrice'] ) ? $listing_price : $currency_symbol . number_format( $property['soldPrice'] );
 		}
 		// Return rntLsePrice if rntLse field is set to any value besides 'neither'.
