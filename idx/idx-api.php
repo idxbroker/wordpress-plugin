@@ -573,6 +573,22 @@ class Idx_Api {
 	}
 
 	/**
+	 * Saved_link_properties_count function.
+	 * Used to get accurate count on saved link results as the /results method currently is limited to 250 listings returned.
+	 *
+	 * @access public
+	 * @param mixed $saved_link_id - Saved link ID.
+	 * @return mixed
+	 */
+	public function saved_link_properties_count( $saved_link_id ) {
+		$saved_link_count = $this->idx_api( 'savedlinks/' . $saved_link_id . '/count', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		if ( is_wp_error( $saved_link_count ) || empty( $saved_link_count[0] ) ) {
+			return 0;
+		}
+		return $saved_link_count[0];
+	}
+
+	/**
 	 * Client_properties function.
 	 * Expected $type posibilities: featured, soldpending, supplemental.
 	 * 
