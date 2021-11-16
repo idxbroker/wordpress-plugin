@@ -198,11 +198,7 @@ class Create_Impress_Widgets {
 				return $output;
 			}
 
-			if ( ( $property_type ) == 'savedlink' ) {
-				$prop_image_url = ( isset( $prop['image']['1']['url'] ) ) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-			} else {
-				$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-			}
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			if ( 1 == $use_rows && $count == 0 && $max != '1' ) {
 				$output .= '<div class="shortcode property-showcase row">';
@@ -408,11 +404,7 @@ class Create_Impress_Widgets {
 				return $output;
 			}
 
-			if ( ( $property_type ) == 'savedlink' ) {
-				$prop_image_url = ( isset( $prop['image']['1']['url'] ) ) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-			} else {
-				$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-			}
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			$count++;
 

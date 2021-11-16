@@ -229,7 +229,7 @@ class Register_Impress_Shortcodes {
 				return $output;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			if ( 1 == $use_rows && $count == 0 && $max != '1' ) {
 				$output .= '<div class="shortcode impress-property-showcase impress-row">';
@@ -615,7 +615,7 @@ class Register_Impress_Shortcodes {
 				break;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 			$image_alt_tag  = apply_filters( 'impress_carousel_image_alt_tag', esc_html( $prop['address'] ), $prop );
 
 			$count++;

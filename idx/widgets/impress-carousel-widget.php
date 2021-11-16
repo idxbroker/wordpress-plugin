@@ -162,7 +162,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 				break;
 			}
 
-			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 			$image_alt_tag  = apply_filters( 'impress_carousel_image_alt_tag', esc_html( $prop['address'] ), $prop );
 
 			$count++;
