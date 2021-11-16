@@ -79,7 +79,7 @@ if (function_exists('equity')) {
 
 get_header();
 
-if($options['impress_agents_custom_wrapper'] && $options['impress_agents_start_wrapper']) {
+if( ! empty( $options['impress_agents_custom_wrapper'] ) && ! empty( $options['impress_agents_start_wrapper'] ) ) {
 	echo $options['impress_agents_start_wrapper'];
 } else {
 	echo '<div id="primary" class="content-area container inner">
@@ -113,7 +113,7 @@ if($options['impress_agents_custom_wrapper'] && $options['impress_agents_start_w
 	}
 	endwhile;
 
-if($options['impress_agents_custom_wrapper'] && $options['impress_agents_end_wrapper']) {
+if( ! empty( $options['impress_agents_custom_wrapper'] ) && ! empty( $options['impress_agents_end_wrapper'] ) ) {
 	echo $options['impress_agents_end_wrapper'];
 } else {
 	echo '</div><!-- #content -->

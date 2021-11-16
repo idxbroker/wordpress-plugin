@@ -262,7 +262,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	public static function city_list_links( $list_id, $idx_id, $columns = 0, $number_columns = 4, $target, $show_count = false, $idx_api ) {
 		$cities = $idx_api->city_list( $list_id );
 
-		if ( ! $cities ) {
+		if ( is_wp_error( $cities) || empty( $cities ) ) {
 			return false;
 		}
 

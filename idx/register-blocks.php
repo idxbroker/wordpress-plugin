@@ -800,7 +800,7 @@ class Register_Blocks {
 
 		if ( get_option( 'idx_broker_apikey' ) ) {
 			$agent_api_data = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-			if ( ! empty( $agent_api_data['agent'] ) ) {
+			if ( ! is_wp_error( $agent_api_data ) && ! empty( $agent_api_data['agent'] ) ) {
 				foreach ( $agent_api_data['agent'] as $current_agent ) {
 					array_push( $agents_list, [ 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ] );
 				}
