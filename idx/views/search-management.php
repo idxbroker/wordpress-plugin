@@ -32,6 +32,12 @@ class Search_Management {
 		add_action( 'init', array( $this, 'idx_ajax_actions' ) );
 	}
 
+	/**
+	 * Idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
 	public function add_search_pages() {
@@ -72,11 +78,11 @@ class Search_Management {
 
 	public function idx_search_scripts() {
 
-		// Only load on searches pages
+		// Only load on searches pages.
 		$screen_id = get_current_screen();
-		if ( $screen_id->id === 'impress_page_idx-searches' || $screen_id->id === 'impress_page_edit-idx-search' || $screen_id->id === 'searches_page_edit-idx-search' || $screen_id->id === 'toplevel_page_idx-searches' ) {
+		if ( 'impress_page_idx-searches' === $screen_id->id || 'impress_page_edit-idx-search' === $screen_id->id || 'searches_page_edit-idx-search' === $screen_id->id || 'toplevel_page_idx-searches' === $screen_id->id ) {
 
-			wp_enqueue_script( 'idx_search_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-searches.js', array( 'jquery' ), true );
+			wp_enqueue_script( 'idx_search_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-searches.min.js', [ 'jquery' ], '1.0.0', false );
 			wp_localize_script(
 				'idx_search_ajax_script',
 				'IDXSearchAjax',
@@ -87,17 +93,18 @@ class Search_Management {
 					'detailsurl'  => $this->idx_api->details_url(),
 				)
 			);
-			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
-			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
+			wp_enqueue_script( 'dialog-polyfill' );
+			wp_enqueue_script( 'idx-material-js' );
+			wp_enqueue_script( 'jquery-datatables' );
+			wp_enqueue_script( 'select2' );
 
-			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.min.css' );
-			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
-			wp_enqueue_style( 'idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons' );
-			wp_enqueue_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css' );
-			wp_enqueue_style( 'idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css' );
-			wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
+
+			wp_enqueue_style( 'idx-admin' );
+			wp_enqueue_style( 'idx-material-font' );
+			wp_enqueue_style( 'idx-material-icons' );
+			wp_enqueue_style( 'idx-material-style' );
+			wp_enqueue_style( 'idx-material-datatable' );
+			wp_enqueue_style( 'select2' );
 		}
 	}
 
@@ -174,7 +181,7 @@ class Search_Management {
 				// Delete search cache so new search will show in list views immediately.
 				delete_option( 'idx_clients_savedlinks_cache' );
 				// return new search ID to script.
-				echo $decoded_response['newID'];
+				echo esc_html( $decoded_response['newID'] );
 			} else {
 				echo $response->get_error_message();
 			}
@@ -244,7 +251,7 @@ class Search_Management {
 				// Delete search cache so new search will show in list views immediately.
 				delete_option( 'idx_leads_search/' . $_POST['leadID'] . '_cache' );
 				// return new search ID to script.
-				echo $decoded_response['newID'];
+				echo esc_html( $decoded_response['newID'] );
 			} else {
 				echo $response->get_error_message();
 			}
@@ -410,7 +417,7 @@ class Search_Management {
 					<label class="mdl-selectfield__label" for="ccz">City, County or Zip</label>
 					<div class="" style="width: 300px;">
 						<select style="width: 300px;" class="" id="ccz" name="ccz" multiple="multiple">
-							<?php echo self::ccz_select_list(); ?>
+							<?php self::ccz_select_list(); ?>
 						</select>
 					</div>
 				</div><br />
@@ -541,7 +548,7 @@ class Search_Management {
 					<label class="mdl-selectfield__label" for="ccz">City, County or Zip</label>
 					<div class="" style="width: 300px;">
 						<select style="width: 300px;" class="" id="ccz" name="ccz" multiple="multiple">
-							<?php echo self::ccz_select_list(); ?>
+							<?php self::ccz_select_list(); ?>
 						</select>
 					</div>
 				</div><br />
@@ -612,23 +619,21 @@ class Search_Management {
 	private function ccz_select_list() {
 		$cities = $this->idx_api->idx_api( 'cities/combinedActiveMLS' );
 
-		$ccz_select = '<optgroup label="Cities" id="city" data-type="city">';
+		echo '<optgroup label="Cities" id="city" data-type="city">';
 		foreach ( $cities as $city ) {
-			$ccz_select .= '<option data-ccz="city" data-value="' . $city->id . '" value="' . $city->id . '">' . $city->name . '</option>';
+			echo '<option data-ccz="city" data-value="' . esc_attr( $city->id ) . '" value="' . esc_attr( $city->id ) . '">' . esc_html( $city->name ) . '</option>';
 		}
-		$ccz_select .= '</optgroup><optgroup label="Counties" id="county" data-type="county">';
-		$counties    = $this->idx_api->idx_api( 'counties/combinedActiveMLS' );
+		echo '</optgroup><optgroup label="Counties" id="county" data-type="county">';
+		$counties = $this->idx_api->idx_api( 'counties/combinedActiveMLS' );
 		foreach ( $counties as $county ) {
-			$ccz_select .= '<option data-ccz="county" value="' . $county->id . '">' . $county->name . '</option>';
+			echo '<option data-ccz="county" value="' . esc_attr( $county->id ) . '">' . esc_html( $county->name ) . '</option>';
 		}
-		$ccz_select .= '</optgroup><optgroup label="Postal Codes" id="postalcode" data-type="zipcode">';
-		$zips        = $this->idx_api->idx_api( 'postalcodes/combinedActiveMLS' );
+		echo '</optgroup><optgroup label="Postal Codes" id="postalcode" data-type="zipcode">';
+		$zips = $this->idx_api->idx_api( 'postalcodes/combinedActiveMLS' );
 		foreach ( $zips as $zip ) {
-			$ccz_select .= '<option data-ccz="zipcode" value="' . $zip->id . '">' . $zip->name . '</option>';
+			echo '<option data-ccz="zipcode" value="' . esc_attr( $zip->id ) . '">' . esc_html( $zip->name ) . '</option>';
 		}
-		$ccz_select .= '</optgroup>';
-
-		return $ccz_select;
+		echo '</optgroup>';
 	}
 
 	/**

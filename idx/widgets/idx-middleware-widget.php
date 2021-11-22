@@ -7,7 +7,7 @@ namespace IDX\Widgets;
 class Idx_Middleware_Widget extends \WP_Widget {
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -56,18 +56,17 @@ class Idx_Middleware_Widget extends \WP_Widget {
 
 		if ( ! empty( $instance['widget'] ) ) {
 			if ( strpos( $instance['widget'], 'mapwidgetjs.php' ) ) {
-				echo '<script type="text/javascript" name="custom-scriptLeaf" src="https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js"></script>';
-				echo '<script type="text/javascript" name="custom-scriptLeafDraw" src="https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js"></script>';
-				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
-				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
+				wp_enqueue_script( 'custom-scriptLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', [], '1.0', false );
+				wp_enqueue_script( 'custom-scriptLeafDraw', 'https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', [], '1.0', false );
+				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css', [], '1.0' );
+				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css', [], '1.0' );
 			}
 			// Check URL structure for new widget type, if found set the widget ID.
 			if ( strpos( $instance['widget'], '/idx/widgets/' ) !== false ) {
 				$widget_id = explode( '/idx/widgets/', $instance['widget'] );
 			}
-			echo '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : esc_attr( $widget_id[1] ) ) . '" src="' . esc_attr( $instance['widget'] ) . '"></script>';
+			echo '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : esc_attr( $widget_id[1] ) ) . '" src="' . esc_url( $instance['widget'] ) . '"></script>';
 		}
-
 		echo $after_widget;
 	}
 

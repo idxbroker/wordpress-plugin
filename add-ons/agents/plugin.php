@@ -36,9 +36,6 @@ function impress_agents_init() {
 
 		$options = get_option('plugin_impress_agents_settings');
 
-		/** Register Font Awesome icons but don't enqueue them */
-		wp_register_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-		
 		if ( !isset($options['impress_agents_stylesheet_load']) ) {
 			$options['impress_agents_stylesheet_load'] = 0;
 		}

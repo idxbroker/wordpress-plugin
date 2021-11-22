@@ -17,6 +17,12 @@ class IDX_Leads_GF {
 		add_action( 'gform_form_settings_page_idx_broker_leads_page', array( 'IDX_Leads_GF', 'idx_broker_leads_page' ) );
 	}
 
+	/**
+	 * Idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
 	public static function idx_leads_gform_settings_menu( $menu_items ) {
@@ -48,9 +54,9 @@ class IDX_Leads_GF {
 		if ( isset( $_POST['submit'] ) ) {
 
 			$new_value                = array();
-			$new_value['enable_lead'] = isset( $_POST['enable_lead'] ) ? (int) stripslashes( $_POST['enable_lead'] ) : 0;
-			$new_value['category']    = isset( $_POST['category'] ) ? stripslashes( $_POST['category'] ) : 0;
-			$new_value['agent_id']    = isset( $_POST['agent_id'] ) ? (int) stripslashes( $_POST['agent_id'] ) : 0;
+			$new_value['enable_lead'] = isset( $_POST['enable_lead'] ) ? (int) sanitized_text_field( stripslashes( $_POST['enable_lead'] ) ) : 0;
+			$new_value['category']    = isset( $_POST['category'] ) ? (string) sanitized_text_field( stripslashes( $_POST['category'] ) ) : 0;
+			$new_value['agent_id']    = isset( $_POST['agent_id'] ) ? (int) sanitized_text_field( stripslashes( $_POST['agent_id'] ) ) : 0;
 
 			update_option( $option_name, $new_value, false );
 		}
@@ -80,7 +86,7 @@ class IDX_Leads_GF {
 							</th>
 							<td>
 								<select name="agent_id">
-									<?php echo $idx_api->get_agents_select_list( $form_options['agent_id'] ); ?>
+									<?php $idx_api->get_agents_select_list( $form_options['agent_id'] ); ?>
 								</select>
 							</td>
 						</tr>
