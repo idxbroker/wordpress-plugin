@@ -2,7 +2,7 @@
 namespace IDX;
 
 /**
- * Idx_Api class.
+ * Idx_api class.
  */
 class Idx_Api {
 
@@ -1019,19 +1019,18 @@ class Idx_Api {
 			return;
 		}
 
-		if ( $agent_id != null ) {
-			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>---</option>';
+		if ( ! empty( $agent_id ) ) {
+			echo '<option value="" ' . selected( $agent_id, '', '' ) . '>---</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
+				echo '<option value="' . esc_attr( $agent['agentID'] ) . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . esc_html( $agent['agentDisplayName'] ) . '</option>';
 			}
 		} else {
-			$agents_list = '<option value="">---</option>';
+			echo '<option value="">---</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
+				echo '<option value="' . esc_attr( $agent['agentID'] ) . '">' . esc_html( $agent['agentDisplayName'] ) . '</option>';
 			}
 		}
 
-		return $agents_list;
 	}
 
 	/**

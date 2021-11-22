@@ -98,13 +98,12 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		$wpl_options = get_option( 'plugin_wp_listings_settings' );
 
 		// Validate fields.
-		wp_register_script( 'impress-lead-signup', plugins_url( '../assets/js/idx-lead-signup.min.js', dirname( __FILE__ ) ) );
 		wp_localize_script( 'impress-lead-signup', 'idxLeadLoginUrl', [ $this->lead_login_page() ] );
 		wp_enqueue_script( 'impress-lead-signup' );
 
 		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
-			wp_enqueue_script( 'idx-recaptcha', IMPRESS_IDX_URL . 'assets/js/idx-recaptcha.min.js' );
-			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], null, false );
+			wp_enqueue_script( 'idx-recaptcha' );
+			wp_enqueue_script( 'google-recaptcha' );
 			wp_enqueue_script( 'jquery' );
 		}
 
@@ -260,7 +259,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Route to Agent:', 'idxbroker' ); ?></label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
-				<?php echo $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
+				<?php $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
 		</p>
 		<p>

@@ -20,6 +20,12 @@ class IDX_Leads_CF7 {
 		add_action( 'admin_enqueue_scripts', array( 'IDX_Leads_CF7', 'load_scripts' ) );
 	}
 
+	/**
+	 * Idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
 	public static function idx_add_settings_panel( $panels ) {
@@ -40,8 +46,8 @@ class IDX_Leads_CF7 {
 	public static function load_scripts() {
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-tooltip' );
-		wp_enqueue_script( 'idx-tooltip', IMPRESS_IDX_URL . 'assets/js/tooltip.js' );
-		wp_enqueue_style( 'idx-tooltip-css', IMPRESS_IDX_URL . 'assets/css/tooltip.min.css' );
+		wp_enqueue_script( 'idx-tooltip', IMPRESS_IDX_URL . 'assets/js/tooltip.js', [], '1.0.0', false );
+		wp_enqueue_style( 'idx-tooltip-css', IMPRESS_IDX_URL . 'assets/css/tooltip.min.css', [], '1.0.0' );
 	}
 
 	public function idx_save_lead_settings( $args ) {
@@ -51,18 +57,18 @@ class IDX_Leads_CF7 {
 			$option_name = 'idx_lead_form_' . $args->id;
 
 			$new_value                  = array();
-			$new_value['enable_lead']   = isset( $_POST['enable_lead'] ) ? (int) stripslashes( $_POST['enable_lead'] ) : 0;
-			$new_value['category']      = isset( $_POST['category'] ) ? stripslashes( $_POST['category'] ) : null;
-			$new_value['firstName']     = isset( $_POST['firstName'] ) ? stripslashes( $_POST['firstName'] ) : null;
-			$new_value['lastName']      = isset( $_POST['lastName'] ) ? stripslashes( $_POST['lastName'] ) : null;
-			$new_value['email']         = isset( $_POST['email'] ) ? stripslashes( $_POST['email'] ) : null;
-			$new_value['email2']        = isset( $_POST['email2'] ) ? stripslashes( $_POST['email2'] ) : null;
-			$new_value['phone']         = isset( $_POST['phone'] ) ? stripslashes( $_POST['phone'] ) : null;
-			$new_value['address']       = isset( $_POST['address'] ) ? stripslashes( $_POST['address'] ) : null;
-			$new_value['city']          = isset( $_POST['city'] ) ? stripslashes( $_POST['city'] ) : null;
-			$new_value['stateProvince'] = isset( $_POST['stateProvince'] ) ? stripslashes( $_POST['stateProvince'] ) : null;
-			$new_value['zipCode']       = isset( $_POST['zipCode'] ) ? stripslashes( $_POST['zipCode'] ) : null;
-			$new_value['country']       = isset( $_POST['country'] ) ? stripslashes( $_POST['country'] ) : null;
+			$new_value['enable_lead']   = isset( $_POST['enable_lead'] ) ? (int) wp_sanitize_text_field( stripslashes( $_POST['enable_lead'] ) ) : 0;
+			$new_value['category']      = isset( $_POST['category'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['category'] ) ) : null;
+			$new_value['firstName']     = isset( $_POST['firstName'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['firstName'] ) ) : null;
+			$new_value['lastName']      = isset( $_POST['lastName'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['lastName'] ) ) : null;
+			$new_value['email']         = ( isset( $_POST['email'] ) && is_email( $_POST['email'] ) ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['email'] ) ) : null;
+			$new_value['email2']        = ( isset( $_POST['email2'] ) && is_email( $_POST['email2'] ) ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['email2'] ) ) : null;
+			$new_value['phone']         = isset( $_POST['phone'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['phone'] ) ) : null;
+			$new_value['address']       = isset( $_POST['address'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['address'] ) ) : null;
+			$new_value['city']          = isset( $_POST['city'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['city'] ) ) : null;
+			$new_value['stateProvince'] = isset( $_POST['stateProvince'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['stateProvince'] ) ) : null;
+			$new_value['zipCode']       = isset( $_POST['zipCode'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['zipCode'] ) ) : null;
+			$new_value['country']       = isset( $_POST['country'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['country'] ) ) : null;
 
 			update_option( $option_name, $new_value, false );
 		}
@@ -83,7 +89,7 @@ class IDX_Leads_CF7 {
 			$form_options['category'] = '';
 		}
 
-		// Instantiate ContactForm class and get tags for form fields
+		// Instantiate ContactForm class and get tags for form fields.
 		$cf7 = WPCF7_ContactForm::get_instance( get_post( $form->id() ) );
 
 		if ( is_object( $cf7 ) ) {
@@ -134,7 +140,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="firstName">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'firstName' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'firstName' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -144,7 +150,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="lastName">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'lastName' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'lastName' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -154,7 +160,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="email">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'email' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'email' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -164,7 +170,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="email2">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'email2' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'email2' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -174,7 +180,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="phone">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'phone' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'phone' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -184,7 +190,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="address">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'address' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'address' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -194,7 +200,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="city">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'city' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'city' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -204,7 +210,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="stateProvince">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'stateProvince' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'stateProvince' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -214,7 +220,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="zipCode">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'zipCode' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'zipCode' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -224,7 +230,7 @@ class IDX_Leads_CF7 {
 							</th>
 							<td>
 								<select name="country">
-									<?php echo self::output_tag_options( $mail_tags, $form_options, 'country' ); ?>
+									<?php self::output_tag_options( $mail_tags, $form_options, 'country' ); ?>
 								</select>
 							</td>
 						</tr>
@@ -350,15 +356,13 @@ class IDX_Leads_CF7 {
 	 * @return string               HTML options
 	 */
 	private static function output_tag_options( $mail_tags, $form_options, $mapped ) {
-		$output = '<option value="">-- Not Mapped --</option>';
+		echo '<option value="">-- Not Mapped --</option>';
 		foreach ( $mail_tags as $tag ) {
-			$output .= '<option value="' . esc_html( $tag ) . '" ' . selected( $form_options[ $mapped ], $tag, 1 ) . '>' . esc_html( $tag ) . '</option>';
+			echo '<option value="' . esc_attr( $tag ) . '" ' . selected( $form_options[ $mapped ], $tag, 1 ) . '>' . esc_html( $tag ) . '</option>';
 		}
-		return $output;
 	}
 
 	private static function output_form_fields( $posted_data ) {
-
 		$output = '';
 		foreach ( $posted_data as $key => $value ) {
 

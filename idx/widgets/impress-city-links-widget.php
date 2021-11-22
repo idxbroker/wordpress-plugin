@@ -152,13 +152,13 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'mls' ); ?>">MLS to use for the city links: *required*</label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'mls' ); ?>" name="<?php echo $this->get_field_name( 'mls' ); ?>">
-				<?php echo $this->mls_options( $instance, $this->idx_api ); ?>
+				<?php $this->mls_options( $instance, $this->idx_api ); ?>
 			</select>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'city_list' ); ?>">Select a city list:</label>
 			<select class="city-list-options widefat" id="<?php echo $this->get_field_id( 'city_list' ); ?>" name="<?php echo $this->get_field_name( 'city_list' ); ?>">
-				<?php echo $this->city_list_options( $instance, $this->idx_api ); ?>
+				<?php $this->city_list_options( $instance, $this->idx_api ); ?>
 			</select>
 		</p>
 		<p class="show-count">
@@ -200,7 +200,6 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 */
 	public static function city_list_options( $instance, $idx_api ) {
 		$lists  = $idx_api->city_list_names();
-		$output = '';
 
 		if ( ! is_array( $lists ) ) {
 			return;
@@ -209,10 +208,8 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		foreach ( $lists as $list ) {
 			// Display the list id if no list name has been assigned.
 			$list_text = $list->name ?? $list->id;
-
-			$output .= '<option class="city-list-option" ' . selected( $instance['city_list'], $list->id, 0 ) . ' value="' . $list->id . '">' . $list_text . '</option>';
+			echo '<option class="city-list-option" ' . selected( $instance['city_list'], $list->id, 0 ) . ' value="' . esc_attr( $list->id ) . '">' . esc_html( $list_text ) . '</option>';
 		}
-		return $output;
 	}
 
 	/**
@@ -225,15 +222,14 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 */
 	public static function mls_options( $instance, $idx_api ) {
 		$approved_mls = $idx_api->approved_mls();
-		$output       = '';
 
 		if ( ! is_array( $approved_mls ) ) {
 			return;
 		}
 		foreach ( $approved_mls as $mls ) {
-			$output .= '<option ' . selected( $instance['mls'], $mls->id . 0 ) . ' value="' . $mls->id . '">' . $mls->name . '</option>';
+			echo '<option ' . selected( $instance['mls'], $mls->id . 0 ) . ' value="' . esc_attr( $mls->id ) . '">' . esc_html( $mls->name ) . '</option>';
 		}
-		return $output;
+
 	}
 
 	/**

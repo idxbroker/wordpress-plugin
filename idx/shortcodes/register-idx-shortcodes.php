@@ -23,7 +23,7 @@ class Register_Idx_Shortcodes {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public

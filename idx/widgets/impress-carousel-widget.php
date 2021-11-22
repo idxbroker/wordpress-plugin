@@ -27,7 +27,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Idx_Api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -73,7 +73,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		if ( $instance['styles'] ) {
 			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) );
-			wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+			wp_enqueue_style( 'font-awesome-5.8.2' );
 		}
 
 		$output = '';
@@ -378,17 +378,14 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			return;
 		}
 
-		$output = '';
-
 		foreach ( $saved_links as $saved_link ) {
 
 			// Display the link name if no link title has been assigned.
 			$link_text = $saved_link->linkTitle ?? $saved_link->linkName;
 
-			$output .= '<option ' . selected( $instance['saved_link_id'], $saved_link->id, 0 ) . ' value="' . $saved_link->id . '">' . $link_text . '</option>';
+			echo '<option ' . selected( $instance['saved_link_id'], $saved_link->id, 0 ) . ' value="' . esc_attr( $saved_link->id ) . '">' . esc_html( $link_text ) . '</option>';
 
 		}
-		return $output;
 	}
 
 	/**
@@ -483,14 +480,14 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'saved_link_id' ); ?>">Choose a saved link (if selected above):</label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'saved_link_id' ); ?>" name="<?php echo $this->get_field_name( 'saved_link_id' ); ?>">
-				<?php echo $this->saved_link_options( $instance, $this->idx_api ); ?>
+				<?php $this->saved_link_options( $instance, $this->idx_api ); ?>
 			</select>
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'idxbroker' ); ?></label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
-				<?php echo $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
+				<?php $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
 		</p>
 

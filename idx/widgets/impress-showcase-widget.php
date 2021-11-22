@@ -27,7 +27,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Idx_Api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -554,7 +554,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'idxbroker' ); ?></label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
-				<?php echo $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
+				<?php $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
 		</p>
 

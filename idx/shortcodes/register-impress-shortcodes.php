@@ -7,7 +7,7 @@ namespace IDX\Shortcodes;
 class Register_Impress_Shortcodes {
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -37,7 +37,7 @@ class Register_Impress_Shortcodes {
 	 * lead_login_shortcode function.
 	 *
 	 * @access public
-	 * @param mixed $atts
+	 * @param mixed $atts - Attributes.
 	 * @return void
 	 */
 	public function lead_login_shortcode( $atts ) {
@@ -53,7 +53,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ), [], '1.0' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -62,7 +62,7 @@ class Register_Impress_Shortcodes {
 
 		$target = $this->target( $new_window );
 
-		// Returns hidden if false or not set
+		// Returns hidden if false or not set.
 		$password_field_type = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? 'password' : 'hidden';
 		$password_label      = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? '<label for="impress-widgetPassword">Password:</label>' : '';
 
@@ -505,7 +505,7 @@ class Register_Impress_Shortcodes {
 	 * @return void
 	 */
 	public function property_carousel_shortcode( $atts = array() ) {
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-5.8.2' );
 
 		extract(
 			shortcode_atts(

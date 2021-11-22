@@ -20,7 +20,7 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public

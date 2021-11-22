@@ -43,7 +43,7 @@ echo '</div><br style="clear: both;" />';
 
 // Advanced fields area.
 
-$options = get_option('plugin_wp_listings_settings');
+$options = get_option( 'plugin_wp_listings_settings' );
 if ( isset( $options['wp_listings_display_advanced_fields'] ) && $options['wp_listings_display_advanced_fields'] ) {
 	$adv_fields  = generate_adv_field_list( $post );
 	if ( count( $adv_fields ) ) {
