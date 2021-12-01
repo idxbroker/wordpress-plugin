@@ -42,7 +42,7 @@ class Search_Management {
 
 	public function add_search_pages() {
 
-		// Add Searches as submenu page
+		// Add Searches as submenu page.
 		$this->page = add_submenu_page(
 			'idx-broker',
 			'Searches',
@@ -55,7 +55,7 @@ class Search_Management {
 			)
 		);
 
-		// Add Add Search submenu page
+		// Add Add Search submenu page.
 		$this->page = add_submenu_page(
 			'idx-broker',
 			'Add/Edit Search',
@@ -121,7 +121,7 @@ class Search_Management {
 			echo 'missing required fields';
 		} else {
 
-			// Add search via API
+			// Add search via API.
 			$api_url = IDX_API_URL . '/clients/savedlinks';
 
 			$search_query = array(
@@ -136,13 +136,13 @@ class Search_Management {
 				'add'   => $_POST['add'],
 			);
 
-			if ( $_POST['ccz'] === 'city' ) {
+			if ( 'city' === $_POST['ccz'] ) {
 				$city_array   = array( 'city' => $_POST['locations'] );
 				$search_query = $search_query + $city_array;
-			} elseif ( $_POST['ccz'] == 'county' ) {
+			} elseif ( 'county' === $_POST['ccz'] ) {
 				$county_array = array( 'county' => $_POST['locations'] );
 				$search_query = $search_query + $county_array;
-			} elseif ( $_POST['ccz'] == 'zipcode' ) {
+			} elseif ( 'zipcode' === $_POST['ccz'] ) {
 				$zipcode_array = array( 'zipcode' => $_POST['locations'] );
 				$search_query  = $search_query + $zipcode_array;
 			}
@@ -183,7 +183,7 @@ class Search_Management {
 				// return new search ID to script.
 				echo esc_html( $decoded_response['newID'] );
 			} else {
-				echo $response->get_error_message();
+				echo esc_html( $response->get_error_message() );
 			}
 		}
 		die();
@@ -198,11 +198,11 @@ class Search_Management {
 	public function idx_lead_search_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_search_add_nonce', 'nonce', false );
-		if ( $permission == false || empty( $_POST['leadID'] ) ) {
+		if ( false == $permission || empty( $_POST['leadID'] ) ) {
 			echo 'missing required fields';
 		} else {
 
-			// Add search via API
+			// Add search via API.
 			$api_url = IDX_API_URL . '/leads/search/' . $_POST['leadID'];
 
 			$search_query = array(
@@ -217,13 +217,13 @@ class Search_Management {
 				'add'   => $_POST['add'],
 			);
 
-			if ( $_POST['ccz'] === 'city' ) {
+			if ( 'city' === $_POST['ccz'] ) {
 				$city_array   = array( 'city' => $_POST['locations'] );
 				$search_query = $search_query + $city_array;
-			} elseif ( $_POST['ccz'] == 'county' ) {
+			} elseif ( 'county' === $_POST['ccz'] ) {
 				$county_array = array( 'county' => $_POST['locations'] );
 				$search_query = $search_query + $county_array;
-			} elseif ( $_POST['ccz'] == 'zipcode' ) {
+			} elseif ( 'zipcode' === $_POST['ccz'] ) {
 				$zipcode_array = array( 'zipcode' => $_POST['locations'] );
 				$search_query  = $search_query + $zipcode_array;
 			}
@@ -253,7 +253,7 @@ class Search_Management {
 				// return new search ID to script.
 				echo esc_html( $decoded_response['newID'] );
 			} else {
-				echo $response->get_error_message();
+				echo esc_html( $response->get_error_message() );
 			}
 		}
 		die();
@@ -271,7 +271,7 @@ class Search_Management {
 		if ( $permission == false || ! isset( $_POST['ssid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead saved search via API
+			// Delete lead saved search via API.
 			$api_url  = IDX_API_URL . '/clients/savedlinks/' . $_POST['ssid'];
 			$args     = array(
 				'method'    => 'DELETE',
@@ -301,7 +301,7 @@ class Search_Management {
 	 * @return void
 	 */
 	public function idx_searches_list() {
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
@@ -312,25 +312,7 @@ class Search_Management {
 
 		$searches_array = array_reverse( $searches_array );
 
-		$searches = '';
-
 		$offset = get_option( 'gmt_offset', 0 );
-
-		// prepare searches for display
-		foreach ( $searches_array as $search ) {
-
-			$nonce = wp_create_nonce( 'idx_search_delete_nonce' );
-
-			$searches .= '<tr class="search-row">';
-			$searches .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $search->url . '" target="_blank">' . $search->linkTitle . '</a></td>';
-			$searches .= '<td class="mdl-data-table__cell--non-numeric">' . Carbon::parse( $search->created )->addHours( $offset )->toDayDateTimeString() . '</td>';
-			$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $search->timesViewed . '</td>';
-			$searches .= '<td class="mdl-data-table__cell--non-numeric">
-						<a href="' . admin_url( 'admin-ajax.php?action=idx_search_delete&ssid=' . $search->id . '&nonce=' . $nonce ) . '" id="delete-search-' . $search->id . '" class="delete-search" data-ssid="' . $search->id . '" data-nonce="' . $nonce . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . $search->id . '">Delete Search</div></a>
-						<a href="https://middleware.idxbroker.com/mgmt/addeditsavedlink.php?id=' . $search->id . '" id="edit-mw-' . $search->id . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $search->id . '">Edit Search in Middleware</div></a>
-						</td>';
-			$searches .= '</tr>';
-		}
 
 		echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp searches">';
 		echo '
@@ -343,7 +325,23 @@ class Search_Management {
 			</thead>
 			<tbody>
 			';
-		echo $searches;
+
+		// prepare searches for display.
+		foreach ( $searches_array as $search ) {
+
+			$nonce = wp_create_nonce( 'idx_search_delete_nonce' );
+
+			echo '<tr class="search-row">';
+			echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $search->url ) . '" target="_blank">' . esc_html( $search->linkTitle ) . '</a></td>';
+			echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( Carbon::parse( $search->created )->addHours( $offset )->toDayDateTimeString() ) . '</td>';
+			echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $search->timesViewed ) . '</td>';
+			echo '<td class="mdl-data-table__cell--non-numeric">
+						<a href="' . esc_url( admin_url( 'admin-ajax.php?action=idx_search_delete&ssid=' . $search->id . '&nonce=' . $nonce ) ) . '" id="delete-search-' . esc_attr( $search->id ) . '" class="delete-search" data-ssid="' . esc_attr( $search->id ) . '" data-nonce="' . esc_attr( $nonce ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . esc_attr( $search->id ) . '">Delete Search</div></a>
+						<a href="https://middleware.idxbroker.com/mgmt/addeditsavedlink.php?id=' . esc_attr( $search->id ) . '" id="edit-mw-' . esc_attr( $search->id ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $search->id ) . '">Edit Search in Middleware</div></a>
+						</td>';
+			echo '</tr>';
+		}
+
 		echo '</tbody></table>';
 		echo '<dialog id="dialog-search-delete">
 				<form method="dialog">
@@ -354,7 +352,7 @@ class Search_Management {
 				</form>
 			</dialog>';
 		echo '
-			<a href="' . admin_url( 'admin.php?page=edit-idx-search' ) . '" id="add-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+			<a href="' . esc_url( admin_url( 'admin.php?page=edit-idx-search' ) ) . '" id="add-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 				<i class="material-icons">add</i>
 				<div class="mdl-tooltip" data-mdl-for="add-search">Add New Search</div>
 			</a>
@@ -392,7 +390,7 @@ class Search_Management {
 	 * @return void
 	 */
 	public function idx_searches_edit() {
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		} elseif ( empty( $_GET['searchID'] ) && empty( $_GET['leadID'] ) ) { ?>
@@ -509,7 +507,7 @@ class Search_Management {
 					<label class="mdl-selectfield__label" for="agentID">Assign an Agent to this link</label>
 					<div class="mdl-selectfield">
 						<select class="mdl-selectfield__select" id="agentID" name="agentID">
-							<?php echo self::agents_select_list(); ?>
+							<?php self::agents_select_list(); ?>
 						</select>
 					</div>
 				</div>
@@ -523,12 +521,12 @@ class Search_Management {
 
 			</form>
 			<?php
-		} elseif ( ! empty( $_GET['leadID'] ) && is_numeric( $_GET['leadID'] ) ) {
-			$lead_id = $_GET['leadID'];
-			// Get Lead info
+		} elseif ( ! empty( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'], 'idx_lead_add_search_nonce' ) && ! empty( $_GET['leadID'] ) && is_numeric( $_GET['leadID'] ) ) {
+			$lead_id = (int) sanitize_text_field( wp_unslash( $_GET['leadID'] ) );
+			// Get Lead info.
 			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 			?>
-			<h3>Add Lead Saved Search for <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
+			<h3>Add Lead Saved Search for <?php echo ( $lead['firstName'] ) ? esc_html( $lead['firstName'] ) : ''; ?> <?php echo ( $lead['lastName'] ) ? esc_html( $lead['lastName'] ) : ''; ?></h3>
 			<form action="" method="post" id="add-lead-search" class="add-lead-search">
 				<!-- Search form -->
 				<div class="mdl-fieldgroup">
@@ -593,11 +591,11 @@ class Search_Management {
 						<span class="mdl-switch__label">Receive property updates? Yes/No</span>
 					</label>
 				</div>
-				<input type="hidden" id="leadID" name="leadID" value="<?php echo $lead_id; ?>" />
+				<input type="hidden" id="leadID" name="leadID" value="<?php echo esc_attr( $lead_id ); ?>" />
 				<br />
 
 				<input type="hidden" name="action" value="idx_lead_search_add" />
-				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead-search" data-nonce="<?php echo wp_create_nonce( 'idx_lead_search_add_nonce' ); ?>" type="submit">Save Search</button>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead-search" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_lead_search_add_nonce' ) ); ?>" type="submit">Save Search</button>
 				<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 				<div class="error-fail" style="display: none;">Saved Search addition failed. Check all required fields or try again later.</div>
 				<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -637,23 +635,23 @@ class Search_Management {
 	}
 
 	/**
-	 * Output Agents as select options
+	 * Output Agents as select options.
 	 */
 	private function agents_select_list( $agent_id = null ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
 		if ( null !== $agent_id && ! is_wp_error( $agents_array ) ) {
-			$agents_list = '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';
+			echo '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
+				echo '<option value="' . esc_attr( $agent['agentID'] ) . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . esc_html( $agent['agentDisplayName'] ) . '</option>';
 			}
 		} elseif ( ! is_wp_error( $agents_array ) ) {
-			$agents_list = '<option value="0">None</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
+			echo '<option value="0">None</option>';
+			if ( ! empty( $agents_array['agent'] ) ) {
+				foreach ( $agents_array['agent'] as $agent ) {
+					echo '<option value="' . esc_attr( $agent['agentID'] ) . '">' . esc_html( $agent['agentDisplayName'] ) . '</option>';
+				}
 			}
 		}
-
-		return $agents_list;
 	}
 }

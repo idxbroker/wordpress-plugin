@@ -480,16 +480,21 @@ class Initiate_Plugin {
 	 * Register plugin scripts and styles.
 	 */
 	public function register_scripts_and_styles() {
+		// Styles.
 		wp_register_style( 'font-awesome-5.8.2', IMPRESS_IDX_URL . 'assets/css/font-awesome-5.8.2.all.min.css', [], '5.8.2' );
 		wp_register_style( 'select2', IMPRESS_IDX_URL . 'assets/css/select2.min.css', [], '4.0.5' );
 		wp_register_style( 'properticons', IMPRESS_IDX_URL . 'assets/css/properticons.min.css', '', '1.0.0' );
 		wp_register_style( 'idx-material-datatable', IMPRESS_IDX_URL . 'assets/css/datatables.material.min.css', [], '1.10.12' );
 		wp_register_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css', [], '1.0.0' );
 		wp_register_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.min.css', [], '1.0.0' );
-
 		wp_register_style( 'idx-material-font', IMPRESS_IDX_URL . 'assets/webfonts/roboto.css', [], '1.0.0' );
 		wp_register_style( 'idx-material-icons', IMPRESS_IDX_URL . 'assets/webfonts/material-icons.css', [], '1.0.0' );
-
+		wp_register_style( 'impress-showcase', IMPRESS_IDX_URL . 'assets/css/widgets/impress-showcase.min.css', [], '1.0.0' );
+		wp_register_style( 'impress-carousel', IMPRESS_IDX_URL . 'assets/css/widgets/impress-carousel.min.css', [], '1.0.0' );
+		wp_register_style( 'impress-city-links', IMPRESS_IDX_URL . 'assets/css/widgets/impress-city-links.min.css', [], '1.0.0' );
+		wp_register_style( 'impress-lead-login', IMPRESS_IDX_URL . 'assets/css/widgets/impress-lead-login.min.css', [], '1.0' );
+		wp_register_style( 'owl2-css', IMPRESS_IDX_URL . 'assets/css/widgets/owl2.carousel.min.css', [], '1.0.0' );
+		// Scripts.
 		wp_register_script( 'select2', IMPRESS_IDX_URL . 'assets/js/select2.min.js', [ 'jquery' ], '4.0.5', true );
 		wp_register_script( 'idx-material-js', IMPRESS_IDX_URL . 'assets/js/material-1.2.1.min.js', [ 'jquery' ], '1.2.1', true );
 		wp_register_script( 'jquery-datatables', IMPRESS_IDX_URL . 'assets/js/jquery.datatables.1.10.12.min.js', [ 'jquery' ], '1.10.12', false );
@@ -498,6 +503,7 @@ class Initiate_Plugin {
 		wp_register_script( 'impress-lead-signup', IMPRESS_IDX_URL . 'assets/js/idx-lead-signup.min.js', [], '1.0.0', false );
 		wp_register_script( 'idx-recaptcha', IMPRESS_IDX_URL . 'assets/js/idx-recaptcha.min.js', [], '1.0.0', false );
 		wp_register_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], '1.0.0', false );
+		wp_register_script( 'owl2', IMPRESS_IDX_URL . 'assets/js/owl2.carousel.min.js', [ 'jquery' ], '1.0.0', false );
 	}
 
 	/**
