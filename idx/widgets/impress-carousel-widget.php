@@ -61,8 +61,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	 * @return string $output html markup for front end display
 	 */
 	public function body( $instance ) {
-		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.min.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
+		wp_enqueue_style( 'owl2-css' );
+		wp_enqueue_script( 'owl2' );
 
 		if ( empty( $instance ) ) {
 			$instance = $this->defaults;
@@ -72,7 +72,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
 
 		if ( $instance['styles'] ) {
-			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-carousel' );
 			wp_enqueue_style( 'font-awesome-5.8.2' );
 		}
 
@@ -89,7 +89,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$properties = json_encode( $properties );
 		$properties = json_decode( $properties, true );
 
-		// If no properties or an error, load message
+		// If no properties or an error, load message.
 		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
 			if ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
@@ -169,7 +169,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 			$prop = $this->set_missing_core_fields( $prop );
 
-			// Get URL and add suffix if one exists
+			// Get URL and add suffix if one exists.
 			if ( isset( $prop['fullDetailsURL'] ) ) {
 				$url = $prop['fullDetailsURL'];
 			} else {
@@ -203,22 +203,22 @@ class Impress_Carousel_Widget extends \WP_Widget {
 					</p>
 					%15$s
 					</div><!-- end .impress-carousel-property -->',
-					price_selector( $prop ),
-					$url,
-					$prop_image_url,
-					$image_alt_tag,
-					$prop['streetNumber'],
-					$prop['streetDirection'],
-					$prop['streetName'],
-					$prop['unitNumber'],
-					$prop['cityName'],
-					$prop['state'],
+					esc_html( price_selector( $prop ) ),
+					esc_url( $url ),
+					esc_url( $prop_image_url ),
+					esc_attr( $image_alt_tag ),
+					esc_html( $prop['streetNumber'] ),
+					esc_html( $prop['streetDirection'] ),
+					esc_html( $prop['streetName'] ),
+					esc_html( $prop['unitNumber'] ),
+					esc_html( $prop['cityName'] ),
+					esc_html( $prop['state'] ),
 					$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
 					$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
 					$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
 					$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
-					$this->maybe_add_disclaimer_and_courtesy( $prop ),
-					$target
+					wp_kses_post( $this->maybe_add_disclaimer_and_courtesy( $prop ) ),
+					esc_attr( $target )
 				),
 				$prop,
 				$instance,
@@ -271,7 +271,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		if ( $value <= 0 ) {
 			return '';
 		} else {
-			return "<span class=\"impress-$field\">$value $display_name</span> ";
+			return '<span class="impress-' . esc_attr( $field ) . '">' . esc_html( $value ) . ' ' . esc_html( $display_name ) . '</span> ';
 		}
 	}
 
@@ -284,7 +284,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
-			// if enabled, open links in new tab/window
+			// if enabled, open links in new tab/window.
 			return '_blank';
 		} else {
 			return '_self';
@@ -463,71 +463,71 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'properties' ); ?>"><?php _e( 'Properties to Display:', 'idxbroker' ); ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'properties' ); ?>" name="<?php echo $this->get_field_name( 'properties' ); ?>">
-				<option <?php selected( $instance['properties'], 'featured' ); ?> value="featured"><?php _e( 'Featured', 'idxbroker' ); ?></option>
-				<option <?php selected( $instance['properties'], 'soldpending' ); ?> value="soldpending"><?php _e( 'Sold/Pending', 'idxbroker' ); ?></option>
-				<option <?php selected( $instance['properties'], 'supplemental' ); ?> value="supplemental"><?php _e( 'Supplemental', 'idxbroker' ); ?></option>
-				<option <?php selected( $instance['properties'], 'savedlinks' ); ?> value="savedlinks"><?php _e( 'Use Saved Link', 'idxbroker' ); ?></option>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>"><?php esc_html_e( 'Properties to Display:', 'idxbroker' ); ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'properties' ) ); ?>">
+				<option <?php selected( $instance['properties'], 'featured' ); ?> value="featured"><?php esc_html_e( 'Featured', 'idxbroker' ); ?></option>
+				<option <?php selected( $instance['properties'], 'soldpending' ); ?> value="soldpending"><?php esc_html_e( 'Sold/Pending', 'idxbroker' ); ?></option>
+				<option <?php selected( $instance['properties'], 'supplemental' ); ?> value="supplemental"><?php esc_html_e( 'Supplemental', 'idxbroker' ); ?></option>
+				<option <?php selected( $instance['properties'], 'savedlinks' ); ?> value="savedlinks"><?php esc_html_e( 'Use Saved Link', 'idxbroker' ); ?></option>
 			</select>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'saved_link_id' ); ?>">Choose a saved link (if selected above):</label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'saved_link_id' ); ?>" name="<?php echo $this->get_field_name( 'saved_link_id' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'saved_link_id' ) ); ?>">Choose a saved link (if selected above):</label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'saved_link_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'saved_link_id' ) ); ?>">
 				<?php $this->saved_link_options( $instance, $this->idx_api ); ?>
 			</select>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'idxbroker' ); ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'agentID' ) ); ?>"><?php esc_html_e( 'Limit by Agent:', 'idxbroker' ); ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'agentID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'agentID' ) ); ?>">
 				<?php $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
 		</p>
 
 		<p>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'colistings' ); ?>" name="<?php echo $this->get_field_name( 'colistings' ); ?>" value="1" <?php checked( $instance['colistings'], true ); ?>>
-			<label for="<?php echo $this->get_field_id( 'colistings' ); ?>"><?php _e( 'Include colistings for selected agent?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'colistings' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'colistings' ) ); ?>" value="1" <?php checked( $instance['colistings'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'colistings' ) ); ?>"><?php esc_html_e( 'Include colistings for selected agent?', 'idxbroker' ); ?></label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'display' ); ?>"><?php _e( 'Listings to show without scrolling:', 'idxbroker' ); ?></label>
-			<input class="widefat" type="number" id="<?php echo $this->get_field_id( 'display' ); ?>" name="<?php echo $this->get_field_name( 'display' ); ?>" value="<?php esc_attr_e( $instance['display'] ); ?>" size="3">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'display' ) ); ?>"><?php esc_html_e( 'Listings to show without scrolling:', 'idxbroker' ); ?></label>
+			<input class="widefat" type="number" id="<?php echo esc_attr( $this->get_field_id( 'display' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'display' ) ); ?>" value="<?php esc_attr( $instance['display'] ); ?>" size="3">
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'max' ); ?>"><?php _e( 'Max number of listings to show:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'max' ); ?>" name="<?php echo $this->get_field_name( 'max' ); ?>" type="number" value="<?php esc_attr_e( $instance['max'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>"><?php esc_html_e( 'Max number of listings to show:' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php esc_attr( $instance['max'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><?php _e( 'Sort order:', 'idxbroker' ); ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
-				<option <?php selected( $instance['order'], 'default' ); ?> value="default"><?php _e( 'Default', 'idxbroker' ); ?></option>
-				<option <?php selected( $instance['order'], 'high-low' ); ?> value="high-low"><?php _e( 'Highest to Lowest Price', 'idxbroker' ); ?></option>
-				<option <?php selected( $instance['order'], 'low-high' ); ?> value="low-high"><?php _e( 'Lowest to Highest Price', 'idxbroker' ); ?></option>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>"><?php esc_html_e( 'Sort order:', 'idxbroker' ); ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'order' ) ); ?>">
+				<option <?php selected( $instance['order'], 'default' ); ?> value="default"><?php esc_html_e( 'Default', 'idxbroker' ); ?></option>
+				<option <?php selected( $instance['order'], 'high-low' ); ?> value="high-low"><?php esc_html_e( 'Highest to Lowest Price', 'idxbroker' ); ?></option>
+				<option <?php selected( $instance['order'], 'low-high' ); ?> value="low-high"><?php esc_html_e( 'Lowest to Highest Price', 'idxbroker' ); ?></option>
 			</select>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'autoplay' ); ?>"><?php _e( 'Autoplay?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'autoplay' ); ?>" name="<?php echo $this->get_field_name( 'autoplay' ); ?>" value="1" <?php checked( $instance['autoplay'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'autoplay' ) ); ?>"><?php esc_html_e( 'Autoplay?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'autoplay' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'autoplay' ) ); ?>" value="1" <?php checked( $instance['autoplay'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php _e( 'Default Styling?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'styles' ); ?>" name="<?php echo $this->get_field_name( 'styles' ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'styles' ) ); ?>"><?php esc_html_e( 'Default Styling?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'styles' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'styles' ) ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php _e( 'Open Listings in a New Window?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'new_window' ); ?>" name="<?php echo $this->get_field_name( 'new_window' ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'new_window' ) ); ?>"><?php esc_html_e( 'Open Listings in a New Window?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'new_window' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'new_window' ) ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
 		</p>
 
 		<?php
@@ -570,7 +570,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
 		}
 
-		if ( $output == '' ) {
+		if ( empty( $output ) ) {
 			return;
 		} else {
 			return '<div class="disclaimer">' . $output . '</div>';

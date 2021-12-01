@@ -100,7 +100,7 @@ class IMPress_Agents_Import {
 			true
 		);
 
-		if ( is_wp_error( $agent ) || empty( $agents['agent'] ) ) {
+		if ( is_wp_error( $agents ) || empty( $agents['agent'] ) ) {
 			return;
 		}
 

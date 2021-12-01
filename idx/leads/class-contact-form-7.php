@@ -76,11 +76,11 @@ class IDX_Leads_CF7 {
 
 	public static function idx_cf7_settings() {
 
-		// Get the form object
+		// Get the form object.
 		$form    = wpcf7_get_current_contact_form();
 		$form_id = $form->id();
 
-		// Set the form option name
+		// Set the form option name.
 		$option_name  = 'idx_lead_form_' . $form_id;
 		$form_options = get_option( $option_name );
 

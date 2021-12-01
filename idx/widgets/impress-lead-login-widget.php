@@ -66,7 +66,7 @@ class IMPress_Lead_Login_Widget extends \WP_Widget {
 		}
 
 		if ( ! empty( $instance['styles'] ) ) {
-			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-login' );
 		}
 
 		if ( ! isset( $instance['new_window'] ) ) {

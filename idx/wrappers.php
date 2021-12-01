@@ -357,7 +357,7 @@ class Wrappers {
 			return;
 		}
 
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || empty( $_POST['idx-wrapper-page-nonce'] ) ) {
 			return $post_id;
 		}
 

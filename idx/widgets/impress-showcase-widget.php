@@ -67,7 +67,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		}
 
 		if ( $instance['styles'] ) {
-			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-showcase' );
 		}
 
 		$output = '';

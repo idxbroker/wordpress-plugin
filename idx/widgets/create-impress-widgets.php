@@ -51,20 +51,16 @@ class Create_Impress_Widgets {
 	 * @return void
 	 */
 	public function lead_login_shortcode() {
-		$widget = sprintf(
-			'
-            <form action="%sajax/userlogin.php" method="post" target="" name="leadLoginForm">
-                <input type="hidden" name="action" value="login">
-                <input type="hidden" name="loginWidget" value="true">
-                <label for="bb-IDX-widgetEmail">Email Address:</label>
-                <input id="bb-IDX-widgetEmail" type="text" name="email" placeholder="Enter your email address">
-                <input id="bb-IDX-widgetPassword" type="hidden" name="password" value="">
-                <input id="bb-IDX-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
-            </form>',
-			$idx_api->subdomain_url()
-		);
-
-		return $widget;
+		echo '
+			<form action="' . esc_attr( $idx_api->subdomain_url() ) . 'ajax/userlogin.php" method="post" target="" name="leadLoginForm">
+				<input type="hidden" name="action" value="login">
+				<input type="hidden" name="loginWidget" value="true">
+				<label for="bb-IDX-widgetEmail">Email Address:</label>
+				<input id="bb-IDX-widgetEmail" type="text" name="email" placeholder="Enter your email address">
+				<input id="bb-IDX-widgetPassword" type="hidden" name="password" value="">
+				<input id="bb-IDX-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
+			</form>
+		';
 	}
 
 	/**

@@ -46,8 +46,7 @@ function wp_listings_init() {
 		wp_register_script( 'bootstrap', IMPRESS_IDX_URL . 'assets/js/bootstrap-3.1.1.min.js', [ 'jquery' ], '1.0', true );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-tabs' );
-
-		wp_register_style( 'impb-google-fonts-elegant', '//fonts.googleapis.com/css?family=Neuton:200|Raleway:300,400,700', [], '1.0' );
+		wp_register_style( 'impb-google-fonts-elegant', IMPRESS_IDX_URL . 'assets/webfonts/neuton-raleway-font.css', [], '1.0' );
 		// Add nonce to wp-listing-single script.
 		wp_localize_script(
 			'wp-listings-single',

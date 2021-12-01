@@ -34,7 +34,7 @@ class Register_Impress_Shortcodes {
 	}
 
 	/**
-	 * lead_login_shortcode function.
+	 * Lead_login_shortcode function.
 	 *
 	 * @access public
 	 * @param mixed $atts - Attributes.
@@ -53,7 +53,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ), [], '1.0' );
+			wp_enqueue_style( 'impress-lead-login' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -77,17 +77,17 @@ class Register_Impress_Shortcodes {
                 <input id="impress-widgetPassword" type="%4$s" name="password" placeholder="Password">
                 <input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
             </form>',
-			$this->idx_api->subdomain_url(),
-			$target,
-			$password_label,
-			$password_field_type
+			esc_url( $this->idx_api->subdomain_url() ),
+			esc_attr( $target ),
+			esc_html( $password_label ),
+			esc_attr( $password_field_type )
 		);
 
 		return $widget;
 	}
 
 	/**
-	 * lead_signup_shortcode function.
+	 * Lead_signup_shortcode function.
 	 *
 	 * @access public
 	 * @return void
@@ -98,7 +98,7 @@ class Register_Impress_Shortcodes {
 	}
 
 	/**
-	 * property_showcase_shortcode function.
+	 * Property_showcase_shortcode function.
 	 *
 	 * @access public
 	 * @param array $atts (default: array())
@@ -125,7 +125,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-showcase' );
 		}
 
 		$output = '';
@@ -525,11 +525,11 @@ class Register_Impress_Shortcodes {
 			)
 		);
 
-		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.min.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
+		wp_enqueue_style( 'owl2-css' );
+		wp_enqueue_script( 'owl2' );
 
 		if ( $styles ) {
-			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-carousel' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -624,7 +624,7 @@ class Register_Impress_Shortcodes {
 
 			$disclaimer = $this->maybe_add_disclaimer_and_courtesy( $prop );
 
-			// Get URL and add suffix if one exists
+			// Get URL and add suffix if one exists.
 			if ( isset( $prop['fullDetailsURL'] ) ) {
 				$url = $prop['fullDetailsURL'];
 			} else {
@@ -747,7 +747,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-city-links', plugins_url( '../assets/css/widgets/impress-city-links.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-city-links' );
 		}
 
 		if ( ! isset( $new_window ) ) {

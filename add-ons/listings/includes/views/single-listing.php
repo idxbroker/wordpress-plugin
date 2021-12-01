@@ -194,7 +194,7 @@ function single_listing_post_content() {
 
 				if ( isset( $options['wp_listings_display_advanced_fields'] ) && $options['wp_listings_display_advanced_fields'] ) {
 					$adv_fields = generate_adv_field_list( $post );
-					if ( count( $adv_fields ) ) {
+					if ( ! empty( $adv_fields['col1'] ) || ! empty( $adv_fields['col2'] ) ) {
 						echo '<table class="listing-details advanced">';
 						echo '<tbody class="left">';
 						foreach ( $adv_fields['col1'] as $key => $value ) {
