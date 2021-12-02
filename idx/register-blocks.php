@@ -191,7 +191,7 @@ class Register_Blocks {
 			false
 		);
 
-		$placeholder_image_url = plugins_url( '../assets/images/block-placeholder-images/idx-widgets-placeholder.png', __FILE__ );
+		$placeholder_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/idx-widgets-placeholder.png';
 		wp_localize_script( 'idx-widgets-block', 'idx_widget_block_image_url', [ $placeholder_image_url ] );
 
 		$available_widgets = $this->get_widget_list_options();
@@ -258,7 +258,7 @@ class Register_Blocks {
 			false
 		);
 
-		$idx_wrapper_tags_image_url = plugins_url( '../assets/images/block-placeholder-images/wrapper-tag-placeholder.png', __FILE__ );
+		$idx_wrapper_tags_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/wrapper-tag-placeholder.png';
 		wp_localize_script( 'idx-wrapper-tags-block', 'idx_wrapper_tags_image_url', [ $idx_wrapper_tags_image_url ] );
 		wp_enqueue_script( 'idx-wrapper-tags-block' );
 	}
@@ -301,7 +301,7 @@ class Register_Blocks {
 		$available_agents = $this->get_agents_select_list();
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $available_agents );
 
-		$lead_signup_image_url = plugins_url( '../assets/images/block-placeholder-images/lead-signup-placeholder.png', __FILE__ );
+		$lead_signup_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/lead-signup-placeholder.png';
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_image_url', [ $lead_signup_image_url ] );
 
 		wp_enqueue_script( 'impress-lead-signup-block' );
@@ -374,7 +374,7 @@ class Register_Blocks {
 			false
 		);
 
-		$lead_login_image_url = plugins_url( '../assets/images/block-placeholder-images/lead-login-placeholder.png', __FILE__ );
+		$lead_login_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/lead-login-placeholder.png';
 		wp_localize_script( 'impress-lead-login-block', 'lead_login_image_url', [ $lead_login_image_url ] );
 		wp_enqueue_script( 'impress-lead-login-block' );
 	}
@@ -437,7 +437,7 @@ class Register_Blocks {
 			false
 		);
 
-		$impress_omnibar_image_url = plugins_url( '../assets/images/block-placeholder-images/omnibar-placeholder.png', __FILE__ );
+		$impress_omnibar_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/omnibar-placeholder.png';
 		wp_localize_script( 'impress-omnibar-block', 'impress_omnibar_image_url', [ $impress_omnibar_image_url ] );
 		wp_enqueue_script( 'impress-omnibar-block' );
 	}
@@ -506,7 +506,7 @@ class Register_Blocks {
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_saved_links', $saved_links_list );
 
-		$impress_carousel_image_url = plugins_url( '../assets/images/block-placeholder-images/carousel-placeholder.png', __FILE__ );
+		$impress_carousel_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/carousel-placeholder.png';
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_image_url', [ $impress_carousel_image_url ] );
 
 		wp_enqueue_script( 'impress-carousel-block' );
@@ -597,7 +597,7 @@ class Register_Blocks {
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_saved_links', $saved_links_list );
 
-		$impress_showcase_image_url = plugins_url( '../assets/images/block-placeholder-images/showcase-placeholder.png', __FILE__ );
+		$impress_showcase_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/showcase-placeholder.png';
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_image_url', [ $impress_showcase_image_url ] );
 
 		wp_enqueue_script( 'impress-showcase-block' );
@@ -685,7 +685,7 @@ class Register_Blocks {
 			false
 		);
 
-		$placeholder_image_url = plugins_url( '../assets/images/block-placeholder-images/impress-city-links.png', __FILE__ );
+		$placeholder_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/impress-city-links.png';
 		wp_localize_script( 'impress-city-links-block', 'impress_city_links_block_image_url', [ $placeholder_image_url ] );
 
 		$mls_options = $this->get_mls_options();

@@ -157,8 +157,8 @@ class Idx_Broker_Plugin {
 			$_wp_listings_taxonomies->register_taxonomies();
 		}
 
-		$notice_keys = array('wpl_notice_idx', 'wpl_listing_notice_idx');
-		foreach ($notice_keys as $notice) {
+		$notice_keys = [ 'wpl_notice_idx', 'wpl_listing_notice_idx' ];
+		foreach ( $notice_keys as $notice ) {
 			delete_user_meta( get_current_user_id(), $notice );
 		}
 
@@ -191,8 +191,8 @@ class Idx_Broker_Plugin {
 		// IMPress Listings.
 		flush_rewrite_rules();
 
-		$notice_keys = array('wpl_notice_idx', 'wpl_listing_notice_idx');
-		foreach ($notice_keys as $notice) {
+		$notice_keys = [ 'wpl_notice_idx', 'wpl_listing_notice_idx' ];
+		foreach ( $notice_keys as $notice ) {
 			delete_user_meta( get_current_user_id(), $notice );
 		}
 	}

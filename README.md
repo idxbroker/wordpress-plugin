@@ -121,6 +121,9 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 ## Changelog ##
 
 ### 3.0.7 ###
+* Fix: Large scale security overhaul including sanitization/escaping and removal of any PHP eval() usage
+* Fix: Previously externally hosted scripts, styles, and images have now been moved into the plugin
+* Fix: Resolves missing index warning on IMPress widgets when displaying sold supplemental listings
 
 ### 3.0.6 ###
 * Fix: Additional escaping added to Lead Management page

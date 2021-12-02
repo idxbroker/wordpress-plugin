@@ -245,7 +245,15 @@ class Initiate_Plugin {
 		// If wrapper, add noindex tag which is stripped out by our system.
 		if ( $post && 'idx-wrapper' === $post->post_type ) {
 			// If html is being modified we offer filters for developers to modify this tag as needed.
-			echo apply_filters( 'idx_activation_meta_tags', "<meta name='idx-robot'>\n<meta name='robots' content='noindex,nofollow'>\n" );
+			echo wp_kses(
+				apply_filters( 'idx_activation_meta_tags', "<meta name='idx-robot'>\n<meta name='robots' content='noindex,nofollow'>\n" ),
+				[
+					'meta' => [
+						'name' => [],
+						'content' => [],
+					],
+				]
+			);
 		}
 	}
 

@@ -63,12 +63,12 @@ class WP_Listings_Admin_Notice {
 	 *
 	 * @return string|void Admin notice if is_admin() and not dismissed.
 	 */
-	public static function notice( $message,  $error = false, $cap_check = 'activate_plugins', $ignore_key = false ) {
-		if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
+	public static function notice( $message, $error = false, $cap_check = 'activate_plugins', $ignore_key = false ) {
+		if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 			if ( current_user_can( $cap_check ) ) {
 				$user_id = get_current_user_id();
 				if ( ! is_string( $ignore_key ) ) {
-					// wplistings_ignore_3911b2583433f696e5813a503bbb2e65
+					// wplistings_ignore_3911b2583433f696e5813a503bbb2e65.
 					$ignore_key = 'wplistings_ignore_' . substr( md5( $ignore_key ), 0, 40 );
 				}
 
@@ -96,9 +96,7 @@ class WP_Listings_Admin_Notice {
 					return implode( '', $out );
 
 				}
-
 			}
-
 		}
 
 	}
@@ -112,13 +110,17 @@ class WP_Listings_Admin_Notice {
 	 */
 	public static function js_css() {
 		global $wp_version;
-		wp_enqueue_style( 'wp-listings-admin-notice', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin-notice.min.css' );
-		wp_enqueue_script( 'wp-listings-admin', IMPRESS_IDX_URL . 'assets/js/listing-admin.min.js' );
-		wp_localize_script( 'wp-listings-admin', 'wp_listings_adminL10n', array(
-			'nonce'      => wp_create_nonce( self::$nonce_action ),
-			'wp_version' => $wp_version,
-			'dismiss'    => __( 'Dismiss this notice', 'wp-listings' ),
-		) );
+		wp_enqueue_style( 'wp-listings-admin-notice', IMPRESS_IDX_URL . 'assets/css/wp-listings-admin-notice.min.css', [], '1.0.0' );
+		wp_enqueue_script( 'wp-listings-admin', IMPRESS_IDX_URL . 'assets/js/listing-admin.min.js', [], '1.0.0', false );
+		wp_localize_script(
+			'wp-listings-admin',
+			'wp_listings_adminL10n',
+			[
+				'nonce'      => wp_create_nonce( self::$nonce_action ),
+				'wp_version' => $wp_version,
+				'dismiss'    => __( 'Dismiss this notice', 'wp-listings' ),
+			]
+		);
 	}
 
 	/**
@@ -131,12 +133,12 @@ class WP_Listings_Admin_Notice {
 	 * @return bool
 	 */
 	public static function ajax_cb() {
-		if (  ! isset( $_POST[ 'nonce' ] ) || ! wp_verify_nonce( $_POST[ 'nonce' ], self::$nonce_action ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], self::$nonce_action ) ) {
 			return false;
 		}
 
-		$nag = sanitize_key( $_POST[ 'nag' ] );
-		if ( $nag === $_POST[ 'nag' ] ) {
+		$nag = sanitize_key( $_POST['nag'] );
+		if ( $nag === $_POST['nag'] ) {
 			update_user_meta( get_current_user_id(), $nag, true );
 		}
 
