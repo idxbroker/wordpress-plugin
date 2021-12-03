@@ -631,7 +631,8 @@ class Lead_Management {
 				'force_display' => true,
 			);
 
-			$nonce = wp_create_nonce( 'idx_lead_delete_nonce' );
+			$edit_lead_nonce = wp_create_nonce( 'idx_lead_edit_nonce' );
+			$nonce           = wp_create_nonce( 'idx_lead_delete_nonce' );
 
 			// Column structure of data being passed to jQuery Datatables:
 			// Column 0 = Gravitar, First Name + Last Name.
@@ -650,7 +651,7 @@ class Lead_Management {
 				4 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $last_active ) . '</td>',
 				5 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $agent_name ) . '</td>',
 				6 => '<td class="mdl-data-table__cell--non-numeric">
-						<a href="' . esc_url( admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) ) . '" id="edit-lead-' . esc_attr( $lead->id ) . '" data-id="' . esc_attr( $lead->id ) . '" data-nonce="' . esc_attr( $nonce ) . '">
+						<a href="' . esc_url( admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id . '&nonce=' . $edit_lead_nonce ) ) . '" id="edit-lead-' . esc_attr( $lead->id ) . '" data-id="' . esc_attr( $lead->id ) . '" data-nonce="' . esc_attr( $edit_lead_nonce ) . '">
 							<i class="material-icons md-18">create</i>
 							<div class="mdl-tooltip" data-mdl-for="edit-lead-' . esc_attr( $lead->id ) . '">Edit Lead</div>
 						</a>
@@ -837,7 +838,13 @@ class Lead_Management {
 			<?php
 
 		} else {
-			$lead_id = sanitize_text_field( wp_unslash( $_GET['leadID'] ) );
+
+			if ( empty( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'], 'idx_lead_edit_nonce' ) ) {
+				echo '<p>Nonce verification failed</p>';
+				return;
+			}
+
+			$lead_id = (int) sanitize_text_field( wp_unslash( $_GET['leadID'] ) );
 			if ( empty( $lead_id ) ) {
 				return;
 			}

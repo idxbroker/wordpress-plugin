@@ -28,7 +28,7 @@ class Create_Impress_Widgets {
 	public $idx_api;
 
 	/**
-	 * register_impress_widgets function.
+	 * Register_impress_widgets function.
 	 *
 	 * @access public
 	 * @return void
@@ -45,7 +45,7 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * lead_login_shortcode function.
+	 * Lead_login_shortcode function.
 	 *
 	 * @access public
 	 * @return void

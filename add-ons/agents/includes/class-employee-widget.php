@@ -90,7 +90,7 @@ class IMPress_Agents_Widget extends WP_Widget {
 				echo '<div ' . esc_attr( post_class( 'widget-agent-wrap' ) ) . '>';
 				echo '<a href="' . esc_url( get_permalink() ) . '">', get_the_post_thumbnail( $post->ID, 'employee-thumbnail' ), '</a>';
 				printf( '<div class="widget-agent-details"><a class="fn" href="%s">%s</a>', esc_url( get_permalink() ), esc_html( get_the_title() ) );
-				echo impa_employee_archive_details();
+				impa_employee_archive_details();
 
 				if ( function_exists( '_p2p_init' ) && function_exists( 'agentpress_listings_init' ) || function_exists( '_p2p_init' ) && function_exists( 'wp_listings_init' ) ) {
 					$has_listings = impa_has_listings( $post->ID );
@@ -132,8 +132,8 @@ class IMPress_Agents_Widget extends WP_Widget {
 		?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<?php
@@ -152,40 +152,40 @@ class IMPress_Agents_Widget extends WP_Widget {
 		?>
 
 		<p>
-				<label for="<?php echo $this->get_field_id( 'show_agent' ); ?>"><?php _e( 'Show Agent', 'impress_agents' ); ?>:</label>
+				<label for="<?php echo $this->get_field_id( 'show_agent' ); ?>"><?php esc_html_e( 'Show Agent', 'impress_agents' ); ?>:</label>
 				<select id="<?php echo $this->get_field_id( 'show_agent' ); ?>" name="<?php echo $this->get_field_name( 'show_agent' ); ?>">
-					<option value="show_selected" <?php selected( 'show_selected', $instance['show_agent'] ); ?>><?php _e( 'Show Agent selected above', 'impress_agents' ); ?></option>
-					<option value="show_random" <?php selected( 'show_random', $instance['show_agent'] ); ?>><?php _e( 'Show Random', 'impress_agents' ); ?></option>
-					<option value="show_all" <?php selected( 'show_all', $instance['show_agent'] ); ?>><?php _e( 'Show All', 'impress_agents' ); ?></option>
+					<option value="show_selected" <?php selected( 'show_selected', $instance['show_agent'] ); ?>><?php esc_html_e( 'Show Agent selected above', 'impress_agents' ); ?></option>
+					<option value="show_random" <?php selected( 'show_random', $instance['show_agent'] ); ?>><?php esc_html_e( 'Show Random', 'impress_agents' ); ?></option>
+					<option value="show_all" <?php selected( 'show_all', $instance['show_agent'] ); ?>><?php esc_html_e( 'Show All', 'impress_agents' ); ?></option>
 				</select>
 		</p>
 
 		<hr>
-		<p><?php _e( 'If Show Random selected: ', 'impress_agents' ); ?></p>
+		<p><?php esc_html_e( 'If Show Random selected: ', 'impress_agents' ); ?></p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'show_number' ); ?>"><?php _e( 'Max number of agents to show:' ); ?></label>
+				<label for="<?php echo $this->get_field_id( 'show_number' ); ?>"><?php esc_html_e( 'Max number of agents to show:' ); ?></label>
 				<input id="<?php echo $this->get_field_id( 'show_number' ); ?>" name="<?php echo $this->get_field_name( 'show_number' ); ?>" type="text" value="<?php echo $instance['show_number']; ?>" size="3" maxlength="2" />
 			</p>
 
 		<hr>
-		<p><?php _e( 'If Show All selected: ', 'impress_agents' );?></p>
+		<p><?php esc_html_e( 'If Show All selected: ', 'impress_agents' );?></p>
 			<p>
-				<label for="<?php echo $this->get_field_id( 'orderby' ); ?>"><?php _e( 'Order By', 'impress_agents' ); ?>:</label>
+				<label for="<?php echo $this->get_field_id( 'orderby' ); ?>"><?php esc_html_e( 'Order By', 'impress_agents' ); ?>:</label>
 				<select id="<?php echo $this->get_field_id( 'orderby' ); ?>" name="<?php echo $this->get_field_name( 'orderby' ); ?>">
-					<option value="date" <?php selected( 'date', $instance['orderby'] ); ?>><?php _e( 'Date', 'impress_agents' ); ?></option>
-					<option value="title" <?php selected( 'title', $instance['orderby'] ); ?>><?php _e( 'Title', 'impress_agents' ); ?></option>
-					<option value="menu_order" <?php selected( 'menu_order', $instance['orderby'] ); ?>><?php _e( 'Menu Order', 'impress_agents' ); ?></option>
-					<option value="ID" <?php selected( 'ID', $instance['orderby'] ); ?>><?php _e( 'ID', 'impress_agents' ); ?></option>
-					<option value="rand" <?php selected( 'rand', $instance['orderby'] ); ?>><?php _e( 'Random', 'impress_agents' ); ?></option>
+					<option value="date" <?php selected( 'date', $instance['orderby'] ); ?>><?php esc_html_e( 'Date', 'impress_agents' ); ?></option>
+					<option value="title" <?php selected( 'title', $instance['orderby'] ); ?>><?php esc_html_e( 'Title', 'impress_agents' ); ?></option>
+					<option value="menu_order" <?php selected( 'menu_order', $instance['orderby'] ); ?>><?php esc_html_e( 'Menu Order', 'impress_agents' ); ?></option>
+					<option value="ID" <?php selected( 'ID', $instance['orderby'] ); ?>><?php esc_html_e( 'ID', 'impress_agents' ); ?></option>
+					<option value="rand" <?php selected( 'rand', $instance['orderby'] ); ?>><?php esc_html_e( 'Random', 'impress_agents' ); ?></option>
 				</select>
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'order' ); ?>"><?php _e( 'Sort Order', 'impress_agents' ); ?>:</label>
+				<label for="<?php echo $this->get_field_id( 'order' ); ?>"><?php esc_html_e( 'Sort Order', 'impress_agents' ); ?>:</label>
 				<select id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
-					<option value="DESC" <?php selected( 'DESC', $instance['order'] ); ?>><?php _e( 'Descending (3, 2, 1)', 'impress_agents' ); ?></option>
-					<option value="ASC" <?php selected( 'ASC', $instance['order'] ); ?>><?php _e( 'Ascending (1, 2, 3)', 'impress_agents' ); ?></option>
+					<option value="DESC" <?php selected( 'DESC', $instance['order'] ); ?>><?php esc_html_e( 'Descending (3, 2, 1)', 'impress_agents' ); ?></option>
+					<option value="ASC" <?php selected( 'ASC', $instance['order'] ); ?>><?php esc_html_e( 'Ascending (1, 2, 3)', 'impress_agents' ); ?></option>
 				</select>
 			</p>
 		<?php

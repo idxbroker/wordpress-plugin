@@ -366,18 +366,45 @@ class Wrappers {
 			$meta_value = sanitize_text_field( wp_unslash( $_POST['idx-wrapper-page'] ) );
 			// Find the IDX Page ID by matching URLs.
 			$idx_page_id = $this->find_idx_url( $post_id );
-
 			// do not update wrapper if wrapper is none.
 			if ( 'none' === $meta_value ) {
 				return;
 			} elseif ( 'global' === $meta_value ) {
 				$this->idx_api->set_wrapper( $idx_page_id, '' );
 			}
-			$wrapper_page_url = get_permalink( $meta_value );
+			$wrapper_page_url = get_permalink();
 			// logic for what type of idx page is in Idx_Api class.
 			$this->idx_api->set_wrapper( $idx_page_id, $wrapper_page_url );
 			update_post_meta( $post_id, 'idx-wrapper-page', $meta_value );
 		}
+	}
 
+	/**
+	 * Find_idx_url function.
+	 *
+	 * @access public
+	 * @param mixed $post_id - Post ID.
+	 * @return mixed
+	 */
+	public function find_idx_url( $post_id ) {
+		$post         = get_post( $post_id );
+		$url          = $post->post_name;
+		$system_links = $this->idx_api->idx_api_get_systemlinks();
+		$saved_links  = $this->idx_api->idx_api_get_savedlinks();
+		foreach ( $system_links as $link ) {
+			if ( $link->url === $url ) {
+				$uid  = $link->uid;
+				$name = $link->name;
+				$id   = $this->convert_uid_to_id( $uid );
+				return $id;
+			}
+		}
+		foreach ( $saved_links as $link ) {
+			if ( $link->url === $url ) {
+				$id   = $link->id;
+				$name = $link->linkTitle;
+				return $id;
+			}
+		}
 	}
 }

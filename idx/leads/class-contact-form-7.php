@@ -252,9 +252,14 @@ class IDX_Leads_CF7 {
 		$apikey = get_option( 'idx_broker_apikey' );
 
 		// Instantiate Submission class and get posted data
-		// return early if no posted data
+		// return early if no posted data.
 		$submission = WPCF7_Submission::get_instance();
-		if ( ! $submission || ! $posted_data = $submission->get_posted_data() ) {
+		if ( ! $submission ) {
+			return;
+		}
+
+		$posted_data = $submission->get_posted_data();
+		if ( ! $posted_data ) {
 			return;
 		}
 
@@ -298,8 +303,8 @@ class IDX_Leads_CF7 {
 						'note' => self::output_form_fields( $posted_data ),
 					);
 
-					// Add note if lead already exists
-					if ( $decoded_response == 'Lead already exists.' ) {
+					// Add note if lead already exists.
+					if ( 'Lead already exists.' === $decoded_response ) {
 						$args = array_replace(
 							$args,
 							array(
@@ -308,14 +313,15 @@ class IDX_Leads_CF7 {
 							)
 						);
 
-						// Get leads
-						if ( false === ( $all_leads = get_transient( 'idx_leads' ) ) ) {
+						// Get leads.
+						$all_leads = get_transient( 'idx_leads' );
+						if ( false === $all_leads ) {
 							$response  = wp_remote_request( $api_url, $args );
 							$all_leads = json_decode( $response['body'], 1 );
 							set_transient( 'idx_leads', $all_leads, 60 * 60 * 1 );
 						}
 
-						// Loop through leads to match email address
+						// Loop through leads to match email address.
 						foreach ( $all_leads as $leads => $lead ) {
 							if ( $lead['email'] == $posted_data[ $form_options['email'] ] ) {
 								$api_url  = IDX_API_URL . '/leads/note/' . $lead['id'];
@@ -333,7 +339,7 @@ class IDX_Leads_CF7 {
 							}
 						}
 					} else {
-						// Add note for new lead
+						// Add note for new lead.
 						$lead_id  = $decoded_response->newID;
 						$api_url  = IDX_API_URL . '/leads/note/' . $lead_id;
 						$args     = array_replace( $args, array( 'body' => http_build_query( $note ) ) );

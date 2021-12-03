@@ -184,7 +184,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 			$count++;
 
-			// Get URL and add suffix if one exists
+			// Get URL and add suffix if one exists.
 			$url = $prop['fullDetailsURL'] ?? $this->idx_api->details_url() . '/' . $prop['detailsURL'];
 
 			if ( has_filter( 'impress_showcase_property_url_suffix' ) ) {
@@ -294,7 +294,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				// close a row if..
 				// num_per_row is a factor of count OR
 				// count is equal to the max number of listings to show OR
-				// count is equal to the total number of listings available
+				// count is equal to the total number of listings available.
 				if ( $count % $num_per_row == 0 || $count == $total || $count == $max ) {
 					$output .= '</div> <!-- .row -->';
 				}
@@ -302,7 +302,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				// open a new row if..
 				// num per row is a factor of count AND
 				// count is not equal to max AND
-				// count is not equal to total
+				// count is not equal to total.
 				if ( $count % $num_per_row == 0 && $count != $max && $count != $total ) {
 					$output .= '<div class="row">';
 				}
@@ -328,7 +328,9 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		}
 	}
 
-	// Hide fields that have no data to avoid fields such as 0 Baths from displaying.
+	/**
+	 * Hide fields that have no data to avoid fields such as 0 Baths from displaying.
+	 */
 	public function hide_empty_fields( $field, $display_name, $value ) {
 		if ( $value <= 0 ) {
 			return '';
@@ -530,13 +532,13 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php echo 'Title:'; ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php echo 'Title:'; ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'properties' ); ?>"><?php echo 'Properties to Display:'; ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'properties' ); ?>" name="<?php echo $this->get_field_name( 'properties' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>"><?php echo 'Properties to Display:'; ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'properties' ) ); ?>">
 				<option <?php selected( $instance['properties'], 'featured' ); ?> value="featured"><?php echo 'Featured'; ?></option>
 				<option <?php selected( $instance['properties'], 'soldpending' ); ?> value="soldpending"><?php echo 'Sold/Pending'; ?></option>
 				<option <?php selected( $instance['properties'], 'supplemental' ); ?> value="supplemental"><?php echo 'Supplemental'; ?></option>
@@ -545,37 +547,37 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'saved_link_id' ); ?>">Choose a saved link (if selected above):</label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'saved_link_id' ); ?>" name="<?php echo $this->get_field_name( 'saved_link_id' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'saved_link_id' ) ); ?>">Choose a saved link (if selected above):</label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'saved_link_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'saved_link_id' ) ); ?>">
 				<?php $this->saved_link_options( $instance ); ?>
 			</select>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'idxbroker' ); ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'agentID' ) ); ?>"><?php esc_html_e( 'Limit by Agent:', 'idxbroker' ); ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'agentID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'agentID' ) ); ?>">
 				<?php $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
 		</p>
 
 		<p>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'colistings' ); ?>" name="<?php echo $this->get_field_name( 'colistings' ); ?>" value="1" <?php checked( $instance['colistings'], true ); ?>>
-			<label for="<?php echo $this->get_field_id( 'colistings' ); ?>"><?php _e( 'Include colistings for selected agent?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'colistings' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'colistings' ) ); ?>" value="1" <?php checked( $instance['colistings'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'colistings' ) ); ?>"><?php esc_html_e( 'Include colistings for selected agent?', 'idxbroker' ); ?></label>
 		</p>
 
 		<p>
-			<input class="checkbox" type="checkbox" <?php checked( $instance['show_image'], 1 ); ?> id="<?php echo $this->get_field_id( 'show_image' ); ?>" name="<?php echo $this->get_field_name( 'show_image' ); ?>" value="1" />
-			<label for="<?php echo $this->get_field_id( 'show_image' ); ?>"><?php echo 'Show image?'; ?></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['show_image'], 1 ); ?> id="<?php echo esc_attr( $this->get_field_id( 'show_image' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'show_image' ) ); ?>" value="1" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'show_image' ) ); ?>"><?php echo 'Show image?'; ?></label>
 		</p>
 
 		<p>
-			<input class="checkbox" type="checkbox" <?php checked( $instance['use_rows'], 1 ); ?> id="<?php echo $this->get_field_id( 'use_rows' ); ?>" name="<?php echo $this->get_field_name( 'use_rows' ); ?>" value="1" />
-			<label for="<?php echo $this->get_field_id( 'use_rows' ); ?>"><?php echo 'Use rows?'; ?></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['use_rows'], 1 ); ?> id="<?php echo esc_attr( $this->get_field_id( 'use_rows' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'use_rows' ) ); ?>" value="1" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'use_rows' ) ); ?>"><?php echo 'Use rows?'; ?></label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'listings_per_row' ); ?>"><?php echo 'Listings per row:'; ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'listings_per_row' ); ?>" name="<?php echo $this->get_field_name( 'listings_per_row' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'listings_per_row' ) ); ?>"><?php echo 'Listings per row:'; ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'listings_per_row' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'listings_per_row' ) ); ?>">
 				<option <?php selected( $instance['listings_per_row'], '2' ); ?> value="2">2</option>
 				<option <?php selected( $instance['listings_per_row'], '3' ); ?> value="3">3</option>
 				<option <?php selected( $instance['listings_per_row'], '4' ); ?> value="4">4</option>
@@ -583,27 +585,27 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'max' ); ?>"><?php echo 'Max number of listings to show:'; ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'max' ); ?>" name="<?php echo $this->get_field_name( 'max' ); ?>" type="number" value="<?php esc_attr_e( $instance['max'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>"><?php echo 'Max number of listings to show:'; ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php esc_attr( $instance['max'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><?php echo 'Sort order:'; ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>"><?php echo 'Sort order:'; ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'order' ) ); ?>">
 				<option <?php selected( $instance['order'], 'default' ); ?> value="default"><?php echo 'Default'; ?></option>
 				<option <?php selected( $instance['order'], 'high-low' ); ?> value="high-low"><?php echo 'Highest to Lowest Price'; ?></option>
 				<option <?php selected( $instance['order'], 'low-high' ); ?> value="low-high"><?php echo 'Lowest to Highest Price'; ?></option>
 			</select>
 		</p>
 
-		 <p>
-			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php _e( 'Default Styling?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'styles' ); ?>" name="<?php echo $this->get_field_name( 'styles' ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'styles' ) ); ?>"><?php esc_html_e( 'Default Styling?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'styles' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'styles' ) ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php _e( 'Open Listings in a New Window?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'new_window' ); ?>" name="<?php echo $this->get_field_name( 'new_window' ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'new_window' ) ); ?>"><?php esc_html_e( 'Open Listings in a New Window?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'new_window' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'new_window' ) ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
 		</p>
 
 		<?php
@@ -646,7 +648,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
 		}
 
-		if ( $output == '' ) {
+		if ( '' == $output ) {
 			return;
 		} else {
 			return '<div class="disclaimer">' . $output . '</div>';

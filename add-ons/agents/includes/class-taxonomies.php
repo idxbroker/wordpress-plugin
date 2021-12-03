@@ -482,13 +482,13 @@ class IMPress_Agents_Taxonomies {
 		wp_nonce_field( basename( __FILE__ ), 'impa_term_image_nonce' ); ?>
 
 		<div class="form-field impa-term-image-wrap">
-			<label for="impa-term-image"><?php _e( 'Image', 'impress_agents' ); ?></label>
+			<label for="impa-term-image"><?php esc_html_e( 'Image', 'impress_agents' ); ?></label>
 			<!-- Begin term image -->
 			<p>
 				<input type="hidden" name="impa-term-image" id="impa-term-image" value="<?php echo esc_attr( $image_id ); ?>" />
 				<a href="#" class="impa-add-media impa-add-media-img"><img class="impa-term-image-url" src="" style="max-width: 100%; max-height: 200px; height: auto; display: block;" /></a>
-				<a href="#" class="impa-add-media impa-add-media-text"><?php _e( 'Set term image', 'impress_agents' ); ?></a>
-				<a href="#" class="impa-remove-media"><?php _e( 'Remove term image', 'impress_agents' ); ?></a>
+				<a href="#" class="impa-add-media impa-add-media-text"><?php esc_html_e( 'Set term image', 'impress_agents' ); ?></a>
+				<a href="#" class="impa-remove-media"><?php esc_html_e( 'Remove term image', 'impress_agents' ); ?></a>
 			</p>
 			<!-- End term image -->
 		</div>
@@ -509,15 +509,15 @@ class IMPress_Agents_Taxonomies {
 		?>
 
 		<tr class="form-field impa-term-image-wrap">
-			<th scope="row"><label for="impa-term-image"><?php _e( 'Image', 'impress_agents' ); ?></label></th>
+			<th scope="row"><label for="impa-term-image"><?php esc_html_e( 'Image', 'impress_agents' ); ?></label></th>
 			<td>
 				<?php wp_nonce_field( basename( __FILE__ ), 'impa_term_image_nonce' ); ?>
 				<!-- Begin term image -->
 				<p>
 					<input type="hidden" name="impa-term-image" id="impa-term-image" value="<?php echo esc_attr( $image_id ); ?>" />
 					<a href="#" class="impa-add-media impa-add-media-img"><img class="impa-term-image-url" src="<?php echo esc_url( $image_url ); ?>" style="max-width: 100%; max-height: 200px; height: auto; display: block;" /></a>
-					<a href="#" class="impa-add-media impa-add-media-text"><?php _e( 'Set term image', 'impress_agents' ); ?></a>
-					<a href="#" class="impa-remove-media"><?php _e( 'Remove term image', 'impress_agents' ); ?></a>
+					<a href="#" class="impa-add-media impa-add-media-text"><?php esc_html_e( 'Set term image', 'impress_agents' ); ?></a>
+					<a href="#" class="impa-remove-media"><?php esc_html_e( 'Remove term image', 'impress_agents' ); ?></a>
 				</p>
 				<!-- End term image -->
 			</td>
