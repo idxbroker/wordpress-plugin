@@ -4,11 +4,11 @@ $options                = get_option( 'plugin_wp_listings_settings' );
 $advanced_field_options = get_option( 'wp_listings_advanced_field_display_options', [] );
 
 // If no advanced fields are imported but the option to import is enabled, show message on what to do next.
-if ( count( $advanced_field_options ) < 1 && isset( $options['wp_listings_import_advanced_fields'] ) && '1' == $options['wp_listings_import_advanced_fields'] ) {
+if ( is_array( $advanced_field_options ) && count( $advanced_field_options ) < 1 && isset( $options['wp_listings_import_advanced_fields'] ) && '1' == $options['wp_listings_import_advanced_fields'] ) {
 	echo '<div style="font-size:10px;line-height:21px;">
 			<span class="dashicons dashicons-warning"></span>
 			<span>
-				Once new listings are imported or existing listings update after enabling the "Import advanced field data" option, advanced field display setting options will appear here.
+				Advanced field data will be gathered during the next listing auto-import, please check back later.
 			</span>
 		 </div>';
 }
@@ -41,7 +41,7 @@ echo '
 <input type="hidden" id="adv-fields-nonce" value="<?php echo esc_attr( wp_create_nonce( 'impress_adv_fields_settings_nonce' ) ); ?>" />
 <?php
 // If any advanced fields are imported, display the adv field customization table.
-if ( count( $advanced_field_options ) > 0 ) {
+if ( is_array( $advanced_field_options ) && count( $advanced_field_options ) > 0 ) {
 	echo '<div id="adv-field-cusomization-container" class="' . ( 0 == $options['wp_listings_import_advanced_fields'] ? 'disabled-adv-field-option' : '' ) . '">';
 
 	echo '<h1 id="wpl-customize-adv-fields-label">IMPress Listings - Advanced Fields</h1>
@@ -78,10 +78,10 @@ if ( count( $advanced_field_options ) > 0 ) {
 			<button id="wpl-clear-custom-names-button" class="button-primary" type="button" onclick="clearAdvCustomNameFields()" title="Remove custom names from all fields. Press the Save Settings button to commit any changes." >Clear Custom Names</button>
 		</div>
 	</div>';
+	echo '<hr>';
+	echo '<input id="adv-field-settings-submit-button" name="submit" class="button-primary" type="submit" value="Save Settings" aria-label="Submit Advanced Field Display Changes" style="min-width:200px;"/>';
 }
-echo '<hr>';
 ?>
-<input id="adv-field-settings-submit-button" name="submit" class="button-primary" type="submit" value="Save Settings" aria-label="Submit Advanced Field Display Changes" style="min-width:200px;"/>
 </form>
 
 <script>
