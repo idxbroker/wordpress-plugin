@@ -547,4 +547,71 @@ function wp_listings_idx_auto_import_task() {
 		$listing_ids[] = $prop['listingID'];
 	}
 	WPL_Idx_Listing::wp_listings_idx_create_post( $listing_ids );
+	// Advanced field data update.
+	$options = get_option( 'plugin_wp_listings_settings' );
+
+	if ( isset( $options['wp_listings_import_advanced_fields'] ) ) {
+		if ( ! get_option( 'wp_listings_advanced_field_display_options' ) ) {
+			add_option( 'wp_listings_advanced_field_display_options', [] );
+		}
+		update_advanced_field_options();
+	} else {
+		purge_advanced_field_options();
+	}
 }
+
+/**
+ * Purges any saved advanced fields/Customizations currently saved.
+ */
+function purge_advanced_field_options() {
+	update_option( 'wp_listings_advanced_field_display_options', [] );
+}
+
+/**
+ * Gathers all advanced fields present to allow for cuztomization in settings.
+ */
+function update_advanced_field_options() {
+
+	if ( ! get_option( 'wp_listings_advanced_field_display_options' ) ) {
+		add_option( 'wp_listings_advanced_field_display_options', [] );
+	}
+
+	$adv_field_options = get_option( 'wp_listings_advanced_field_display_options' );
+	if ( ! is_array( $adv_field_options ) ) {
+		$adv_field_options = [];
+	}
+
+	$adv_fields = [];
+	$listing_posts = get_posts(
+		[
+			'numberposts' => '-1',
+			'post_type'   => 'listing',
+		]
+	);
+
+	if ( ! is_array( $listing_posts ) ) {
+		return;
+	}
+
+	foreach ( $listing_posts as $key => $value ) {
+		$listing_post_meta = get_post_meta( $value->ID );
+		// Get advanced fields from all listings and remove any duplicates.
+		if ( ! empty( $listing_post_meta['_advanced_fields'][0] ) ) {
+			$adv_fields = array_unique( array_merge( $adv_fields, array_keys( maybe_unserialize( $listing_post_meta['_advanced_fields'][0] ) ) ) );
+		}
+	}
+	if ( ! empty( $adv_fields ) ) {
+		sort( $adv_fields );
+		foreach ( $adv_fields as $value ) {
+			if ( ! array_key_exists( $value, $adv_field_options ) ) {
+				$adv_field_options[ $value ] = [
+					'custom_name'  => '',
+					'display_field' => 'show',
+				];
+			}
+		}
+	}
+
+	update_option( 'wp_listings_advanced_field_display_options', $adv_field_options );
+}
+
