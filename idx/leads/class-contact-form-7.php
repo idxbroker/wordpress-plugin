@@ -57,18 +57,18 @@ class IDX_Leads_CF7 {
 			$option_name = 'idx_lead_form_' . $args->id;
 
 			$new_value                  = array();
-			$new_value['enable_lead']   = isset( $_POST['enable_lead'] ) ? (int) wp_sanitize_text_field( stripslashes( $_POST['enable_lead'] ) ) : 0;
-			$new_value['category']      = isset( $_POST['category'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['category'] ) ) : null;
-			$new_value['firstName']     = isset( $_POST['firstName'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['firstName'] ) ) : null;
-			$new_value['lastName']      = isset( $_POST['lastName'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['lastName'] ) ) : null;
-			$new_value['email']         = ( isset( $_POST['email'] ) && is_email( $_POST['email'] ) ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['email'] ) ) : null;
-			$new_value['email2']        = ( isset( $_POST['email2'] ) && is_email( $_POST['email2'] ) ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['email2'] ) ) : null;
-			$new_value['phone']         = isset( $_POST['phone'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['phone'] ) ) : null;
-			$new_value['address']       = isset( $_POST['address'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['address'] ) ) : null;
-			$new_value['city']          = isset( $_POST['city'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['city'] ) ) : null;
-			$new_value['stateProvince'] = isset( $_POST['stateProvince'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['stateProvince'] ) ) : null;
-			$new_value['zipCode']       = isset( $_POST['zipCode'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['zipCode'] ) ) : null;
-			$new_value['country']       = isset( $_POST['country'] ) ? (string) wp_sanitize_text_field( stripslashes( $_POST['country'] ) ) : null;
+			$new_value['enable_lead']   = isset( $_POST['enable_lead'] ) ? (int) sanitize_text_field( stripslashes( $_POST['enable_lead'] ) ) : 0;
+			$new_value['category']      = isset( $_POST['category'] ) ? (string) sanitize_text_field( stripslashes( $_POST['category'] ) ) : null;
+			$new_value['firstName']     = isset( $_POST['firstName'] ) ? (string) sanitize_text_field( stripslashes( $_POST['firstName'] ) ) : null;
+			$new_value['lastName']      = isset( $_POST['lastName'] ) ? (string) sanitize_text_field( stripslashes( $_POST['lastName'] ) ) : null;
+			$new_value['email']         = ( isset( $_POST['email'] ) && is_email( $_POST['email'] ) ) ? (string) sanitize_text_field( stripslashes( $_POST['email'] ) ) : null;
+			$new_value['email2']        = ( isset( $_POST['email2'] ) && is_email( $_POST['email2'] ) ) ? (string) sanitize_text_field( stripslashes( $_POST['email2'] ) ) : null;
+			$new_value['phone']         = isset( $_POST['phone'] ) ? (string) sanitize_text_field( stripslashes( $_POST['phone'] ) ) : null;
+			$new_value['address']       = isset( $_POST['address'] ) ? (string) sanitize_text_field( stripslashes( $_POST['address'] ) ) : null;
+			$new_value['city']          = isset( $_POST['city'] ) ? (string) sanitize_text_field( stripslashes( $_POST['city'] ) ) : null;
+			$new_value['stateProvince'] = isset( $_POST['stateProvince'] ) ? (string) sanitize_text_field( stripslashes( $_POST['stateProvince'] ) ) : null;
+			$new_value['zipCode']       = isset( $_POST['zipCode'] ) ? (string) sanitize_text_field( stripslashes( $_POST['zipCode'] ) ) : null;
+			$new_value['country']       = isset( $_POST['country'] ) ? (string) sanitize_text_field( stripslashes( $_POST['country'] ) ) : null;
 
 			update_option( $option_name, $new_value, false );
 		}

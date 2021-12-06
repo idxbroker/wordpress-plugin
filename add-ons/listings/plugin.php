@@ -43,7 +43,7 @@ function wp_listings_init() {
 		wp_register_script( 'jquery-validate', IMPRESS_IDX_URL . 'assets/js/jquery.validate.min.js', [ 'jquery' ], '1.0', true ); // enqueued only on single listings.
 		wp_register_script( 'fitvids', IMPRESS_IDX_URL . 'assets/js/jquery.fitvids.min.js', [ 'jquery' ], '1.0', true ); // enqueued only on single listings.
 		wp_register_script( 'smoothscroll', IMPRESS_IDX_URL . 'assets/js/smoothscroll-1.4.13.min.js', [ 'jquery' ], '1.0', true );
-		wp_register_script( 'bootstrap', IMPRESS_IDX_URL . 'assets/js/bootstrap-3.1.1.min.js', [ 'jquery' ], '1.0', true );
+		wp_register_script( 'bootstrap', IMPRESS_IDX_URL . 'assets/js/bootstrap-5.1.3.min.js', [ 'jquery' ], '5.1.3', true );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-tabs' );
 		wp_register_style( 'impb-google-fonts-elegant', IMPRESS_IDX_URL . 'assets/webfonts/neuton-raleway-font.css', [], '1.0' );
@@ -102,7 +102,7 @@ function wp_listings_init() {
 		$screen_id = get_current_screen();
 		if ( 'listing_page_wp-listings-settings' === $screen_id->id || 'listing_page_wp-listings-gmb-settings' === $screen_id->id ) {
 			wp_enqueue_script( 'jquery-ui-tabs' );
-			wp_enqueue_style( 'jquery-ui-css', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', [], '1.12.1', false );
+			wp_enqueue_style( 'jquery-ui-css', IMPRESS_IDX_URL . 'assets/css/jquery-ui-1.12.1.min.css', [], '1.12.1', false );
 		}
 
 		if ( 'listing_page_wp-listings-gmb-settings' === $screen_id->id ) {

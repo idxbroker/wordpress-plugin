@@ -125,15 +125,15 @@ class Search_Management {
 			$api_url = IDX_API_URL . '/clients/savedlinks';
 
 			$search_query = array(
-				'pt'    => $_POST['pt'],
-				'ccz'   => $_POST['ccz'],
-				'lp'    => $_POST['lp'],
-				'hp'    => $_POST['hp'],
-				'bd'    => $_POST['bd'],
-				'ba'    => $_POST['ba'],
-				'sqft'  => $_POST['sqft'],
-				'acres' => $_POST['acres'],
-				'add'   => $_POST['add'],
+				'pt'    => sanitize_text_field( wp_unslash( $_POST['pt'] ) ),
+				'ccz'   => sanitize_text_field( wp_unslash( $_POST['ccz'] ) ),
+				'lp'    => sanitize_text_field( wp_unslash( $_POST['lp'] ) ),
+				'hp'    => sanitize_text_field( wp_unslash( $_POST['hp'] ) ),
+				'bd'    => sanitize_text_field( wp_unslash( $_POST['bd'] ) ),
+				'ba'    => sanitize_text_field( wp_unslash( $_POST['ba'] ) ),
+				'sqft'  => sanitize_text_field( wp_unslash( $_POST['sqft'] ) ),
+				'acres' => sanitize_text_field( wp_unslash( $_POST['acres'] ) ),
+				'add'   => sanitize_text_field( wp_unslash( $_POST['add'] ) ),
 			);
 
 			if ( 'city' === $_POST['ccz'] ) {
@@ -148,17 +148,17 @@ class Search_Management {
 			}
 
 			$data = array(
-				'pageTitle'          => $_POST['pageTitle'],
-				'linkName'           => str_replace( ' ', '-', strtolower( $_POST['linkTitle'] ) ),
-				'linkTitle'          => $_POST['linkTitle'],
+				'pageTitle'          => sanitize_text_field( wp_unslash( $_POST['pageTitle'] ) ),
+				'linkName'           => sanitize_text_field( wp_unslash( str_replace( ' ', '-', strtolower( $_POST['linkTitle'] ) ) ) ),
+				'linkTitle'          => sanitize_text_field( wp_unslash( $_POST['linkTitle'] ) ),
 				'queryString'        => $search_query,
-				'useDescriptionMeta' => ( isset( $_POST['useDescriptionMeta'] ) ) ? $_POST['useDescriptionMeta'] : '',
-				'descriptionMeta'    => ( isset( $_POST['descriptionMeta'] ) ) ? $_POST['descriptionMeta'] : '',
-				'useKeywordsMeta'    => ( isset( $_POST['useKeywordsMeta'] ) ) ? $_POST['useKeywordsMeta'] : '',
-				'keywords'           => ( isset( $_POST['keywords'] ) ) ? $_POST['keywords'] : '',
-				'featured'           => ( isset( $_POST['featured'] ) ) ? $_POST['featured'] : '',
-				'linkCopy'           => ( isset( $_POST['linkCopy'] ) ) ? $_POST['linkCopy'] : '',
-				'agentID'            => ( isset( $_POST['agentID'] ) ) ? $_POST['agentID'] : '',
+				'useDescriptionMeta' => ( isset( $_POST['useDescriptionMeta'] ) ) ? sanitize_text_field( wp_unslash( $_POST['useDescriptionMeta'] ) ) : '',
+				'descriptionMeta'    => ( isset( $_POST['descriptionMeta'] ) ) ? sanitize_text_field( wp_unslash( $_POST['descriptionMeta'] ) ) : '',
+				'useKeywordsMeta'    => ( isset( $_POST['useKeywordsMeta'] ) ) ? sanitize_text_field( wp_unslash( $_POST['useKeywordsMeta'] ) ) : '',
+				'keywords'           => ( isset( $_POST['keywords'] ) ) ? sanitize_text_field( wp_unslash( $_POST['keywords'] ) ) : '',
+				'featured'           => ( isset( $_POST['featured'] ) ) ? sanitize_text_field( wp_unslash( $_POST['featured'] ) ) : '',
+				'linkCopy'           => ( isset( $_POST['linkCopy'] ) ) ? sanitize_text_field( wp_unslash( $_POST['linkCopy'] ) ) : '',
+				'agentID'            => ( isset( $_POST['agentID'] ) ) ? sanitize_text_field( wp_unslash( $_POST['agentID'] ) ) : '',
 			);
 
 			$data = array_merge( $data, $search_query );
@@ -206,15 +206,15 @@ class Search_Management {
 			$api_url = IDX_API_URL . '/leads/search/' . $_POST['leadID'];
 
 			$search_query = array(
-				'pt'    => $_POST['pt'],
-				'ccz'   => $_POST['ccz'],
-				'lp'    => $_POST['lp'],
-				'hp'    => $_POST['hp'],
-				'bd'    => $_POST['bd'],
-				'ba'    => $_POST['ba'],
-				'sqft'  => $_POST['sqft'],
-				'acres' => $_POST['acres'],
-				'add'   => $_POST['add'],
+				'pt'    => sanitize_text_field( wp_unslash( $_POST['pt'] ) ),
+				'ccz'   => sanitize_text_field( wp_unslash( $_POST['ccz'] ) ),
+				'lp'    => sanitize_text_field( wp_unslash( $_POST['lp'] ) ),
+				'hp'    => sanitize_text_field( wp_unslash( $_POST['hp'] ) ),
+				'bd'    => sanitize_text_field( wp_unslash( $_POST['bd'] ) ),
+				'ba'    => sanitize_text_field( wp_unslash( $_POST['ba'] ) ),
+				'sqft'  => sanitize_text_field( wp_unslash( $_POST['sqft'] ) ),
+				'acres' => sanitize_text_field( wp_unslash( $_POST['acres'] ) ),
+				'add'   => sanitize_text_field( wp_unslash( $_POST['add'] ) ),
 			);
 
 			if ( 'city' === $_POST['ccz'] ) {
