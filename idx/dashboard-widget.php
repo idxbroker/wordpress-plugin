@@ -130,10 +130,10 @@ class Dashboard_Widget {
 
 			try {
 				$leads = wp_json_encode( $this->leads_json( $timeframe, $interval ) );
-				echo $leads;
+				echo wp_kses_post( $leads );
 				wp_die();
 			} catch ( Exception $error ) {
-				echo $error->getMessage();
+				echo wp_kses_post( $error->getMessage() );
 				wp_die();
 			}
 		}
@@ -151,10 +151,10 @@ class Dashboard_Widget {
 			$interval = sanitize_text_field( $_POST['timeframe'] );
 			try {
 				$listings = wp_json_encode( $this->listings_json( $interval ) );
-				echo $listings;
+				echo wp_kses_post( $listings );
 				wp_die();
 			} catch ( Exception $error ) {
-				echo $error->getMessage();
+				echo wp_kses_post( $error->getMessage() );
 				wp_die();
 			}
 		}

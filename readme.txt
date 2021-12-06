@@ -5,7 +5,7 @@ Author URL: http://www.idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite
 Requires at least: 5.3
 Tested up to: 5.8
-Stable tag: 3.0.7
+Stable tag: 3.0.8
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -135,6 +135,11 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 13. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+
+= 3.0.8 =
+* Fix: Some additional sanitization and escaping added that was missed in 3.0.7
+* Update: Moved externally hosted CSS file into the plugin
+* Update: Bootstrap.js version used for the listing templates "Solid" and "Classical" was bumptetd from 3.1.1 to 5.1.3
 
 = 3.0.7 =
 * Fix: Large scale security overhaul including sanitization/escaping and removal of any PHP eval() usage

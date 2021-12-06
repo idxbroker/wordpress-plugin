@@ -154,7 +154,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => wp_strip_all_tags( $_POST['fields'] ),
+				'body'      => sanitize_text_field( wp_unslash( $_POST['fields'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 
@@ -199,7 +199,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => wp_strip_all_tags( $_POST['fields'] ),
+				'body'      => sanitize_text_field( wp_unslash( $_POST['fields'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 
@@ -238,7 +238,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => wp_strip_all_tags( $_POST['note'] ),
+				'body'      => sanitize_text_field( wp_unslash( $_POST['note'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 
@@ -279,7 +279,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => wp_strip_all_tags( $_POST['note'] ),
+				'body'      => sanitize_text_field( wp_unslash( $_POST['note'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 

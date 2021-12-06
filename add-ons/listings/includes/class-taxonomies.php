@@ -630,7 +630,7 @@ class WP_Listings_Taxonomies {
 		$wp_listings_taxes = get_option( 'wp_listings_taxonomies' );
 
 		if ( $_POST ) {
-			$new_order                   = $_POST['wp_listings_taxonomy'];
+			$new_order                   = sanitize_text_field( wp_unslash( $_POST['wp_listings_taxonomy'] ) );
 			$wp_listings_taxes_reordered = [];
 			foreach ( $new_order as $tax ) {
 				if ( $wp_listings_taxes[ $tax ] ) {
