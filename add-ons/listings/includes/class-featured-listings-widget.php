@@ -104,7 +104,7 @@ class WP_Listings_Featured_Listings_Widget extends WP_Widget {
 				$loop .= sprintf( '<div class="listing-thumb-meta">' );
 
 				if ( '' != get_post_meta( $post->ID, '_listing_text', true ) ) {
-					$loop .= sprintf( '<span class="listing-text">%s</span>', get_post_meta( $post->ID, esc_html('_listing_text'), true ) );
+					$loop .= sprintf( '<span class="listing-text">%s</span>', get_post_meta( $post->ID, '_listing_text', true ) );
 				} elseif ( '' != wp_listings_get_property_types() ) {
 					$loop .= sprintf( '<span class="listing-property-type">%s</span>', wp_listings_get_property_types() );
 				}
@@ -113,21 +113,21 @@ class WP_Listings_Featured_Listings_Widget extends WP_Widget {
 					$currency_symbol = ( empty( $options['wp_listings_currency_symbol'] ) || 'none' === $options['wp_listings_currency_symbol'] ) ? '' : $options['wp_listings_currency_symbol'];
 					$currency_code   = ( ! empty( $options['wp_listings_display_currency_code'] ) && ! empty( $options['wp_listings_display_currency_code'] && $options['wp_listings_currency_code'] !== 'none' ) ) ? '<span class="currency-code">' . $options['wp_listings_currency_code'] . '</span>' : '';
 					$loop           .= '<style>.currency-symbol:empty{display:none!important;}</style>';
-					$loop           .= sprintf( '<span class="listing-price"><span class="currency-symbol" style="">%s</span>%s %s</span>', $currency_symbol, get_post_meta( $post->ID, esc_html('_listing_price'), true ), $currency_code );
+					$loop           .= sprintf( '<span class="listing-price"><span class="currency-symbol" style="">%s</span>%s %s</span>', $currency_symbol, get_post_meta( $post->ID, '_listing_price', true ), $currency_code );
 				}
 
 				$loop .= sprintf( '</div><!-- .listing-thumb-meta --></div><!-- .listing-widget-thumb -->' );
 
 				if ( '' != get_post_meta( $post->ID, '_listing_open_house', true ) ) {
-					$loop .= sprintf( '<span class="listing-open-house">Open House: %s</span>', get_post_meta( $post->ID, esc_html('_listing_open_house'), true ) );
+					$loop .= sprintf( '<span class="listing-open-house">Open House: %s</span>', get_post_meta( $post->ID, '_listing_open_house', true ) );
 				}
 
 				$loop .= sprintf( '<div class="listing-widget-details"><h3 class="listing-title"><a href="%s">%s</a></h3>', get_permalink(), get_the_title() );
 				$loop .= sprintf( '<p class="listing-address"><span class="listing-address">%s</span><br />', wp_listings_get_address() );
-				$loop .= sprintf( '<span class="listing-city-state-zip">%s, %s %s</span></p>', wp_listings_get_city(), wp_listings_get_state(), get_post_meta( $post->ID, esc_html('_listing_zip'), true ) );
+				$loop .= sprintf( '<span class="listing-city-state-zip">%s, %s %s</span></p>', wp_listings_get_city(), wp_listings_get_state(), get_post_meta( $post->ID, '_listing_zip', true ) );
 
 				if ( '' != get_post_meta( $post->ID, '_listing_bedrooms', true ) || '' != get_post_meta( $post->ID, '_listing_bathrooms', true ) || '' != get_post_meta( $post->ID, '_listing_sqft', true )) {
-					$loop .= sprintf( '<ul class="listing-beds-baths-sqft"><li class="beds">%s<span>Beds</span></li> <li class="baths">%s<span>Baths</span></li> <li class="sqft">%s<span>Sq ft</span></li></ul>', get_post_meta( $post->ID, '_listing_bedrooms', true ), get_post_meta( $post->ID, esc_html('_listing_bathrooms'), true ), get_post_meta( $post->ID, esc_html('_listing_sqft'), true ) );
+					$loop .= sprintf( '<ul class="listing-beds-baths-sqft"><li class="beds">%s<span>Beds</span></li> <li class="baths">%s<span>Baths</span></li> <li class="sqft">%s<span>Sq ft</span></li></ul>', get_post_meta( $post->ID, '_listing_bedrooms', true ), get_post_meta( $post->ID, '_listing_bathrooms', true ), get_post_meta( $post->ID, '_listing_sqft', true ) );
 				}
 
 				$loop .= sprintf( '</div><!-- .listing-widget-details -->' );
