@@ -61,8 +61,8 @@ class IDX_Leads_CF7 {
 			$new_value['category']      = isset( $_POST['category'] ) ? (string) sanitize_text_field( stripslashes( $_POST['category'] ) ) : null;
 			$new_value['firstName']     = isset( $_POST['firstName'] ) ? (string) sanitize_text_field( stripslashes( $_POST['firstName'] ) ) : null;
 			$new_value['lastName']      = isset( $_POST['lastName'] ) ? (string) sanitize_text_field( stripslashes( $_POST['lastName'] ) ) : null;
-			$new_value['email']         = ( isset( $_POST['email'] ) && is_email( $_POST['email'] ) ) ? (string) sanitize_text_field( stripslashes( $_POST['email'] ) ) : null;
-			$new_value['email2']        = ( isset( $_POST['email2'] ) && is_email( $_POST['email2'] ) ) ? (string) sanitize_text_field( stripslashes( $_POST['email2'] ) ) : null;
+			$new_value['email']         = isset( $_POST['email'] ) ? (string) sanitize_text_field( stripslashes( $_POST['email'] ) ) : null;
+			$new_value['email2']        = isset( $_POST['email2'] ) ? (string) sanitize_text_field( stripslashes( $_POST['email2'] ) ) : null;
 			$new_value['phone']         = isset( $_POST['phone'] ) ? (string) sanitize_text_field( stripslashes( $_POST['phone'] ) ) : null;
 			$new_value['address']       = isset( $_POST['address'] ) ? (string) sanitize_text_field( stripslashes( $_POST['address'] ) ) : null;
 			$new_value['city']          = isset( $_POST['city'] ) ? (string) sanitize_text_field( stripslashes( $_POST['city'] ) ) : null;
@@ -99,7 +99,7 @@ class IDX_Leads_CF7 {
 			<form action="" method="post" id="cf7_form_settings">
 
 					<table class="form-table" cellpadding="0" cellspacing="0">
-					<tbody>                                     
+					<tbody>
 						<tr>
 							<th>Enable Lead Import?
 								<a href="#" onclick="return false;" onkeypress="return false;" class="idx_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;''>This requires that your form have a required First and Last Name field and required Email field.</strong>"><i class="far fa-question-circle"></i></a>
