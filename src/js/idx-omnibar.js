@@ -85,6 +85,18 @@ var idxOmnibar = function(jsonData){
 		return newArray;
 	};
 
+	// Returns the set sort by field for a provided Omnibar input, or what is set as the default if nothing is found
+	var getSortByForInput = function(omnibarInput) {
+		let parentForm = jQuery(omnibarInput).parents('form.idx-omnibar-form');
+		let sortBySelect = parentForm.find('.idx-omnibar-sort-by');
+
+		if (sortBySelect.length > 0) {
+			return sortBySelect.val();
+		} else {
+			return sortOrder;
+		}
+	}
+
 	var addAdvancedFields = function(newArray){
 		for(var i = 1; i < jsonData.length; i++){
 			var idxID = Object.keys(jsonData[i])[0];
@@ -477,6 +489,10 @@ var idxOmnibar = function(jsonData){
 			inputFiltered = 'jc, ' + input.value.toLowerCase().split(', ')[1];
 			var stateException = true;
 		}
+
+		// Check and set sortOrder field...
+		var sortOrder = getSortByForInput(input);
+
 		for(var i=0; i < list.length; i++){
 			//filter out blank and county from input and check for appended state
 			if (inputFiltered.split(' county')[0] === list[i].name.toLowerCase() && whatState(input.value.split(', ')[1], list[i].stateAbrv, stateException) && isCounty(inputFiltered.split(' county')[1], listType) && input.value) {
@@ -517,6 +533,9 @@ var idxOmnibar = function(jsonData){
 			if(typeof mlsPtID === 'undefined'){
 				var mlsPtID = 1;
 			}
+			
+			// Check and set sortOrder field...
+			var sortOrder = getSortByForInput(input);
 
 			for(var j = 0; j < fieldNumber; j++){
 				var fieldName = Object.keys(jsonData[i][idxID][j])[0];
@@ -565,6 +584,9 @@ var idxOmnibar = function(jsonData){
 			return;
 		}
 		
+		// Check and set sortOrder field...
+		var sortOrder = getSortByForInput(input);
+
 		var hasSpaces = /\s/g.test(input.value);
 		if (!input.value) {
 			//nothing in input
@@ -601,6 +623,7 @@ var idxOmnibar = function(jsonData){
 	var runSearch = function(event) {
 		event.preventDefault();
 		var input = event.target.querySelector('.idx-omnibar-input');
+
 		checkAgainstList(input, jsonData[0].core.cities, 'cities', checkAgainstList(input, jsonData[0].core.counties, 'counties', checkAgainstList(input, jsonData[0].core.zipcodes, 'zipcodes')));
 		if(foundResult === false){
 			advancedList(input);
