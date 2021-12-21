@@ -87,7 +87,7 @@ class IMPress_Agents_Widget extends WP_Widget {
 
 		if ( have_posts() ) : while ( have_posts() ) : the_post();
 
-				echo '<div ' . esc_attr( post_class( 'widget-agent-wrap' ) ) . '>';
+				echo '<div ', esc_attr( post_class( 'widget-agent-wrap' ) ), '>';
 				echo '<a href="' . esc_url( get_permalink() ) . '">', get_the_post_thumbnail( $post->ID, 'employee-thumbnail' ), '</a>';
 				printf( '<div class="widget-agent-details"><a class="fn" href="%s">%s</a>', esc_url( get_permalink() ), esc_html( get_the_title() ) );
 				impa_employee_archive_details();

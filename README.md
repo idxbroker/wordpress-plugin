@@ -123,7 +123,7 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 ### 3.0.8 ###
 * Fix: Some additional sanitization and escaping added that was missed in 3.0.7
 * Update: Moved externally hosted CSS file into the plugin
-* Update: Bootstrap.js version used for the listing templates "Solid" and "Classical" was bumptetd from 3.1.1 to 5.1.3
+* Update: Bootstrap.js version used for the listing templates "Solid" and "Classical" was bumped from 3.1.1 to 5.1.3
 
 ### 3.0.7 ###
 * Fix: Large scale security overhaul including sanitization/escaping and removal of any PHP eval() usage
