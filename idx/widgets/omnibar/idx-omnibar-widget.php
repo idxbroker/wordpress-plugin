@@ -41,6 +41,7 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 		'min_price' => 0,
 		'styles'    => 1,
 		'extra'     => 0,
+		'sort_by'   => ''
 	);
 
 	/**

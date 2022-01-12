@@ -87,9 +87,10 @@ EOD;
 	 * @param mixed $idx_url
 	 * @param int $styles (default: 1)
 	 * @param int $min_price (default: 0)
+	 * @param string $sort_by, whether to show a sort by field for the Omnibar. Defaults to '', set to a results sort order (like 'newest' or 'bda') to show the sort by field with the Omnibar, set to default to the input string
 	 * @return void
 	 */
-	public function idx_omnibar_extra( $plugin_dir, $idx_url, $styles = 1, $min_price = 0 ) {
+	public function idx_omnibar_extra( $plugin_dir, $idx_url, $styles = 1, $min_price = 0, $sort_by = '') {
 		$mlsPtIDs    = $this->idx_omnibar_default_property_types();
 		$placeholder = get_option( 'idx_omnibar_placeholder' );
 		if ( empty( $placeholder ) ) {
@@ -129,12 +130,42 @@ EOD;
 
 		$price_field = $this->price_field( $min_price );
 
+		// What HTML, if anything, should be output as part of the Omnibar for the sort by field
+		$sort_by_field = '';
+
+		$sort_by_options = array(
+			"newest" => 'Newest listings',
+			"oldest" => 'Oldest listings',
+			"pra" => 'Least expensive to most',
+			"prd" => 'Most expensive to least',
+			"bda" => 'Bedrooms (least to most)',
+			"bdd" => 'Bedrooms (most to least)',
+			"tba" => 'Bathrooms (least to most)',
+			"tbd" => 'Bathrooms (most to least)',
+			"sqfta" => 'Square feet (smallest to largest)',
+			"sqftd" => 'Square feet (largest to smallest)'
+		);
+
+		// Generate the possible options for the sort by field if something was set for sort_by
+		if ($sort_by !== '') {
+			$sort_by_field = '<div class="idx-omnibar-extra idx-omnibar-sort-by-container"><label>Sort by</label> <select class="idx-omnibar-sort-by">';
+			foreach ($sort_by_options as $sort_option => $sort_description) {
+				$sort_option_selected = '';
+				if ($sort_by === $sort_option) {
+					$sort_option_selected = 'selected'; 
+				}
+				$sort_by_field .= "<option value=\"$sort_option\" $sort_option_selected>$sort_description</option>";
+			}
+			$sort_by_field .= '</select></div>';
+		}
+
 		return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">
       <label for="omnibar" class="screen-reader-text">$placeholder</label>
       <input id="omnibar" class="idx-omnibar-input idx-omnibar-extra-input" type="text" placeholder="$placeholder">
       $price_field<div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0" step="1"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="1" title="Only numbers and decimals are allowed"></div>
-      <button class="idx-omnibar-extra-button" type="submit" value="Search" aria-label="Submit Search"><i class="fas fa-search"></i><span>Search</span></button>
+      $sort_by_field
+	  <button class="idx-omnibar-extra-button" type="submit" value="Search" aria-label="Submit Search"><i class="fas fa-search"></i><span>Search</span></button> 
     </form>
 EOD;
 	}
@@ -190,6 +221,7 @@ EOD;
 					'min_price' => 0,
 					'styles'    => 1,
 					'extra'     => 0,
+					'sort_by'    => ''
 				),
 				$atts
 			)
@@ -199,7 +231,7 @@ EOD;
 		$plugin_dir = plugins_url();
 
 		if ( ! empty( $extra ) ) {
-			return $this->idx_omnibar_extra( $plugin_dir, $idx_url, $styles, $min_price );
+			return $this->idx_omnibar_extra( $plugin_dir, $idx_url, $styles, $min_price, $sort_by);
 		} else {
 			return $this->idx_omnibar_basic( $plugin_dir, $idx_url, $styles );
 		}
