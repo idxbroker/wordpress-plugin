@@ -120,6 +120,9 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 
 ## Changelog ##
 
+### 3.0.9 ###
+
+
 ### 3.0.8 ###
 * Fix: Some additional sanitization and escaping added that was missed in 3.0.7
 * Update: Moved externally hosted CSS file into the plugin
