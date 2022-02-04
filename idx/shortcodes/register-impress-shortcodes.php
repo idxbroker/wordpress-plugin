@@ -79,7 +79,7 @@ class Register_Impress_Shortcodes {
             </form>',
 			esc_url( $this->idx_api->subdomain_url() ),
 			esc_attr( $target ),
-			esc_html( $password_label ),
+			html_entity_decode( $password_label ),
 			esc_attr( $password_field_type )
 		);
 
