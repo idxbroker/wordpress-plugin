@@ -45,16 +45,16 @@ class Create_Omnibar {
 		}
 
 		// css and js have been minified and combined to help performance
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-5.8.2' );
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
 		}
 		wp_register_script( 'idx-omnibar-js', plugins_url( '../../assets/js/idx-omnibar.min.js', dirname( __FILE__ ) ), array( 'wp-api' ), false, true );
 		// inserts inline variable for the results page url
-		wp_localize_script( 'idx-omnibar-js', 'idxUrl', $idx_url );
-		wp_localize_script( 'idx-omnibar-js', 'sortOrder', $sort_order );
+		wp_localize_script( 'idx-omnibar-js', 'idxUrl', [ $idx_url ] );
+		wp_localize_script( 'idx-omnibar-js', 'sortOrder', [ $sort_order ] );
 		wp_localize_script( 'idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs );
-		wp_localize_script( 'idx-omnibar-js', 'idxOmnibarPlaceholder', $placeholder );
+		wp_localize_script( 'idx-omnibar-js', 'idxOmnibarPlaceholder', [ $placeholder ] );
 		// Adds agent header ID if multisite + not main site + it's set
 		if ( is_multisite() ) {
 			$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
@@ -68,12 +68,12 @@ class Create_Omnibar {
 		);
 		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj );
 		wp_enqueue_script( 'idx-omnibar-js' );
-		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), false, true );
+		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), '1.0.0', true );
 
 		return <<<EOD
         <form class="idx-omnibar-form idx-omnibar-original-form">
           <label for="omnibar" class="screen-reader-text">$placeholder</label>
-          <input id="omnibar" class="idx-omnibar-input" type="text" placeholder="$placeholder"><button type="submit" value="Search"><i class="fas fa-search"></i><span>Search</span></button>
+          <input id="omnibar" class="idx-omnibar-input" type="text" placeholder="$placeholder"><button type="submit" value="Search" aria-label="Submit Search"><i class="fas fa-search"></i><span>Search</span></button>
           <div class="idx-omnibar-extra idx-omnibar-price-container" style="display: none;"><label>Price Max</label><input class="idx-omnibar-price" type="number" min="0" step="10000"></div><div class="idx-omnibar-extra idx-omnibar-bed-container" style="display: none;"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0" step="1"></div><div class="idx-omnibar-extra idx-omnibar-bath-container" style="display: none;"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="1"></div>
         </form>
 EOD;
@@ -100,22 +100,22 @@ EOD;
 		$upload_dir  = wp_upload_dir();
 		$idx_dir_url = $upload_dir['baseurl'] . '/idx_cache';
 
-		// css and js have been minified and combined to help performance
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		// css and js have been minified and combined to help performance.
+		wp_enqueue_style( 'font-awesome-5.8.2' );
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'idx-omnibar', plugins_url( '../../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ), [], '1.0.0' );
 		}
-		wp_register_script( 'idx-omnibar-js', plugins_url( '../../assets/js/idx-omnibar.min.js', dirname( __FILE__ ) ), array( 'wp-api' ), false, true );
-		// inserts inline variable for the results page url
-		wp_localize_script( 'idx-omnibar-js', 'idxUrl', $idx_url );
-		wp_localize_script( 'idx-omnibar-js', 'sortOrder', $sort_order );
+		wp_register_script( 'idx-omnibar-js', plugins_url( '../../assets/js/idx-omnibar.min.js', dirname( __FILE__ ) ), array( 'wp-api' ), '1.0.0', true );
+		// inserts inline variable for the results page url.
+		wp_localize_script( 'idx-omnibar-js', 'idxUrl', [ $idx_url ] );
+		wp_localize_script( 'idx-omnibar-js', 'sortOrder', [ $sort_order ] );
 		wp_localize_script( 'idx-omnibar-js', 'mlsPtIDs', $mlsPtIDs );
-		wp_localize_script( 'idx-omnibar-js', 'idxOmnibarPlaceholder', $placeholder );
-		// Adds agent header ID if multisite + not main site + it's set
+		wp_localize_script( 'idx-omnibar-js', 'idxOmnibarPlaceholder', [ $placeholder ] );
+		// Adds agent header ID if multisite + not main site + it's set.
 		if ( is_multisite() ) {
 			$options = get_blog_option( get_current_blog_id(), 'impress_multisite_settings' );
 			if ( isset( $options['agent_id'] ) && ! empty( $options['agent_id'] ) && ! is_main_site() ) {
-				wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', $options['agent_id'] );
+				wp_localize_script( 'idx-omnibar-js', 'agentHeaderID', [ $options['agent_id'] ] );
 			}
 		}
 
@@ -125,7 +125,7 @@ EOD;
 		);
 		wp_localize_script( 'idx-omnibar-js', 'idxAutocompleteServerObj', $server_obj );
 		wp_enqueue_script( 'idx-omnibar-js' );
-		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), false, true );
+		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), '1.0.0', true );
 
 		$price_field = $this->price_field( $min_price );
 
@@ -134,7 +134,7 @@ EOD;
       <label for="omnibar" class="screen-reader-text">$placeholder</label>
       <input id="omnibar" class="idx-omnibar-input idx-omnibar-extra-input" type="text" placeholder="$placeholder">
       $price_field<div class="idx-omnibar-extra idx-omnibar-bed-container"><label>Beds</label><input class="idx-omnibar-bed" type="number" min="0" step="1"></div><div class="idx-omnibar-extra idx-omnibar-bath-container"><label>Baths</label><input class="idx-omnibar-bath" type="number" min="0" step="1" title="Only numbers and decimals are allowed"></div>
-      <button class="idx-omnibar-extra-button" type="submit" value="Search"><i class="fas fa-search"></i><span>Search</span></button>
+      <button class="idx-omnibar-extra-button" type="submit" value="Search" aria-label="Submit Search"><i class="fas fa-search"></i><span>Search</span></button>
     </form>
 EOD;
 	}

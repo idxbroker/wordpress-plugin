@@ -32,11 +32,17 @@ class Search_Management {
 		add_action( 'init', array( $this, 'idx_ajax_actions' ) );
 	}
 
+	/**
+	 * Idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
 	public function add_search_pages() {
 
-		// Add Searches as submenu page
+		// Add Searches as submenu page.
 		$this->page = add_submenu_page(
 			'idx-broker',
 			'Searches',
@@ -49,7 +55,7 @@ class Search_Management {
 			)
 		);
 
-		// Add Add Search submenu page
+		// Add Add Search submenu page.
 		$this->page = add_submenu_page(
 			'idx-broker',
 			'Add/Edit Search',
@@ -72,11 +78,11 @@ class Search_Management {
 
 	public function idx_search_scripts() {
 
-		// Only load on searches pages
+		// Only load on searches pages.
 		$screen_id = get_current_screen();
-		if ( $screen_id->id === 'impress_page_idx-searches' || $screen_id->id === 'impress_page_edit-idx-search' || $screen_id->id === 'searches_page_edit-idx-search' || $screen_id->id === 'toplevel_page_idx-searches' ) {
+		if ( 'impress_page_idx-searches' === $screen_id->id || 'impress_page_edit-idx-search' === $screen_id->id || 'searches_page_edit-idx-search' === $screen_id->id || 'toplevel_page_idx-searches' === $screen_id->id ) {
 
-			wp_enqueue_script( 'idx_search_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-searches.js', array( 'jquery' ), true );
+			wp_enqueue_script( 'idx_search_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-searches.min.js', [ 'jquery' ], '1.0.0', false );
 			wp_localize_script(
 				'idx_search_ajax_script',
 				'IDXSearchAjax',
@@ -87,17 +93,18 @@ class Search_Management {
 					'detailsurl'  => $this->idx_api->details_url(),
 				)
 			);
-			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
-			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
+			wp_enqueue_script( 'dialog-polyfill' );
+			wp_enqueue_script( 'idx-material-js' );
+			wp_enqueue_script( 'jquery-datatables' );
+			wp_enqueue_script( 'select2' );
 
-			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.css' );
-			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
-			wp_enqueue_style( 'idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons' );
-			wp_enqueue_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css' );
-			wp_enqueue_style( 'idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css' );
-			wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
+
+			wp_enqueue_style( 'idx-admin' );
+			wp_enqueue_style( 'idx-material-font' );
+			wp_enqueue_style( 'idx-material-icons' );
+			wp_enqueue_style( 'idx-material-style' );
+			wp_enqueue_style( 'idx-material-datatable' );
+			wp_enqueue_style( 'select2' );
 		}
 	}
 
@@ -114,44 +121,44 @@ class Search_Management {
 			echo 'missing required fields';
 		} else {
 
-			// Add search via API
-			$api_url = 'https://api.idxbroker.com/clients/savedlinks';
+			// Add search via API.
+			$api_url = IDX_API_URL . '/clients/savedlinks';
 
 			$search_query = array(
-				'pt'    => $_POST['pt'],
-				'ccz'   => $_POST['ccz'],
-				'lp'    => $_POST['lp'],
-				'hp'    => $_POST['hp'],
-				'bd'    => $_POST['bd'],
-				'ba'    => $_POST['ba'],
-				'sqft'  => $_POST['sqft'],
-				'acres' => $_POST['acres'],
-				'add'   => $_POST['add'],
+				'pt'    => sanitize_text_field( wp_unslash( $_POST['pt'] ) ),
+				'ccz'   => sanitize_text_field( wp_unslash( $_POST['ccz'] ) ),
+				'lp'    => sanitize_text_field( wp_unslash( $_POST['lp'] ) ),
+				'hp'    => sanitize_text_field( wp_unslash( $_POST['hp'] ) ),
+				'bd'    => sanitize_text_field( wp_unslash( $_POST['bd'] ) ),
+				'ba'    => sanitize_text_field( wp_unslash( $_POST['ba'] ) ),
+				'sqft'  => sanitize_text_field( wp_unslash( $_POST['sqft'] ) ),
+				'acres' => sanitize_text_field( wp_unslash( $_POST['acres'] ) ),
+				'add'   => sanitize_text_field( wp_unslash( $_POST['add'] ) ),
 			);
 
-			if ( $_POST['ccz'] === 'city' ) {
+			if ( 'city' === $_POST['ccz'] ) {
 				$city_array   = array( 'city' => $_POST['locations'] );
 				$search_query = $search_query + $city_array;
-			} elseif ( $_POST['ccz'] == 'county' ) {
+			} elseif ( 'county' === $_POST['ccz'] ) {
 				$county_array = array( 'county' => $_POST['locations'] );
 				$search_query = $search_query + $county_array;
-			} elseif ( $_POST['ccz'] == 'zipcode' ) {
+			} elseif ( 'zipcode' === $_POST['ccz'] ) {
 				$zipcode_array = array( 'zipcode' => $_POST['locations'] );
 				$search_query  = $search_query + $zipcode_array;
 			}
 
 			$data = array(
-				'pageTitle'          => $_POST['pageTitle'],
-				'linkName'           => str_replace( ' ', '-', strtolower( $_POST['linkTitle'] ) ),
-				'linkTitle'          => $_POST['linkTitle'],
+				'pageTitle'          => sanitize_text_field( wp_unslash( $_POST['pageTitle'] ) ),
+				'linkName'           => sanitize_text_field( wp_unslash( str_replace( ' ', '-', strtolower( $_POST['linkTitle'] ) ) ) ),
+				'linkTitle'          => sanitize_text_field( wp_unslash( $_POST['linkTitle'] ) ),
 				'queryString'        => $search_query,
-				'useDescriptionMeta' => ( isset( $_POST['useDescriptionMeta'] ) ) ? $_POST['useDescriptionMeta'] : '',
-				'descriptionMeta'    => ( isset( $_POST['descriptionMeta'] ) ) ? $_POST['descriptionMeta'] : '',
-				'useKeywordsMeta'    => ( isset( $_POST['useKeywordsMeta'] ) ) ? $_POST['useKeywordsMeta'] : '',
-				'keywords'           => ( isset( $_POST['keywords'] ) ) ? $_POST['keywords'] : '',
-				'featured'           => ( isset( $_POST['featured'] ) ) ? $_POST['featured'] : '',
-				'linkCopy'           => ( isset( $_POST['linkCopy'] ) ) ? $_POST['linkCopy'] : '',
-				'agentID'            => ( isset( $_POST['agentID'] ) ) ? $_POST['agentID'] : '',
+				'useDescriptionMeta' => ( isset( $_POST['useDescriptionMeta'] ) ) ? sanitize_text_field( wp_unslash( $_POST['useDescriptionMeta'] ) ) : '',
+				'descriptionMeta'    => ( isset( $_POST['descriptionMeta'] ) ) ? sanitize_text_field( wp_unslash( $_POST['descriptionMeta'] ) ) : '',
+				'useKeywordsMeta'    => ( isset( $_POST['useKeywordsMeta'] ) ) ? sanitize_text_field( wp_unslash( $_POST['useKeywordsMeta'] ) ) : '',
+				'keywords'           => ( isset( $_POST['keywords'] ) ) ? sanitize_text_field( wp_unslash( $_POST['keywords'] ) ) : '',
+				'featured'           => ( isset( $_POST['featured'] ) ) ? sanitize_text_field( wp_unslash( $_POST['featured'] ) ) : '',
+				'linkCopy'           => ( isset( $_POST['linkCopy'] ) ) ? sanitize_text_field( wp_unslash( $_POST['linkCopy'] ) ) : '',
+				'agentID'            => ( isset( $_POST['agentID'] ) ) ? sanitize_text_field( wp_unslash( $_POST['agentID'] ) ) : '',
 			);
 
 			$data = array_merge( $data, $search_query );
@@ -174,9 +181,9 @@ class Search_Management {
 				// Delete search cache so new search will show in list views immediately.
 				delete_option( 'idx_clients_savedlinks_cache' );
 				// return new search ID to script.
-				echo $decoded_response['newID'];
+				echo esc_html( $decoded_response['newID'] );
 			} else {
-				echo $response->get_error_message();
+				echo esc_html( $response->get_error_message() );
 			}
 		}
 		die();
@@ -191,32 +198,32 @@ class Search_Management {
 	public function idx_lead_search_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_search_add_nonce', 'nonce', false );
-		if ( $permission == false || empty( $_POST['leadID'] ) ) {
+		if ( false == $permission || empty( $_POST['leadID'] ) ) {
 			echo 'missing required fields';
 		} else {
 
-			// Add search via API
-			$api_url = 'https://api.idxbroker.com/leads/search/' . $_POST['leadID'];
+			// Add search via API.
+			$api_url = IDX_API_URL . '/leads/search/' . $_POST['leadID'];
 
 			$search_query = array(
-				'pt'    => $_POST['pt'],
-				'ccz'   => $_POST['ccz'],
-				'lp'    => $_POST['lp'],
-				'hp'    => $_POST['hp'],
-				'bd'    => $_POST['bd'],
-				'ba'    => $_POST['ba'],
-				'sqft'  => $_POST['sqft'],
-				'acres' => $_POST['acres'],
-				'add'   => $_POST['add'],
+				'pt'    => sanitize_text_field( wp_unslash( $_POST['pt'] ) ),
+				'ccz'   => sanitize_text_field( wp_unslash( $_POST['ccz'] ) ),
+				'lp'    => sanitize_text_field( wp_unslash( $_POST['lp'] ) ),
+				'hp'    => sanitize_text_field( wp_unslash( $_POST['hp'] ) ),
+				'bd'    => sanitize_text_field( wp_unslash( $_POST['bd'] ) ),
+				'ba'    => sanitize_text_field( wp_unslash( $_POST['ba'] ) ),
+				'sqft'  => sanitize_text_field( wp_unslash( $_POST['sqft'] ) ),
+				'acres' => sanitize_text_field( wp_unslash( $_POST['acres'] ) ),
+				'add'   => sanitize_text_field( wp_unslash( $_POST['add'] ) ),
 			);
 
-			if ( $_POST['ccz'] === 'city' ) {
+			if ( 'city' === $_POST['ccz'] ) {
 				$city_array   = array( 'city' => $_POST['locations'] );
 				$search_query = $search_query + $city_array;
-			} elseif ( $_POST['ccz'] == 'county' ) {
+			} elseif ( 'county' === $_POST['ccz'] ) {
 				$county_array = array( 'county' => $_POST['locations'] );
 				$search_query = $search_query + $county_array;
-			} elseif ( $_POST['ccz'] == 'zipcode' ) {
+			} elseif ( 'zipcode' === $_POST['ccz'] ) {
 				$zipcode_array = array( 'zipcode' => $_POST['locations'] );
 				$search_query  = $search_query + $zipcode_array;
 			}
@@ -244,9 +251,9 @@ class Search_Management {
 				// Delete search cache so new search will show in list views immediately.
 				delete_option( 'idx_leads_search/' . $_POST['leadID'] . '_cache' );
 				// return new search ID to script.
-				echo $decoded_response['newID'];
+				echo esc_html( $decoded_response['newID'] );
 			} else {
-				echo $response->get_error_message();
+				echo esc_html( $response->get_error_message() );
 			}
 		}
 		die();
@@ -264,8 +271,8 @@ class Search_Management {
 		if ( $permission == false || ! isset( $_POST['ssid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead saved search via API
-			$api_url  = 'https://api.idxbroker.com/clients/savedlinks/' . $_POST['ssid'];
+			// Delete lead saved search via API.
+			$api_url  = IDX_API_URL . '/clients/savedlinks/' . $_POST['ssid'];
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -294,7 +301,7 @@ class Search_Management {
 	 * @return void
 	 */
 	public function idx_searches_list() {
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
@@ -305,25 +312,7 @@ class Search_Management {
 
 		$searches_array = array_reverse( $searches_array );
 
-		$searches = '';
-
 		$offset = get_option( 'gmt_offset', 0 );
-
-		// prepare searches for display
-		foreach ( $searches_array as $search ) {
-
-			$nonce = wp_create_nonce( 'idx_search_delete_nonce' );
-
-			$searches .= '<tr class="search-row">';
-			$searches .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $search->url . '" target="_blank">' . $search->linkTitle . '</a></td>';
-			$searches .= '<td class="mdl-data-table__cell--non-numeric">' . Carbon::parse( $search->created )->addHours( $offset )->toDayDateTimeString() . '</td>';
-			$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $search->timesViewed . '</td>';
-			$searches .= '<td class="mdl-data-table__cell--non-numeric">
-						<a href="' . admin_url( 'admin-ajax.php?action=idx_search_delete&ssid=' . $search->id . '&nonce=' . $nonce ) . '" id="delete-search-' . $search->id . '" class="delete-search" data-ssid="' . $search->id . '" data-nonce="' . $nonce . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . $search->id . '">Delete Search</div></a>
-						<a href="https://middleware.idxbroker.com/mgmt/addeditsavedlink.php?id=' . $search->id . '" id="edit-mw-' . $search->id . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $search->id . '">Edit Search in Middleware</div></a>
-						</td>';
-			$searches .= '</tr>';
-		}
 
 		echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp searches">';
 		echo '
@@ -336,7 +325,23 @@ class Search_Management {
 			</thead>
 			<tbody>
 			';
-		echo $searches;
+
+		// prepare searches for display.
+		foreach ( $searches_array as $search ) {
+
+			$nonce = wp_create_nonce( 'idx_search_delete_nonce' );
+
+			echo '<tr class="search-row">';
+			echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $search->url ) . '" target="_blank">' . esc_html( $search->linkTitle ) . '</a></td>';
+			echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( Carbon::parse( $search->created )->addHours( $offset )->toDayDateTimeString() ) . '</td>';
+			echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $search->timesViewed ) . '</td>';
+			echo '<td class="mdl-data-table__cell--non-numeric">
+						<a href="' . esc_url( admin_url( 'admin-ajax.php?action=idx_search_delete&ssid=' . $search->id . '&nonce=' . $nonce ) ) . '" id="delete-search-' . esc_attr( $search->id ) . '" class="delete-search" data-ssid="' . esc_attr( $search->id ) . '" data-nonce="' . esc_attr( $nonce ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . esc_attr( $search->id ) . '">Delete Search</div></a>
+						<a href="https://middleware.idxbroker.com/mgmt/addeditsavedlink.php?id=' . esc_attr( $search->id ) . '" id="edit-mw-' . esc_attr( $search->id ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $search->id ) . '">Edit Search in Middleware</div></a>
+						</td>';
+			echo '</tr>';
+		}
+
 		echo '</tbody></table>';
 		echo '<dialog id="dialog-search-delete">
 				<form method="dialog">
@@ -347,7 +352,7 @@ class Search_Management {
 				</form>
 			</dialog>';
 		echo '
-			<a href="' . admin_url( 'admin.php?page=edit-idx-search' ) . '" id="add-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+			<a href="' . esc_url( admin_url( 'admin.php?page=edit-idx-search' ) ) . '" id="add-search" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 				<i class="material-icons">add</i>
 				<div class="mdl-tooltip" data-mdl-for="add-search">Add New Search</div>
 			</a>
@@ -385,7 +390,7 @@ class Search_Management {
 	 * @return void
 	 */
 	public function idx_searches_edit() {
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		} elseif ( empty( $_GET['searchID'] ) && empty( $_GET['leadID'] ) ) { ?>
@@ -410,7 +415,7 @@ class Search_Management {
 					<label class="mdl-selectfield__label" for="ccz">City, County or Zip</label>
 					<div class="" style="width: 300px;">
 						<select style="width: 300px;" class="" id="ccz" name="ccz" multiple="multiple">
-							<?php echo self::ccz_select_list(); ?>
+							<?php self::ccz_select_list(); ?>
 						</select>
 					</div>
 				</div><br />
@@ -502,26 +507,26 @@ class Search_Management {
 					<label class="mdl-selectfield__label" for="agentID">Assign an Agent to this link</label>
 					<div class="mdl-selectfield">
 						<select class="mdl-selectfield__select" id="agentID" name="agentID">
-							<?php echo self::agents_select_list(); ?>
+							<?php self::agents_select_list(); ?>
 						</select>
 					</div>
 				</div>
 				<br />
 
 				<input type="hidden" name="action" value="idx_search_add" />
-				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-search" data-nonce="<?php echo wp_create_nonce( 'idx_search_add_nonce' ); ?>" type="submit">Save Search</button>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-search" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_search_add_nonce' ) ); ?>" type="submit">Save Search</button>
 				<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 				<div class="error-fail" style="display: none;">Saved Search addition failed. Check all required fields or try again later.</div>
 				<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
 
 			</form>
 			<?php
-		} elseif ( ! empty( $_GET['leadID'] ) && is_numeric( $_GET['leadID'] ) ) {
-			$lead_id = $_GET['leadID'];
-			// Get Lead info
-			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+		} elseif ( ! empty( $_GET['nonce'] ) && wp_verify_nonce( $_GET['nonce'], 'idx_lead_add_search_nonce' ) && ! empty( $_GET['leadID'] ) && is_numeric( $_GET['leadID'] ) ) {
+			$lead_id = (int) sanitize_text_field( wp_unslash( $_GET['leadID'] ) );
+			// Get Lead info.
+			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 			?>
-			<h3>Add Lead Saved Search for <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
+			<h3>Add Lead Saved Search for <?php echo ( $lead['firstName'] ) ? esc_html( $lead['firstName'] ) : ''; ?> <?php echo ( $lead['lastName'] ) ? esc_html( $lead['lastName'] ) : ''; ?></h3>
 			<form action="" method="post" id="add-lead-search" class="add-lead-search">
 				<!-- Search form -->
 				<div class="mdl-fieldgroup">
@@ -541,7 +546,7 @@ class Search_Management {
 					<label class="mdl-selectfield__label" for="ccz">City, County or Zip</label>
 					<div class="" style="width: 300px;">
 						<select style="width: 300px;" class="" id="ccz" name="ccz" multiple="multiple">
-							<?php echo self::ccz_select_list(); ?>
+							<?php self::ccz_select_list(); ?>
 						</select>
 					</div>
 				</div><br />
@@ -586,11 +591,11 @@ class Search_Management {
 						<span class="mdl-switch__label">Receive property updates? Yes/No</span>
 					</label>
 				</div>
-				<input type="hidden" id="leadID" name="leadID" value="<?php echo $lead_id; ?>" />
+				<input type="hidden" id="leadID" name="leadID" value="<?php echo esc_attr( $lead_id ); ?>" />
 				<br />
 
 				<input type="hidden" name="action" value="idx_lead_search_add" />
-				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead-search" data-nonce="<?php echo wp_create_nonce( 'idx_lead_search_add_nonce' ); ?>" type="submit">Save Search</button>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead-search" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_lead_search_add_nonce' ) ); ?>" type="submit">Save Search</button>
 				<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 				<div class="error-fail" style="display: none;">Saved Search addition failed. Check all required fields or try again later.</div>
 				<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -612,43 +617,41 @@ class Search_Management {
 	private function ccz_select_list() {
 		$cities = $this->idx_api->idx_api( 'cities/combinedActiveMLS' );
 
-		$ccz_select = '<optgroup label="Cities" id="city" data-type="city">';
+		echo '<optgroup label="Cities" id="city" data-type="city">';
 		foreach ( $cities as $city ) {
-			$ccz_select .= '<option data-ccz="city" data-value="' . $city->id . '" value="' . $city->id . '">' . $city->name . '</option>';
+			echo '<option data-ccz="city" data-value="' . esc_attr( $city->id ) . '" value="' . esc_attr( $city->id ) . '">' . esc_html( $city->name ) . '</option>';
 		}
-		$ccz_select .= '</optgroup><optgroup label="Counties" id="county" data-type="county">';
-		$counties    = $this->idx_api->idx_api( 'counties/combinedActiveMLS' );
+		echo '</optgroup><optgroup label="Counties" id="county" data-type="county">';
+		$counties = $this->idx_api->idx_api( 'counties/combinedActiveMLS' );
 		foreach ( $counties as $county ) {
-			$ccz_select .= '<option data-ccz="county" value="' . $county->id . '">' . $county->name . '</option>';
+			echo '<option data-ccz="county" value="' . esc_attr( $county->id ) . '">' . esc_html( $county->name ) . '</option>';
 		}
-		$ccz_select .= '</optgroup><optgroup label="Postal Codes" id="postalcode" data-type="zipcode">';
-		$zips        = $this->idx_api->idx_api( 'postalcodes/combinedActiveMLS' );
+		echo '</optgroup><optgroup label="Postal Codes" id="postalcode" data-type="zipcode">';
+		$zips = $this->idx_api->idx_api( 'postalcodes/combinedActiveMLS' );
 		foreach ( $zips as $zip ) {
-			$ccz_select .= '<option data-ccz="zipcode" value="' . $zip->id . '">' . $zip->name . '</option>';
+			echo '<option data-ccz="zipcode" value="' . esc_attr( $zip->id ) . '">' . esc_html( $zip->name ) . '</option>';
 		}
-		$ccz_select .= '</optgroup>';
-
-		return $ccz_select;
+		echo '</optgroup>';
 	}
 
 	/**
-	 * Output Agents as select options
+	 * Output Agents as select options.
 	 */
 	private function agents_select_list( $agent_id = null ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
 		if ( null !== $agent_id && ! is_wp_error( $agents_array ) ) {
-			$agents_list = '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';
+			echo '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
+				echo '<option value="' . esc_attr( $agent['agentID'] ) . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . esc_html( $agent['agentDisplayName'] ) . '</option>';
 			}
 		} elseif ( ! is_wp_error( $agents_array ) ) {
-			$agents_list = '<option value="0">None</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
+			echo '<option value="0">None</option>';
+			if ( ! empty( $agents_array['agent'] ) ) {
+				foreach ( $agents_array['agent'] as $agent ) {
+					echo '<option value="' . esc_attr( $agent['agentID'] ) . '">' . esc_html( $agent['agentDisplayName'] ) . '</option>';
+				}
 			}
 		}
-
-		return $agents_list;
 	}
 }

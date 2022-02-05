@@ -74,7 +74,7 @@ class Multisite {
 	 * @return string HTML of agents
 	 */
 	public function get_agent_select_options( $agent_id ) {
-		$agents_array = $this->_idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		$agents_array = $this->_idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
 		if ( ! is_array( $agents_array ) ) {
 			return '<option value="">None available</option>';
