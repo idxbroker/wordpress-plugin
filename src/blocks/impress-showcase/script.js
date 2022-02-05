@@ -43,6 +43,10 @@ registerBlockType(
         type: 'string',
         default: ''
       },
+      colistings: {
+        type: 'int',
+        default: 1
+      },
       styles: {
         type: 'int',
         default: 1
@@ -83,6 +87,12 @@ registerBlockType(
                   onChange={(value) => { setAttributes({ agent_id: value }) }}
                 />
                 <CheckboxControl
+                  label={__('Include colistings for selected agent?', 'idx-broker-platinum')}
+                  value={attributes.colistings}
+                  checked={(attributes.colistings > 0)}
+                  onChange={(value) => { setAttributes({ colistings: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
                   label={__('Show image?', 'idx-broker-platinum')}
                   value={attributes.show_image}
                   checked={(attributes.show_image > 0)}
@@ -98,6 +108,8 @@ registerBlockType(
                   label={__('Listings per row', 'idx-broker-platinum')}
                   value={attributes.num_per_row}
                   type='number'
+                  min='0'
+                  max='4'
                   onChange={(value) => { setAttributes({ num_per_row: value }) }}
                 />
                 <TextControl

@@ -14,18 +14,20 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		parent::__construct(
-			'impress_showcase', // Base ID
-			'IMPress Property Showcase', // Name
+			'impress_showcase', // Base ID.
+			'IMPress Property Showcase', // Name.
 			array(
 				'description'                 => 'Displays a showcase of properties',
 				'classname'                   => 'impress-showcase-widget',
 				'customize_selective_refresh' => true,
 			)
 		);
+		// Include helper functions file.
+		include_once IMPRESS_IDX_DIR . 'idx/widgets/impress-widget-helper.php';
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -33,7 +35,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	public $idx_api;
 
 	/**
-	 * defaults
+	 * Defaults
 	 *
 	 * @var mixed
 	 * @access public
@@ -50,6 +52,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		'order'            => 'default',
 		'styles'           => 1,
 		'new_window'       => 0,
+		'colistings'       => 1,
 	);
 
 	/**
@@ -64,7 +67,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		}
 
 		if ( $instance['styles'] ) {
-			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-showcase' );
 		}
 
 		$output = '';
@@ -80,7 +83,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		$properties = json_encode( $properties );
 		$properties = json_decode( $properties, true );
 
-		// If no properties or an error, load message
+		// If no properties or an error, load message.
 		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
 			if ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
@@ -90,7 +93,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		}
 
 		if ( 'low-high' == $instance['order'] ) {
-			// sort low to high
+			// sort low to high.
 			usort( $properties, array( $this, 'price_cmp' ) );
 		}
 
@@ -115,10 +118,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 		if ( true == $instance['use_rows'] ) {
 
-			// Max of four columns
+			// Max of four columns.
 			$number_columns = ( $num_per_row > 4 ) ? 4 : (int) $num_per_row;
 
-			// column class
+			// column class.
 			switch ( $number_columns ) {
 				case 0:
 					$column_class = 'columns small-12 large-12';
@@ -138,11 +141,32 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			}
 		}
 
+		// Used to hold agent data when matching for co-listings.
+		$agent_data;
+
 		foreach ( $properties as $prop ) {
 
 			if ( ! empty( $instance['agentID'] ) ) {
 				if ( empty( $prop['userAgentID'] ) || (int) $instance['agentID'] !== (int) $prop['userAgentID'] ) {
-					continue;
+					if ( $instance['colistings'] ) {
+						// Check if coListingAgentID exists since the initial agent ID match failed.
+						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
+							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
+							if ( empty( $agent_data ) ) {
+								$agent_data = $this->idx_api->idx_api( 'agents?filterField=agentID&filterValue=' . $instance['agentID'], IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
+							}
+							// Check the listing's coListingAgentID against the agent's raw MLS-provided ID, continues if no match.
+							if ( empty( $agent_data['agent'][0]['listingAgentID'] ) || $agent_data['agent'][0]['listingAgentID'] !== $prop['coListingAgentID'] ) {
+								continue;
+							}
+						} else {
+							// Listing does not have coListingAgentID field data to match against.
+							continue;
+						}
+					} else {
+						// Colistings setting is not enabled.
+						continue;
+					}
 				}
 			}
 
@@ -150,7 +174,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				return $output;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			if ( 1 == $instance['use_rows'] && $count == 0 && $max != '1' ) {
 				$output .= '<div class="impress-row">';
@@ -160,23 +184,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 			$count++;
 
-			// Get URL and add suffix if one exists
-			if ( isset( $prop['fullDetailsURL'] ) ) {
-				$url = $prop['fullDetailsURL'];
-			} else {
-				$url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
-			}
-
-			if ( has_filter( 'impress_showcase_property_url_suffix' ) ) {
-				$url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
-			}
-
-			// Get URL and add suffix if one exists
-			if ( isset( $prop['fullDetailsURL'] ) ) {
-				$url = $prop['fullDetailsURL'];
-			} else {
-				$url = $this->idx_api->details_url() . '/' . $prop['detailsURL'];
-			}
+			// Get URL and add suffix if one exists.
+			$url = $prop['fullDetailsURL'] ?? $this->idx_api->details_url() . '/' . $prop['detailsURL'];
 
 			if ( has_filter( 'impress_showcase_property_url_suffix' ) ) {
 				$url = $url . apply_filters( 'impress_showcase_property_url_suffix', $suffix = http_build_query( array() ), $prop, $this->idx_api );
@@ -207,8 +216,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
                         </p>
                         %16$s
                         </div>',
-						$prop['listingPrice'],
-						$prop['propStatus'],
+						price_selector( $prop ),
+						$prop['propStatus'] ?? $prop['status'] ?? '',
 						$url,
 						$prop_image_url,
 						htmlspecialchars( $prop['remarksConcat'] ),
@@ -218,10 +227,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 						$prop['unitNumber'],
 						$prop['cityName'],
 						$prop['state'],
-						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ?? '' ),
+						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ?? '' ),
+						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ?? '' ),
+						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ?? '' ),
 						$this->maybe_add_disclaimer_and_courtesy( $prop ),
 						$column_class,
 						$target
@@ -256,7 +265,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
                             </p>
                         </a>
                     </li>',
-						$prop['listingPrice'],
+						price_selector( $prop ),
 						$url,
 						$prop['streetNumber'],
 						$prop['streetDirection'],
@@ -264,10 +273,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 						$prop['unitNumber'],
 						$prop['cityName'],
 						$prop['state'],
-						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ?? '' ),
+						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ?? '' ),
+						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ?? '' ),
+						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ?? '' ),
 						$column_class,
 						$target
 					),
@@ -285,7 +294,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				// close a row if..
 				// num_per_row is a factor of count OR
 				// count is equal to the max number of listings to show OR
-				// count is equal to the total number of listings available
+				// count is equal to the total number of listings available.
 				if ( $count % $num_per_row == 0 || $count == $total || $count == $max ) {
 					$output .= '</div> <!-- .row -->';
 				}
@@ -293,7 +302,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				// open a new row if..
 				// num per row is a factor of count AND
 				// count is not equal to max AND
-				// count is not equal to total
+				// count is not equal to total.
 				if ( $count % $num_per_row == 0 && $count != $max && $count != $total ) {
 					$output .= '<div class="row">';
 				}
@@ -304,7 +313,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * target function.
+	 * Target
 	 *
 	 * @access public
 	 * @param mixed $new_window
@@ -312,14 +321,16 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
-			// if enabled, open links in new tab/window
+			// If enabled, open links in new tab/window.
 			return '_blank';
 		} else {
 			return '_self';
 		}
 	}
 
-	// Hide fields that have no data to avoid fields such as 0 Baths from displaying
+	/**
+	 * Hide fields that have no data to avoid fields such as 0 Baths from displaying.
+	 */
 	public function hide_empty_fields( $field, $display_name, $value ) {
 		if ( $value <= 0 ) {
 			return '';
@@ -329,11 +340,11 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * set_missing_core_fields function.
+	 * Set_missing_core_fields
 	 *
 	 * @access public
-	 * @param mixed $prop
-	 * @return void
+	 * @param  array $prop - Listing values.
+	 * @return array
 	 */
 	public function set_missing_core_fields( $prop ) {
 		$name_values   = array(
@@ -352,6 +363,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			'bedrooms',
 			'totalBaths',
 			'sqFt',
+			'acres',
 		);
 		foreach ( $name_values as $field ) {
 			if ( empty( $prop[ $field ] ) ) {
@@ -370,7 +382,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	/**
 	 * Converts the decimal to a percent
 	 *
-	 * @param mixed $num decimal to convert
+	 * @param mixed $num decimal to convert.
 	 */
 	public function calc_percent( $num ) {
 
@@ -389,8 +401,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	/**
 	 * Compares the price fields of two arrays
 	 *
-	 * @param array $a
-	 * @param array $b
+	 * @param array $a - Listing 1.
+	 * @param array $b - Listing 2.
 	 * @return int
 	 */
 	public function price_cmp( $a, $b ) {
@@ -398,18 +410,14 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		$a = $this->clean_price( $a['listingPrice'] );
 		$b = $this->clean_price( $b['listingPrice'] );
 
-		if ( $a == $b ) {
-			return 0;
-		}
-
-		return ( $a < $b ) ? -1 : 1;
+		return $a <=> $b;
 	}
 
 	/**
 	 * Removes the "$" and "," from the price field
 	 *
-	 * @param string $price
-	 * @return mixed $price the cleaned price
+	 * @param string $price - Price String.
+	 * @return string - Cleaned price string
 	 */
 	public function clean_price( $price ) {
 
@@ -440,8 +448,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 		foreach ( $saved_links as $saved_link ) {
 
-			// display the link name if no link title has been assigned
-			$link_text = empty( $saved_link->linkTitle ) ? $saved_link->linkName : $saved_link->linkTitle;
+			// Display the link name if no link title has been assigned.
+			$link_text = $saved_link->linkTitle ?? $saved_link->linkName;
 
 			echo '<option ', selected( $instance['saved_link_id'], $saved_link->id, 0 ), ' value="', $saved_link->id, '">', $link_text, '</option>';
 
@@ -449,7 +457,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Front-end display of widget.
+	 * Front-end display of widget
 	 *
 	 * @see WP_Widget::widget()
 	 * @param array $args Widget arguments.
@@ -480,7 +488,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Sanitize widget form values as they are saved.
+	 * Sanitize widget form values as they are saved
 	 *
 	 * @see WP_Widget::update()
 	 *
@@ -489,11 +497,14 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
+		// Merge defaults and new_instance to avoid any missing index warnings when used with the legacy block widget.
+		$new_instance                 = array_merge( $this->defaults, $new_instance );
 		$instance                     = array();
 		$instance['title']            = wp_strip_all_tags( $new_instance['title'] );
 		$instance['properties']       = wp_strip_all_tags( $new_instance['properties'] );
 		$instance['saved_link_id']    = (int) ( $new_instance['saved_link_id'] );
 		$instance['agentID']          = (int) $new_instance['agentID'];
+		$instance['colistings']       = (bool) $new_instance['colistings'];
 		$instance['show_image']       = (bool) $new_instance['show_image'];
 		$instance['listings_per_row'] = (int) $new_instance['listings_per_row'];
 		$instance['max']              = wp_strip_all_tags( $new_instance['max'] );
@@ -506,7 +517,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Back-end widget form.
+	 * Back-end widget form
 	 *
 	 * @see WP_Widget::form()
 	 * @param array $instance Previously saved values from database.
@@ -521,13 +532,13 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php echo 'Title:'; ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php echo 'Title:'; ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'properties' ); ?>"><?php echo 'Properties to Display:'; ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'properties' ); ?>" name="<?php echo $this->get_field_name( 'properties' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>"><?php echo 'Properties to Display:'; ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'properties' ) ); ?>">
 				<option <?php selected( $instance['properties'], 'featured' ); ?> value="featured"><?php echo 'Featured'; ?></option>
 				<option <?php selected( $instance['properties'], 'soldpending' ); ?> value="soldpending"><?php echo 'Sold/Pending'; ?></option>
 				<option <?php selected( $instance['properties'], 'supplemental' ); ?> value="supplemental"><?php echo 'Supplemental'; ?></option>
@@ -536,32 +547,37 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'saved_link_id' ); ?>">Choose a saved link (if selected above):</label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'saved_link_id' ); ?>" name="<?php echo $this->get_field_name( 'saved_link_id' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'saved_link_id' ) ); ?>">Choose a saved link (if selected above):</label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'saved_link_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'saved_link_id' ) ); ?>">
 				<?php $this->saved_link_options( $instance ); ?>
 			</select>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'agentID' ); ?>"><?php _e( 'Limit by Agent:', 'idxbroker' ); ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'agentID' ); ?>" name="<?php echo $this->get_field_name( 'agentID' ); ?>">
-				<?php echo $this->get_agents_select_list( $instance['agentID'] ); ?>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'agentID' ) ); ?>"><?php esc_html_e( 'Limit by Agent:', 'idxbroker' ); ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'agentID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'agentID' ) ); ?>">
+				<?php $this->idx_api->get_agents_select_list( $instance['agentID'] ); ?>
 			</select>
 		</p>
 
 		<p>
-			<input class="checkbox" type="checkbox" <?php checked( $instance['show_image'], 1 ); ?> id="<?php echo $this->get_field_id( 'show_image' ); ?>" name="<?php echo $this->get_field_name( 'show_image' ); ?>" value="1" />
-			<label for="<?php echo $this->get_field_id( 'show_image' ); ?>"><?php echo 'Show image?'; ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'colistings' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'colistings' ) ); ?>" value="1" <?php checked( $instance['colistings'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'colistings' ) ); ?>"><?php esc_html_e( 'Include colistings for selected agent?', 'idxbroker' ); ?></label>
 		</p>
 
 		<p>
-			<input class="checkbox" type="checkbox" <?php checked( $instance['use_rows'], 1 ); ?> id="<?php echo $this->get_field_id( 'use_rows' ); ?>" name="<?php echo $this->get_field_name( 'use_rows' ); ?>" value="1" />
-			<label for="<?php echo $this->get_field_id( 'use_rows' ); ?>"><?php echo 'Use rows?'; ?></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['show_image'], 1 ); ?> id="<?php echo esc_attr( $this->get_field_id( 'show_image' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'show_image' ) ); ?>" value="1" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'show_image' ) ); ?>"><?php echo 'Show image?'; ?></label>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'listings_per_row' ); ?>"><?php echo 'Listings per row:'; ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'listings_per_row' ); ?>" name="<?php echo $this->get_field_name( 'listings_per_row' ); ?>">
+			<input class="checkbox" type="checkbox" <?php checked( $instance['use_rows'], 1 ); ?> id="<?php echo esc_attr( $this->get_field_id( 'use_rows' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'use_rows' ) ); ?>" value="1" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'use_rows' ) ); ?>"><?php echo 'Use rows?'; ?></label>
+		</p>
+
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'listings_per_row' ) ); ?>"><?php echo 'Listings per row:'; ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'listings_per_row' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'listings_per_row' ) ); ?>">
 				<option <?php selected( $instance['listings_per_row'], '2' ); ?> value="2">2</option>
 				<option <?php selected( $instance['listings_per_row'], '3' ); ?> value="3">3</option>
 				<option <?php selected( $instance['listings_per_row'], '4' ); ?> value="4">4</option>
@@ -569,65 +585,37 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'max' ); ?>"><?php echo 'Max number of listings to show:'; ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'max' ); ?>" name="<?php echo $this->get_field_name( 'max' ); ?>" type="number" value="<?php esc_attr_e( $instance['max'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>"><?php echo 'Max number of listings to show:'; ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php esc_attr( $instance['max'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><?php echo 'Sort order:'; ?></label>
-			<select class="widefat" id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>"><?php echo 'Sort order:'; ?></label>
+			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'order' ) ); ?>">
 				<option <?php selected( $instance['order'], 'default' ); ?> value="default"><?php echo 'Default'; ?></option>
 				<option <?php selected( $instance['order'], 'high-low' ); ?> value="high-low"><?php echo 'Highest to Lowest Price'; ?></option>
 				<option <?php selected( $instance['order'], 'low-high' ); ?> value="low-high"><?php echo 'Lowest to Highest Price'; ?></option>
 			</select>
 		</p>
 
-		 <p>
-			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php _e( 'Default Styling?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'styles' ); ?>" name="<?php echo $this->get_field_name( 'styles' ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'styles' ) ); ?>"><?php esc_html_e( 'Default Styling?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'styles' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'styles' ) ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php _e( 'Open Listings in a New Window?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'new_window' ); ?>" name="<?php echo $this->get_field_name( 'new_window' ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'new_window' ) ); ?>"><?php esc_html_e( 'Open Listings in a New Window?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'new_window' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'new_window' ) ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
 		</p>
 
 		<?php
 	}
 
 	/**
-	 * Returns agents wrapped in option tags
-	 *
-	 * @param  int $agent_id Instance agentID if exists
-	 * @return str           HTML options tags of agents ids and names
-	 */
-	public function get_agents_select_list( $agent_id ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-
-		if ( ! is_array( $agents_array ) ) {
-			return;
-		}
-
-		if ( $agent_id != null ) {
-			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>All</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
-			}
-		} else {
-			$agents_list = '<option value="">All</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
-			}
-		}
-
-		return $agents_list;
-	}
-
-	/**
 	 * Output disclaimer and courtesy if applicable
 	 *
-	 * @param  array $prop The current property in the loop
-	 * @return string       HTML of disclaimer, logo, and courtesy
+	 * @param  array $prop - The current property in the loop.
+	 * @return string HTML of disclaimer, logo, and courtesy
 	 */
 	public function maybe_add_disclaimer_and_courtesy( $prop ) {
 		// Add Disclaimer when applicable.
@@ -660,7 +648,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
 		}
 
-		if ( $output == '' ) {
+		if ( '' == $output ) {
 			return;
 		} else {
 			return '<div class="disclaimer">' . $output . '</div>';

@@ -1,0 +1,18 @@
+#dashboard_right_now a.employee-count:before,
+#dashboard_right_now span.employee-count:before {
+	content: "\f307";
+}
+
+.impa-term-image {
+	max-width: 80px;
+	height: auto;
+}
+
+.js #idx_metabox .handlediv,
+#idx_metabox h2.hndle {
+	display: none;
+}
+.js #equity_metabox .handlediv,
+#equity_metabox h2.hndle {
+	display: none;
+}
