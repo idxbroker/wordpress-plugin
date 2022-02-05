@@ -2,7 +2,7 @@
 
 👋 Hello there! Welcome. Please follow the steps below to tell us about your contribution.
 
-Please exaplin the intent of your Pull Request.
+Please explain the intent of your Pull Request.
 
 🐛 Are you fixing a bug?
 

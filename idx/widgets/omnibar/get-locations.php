@@ -48,7 +48,7 @@ class Get_Locations {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -56,7 +56,7 @@ class Get_Locations {
 	public $idx_api;
 
 	/**
-	 * address_mls
+	 * Address_mls
 	 *
 	 * @var mixed
 	 * @access private
@@ -64,7 +64,7 @@ class Get_Locations {
 	private $address_mls;
 
 	/**
-	 * mls_list
+	 * Mls_list
 	 *
 	 * @var mixed
 	 * @access private
@@ -72,7 +72,7 @@ class Get_Locations {
 	private $mls_list;
 
 	/**
-	 * property_types
+	 * Property_types
 	 *
 	 * @var mixed
 	 * @access private
@@ -84,7 +84,7 @@ class Get_Locations {
 	 */
 
 	/**
-	 * get_idxIDs function.
+	 * Get_idxIDs function.
 	 *
 	 * @access public
 	 * @param mixed $array
@@ -257,13 +257,13 @@ class Get_Locations {
 			'headers' => array(
 				'Content-Type' => 'application/x-www-form-urlencoded',
 				'accesskey'    => get_option( 'idx_broker_apikey' ),
-				'apiversion'   => \IDX\Initiate_Plugin::IDX_API_DEFAULT_VERSION,
+				'apiversion'   => IDX_API_DEFAULT_VERSION,
 				'outputtype'   => 'json',
 			),
 			'timeout' => 120,
 		);
 
-		$response = wp_remote_get( "https://api.idxbroker.com/mls/searchfieldvalues/$mls?mlsPtID=$parent_id&name=address", $args );
+		$response = wp_remote_get( IDX_API_URL . "/mls/searchfieldvalues/$mls?mlsPtID=$parent_id&name=address", $args );
 
 		if ( is_wp_error( $response ) || ! isset( $response['body'] ) ) {
 			return;
