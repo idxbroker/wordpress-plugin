@@ -122,7 +122,7 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 
 ### 3.0.9 ###
 * Fix: Legacy IMPress Widgets display issues
-* Fix: CF7 not sending leads to IDX Broker
+* Fix: 3rd Party Form integrations not sending leads to IDX Broker
 * Update: Omnibar custom fields - blacklisted core fields
 
 ### 3.0.8 ###
