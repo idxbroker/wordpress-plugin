@@ -121,7 +121,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
     return jQuery.post(
       ajaxurl, {
         action: 'idx_shortcode_options',
-        idx_shortcode_type: shortcodeType
+        idx_shortcode_type: shortcodeType,
+        nonce: IDXShortcodeOptionsNonce
       }).done(function (data) {
       editTab.innerHTML = data
       var select = editTab.querySelector('select')

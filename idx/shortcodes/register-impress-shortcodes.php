@@ -7,7 +7,7 @@ namespace IDX\Shortcodes;
 class Register_Impress_Shortcodes {
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -29,15 +29,15 @@ class Register_Impress_Shortcodes {
 		add_shortcode( 'impress_property_showcase', array( $this, 'property_showcase_shortcode' ) );
 		add_shortcode( 'impress_property_carousel', array( $this, 'property_carousel_shortcode' ) );
 		add_shortcode( 'impress_city_links', array( $this, 'city_links_shortcode' ) );
-
+		// Include helper functions file.
+		include_once IMPRESS_IDX_DIR . 'idx/widgets/impress-widget-helper.php';
 	}
 
-
 	/**
-	 * lead_login_shortcode function.
+	 * Lead_login_shortcode function.
 	 *
 	 * @access public
-	 * @param mixed $atts
+	 * @param mixed $atts - Attributes.
 	 * @return void
 	 */
 	public function lead_login_shortcode( $atts ) {
@@ -53,7 +53,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-login' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -62,7 +62,7 @@ class Register_Impress_Shortcodes {
 
 		$target = $this->target( $new_window );
 
-		// Returns hidden if false or not set
+		// Returns hidden if false or not set.
 		$password_field_type = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? 'password' : 'hidden';
 		$password_label      = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? '<label for="impress-widgetPassword">Password:</label>' : '';
 
@@ -77,17 +77,17 @@ class Register_Impress_Shortcodes {
                 <input id="impress-widgetPassword" type="%4$s" name="password" placeholder="Password">
                 <input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
             </form>',
-			$this->idx_api->subdomain_url(),
-			$target,
-			$password_label,
-			$password_field_type
+			esc_url( $this->idx_api->subdomain_url() ),
+			esc_attr( $target ),
+			html_entity_decode( $password_label ),
+			esc_attr( $password_field_type )
 		);
 
 		return $widget;
 	}
 
 	/**
-	 * lead_signup_shortcode function.
+	 * Lead_signup_shortcode function.
 	 *
 	 * @access public
 	 * @return void
@@ -98,7 +98,7 @@ class Register_Impress_Shortcodes {
 	}
 
 	/**
-	 * property_showcase_shortcode function.
+	 * Property_showcase_shortcode function.
 	 *
 	 * @access public
 	 * @param array $atts (default: array())
@@ -118,13 +118,14 @@ class Register_Impress_Shortcodes {
 					'agent_id'      => '',
 					'styles'        => 1,
 					'new_window'    => 0,
+					'colistings'    => 1,
 				),
 				$atts
 			)
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-showcase' );
 		}
 
 		$output = '';
@@ -194,11 +195,33 @@ class Register_Impress_Shortcodes {
 			$properties = array_reverse( $properties );
 		}
 
+		// Used to hold agent data when matching for colistings.
+		$agent_data;
+
 		foreach ( $properties as $prop ) {
 
 			if ( ! empty( $agent_id ) ) {
+				// Check if listing agent ID matches agent's IDX ID.
 				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
-					continue;
+					// If colistings is enabled, check for match.
+					if ( $colistings ) {
+						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
+							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
+							if ( empty( $agent_data ) ) {
+								$agent_data = $this->idx_api->idx_api( 'agents?filterField=agentID&filterValue=' . $agent_id, IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
+							}
+							// Check the listing's coListingAgentID against the agent's raw MLS-provided ID, continues if no match.
+							if ( empty( $agent_data['agent'][0]['listingAgentID'] ) || $agent_data['agent'][0]['listingAgentID'] !== $prop['coListingAgentID'] ) {
+								continue;
+							}
+						} else {
+							// Listing does not have coListingAgentID field data to match against.
+							continue;
+						}
+					} else {
+						// Colistings setting is not enabled.
+						continue;
+					}
 				}
 			}
 
@@ -206,7 +229,7 @@ class Register_Impress_Shortcodes {
 				return $output;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			if ( 1 == $use_rows && $count == 0 && $max != '1' ) {
 				$output .= '<div class="shortcode impress-property-showcase impress-row">';
@@ -272,7 +295,7 @@ class Register_Impress_Shortcodes {
                         </p>
                         %16$s
                         </div>',
-						$prop['listingPrice'],
+						price_selector( $prop ),
 						$prop['propStatus'],
 						$url,
 						$prop_image_url,
@@ -283,10 +306,10 @@ class Register_Impress_Shortcodes {
 						$prop['unitNumber'],
 						$prop['cityName'],
 						$prop['state'],
-						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+						$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
+						$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
+						$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
+						$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 						$this->maybe_add_disclaimer_and_courtesy( $prop ),
 						$column_class,
 						$target
@@ -321,7 +344,7 @@ class Register_Impress_Shortcodes {
                             </p>
                         </a>
                     </li>',
-						$prop['listingPrice'],
+						price_selector( $prop ),
 						$url,
 						$prop['streetNumber'],
 						$prop['streetDirection'],
@@ -329,10 +352,10 @@ class Register_Impress_Shortcodes {
 						$prop['unitNumber'],
 						$prop['cityName'],
 						$prop['state'],
-						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+						$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
+						$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
+						$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
+						$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 						$column_class,
 						$target
 					),
@@ -344,7 +367,7 @@ class Register_Impress_Shortcodes {
 				);
 			}
 
-			if ( 1 == $use_rows && $count != 1 ) {
+			if ( 1 == $use_rows && ( 1 !== $count || 1 === $total ) ) {
 
 				// close a row if..
 				// num_per_row is a factor of count OR
@@ -482,7 +505,7 @@ class Register_Impress_Shortcodes {
 	 * @return void
 	 */
 	public function property_carousel_shortcode( $atts = array() ) {
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-5.8.2' );
 
 		extract(
 			shortcode_atts(
@@ -494,6 +517,7 @@ class Register_Impress_Shortcodes {
 					'property_type' => 'featured',
 					'saved_link_id' => '',
 					'agent_id'      => '',
+					'colistings'    => 1,
 					'styles'        => 1,
 					'new_window'    => 0,
 				),
@@ -501,11 +525,11 @@ class Register_Impress_Shortcodes {
 			)
 		);
 
-		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
+		wp_enqueue_style( 'owl2-css' );
+		wp_enqueue_script( 'owl2' );
 
 		if ( $styles ) {
-			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-carousel' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -555,59 +579,43 @@ class Register_Impress_Shortcodes {
 			$autoplay_param = '';
 		}
 
-		// All Instance Values are strings for shortcodes but not widgets.
-		$output .= '
-            <script>
-		window.addEventListener("DOMContentLoaded", function(event) {
-                	jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
-			    items: ' . $display . ',
-			    ' . $autoplay_param . '
-			    nav: true,
-			    navText: ["' . $prev_link . '", "' . $next_link . '"],
-			    loop: true,
-			    lazyLoad: true,
-			    addClassActive: true,
-			    itemsScaleUp: true,
-			    navContainerClass: "owl-controls owl-nav",
-			    responsiveClass:true,
-			    responsive:{
-				0:{
-					items: 1,
-				    	nav: true,
-				    	margin: 0
-				},
-				450:{
-					items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
-					loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
-				},
-				800:{
-					items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
-					loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
-				}
-                    	}
-                });
-              });
-            </script>
-            ';
-
 		$count = 0;
 
 		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $display );
 
-		foreach ( $properties as $prop ) {
+		// Used to hold agent data when matching for colistings.
+		$agent_data;
 
-			if ( isset( $agent_id, $prop['userAgentID'] ) && ! empty( $agent_id ) ) {
-				if ( (int) $agent_id !== (int) $prop['userAgentID'] ) {
-					continue;
+		foreach ( $properties as $prop ) {
+			if ( ! empty( $agent_id ) ) {
+				// Check if listing agent ID matches agent's IDX ID.
+				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
+					// If colistings is enabled, check for match.
+					if ( $colistings ) {
+						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
+							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
+							if ( empty( $agent_data ) ) {
+								$agent_data = $this->idx_api->idx_api( 'agents?filterField=agentID&filterValue=' . $agent_id, IDX_API_DEFAULT_VERSION, 'clients', [], 7200, 'GET', true );
+							}
+							// And finally, check the listing's coListingAgentID against the agent's raw MLS-provided ID.
+							if ( empty( $agent_data['agent'][0]['listingAgentID'] ) || $agent_data['agent'][0]['listingAgentID'] !== $prop['coListingAgentID'] ) {
+								continue;
+							}
+						} else {
+							// Continue as the listing does not have coListingAgentID field data to match against.
+							continue;
+						}
+					} else {
+						continue;
+					}
 				}
 			}
 
 			if ( ! empty( $max ) && $count == $max ) {
-				$output .= '</div><!-- end .impress-listing-carousel -->';
-				return $output;
+				break;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 			$image_alt_tag  = apply_filters( 'impress_carousel_image_alt_tag', esc_html( $prop['address'] ), $prop );
 
 			$count++;
@@ -616,7 +624,7 @@ class Register_Impress_Shortcodes {
 
 			$disclaimer = $this->maybe_add_disclaimer_and_courtesy( $prop );
 
-			// Get URL and add suffix if one exists
+			// Get URL and add suffix if one exists.
 			if ( isset( $prop['fullDetailsURL'] ) ) {
 				$url = $prop['fullDetailsURL'];
 			} else {
@@ -650,7 +658,7 @@ class Register_Impress_Shortcodes {
                     </p>
                     %15$s
                     </div><!-- end .impress-carousel-property -->',
-					$prop['listingPrice'],
+					price_selector( $prop ),
 					$url,
 					$prop_image_url,
 					$image_alt_tag,
@@ -660,10 +668,10 @@ class Register_Impress_Shortcodes {
 					$prop['unitNumber'],
 					$prop['cityName'],
 					$prop['state'],
-					$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ),
-					$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ),
-					$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ),
-					$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ),
+					$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
+					$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
+					$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
+					$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 					$disclaimer,
 					$target
 				),
@@ -673,6 +681,41 @@ class Register_Impress_Shortcodes {
 				$disclaimer
 			);
 		}
+
+		// All Instance Values are strings for shortcodes but not widgets.
+		$output = '
+        	<script>
+				window.addEventListener("DOMContentLoaded", function(event) {
+					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+						items: ' . $display . ',
+						' . $autoplay_param . '
+						nav: true,
+						navText: ["' . $prev_link . '", "' . $next_link . '"],
+						loop: true,
+						lazyLoad: true,
+						addClassActive: true,
+						itemsScaleUp: true,
+						navContainerClass: "owl-controls owl-nav",
+						responsiveClass:true,
+						responsive:{
+							0:{
+								items: 1,
+								nav: true,
+								margin: 0
+							},
+							450:{
+								items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+								loop: ' . ( round( $display / 2 ) < $count ? 'true' : 'false' ) . '
+							},
+							800:{
+								items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+								loop: ' . ( $display < $count ? 'true' : 'false' ) . '
+							}
+						}
+					});
+				});
+            </script>
+        ' . $output;
 
 		$output .= '</div><!-- end .impress-carousel -->';
 
@@ -704,7 +747,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-city-links', plugins_url( '../assets/css/widgets/impress-city-links.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-city-links' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -842,6 +885,16 @@ class Register_Impress_Shortcodes {
 							'attr'  => 'agent_id',
 							'type'  => 'text',
 							'value' => '',
+						),
+						array(
+							'label' => 'Include selected agent\'s colistings',
+							'attr'  => 'colistings',
+							'type'    => 'radio',
+							'value'   => 1,
+							'options' => array(
+								1 => 'Yes',
+								0 => 'No',
+							),
 						),
 					),
 				)

@@ -1,0 +1,1295 @@
+# Copyright (C) 2020 Agent Evolution
+# This file is distributed under the GNU General Public License v2.0 (or later).
+msgid ""
+msgstr ""
+"Project-Id-Version: IMPress Listings 2.6.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-listings\n"
+"POT-Creation-Date: 2020-11-17 22:34:19+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Textdomain-Support: yes\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
+
+#: includes/class-admin-notice.php:120 plugin.php:209
+msgid "Dismiss this notice"
+msgstr ""
+
+#: includes/class-featured-listings-widget.php:11
+msgid "Display grid-style featured listings"
+msgstr ""
+
+#: includes/class-featured-listings-widget.php:13
+msgid "IMPress Listings - Featured Listings"
+msgstr ""
+
+#: includes/class-featured-listings-widget.php:129
+#: includes/class-listings.php:169 includes/class-listings.php:170
+#: includes/views/archive-listing.php:61
+msgid "View Listing"
+msgstr ""
+
+#: includes/class-featured-listings-widget.php:176
+#: includes/class-listings-search-widget.php:76
+msgid "Title:"
+msgstr ""
+
+#: includes/class-featured-listings-widget.php:184
+msgid "Image Size"
+msgstr ""
+
+#: includes/class-featured-listings-widget.php:198
+msgid "How many results should be returned?"
+msgstr ""
+
+#: includes/class-featured-listings-widget.php:206
+msgid "All Taxonomies and Terms"
+msgstr ""
+
+#: includes/class-listing-import.php:444
+msgid "Import IDX Listings"
+msgstr ""
+
+#: includes/class-listing-template.php:147
+#: includes/class-listing-template.php:155
+msgid "Listing Template"
+msgstr ""
+
+#: includes/class-listing-template.php:157
+msgid "Default"
+msgstr ""
+
+#: includes/class-listings-search-widget.php:11
+msgid "Display listings search dropdown"
+msgstr ""
+
+#: includes/class-listings-search-widget.php:13
+msgid "IMPress Listings - Search"
+msgstr ""
+
+#: includes/class-listings-search-widget.php:20
+#: includes/class-listings-search-widget.php:68 includes/class-listings.php:171
+msgid "Search Listings"
+msgstr ""
+
+#: includes/class-listings-search-widget.php:78
+msgid "Include these taxonomies in the search widget"
+msgstr ""
+
+#: includes/class-listings-search-widget.php:91
+msgid "Button Text:"
+msgstr ""
+
+#: includes/class-listings.php:34
+#: includes/listing-templates/single-listing-classical.php:1096
+#: includes/listing-templates/single-listing-classical.php:1098
+#: includes/listing-templates/single-listing-elegant.php:1065
+#: includes/listing-templates/single-listing-elegant.php:1067
+#: includes/listing-templates/single-listing-luxurious.php:1014
+#: includes/listing-templates/single-listing-luxurious.php:1016
+#: includes/listing-templates/single-listing-solid.php:1069
+#: includes/listing-templates/single-listing-solid.php:1071
+#: includes/listing-templates/single-listing-spacious.php:1064
+#: includes/listing-templates/single-listing-spacious.php:1066
+#: includes/views/single-listing.php:170 includes/views/single-listing.php:172
+msgid "Price:"
+msgstr ""
+
+#: includes/class-listings.php:35
+#: includes/listing-templates/single-listing-classical.php:1104
+#: includes/listing-templates/single-listing-elegant.php:1073
+#: includes/listing-templates/single-listing-luxurious.php:1022
+#: includes/listing-templates/single-listing-solid.php:1077
+#: includes/listing-templates/single-listing-spacious.php:1072
+#: includes/views/single-listing.php:178
+msgid "Address:"
+msgstr ""
+
+#: includes/class-listings.php:36
+#: includes/listing-templates/single-listing-classical.php:1105
+#: includes/listing-templates/single-listing-elegant.php:1074
+#: includes/listing-templates/single-listing-luxurious.php:1023
+#: includes/listing-templates/single-listing-solid.php:1078
+#: includes/listing-templates/single-listing-spacious.php:1073
+#: includes/views/single-listing.php:179
+msgid "City:"
+msgstr ""
+
+#: includes/class-listings.php:37 includes/views/single-listing.php:180
+msgid "County:"
+msgstr ""
+
+#: includes/class-listings.php:38
+#: includes/listing-templates/single-listing-classical.php:1106
+#: includes/listing-templates/single-listing-elegant.php:1075
+#: includes/listing-templates/single-listing-luxurious.php:1024
+#: includes/listing-templates/single-listing-solid.php:1079
+#: includes/listing-templates/single-listing-spacious.php:1074
+#: includes/views/single-listing.php:181
+msgid "State:"
+msgstr ""
+
+#: includes/class-listings.php:39
+msgid "Country:"
+msgstr ""
+
+#: includes/class-listings.php:40
+msgid "ZIP:"
+msgstr ""
+
+#: includes/class-listings.php:41
+msgid "MLS #:"
+msgstr ""
+
+#: includes/class-listings.php:42
+msgid "Open House Time & Date:"
+msgstr ""
+
+#: includes/class-listings.php:45
+msgid "Year Built:"
+msgstr ""
+
+#: includes/class-listings.php:46
+msgid "Floors:"
+msgstr ""
+
+#: includes/class-listings.php:47
+msgid "Square Feet:"
+msgstr ""
+
+#: includes/class-listings.php:48
+msgid "Acres:"
+msgstr ""
+
+#: includes/class-listings.php:49
+msgid "Lot Square Feet:"
+msgstr ""
+
+#: includes/class-listings.php:50
+msgid "Bedrooms:"
+msgstr ""
+
+#: includes/class-listings.php:51
+msgid "Bathrooms:"
+msgstr ""
+
+#: includes/class-listings.php:52
+msgid "Half Bathrooms:"
+msgstr ""
+
+#: includes/class-listings.php:53
+msgid "Garage:"
+msgstr ""
+
+#: includes/class-listings.php:54
+msgid "Pool:"
+msgstr ""
+
+#: includes/class-listings.php:60
+msgid "Property Type:"
+msgstr ""
+
+#: includes/class-listings.php:61
+msgid "Condo:"
+msgstr ""
+
+#: includes/class-listings.php:62
+msgid "Financial:"
+msgstr ""
+
+#: includes/class-listings.php:63
+msgid "Condition:"
+msgstr ""
+
+#: includes/class-listings.php:64
+msgid "Construction:"
+msgstr ""
+
+#: includes/class-listings.php:65
+msgid "Exterior:"
+msgstr ""
+
+#: includes/class-listings.php:66
+msgid "Fencing:"
+msgstr ""
+
+#: includes/class-listings.php:67
+msgid "Interior:"
+msgstr ""
+
+#: includes/class-listings.php:68
+msgid "Flooring:"
+msgstr ""
+
+#: includes/class-listings.php:69
+msgid "Heat/Cool:"
+msgstr ""
+
+#: includes/class-listings.php:72
+msgid "Lot size:"
+msgstr ""
+
+#: includes/class-listings.php:73
+msgid "Location:"
+msgstr ""
+
+#: includes/class-listings.php:74
+msgid "Scenery:"
+msgstr ""
+
+#: includes/class-listings.php:75
+msgid "Community:"
+msgstr ""
+
+#: includes/class-listings.php:76
+msgid "Recreation:"
+msgstr ""
+
+#: includes/class-listings.php:77
+msgid "General:"
+msgstr ""
+
+#: includes/class-listings.php:78
+msgid "Inclusions:"
+msgstr ""
+
+#: includes/class-listings.php:79
+msgid "Parking:"
+msgstr ""
+
+#: includes/class-listings.php:80
+msgid "Rooms:"
+msgstr ""
+
+#: includes/class-listings.php:81
+msgid "Laundry:"
+msgstr ""
+
+#: includes/class-listings.php:82
+msgid "Utilities:"
+msgstr ""
+
+#: includes/class-listings.php:132
+msgid "Settings"
+msgstr ""
+
+#: includes/class-listings.php:138
+msgid "IMPress Listings - Google My Business"
+msgstr ""
+
+#: includes/class-listings.php:138
+msgid "Google My Business"
+msgstr ""
+
+#: includes/class-listings.php:162
+msgid "Listings"
+msgstr ""
+
+#: includes/class-listings.php:163
+msgid "Listing"
+msgstr ""
+
+#: includes/class-listings.php:164
+msgid "Add New"
+msgstr ""
+
+#: includes/class-listings.php:165
+msgid "Add New Listing"
+msgstr ""
+
+#: includes/class-listings.php:166 includes/views/create-tax.php:48
+#: includes/views/single-listing.php:642
+msgid "Edit"
+msgstr ""
+
+#: includes/class-listings.php:167
+msgid "Edit Listing"
+msgstr ""
+
+#: includes/class-listings.php:168
+msgid "New Listing"
+msgstr ""
+
+#: includes/class-listings.php:172
+msgid "No listings found"
+msgstr ""
+
+#: includes/class-listings.php:173
+msgid "No listings found in Trash"
+msgstr ""
+
+#: includes/class-listings.php:174
+msgid "Filter Listings"
+msgstr ""
+
+#: includes/class-listings.php:175 includes/helpers.php:116
+msgid "Listings navigation"
+msgstr ""
+
+#: includes/class-listings.php:176
+msgid "Listings list"
+msgstr ""
+
+#: includes/class-listings.php:196
+msgid "Property Details"
+msgstr ""
+
+#: includes/class-listings.php:197
+msgid "Additional Details"
+msgstr ""
+
+#: includes/class-listings.php:199
+msgid "IDX Broker"
+msgstr ""
+
+#: includes/class-listings.php:260
+msgid "Thumbnail"
+msgstr ""
+
+#: includes/class-listings.php:261
+msgid "Listing Title"
+msgstr ""
+
+#: includes/class-listings.php:262
+msgid "Details"
+msgstr ""
+
+#: includes/class-listings.php:263
+msgid "Tags"
+msgstr ""
+
+#: includes/class-listings.php:337 includes/views/wp-listings-settings.php:3
+msgid ""
+"<strong>Integrate your MLS Listings into WordPress with IDX "
+"Broker!</strong> <a "
+"href=\"http://www.idxbroker.com/features/idx-wordpress-plugin\">Find out "
+"how</a>"
+msgstr ""
+
+#: includes/class-listings.php:340
+msgid ""
+"<strong>Your listings are being imported in the background. This notice "
+"will dismiss when all selected listings have been imported.</strong>"
+msgstr ""
+
+#: includes/class-listings.php:348
+msgid ""
+"<style>.listing_thumbnail>p>img[src=\"\"]{content:url(\"//mlsphotos."
+"idxbroker.com/defaultNoPhoto/noPhotoFull.png\")}</style>"
+msgstr ""
+
+#: includes/class-taxonomies.php:59
+msgid "Register Taxonomies"
+msgstr ""
+
+#: includes/class-taxonomies.php:60 includes/class-taxonomies.php:626
+#: includes/views/reorder-tax.php:17 includes/views/reorder-tax.php:40
+msgid "Reorder Taxonomies"
+msgstr ""
+
+#: includes/class-taxonomies.php:112 includes/class-taxonomies.php:114
+#: includes/class-taxonomies.php:116 includes/class-taxonomies.php:184
+#: includes/class-taxonomies.php:186 includes/class-taxonomies.php:188
+msgid "Please complete all required fields."
+msgstr ""
+
+#: includes/class-taxonomies.php:125 includes/class-taxonomies.php:197
+#: includes/class-taxonomies.php:265 includes/class-taxonomies.php:301
+#: includes/class-taxonomies.php:337 includes/class-taxonomies.php:373
+msgid "Search %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:126 includes/class-taxonomies.php:198
+#: includes/class-taxonomies.php:266 includes/class-taxonomies.php:302
+#: includes/class-taxonomies.php:338 includes/class-taxonomies.php:374
+msgid "Popular %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:127 includes/class-taxonomies.php:199
+#: includes/class-taxonomies.php:267 includes/class-taxonomies.php:303
+#: includes/class-taxonomies.php:339 includes/class-taxonomies.php:375
+msgid "All %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:128 includes/class-taxonomies.php:200
+#: includes/class-taxonomies.php:268 includes/class-taxonomies.php:304
+#: includes/class-taxonomies.php:340 includes/class-taxonomies.php:376
+msgid "Edit %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:129 includes/class-taxonomies.php:201
+#: includes/class-taxonomies.php:269 includes/class-taxonomies.php:305
+#: includes/class-taxonomies.php:341 includes/class-taxonomies.php:377
+msgid "Update %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:130 includes/class-taxonomies.php:202
+#: includes/class-taxonomies.php:270 includes/class-taxonomies.php:306
+#: includes/class-taxonomies.php:342 includes/class-taxonomies.php:378
+msgid "Add New %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:131 includes/class-taxonomies.php:203
+#: includes/class-taxonomies.php:271 includes/class-taxonomies.php:307
+#: includes/class-taxonomies.php:343 includes/class-taxonomies.php:379
+msgid "New %s Name"
+msgstr ""
+
+#: includes/class-taxonomies.php:132 includes/class-taxonomies.php:204
+#: includes/class-taxonomies.php:272 includes/class-taxonomies.php:308
+#: includes/class-taxonomies.php:344 includes/class-taxonomies.php:380
+msgid "Add or Remove %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:133 includes/class-taxonomies.php:205
+#: includes/class-taxonomies.php:273 includes/class-taxonomies.php:309
+#: includes/class-taxonomies.php:345 includes/class-taxonomies.php:381
+msgid "Choose from the most used %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:162 includes/class-taxonomies.php:170
+msgid ""
+"Nice try, partner. But that taxonomy doesn't exist. Click back and try "
+"again."
+msgstr ""
+
+#: includes/class-taxonomies.php:232
+msgid "New taxonomy successfully created!"
+msgstr ""
+
+#: includes/class-taxonomies.php:237
+msgid "Taxonomy successfully edited!"
+msgstr ""
+
+#: includes/class-taxonomies.php:242
+msgid "Taxonomy successfully deleted."
+msgstr ""
+
+#: includes/class-taxonomies.php:255 includes/class-taxonomies.php:256
+msgid "Status"
+msgstr ""
+
+#: includes/class-taxonomies.php:276
+msgid "status"
+msgstr ""
+
+#: includes/class-taxonomies.php:291
+msgid "Property Types"
+msgstr ""
+
+#: includes/class-taxonomies.php:292
+msgid "Property Type"
+msgstr ""
+
+#: includes/class-taxonomies.php:312
+msgid "property-types"
+msgstr ""
+
+#: includes/class-taxonomies.php:327
+msgid "Locations"
+msgstr ""
+
+#: includes/class-taxonomies.php:328
+msgid "Location"
+msgstr ""
+
+#: includes/class-taxonomies.php:348
+msgid "locations"
+msgstr ""
+
+#: includes/class-taxonomies.php:363
+msgid "Features"
+msgstr ""
+
+#: includes/class-taxonomies.php:364
+msgid "Feature"
+msgstr ""
+
+#: includes/class-taxonomies.php:384
+msgid "features"
+msgstr ""
+
+#: includes/class-taxonomies.php:495 includes/class-taxonomies.php:570
+#: includes/class-taxonomies.php:594
+msgid "Image"
+msgstr ""
+
+#: includes/class-taxonomies.php:575 includes/class-taxonomies.php:601
+#: plugin.php:218
+msgid "Set term image"
+msgstr ""
+
+#: includes/class-taxonomies.php:576 includes/class-taxonomies.php:602
+msgid "Remove term image"
+msgstr ""
+
+#: includes/class-taxonomies.php:628
+msgid ""
+"Note: This will only allow you to reorder user-created taxonomies. Default "
+"taxonomies cannot be reordered (Status, Locations, Property Types, "
+"Features)."
+msgstr ""
+
+#: includes/class-taxonomies.php:640
+msgid "Drag and Drop to reorder"
+msgstr ""
+
+#: includes/helpers.php:18
+msgid "View all post filed under %s"
+msgstr ""
+
+#: includes/helpers.php:58
+msgid "Listing navigation"
+msgstr ""
+
+#: includes/helpers.php:62
+msgid "<span class=\"meta-nav\">Published In</span>%title"
+msgstr ""
+
+#: includes/helpers.php:64
+msgid "<span class=\"meta-nav\">Previous Listing</span>%title"
+msgstr ""
+
+#: includes/helpers.php:65
+msgid "<span class=\"meta-nav\">Next Listing</span>%title"
+msgstr ""
+
+#: includes/helpers.php:108
+msgid "&larr; Previous"
+msgstr ""
+
+#: includes/helpers.php:109
+msgid "Next &rarr;"
+msgstr ""
+
+#: includes/integrations/wpl-google-my-business.php:257
+msgid "IMPress_GMB_Posts"
+msgstr ""
+
+#: includes/integrations/wpl-google-my-business.php:258
+msgid "IMPress_GMB_Post"
+msgstr ""
+
+#: includes/integrations/wpl-google-my-business.php:973
+msgid "Every Week"
+msgstr ""
+
+#: includes/integrations/wpl-google-my-business.php:980
+msgid "Every 2 Weeks"
+msgstr ""
+
+#: includes/integrations/wpl-google-my-business.php:987
+msgid "Every Month"
+msgstr ""
+
+#: includes/listing-templates/single-listing-classical.php:1075
+#: includes/listing-templates/single-listing-elegant.php:1046
+#: includes/listing-templates/single-listing-luxurious.php:995
+#: includes/listing-templates/single-listing-solid.php:1049
+#: includes/listing-templates/single-listing-spacious.php:1044
+#: includes/views/single-listing.php:143
+msgid "View more <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: includes/listing-templates/single-listing-classical.php:1107
+#: includes/listing-templates/single-listing-elegant.php:1076
+#: includes/listing-templates/single-listing-luxurious.php:1025
+#: includes/listing-templates/single-listing-solid.php:1080
+#: includes/listing-templates/single-listing-spacious.php:1075
+#: includes/views/single-listing.php:182
+msgid "Zip Code:"
+msgstr ""
+
+#: includes/listing-templates/single-listing-classical.php:1166
+#: includes/listing-templates/single-listing-elegant.php:1135
+#: includes/listing-templates/single-listing-luxurious.php:1084
+#: includes/listing-templates/single-listing-solid.php:1139
+#: includes/listing-templates/single-listing-spacious.php:1134
+#: includes/views/single-listing.php:241
+msgid "Tagged Features:"
+msgstr ""
+
+#: includes/listing-templates/single-listing-classical.php:1174
+#: includes/listing-templates/single-listing-elegant.php:1143
+#: includes/listing-templates/single-listing-luxurious.php:1092
+#: includes/listing-templates/single-listing-solid.php:1147
+#: includes/listing-templates/single-listing-spacious.php:1142
+#: includes/views/single-listing.php:249
+msgid "Home Summary"
+msgstr ""
+
+#: includes/listing-templates/single-listing-classical.php:1176
+#: includes/listing-templates/single-listing-elegant.php:1145
+#: includes/listing-templates/single-listing-luxurious.php:1094
+#: includes/listing-templates/single-listing-solid.php:1149
+#: includes/listing-templates/single-listing-spacious.php:1144
+#: includes/views/single-listing.php:251
+msgid "Kitchen Summary"
+msgstr ""
+
+#: includes/listing-templates/single-listing-classical.php:1178
+#: includes/listing-templates/single-listing-elegant.php:1147
+#: includes/listing-templates/single-listing-luxurious.php:1096
+#: includes/listing-templates/single-listing-solid.php:1151
+#: includes/listing-templates/single-listing-spacious.php:1146
+#: includes/views/single-listing.php:253
+msgid "Living Room"
+msgstr ""
+
+#: includes/listing-templates/single-listing-classical.php:1180
+#: includes/listing-templates/single-listing-elegant.php:1149
+#: includes/listing-templates/single-listing-luxurious.php:1098
+#: includes/listing-templates/single-listing-solid.php:1153
+#: includes/listing-templates/single-listing-spacious.php:1148
+#: includes/views/single-listing.php:255
+msgid "Master Suite"
+msgstr ""
+
+#: includes/shortcodes.php:99
+msgid "Open House"
+msgstr ""
+
+#: includes/shortcodes.php:107
+msgid "Beds"
+msgstr ""
+
+#: includes/shortcodes.php:107
+msgid "Baths"
+msgstr ""
+
+#: includes/shortcodes.php:107
+msgid "Square Feet"
+msgstr ""
+
+#: includes/views/create-tax.php:2
+msgid "Listing Taxonomies"
+msgstr ""
+
+#: includes/views/create-tax.php:9
+msgid "Current Listing Taxonomies"
+msgstr ""
+
+#: includes/views/create-tax.php:13 includes/views/create-tax.php:21
+#: includes/views/create-tax.php:76 includes/views/edit-tax.php:19
+msgid "ID"
+msgstr ""
+
+#: includes/views/create-tax.php:14 includes/views/create-tax.php:22
+#: includes/views/create-tax.php:88 includes/views/edit-tax.php:33
+msgid "Singular Name"
+msgstr ""
+
+#: includes/views/create-tax.php:15 includes/views/create-tax.php:23
+#: includes/views/create-tax.php:82 includes/views/edit-tax.php:27
+msgid "Plural Name"
+msgstr ""
+
+#: includes/views/create-tax.php:49
+msgid "Delete"
+msgstr ""
+
+#: includes/views/create-tax.php:70
+msgid "Add New Listing Taxonomy"
+msgstr ""
+
+#: includes/views/create-tax.php:78
+msgid ""
+"The unique ID is used to register the taxonomy.<br />(no spaces, "
+"underscores, or special characters)"
+msgstr ""
+
+#: includes/views/create-tax.php:84 includes/views/edit-tax.php:29
+msgid "Example: \"Property Types\" or \"Locations\""
+msgstr ""
+
+#: includes/views/create-tax.php:90 includes/views/edit-tax.php:35
+msgid "Example: \"Property Type\" or \"Location\""
+msgstr ""
+
+#: includes/views/create-tax.php:93
+msgid "Add New Taxonomy"
+msgstr ""
+
+#: includes/views/edit-tax.php:7
+msgid ""
+"Nice try, partner. But that taxonomy doesn't exist or can't be edited. "
+"Click back and try again."
+msgstr ""
+
+#: includes/views/edit-tax.php:12
+msgid "Edit Taxonomy"
+msgstr ""
+
+#: includes/views/edit-tax.php:23
+msgid "The unique ID is used to register the taxonomy. (cannot be changed)"
+msgstr ""
+
+#: includes/views/edit-tax.php:40
+msgid "Update"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:27
+msgid "<h4>Extended Details:</h4>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:50
+msgid "<h4>Advanced Fields:</h4>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:69
+msgid "<h4>Price Options</h4>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:70
+msgid ""
+"<p><label>Hide the price from visitors?<br /> <input type=\"checkbox\" "
+"name=\"wp_listings[_listing_hide_price]\" value=\"1\" %s /></label></p>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:73
+msgid "<p><label>Text to display instead of price (or leave blank):<br />"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:74
+msgid ""
+"<input type=\"text\" name=\"wp_listings[_listing_price_alt]\" value=\"%s\" "
+"/></label></p>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:79
+msgid "<h4>Custom Overlay Text</h4>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:80
+msgid "<p><label>Custom text to display as overlay on featured listings<br />"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:81
+msgid ""
+"<input type=\"text\" name=\"wp_listings[_listing_text]\" value=\"%s\" "
+"/></label></p>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:87
+msgid "<p><label>Photo Gallery (use Add Media button to insert Gallery):<br />"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:108
+msgid ""
+"<p><label>Enter Video or Virtual Tour Embed Code (<a "
+"href=\"https://wordpress.org/plugins/jetpack/\" target=\"_blank\" "
+"rel=\"nofollow\">Jetpack</a> offers several <a "
+"href=\"http://jetpack.me/support/shortcode-embeds/\" target=\"_blank\" "
+"rel=\"nofollow\">video shortcodes</a>.):<br />"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:109
+msgid ""
+"<textarea name=\"wp_listings[_listing_video]\" rows=\"5\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:116
+msgid "<h4>Map Options</h4>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:121
+msgid ""
+"<p><label>Automatically insert map based on latitude/longitude? "
+"<strong>Will be overridden if a shortode is entered below.</strong><br /> "
+"<input type=\"radio\" name=\"wp_listings[_listing_automap]\" value=\"y\" "
+"%s>Yes</input> <input type=\"radio\" name=\"wp_listings[_listing_automap]\" "
+"value=\"n\" %s>No</input></label></p>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:126
+msgid ""
+"<p><label>Latitude: <br /><input type=\"text\" "
+"name=\"wp_listings[_listing_latitude]\" value=\"%s\" /></label></p>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:129
+msgid ""
+"<p><label>Longitude: <br /><input type=\"text\" "
+"name=\"wp_listings[_listing_longitude]\" value=\"%s\" /></label></p>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:132
+msgid ""
+"<p><label>Or enter Map Embed Code or shortcode from Map plugin (such as <a "
+"href=\"http://jetpack.me/support/shortcode-embeds/\" target=\"_blank\" "
+"rel=\"nofollow\">Jetpack Shortcodes</a>, <a "
+"href=\"https://wordpress.org/plugins/simple-google-maps-short-code/\" "
+"target=\"_blank\" rel=\"nofollow\">Simple Google Maps Short Code</a> or <a "
+"href=\"https://wordpress.org/plugins/mappress-google-maps-for-wordpress/\" "
+"target=\"_blank\" rel=\"nofollow\">MapPress</a>):<br /><em>Recommend size: "
+"660x300 (If possible, use 100% width, or your themes content width)</em><br "
+"/>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:133
+msgid ""
+"<textarea name=\"wp_listings[_listing_map]\" rows=\"5\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:138
+msgid "<h4>Contact Form</h4>"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:140
+msgid ""
+"<p><label>If you use a Contact Form plugin, you may enter the Contact Form "
+"shortcode here. Otherwise, the single listing template will use a default "
+"contact form:<br />"
+msgstr ""
+
+#: includes/views/listing-details-metabox.php:141
+msgid ""
+"<textarea name=\"wp_listings[_listing_contact_form]\" rows=\"1\" "
+"cols=\"18\" style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-features-metabox.php:8
+msgid ""
+"<p><label>Featured on (allows shortcodes):<br /><textarea "
+"name=\"wp_listings[_listing_featured_on]\" rows=\"3\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-features-metabox.php:16
+msgid ""
+"<p><label>Home Summary (allows shortcodes):<br /><textarea "
+"name=\"wp_listings[_listing_home_sum]\" rows=\"3\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-features-metabox.php:23
+msgid ""
+"<p><label>Kitchen Summary (allows shortcodes):<br /><textarea "
+"name=\"wp_listings[_listing_kitchen_sum]\" rows=\"3\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-features-metabox.php:30
+msgid ""
+"<p><label>Living Room (allows shortcodes):<br /><textarea "
+"name=\"wp_listings[_listing_living_room]\" rows=\"3\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-features-metabox.php:37
+msgid ""
+"<p><label>Master Suite (allows shortcodes):<br /><textarea "
+"name=\"wp_listings[_listing_master_suite]\" rows=\"3\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-features-metabox.php:44
+msgid ""
+"<p><label>School and Neighborhood Info (allows shortcodes):<br /><textarea "
+"name=\"wp_listings[_listing_school_neighborhood]\" rows=\"5\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/listing-features-metabox.php:51
+msgid ""
+"<p><label>Disclaimer:<br /><textarea "
+"name=\"wp_listings[_listing_disclaimer]\" rows=\"3\" cols=\"18\" "
+"style=\"%s\">%s</textarea></label></p>"
+msgstr ""
+
+#: includes/views/single-listing.php:638
+msgid "Leave a comment"
+msgstr ""
+
+#: includes/views/single-listing.php:638
+msgid "1 Comment"
+msgstr ""
+
+#: includes/views/single-listing.php:638
+msgid "% Comments"
+msgstr ""
+
+#: includes/views/wp-listings-gmb-settings.php:28
+msgid ""
+"<div class=\"gmb-login-container\">\n"
+"\t\t<h3 style=\"margin-bottom:0px;\">Give Leads More Ways to Reach You</h3>\n"
+"\t\t<hr>\n"
+"\t\t<p><a onclick=\"showLightbox();\" href=\"#\">Log in</a> or <a "
+"href=\"https://google.com/business\" target=\"_blank\">Create a free Google "
+"My Business Profile</a> to connect with IMPress Listings.</p>\n"
+"\n"
+"\t\t\t<h3 style=\"margin-bottom:0px;\">Connect to Google My Business</h3>\n"
+"\t\t\t<hr>\n"
+"\t\t\t<p>Once verified, connect your Google My Business (GMB) profile to "
+"IMPress Listings, to generate timely posts and photos of your listings and "
+"more… automatically.</p>\n"
+"\n"
+"\t\t\t<p>The automatic scheduler can be used to create and share posts to "
+"highlight your own featured listings as well as open house announcements, "
+"recent sales, local expertise and more.</p>\n"
+"\n"
+"\t\t\t<p>Posts have the potential to draw leads and clients directly to "
+"your IDX-enabled website for more home search opportunities. Google My "
+"Business posts are archived on a weekly basis, so automating the process "
+"with the scheduler is an easy way to maintain your real estate business’s "
+"online presence.</p> \n"
+"\n"
+"\t\t\t<p><strong>Automatic posting requires a verified Google My Business "
+"account with a verified location.</strong>\n"
+"\t\t\t<!-- Tooltip -->\n"
+"\t\t\t<span class=\"tooltip\"><span class=\"dashicons dashicons-editor-help "
+"wpl-gmb-main-desc-help\"></span>\n"
+"\t\t\t\t<span class=\"tooltiptext\">\n"
+"\n"
+"\t\t\t\tPosts made to Google My Business will be of the type \"What&apos;s "
+"New\". For more information about local posts, visit Google&apos;s <a "
+"href=\"https://support.google.com/business/answer/7662907?hl=en\" "
+"target=\"_blank\">About posts for local businesses</a> page. \n"
+"\n"
+"\t\t\t\t</span>\n"
+"\t\t\t</span>\n"
+"\t\t\t</p>\n"
+"\t\t</div>"
+msgstr ""
+
+#: includes/views/wp-listings-gmb-settings.php:61
+msgid "Terms of Service"
+msgstr ""
+
+#: includes/views/wp-listings-gmb-settings.php:63
+msgid "Important:"
+msgstr ""
+
+#: includes/views/wp-listings-gmb-settings.php:65
+msgid ""
+"The IMPress Listings plugin is designed to further power and enhance the "
+"functionality of websites and applications used by real estate agents, "
+"brokers, and technology partners."
+msgstr ""
+
+#: includes/views/wp-listings-gmb-settings.php:67
+msgid ""
+" Using this plugin to publish, or otherwise make public, information "
+"related to any listing data which violates your local MLS system agreements "
+"in any way is prohibited. URLs, landing pages, listing pages, community "
+"pages, or any “linked” resources that contains IDX data must be approved "
+"for public display by your MLS system."
+msgstr ""
+
+#: includes/views/wp-listings-gmb-settings.php:72
+msgid "Agree to terms:"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:8
+msgid "Settings saved."
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:16
+msgid "IMPress Listings Settings"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:204
+#: includes/views/wp-listings-settings.php:625
+msgid "Save Settings"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:209
+msgid ""
+"<h3>Default State</h3><p>You can enter a default state that will "
+"automatically be output on template pages and widgets that show the state. "
+"When you create a listing and leave the state field empty, the default "
+"below will be shown. You can override the default on each listing by "
+"entering a value into the state field.</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:212
+msgid ""
+"<h3>Default Currency</h3><p>Select a default currency symbol and optional "
+"currency code to display on listings.</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:213
+msgid "<p>Currency Symbol: "
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:389
+msgid "<p>Currency Code: "
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:399
+msgid ""
+"<h3>Default Number of Posts</h3><p>The default number of posts displayed on "
+"a listing archive page is 9. Here you can set a custom number. Enter <span "
+"style='color: #f00;font-weight: 700;'>-1</span> to display all listing "
+"posts.<br /><em>If you have more than 20-30 posts, it's not recommended to "
+"show all or your page will load slow.</em></p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:402
+msgid ""
+"<h3>Default Disclaimer</h3><p>Optionally enter a disclaimer to show on "
+"single listings. This can be overridden on individual listings.</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:406
+msgid ""
+"<em>Don't forget to <a href='../wp-admin/options-permalink.php'>reset your "
+"permalinks</a> if you change the slug!</em></p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:411
+msgid "<h3>Include CSS?</h3>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:416
+msgid ""
+"<p>Here you can deregister the WP Listings CSS files and move to your "
+"theme's css file for ease of customization</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:421
+msgid ""
+"<h3>Forms</h3><h4>Google reCAPTCHA v2 (anti-spam)</h4><p>With the default "
+"contact form, you can choose to add Google reCAPTCHA v2 to prevent spam, or "
+"use a form shortcode plugin with anti-spam protection. To use Google "
+"reCAPTCHA v2, you must first <a "
+"href=\"https://www.google.com/recaptcha/admin\" target=\"_blank\">sign up "
+"for a v2 key</a>, then enter the site and secret key below:</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:424
+msgid ""
+"<h4>Default Form shortcode</h4><p>If you use a Contact Form plugin, you may "
+"enter the form shortcode here to display on all listings. Additionally, "
+"each listing can use a custom form. If no shortcode is entered, the "
+"template will use a default contact form:</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:428
+msgid ""
+"<h4>Add default form entries to IDX Broker?</h4><p>Check this option to "
+"enable form entries to be sent to IDX Broker as a lead.<br/><strong>Note: "
+"This only works if using the default contact form.</strong></p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:432
+msgid ""
+"<h3>Maps</h3><h4>Google Maps</h4><p>Listings can be automatically mapped if "
+"they have a latitude and longitude. You will need a <a "
+"href=\"https://developers.google.com/maps/documentation/javascript/get-api-"
+"key\" target=\"_blank\">Google Maps API key</a> to use this feature. Enter "
+"your API key below.</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:435
+msgid ""
+"<h3>Custom Wrapper</h3><p>If your theme's content HTML ID's and Classes are "
+"different than the included template, you can enter the HTML of your "
+"content wrapper beginning and end:</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:440
+msgid "<h3>Delete data on uninstall?</h3>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:441
+msgid ""
+"<p>Checking this option will delete <strong>all</strong> plugin data when "
+"uninstalling the plugin.</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:448
+msgid ""
+"<h3>IDX Imported Listings</h3><p>These settings apply to any imported IDX "
+"listings. Imported listings are updated via the latest API response twice "
+"daily.</p>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:449
+msgid "<h2>Update Listings</h2>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:454
+msgid "<br style=\"clear: both;\"><h2>Sold Listings</h2>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:459
+msgid ""
+"<hr style=\"margin: 25px 0; clear: both;\"><h2>Additional Import "
+"Options</h2>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:462
+msgid ""
+"<p>Optionally select a default single listing template to use for imported "
+"listings.<br />\n"
+"\t\t\t\t\t\t\t<select "
+"name=\"plugin_wp_listings_settings[wp_listings_default_template]\" "
+"id=\"listing_template\" class=\"dropdown\">"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:464
+msgid "<option value=\"\">Default</option>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:475
+msgid "</select>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:485
+msgid "<h2>Advanced Field Settings</h2>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:497
+msgid "Import advanced field data?"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:508
+msgid "Display advanced fields on single listing pages?"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:545
+msgid ""
+"<h2 id=\"wpl-customize-adv-fields-label\">Customize Advanced Fields</h2>\n"
+"\t\t\t\t\t\t\t\t\t<div id=\"wpl-adv-field-button-container\">\n"
+"\t\t\t\t\t\t\t\t\t<button id=\"wpl-hide-all-adv-field-button\" "
+"class=\"button-primary\" type=\"button\" onclick=\"hideAllAdvFields()\" "
+"title=\"Set all advanced fields to hide on listing pages\">Hide All "
+"Fields</button>\n"
+"\t\t\t\t\t\t\t\t\t<button id=\"wpl-show-all-adv-field-button\" "
+"class=\"button-primary\" type=\"button\" onclick=\"showAllAdvFields()\" "
+"title=\"Set all advanced fields to display on listing pages\" >Show All "
+"Fields</button>\n"
+"\t\t\t\t\t\t\t\t\t<button id=\"wpl-populate-custom-names-button\" "
+"class=\"button-primary\" type=\"button\" "
+"onclick=\"populateEmptyAdvCustomNameFields()\" title=\"Generate a best "
+"guess name for all fields currently missing a custom name\" >Generate "
+"Custom Names</button>\n"
+"\t\t\t\t\t\t\t\t\t<button id=\"wpl-clear-custom-names-button\" "
+"class=\"button-primary\" type=\"button\" "
+"onclick=\"clearAdvCustomNameFields()\" title=\"Remove custom names from all "
+"fields\" >Clear Custom Names</button>\n"
+"\t\t\t\t\t\t\t\t</div>\n"
+"\t\t\t\t\t\t\t"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:557
+msgid "<table id='idx-wp-listings-adv-fields-table'>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:558
+msgid "<tr><th>Field Name</th><th>Custom Name</th><th>Display</th></tr>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:577
+msgid "</table>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:578
+msgid ""
+"<div id=\"wpl-adv-field-button-container\">\n"
+"\t\t\t\t\t\t\t\t\t<button id=\"wpl-hide-all-adv-field-button\" "
+"class=\"button-primary\" type=\"button\" onclick=\"hideAllAdvFields()\" "
+"title=\"Set all advanced fields to hide on single listing pages.\">Hide All "
+"Fields</button>\n"
+"\t\t\t\t\t\t\t\t\t<button id=\"wpl-show-all-adv-field-button\" "
+"class=\"button-primary\" type=\"button\" onclick=\"showAllAdvFields()\" "
+"title=\"Set all advanced fields to show on single listing pages\" >Show All "
+"Fields</button>\n"
+"\t\t\t\t\t\t\t\t\t<button id=\"wpl-populate-custom-names-button\" "
+"class=\"button-primary\" type=\"button\" "
+"onclick=\"populateEmptyAdvCustomNameFields()\" title=\"Generates a best "
+"guess title for any field missing a custom name.\" >Generate Custom "
+"Names</button>\n"
+"\t\t\t\t\t\t\t\t\t<button id=\"wpl-clear-custom-names-button\" "
+"class=\"button-primary\" type=\"button\" "
+"onclick=\"clearAdvCustomNameFields()\" title=\"Remove custom names from all "
+"fields. Press the Save Settings button to commit any changes.\" >Clear "
+"Custom Names</button>\n"
+"\t\t\t\t\t\t\t\t</div>\n"
+"\t\t\t\t\t\t\t"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:599
+msgid "<h3>Google My Business</h3>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:603
+msgid "<div class=\"gmb-reset-next-post-container\">"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:605
+msgid "</div>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:606
+msgid ""
+"<button id=\"wpl-reset-next-post-time-button\" title=\"Resets next "
+"scheduled post to 12 hours from now.\" class=\"button\">Reset Next "
+"Scheduled Post Time</button>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:607
+msgid "<h4 class=\"gmb-location-header\">Locations:</h4>"
+msgstr ""
+
+#: includes/views/wp-listings-settings.php:618
+msgid ""
+"<div id=\"wpl-gmb-clear-btn-container\" ><a "
+"id=\"wpl-gmb-clear-settings-button\" href=\"#\">Disconnect from Google My "
+"Business</a></div>"
+msgstr ""
+
+#: includes/wp-background-processing/classes/wp-background-process.php:425
+msgid "Every %d Minutes"
+msgstr ""
+
+#: plugin.php:217
+msgid "Set Term Image"
+msgstr ""
+
+#: plugin.php:292
+msgid ""
+"<strong><span style=\"color:green;\">New!</span> Connect IMPress Listings "
+"to your verified Google My Business profile to generate and schedule timely "
+"posts and photos of your listings. <a "
+"href=\"https://wordpress.org/plugins/wp-listings/\" target=\"_blank\">Learn "
+"more!</a></strong>"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "IMPress Listings"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://wordpress.org/plugins/wp-listings/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Creates a real estate listing management system. Designed to work with any "
+"theme using built-in templates."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Agent Evolution"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://agentevolution.com"
+msgstr ""
