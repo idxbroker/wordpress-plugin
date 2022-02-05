@@ -30,6 +30,7 @@ class IDX_Leads_GF {
 		$menu_items[] = array(
 			'name'  => 'idx_broker_leads_page',
 			'label' => __( 'IDX Broker' ),
+			'icon' => 'https://idx-staticassets.s3.amazonaws.com/images/idx-logo.svg'
 		);
 
 		return $menu_items;
@@ -54,17 +55,18 @@ class IDX_Leads_GF {
 		if ( isset( $_POST['submit'] ) ) {
 
 			$new_value                = array();
-			$new_value['enable_lead'] = isset( $_POST['enable_lead'] ) ? (int) sanitized_text_field( stripslashes( $_POST['enable_lead'] ) ) : 0;
-			$new_value['category']    = isset( $_POST['category'] ) ? (string) sanitized_text_field( stripslashes( $_POST['category'] ) ) : 0;
-			$new_value['agent_id']    = isset( $_POST['agent_id'] ) ? (int) sanitized_text_field( stripslashes( $_POST['agent_id'] ) ) : 0;
+			$new_value['enable_lead'] = isset( $_POST['enable_lead'] ) ? (int) sanitize_text_field( stripslashes( $_POST['enable_lead'] ) ) : 0;
+			$new_value['category']    = isset( $_POST['category'] ) ? (string) sanitize_text_field( stripslashes( $_POST['category'] ) ) : 0;
+			$new_value['agent_id']    = isset( $_POST['agent_id'] ) ? (int) sanitize_text_field( stripslashes( $_POST['agent_id'] ) ) : 0;
 
 			update_option( $option_name, $new_value, false );
+			wp_redirect($_SERVER['HTTP_REFERER']);
 		}
 		?>
-			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
+			<h3><img src="https://idx-staticassets.s3.amazonaws.com/images/idx-logo.svg" alt="IDX Broker Logo" style="max-height:25px"> Lead Capture Settings</h3>
 			<form action="" method="post" id="gform_form_settings">
 
-					<table class="gforms_form_settings" cellpadding="0" cellspacing="0">
+					<table class="gforms_form_settings" cellpadding="0" cellspacing="0" style="padding: 0 10px;">
 					<tbody>
 						<tr>
 							<td colspan="2">
@@ -73,7 +75,9 @@ class IDX_Leads_GF {
 						</tr>                                       
 						<tr>
 							<th>Enable Lead Import?
-								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;'>This requires that your form use the advanced &#34;Name&#34; and &#34;Email&#34; fields and those fields be required.</strong>"><i class="far fa-question-circle"></i></a>
+								<button onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" aria-label="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note to IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;'>This requires that your form use the advanced &#34;Name&#34; and &#34;Email&#34; fields AND be marked as required.</strong>">
+									<i class="gform-icon gform-icon--question-mark" aria-hidden="true"></i>
+								</button>
 							</th>
 							<td>
 								<input id="enable_lead" name="enable_lead"  value="1" type="checkbox" <?php checked( $checked, 1, true ); ?>>
@@ -91,8 +95,10 @@ class IDX_Leads_GF {
 							</td>
 						</tr>
 						<tr>
-							<th>Assign to category (optional)
-								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Assign to Category</h6>You can optionally choose a category to assign the lead to in IDX Broker Middleware."><i class="far fa-question-circle"></i></a>
+							<th style="padding-right:10px">Assign to category (optional)
+								<button onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" aria-label="<h6>Assign to Category</h6>You can optionally assign leads to a category in IDX Broker Middleware.">
+									<i class="gform-icon gform-icon--question-mark" aria-hidden="true"></i>
+								</button>
 							</th>
 							<td>
 								<select name="category">
