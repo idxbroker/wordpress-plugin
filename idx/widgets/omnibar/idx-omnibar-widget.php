@@ -23,7 +23,7 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * create_omnibar
+	 * Create_omnibar
 	 *
 	 * @var mixed
 	 * @access public
@@ -31,7 +31,7 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	public $create_omnibar;
 
 	/**
-	 * defaults
+	 * Defaults
 	 *
 	 * @var mixed
 	 * @access public
@@ -44,10 +44,10 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	);
 
 	/**
-	 * form function.
+	 * Form function.
 	 *
 	 * @access public
-	 * @param mixed $instance
+	 * @param mixed $instance - Instance.
 	 * @return void
 	 */
 	public function form( $instance ) {
@@ -55,31 +55,33 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 		$instance = wp_parse_args( (array) $instance, $this->defaults );
 		$title    = $instance['title'];
 		?>
-		<p><label for="<?php echo esc_attr( $title ); ?>">Title: <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
+		<p><label for="<?php echo esc_attr( $title ); ?>">Title: <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php _e( 'Default Styling?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'styles' ); ?>" name="<?php echo $this->get_field_name( 'styles' ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'styles' ) ); ?>"><?php esc_html_e( 'Default Styling?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'styles' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'styles' ) ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'extra' ); ?>"><?php _e( 'Extra Fields?', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'extra' ); ?>" name="<?php echo $this->get_field_name( 'extra' ); ?>" value="1" <?php checked( $instance['extra'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'extra' ) ); ?>"><?php esc_html_e( 'Extra Fields?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'extra' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'extra' ) ); ?>" value="1" <?php checked( $instance['extra'], true ); ?>>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'min_price' ); ?>"><?php _e( 'Include Min Price? (If Extra Fields is enabled)', 'idxbroker' ); ?></label>
-			<input type="checkbox" id="<?php echo $this->get_field_id( 'min_price' ); ?>" name="<?php echo $this->get_field_name( 'min_price' ); ?>" value="1" <?php checked( $instance['min_price'], true ); ?>>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'min_price' ) ); ?>"><?php esc_html_e( 'Include Min Price? (If Extra Fields is enabled)', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'min_price' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'min_price' ) ); ?>" value="1" <?php checked( $instance['min_price'], true ); ?>>
 		</p>
 		<?php
 	}
 
 	/**
-	 * update function.
+	 * Update function.
 	 *
 	 * @access public
-	 * @param mixed $new_instance
-	 * @param mixed $old_instance
-	 * @return void
+	 * @param mixed $new_instance - New Instance.
+	 * @param mixed $old_instance - New Instance.
+	 * @return mixed
 	 */
 	public function update( $new_instance, $old_instance ) {
+		// Merge defaults and new_instance to avoid any missing index warnings when used with the legacy block widget.
+		$new_instance          = array_merge( $this->defaults, $new_instance );
 		$instance              = $old_instance;
 		$instance['title']     = $new_instance['title'];
 		$instance['styles']    = (int) $new_instance['styles'];
@@ -89,11 +91,11 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * widget function.
+	 * Widget function.
 	 *
 	 * @access public
-	 * @param mixed $args
-	 * @param mixed $instance
+	 * @param mixed $args - Arguments.
+	 * @param mixed $instance - Instance.
 	 * @return void
 	 */
 	public function widget( $args, $instance ) {

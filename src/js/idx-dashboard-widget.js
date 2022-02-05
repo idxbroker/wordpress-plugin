@@ -18,7 +18,10 @@ window.addEventListener('load', function() {
     // Load new leads and popular listings data.
     jQuery.ajax({
         url: ajaxurl,
-        data: {action: 'side_overview_data'}
+        data: {
+            action: 'side_overview_data',
+            nonce: idxDashboardNonces['overviewNonce']
+        },
     }).done(function(jsonData){
         var sideOverviewData = JSON.parse(jsonData).data
         document.querySelector('.new-leads ul').innerHTML = sideOverviewData.leads
@@ -36,7 +39,8 @@ window.addEventListener('load', function() {
         jQuery.post(
             ajaxurl, {
                 'action': 'idx_dashboard_leads',
-                'timeframe' : getTimeframe()
+                'timeframe' : getTimeframe(),
+                'nonce': idxDashboardNonces['leadsNonce']
         }).done(function(jsonData){
             //Handle error.
             if(jsonData === 'No Leads Returned'){
@@ -81,7 +85,8 @@ window.addEventListener('load', function() {
         jQuery.post(
             ajaxurl, {
                 'action': 'idx_dashboard_listings',
-                'timeframe' : getTimeframe()
+                'timeframe' : getTimeframe(),
+                'nonce': idxDashboardNonces['listingsNonce']
         }).done(function(jsonData){
             //Handle the error.
             if(jsonData === 'No Listings Returned'){

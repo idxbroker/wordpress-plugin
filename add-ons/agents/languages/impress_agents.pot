@@ -1,0 +1,468 @@
+# Copyright (C) 2016 Agent Evolution
+# This file is distributed under the GNU General Public License v2.0 (or later).
+msgid ""
+msgstr ""
+"Project-Id-Version: IMPress Agents 0.9.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/plugin\n"
+"POT-Creation-Date: 2016-01-12 20:12:19+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Generator: grunt-wp-i18n 0.5.0\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Textdomain-Support: yes\n"
+
+#: includes/class-agents.php:34 includes/class-employee-widget.php:93
+msgid "Title:"
+msgstr ""
+
+#: includes/class-agents.php:35
+msgid "License #:"
+msgstr ""
+
+#: includes/class-agents.php:36
+msgid "Designations:"
+msgstr ""
+
+#: includes/class-agents.php:37
+msgid "Phone:"
+msgstr ""
+
+#: includes/class-agents.php:38
+msgid "Mobile:"
+msgstr ""
+
+#: includes/class-agents.php:39
+msgid "Fax:"
+msgstr ""
+
+#: includes/class-agents.php:42
+msgid "Email:"
+msgstr ""
+
+#: includes/class-agents.php:43
+msgid "Website (NO http://):"
+msgstr ""
+
+#: includes/class-agents.php:44
+msgid "Address:"
+msgstr ""
+
+#: includes/class-agents.php:45
+msgid "City:"
+msgstr ""
+
+#: includes/class-agents.php:46
+msgid "State:"
+msgstr ""
+
+#: includes/class-agents.php:47
+msgid "Zip:"
+msgstr ""
+
+#: includes/class-agents.php:52
+msgid "Facebook URL:"
+msgstr ""
+
+#: includes/class-agents.php:53
+msgid "Twitter URL:"
+msgstr ""
+
+#: includes/class-agents.php:54
+msgid "LinkedIn URL:"
+msgstr ""
+
+#: includes/class-agents.php:55
+msgid "Google+ URL:"
+msgstr ""
+
+#: includes/class-agents.php:56
+msgid "Pinterest URL:"
+msgstr ""
+
+#: includes/class-agents.php:57
+msgid "YouTube URL:"
+msgstr ""
+
+#: includes/class-agents.php:58
+msgid "Instagram URL:"
+msgstr ""
+
+#: includes/class-agents.php:103
+msgid "Settings"
+msgstr ""
+
+#: includes/class-agents.php:121
+msgid "Employees"
+msgstr ""
+
+#: includes/class-agents.php:122
+msgid "Employee"
+msgstr ""
+
+#: includes/class-agents.php:123
+msgid "Add New"
+msgstr ""
+
+#: includes/class-agents.php:124
+msgid "Add New Employee"
+msgstr ""
+
+#: includes/class-agents.php:125 includes/views/create-tax.php:48
+#: includes/views/single-employee.php:96
+msgid "Edit"
+msgstr ""
+
+#: includes/class-agents.php:126
+msgid "Edit Employee"
+msgstr ""
+
+#: includes/class-agents.php:127
+msgid "New Employee"
+msgstr ""
+
+#: includes/class-agents.php:128 includes/class-agents.php:129
+msgid "View Employee"
+msgstr ""
+
+#: includes/class-agents.php:130
+msgid "Search Employees"
+msgstr ""
+
+#: includes/class-agents.php:131
+msgid "No employees found"
+msgstr ""
+
+#: includes/class-agents.php:132
+msgid "No employees found in Trash"
+msgstr ""
+
+#: includes/class-agents.php:133
+msgid "Filter Employees"
+msgstr ""
+
+#: includes/class-agents.php:134
+msgid "Employees navigation"
+msgstr ""
+
+#: includes/class-agents.php:135
+msgid "Employees list"
+msgstr ""
+
+#: includes/class-agents.php:155
+msgid "Employee Info"
+msgstr ""
+
+#: includes/class-agents.php:203
+msgid "Thumbnail"
+msgstr ""
+
+#: includes/class-agents.php:204
+msgid "Employee Title"
+msgstr ""
+
+#: includes/class-agents.php:205
+msgid "Details"
+msgstr ""
+
+#: includes/class-agents.php:206
+msgid "Tags"
+msgstr ""
+
+#: includes/class-employee-widget.php:11
+msgid "Display featured employee"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "IMPress Agents"
+msgstr ""
+
+#: includes/class-taxonomies.php:55
+msgid "Register Taxonomies"
+msgstr ""
+
+#: includes/class-taxonomies.php:102 includes/class-taxonomies.php:104
+#: includes/class-taxonomies.php:106 includes/class-taxonomies.php:174
+#: includes/class-taxonomies.php:176 includes/class-taxonomies.php:178
+msgid "Please complete all required fields."
+msgstr ""
+
+#: includes/class-taxonomies.php:115 includes/class-taxonomies.php:187
+#: includes/class-taxonomies.php:255 includes/class-taxonomies.php:291
+msgid "Search %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:116 includes/class-taxonomies.php:188
+#: includes/class-taxonomies.php:256 includes/class-taxonomies.php:292
+msgid "Popular %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:117 includes/class-taxonomies.php:189
+#: includes/class-taxonomies.php:257 includes/class-taxonomies.php:293
+msgid "All %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:118 includes/class-taxonomies.php:190
+#: includes/class-taxonomies.php:258 includes/class-taxonomies.php:294
+msgid "Edit %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:119 includes/class-taxonomies.php:191
+#: includes/class-taxonomies.php:259 includes/class-taxonomies.php:295
+msgid "Update %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:120 includes/class-taxonomies.php:192
+#: includes/class-taxonomies.php:260 includes/class-taxonomies.php:296
+msgid "Add New %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:121 includes/class-taxonomies.php:193
+#: includes/class-taxonomies.php:261 includes/class-taxonomies.php:297
+msgid "New %s Name"
+msgstr ""
+
+#: includes/class-taxonomies.php:122 includes/class-taxonomies.php:194
+#: includes/class-taxonomies.php:262 includes/class-taxonomies.php:298
+msgid "Add or Remove %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:123 includes/class-taxonomies.php:195
+#: includes/class-taxonomies.php:263 includes/class-taxonomies.php:299
+msgid "Choose from the most used %s"
+msgstr ""
+
+#: includes/class-taxonomies.php:152 includes/class-taxonomies.php:160
+msgid ""
+"Nice try, partner. But that taxonomy doesn't exist. Click back and try "
+"again."
+msgstr ""
+
+#: includes/class-taxonomies.php:222
+msgid "New taxonomy successfully created!"
+msgstr ""
+
+#: includes/class-taxonomies.php:227
+msgid "Taxonomy successfully edited!"
+msgstr ""
+
+#: includes/class-taxonomies.php:232
+msgid "Taxonomy successfully deleted."
+msgstr ""
+
+#: includes/class-taxonomies.php:245
+msgid "Job Types"
+msgstr ""
+
+#: includes/class-taxonomies.php:246
+msgid "Job Type"
+msgstr ""
+
+#: includes/class-taxonomies.php:266
+msgid "job-types"
+msgstr ""
+
+#: includes/class-taxonomies.php:281
+msgid "Offices"
+msgstr ""
+
+#: includes/class-taxonomies.php:282
+msgid "Office"
+msgstr ""
+
+#: includes/class-taxonomies.php:302
+msgid "offices"
+msgstr ""
+
+#: includes/class-taxonomies.php:386 includes/class-taxonomies.php:461
+#: includes/class-taxonomies.php:485
+msgid "Image"
+msgstr ""
+
+#: includes/class-taxonomies.php:466 includes/class-taxonomies.php:492
+#: plugin.php:113
+msgid "Set term image"
+msgstr ""
+
+#: includes/class-taxonomies.php:467 includes/class-taxonomies.php:493
+msgid "Remove term image"
+msgstr ""
+
+#: includes/helpers.php:18
+msgid "View all post filed under %s"
+msgstr ""
+
+#: includes/helpers.php:58 includes/helpers.php:116
+msgid "Agents navigation"
+msgstr ""
+
+#: includes/helpers.php:62
+msgid "<span class=\"meta-nav\">Published In</span>%title"
+msgstr ""
+
+#: includes/helpers.php:64
+msgid "<span class=\"meta-nav\">Previous Agent</span>%title"
+msgstr ""
+
+#: includes/helpers.php:65
+msgid "<span class=\"meta-nav\">Next Agent</span>%title"
+msgstr ""
+
+#: includes/helpers.php:108
+msgid "&larr; Previous"
+msgstr ""
+
+#: includes/helpers.php:109
+msgid "Next &rarr;"
+msgstr ""
+
+#: includes/views/archive-employee.php:63
+msgid "Sorry, no posts matched your criteria."
+msgstr ""
+
+#: includes/views/create-tax.php:2
+msgid "Employee Taxonomies"
+msgstr ""
+
+#: includes/views/create-tax.php:9
+msgid "Current Employee Taxonomies"
+msgstr ""
+
+#: includes/views/create-tax.php:13 includes/views/create-tax.php:21
+#: includes/views/create-tax.php:76 includes/views/edit-tax.php:19
+msgid "ID"
+msgstr ""
+
+#: includes/views/create-tax.php:14 includes/views/create-tax.php:22
+#: includes/views/create-tax.php:88 includes/views/edit-tax.php:33
+msgid "Singular Name"
+msgstr ""
+
+#: includes/views/create-tax.php:15 includes/views/create-tax.php:23
+#: includes/views/create-tax.php:82 includes/views/edit-tax.php:27
+msgid "Plural Name"
+msgstr ""
+
+#: includes/views/create-tax.php:49
+msgid "Delete"
+msgstr ""
+
+#: includes/views/create-tax.php:70
+msgid "Add New Employee Taxonomy"
+msgstr ""
+
+#: includes/views/create-tax.php:78
+msgid ""
+"The unique ID is used to register the taxonomy.<br />(no spaces, "
+"underscores, or special characters)"
+msgstr ""
+
+#: includes/views/create-tax.php:84 includes/views/edit-tax.php:29
+msgid "Example: \"Job Types\" or \"Offices\""
+msgstr ""
+
+#: includes/views/create-tax.php:90 includes/views/edit-tax.php:35
+msgid "Example: \"Job Type\" or \"Office\""
+msgstr ""
+
+#: includes/views/create-tax.php:93
+msgid "Add New Taxonomy"
+msgstr ""
+
+#: includes/views/edit-tax.php:7
+msgid ""
+"Nice try, partner. But that taxonomy doesn't exist or can't be edited. "
+"Click back and try again."
+msgstr ""
+
+#: includes/views/edit-tax.php:12
+msgid "Edit Taxonomy"
+msgstr ""
+
+#: includes/views/edit-tax.php:23
+msgid "The unique ID is used to register the taxonomy. (cannot be changed)"
+msgstr ""
+
+#: includes/views/edit-tax.php:40
+msgid "Update"
+msgstr ""
+
+#: includes/views/employee-details-metabox.php:26
+msgid "Social info:"
+msgstr ""
+
+#: includes/views/impress-agents-settings.php:4
+msgid "Settings saved."
+msgstr ""
+
+#: includes/views/impress-agents-settings.php:12
+msgid "IMPress Agents Settings"
+msgstr ""
+
+#: includes/views/impress-agents-settings.php:47
+msgid "<h3>Include CSS?</h3>"
+msgstr ""
+
+#: includes/views/impress-agents-settings.php:48
+msgid ""
+"<p>Here you can deregister the IMPress Agents CSS files and move to your "
+"theme's css file for ease of customization</p>"
+msgstr ""
+
+#: includes/views/impress-agents-settings.php:51
+msgid ""
+"<h3>Default Number of Posts</h3><p>The default number of posts displayed on "
+"a employee archive page is 9. Here you can set a custom number. Enter <span "
+"style='color: #f00;font-weight: 700;'>-1</span> to display all employee "
+"posts.<br /><em>If you have more than 20-30 posts, it's not recommended to "
+"show all or your page will load slow.</em></p>"
+msgstr ""
+
+#: includes/views/impress-agents-settings.php:55
+msgid ""
+"<h3>Custom Wrapper</h3><p>If your theme's content HTML ID's and Classes are "
+"different than the included template, you can enter the HTML of your "
+"content wrapper beginning and end:</p>"
+msgstr ""
+
+#: includes/views/impress-agents-settings.php:62
+msgid ""
+"<em>Don't forget to <a href='../wp-admin/options-permalink.php'>reset your "
+"permalinks</a> if you change the slug!</em></p>"
+msgstr ""
+
+#: includes/views/impress-agents-settings.php:65
+msgid "Save Settings"
+msgstr ""
+
+#: plugin.php:112
+msgid "Set Term Image"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://wordpress.org/plugins/impress-agents/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Employee Directory for WordPress tailored for Real Estate Offices."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Agent Evolution"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://agentevolution.com"
+msgstr ""
