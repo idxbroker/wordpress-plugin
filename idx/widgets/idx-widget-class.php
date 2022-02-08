@@ -82,18 +82,10 @@ class Idx_Widget_Class extends \WP_Widget {
 			echo $widget_name;
 		}
 		// if no WP title and not specifically set to 'none', display IDX Widget title which is in $args param
-		// only load leaflet scripts and styles for map search widget. WP takes care of duplicates automatically
-		if ( strpos( $this->widget_url, 'mapwidgetjs.php' ) ) {
-			wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', [], '1.0.0', false );
-			wp_enqueue_script( 'custom-scriptLeafDraw', '//d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', [], '1.0.0', false );
-			wp_enqueue_style( 'cssLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.css', [], '1.0.0' );
-			wp_enqueue_style( 'cssLeafLabel', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css', [], '1.0.0' );
-			echo $after_title . '<script src="' . esc_url( $this->widget_url ) . '" defer></script>' . $after_widget;
-		} else {
-			echo $after_title;
-			echo '<script src="' . esc_url( $this->widget_url ) . '"></script>';
-			echo $after_widget;
-		}
+
+		echo $after_title;
+		echo '<script src="' . esc_url( $this->widget_url ) . '"></script>';
+		echo $after_widget;
 
 	} // end widget function
 

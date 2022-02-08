@@ -54,13 +54,6 @@ class Register_Idx_Shortcodes {
 		if ( ! is_null( $id ) ) {
 			$url    = $this->get_widget_url( $id );
 			$widget = '';
-			// This is dumb. Don't ever do this. But we have weird conflicts and issues if we don't do this.
-			if ( strpos( $url, 'mapwidgetjs.php' ) ) {
-				wp_enqueue_script( 'custom-scriptLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', [], '1.0', false );
-				wp_enqueue_script( 'custom-scriptLeafDraw', 'https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', [], '1.0', false );
-				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css', [], '1.0' );
-				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css', [], '1.0' );
-			}
 			$widget_id = explode( '-', $id );
 			$widget   .= '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : $widget_id[1] ) . '" src="' . $url . '"></script>';
 			return $widget;
