@@ -37,7 +37,7 @@
                     We're experiencing a problem, please try again.
                 </idx-block>
             </idx-block>
-            <social-pro-upgrade v-else></social-pro-upgrade>
+            <social-pro-upgrade :restrictedByBeta="restrictedByBeta" v-else></social-pro-upgrade>
         </template>
     </GuidedSetupContentCard>
 </template>
@@ -69,7 +69,8 @@ export default {
     computed: {
         ...mapState({
             guidedSetupSteps: state => state.guidedSetup.guidedSetupSteps,
-            subscribed: state => state.socialPro.subscribed
+            subscribed: state => state.socialPro.subscribed,
+            restrictedByBeta: state => state.socialPro.restrictedByBeta
         }),
         continuePath () {
             return (this.localStateValues.enabled && this.subscribed) ? '/guided-setup/social-pro/configure' : '/guided-setup/confirmation'
