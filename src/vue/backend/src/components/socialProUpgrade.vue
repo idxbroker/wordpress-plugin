@@ -9,7 +9,7 @@
         <idx-block
             tag="a"
             className="wp-btn btn-primary btn-lg"
-            href="https://middleware.idxbroker.com/mgmt/upgrade#socialPro"
+            :href="upgradeLink"
             target="_blank"
             role="button"
         >
@@ -19,7 +19,18 @@
 </template>
 <script>
 export default {
-    name: 'social-pro-upgrade'
+    name: 'social-pro-upgrade',
+    props: {
+        restrictedByBeta: {
+            type: Boolean,
+            default: true
+        }
+    },
+    computed: {
+        upgradeLink () {
+            return this.restrictedByBeta ? 'https://support.idxbroker.com/s/article/Social-Pro-for-IDX-Broker' : 'https://middleware.idxbroker.com/mgmt/upgrade#socialPro'
+        }
+    }
 }
 </script>
 <style lang="scss">
