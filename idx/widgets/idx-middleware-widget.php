@@ -55,12 +55,6 @@ class Idx_Middleware_Widget extends \WP_Widget {
 		}
 
 		if ( ! empty( $instance['widget'] ) ) {
-			if ( strpos( $instance['widget'], 'mapwidgetjs.php' ) ) {
-				wp_enqueue_script( 'custom-scriptLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', [], '1.0', false );
-				wp_enqueue_script( 'custom-scriptLeafDraw', 'https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', [], '1.0', false );
-				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css', [], '1.0' );
-				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css', [], '1.0' );
-			}
 			// Check URL structure for new widget type, if found set the widget ID.
 			if ( strpos( $instance['widget'], '/idx/widgets/' ) !== false ) {
 				$widget_id = explode( '/idx/widgets/', $instance['widget'] );

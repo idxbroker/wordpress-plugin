@@ -125,6 +125,7 @@ For users with IMPress 3.0 who have legacy versions of IMPress Listings and/or I
 * Fix: 3rd Party Form integrations not sending leads to IDX Broker
 * Fix: Missing Font Awesome files
 * Update: Omnibar custom fields - blacklisted core fields
+* Update: IDX Broker Map Search Widget - Removed duplicate leaflet dependencies in relation to migration to Azure
 
 ### 3.0.8 ###
 * Fix: Some additional sanitization and escaping added that was missed in 3.0.7
