@@ -14,7 +14,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		if ( isset( $_GET['error'] ) ) {
-			$this->error_message = $this->handle_errors( (string) sanatize_text_field( wp_unslash( $_GET['error'] ) ) );
+			$this->error_message = $this->handle_errors( (string) sanitize_text_field( wp_unslash( $_GET['error'] ) ) );
 		} else {
 			$this->error_message = '';
 		}
