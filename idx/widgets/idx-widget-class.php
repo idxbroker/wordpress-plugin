@@ -82,40 +82,31 @@ class Idx_Widget_Class extends \WP_Widget {
 			echo $widget_name;
 		}
 		// if no WP title and not specifically set to 'none', display IDX Widget title which is in $args param
-		// only load leaflet scripts and styles for map search widget. WP takes care of duplicates automatically
-		if ( strpos( $this->widget_url, 'mapwidgetjs.php' ) ) {
-			 wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', __FILE__ );
-			wp_enqueue_script( 'custom-scriptLeafDraw', '//d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', __FILE__ );
-			wp_enqueue_script( 'custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', __FILE__ );
-			wp_enqueue_style( 'cssLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.css' );
-			wp_enqueue_style( 'cssLeafLabel', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
-			echo $after_title . "<script src=\"{$this->widget_url}\" defer></script>" . $after_widget;
-		} else {
-			echo $after_title;
-			echo "<script src='{$this->widget_url}'></script>";
-			echo $after_widget;
-		}
+
+		echo $after_title;
+		echo '<script src="' . esc_url( $this->widget_url ) . '"></script>';
+		echo $after_widget;
 
 	} // end widget function
 
 	/**
-	 * form will display a editing UI for changing widget title
+	 * Form will display a editing UI for changing widget title.
 	 *
 	 * @param  [array] $instance [description]
 	 * @return [type]           [description]
 	 */
 	public function form( $instance ) {
 		$title = ( isset( $instance['title'] ) ) ? $instance['title'] : ''; // if instance has a title already, display that pup, otherwise display empty input
-		echo "<div id='{$this->widget_id}-admin-panel'>";
-		echo "<label for='{$this->get_field_id('title')}'>Widget Title:</label>";
-		echo "<input type='text' name='{$this->get_field_name('title')}' id='{$this->get_field_id('title')}' value='{$title}' />";
+		echo '<div id="' . esc_attr( $this->widget_id ) . '-admin-panel">';
+		echo '<label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">Widget Title:</label>';
+		echo '<input type="text" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" value="' . esc_attr( $title ) . '" />';
 		echo '<br /><br />';
 		echo '</div>';
 
 	} // end form fn
 
 	/**
-	 * update will take new values inputted into the editor and return the values after stripping the tags
+	 * Update will take new values inputted into the editor and return the values after stripping the tags.
 	 *
 	 * @param  [array] $new_instance [new vals]
 	 * @param  [array] $old_instance [old vals]

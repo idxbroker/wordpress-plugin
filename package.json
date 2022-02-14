@@ -2,7 +2,6 @@
   "name": "impress-for-idx-broker",
   "version": "1.0.0",
   "description": "IMPress for IDX Broker",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/idxbroker/wordpress-plugin.git"
@@ -22,31 +21,32 @@
   },
   "homepage": "https://github.com/idxbroker/wordpress-plugin#readme",
   "devDependencies": {
-    "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.1",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.6.0",
-    "cross-env": "^5.0.1",
+    "@babel/core": "^7.12.13",
+    "@babel/preset-env": "^7.12.13",
     "glob": "^6.0.1",
     "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.0",
     "gulp-jshint": "^2.0.0",
     "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.2.1",
     "gulp-rename": "^1.2.2",
+    "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.7",
     "jshint": "^2.8.0",
     "jshint-stylish": "^2.1.0",
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.3.11"
+    "node-sass": "^5.0.0"
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
-    "build": "cross-env BABEL_ENV=default NODE_ENV=production webpack",
-    "watch": "cross-env BABEL_ENV=default webpack --watch"
+    "preinstall": "npx npm-force-resolutions"
   },
   "resolutions": {
-    "graceful-fs": "^4.2.4"
+    "graceful-fs": "^4.2.2"
+  },
+  "dependencies": {
+    "normalizr": "^3.6.1"
   }
 }

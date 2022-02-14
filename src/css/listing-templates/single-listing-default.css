@@ -1,0 +1,9 @@
+.wplistings-single-listing tbody.left {
+	width: 50%;
+	margin-right:0px;
+	margin-top:-1px;
+}
+.wplistings-single-listing tbody.right {
+	width: 50%;
+	margin-top:-1px;
+}

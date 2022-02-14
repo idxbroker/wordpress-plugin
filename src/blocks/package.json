@@ -1,0 +1,43 @@
+{
+  "name": "impress-for-idx-broker",
+  "version": "1.0.0",
+  "description": "IMPress for IDX Broker",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idxbroker/wordpress-plugin.git"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "idx",
+    "idxbroker",
+    "impress",
+    "real estate"
+  ],
+  "author": "IDX Broker",
+  "license": "GPL-2.0+",
+  "bugs": {
+    "url": "https://github.com/idxbroker/wordpress-plugin/issues"
+  },
+  "homepage": "https://github.com/idxbroker/wordpress-plugin#readme",
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "cross-env": "^5.0.1",
+    "jshint": "^2.8.0",
+    "jshint-stylish": "^2.1.0",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "scripts": {
+    "preinstall": "npx npm-force-resolutions",
+    "build": "cross-env BABEL_ENV=default NODE_ENV=production webpack",
+    "watch": "cross-env BABEL_ENV=default webpack --watch"
+  },
+  "resolutions": {
+    "graceful-fs": "^4.2.4"
+  }
+}

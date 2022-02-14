@@ -1,7 +1,7 @@
 const { __ } = wp.i18n
 const { registerBlockType } = wp.blocks
 const { InspectorControls } = wp.blockEditor
-const { SelectControl, CheckboxControl, Panel, PanelBody } = wp.components
+const { SelectControl, CheckboxControl, Panel, PanelBody, Tooltip } = wp.components
 const icon = () => (<i className='fas fa-link fa-2x' />)
 
 registerBlockType(
@@ -40,6 +40,17 @@ registerBlockType(
       }
     },
     edit: ({ attributes, setAttributes }) => {
+
+      // Label and tooltip for the city list select control
+      const toolTipText = 'For accounts with multiple MLS, only MLS-specific city lists work with the City Links widget at this time.'
+      const labelWithTooltip = (
+        <div className='city-links-city-select-label'>{__('Select a city list:', 'idx-broker-platinum')}
+          <Tooltip className='tooltip-text' text={toolTipText}>
+            <span className='dashicons dashicons-info-outline' aria-label={toolTipText}></span>
+          </Tooltip>
+        </div>
+      )
+
       const columnCountOptions = [{ label: '2', value: '2' }, { label: '3', value: '3' }, { label: '4', value: '4' }]
 
       return (
@@ -52,13 +63,13 @@ registerBlockType(
             <Panel>
               <PanelBody title='Settings' initialOpen={true}>
                 <SelectControl
-                  label={__('MLS to use for city links:', 'idx-broker-platinum')}
+                  label={__('MLS to use for city links (required):', 'idx-broker-platinum')}
                   value={attributes.mls}
                   options={(impress_city_links_mls_options || [{ label: '-', value: '' }])}
                   onChange={(value) => { setAttributes({ mls: value }) }}
                 />
                 <SelectControl
-                  label={__('Select a city list:', 'idx-broker-platinum')}
+                  label={labelWithTooltip}
                   value={attributes.city_list}
                   options={(impress_city_links_city_options || [{ label: '-', value: '' }])}
                   onChange={(value) => { setAttributes({ city_list: value }) }}
