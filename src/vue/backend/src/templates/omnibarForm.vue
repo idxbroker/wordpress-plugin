@@ -69,7 +69,7 @@
                 v-for="(mls, key) in mlsMembership"
                 :key="mls.value"
             >
-                <idx-form-label customClass="form-content__label">{{ mls.label }}</idx-form-label>
+                <idx-form-label customClass="form-content__label">{{ decodeEntities(mls.label) }}</idx-form-label>
                 <idx-custom-select
                     :ariaLabel="mls.label"
                     :selected="mls.selected === '' ? undefined : mls.selected"
@@ -155,6 +155,7 @@
     </idx-block>
 </template>
 <script>
+import { decodeEntities } from '@/utilities'
 export default {
     name: 'omnibar-form',
     props: {
@@ -219,7 +220,7 @@ export default {
         mlsNamesList () {
             const names = []
             for (const x in this.mlsMembership) {
-                names.push({ value: this.mlsMembership[x].value, label: this.mlsMembership[x].label })
+                names.push({ value: this.mlsMembership[x].value, label: decodeEntities(this.mlsMembership[x].label) })
             }
             return names
         },
@@ -306,7 +307,7 @@ export default {
             // which is "the custom field's name - the name of the MLS it belongs to (The property type it is in)"
             return {
                 ...item,
-                label: `${item.label} - ${MLSName.label} (${propType.label})`,
+                label: `${item.label} - ` + decodeEntities(MLSName.label) + ` (${propType.label})`,
                 cleanLabel
             }
         },
@@ -345,7 +346,8 @@ export default {
             }) : selections
             // Emit the form update with the new clean selections
             this.$emit('form-field-update', { key, value: cleanedSelections })
-        }
+        },
+        decodeEntities
     },
     created () {
         this.labels = {
