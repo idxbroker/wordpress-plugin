@@ -18,3 +18,8 @@ export const filterRequires = (routeObject, rootState) => {
     }
     return true
 }
+
+// Decode HTML Entities in MLS names when displayed through text interpolation.
+export const decodeEntities = string => {
+    return String(string).replace(/&reg;|&reg/gi, '®').replace(/&copy;|&copy/gi, '©')
+}
