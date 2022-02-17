@@ -21,7 +21,7 @@
                 placeholder="Select"
                 :ariaLabel="labels.cityListLabel"
                 :selected="cityListSelected"
-                :options="cityListOptions"
+                :options="cleanOptionsList(cityListOptions)"
                 @selected-item="$emit('form-field-update', { key: 'cityListSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
@@ -31,7 +31,7 @@
                 placeholder="Select"
                 :ariaLabel="labels.countyListLabel"
                 :selected="countyListSelected"
-                :options="countyListOptions"
+                :options="cleanOptionsList(countyListOptions)"
                 @selected-item="$emit('form-field-update', { key: 'countyListSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
@@ -41,7 +41,7 @@
                 placeholder="Select"
                 :ariaLabel="labels.postalCodeListLabel"
                 :selected="postalCodeSelected"
-                :options="postalCodeListOptions"
+                :options="cleanOptionsList(postalCodeListOptions)"
                 @selected-item="$emit('form-field-update', { key: 'postalCodeSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
@@ -324,6 +324,15 @@ export default {
             delete updatedItem.parentPtID
             // Return the new item
             return updatedItem
+        },
+        cleanOptionsList (optionList) {
+            return optionList.map(option => {
+                option = {
+                    label: decodeEntities(option.label),
+                    value: option.value
+                }
+                return option
+            })
         },
         findMLSName (idxID) {
             // Find the MLS object based on the given idxID
