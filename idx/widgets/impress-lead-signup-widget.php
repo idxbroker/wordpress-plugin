@@ -103,7 +103,7 @@ class Impress_Lead_Signup_Widget extends \WP_Widget {
 
 		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
 			wp_enqueue_script( 'idx-recaptcha' );
-			wp_enqueue_script( 'google-recaptcha' );
+			wp_enqueue_script( 'idx-google-recaptcha' );
 			wp_enqueue_script( 'jquery' );
 		}
 

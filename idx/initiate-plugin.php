@@ -510,7 +510,7 @@ class Initiate_Plugin {
 		wp_register_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', [], '1.0.0', false );
 		wp_register_script( 'impress-lead-signup', IMPRESS_IDX_URL . 'assets/js/idx-lead-signup.min.js', [], '1.0.0', false );
 		wp_register_script( 'idx-recaptcha', IMPRESS_IDX_URL . 'assets/js/idx-recaptcha.min.js', [], '1.0.0', false );
-		wp_register_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], '1.0.0', false );
+		wp_register_script( 'idx-google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], '1.0.0', false );
 		wp_register_script( 'owl2', IMPRESS_IDX_URL . 'assets/js/owl2.carousel.min.js', [ 'jquery' ], '1.0.0', false );
 	}
 
