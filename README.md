@@ -59,7 +59,7 @@ IMPress provides you with a full employee directory, that is ideal for Real Esta
 <h4>Optimized for IDX Broker</h4>
 Your IDX Broker account provides this plugin with access to your MLS data feed - meaning you can effortlessly integrate IDX Broker features into your WordPress site.
 
-IDX Broker Lite plans start at $50/mo and offer the essential features and functionality needed for home search. Platinum plans start at $80/mo and include the features of Lite plus map search widgets, Market Reports, Sold Data and much more.
+IDX Broker Lite plans offer the essential features and functionality needed for home search. Platinum plans include all the features of Lite plus map search widgets, Market Reports, Sold Data, Polygon Searching and much more.
 
 <a href="https://idxbroker.com/take-a-tour/" target="_blank">Take a tour of IDX Broker today!</a>
 
@@ -69,7 +69,7 @@ IMPress for IDX Broker uses the MLS/IDX feeds provided by your IDX Broker accoun
 
 ## Installation ##
 
-1. Install and activate directly by going to your WP-Admin dashboard and then Plugins > Add New. Search for 'IMPress for IDX Broker' under new plugins and click install. Or manually download and extract the IMPress for IDX Broker plugin.
+1. Install and activate directly by going to your WP Admin Dashboard and then Plugins > Add New. Search for 'IMPress for IDX Broker' under new plugins and click install. Or manually install by downloading and extracting the IMPress for IDX Broker plugin.
 2. Upload the uncompressed folder to your `/wp-content/plugins/` directory.
 3. Activate the plugin through the Plugins menu in WordPress.
 4. Confirm you are using a version of PHP later than 7.0. You will also need to have an active IDX Broker account for the plugin to work. If you have an account, simply go to the IMPress for IDX Broker plugin page within WordPress, enter the API key provided via your setup email, and click the 'Save' button.
@@ -102,11 +102,7 @@ Yes. All IDX feeds require approval from a local board or MLS. If you (or your c
 No. IDX Broker requires a month-to-month agreement only.
 
 ### What is the pricing for IDX Broker services? ###
-IDX Broker offers three account levels: Lite, Platinum and HOME. 
-- Lite monthly subscriptions: Agent ($55+), Team ($75+), and Office ($105+)
-- Platinum monthly subscriptions: Agent ($90+), Team ($110+), and Office ($140+)
-
-<a href="https://idxbroker.com/idx_broker#lite" target="_blank">Read more about pricing.</a>
+For updated pricing, please <a href="https://idxbroker.com/idx_broker" target="_blank">visit our website</a> to compare the available account types.
 
 ### What can I expect if I decide to get my IDX feed through IDX Broker? ###
 When you sign up for a new account our MLS team will send you a Docusign email (or PDF). Simply add your signature to the Docusign file or PDF in order to proceed. If you are not a Principal Broker, and have provided us with your Broker name and contact information, we will then forward the same paperwork to your Broker for approval. Once we receive the paperwork from your Broker, we will send it to the MLS for data approval. MLS approval can take anywhere from 3-10 days. Once approved, we will activate your account, integrate your site's design into IDX pages, and send you IDX Broker login credentials so that you can use this plugin to add links and Widgets to your site or blog.

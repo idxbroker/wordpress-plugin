@@ -59,7 +59,7 @@ IMPress provides you with a full employee directory, that is ideal for Real Esta
 <h4>Optimized for IDX Broker</h4>
 Your IDX Broker account provides this plugin with access to your MLS data feed - meaning you can effortlessly integrate IDX Broker features into your WordPress site.
 
-IDX Broker Lite plans start at $50/mo and offer the essential features and functionality needed for home search. Platinum plans start at $80/mo and include the features of Lite plus map search widgets, Market Reports, Sold Data and much more.
+IDX Broker Lite plans offer the essential features and functionality needed for home search. Platinum plans include all the features of Lite plus map search widgets, Market Reports, Sold Data, Polygon Searching and much more.
 
 <a href="https://idxbroker.com/take-a-tour/" target="_blank">Take a tour of IDX Broker today!</a>
 
@@ -69,7 +69,7 @@ IMPress for IDX Broker uses the MLS/IDX feeds provided by your IDX Broker accoun
 
 == Installation ==
 
-1. Install and activate directly by going to your WP-Admin dashboard and then Plugins > Add New. Search for 'IMPress for IDX Broker' under new plugins and click install. Or manually download and extract the IMPress for IDX Broker plugin.
+1. Install and activate directly by going to your WP Admin Dashboard and then Plugins > Add New. Search for 'IMPress for IDX Broker' under new plugins and click install. Or manually install by downloading and extracting the IMPress for IDX Broker plugin.
 2. Upload the uncompressed folder to your `/wp-content/plugins/` directory.
 3. Activate the plugin through the Plugins menu in WordPress.
 4. Confirm you are using a version of PHP later than 7.0. You will also need to have an active IDX Broker account for the plugin to work. If you have an account, simply go to the IMPress for IDX Broker plugin page within WordPress, enter the API key provided via your setup email, and click the 'Save' button.
@@ -102,11 +102,7 @@ Yes. All IDX feeds require approval from a local board or MLS. If you (or your c
 No. IDX Broker requires a month-to-month agreement only. 
  
 = What is the pricing for IDX Broker services? =
-IDX Broker offers three account levels: Lite, Platinum and HOME. 
-- Lite monthly subscriptions: Agent ($55+), Team ($75+), and Office ($105+)
-- Platinum monthly subscriptions: Agent ($90+), Team ($110+), and Office ($140+)
-
-<a target="_blank" href="https://idxbroker.com/idx_broker#lite">Read more about pricing.</a>
+For updated pricing, please <a href="https://idxbroker.com/idx_broker" target="_blank">visit our website</a> to compare the available account types.
 
 = What can I expect if I decide to get my IDX feed through IDX Broker? =
 When you sign up for a new account our MLS team will send you a Docusign email (or PDF). Simply add your signature to the Docusign file or PDF in order to proceed. If you are not a Principal Broker, and have provided us with your Broker name and contact information, we will then forward the same paperwork to your Broker for approval. Once we receive the paperwork from your Broker, we will send it to the MLS for data approval. MLS approval can take anywhere from 3-10 days. Once approved, we will activate your account, integrate your site's design into IDX pages, and send you IDX Broker login credentials so that you can use this plugin to add links and Widgets to your site or blog.
@@ -122,19 +118,24 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 == Screenshots ==
 
-1. Modify your Omnibar settings to give visitors the option to search by over a dozen different MLS fields. 
-2. IMPress will sync with your IDX Broker account and display all of your leads within your WordPress Dashboard. 
-3. Edit leads directly from within your WordPress Dashboard. Changes will sync with your IDX Broker account. 
-4. Add leads from your WordPress Dashboard and they will automatically sync with your IDX Broker account. 
-5. View popular listing pages (stats pulled from IDX Broker) and leads from your IMPress Dashboard. 
-6. IMPress Listings (a separate plugin, part of the IMPress Suite) will pull all of your featured listing data into WordPress so that you can host the content on your root domain. Note: At this time this feature is limited to only your Featured listings.
-7. The Omnibar Search Widget allows your visitors to view a live search of City, State, Subdivision, Area, and more.
-8. With the IDX shortcode interface, you can easily add shortcodes to your posts and pages.
-9. Simply add your API key and click a button to auto-generate a wrapper page to ensure that your IDX Broker pages synchronize with the header, sidebar, and footer of your WordPress website. Note: IDX content is co-brandable, and hosted on a subdomain of your primary domain. IDX content is integrated, not framed. 
-10. Pull or reset your API key from within your IDX Broker Dashboard.
-11. View all the IDX Broker page traffic history for each of your leads. One-click access to the IDX Broker Dashboard to create a new saved search or property for the lead based on traffic history.
-12. View Saved Searches created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved searches, toggle emails on, or edit an existing search.
-13. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
+1. IMPress Omnibar Widget. Modify your Omnibar settings to give visitors the option to search by over a dozen different MLS fields.
+2. Grab or reset your API key from within your IDX Broker Dashboard under Home > Access Control.
+3. Guided Setup for ease of getting started.
+4. Simply add your API key, click a button to auto-generate a wrapper page to ensure that your IDX Broker pages synchronize with the header, sidebar, and footer of your WordPress website. Note: IDX content is co-brandable, and hosted on a subdomain of your primary domain. IDX content is integrated, not framed.
+5. Easily add IMPress widgets and IDX Dashboard widgets to your posts, pages, and theme's widget areas with Gutenburg Blocks.
+6. With the IDX shortcode interface, you can easily add shortcodes to your posts and pages. (Classic Editor)
+7. The Omnibar Search Widget allows your visitors to view a live search of City, State, Subdivision, Area, or any advanced fields from your MLS.
+8. IMPress Widget Examples (Carousel, Lead Signup)
+9. IMPress Widget Examples (Showcase, City Links, Lead Login)
+10. Quickly add any IDX Broker pages to your site's navigation menus for site visitors.
+11. IMPress will sync with your IDX Broker account and display all of your leads within your WordPress Dashboard.
+12. Add leads from your WordPress Dashboard and they will automatically sync with your IDX Broker account.
+13. Edit leads directly from within your WordPress Dashboard. Changes will sync with your IDX Broker account.
+14. View popular listing pages (stats pulled from IDX Broker) and new leads from your WordPress Dashboard.
+15. IMPress Listings will pull all of your featured listing data into WordPress so that you can host the content on your root domain with . Note: At this time this feature is limited to only your Featured listings.
+16. View all the IDX Broker page traffic history for each of your leads. One-click access to the IDX Broker Dashboard to create a new saved search or property for the lead based on traffic history.
+17. View Saved Searches created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved searches, toggle email updates on, or edit an existing search.
+18. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
 
