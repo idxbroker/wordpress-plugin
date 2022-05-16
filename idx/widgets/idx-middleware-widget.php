@@ -7,7 +7,7 @@ namespace IDX\Widgets;
 class Idx_Middleware_Widget extends \WP_Widget {
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -55,20 +55,12 @@ class Idx_Middleware_Widget extends \WP_Widget {
 		}
 
 		if ( ! empty( $instance['widget'] ) ) {
-			if ( strpos( $instance['widget'], 'mapwidgetjs.php' ) ) {
-				echo '<script type="text/javascript" name="custom-scriptLeaf" src="https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js"></script>';
-				echo '<script type="text/javascript" name="custom-scriptLeafDraw" src="https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js"></script>';
-				echo '<script type="text/javascript" name="custom-scriptMQ" src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh"></script>';
-				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
-				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
-			}
 			// Check URL structure for new widget type, if found set the widget ID.
 			if ( strpos( $instance['widget'], '/idx/widgets/' ) !== false ) {
 				$widget_id = explode( '/idx/widgets/', $instance['widget'] );
 			}
-			echo '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : esc_attr( $widget_id[1] ) ) . '" src="' . esc_attr( $instance['widget'] ) . '"></script>';
+			echo '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : esc_attr( $widget_id[1] ) ) . '" src="' . esc_url( $instance['widget'] ) . '"></script>';
 		}
-
 		echo $after_widget;
 	}
 
@@ -104,17 +96,17 @@ class Idx_Middleware_Widget extends \WP_Widget {
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'idx-broker' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'idx-broker' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
-			<?php _e( 'IDX widgets are widgets you have created in your IDX Middleware dashboard. Select one to display here:', 'idx-broker' ); ?>
+			<?php esc_html_e( 'IDX widgets are widgets you have created in your IDX Middleware dashboard. Select one to display here:', 'idx-broker' ); ?>
 		</p>
 
 		<p>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'widget' ); ?>" name="<?php echo $this->get_field_name( 'widget' ); ?>">
-				<option <?php selected( $instance['widget'], '' ); ?> value=""><?php _e( 'Select a widget', 'idx-broker' ); ?></option>
+				<option <?php selected( $instance['widget'], '' ); ?> value=""><?php esc_html_e( 'Select a widget', 'idx-broker' ); ?></option>
 				<?php $this->widget_options( $instance ); ?>
 			</select>
 		</p>

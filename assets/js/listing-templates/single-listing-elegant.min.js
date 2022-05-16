@@ -1,0 +1,1 @@
+jQuery(function(l){l(window).scroll(function(){console.log("scrolling"),l(document).scrollTop()>1?l(".entry-title").addClass("shrink"):l(".entry-title").removeClass("shrink")})});
