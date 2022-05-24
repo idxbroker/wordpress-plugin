@@ -66,6 +66,7 @@ class Idx_Api {
 					$err_message = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.<br />Please contact your developer and/or hosting provider.';
 					$rest_error  = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.';
 					break;
+				case 400:
 				case 405:
 				case 409:
 					$err_message = 'Invalid request sent to IDX Broker API, please re-install the IMPress for IDX Broker plugin.';
