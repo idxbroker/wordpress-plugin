@@ -573,7 +573,7 @@ var idxOmnibar = function(jsonData){
 			//MLS Number/ListingID
 			var listingID = true;
 			var agentHeaderID = false;
-			goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID);
+			goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value + '&a_statusCategory[]=active&a_statusCategory[]=sold', listingID);
 		} else {
 			//address (split into number and street)
 			var addressSplit = input.value.split(' ');
