@@ -46,7 +46,7 @@ class Search_Management {
 		$this->page = add_submenu_page(
 			'idx-broker',
 			'Searches',
-			'Saved Searches',
+			'Saved Links',
 			'manage_options',
 			'idx-searches',
 			array(
