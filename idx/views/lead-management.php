@@ -154,7 +154,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => sanitize_text_field( wp_unslash( $_POST['fields'] ) ),
+				'body'      => sanitize_text_field( urldecode( $_POST['fields'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 
