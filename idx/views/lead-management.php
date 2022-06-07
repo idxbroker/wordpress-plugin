@@ -644,7 +644,7 @@ class Lead_Management {
 			// Column 6 = Actions (edit, delete, MW link).
 
 			$current_lead = [
-				0 => '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . esc_html( $lead->firstName ) . ' ' . esc_html( $lead->lastName ) . '</a></td>',
+				0 => '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id . '&nonce=' . $edit_lead_nonce ) ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . esc_html( $lead->firstName ) . ' ' . esc_html( $lead->lastName ) . '</a></td>',
 				1 => '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . esc_attr( $lead->id ) . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>',
 				2 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $lead->phone ) . '</td>',
 				3 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $subscribed_on ) . '</td>',
