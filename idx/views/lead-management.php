@@ -1286,28 +1286,6 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-traffic">
 					<?php
-					// order newest first.
-					$traffic_array = $this->idx_api->idx_api( 'leadtraffic/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
-					$traffic_array = array_reverse( $traffic_array );
-
-					$traffic = '';
-
-					$offset = get_option( 'gmt_offset', 0 );
-
-					if ( is_array( $traffic_array ) ) {
-
-						// prepare traffic for display.
-						foreach ( $traffic_array as $traffic_entry ) {
-							$nice_date = Carbon::parse( $traffic_entry['date'] )->addHours( $offset )->toDayDateTimeString();
-
-							echo '<tr>';
-							echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $nice_date ) . '</td>';
-							echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['page'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['page'], 0, 80 ) ) . '</td>';
-							echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['referrer'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['referrer'], 0, 80 ) ) . '</a></td>';
-							echo '</tr>';
-						}
-					}
-
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-traffic">';
 					echo '
 						<thead>
@@ -1317,6 +1295,27 @@ class Lead_Management {
 						</thead>
 						<tbody>
 						';
+						// order newest first.
+						$traffic_array = $this->idx_api->idx_api( 'leadtraffic/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+						$traffic_array = array_reverse( $traffic_array );
+	
+						$traffic = '';
+	
+						$offset = get_option( 'gmt_offset', 0 );
+	
+						if ( is_array( $traffic_array ) ) {
+	
+							// prepare traffic for display.
+							foreach ( $traffic_array as $traffic_entry ) {
+								$nice_date = Carbon::parse( $traffic_entry['date'] )->addHours( $offset )->toDayDateTimeString();
+	
+								echo '<tr>';
+								echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $nice_date ) . '</td>';
+								echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['page'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['page'], 0, 80 ) ) . '</td>';
+								echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['referrer'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['referrer'], 0, 80 ) ) . '</a></td>';
+								echo '</tr>';
+							}
+						}	
 					echo '</tbody></table>';
 					?>
 				</div>
