@@ -362,7 +362,7 @@ class Lead_Management {
 			$spid    = sanitize_text_field( wp_unslash( $_POST['spid'] ) );
 
 			$property_array = array(
-				'propertyName'   => sanitize_text_field( wp_unslash( $_POST['property_name'] ) ),
+				'propertyName'   => sanitize_text_field( wp_unslash( $_POST['name'] ) ),
 				'receiveUpdates' => sanitize_text_field( wp_unslash( $_POST['updates'] ) ),
 				'property'       => array(
 					'idxID'     => sanitize_text_field( wp_unslash( $_POST['idxid'] ) ),
