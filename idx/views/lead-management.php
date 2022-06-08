@@ -1133,7 +1133,7 @@ class Lead_Management {
 
 										<a href="#" id="delete-property-' . esc_attr( $property['id'] ) . '" class="delete-property" data-id="' . esc_attr( $lead_id ) . '" data-spid="' . esc_attr( $property['id'] ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'idx_lead_property_delete_nonce' ) ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' . esc_attr( $property['id'] ) . '">Delete Saved Property</div></a>
 
-										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' . esc_attr( $lead_id ) . '&spid=' . esc_attr( $property['id'] ) . '" id="edit-mw-' . esc_attr( $property['id'] ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $property['id'] ) . '">Edit Property in Middleware</div></a>
+										<a href="https://middleware.idxbroker.com/mgmt/leads/' . esc_attr( $lead_id ) . '/properties/' . esc_attr( $property['id'] ) . '/edit" id="edit-mw-' . esc_attr( $property['id'] ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $property['id'] ) . '">Edit Property in Middleware</div></a>
 										</td>';
 							echo '</tr>';
 						}
