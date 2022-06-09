@@ -84,7 +84,13 @@ class IDX_Leads_CF7 {
 		$option_name  = 'idx_lead_form_' . $form_id;
 		$form_options = get_option( $option_name );
 
-		$checked = $form_options['enable_lead'];
+		$checked = false;
+		// $form_options could be false if this is a new form (since get_option returns false when it can't find anything)
+		if ($form_options!= false
+		&& array_key_exists('enable_lead', $form_options)) {
+			$checked = $form_options['enable_lead'];
+		}
+
 		if ( ! isset( $form_options['category'] ) ) {
 			$form_options['category'] = '';
 		}
@@ -93,7 +99,12 @@ class IDX_Leads_CF7 {
 		$cf7 = WPCF7_ContactForm::get_instance( get_post( $form->id() ) );
 
 		if ( is_object( $cf7 ) ) {
-			$mail_tags = $cf7->collect_mail_tags( get_post( $form->id() ) );}
+			$mail_tags = $cf7->collect_mail_tags( get_post( $form->id() ) );
+		} else {
+			// If we're creating a new form, there won't be any mail tags to reference. 
+			// Initializing $mail_tags to an empty array avoids warnings that would otherwise occur when we use foreach($mail_tags...) to try to generate the rest of the page.
+			$mail_tags = [];
+		}
 		?>
 			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
 			<form action="" method="post" id="cf7_form_settings">
@@ -364,7 +375,12 @@ class IDX_Leads_CF7 {
 	private static function output_tag_options( $mail_tags, $form_options, $mapped ) {
 		echo '<option value="">-- Not Mapped --</option>';
 		foreach ( $mail_tags as $tag ) {
-			echo '<option value="' . esc_attr( $tag ) . '" ' . selected( $form_options[ $mapped ], $tag, 1 ) . '>' . esc_html( $tag ) . '</option>';
+			$selectedTag = false;
+			// Check if the field we're trying to set exists in the form option array to avoid warnings in php 8
+			if (array_key_exists($mapped, $form_options)) {
+				$selectedTag = $form_options[$mapped] === $tag;
+			}
+			echo '<option value="' . esc_attr( $tag ) . '" ' . selected( $selectedTag, true, 1 ) . '>' . esc_html( $tag ) . '</option>';
 		}
 	}
 
