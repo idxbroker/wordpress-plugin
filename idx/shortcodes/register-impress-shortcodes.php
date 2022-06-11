@@ -869,8 +869,9 @@ class Register_Impress_Shortcodes {
 							'options' => array(
 								'featured'     => 'Featured',
 								'soldpending'  => 'Sold/Pending',
-								'historical'   => 'Historical',
-								'supplemental' => 'Supplemental',
+								'supplementalactive' => 'Active Supplemental',
+								'supplementalsoldpending' => 'Sold/Pending Supplemental',
+								'supplementalall' => 'All Supplemental',
 								'savedlinks'   => 'Saved Link',
 							),
 						),
@@ -947,8 +948,9 @@ class Register_Impress_Shortcodes {
 							'options' => array(
 								'featured'     => 'Featured',
 								'soldpending'  => 'Sold/Pending',
-								'historical'   => 'Historical',
-								'supplemental' => 'Supplemental',
+								'supplementalactive' => 'Active Supplemental',
+								'supplementalsoldpending' => 'Sold/Pending Supplemental',
+								'supplementalall' => 'All Supplemental',
 								'savedlinks'   => 'Saved Link',
 							),
 						),

@@ -472,7 +472,9 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'properties' ) ); ?>">
 				<option <?php selected( $instance['properties'], 'featured' ); ?> value="featured"><?php esc_html_e( 'Featured', 'idxbroker' ); ?></option>
 				<option <?php selected( $instance['properties'], 'soldpending' ); ?> value="soldpending"><?php esc_html_e( 'Sold/Pending', 'idxbroker' ); ?></option>
-				<option <?php selected( $instance['properties'], 'supplemental' ); ?> value="supplemental"><?php esc_html_e( 'Supplemental', 'idxbroker' ); ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalactive' ); ?> value="supplementalactive"><?php echo 'Active Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalsoldpending' ); ?> value="supplementalsoldpending"><?php echo 'Sold/Pending Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalall' ); ?> value="supplementalall"><?php echo 'All Supplemental'; ?></option>
 				<option <?php selected( $instance['properties'], 'savedlinks' ); ?> value="savedlinks"><?php esc_html_e( 'Use Saved Link', 'idxbroker' ); ?></option>
 			</select>
 		</p>
