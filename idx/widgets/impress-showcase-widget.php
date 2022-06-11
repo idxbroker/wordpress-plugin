@@ -18,7 +18,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			'IMPress Property Showcase', // Name.
 			array(
 				'description'                 => 'Displays a showcase of properties',
-				'classname'                   => 'impress-showcase-widget',
+				// The class name used by the rest of the plugin to refer to styling the showcase widget is impress-property-showcase, but it was initially set to impress-showcase-widget. impress-showcase-widget has been left here for now to avoid possibly breaking functionality on client sites that may have been styling this widget using this class name.
+				'classname'                   => 'impress-showcase-widget impress-property-showcase',
 				'customize_selective_refresh' => true,
 			)
 		);
