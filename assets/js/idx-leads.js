@@ -24,6 +24,9 @@ jQuery(document).ready(function($) {
 				"orderable": false
 			}
 		],
+		"createdRow": function (row, data, index) {
+			$(row).addClass('lead-row');
+		},
 		"dom": '<"table-filter"f>rt<"lead-table-controls mdl-shadow--2dp"lip>',
 		"oLanguage": {
 			"sSearch": ""
