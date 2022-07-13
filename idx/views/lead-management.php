@@ -525,9 +525,9 @@ class Lead_Management {
 			echo 'error';
 		} else {
 			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
-			$spid    = sanitize_text_field( wp_unslash( $_POST['spid'] ) );
+			$ssid    = sanitize_text_field( wp_unslash( $_POST['ssid'] ) );
 			// Delete lead saved search via API.
-			$api_url  = IDX_API_URL . '/leads/search/' . $post_id . '/' . $spid;
+			$api_url  = IDX_API_URL . '/leads/search/' . $post_id . '/' . $ssid;
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
