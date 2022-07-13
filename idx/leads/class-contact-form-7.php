@@ -50,7 +50,7 @@ class IDX_Leads_CF7 {
 		wp_enqueue_style( 'idx-tooltip-css', IMPRESS_IDX_URL . 'assets/css/tooltip.min.css', [], '1.0.0' );
 	}
 
-	public function idx_save_lead_settings( $args ) {
+	public static function idx_save_lead_settings( $args ) {
 
 		if ( ! empty( $_POST ) ) {
 
@@ -240,7 +240,7 @@ class IDX_Leads_CF7 {
 		<?php
 	}
 
-	public function idx_put_lead( $contact_form ) {
+	public static function idx_put_lead( $contact_form ) {
 		$form_id = $contact_form->id;
 
 		$option_name = 'idx_lead_form_' . $form_id;
