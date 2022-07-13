@@ -46,7 +46,7 @@ class Search_Management {
 		$this->page = add_submenu_page(
 			'idx-broker',
 			'Searches',
-			'Saved Searches',
+			'Saved Links',
 			'manage_options',
 			'idx-searches',
 			array(
@@ -337,7 +337,7 @@ class Search_Management {
 			echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $search->timesViewed ) . '</td>';
 			echo '<td class="mdl-data-table__cell--non-numeric">
 						<a href="' . esc_url( admin_url( 'admin-ajax.php?action=idx_search_delete&ssid=' . $search->id . '&nonce=' . $nonce ) ) . '" id="delete-search-' . esc_attr( $search->id ) . '" class="delete-search" data-ssid="' . esc_attr( $search->id ) . '" data-nonce="' . esc_attr( $nonce ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . esc_attr( $search->id ) . '">Delete Search</div></a>
-						<a href="https://middleware.idxbroker.com/mgmt/addeditsavedlink.php?id=' . esc_attr( $search->id ) . '" id="edit-mw-' . esc_attr( $search->id ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $search->id ) . '">Edit Search in Middleware</div></a>
+						<a href="https://middleware.idxbroker.com/mgmt/saved-links/' . esc_attr( $search->id ) . '/edit" id="edit-mw-' . esc_attr( $search->id ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $search->id ) . '">Edit Search in Middleware</div></a>
 						</td>';
 			echo '</tr>';
 		}
