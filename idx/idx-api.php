@@ -248,28 +248,44 @@ class Idx_Api {
 	}
 
 	/**
-	 * Clean IDX cached data
-	 *
-	 * @param void
+	 * Clean IDX cached data for all idx_ options containing $name, or all of these options in general, the wrapper cache and idx pages if nothing is provided
+	 * 
+	 * @param String $name, what name should be matched when clearing cached options. Defaults to an empty string.
 	 * @return void
 	 */
-	public function idx_clean_transients() {
+	public function idx_clean_transients($name = '') {
 		global $wpdb;
-		$wpdb->query(
-			$wpdb->prepare(
-				"
-                DELETE FROM $wpdb->options
-         WHERE option_name LIKE %s
-        ",
-				'%idx_%_cache'
-			)
-		);
 
-		$this->clear_wrapper_cache();
-
-		// Update IDX Pages Immediately.
-		wp_schedule_single_event( time(), 'idx_create_idx_pages' );
-		wp_schedule_single_event( time(), 'idx_delete_idx_pages' );
+		// If nothing was provided for the name of options to clear, clear everything.
+		if ($name === '') {
+			$wpdb->query(
+				$wpdb->prepare(
+					"
+					DELETE FROM $wpdb->options
+			 WHERE option_name LIKE %s
+			",
+					'%idx_%_cache'
+				)
+			);
+	
+			$this->clear_wrapper_cache();
+	
+			// Update IDX Pages Immediately.
+			wp_schedule_single_event( time(), 'idx_create_idx_pages' );
+			wp_schedule_single_event( time(), 'idx_delete_idx_pages' );
+		} else {
+			// If $name was set, only clear idx_*_cache options that contain that name		
+			$wpdb->query(
+				$wpdb->prepare(
+					"
+					DELETE FROM $wpdb->options
+			 WHERE option_name LIKE %s
+			",
+					'%idx_' . $name . '%_cache'
+				)
+			);
+	
+		}
 	}
 
 	/**

@@ -164,7 +164,7 @@ class Lead_Management {
 				echo 'Lead already exists.';
 			} elseif ( wp_remote_retrieve_response_code( $response ) == '200' ) {
 				// Delete lead cache so new lead will show in list views immediately.
-				delete_option( 'idx_leads_lead_cache' );
+				$this->idx_api->idx_clean_transients('leads_lead');
 				// return new lead ID to script.
 				echo esc_html( $decoded_response['newID'] );
 			} else {
@@ -425,8 +425,7 @@ class Lead_Management {
 			$response = wp_remote_request( $api_url, $args );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
-				delete_option( 'idx_leads_lead_cache' );
-				delete_option( 'idx_leads_lead/' . $post_id . '_cache' );
+				$this->idx_api->idx_clean_transients('leads_lead');
 				echo 'success';
 			} else {
 				echo 'error';
