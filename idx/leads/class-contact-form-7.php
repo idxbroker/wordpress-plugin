@@ -86,8 +86,7 @@ class IDX_Leads_CF7 {
 
 		$checked = false;
 		// $form_options could be false if this is a new form (since get_option returns false when it can't find anything)
-		if ($form_options!= false
-		&& array_key_exists('enable_lead', $form_options)) {
+		if ($form_options != false && array_key_exists('enable_lead', $form_options)) {
 			$checked = $form_options['enable_lead'];
 		}
 
