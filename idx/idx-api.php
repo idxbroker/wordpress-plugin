@@ -596,7 +596,7 @@ class Idx_Api {
 	 * @param string $type
 	 * @return array
 	 */
-	public function client_properties( $type ) {		
+	public function client_properties( $type ) {
 		// Handle supplemental listings.
 		// supplemental and supplementalactive both just return active supplemental listings---leaving old supplemental type functionality to avoid making unexpected changes to client sites
 		if ( 'supplemental' === $type 
