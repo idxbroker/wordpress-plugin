@@ -109,17 +109,21 @@ function GoogleMyBusinessSettings (props) {
           setPostDataReady(true)
           return
         }
-        setPosts(response.data)
-        setPostDataReady(true)
-
-        if (response.data.scheduledIds.length < 4) {
-          const currentSchedule = response.data.scheduledIds
-          while (currentSchedule.length < 4) currentSchedule.push('-')
-          setPosts({
-            ...posts,
-            scheduledIds: currentSchedule
-          })
-        }
+        // setState actions are async, so wait for the posts to be set before continuing
+        setPosts(response.data, function() {
+          if (response.data.scheduledIds.length < 4) {
+            const currentSchedule = response.data.scheduledIds
+            while (currentSchedule.length < 4) currentSchedule.push('-')
+            setPosts({
+              ...posts,
+              scheduledIds: currentSchedule
+            }, function(){
+              setPostDataReady(true)
+            })
+          } else {
+            setPostDataReady(true)
+          }
+        })
       }, (error) => {
         // If error occurs, log to console for troubleshooting
         setPostDataReady(true)

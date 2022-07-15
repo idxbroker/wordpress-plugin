@@ -615,9 +615,19 @@ class Idx_Api {
 	 */
 	public function client_properties( $type ) {
 		// Handle supplemental listings.
-		if ( 'supplemental' === $type ) {
+		// supplemental and supplementalactive both just return active supplemental listings---leaving old supplemental type functionality to avoid making unexpected changes to client sites
+		if ( 'supplemental' === $type 
+		|| 'supplementalactive' === $type) {
 			// Pass 'featured' to get just the active supplemental listings.
 			return $this->get_client_supplementals( 'featured' );
+		}
+
+		if ( 'supplementalsoldpending' === $type ) {
+			return $this->get_client_supplementals( 'soldpending' );
+		}
+
+		if ( 'supplementalall' === $type ) {
+			return $this->get_client_supplementals( '' );
 		}
 
 		$properties        = [];
