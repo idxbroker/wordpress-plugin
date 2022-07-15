@@ -51,7 +51,7 @@ registerBlockType(
       }
     },
     edit: ({ attributes, setAttributes }) => {
-      const propertiesToFeature = [{ label: 'Featured', value: 'featured' }, { label: 'Sold/Pending', value: 'soldpending' }, { label: 'Supplemental', value: 'supplemental' }, { label: 'Use Saved Link', value: 'savedlinks' }]
+      const propertiesToFeature = [{ label: 'Featured', value: 'featured' }, { label: 'Sold/Pending', value: 'soldpending' }, { label: 'Active Supplemental', value: 'supplementalactive' }, { label: 'Sold/Pending Supplemental', value: 'supplementalsoldpending' }, { label: 'All Supplemental', value: 'supplementalall' }, { label: 'Use Saved Link', value: 'savedlinks' }]
       const sortOptions = [{ label: 'Default', value: 'default' }, { label: 'Highest to Lowest Price', value: 'high-low' }, { label: 'Lowest to Highest Price', value: 'low-high' }]
       return (
         <div>

@@ -542,7 +542,9 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'properties' ) ); ?>">
 				<option <?php selected( $instance['properties'], 'featured' ); ?> value="featured"><?php echo 'Featured'; ?></option>
 				<option <?php selected( $instance['properties'], 'soldpending' ); ?> value="soldpending"><?php echo 'Sold/Pending'; ?></option>
-				<option <?php selected( $instance['properties'], 'supplemental' ); ?> value="supplemental"><?php echo 'Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalactive' ); ?> value="supplementalactive"><?php echo 'Active Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalsoldpending' ); ?> value="supplementalsoldpending"><?php echo 'Sold/Pending Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalall' ); ?> value="supplementalall"><?php echo 'All Supplemental'; ?></option>
 				<option <?php selected( $instance['properties'], 'savedlinks' ); ?> value="savedlinks"><?php echo 'Use Saved Link'; ?></option>
 			</select>
 		</p>
