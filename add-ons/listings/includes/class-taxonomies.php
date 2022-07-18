@@ -653,7 +653,7 @@ class WP_Listings_Taxonomies {
 	 * @param array $array Array of text fields to sanitize.
 	 * @return array Array of sanitized text fields.
 	 * @author Allen McKenzie
-	 * @since 3.0.11
+	 * @since 3.1.0
 	 */
 	public function wp_listings_sanitize_array_items( $array ) {
 		foreach ( $array as $key => $value ) {

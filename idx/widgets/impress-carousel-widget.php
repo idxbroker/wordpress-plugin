@@ -68,8 +68,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			$instance = $this->defaults;
 		}
 
-		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fas fa-caret-left\"></i><span>Prev</span>', 'idxbroker' ) );
-		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
+		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fas fa-caret-left\" aria-label=\"Previous Listing\"></i><span>Prev</span>', 'idxbroker' ) );
+		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\" aria-label=\"Next Listing\"></i><span>Next</span>', 'idxbroker' ) );
 
 		if ( $instance['styles'] ) {
 			wp_enqueue_style( 'impress-carousel' );
