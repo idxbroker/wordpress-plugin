@@ -140,7 +140,20 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 == Changelog ==
 
 = 3.1.0 =
-* 
+* New: Supplemental Listings can now be targeted by Active, Sold, or Both within all IMPress Property widgets under the Properties to Feature dropdown
+* Update: IMPress plugin now compatible with WordPress subdirectory installs
+* Update: Accessibility adjustments for IMPress Widgets
+* Fix: Omnibar not always searching for closed status listings
+* Fix: Apply Wrapper To IDX Pages dropdown for Wrappers not accurately updating the IDX Account wrapper settings
+* Fix: CF7 and IMPress PHP 8 Errors on form submission
+* Fix: Unable to create, edit, delete leads in some cases
+* Fix: Unable to delete lead saved search
+* Fix: Traffic history table display issue viewing individual leads
+* Fix: Editing a lead saved property will empty the Name field
+* Fix: IMPress GMB page not accessible after saving a post
+* Fix: Accurate sort order by timestamp viewing Leads
+* Fix: Re-ordering Custom Taxonomies deletes all custom taxonomies in WP 6.0+
+* Fix: Various bug fixes and middleware link updates
 
 = 3.0.10 =
 * Fix: CF7 Captcha Conflict
