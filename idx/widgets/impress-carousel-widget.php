@@ -127,7 +127,10 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$total = count( $properties );
 		$count = 0;
 
-		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s owl-carousel owl-theme">', $instance['display'] );
+		// The id set on the container and used by the output script to insert the listings into the page for this particular carousel
+		$carousel_id = uniqid('impress-carousel-');
+
+		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s owl-carousel owl-theme">', $carousel_id, $instance['display'] );
 
 		// Used to hold agent data when matching for co-listings.
 		$agent_data;
@@ -230,7 +233,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$output = '
 			<script>
 				window.addEventListener("DOMContentLoaded", function(event) {
-					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+					jQuery("#' . $carousel_id . '").owlCarousel({
 						items: ' . $display . ',
 						' . $autoplay . '
 						nav: true,
