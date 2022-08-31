@@ -206,8 +206,19 @@ class Idx_Pages {
 	public function create_idx_pages() {
 		// Only schedule update once IDX pages have UID.
 		$uid_added = get_option( 'idx_added_uid_to_idx_pages' );
-		if ( empty( $uid_added ) ) {
+		
+		// see if there's data from <=v1.3 in the database by checking for the existence of a posts_idx table
+		$table_name =  $wpdb->prefix . 'posts_idx';
+		$old_idx_table_found = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name;
+
+		if ( empty( $uid_added ) && $old_idx_table_found ) {
 			return wp_schedule_single_event( time(), 'idx_add_uid_to_idx_pages' );
+		}
+
+		// if we didn't see any posts_idx table, assume there's nothing to migrate
+		if (!$old_idx_table_found) {
+			update_option( 'idx_migrated_old_table', true, false );
+			update_option( 'idx_add_uid_to_idx_pages', true, false );
 		}
 
 		$all_idx_pages = $this->get_all_api_idx_pages();
