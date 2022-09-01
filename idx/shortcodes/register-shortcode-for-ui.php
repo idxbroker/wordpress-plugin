@@ -21,7 +21,7 @@ class Register_Shortcode_For_Ui {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -36,6 +36,7 @@ class Register_Shortcode_For_Ui {
 	 */
 	public function idx_set_shortcode_preview_nonce() {
 		wp_localize_script( 'idx-shortcode', 'IDXShortcodePreviewNonce', [ wp_create_nonce( 'idx-shortcode-preview-nonce' ) ] );
+		wp_localize_script( 'idx-shortcode', 'IDXShortcodeOptionsNonce', [ wp_create_nonce( 'idx-shortcode-options-nonce' ) ] );
 	}
 
 	/**
@@ -54,14 +55,14 @@ class Register_Shortcode_For_Ui {
 			'saved_links'               => array(
 				'name'       => 'Saved Links',
 				'short_name' => 'saved_links',
-				'icon'       => 'far fa-save',
+				'icon'       => 'fas fa-save',
 			),
 			'widgets'                   => array(
 				'name'       => 'IDX Widgets',
 				'short_name' => 'widgets',
 				'icon'       => 'fas fa-cog',
 			),
-			// omnibar extra included as option
+			// omnibar extra included as option.
 			'omnibar'                   => array(
 				'name'       => 'IMPress Omnibar Search',
 				'short_name' => 'omnibar',
@@ -93,7 +94,7 @@ class Register_Shortcode_For_Ui {
 				'icon'       => 'fas fa-code',
 			),
 		);
-		// Only add lead signup shortcode if the account type is Platinum
+		// Only add lead signup shortcode if the account type is Platinum.
 		if ( $this->idx_api->platinum_account_type() ) {
 			$shortcode_types['impress_lead_signup'] = array(
 				'name'       => 'IMPress Lead Signup Widget',
@@ -105,65 +106,74 @@ class Register_Shortcode_For_Ui {
 	}
 
 	/**
-	 * get_shortcode_options function.
+	 * Get_shortcode_options function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function get_shortcode_options() {
+		// User capability check.
+		if ( ! current_user_can( 'publish_posts' ) && ! current_user_can( 'publish_pages' ) ) {
+			wp_die();
+		}
+		// Exit early if missing parameters or nonce check fails.
+		if ( ! isset( $_POST['idx_shortcode_type'], $_POST['nonce'][0] ) || ! wp_verify_nonce( sanitize_key( $_POST['nonce'][0] ), 'idx-shortcode-options-nonce' ) ) {
+			return;
+		}
+
 		$shortcode_type     = sanitize_text_field( $_POST['idx_shortcode_type'] );
 		$system_links_check = $this->idx_api->idx_api_get_systemlinks();
 		if ( empty( $system_links_check ) || ! empty( $system_links_check->errors ) ) {
 			if ( empty( $system_links_check ) ) {
 				echo '<p class="error" style="display:block;">No Links to Display</p>';
 			} else {
-				echo '<p class="error" style="display:block;">' . $system_links_check->get_error_message() . '</p>';
+				echo '<p class="error" style="display:block;">' . esc_html( $system_links_check->get_error_message() ) . '</p>';
 			}
 			wp_die();
 		}
 
 		switch ( $shortcode_type ) {
 			case 'system_links':
-				echo $this->show_link_short_codes( 0 );
+				$this->show_link_short_codes( 0 );
 				break;
 			case 'saved_links':
-				echo $this->show_link_short_codes( 1 );
+				$this->show_link_short_codes( 1 );
 				break;
 			case 'widgets':
-				echo $this->get_widget_html();
+				$this->get_widget_html();
 				break;
 			case 'omnibar':
-				echo $this->get_omnibar( 'idx-omnibar' );
+				$this->get_omnibar( 'idx-omnibar' );
 				break;
 			case 'omnibar_extra':
-				echo $this->get_omnibar_extra( 'idx-omnibar-extra' );
+				$this->get_omnibar_extra( 'idx-omnibar-extra' );
 				break;
 			case 'impress_lead_login':
-				echo $this->get_lead_login( 'impress_lead_login' );
+				$this->get_lead_login( 'impress_lead_login' );
 				break;
 			case 'impress_lead_signup':
-				echo $this->get_lead_signup( 'impress_lead_signup' );
+				$this->get_lead_signup( 'impress_lead_signup' );
 				break;
 			case 'impress_city_links':
-				echo $this->get_city_links( 'impress_city_links' );
+				$this->get_city_links( 'impress_city_links' );
 				break;
 			case 'impress_property_showcase':
-				echo $this->get_property_showcase( 'impress_property_showcase' );
+				$this->get_property_showcase( 'impress_property_showcase' );
 				break;
 			case 'impress_property_carousel':
-				echo $this->get_property_carousel( 'impress_property_carousel' );
+				$this->get_property_carousel( 'impress_property_carousel' );
 				break;
 			case 'idx_wrapper_tags':
-				echo $this->idx_wrapper_tags();
+				$this->idx_wrapper_tags();
 				break;
 		}
-		// return html for the desired type for 3rd party plugins
+		// return html for the desired type for 3rd party plugins.
 		do_action( 'idx-get-shortcode-options' );
 		wp_die();
 	}
 
 	/**
-	 * shortcode_preview function.
+	 * Shortcode_preview function.
 	 *
 	 * @access public
 	 * @return void
@@ -174,32 +184,29 @@ class Register_Shortcode_For_Ui {
 			wp_die();
 		}
 		// Validate and process request.
-		if ( isset( $_POST['idx_shortcode'], $_POST['nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'] ), 'idx-shortcode-preview-nonce' ) ) {
+		if ( isset( $_POST['idx_shortcode'], $_POST['nonce'][0] ) && wp_verify_nonce( sanitize_key( $_POST['nonce'][0] ), 'idx-shortcode-preview-nonce' ) ) {
 			// Output shortcode for shortcode preview.
 			$shortcode = stripslashes( sanitize_text_field( $_POST['idx_shortcode'] ) );
-			echo do_shortcode( $shortcode );
+			echo wp_kses_post( do_shortcode( $shortcode ) );
 		}
 		wp_die();
 	}
 
 	/**
-	 * idx_wrapper_tags function.
+	 * Idx_wrapper_tags function.
 	 *
 	 * @access public
-	 * @param mixed $shortcode
 	 * @return void
 	 */
-	public function idx_wrapper_tags( ) {
-		$output = '<div class="idx-modal-shortcode-field" data-shortcode="idx-wrapper-tags"></div>';
-
-		return $output;
+	public function idx_wrapper_tags() {
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="idx-wrapper-tags"></div>';
 	}
 
 	/**
-	 * get_shortcodes_for_ui function.
+	 * Get_shortcodes_for_ui function.
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_shortcodes_for_ui() {
 		// add any other types from 3rd party plugins to this interface
@@ -213,19 +220,19 @@ class Register_Shortcode_For_Ui {
 	}
 
 	/**
-	 * show_link_short_codes function.
+	 * Show_link_short_codes function.
 	 *
 	 * @access public
-	 * @param int $link_type (default: 0)
-	 * @return void
+	 * @param int $link_type - (default: 0).
+	 * @return string
 	 */
 	public function show_link_short_codes( $link_type = 0 ) {
-		$available_shortcodes = '';
 
-		if ( $link_type === 0 ) {
+
+		if ( 0 === $link_type ) {
 			$short_code = Register_Idx_Shortcodes::SHORTCODE_SYSTEM_LINK;
 			$idx_links  = $this->idx_api->idx_api_get_systemlinks();
-		} elseif ( $link_type == 1 ) {
+		} elseif ( 1 === $link_type ) {
 			$short_code = Register_Idx_Shortcodes::SHORTCODE_SAVED_LINK;
 			$idx_links  = $this->idx_api->idx_api_get_savedlinks();
 		} else {
@@ -233,115 +240,106 @@ class Register_Shortcode_For_Ui {
 		}
 
 		if ( count( $idx_links ) > 0 && is_array( $idx_links ) ) {
-			$available_shortcodes .= '<div class="idx-modal-shortcode-field" data-shortcode="' . $short_code . '"><label for="saved-link">Select a Link</label><select id="idx-select-subtype" data-short-name="id" style="width: 100%;">';
+			echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $short_code ) . '"><label for="saved-link">Select a Link</label><select id="idx-select-subtype" data-short-name="id" style="width: 100%;">';
 			foreach ( $idx_links as $idx_link ) {
-				if ( $link_type === 0 ) {
-					$available_shortcodes .= $this->get_system_link_html( $idx_link );
+				if ( 0 === $link_type ) {
+					$this->get_system_link_html( $idx_link );
 				}
-				if ( $link_type == 1 ) {
-					$available_shortcodes .= $this->get_saved_link_html( $idx_link );
+				if ( 1 === $link_type ) {
+					$this->get_saved_link_html( $idx_link );
 				}
 			}
-			$available_shortcodes .= '</select></div><div class="idx-modal-shortcode-field"><label for="title">Change the Title?</label><input type="text" name="title" id="title" data-short-name="title"></div>';
+			echo '</select></div><div class="idx-modal-shortcode-field"><label for="title">Change the Title?</label><input type="text" name="title" id="title" data-short-name="title"></div>';
 		} else {
-			$available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.<br>For instructions on creating Saved Links, see <a href="http://support.idxbroker.com/customer/portal/articles/1913083" target="_blank">this article</a> from our knowledgebase.</div>';
+			echo '<div class="each_shortcode_row">No shortcodes available.<br>For instructions on creating Saved Links, see <a href="http://support.idxbroker.com/customer/portal/articles/1913083" target="_blank">this article</a> from our knowledgebase.</div>';
 		}
 
-		return $available_shortcodes;
 	}
 
 	/**
-	 * get_system_link_html function.
+	 * Get_system_link_html function.
 	 *
 	 * @access public
-	 * @param mixed $idx_link
+	 * @param mixed $idx_link - IDX Links.
 	 * @return void
 	 */
 	public function get_system_link_html( $idx_link ) {
-		$available_shortcodes = '';
-
-		if ( $idx_link->systemresults != 1 ) {
-			$link_short_code       = Register_Idx_Shortcodes::SHORTCODE_SYSTEM_LINK;
-			$available_shortcodes .= '<option id="' . $link_short_code . '" value="' . $idx_link->uid . '">';
-			$available_shortcodes .= $idx_link->name . '</option>';
+		if ( 1 != $idx_link->systemresults ) {
+			$link_short_code = Register_Idx_Shortcodes::SHORTCODE_SYSTEM_LINK;
+			echo '<option id="' . esc_attr( $link_short_code ) . '" value="' . esc_attr( $idx_link->uid ) . '">';
+			echo esc_html( $idx_link->name ) . '</option>';
 		}
-		return $available_shortcodes;
 	}
 
 	/**
-	 * get_saved_link_html function.
+	 * Get_saved_link_html function.
 	 *
 	 * @access public
-	 * @param mixed $idx_link
+	 * @param mixed $idx_link - IDX Links.
 	 * @return void
 	 */
 	public function get_saved_link_html( $idx_link ) {
-		$available_shortcodes  = '';
-		$link_short_code       = Register_Idx_Shortcodes::SHORTCODE_SAVED_LINK;
-		$available_shortcodes .= '<option id="' . $link_short_code . '" value="' . $idx_link->uid . '">';
-		$available_shortcodes .= $idx_link->linkTitle . '</option>';
-		return $available_shortcodes;
+		$link_short_code = Register_Idx_Shortcodes::SHORTCODE_SAVED_LINK;
+		echo '<option id="' . esc_attr( $link_short_code ) . '" value="' . esc_attr( $idx_link->uid ) . '">';
+		echo esc_html( $idx_link->linkTitle ) . '</option>';
 	}
 
 	/**
-	 * get_widget_html function.
+	 * Get_widget_html function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function get_widget_html() {
-		$idx_widgets          = $this->idx_api->idx_api_get_widgetsrc();
-		$available_shortcodes = '';
-		$widget_shortcode     = Register_Idx_Shortcodes::SHORTCODE_WIDGET;
+		$idx_widgets      = $this->idx_api->idx_api_get_widgetsrc();
+		$widget_shortcode = Register_Idx_Shortcodes::SHORTCODE_WIDGET;
 
 		if ( $idx_widgets ) {
-			$available_shortcodes .= '<div class="idx-modal-shortcode-field" data-shortcode="' . $widget_shortcode . '"><label for="widget">Select a Widget</label><select id="idx-select-subtype" data-short-name="id" style="width: 100%;">';
+			echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $widget_shortcode ) . '"><label for="widget">Select a Widget</label><select id="idx-select-subtype" data-short-name="id" style="width: 100%;">';
 			foreach ( $idx_widgets as $widget ) {
-				$available_shortcodes .= '<option id="' . $widget_shortcode . '" value="' . $widget->uid . '">' . $widget->name . '</option>';
+				echo '<option id="' . esc_attr( $widget_shortcode ) . '" value="' . esc_attr( $widget->uid ) . '">' . esc_html( $widget->name ) . '</option>';
 			}
-			$available_shortcodes .= '</select></div>';
+			echo '</select></div>';
 
 		} else {
-			$available_shortcodes .= '<div class="each_shortcode_row">No shortcodes available.</div>';
+			echo '<div class="each_shortcode_row">No shortcodes available.</div>';
 		}
-		return $available_shortcodes;
 	}
 
 	/**
-	 * get_omnibar function.
+	 * Get_omnibar function.
 	 *
 	 * @access public
-	 * @param mixed $shortcode
+	 * @param mixed $shortcode - IDX Shortcode.
 	 * @return void
 	 */
 	public function get_omnibar( $shortcode ) {
-		// Default Styles
-		$output  = "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="styles" data-short-name="styles" checked>';
-		$output .= '<label for"styles">Default Styles?</label>';
-		$output .= '</div>';
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="extra" data-short-name="extra">';
-		$output .= '<label for"extra">Extra Fields?</label>';
-		$output .= '</div>';
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="min_price" data-short-name="min_price">';
-		$output .= '<label for"min_price">Include Min Price? (If Extra Fields is enabled)</label>';
-		$output .= '</div>';
-		$output .= '<div class="idx-modal-shortcode-field" data-shortcode="idx-omnibar"></div>';
-		// Styles and Scripts for Preview
-		$output .= '<script>';
-		// empty url array so styles can be disabled and enabled as expected
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) . '"];';
-		$output .= '</script>';
-		return $output;
+		// Default Styles.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="styles" data-short-name="styles" checked>';
+		echo '<label for="styles">Default Styles?</label>';
+		echo '</div>';
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="extra" data-short-name="extra">';
+		echo '<label for="extra">Extra Fields?</label>';
+		echo '</div>';
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="min_price" data-short-name="min_price">';
+		echo '<label for="min_price">Include Min Price? (If Extra Fields is enabled)</label>';
+		echo '</div>';
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="idx-omnibar"></div>';
+		// Styles and Scripts for Preview.
+		echo '<script>';
+		// empty url array so styles can be disabled and enabled as expected.
+		echo 'styleSheetUrls = ["' . esc_js( plugins_url( '../assets/css/widgets/idx-omnibar.min.css', dirname( __FILE__ ) ) ) . '"];';
+		echo '</script>';
 	}
 
 	/**
-	 * get_lead_login function.
+	 * Get_lead_login function.
 	 *
 	 * @access public
-	 * @param mixed $shortcode
+	 * @param mixed $shortcode - Shortcode.
 	 * @return void
 	 */
 	public function get_lead_login( $shortcode ) {
@@ -351,35 +349,32 @@ class Register_Shortcode_For_Ui {
 			'password_field' => false,
 		);
 
-		$output = '';
-		// Default Styles
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="styles" data-short-name="styles" checked>';
-		$output .= '<label for"styles">Default Styles?</label>';
-		$output .= '</div>';
-		// New Window
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="new_window" data-short-name="new_window">';
-		$output .= '<label for"new_window">Open in a New Window?</label>';
-		$output .= '</div>';
-		// Password field
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="password_field" data-short-name="password_field">';
-		$output .= '<label for"password_field">Add password form field?</label>';
-		$output .= '</div>';
-		// Styles and Scripts for Preview
-		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ) . '"];';
-		$output .= '</script>';
-
-		return $output;
+		// Default Styles.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="styles" data-short-name="styles" checked>';
+		echo '<label for="styles">Default Styles?</label>';
+		echo '</div>';
+		// New Window.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="new_window" data-short-name="new_window">';
+		echo '<label for="new_window">Open in a New Window?</label>';
+		echo '</div>';
+		// Password field.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="password_field" data-short-name="password_field">';
+		echo '<label for="password_field">Add password form field?</label>';
+		echo '</div>';
+		// Styles and Scripts for Preview.
+		echo '<script>';
+		echo 'styleSheetUrls = ["' . esc_js( plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ) ) . '"];';
+		echo '</script>';
 	}
 
 	/**
-	 * get_lead_signup function.
+	 * Get_lead_signup function.
 	 *
 	 * @access public
-	 * @param mixed $shortcode
+	 * @param mixed $shortcode - IDX Shortcode.
 	 * @return void
 	 */
 	public function get_lead_signup( $shortcode ) {
@@ -392,57 +387,54 @@ class Register_Shortcode_For_Ui {
 			'button_text'    => 'Sign Up!',
 		);
 
-		$output  = '';
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="idx-phone-number" data-short-name="phone">';
-		$output .= '<label for"idx-phone-number">Show phone number field?</label>';
-		$output .= '</div>';
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="idx-phone-number" data-short-name="phone">';
+		echo '<label for="idx-phone-number">Show phone number field?</label>';
+		echo '</div>';
 
-		// Default Styles
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="styles" data-short-name="styles" checked>';
-		$output .= '<label for"styles">Default Styles?</label>';
-		$output .= '</div>';
+		// Default Styles.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="styles" data-short-name="styles" checked>';
+		echo '<label for="styles">Default Styles?</label>';
+		echo '</div>';
 
-		// New Window
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="new_window" data-short-name="new_window">';
-		$output .= '<label for"new_window">Open in a New Window?</label>';
-		$output .= '</div>';
+		// New Window.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="new_window" data-short-name="new_window">';
+		echo '<label for="new_window">Open in a New Window?</label>';
+		echo '</div>';
 
-		// Styles and Scripts for Preview
-		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-lead-signup.min.css', dirname( __FILE__ ) ) . '"];';
-		$output .= '</script>';
+		// Styles and Scripts for Preview.
+		echo '<script>';
+		echo 'styleSheetUrls = ["' . esc_js( plugins_url( '../assets/css/widgets/impress-lead-signup.min.css', dirname( __FILE__ ) ) ) . '"];';
+		echo '</script>';
 
-		// Password field
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="password_field" data-short-name="password_field">';
-		$output .= '<label for"password_field">Add password form field?</label>';
-		$output .= '</div>';
+		// Password field.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="password_field" data-short-name="password_field">';
+		echo '<label for="password_field">Add password form field?</label>';
+		echo '</div>';
 
-		// Agent select
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"agent_id">Route to Agent:</label>';
-		$output .= '<select id="agent_id" data-short-name="agent_id">';
-		$output .= $this->get_agents_select_list( $defaults['agent_id'] );
-		$output .= '</select>';
-		$output .= '</div>';
+		// Agent select.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="agent_id">Route to Agent:</label>';
+		echo '<select id="agent_id" data-short-name="agent_id">';
+		$this->idx_api->get_agents_select_list( $defaults['agent_id'] );
+		echo '</select>';
+		echo '</div>';
 
-		// Button text
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"button_text">Sign up button text:</label>';
-		$output .= '<input type="text" id="button_text" data-short-name="button_text" value="' . $defaults['button_text'] . '">';
-		$output .= '</div>';
-
-		return $output;
+		// Button text.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="button_text">Sign up button text:</label>';
+		echo '<input type="text" id="button_text" data-short-name="button_text" value="' . esc_attr( $defaults['button_text'] ) . '">';
+		echo '</div>';
 	}
 
 	/**
-	 * get_city_links function.
+	 * Get_city_links function.
 	 *
 	 * @access public
-	 * @param mixed $shortcode
+	 * @param mixed $shortcode - IDX Shortcode.
 	 * @return void
 	 */
 	public function get_city_links( $shortcode ) {
@@ -456,68 +448,62 @@ class Register_Shortcode_For_Ui {
 			'new_window'     => 0,
 		);
 
-		$approved_mls      = \IDX\Widgets\Impress_City_Links_Widget::mls_options( $defaults, $this->idx_api );
-		$city_list_options = \IDX\Widgets\Impress_City_Links_Widget::city_list_options( $defaults, $this->idx_api );
+		// MLS.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="mls">MLS to use for city links</label>';
+		echo '<select id="mls" data-short-name="mls">';
+		\IDX\Widgets\Impress_City_Links_Widget::mls_options( $defaults, $this->idx_api );
+		echo '</select>';
+		echo '</div>';
+		// City List.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="city-list">Select a city list</label>';
+		echo '<select id="city-list" class="city-list-options" data-short-name="city_list">';
+		\IDX\Widgets\Impress_City_Links_Widget::city_list_options( $defaults, $this->idx_api );
+		echo '</select>';
+		echo '</div>';
+		// Use Columns.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="use-columns" data-short-name="use_columns">';
+		echo '<label for="use-columns">Split links into columns?</label>';
+		echo '</div>';
+		// Number of Columns.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="number-columns">Number of columns</label>';
+		echo '<select id="number-columns" data-short-name="number_columns">';
+		echo '<option value="2">2</option>';
+		echo '<option value="3">3</option>';
+		echo '<option value="4" selected="selected">4</option>';
+		echo '</select>';
+		echo '</div>';
+		// Default Styles.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="styles" data-short-name="styles" checked>';
+		echo '<label for="styles">Default Styles?</label>';
+		echo '</div>';
+		// Show Count.
+		echo '<div class="idx-modal-shortcode-field checkbox show-count" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="show_count" data-short-name="show_count" checked>';
+		echo '<label for="show_count">Show Number of Listings for each city?</label>';
+		echo '</div>';
+		// New Window.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="new_window" data-short-name="new_window">';
+		echo '<label for="new_window">Open Links in a New Window?</label>';
+		echo '</div>';
 
-		$output = '';
-		// MLS
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"mls">MLS to use for city links</label>';
-		$output .= '<select id="mls" data-short-name="mls">';
-		$output .= $approved_mls;
-		$output .= '</select>';
-		$output .= '</div>';
-		// City List
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"city-list">Select a city list</label>';
-		$output .= '<select id="city-list" class="city-list-options" data-short-name="city_list">';
-		$output .= $city_list_options;
-		$output .= '</select>';
-		$output .= '</div>';
-		// Use Columns
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="use-columns" data-short-name="use_columns">';
-		$output .= '<label for"use-columns">Split links into columns?</label>';
-		$output .= '</div>';
-		// Number of Columns
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"number-columns">Number of columns</label>';
-		$output .= '<select id="number-columns" data-short-name="number_columns">';
-		$output .= '<option value="2">2</option>';
-		$output .= '<option value="3">3</option>';
-		$output .= '<option value="4" selected="selected">4</option>';
-		$output .= '</select>';
-		$output .= '</div>';
-		// Default Styles
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="styles" data-short-name="styles" checked>';
-		$output .= '<label for"styles">Default Styles?</label>';
-		$output .= '</div>';
-		// Show Count
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox show-count\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="show_count" data-short-name="show_count" checked>';
-		$output .= '<label for"show_count">Show Number of Listings for each city?</label>';
-		$output .= '</div>';
-		// New Window
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="new_window" data-short-name="new_window">';
-		$output .= '<label for"new_window">Open Links in a New Window?</label>';
-		$output .= '</div>';
-
-		$output .= "<p>Don't have any city lists? Go create some in your <a href=\"http://middleware.idxbroker.com/mgmt/citycountyziplists.php\" target=\"_blank\">IDX dashboard.</a></p>";
-		// Styles and Scripts for Preview
-		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-city-links.min.css', dirname( __FILE__ ) ) . '"];';
-		$output .= '</script>';
-
-		return $output;
+		echo '<p>Don&apos;t have any city lists? Go create some in your <a href="http://middleware.idxbroker.com/mgmt/citycountyziplists.php" target="_blank">IDX dashboard.</a></p>';
+		// Styles and Scripts for Preview.
+		echo '<script>';
+		echo 'styleSheetUrls = ["' . esc_js( plugins_url( '../assets/css/widgets/impress-city-links.min.css', dirname( __FILE__ ) ) ) . '"];';
+		echo '</script>';
 	}
 
 	/**
-	 * get_property_showcase function.
+	 * Get_property_showcase function.
 	 *
 	 * @access public
-	 * @param mixed $shortcode
+	 * @param mixed $shortcode - Shortcode.
 	 * @return void
 	 */
 	public function get_property_showcase( $shortcode ) {
@@ -536,96 +522,95 @@ class Register_Shortcode_For_Ui {
 		);
 
 		$output = '';
-		// Property type
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"property-type">Properties to Display</label>';
-		$output .= '<select id="property-type" data-short-name="property_type">';
-		$output .= '<option value="featured" selected="selected">Featured</option>';
-		$output .= '<option value="soldpending">Sold/Pending</option>';
-		$output .= '<option value="supplemental">Supplemental</option>';
-		$output .= '<option value="savedlinks">Use Saved Link</option>';
-		$output .= '</select>';
-		$output .= '</div>';
+		// Property type.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="property-type">Properties to Display</label>';
+		echo '<select id="property-type" data-short-name="property_type">';
+		echo '<option value="featured" selected="selected">Featured</option>';
+		echo '<option value="soldpending">Sold/Pending</option>';
+		echo '<option value="supplemental">Supplemental</option>';
+		echo '<option value="savedlinks">Use Saved Link</option>';
+		echo '</select>';
+		echo '</div>';
 
-		// Saved link ID
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"saved-link-id">Choose a saved link (if selected above):</label>';
-		$output .= '<select id="saved-link-id" data-short-name="saved_link_id">';
-		$output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options( $defaults, $this->idx_api );
-		$output .= '</select>';
-		$output .= '</div>';
+		// Saved link ID.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="saved-link-id">Choose a saved link (if selected above):</label>';
+		echo '<select id="saved-link-id" data-short-name="saved_link_id">';
+		\IDX\Widgets\Impress_Carousel_Widget::saved_link_options( $defaults, $this->idx_api );
+		echo '</select>';
+		echo '</div>';
 
-		// Agent select
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"agent_id">Limit by Agent:</label>';
-		$output .= '<select id="agent_id" data-short-name="agent_id">';
-		$output .= $this->get_agents_select_list( $defaults['agent_id'] );
-		$output .= '</select>';
-		$output .= '</div>';
+		// Agent select.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="agent_id">Limit by Agent:</label>';
+		echo '<select id="agent_id" data-short-name="agent_id">';
+		$this->idx_api->get_agents_select_list( $defaults['agent_id'] );
+		echo '</select>';
+		echo '</div>';
 
-		// Colistings
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="colistings" data-short-name="colistings">';
-		$output .= '<label for"colistings">Include colistings for selected agent?</label>';
-		$output .= '</div>';	
+		// Colistings.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="colistings" data-short-name="colistings">';
+		echo '<label for="colistings">Include colistings for selected agent?</label>';
+		echo '</div>';
 
-		// Images
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="show-image" data-short-name="show_image" checked>';
-		$output .= '<label for"show-image">Show image?</label>';
-		$output .= '</div>';
-		// Rows
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="use-rows" data-short-name="use_rows" checked>';
-		$output .= '<label for"use-rows">Use rows?</label>';
-		$output .= '</div>';
-		// Per row
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"property-type">Listings per row</label>';
-		$output .= '<select id="property-type" data-short-name="num_per_row">';
-		$output .= '<option value="2">2</option>';
-		$output .= '<option value="3">3</option>';
-		$output .= '<option value="4" selected="selected">4</option>';
-		$output .= '</select>';
-		$output .= '</div>';
-		// Max Listings
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"max">Max number of listings to show</label>';
-		$output .= '<input type="number" id="max" data-short-name="max" value="4">';
-		$output .= '</div>';
-		// Sort order
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"order">Sort order</label>';
-		$output .= '<select id="order" data-short-name="order">';
-		$output .= '<option value="default" selected="selected">Default</option>';
-		$output .= '<option value="high-low">Highest to Lowest Price</option>';
-		$output .= '<option value="low-high">Lowest to Highest Price</option>';
-		$output .= '</select>';
-		$output .= '</div>';
-		// Default Styles
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="styles" data-short-name="styles" checked>';
-		$output .= '<label for"styles">Default Styles?</label>';
-		$output .= '</div>';
-		// New Window
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="new_window" data-short-name="new_window">';
-		$output .= '<label for"new_window">Open Listings in a New Window?</label>';
-		$output .= '</div>';
+		// Images.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="show-image" data-short-name="show_image" checked>';
+		echo '<label for="show-image">Show image?</label>';
+		echo '</div>';
+		// Rows.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="use-rows" data-short-name="use_rows" checked>';
+		echo '<label for="use-rows">Use rows?</label>';
+		echo '</div>';
+		// Per row.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="property-type">Listings per row</label>';
+		echo '<select id="property-type" data-short-name="num_per_row">';
+		echo '<option value="2">2</option>';
+		echo '<option value="3">3</option>';
+		echo '<option value="4" selected="selected">4</option>';
+		echo '</select>';
+		echo '</div>';
+		// Max Listings.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="max">Max number of listings to show</label>';
+		echo '<input type="number" id="max" data-short-name="max" value="4">';
+		echo '</div>';
+		// Sort order.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="order">Sort order</label>';
+		echo '<select id="order" data-short-name="order">';
+		echo '<option value="default" selected="selected">Default</option>';
+		echo '<option value="high-low">Highest to Lowest Price</option>';
+		echo '<option value="low-high">Lowest to Highest Price</option>';
+		echo '</select>';
+		echo '</div>';
+		// Default Styles.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="styles" data-short-name="styles" checked>';
+		echo '<label for="styles">Default Styles?</label>';
+		echo '</div>';
+		// New Window.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="new_window" data-short-name="new_window">';
+		echo '<label for="new_window">Open Listings in a New Window?</label>';
+		echo '</div>';
 
-		// Styles and Scripts for Preview
-		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/impress-showcase.min.css', dirname( __FILE__ ) ) . '"];';
-		$output .= '</script>';
+		// Styles and Scripts for Preview.
+		echo '<script>';
+		echo 'styleSheetUrls = ["' . esc_js( plugins_url( '../assets/css/widgets/impress-showcase.min.css', dirname( __FILE__ ) ) ) . '"];';
+		echo '</script>';
 
-		return $output;
 	}
 
 	/**
-	 * get_property_carousel function.
+	 * Get_property_carousel function.
 	 *
 	 * @access public
-	 * @param mixed $shortcode
+	 * @param mixed $shortcode - Shortcode.
 	 * @return void
 	 */
 	public function get_property_carousel( $shortcode ) {
@@ -643,112 +628,79 @@ class Register_Shortcode_For_Ui {
 		);
 
 		$output = '';
-		// Property type
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"property-type">Properties to Display</label>';
-		$output .= '<select id="property-type" data-short-name="property_type">';
-		$output .= '<option value="featured" selected="selected">Featured</option>';
-		$output .= '<option value="soldpending">Sold/Pending</option>';
-		$output .= '<option value="supplemental">Supplemental</option>';
-		$output .= '<option value="savedlinks">Use Saved Link</option>';
-		$output .= '</select>';
-		$output .= '</div>';
+		// Property type.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="property-type">Properties to Display</label>';
+		echo '<select id="property-type" data-short-name="property_type">';
+		echo '<option value="featured" selected="selected">Featured</option>';
+		echo '<option value="soldpending">Sold/Pending</option>';
+		echo '<option value="supplemental">Supplemental</option>';
+		echo '<option value="savedlinks">Use Saved Link</option>';
+		echo '</select>';
+		echo '</div>';
 
-		// Saved Link ID
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"saved-link-id">Choose a saved link (if selected above):</label>';
-		$output .= '<select id="saved-link-id" data-short-name="saved_link_id">';
-		$output .= \IDX\Widgets\Impress_Carousel_Widget::saved_link_options( $defaults, $this->idx_api );
-		$output .= '</select>';
-		$output .= '</div>';
+		// Saved Link ID.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="saved-link-id">Choose a saved link (if selected above):</label>';
+		echo '<select id="saved-link-id" data-short-name="saved_link_id">';
+		\IDX\Widgets\Impress_Carousel_Widget::saved_link_options( $defaults, $this->idx_api );
+		echo '</select>';
+		echo '</div>';
 
-		// Agent select
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"agent_id">Limit by Agent:</label>';
-		$output .= '<select id="agent_id" data-short-name="agent_id">';
-		$output .= $this->get_agents_select_list( $defaults['agent_id'] );
-		$output .= '</select>';
-		$output .= '</div>';
+		// Agent select.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="agent_id">Limit by Agent:</label>';
+		echo '<select id="agent_id" data-short-name="agent_id">';
+		$this->idx_api->get_agents_select_list( $defaults['agent_id'] );
+		echo '</select>';
+		echo '</div>';
 
-		// Colistings
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="colistings" data-short-name="colistings">';
-		$output .= '<label for"colistings">Include colistings for selected agent?</label>';
-		$output .= '</div>';
+		// Colistings.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="colistings" data-short-name="colistings">';
+		echo '<label for="colistings">Include colistings for selected agent?</label>';
+		echo '</div>';
 
-		// Per row
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"display">Listings to show without scrolling</label>';
-		$output .= '<input type="number" id="display" data-short-name="display" value="3">';
-		$output .= '</div>';
-		// Max Listings
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"max">Max number of listings to show</label>';
-		$output .= '<input type="number" id="max" data-short-name="max" value="15">';
-		$output .= '</div>';
-		// Sort order
-		$output .= "<div class=\"idx-modal-shortcode-field\" data-shortcode=\"$shortcode\">";
-		$output .= '<label for"order">Sort order</label>';
-		$output .= '<select id="order" data-short-name="order">';
-		$output .= '<option value="default" selected="selected">Default</option>';
-		$output .= '<option value="high-low">Highest to Lowest Price</option>';
-		$output .= '<option value="low-high">Lowest to Highest Price</option>';
-		$output .= '</select>';
-		$output .= '</div>';
-		// Autoplay
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="autoplay" data-short-name="autoplay" checked>';
-		$output .= '<label for"autoplay">Autoplay?</label>';
-		$output .= '</div>';
-		// Default Styles
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="styles" data-short-name="styles" checked>';
-		$output .= '<label for"styles">Default Styles?</label>';
-		$output .= '</div>';
-		// New Window
-		$output .= "<div class=\"idx-modal-shortcode-field checkbox\" data-shortcode=\"$shortcode\">";
-		$output .= '<input type="checkbox" id="new_window" data-short-name="new_window">';
-		$output .= '<label for"new_window">Open Listings in a New Window?</label>';
-		$output .= '</div>';
+		// Per row.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="display">Listings to show without scrolling</label>';
+		echo '<input type="number" id="display" data-short-name="display" value="3">';
+		echo '</div>';
+		// Max Listings.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="max">Max number of listings to show</label>';
+		echo '<input type="number" id="max" data-short-name="max" value="15">';
+		echo '</div>';
+		// Sort order.
+		echo '<div class="idx-modal-shortcode-field" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<label for="order">Sort order</label>';
+		echo '<select id="order" data-short-name="order">';
+		echo '<option value="default" selected="selected">Default</option>';
+		echo '<option value="high-low">Highest to Lowest Price</option>';
+		echo '<option value="low-high">Lowest to Highest Price</option>';
+		echo '</select>';
+		echo '</div>';
+		// Autoplay.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="autoplay" data-short-name="autoplay" checked>';
+		echo '<label for="autoplay">Autoplay?</label>';
+		echo '</div>';
+		// Default Styles.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="styles" data-short-name="styles" checked>';
+		echo '<label for="styles">Default Styles?</label>';
+		echo '</div>';
+		// New Window.
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="new_window" data-short-name="new_window">';
+		echo '<label for="new_window">Open Listings in a New Window?</label>';
+		echo '</div>';
 
-		// Styles and Scripts for Preview
-		$output .= '<script>';
-		$output .= 'styleSheetUrls = ["' . plugins_url( '../assets/css/widgets/owl2.carousel.min.css', dirname( __FILE__ ) ) . '", "';
-		$output .= plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) . '"];';
-		$output .= '</script>';
-		$output .= '<script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>';
-		$output .= '<script src="' . plugins_url( '../assets/js/owl2.carousel.min.js', dirname( __FILE__ ) ) . '"></script>';
+		// Styles and Scripts for Preview.
+		echo '<script>';
+		echo 'styleSheetUrls = ["' . esc_js( plugins_url( '../assets/css/widgets/owl2.carousel.min.css', dirname( __FILE__ ) ) ) . '", "' . esc_js( plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) ) . '"];';
+		echo '</script>';
 
-		return $output;
 	}
 
-
-	/**
-	 * get_agents_select_list function.
-	 *
-	 * @access public
-	 * @param mixed $agent_id
-	 * @return void
-	 */
-	public function get_agents_select_list( $agent_id ) {
-		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-
-		if ( ! is_array( $agents_array ) ) {
-			return;
-		}
-
-		if ( $agent_id != null ) {
-			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>Use default routing</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
-			}
-		} else {
-			$agents_list = '<option value="">All</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
-			}
-		}
-
-		return $agents_list;
-	}
 }

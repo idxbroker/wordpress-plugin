@@ -7,7 +7,7 @@ namespace IDX\Shortcodes;
 class Register_Impress_Shortcodes {
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -34,10 +34,10 @@ class Register_Impress_Shortcodes {
 	}
 
 	/**
-	 * lead_login_shortcode function.
+	 * Lead_login_shortcode function.
 	 *
 	 * @access public
-	 * @param mixed $atts
+	 * @param mixed $atts - Attributes.
 	 * @return void
 	 */
 	public function lead_login_shortcode( $atts ) {
@@ -53,7 +53,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-lead-login', plugins_url( '../assets/css/widgets/impress-lead-login.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-login' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -62,7 +62,7 @@ class Register_Impress_Shortcodes {
 
 		$target = $this->target( $new_window );
 
-		// Returns hidden if false or not set
+		// Returns hidden if false or not set.
 		$password_field_type = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? 'password' : 'hidden';
 		$password_label      = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ? '<label for="impress-widgetPassword">Password:</label>' : '';
 
@@ -77,17 +77,17 @@ class Register_Impress_Shortcodes {
                 <input id="impress-widgetPassword" type="%4$s" name="password" placeholder="Password">
                 <input id="impress-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
             </form>',
-			$this->idx_api->subdomain_url(),
-			$target,
-			$password_label,
-			$password_field_type
+			esc_url( $this->idx_api->subdomain_url() ),
+			esc_attr( $target ),
+			html_entity_decode( $password_label ),
+			esc_attr( $password_field_type )
 		);
 
 		return $widget;
 	}
 
 	/**
-	 * lead_signup_shortcode function.
+	 * Lead_signup_shortcode function.
 	 *
 	 * @access public
 	 * @return void
@@ -98,7 +98,7 @@ class Register_Impress_Shortcodes {
 	}
 
 	/**
-	 * property_showcase_shortcode function.
+	 * Property_showcase_shortcode function.
 	 *
 	 * @access public
 	 * @param array $atts (default: array())
@@ -125,7 +125,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-showcase', plugins_url( '../assets/css/widgets/impress-showcase.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-showcase' );
 		}
 
 		$output = '';
@@ -229,7 +229,7 @@ class Register_Impress_Shortcodes {
 				return $output;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			if ( 1 == $use_rows && $count == 0 && $max != '1' ) {
 				$output .= '<div class="shortcode impress-property-showcase impress-row">';
@@ -367,7 +367,7 @@ class Register_Impress_Shortcodes {
 				);
 			}
 
-			if ( 1 == $use_rows && $count != 1 ) {
+			if ( 1 == $use_rows && ( 1 !== $count || 1 === $total ) ) {
 
 				// close a row if..
 				// num_per_row is a factor of count OR
@@ -505,7 +505,7 @@ class Register_Impress_Shortcodes {
 	 * @return void
 	 */
 	public function property_carousel_shortcode( $atts = array() ) {
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'font-awesome-5.8.2' );
 
 		extract(
 			shortcode_atts(
@@ -525,11 +525,11 @@ class Register_Impress_Shortcodes {
 			)
 		);
 
-		wp_enqueue_style( 'owl2-css', plugins_url( '../assets/css/widgets/owl2.carousel.min.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script('owl2', plugins_url('../assets/js/owl2.carousel.min.js', dirname(__FILE__)), array('jquery'), NULL, false);
+		wp_enqueue_style( 'owl2-css' );
+		wp_enqueue_script( 'owl2' );
 
 		if ( $styles ) {
-			wp_enqueue_style( 'impress-carousel', plugins_url( '../assets/css/widgets/impress-carousel.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-carousel' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -579,41 +579,6 @@ class Register_Impress_Shortcodes {
 			$autoplay_param = '';
 		}
 
-		// All Instance Values are strings for shortcodes but not widgets.
-		$output .= '
-            <script>
-		window.addEventListener("DOMContentLoaded", function(event) {
-                	jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
-			    items: ' . $display . ',
-			    ' . $autoplay_param . '
-			    nav: true,
-			    navText: ["' . $prev_link . '", "' . $next_link . '"],
-			    loop: true,
-			    lazyLoad: true,
-			    addClassActive: true,
-			    itemsScaleUp: true,
-			    navContainerClass: "owl-controls owl-nav",
-			    responsiveClass:true,
-			    responsive:{
-				0:{
-					items: 1,
-				    	nav: true,
-				    	margin: 0
-				},
-				450:{
-					items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
-					loop: ' . ( round( $display / 2 ) < count( $properties ) ? 'true' : 'false' ) . '
-				},
-				800:{
-					items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
-					loop: ' . ( $display < count( $properties ) ? 'true' : 'false' ) . '
-				}
-                    	}
-                });
-              });
-            </script>
-            ';
-
 		$count = 0;
 
 		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $display );
@@ -622,7 +587,6 @@ class Register_Impress_Shortcodes {
 		$agent_data;
 
 		foreach ( $properties as $prop ) {
-
 			if ( ! empty( $agent_id ) ) {
 				// Check if listing agent ID matches agent's IDX ID.
 				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
@@ -648,11 +612,10 @@ class Register_Impress_Shortcodes {
 			}
 
 			if ( ! empty( $max ) && $count == $max ) {
-				$output .= '</div><!-- end .impress-listing-carousel -->';
-				return $output;
+				break;
 			}
 
-			$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : 'https://s3.amazonaws.com/mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 			$image_alt_tag  = apply_filters( 'impress_carousel_image_alt_tag', esc_html( $prop['address'] ), $prop );
 
 			$count++;
@@ -661,7 +624,7 @@ class Register_Impress_Shortcodes {
 
 			$disclaimer = $this->maybe_add_disclaimer_and_courtesy( $prop );
 
-			// Get URL and add suffix if one exists
+			// Get URL and add suffix if one exists.
 			if ( isset( $prop['fullDetailsURL'] ) ) {
 				$url = $prop['fullDetailsURL'];
 			} else {
@@ -719,6 +682,41 @@ class Register_Impress_Shortcodes {
 			);
 		}
 
+		// All Instance Values are strings for shortcodes but not widgets.
+		$output = '
+        	<script>
+				window.addEventListener("DOMContentLoaded", function(event) {
+					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+						items: ' . $display . ',
+						' . $autoplay_param . '
+						nav: true,
+						navText: ["' . $prev_link . '", "' . $next_link . '"],
+						loop: true,
+						lazyLoad: true,
+						addClassActive: true,
+						itemsScaleUp: true,
+						navContainerClass: "owl-controls owl-nav",
+						responsiveClass:true,
+						responsive:{
+							0:{
+								items: 1,
+								nav: true,
+								margin: 0
+							},
+							450:{
+								items: ' . ( round( $display / 2 ) > count( $properties ) ? count( $properties ) : round( $display / 2 ) ) . ',
+								loop: ' . ( round( $display / 2 ) < $count ? 'true' : 'false' ) . '
+							},
+							800:{
+								items: ' . ( $display > count( $properties ) ? count( $properties ) : $display ) . ',
+								loop: ' . ( $display < $count ? 'true' : 'false' ) . '
+							}
+						}
+					});
+				});
+            </script>
+        ' . $output;
+
 		$output .= '</div><!-- end .impress-carousel -->';
 
 		return $output;
@@ -749,7 +747,7 @@ class Register_Impress_Shortcodes {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-city-links', plugins_url( '../assets/css/widgets/impress-city-links.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-city-links' );
 		}
 
 		if ( ! isset( $new_window ) ) {

@@ -21,7 +21,7 @@
                 placeholder="Select"
                 :ariaLabel="labels.cityListLabel"
                 :selected="cityListSelected"
-                :options="cityListOptions"
+                :options="cleanOptionsList(cityListOptions)"
                 @selected-item="$emit('form-field-update', { key: 'cityListSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
@@ -31,7 +31,7 @@
                 placeholder="Select"
                 :ariaLabel="labels.countyListLabel"
                 :selected="countyListSelected"
-                :options="countyListOptions"
+                :options="cleanOptionsList(countyListOptions)"
                 @selected-item="$emit('form-field-update', { key: 'countyListSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
@@ -41,7 +41,7 @@
                 placeholder="Select"
                 :ariaLabel="labels.postalCodeListLabel"
                 :selected="postalCodeSelected"
-                :options="postalCodeListOptions"
+                :options="cleanOptionsList(postalCodeListOptions)"
                 @selected-item="$emit('form-field-update', { key: 'postalCodeSelected', value: $event.value })"
             ></idx-custom-select>
         </idx-form-group>
@@ -69,7 +69,7 @@
                 v-for="(mls, key) in mlsMembership"
                 :key="mls.value"
             >
-                <idx-form-label customClass="form-content__label">{{ mls.label }}</idx-form-label>
+                <idx-form-label customClass="form-content__label">{{ decodeEntities(mls.label) }}</idx-form-label>
                 <idx-custom-select
                     :ariaLabel="mls.label"
                     :selected="mls.selected === '' ? undefined : mls.selected"
@@ -155,6 +155,7 @@
     </idx-block>
 </template>
 <script>
+import { decodeEntities } from '@/utilities'
 export default {
     name: 'omnibar-form',
     props: {
@@ -219,7 +220,7 @@ export default {
         mlsNamesList () {
             const names = []
             for (const x in this.mlsMembership) {
-                names.push({ value: this.mlsMembership[x].value, label: this.mlsMembership[x].label })
+                names.push({ value: this.mlsMembership[x].value, label: decodeEntities(this.mlsMembership[x].label) })
             }
             return names
         },
@@ -306,7 +307,7 @@ export default {
             // which is "the custom field's name - the name of the MLS it belongs to (The property type it is in)"
             return {
                 ...item,
-                label: `${item.label} - ${MLSName.label} (${propType.label})`,
+                label: `${item.label} - ` + decodeEntities(MLSName.label) + ` (${propType.label})`,
                 cleanLabel
             }
         },
@@ -323,6 +324,15 @@ export default {
             delete updatedItem.parentPtID
             // Return the new item
             return updatedItem
+        },
+        cleanOptionsList (optionList) {
+            return optionList.map(option => {
+                option = {
+                    label: decodeEntities(option.label),
+                    value: option.value
+                }
+                return option
+            })
         },
         findMLSName (idxID) {
             // Find the MLS object based on the given idxID
@@ -345,7 +355,8 @@ export default {
             }) : selections
             // Emit the form update with the new clean selections
             this.$emit('form-field-update', { key, value: cleanedSelections })
-        }
+        },
+        decodeEntities
     },
     created () {
         this.labels = {

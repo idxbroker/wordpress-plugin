@@ -12,32 +12,32 @@
  * @since 0.1.0
  */
 
-add_action('admin_menu', 'wp_listings_tax_reorder_init', 20);
+add_action( 'admin_menu', 'wp_listings_tax_reorder_init', 20);
 function wp_listings_tax_reorder_init() {
-	add_submenu_page( 'edit.php?post_type=listing', __( 'Reorder Taxonomies', 'wp-listings' ), __( 'Reorder Taxonomies', 'wp-listings' ), 'manage_options', 'wplistings-tax-reorder', 'wp_listings_tax_reorder');
+	add_submenu_page( 'edit.php?post_type=listing', __( 'Reorder Taxonomies', 'wp-listings' ), __( 'Reorder Taxonomies', 'wp-listings' ), 'manage_options', 'wplistings-tax-reorder', 'wp_listings_tax_reorder' );
 }
 
 add_action( 'admin_enqueue_scripts', 'wp_listings_tax_reorder_enqueue' );
 function wp_listings_tax_reorder_enqueue() {
-		wp_enqueue_script('jquery-ui-sortable');
+		wp_enqueue_script( 'jquery-ui-sortable' );
 }
 
 function wp_listings_tax_reorder() {
-	$wp_listings_taxes = get_option('wp_listings_taxonomies');
+	$wp_listings_taxes = get_option( 'wp_listings_taxonomies' );
 
-	if($_POST) {
-		$new_order = $_POST['wplistings-tax'];
+	if ( $_POST ) {
+		$new_order                   = $_POST['wplistings-tax'];
 		$wp_listings_taxes_reordered = array();
-		foreach( $new_order as $tax ) {
-			if($wp_listings_taxes[$tax])
-				$wp_listings_taxes_reordered[$tax] = $wp_listings_taxes[$tax];	
+		foreach ( $new_order as $tax ) {
+			if ( $wp_listings_taxes[ $tax ] ) {
+				$wp_listings_taxes_reordered[ $tax ] = $wp_listings_taxes[ $tax ];
+			}
 		}
 		$wp_listings_taxes = $wp_listings_taxes_reordered;
-		update_option('wp_listings_taxonomies', $wp_listings_taxes_reordered);
-		
+		update_option( 'wp_listings_taxonomies', $wp_listings_taxes_reordered );
 	}
 ?>
-<h2><?php _e( 'Reorder Taxonomies', 'wp-listings' ); ?></h2>
+<h2><?php esc_html_e( 'Reorder Taxonomies', 'wp-listings' ); ?></h2>
 <div id="col-container">
 <style>
 	#sortable { list-style-type: none; margin: 10px 0 ; padding: 0; }
@@ -71,26 +71,26 @@ function wp_listings_tax_reorder() {
 	});
 	</script>
 	<div id="col-left">
-		<?php print_r($wp_listings_taxes); ?>
+		<?php echo $wp_listings_taxes; ?>
 	<div class="col-wrap">
-    <span>Drag and Drop to reorder</span>
+	<span>Drag and Drop to reorder</span>
 	<form method="post">
 	<ul id="sortable">
-    	<?php foreach($wp_listings_taxes as $wp_listings_tax_key => $wp_listings_tax_value) { ?>
-        	<li class="ui-state-default">
-            	<div class="item">
-					<?php echo $wp_listings_tax_value['labels']['name']; ?><input type="hidden" id="wplistings-tax[]" name="wplistings-tax[]" value="<?php echo $wp_listings_tax_key; ?>" />
-                </div>
-            </li>
-        <?php } ?>
+		<?php foreach( $wp_listings_taxes as $wp_listings_tax_key => $wp_listings_tax_value ) { ?>
+			<li class="ui-state-default">
+				<div class="item">
+					<?php echo esc_html( $wp_listings_tax_value['labels']['name'] ); ?><input type="hidden" id="wplistings-tax[]" name="wplistings-tax[]" value="<?php echo esc_attr( $wp_listings_tax_key ); ?>" />
+				</div>
+			</li>
+		<?php } ?>
 	</ul>
-    <input class="wplistings-submit" type="submit" value="Save" />
+	<input class="wplistings-submit" type="submit" value="Save" />
 	</form>
 	</div>
 	</div><!-- /col-left -->
 
 </div><!-- /col-container -->
-<?php
+	<?php
 }
 
 ?>

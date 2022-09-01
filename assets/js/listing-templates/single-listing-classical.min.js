@@ -1,0 +1,1 @@
+jQuery(document).ready(function(){jQuery(".navigation a").smoothScroll(),jQuery(".iframe-wrap").fitVids()}),jQuery(function(i){i("body").scrollspy({target:"#listing-sidebar"}),i(window).scroll(function(){i(document).scrollTop()>1?i("#listing-sidebar").addClass("expand"):i("#listing-sidebar").removeClass("expand")})});

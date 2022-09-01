@@ -4,6 +4,9 @@ namespace IDX\Views;
 use \Carbon\Carbon;
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
+/**
+ * Lead_Management class.
+ */
 class Lead_Management {
 
 	private static $instance;
@@ -24,11 +27,17 @@ class Lead_Management {
 		add_action( 'init', array( $this, 'idx_ajax_actions' ) );
 	}
 
+	/**
+	 * Idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
 	public function add_lead_pages() {
 
-		// Add Leads menu page
+		// Add Leads menu page.
 		$this->page = add_menu_page(
 			'Leads',
 			'Leads',
@@ -45,7 +54,7 @@ class Lead_Management {
 		/* Add callbacks for this screen only */
 		add_action( 'load-' . $this->page, array( $this, 'lead_list_actions' ), 9 );
 
-		// Add Leads as submenu page also
+		// Add Leads as submenu page also.
 		$this->page = add_submenu_page(
 			'leads',
 			'Leads',
@@ -61,7 +70,7 @@ class Lead_Management {
 		/* Add callbacks for this screen only */
 		add_action( 'load-' . $this->page, array( $this, 'lead_list_actions' ), 9 );
 
-		// Add Add Lead submenu page
+		// Add Add Lead submenu page.
 		$this->page = add_submenu_page(
 			'leads',
 			'Add/Edit Lead',
@@ -91,16 +100,16 @@ class Lead_Management {
 		add_action( 'wp_ajax_idx_lead_property_delete', array( $this, 'idx_lead_property_delete' ) );
 		add_action( 'wp_ajax_idx_lead_search_delete', array( $this, 'idx_lead_search_delete' ) );
 
-		add_action( 'wp_ajax_get_idx_leads_data', [$this,'get_idx_leads_data'] );
+		add_action( 'wp_ajax_get_idx_leads_data', [ $this, 'get_idx_leads_data' ] );
 	}
 
 	public function idx_lead_scripts() {
 
-		// Only load on leads pages
+		// Only load on leads pages.
 		$screen_id = get_current_screen();
-		if ( $screen_id->id === 'leads_page_edit-lead' || $screen_id->id === 'toplevel_page_leads' ) {
+		if ( 'leads_page_edit-lead' === $screen_id->id || 'toplevel_page_leads' === $screen_id->id ) {
 
-			wp_enqueue_script( 'idx_lead_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-leads.js', array( 'jquery' ), true );
+			wp_enqueue_script( 'idx_lead_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-leads.js', [ 'jquery' ], '1.0.0', false );
 			wp_localize_script(
 				'idx_lead_ajax_script',
 				'IDXLeadAjax',
@@ -110,17 +119,16 @@ class Lead_Management {
 					'detailsurl' => $this->idx_api->details_url(),
 				)
 			);
-			wp_enqueue_script( 'dialog-polyfill', IMPRESS_IDX_URL . 'assets/js/dialog-polyfill.js', array(), true );
-			wp_enqueue_script( 'idx-material-js', 'https://code.getmdl.io/1.2.1/material.min.js', array( 'jquery' ), true );
-			wp_enqueue_script( 'jquery-datatables', 'https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js', array( 'jquery' ), true );
-			wp_localize_script( 'jquery-datatables', 'datatablesajax', [ 'url' => admin_url( 'admin-ajax.php' ) ] );
-			wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
+			wp_enqueue_script( 'dialog-polyfill' );
+			wp_enqueue_script( 'idx-material-js' );
+			wp_enqueue_script( 'jquery-datatables' );
+			wp_enqueue_script( 'select2' );
 
-			wp_enqueue_style( 'idx-admin', IMPRESS_IDX_URL . 'assets/css/idx-admin.min.css' );
-			wp_enqueue_style( 'idx-material-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' );
-			wp_enqueue_style( 'idx-material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons' );
-			wp_enqueue_style( 'idx-material-style', IMPRESS_IDX_URL . 'assets/css/material.min.css' );
-			wp_enqueue_style( 'idx-material-datatable', 'https://cdn.datatables.net/1.10.12/css/dataTables.material.min.css' );
+			wp_enqueue_style( 'idx-admin' );
+			wp_enqueue_style( 'idx-material-font' );
+			wp_enqueue_style( 'idx-material-icons' );
+			wp_enqueue_style( 'idx-material-style' );
+			wp_enqueue_style( 'idx-material-datatable' );
 		}
 	}
 
@@ -133,11 +141,10 @@ class Lead_Management {
 	public function idx_lead_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_add_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['fields'] ) ) {
+		if ( ! $permission || ! isset( $_POST['fields'] ) ) {
 			echo 'error';
 		} else {
-
-			// Add lead via API
+			// Add lead via API.
 			$api_url  = IDX_API_URL . '/leads/lead';
 			$args     = array(
 				'method'    => 'PUT',
@@ -147,19 +154,19 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => $_POST['fields'],
+				'body'      => sanitize_text_field( wp_unslash( $_POST['fields'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 
 			$decoded_response = json_decode( $response['body'], 1 );
 
-			if ( $decoded_response == 'Lead already exists.' ) {
+			if ( 'Lead already exists.' === $decoded_response ) {
 				echo 'Lead already exists.';
 			} elseif ( wp_remote_retrieve_response_code( $response ) == '200' ) {
-				// Delete lead cache so new lead will show in list views immediately
+				// Delete lead cache so new lead will show in list views immediately.
 				delete_option( 'idx_leads_lead_cache' );
-				// return new lead ID to script
-				echo $decoded_response['newID'];
+				// return new lead ID to script.
+				echo esc_html( $decoded_response['newID'] );
 			} else {
 				echo 'error';
 			}
@@ -176,12 +183,14 @@ class Lead_Management {
 	public function idx_lead_edit() {
 
 		$permission = check_ajax_referer( 'idx_lead_edit_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['fields'] ) || ! isset( $_POST['leadID'] ) ) {
+		if ( ! $permission || ! isset( $_POST['fields'] ) || ! isset( $_POST['leadID'] ) ) {
 			echo 'error';
 		} else {
 
-			// Edit lead via API
-			$api_url  = IDX_API_URL . '/leads/lead/' . $_POST['leadID'];
+			$lead_id = sanitize_text_field( wp_unslash( $_POST['leadID'] ) );
+
+			// Edit lead via API.
+			$api_url  = IDX_API_URL . '/leads/lead/' . $lead_id;
 			$args     = array(
 				'method'    => 'POST',
 				'headers'   => array(
@@ -190,12 +199,12 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => $_POST['fields'],
+				'body'      => sanitize_text_field( wp_unslash( $_POST['fields'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
-				delete_option( 'idx_leads_lead/' . $_POST['leadID'] . '_cache' );
+				delete_option( 'idx_leads_lead/' . $lead_id . '_cache' );
 				echo 'success';
 			} else {
 				echo 'error';
@@ -213,12 +222,14 @@ class Lead_Management {
 	public function idx_lead_note_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_note_add_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['note'] ) || ! isset( $_POST['id'] ) ) {
+		if ( ! $permission || ! isset( $_POST['note'] ) || ! isset( $_POST['id'] ) ) {
 			echo 'error';
 		} else {
 
-			// Add lead note via API
-			$api_url  = IDX_API_URL . '/leads/note/' . $_POST['id'];
+			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
+
+			// Add lead note via API.
+			$api_url  = IDX_API_URL . '/leads/note/' . $post_id;
 			$args     = array(
 				'method'    => 'PUT',
 				'headers'   => array(
@@ -227,15 +238,15 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => $_POST['note'],
+				'body'      => sanitize_text_field( wp_unslash( $_POST['note'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 
 			$decoded_response = json_decode( $response['body'], 1 );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '200' ) {
-				delete_option( 'idx_leads_note/' . $_POST['id'] . '_cache' );
-				echo $decoded_response['newID'];
+				delete_option( 'idx_leads_note/' . $post_id . '_cache' );
+				echo esc_html( $decoded_response['newID'] );
 			} else {
 				echo 'error';
 			}
@@ -252,12 +263,14 @@ class Lead_Management {
 	public function idx_lead_note_edit() {
 
 		$permission = check_ajax_referer( 'idx_lead_note_edit_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['note'] ) || ! isset( $_POST['id'] ) || ! isset( $_POST['noteid'] ) ) {
+		if ( ! $permission || ! isset( $_POST['note'], $_POST['id'], $_POST['noteid'] ) ) {
 			echo 'not set';
 		} else {
+			$note_id = sanitize_text_field( wp_unslash( $_POST['noteid'] ) );
+			$id      = sanitize_text_field( wp_unslash( $_POST['id'] ) );
 
-			// Update lead note via API
-			$api_url  = IDX_API_URL . '/leads/note/' . $_POST['id'] . '/' . $_POST['noteid'];
+			// Update lead note via API.
+			$api_url  = IDX_API_URL . '/leads/note/' . $id . '/' . $note_id;
 			$args     = array(
 				'method'    => 'POST',
 				'headers'   => array(
@@ -266,14 +279,14 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => $_POST['note'],
+				'body'      => sanitize_text_field( wp_unslash( $_POST['note'] ) ),
 			);
 			$response = wp_remote_request( $api_url, $args );
 
 			$decoded_response = json_decode( $response['body'], 1 );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
-				delete_option( 'idx_leads_note/' . $_POST['id'] . '_cache' );
+				delete_option( 'idx_leads_note/' . $id . '_cache' );
 				echo 'success';
 			} else {
 				echo 'error';
@@ -291,21 +304,23 @@ class Lead_Management {
 	public function idx_lead_property_add() {
 
 		$permission = check_ajax_referer( 'idx_lead_property_add_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) ) {
+		if ( ! $permission || ! isset( $_POST['id'] ) ) {
 			echo 'error';
 		} else {
 
+			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
+
 			$property_array = array(
-				'propertyName'   => $_POST['property_name'],
-				'receiveUpdates' => $_POST['updates'],
+				'propertyName'   => sanitize_text_field( wp_unslash( $_POST['property_name'] ) ),
+				'receiveUpdates' => sanitize_text_field( wp_unslash( $_POST['updates'] ) ),
 				'property'       => array(
-					'idxID'     => $_POST['idxid'],
-					'listingID' => $_POST['listingid'],
+					'idxID'     => sanitize_text_field( wp_unslash( $_POST['idxid'] ) ),
+					'listingID' => sanitize_text_field( wp_unslash( $_POST['listingid'] ) ),
 				),
 			);
 
-			// Add lead property via API
-			$api_url  = IDX_API_URL . '/leads/property/' . $_POST['id'];
+			// Add lead property via API.
+			$api_url  = IDX_API_URL . '/leads/property/' . $post_id;
 			$args     = array(
 				'method'    => 'PUT',
 				'headers'   => array(
@@ -321,8 +336,8 @@ class Lead_Management {
 			$decoded_response = json_decode( $response['body'], 1 );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '200' ) {
-				delete_option( 'idx_leads_property/' . $_POST['id'] . '_cache' );
-				echo $decoded_response['newID'];
+				delete_option( 'idx_leads_property/' . $post_id . '_cache' );
+				echo esc_html( $decoded_response['newID'] );
 			} else {
 				echo 'error';
 			}
@@ -339,21 +354,24 @@ class Lead_Management {
 	public function idx_lead_property_edit() {
 
 		$permission = check_ajax_referer( 'idx_lead_property_edit_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) ) {
+		if ( ! $permission || ! isset( $_POST['id'], $_POST['spid'] ) ) {
 			echo 'error';
 		} else {
 
+			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
+			$spid    = sanitize_text_field( wp_unslash( $_POST['spid'] ) );
+
 			$property_array = array(
-				'propertyName'   => $_POST['name'],
-				'receiveUpdates' => $_POST['updates'],
+				'propertyName'   => sanitize_text_field( wp_unslash( $_POST['property_name'] ) ),
+				'receiveUpdates' => sanitize_text_field( wp_unslash( $_POST['updates'] ) ),
 				'property'       => array(
-					'idxID'     => $_POST['idxid'],
-					'listingID' => $_POST['listingid'],
+					'idxID'     => sanitize_text_field( wp_unslash( $_POST['idxid'] ) ),
+					'listingID' => sanitize_text_field( wp_unslash( $_POST['listingid'] ) ),
 				),
 			);
 
-			// Add lead property via API
-			$api_url  = IDX_API_URL . '/leads/property/' . $_POST['id'] . '/' . $_POST['spid'];
+			// Add lead property via API.
+			$api_url  = IDX_API_URL . '/leads/property/' . $post_id . '/' . $spid;
 			$args     = array(
 				'method'    => 'POST',
 				'headers'   => array(
@@ -369,7 +387,7 @@ class Lead_Management {
 			$decoded_response = json_decode( $response['body'], 1 );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
-				delete_option( 'idx_leads_property/' . $_POST['id'] . '_cache' );
+				delete_option( 'idx_leads_property/' . $post_id . '_cache' );
 				echo 'success';
 			} else {
 				echo 'error';
@@ -387,11 +405,13 @@ class Lead_Management {
 	public function idx_lead_delete() {
 
 		$permission = check_ajax_referer( 'idx_lead_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) ) {
+		if ( ! $permission || ! isset( $_POST['id'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead via API
-			$api_url  = IDX_API_URL . '/leads/lead/' . $_POST['id'];
+
+			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
+			// Delete lead via API.
+			$api_url  = IDX_API_URL . '/leads/lead/' . $post_id;
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -406,7 +426,7 @@ class Lead_Management {
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
 				delete_option( 'idx_leads_lead_cache' );
-				delete_option( 'idx_leads_lead/' . $_POST['id'] . '_cache' );
+				delete_option( 'idx_leads_lead/' . $post_id . '_cache' );
 				echo 'success';
 			} else {
 				echo 'error';
@@ -424,11 +444,14 @@ class Lead_Management {
 	public function idx_lead_note_delete() {
 
 		$permission = check_ajax_referer( 'idx_lead_note_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) || ! isset( $_POST['noteid'] ) ) {
+		if ( ! $permission || ! isset( $_POST['id'], $_POST['noteid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead note via API
-			$api_url  = IDX_API_URL . '/leads/note/' . $_POST['id'] . '/' . $_POST['noteid'];
+
+			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
+			$note_id = sanitize_text_field( wp_unslash( $_POST['noteid'] ) );
+			// Delete lead note via API.
+			$api_url  = IDX_API_URL . '/leads/note/' . $post_id . '/' . $note_id;
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -442,7 +465,7 @@ class Lead_Management {
 			$response = wp_remote_request( $api_url, $args );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
-				delete_option( 'idx_leads_note/' . $_POST['id'] . '_cache' );
+				delete_option( 'idx_leads_note/' . $post_id . '_cache' );
 				echo 'success';
 			} else {
 				echo 'error';
@@ -460,11 +483,13 @@ class Lead_Management {
 	public function idx_lead_property_delete() {
 
 		$permission = check_ajax_referer( 'idx_lead_property_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) || ! isset( $_POST['spid'] ) ) {
+		if ( ! $permission || ! isset( $_POST['id'] ) || ! isset( $_POST['spid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead saved property via API
-			$api_url  = IDX_API_URL . '/leads/property/' . $_POST['id'] . '/' . $_POST['spid'];
+			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
+			$spid    = sanitize_text_field( wp_unslash( $_POST['spid'] ) );
+			// Delete lead saved property via API.
+			$api_url  = IDX_API_URL . '/leads/property/' . $post_id . '/' . $spid;
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -478,7 +503,7 @@ class Lead_Management {
 			$response = wp_remote_request( $api_url, $args );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
-				delete_option( 'idx_leads_property/' . $_POST['id'] . '_cache' );
+				delete_option( 'idx_leads_property/' . $post_id . '_cache' );
 				echo 'success';
 			} else {
 				echo 'error';
@@ -496,11 +521,13 @@ class Lead_Management {
 	public function idx_lead_search_delete() {
 
 		$permission = check_ajax_referer( 'idx_lead_search_delete_nonce', 'nonce', false );
-		if ( $permission == false || ! isset( $_POST['id'] ) || ! isset( $_POST['ssid'] ) ) {
+		if ( ! $permission || ! isset( $_POST['id'], $_POST['ssid'] ) ) {
 			echo 'error';
 		} else {
-			// Delete lead saved search via API
-			$api_url  = IDX_API_URL . '/leads/search/' . $_POST['id'] . '/' . $_POST['ssid'];
+			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
+			$spid    = sanitize_text_field( wp_unslash( $_POST['spid'] ) );
+			// Delete lead saved search via API.
+			$api_url  = IDX_API_URL . '/leads/search/' . $post_id . '/' . $spid;
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -514,7 +541,7 @@ class Lead_Management {
 			$response = wp_remote_request( $api_url, $args );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
-				delete_option( 'idx_leads_search/' . $_POST['id'] . '_cache' );
+				delete_option( 'idx_leads_search/' . $post_id . '_cache' );
 				echo 'success';
 			} else {
 				echo 'error';
@@ -529,7 +556,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_leads_list() {
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
@@ -558,7 +585,7 @@ class Lead_Management {
 				</form>
 			</dialog>';
 		echo '
-			<a href="' . admin_url( 'admin.php?page=edit-lead' ) . '" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+			<a href="' . esc_url( admin_url( 'admin.php?page=edit-lead' ) ) . '" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 				<i class="material-icons">add</i>
 				<div class="mdl-tooltip" data-mdl-for="add-lead">Add New Lead</div>
 			</a>
@@ -580,13 +607,14 @@ class Lead_Management {
 
 		// prepare leads for display.
 		foreach ( $leads_array as $lead ) {
-
-			$last_active = Carbon::parse( ( $lead->lastActivityDate === '0000-00-00 00:00:00' ) ? $lead->subscribeDate : $lead->lastActivityDate )->addHours( $offset )->toDayDateTimeString();
-
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$last_active = Carbon::parse( ( '0000-00-00 00:00:00' === $lead->lastActivityDate ) ? $lead->subscribeDate : $lead->lastActivityDate )->addHours( $offset )->toDayDateTimeString();
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			$subscribed_on = Carbon::parse( $lead->subscribeDate )->addHours( $offset )->toDayDateTimeString();
-
-			if ( $lead->agentOwner != '0' && isset( $agents_array['agent'] ) ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			if ( '0' != $lead->agentOwner && isset( $agents_array['agent'] ) ) {
 				foreach ( $agents_array['agent'] as $agent ) {
+					// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					if ( $lead->agentOwner == $agent['agentID'] ) {
 						$agent_name = $agent['agentDisplayName'];
 					}
@@ -603,7 +631,8 @@ class Lead_Management {
 				'force_display' => true,
 			);
 
-			$nonce = wp_create_nonce( 'idx_lead_delete_nonce' );
+			$edit_lead_nonce = wp_create_nonce( 'idx_lead_edit_nonce' );
+			$nonce           = wp_create_nonce( 'idx_lead_delete_nonce' );
 
 			// Column structure of data being passed to jQuery Datatables:
 			// Column 0 = Gravitar, First Name + Last Name.
@@ -615,24 +644,24 @@ class Lead_Management {
 			// Column 6 = Actions (edit, delete, MW link).
 
 			$current_lead = [
-				0 => '<td class="mdl-data-table__cell--non-numeric"><a href="' . admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . $lead->firstName . ' ' . $lead->lastName . '</a></td>',
-				1 => '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . $lead->id . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>',
-				2 => '<td class="mdl-data-table__cell--non-numeric">' . $lead->phone . '</td>',
-				3 => '<td class="mdl-data-table__cell--non-numeric">' . $subscribed_on . '</td>',
-				4 => '<td class="mdl-data-table__cell--non-numeric">' . $last_active . '</td>',
-				5 => '<td class="mdl-data-table__cell--non-numeric">' . $agent_name . '</td>',
+				0 => '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . esc_html( $lead->firstName ) . ' ' . esc_html( $lead->lastName ) . '</a></td>',
+				1 => '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . esc_attr( $lead->id ) . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>',
+				2 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $lead->phone ) . '</td>',
+				3 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $subscribed_on ) . '</td>',
+				4 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $last_active ) . '</td>',
+				5 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $agent_name ) . '</td>',
 				6 => '<td class="mdl-data-table__cell--non-numeric">
-						<a href="' . admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) . '" id="edit-lead-' . $lead->id . '" data-id="' . $lead->id . '" data-nonce="' . $nonce . '">
+						<a href="' . esc_url( admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id . '&nonce=' . $edit_lead_nonce ) ) . '" id="edit-lead-' . esc_attr( $lead->id ) . '" data-id="' . esc_attr( $lead->id ) . '" data-nonce="' . esc_attr( $edit_lead_nonce ) . '">
 							<i class="material-icons md-18">create</i>
-							<div class="mdl-tooltip" data-mdl-for="edit-lead-' . $lead->id . '">Edit Lead</div>
+							<div class="mdl-tooltip" data-mdl-for="edit-lead-' . esc_attr( $lead->id ) . '">Edit Lead</div>
 						</a>
-						<a href="' . admin_url( 'admin-ajax.php?action=idx_lead_delete&id=' . $lead->id . '&nonce=' . $nonce ) . '" id="delete-lead-' . $lead->id . '" class="delete-lead" data-id="' . $lead->id . '" data-nonce="' . $nonce . '">
+						<a href="' . esc_url( admin_url( 'admin-ajax.php?action=idx_lead_delete&id=' . $lead->id . '&nonce=' . $nonce ) ) . '" id="delete-lead-' . esc_attr( $lead->id ) . '" class="delete-lead" data-id="' . esc_attr( $lead->id ) . '" data-nonce="' . esc_attr( $nonce ) . '">
 							<i class="material-icons md-18">delete</i>
-							<div class="mdl-tooltip" data-mdl-for="delete-lead-' . $lead->id . '">Delete Lead</div>
+							<div class="mdl-tooltip" data-mdl-for="delete-lead-' . esc_attr( $lead->id ) . '">Delete Lead</div>
 						</a>
-						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" id="edit-mw-' . $lead->id . '" target="_blank">
+						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . esc_attr( $lead->id ) . '" id="edit-mw-' . esc_attr( $lead->id ) . '" target="_blank">
 							<i class="material-icons md-18">exit_to_app</i>
-							<div class="mdl-tooltip" data-mdl-for="edit-mw-' . $lead->id . '">Edit Lead in Middleware</div>
+							<div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $lead->id ) . '">Edit Lead in Middleware</div>
 						</a>
 					 </td>',
 			];
@@ -641,14 +670,14 @@ class Lead_Management {
 
 		}
 
-		echo json_encode( [ 'data' => $leads ] );
+		echo wp_json_encode( [ 'data' => $leads ] );
 		wp_die();
 	}
 
-	/*
-	* Actions to be taken prior to page loading. This is after headers have been set.
-	* call on load-$hook
-	*/
+	/**
+	 * Actions to be taken prior to page loading. This is after headers have been set.
+	 * call on load-$hook.
+	 */
 	public function lead_list_actions() {
 
 		/* Create an empty post object for dumb plugins like soliloquy */
@@ -668,7 +697,7 @@ class Lead_Management {
 	 */
 	public function idx_leads_edit() {
 		add_thickbox();
-		// Check that the user is logged in & has proper permissions
+		// Check that the user is logged in & has proper permissions.
 		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
 			return;
 		} elseif ( empty( $_GET['leadID'] ) ) { ?>
@@ -732,7 +761,7 @@ class Lead_Management {
 					<label class="mdl-selectfield__label" for="agentOwner">Assigned Agent</label>
 					<div class="mdl-selectfield">
 						<select class="mdl-selectfield__select" id="agentOwner" name="agentOwner">
-							<?php echo self::agents_select_list(); ?>
+							<?php self::agents_select_list(); ?>
 						</select>
 					</div>
 				</div>
@@ -799,7 +828,7 @@ class Lead_Management {
 				<br />
 
 				<input type="hidden" name="action" value="idx_lead_add" />
-				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead" data-nonce="<?php echo wp_create_nonce( 'idx_lead_add_nonce' ); ?>" type="submit">Save Lead</button>
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-lead" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_lead_add_nonce' ) ); ?>" type="submit">Save Lead</button>
 				<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 				<div class="error-existing" style="display: none;">Lead already exists.</div>
 				<div class="error-fail" style="display: none;">Lead addition failed. Check all required fields or try again later.</div>
@@ -809,15 +838,25 @@ class Lead_Management {
 			<?php
 
 		} else {
-			$lead_id = $_GET['leadID'];
+
+			if ( empty( $_GET['nonce'] ) || ! wp_verify_nonce( $_GET['nonce'], 'idx_lead_edit_nonce' ) ) {
+				echo '<p>Nonce verification failed</p>';
+				return;
+			}
+
+			$lead_id = (int) sanitize_text_field( wp_unslash( $_GET['leadID'] ) );
 			if ( empty( $lead_id ) ) {
 				return;
 			}
 
-			// Get Lead info
+			// Get Lead info.
 			$lead = $this->idx_api->idx_api( 'lead/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+			// Return early on error, if not an array, or first key is invalid lead ID message.
+			if ( is_wp_error( $lead ) || ! is_array( $lead ) || ( ! empty( $lead[0] ) && ' Required parameter missing or invalid.' === $lead[0] ) ) {
+				return;
+			}
 			?>
-			<h3>Edit Lead &raquo; <?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?> <?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?></h3>
+			<h3>Edit Lead &raquo; <?php echo esc_html( $lead['firstName'] ?? '' ); ?> <?php echo esc_html( $lead['lastName'] ) ?? ''; ?></h3>
 
 			<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
 				<div class="mdl-tabs__tab-bar">
@@ -834,43 +873,43 @@ class Lead_Management {
 					<form id="edit-lead" action="" method="post">
 						<h6>Account Information</h6>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="firstName" name="firstName" value="<?php echo ( $lead['firstName'] ) ? $lead['firstName'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="firstName" name="firstName" value="<?php echo esc_attr( $lead['firstName'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="firstName">First Name <span class="is-required">(required)</span></label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="lastName" name="lastName" value="<?php echo ( $lead['lastName'] ) ? $lead['lastName'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="lastName" name="lastName" value="<?php echo esc_attr( $lead['lastName'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="lastName">Last Name <span class="is-required">(required)</span></label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="phone" name="phone" value="<?php echo ( $lead['phone'] ) ? $lead['phone'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="phone" name="phone" value="<?php echo esc_attr( $lead['phone'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="phone">Phone</label>
 						</div><br />
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="email" name="email" value="<?php echo ( $lead['email'] ) ? $lead['email'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="email" name="email" value="<?php echo esc_attr( $lead['email'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="email">Email <span class="is-required">(required)</span></label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="email2" name="email2" value="<?php echo ( $lead['email2'] ) ? $lead['email2'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="email2" name="email2" value="<?php echo esc_attr( $lead['email2'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="email2">Additional Email</label>
 						</div><br />
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="address" name="address" value="<?php echo ( $lead['address'] ) ? $lead['address'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="address" name="address" value="<?php echo esc_attr( $lead['address'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="address">Street Address</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="city" name="city" value="<?php echo ( $lead['city'] ) ? $lead['city'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="city" name="city" value="<?php echo esc_attr( $lead['city'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="city">City</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="stateProvince" name="stateProvince" value="<?php echo ( $lead['stateProvince'] ) ? $lead['stateProvince'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="stateProvince" name="stateProvince" value="<?php echo esc_attr( $lead['stateProvince'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="stateProvince">State/Province</label>
 						</div><br />
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="zipCode" name="zipCode" value="<?php echo ( $lead['zipCode'] ) ? $lead['zipCode'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="zipCode" name="zipCode" value="<?php echo esc_attr( $lead['zipCode'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="zipCode">Zip Code</label>
 						</div>
 						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-							<input class="mdl-textfield__input" type="text" id="country" name="country" value="<?php echo ( $lead['country'] ) ? $lead['country'] : ''; ?>">
+							<input class="mdl-textfield__input" type="text" id="country" name="country" value="<?php echo esc_attr( $lead['country'] ?? '' ); ?>">
 							<label class="mdl-textfield__label" for="country">Country</label>
 						</div>
 
@@ -888,7 +927,7 @@ class Lead_Management {
 							<label class="mdl-selectfield__label" for="agentOwner">Assigned Agent</label>
 							<div class="mdl-selectfield">
 								<select class="mdl-selectfield__select" id="agentOwner" name="agentOwner">
-									<?php echo self::agents_select_list( $lead['agentOwner'] ); ?>
+									<?php self::agents_select_list( $lead['agentOwner'] ); ?>
 								</select>
 							</div>
 						</div>
@@ -954,7 +993,7 @@ class Lead_Management {
 						</div>
 						<br />
 
-						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo wp_create_nonce( 'idx_lead_edit_nonce' ); ?>" data-lead-id="<?php echo $lead_id; ?>" type="submit">Save Lead</button>
+						<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-lead" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_lead_edit_nonce' ) ); ?>" data-lead-id="<?php echo esc_attr( $lead_id ); ?>" type="submit">Save Lead</button>
 						<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 						<div class="error-fail" style="display: none;">Lead update failed. Check all required fields or try again later.</div>
 						<div class="error-invalid-email" style="display: none;">Invalid email address detected. Please enter a valid email.</div>
@@ -963,7 +1002,7 @@ class Lead_Management {
 					</form>
 
 
-					<a href="<?php echo admin_url( 'admin.php?page=edit-lead' ); ?>" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=edit-lead' ) ); ?>" id="add-lead" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 						<i class="material-icons">add</i>
 						<div class="mdl-tooltip" data-mdl-for="add-lead">Add New Lead</div>
 					</a>
@@ -972,37 +1011,11 @@ class Lead_Management {
 
 				<div class="mdl-tabs__panel" id="lead-notes">
 					<?php
-					// order newest first
+					// order newest first.
 					$notes_array = $this->idx_api->idx_api( 'note/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$notes_array = array_reverse( $notes_array );
 
-					$notes = '';
-
 					$offset = get_option( 'gmt_offset', 0 );
-
-					// prepare notes for display
-					if ( $notes_array ) {
-						foreach ( $notes_array as $note ) {
-
-							// Skip large HTML table notes that are non-editable.
-							if ( strpos( $note['note'], 'class=&quot;mcnTextContentContainer&quot;' ) ) {
-								continue;
-							}
-
-							$nice_date = Carbon::parse( $note['created'] )->addHours( $offset )->toDayDateTimeString();
-
-							$notes .= '<tr id="note-id-' . $note['id'] . '" class="note-row note-id-' . $note['id'] . '">';
-							$notes .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
-							$notes .= '<td class="mdl-data-table__cell--non-numeric note"><div class="render-note-' . $note['id'] . '">' . str_replace( '&quot;', '"', str_replace( '&gt;', '>', str_replace( '&lt;', '<', $note['note'] ) ) ) . '</div></td>';
-							$notes .= '<td class="mdl-data-table__cell--non-numeric">
-										<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . $note['id'] . '" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-note="' . $note['note'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_note_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . $note['id'] . '">Edit Note</div></a>
-
-										<a href="#" id="delete-note-' . $note['id'] . '" class="delete-note" data-id="' . $lead_id . '" data-noteid="' . $note['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_note_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' . $note['id'] . '">Delete Note</div></a>
-
-										</td>';
-							$notes .= '</tr>';
-						}
-					}
 
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-notes">';
 					echo '
@@ -1013,7 +1026,31 @@ class Lead_Management {
 						</thead>
 						<tbody>
 						';
-					echo $notes;
+
+					// prepare notes for display.
+					if ( $notes_array ) {
+						foreach ( $notes_array as $note ) {
+
+							// Skip large HTML table notes that are non-editable.
+							if ( strpos( $note['note'], 'class=&quot;mcnTextContentContainer&quot;' ) ) {
+								continue;
+							}
+
+							$nice_date = Carbon::parse( $note['created'] )->addHours( $offset )->toDayDateTimeString();
+
+							echo '<tr id="note-id-' . esc_attr( $note['id'] ) . '" class="note-row note-id-' . esc_attr( $note['id'] ) . '">';
+							echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $nice_date ) . '</td>';
+							echo '<td class="mdl-data-table__cell--non-numeric note"><div class="render-note-' . esc_attr( $note['id'] ) . '">' . wp_kses_post( str_replace( '&quot;', '"', str_replace( '&gt;', '>', str_replace( '&lt;', '<', $note['note'] ) ) ) ) . '</div></td>';
+							echo '<td class="mdl-data-table__cell--non-numeric">
+										<a href="#TB_inline?width=600&height=350&inlineId=edit-lead-note" class="edit-note thickbox" id="edit-note-' . esc_attr( $note['id'] ) . '" data-id="' . esc_attr( $lead_id ) . '" data-noteid="' . esc_attr( $note['id'] ) . '" data-note="' . esc_attr( $note['note'] ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'idx_lead_note_edit_nonce' ) ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-note-' . esc_attr( $note['id'] ) . '">Edit Note</div></a>
+
+										<a href="#" id="delete-note-' . esc_attr( $note['id'] ) . '" class="delete-note" data-id="' . esc_attr( $lead_id ) . '" data-noteid="' . esc_attr( $note['id'] ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'idx_lead_note_delete_nonce' ) ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-note-' . esc_attr( $note['id'] ) . '">Delete Note</div></a>
+
+										</td>';
+							echo '</tr>';
+						}
+					}
+
 					echo '</tbody></table>';
 					echo '<dialog id="dialog-lead-note-delete">
 							<form method="dialog">
@@ -1037,7 +1074,7 @@ class Lead_Management {
 								<textarea class="mdl-textfield__input" type="text" rows="4" id="note" name="note" autofocus></textarea>
 								<label class="mdl-textfield__label" for="note">Note <span class="is-required">(required)</span></label>
 							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_note_add_nonce' ); ?>" type="submit">Save Note</button>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-note" data-id="<?php echo esc_attr( $lead_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_lead_note_add_nonce' ) ); ?>" type="submit">Save Note</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead note addition failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1051,7 +1088,7 @@ class Lead_Management {
 								<textarea class="mdl-textfield__input" type="text" rows="4" id="note" name="note" value="" autofocus></textarea>
 								<label class="mdl-textfield__label" for="note">Note <span class="is-required">(required)</span></label>
 							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-note" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_note_edit_nonce' ); ?>" type="submit">Save Note</button>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-note" data-id="<?php echo esc_attr( $lead_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_lead_note_edit_nonce' ) ); ?>" type="submit">Save Note</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead note update failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1060,37 +1097,14 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-properties">
 					<?php
-					// order newest first
+					// order newest first.
 					$properties_array = $this->idx_api->idx_api( 'property/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$properties_array = array_reverse( $properties_array );
 
-					// Get details URL
+					// Get details URL.
 					$details_url = $this->idx_api->details_url();
 
-					$properties = '';
-
 					$offset = get_option( 'gmt_offset', 0 );
-
-					// prepare properties for display
-					if ( is_array( $properties_array ) ) {
-						foreach ( $properties_array as $property ) {
-							$nice_created_date = Carbon::parse( $property['created'] )->addHours( $offset )->toDayDateTimeString();
-							$updates           = ( $property['receiveUpdates'] == 'y' ) ? 'Yes' : 'No';
-
-							$properties .= '<tr class="property-row property-id-' . $property['id'] . '">';
-							$properties .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $details_url . '/' . $property['property']['idxID'] . '/' . $property['property']['listingID'] . '" target="_blank" id="view-property-' . $property['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-property-' . $property['id'] . '">View Property</div>' . stripslashes( $property['propertyName'] ) . '</a></td>';
-							$properties .= '<td class="mdl-data-table__cell--non-numeric">' . $updates . '</td>';
-							$properties .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_created_date . '</td>';
-							$properties .= '<td class="mdl-data-table__cell--non-numeric">
-										<a href="#TB_inline?width=600&height=500&inlineId=edit-lead-property" class="edit-property thickbox" id="edit-property-' . $property['id'] . '" data-id="' . $lead_id . '" data-spid="' . $property['id'] . '" data-name="' . stripslashes( $property['propertyName'] ) . '" data-updates="' . $property['receiveUpdates'] . '" data-idxid="' . $property['property']['idxID'] . '" data-listingid="' . $property['property']['listingID'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_edit_nonce' ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-property-' . $property['id'] . '">Edit Property</div></a>
-
-										<a href="#" id="delete-property-' . $property['id'] . '" class="delete-property" data-id="' . $lead_id . '" data-spid="' . $property['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_property_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' . $property['id'] . '">Delete Saved Property</div></a>
-
-										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' . $lead_id . '&spid=' . $property['id'] . '" id="edit-mw-' . $property['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $property['id'] . '">Edit Property in Middleware</div></a>
-										</td>';
-							$properties .= '</tr>';
-						}
-					}
 
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-properties">';
 					echo '
@@ -1103,7 +1117,28 @@ class Lead_Management {
 						</thead>
 						<tbody>
 						';
-					echo $properties;
+
+					// prepare properties for display.
+					if ( ! empty( $properties_array ) && is_array( $properties_array ) ) {
+						foreach ( $properties_array as $property ) {
+							$nice_created_date = Carbon::parse( $property['created'] )->addHours( $offset )->toDayDateTimeString();
+							$updates           = ( 'y' == $property['receiveUpdates'] ) ? 'Yes' : 'No';
+
+							echo '<tr class="property-row property-id-' . esc_attr( $property['id'] ) . '">';
+							echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $details_url . '/' . $property['property']['idxID'] . '/' . $property['property']['listingID'] ) . '" target="_blank" id="view-property-' . esc_attr( $property['id'] ) . '"><div class="mdl-tooltip" data-mdl-for="view-property-' . esc_attr( $property['id'] ) . '">View Property</div>' . esc_html( stripslashes( $property['propertyName'] ) ) . '</a></td>';
+							echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $updates ) . '</td>';
+							echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $nice_created_date ) . '</td>';
+							echo '<td class="mdl-data-table__cell--non-numeric">
+										<a href="#TB_inline?width=600&height=500&inlineId=edit-lead-property" class="edit-property thickbox" id="edit-property-' . esc_attr( $property['id'] ) . '" data-id="' . esc_attr( $lead_id ) . '" data-spid="' . esc_attr( $property['id'] ) . '" data-name="' . esc_attr( stripslashes( $property['propertyName'] ) ) . '" data-updates="' . esc_attr( $property['receiveUpdates'] ) . '" data-idxid="' . esc_attr( $property['property']['idxID'] ) . '" data-listingid="' . esc_attr( $property['property']['listingID'] ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'idx_lead_property_edit_nonce' ) ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-property-' . esc_attr( $property['id'] ) . '">Edit Property</div></a>
+
+										<a href="#" id="delete-property-' . esc_attr( $property['id'] ) . '" class="delete-property" data-id="' . esc_attr( $lead_id ) . '" data-spid="' . esc_attr( $property['id'] ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'idx_lead_property_delete_nonce' ) ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' . esc_attr( $property['id'] ) . '">Delete Saved Property</div></a>
+
+										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' . esc_attr( $lead_id ) . '&spid=' . esc_attr( $property['id'] ) . '" id="edit-mw-' . esc_attr( $property['id'] ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $property['id'] ) . '">Edit Property in Middleware</div></a>
+										</td>';
+							echo '</tr>';
+						}
+					}
+
 					echo '</tbody></table>';
 					echo '<dialog id="dialog-lead-property-delete">
 							<form method="dialog">
@@ -1131,7 +1166,7 @@ class Lead_Management {
 								<label class="mdl-selectfield__label" for="idxID">MLS</label>
 								<div class="mdl-selectfield">
 									<select class="mdl-selectfield__select" id="idxID" name="idxID">
-										<?php echo self::approved_mls_select_list(); ?>
+										<?php self::approved_mls_select_list(); ?>
 									</select>
 								</div>
 							</div>
@@ -1145,7 +1180,7 @@ class Lead_Management {
 									<span class="mdl-switch__label">Receive Property Updates Off/On</span>
 								</label>
 							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-property" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_property_add_nonce' ); ?>" type="submit">Save Property</button>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored add-property" data-id="<?php echo esc_attr( $lead_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_lead_property_add_nonce' ) ); ?>" type="submit">Save Property</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead saved property addition failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1163,7 +1198,7 @@ class Lead_Management {
 								<label class="mdl-selectfield__label" for="idxID">MLS</label>
 								<div class="mdl-selectfield">
 									<select class="mdl-selectfield__select" id="idxID" name="idxID">
-										<?php echo self::approved_mls_select_list(); ?>
+										<?php self::approved_mls_select_list(); ?>
 									</select>
 								</div>
 							</div>
@@ -1177,7 +1212,7 @@ class Lead_Management {
 									<span class="mdl-switch__label">Receive Property Updates Off/On</span>
 								</label>
 							</div><br />
-							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-property" data-id="<?php echo $lead_id; ?>" data-nonce="<?php echo wp_create_nonce( 'idx_lead_property_edit_nonce' ); ?>" type="submit">Save Property</button>
+							<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored edit-property" data-id="<?php echo esc_attr( $lead_id ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'idx_lead_property_edit_nonce' ) ); ?>" type="submit">Save Property</button>
 							<div class="error-incomplete" style="display: none;">Please complete all required fields</div>
 							<div class="error-fail" style="display: none;">Lead saved property update failed. Check all required fields or try again later.</div>
 							<div class="mdl-spinner mdl-js-spinner mdl-spinner--single-color"></div>
@@ -1186,41 +1221,13 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-searches">
 					<?php
-					// order newest first
+					// order newest first.
 					$searches_array = $this->idx_api->idx_api( 'search/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$searches_array = ( isset( $searches_array['searchInformation'] ) && is_array( $searches_array['searchInformation'] ) ) ? array_reverse( $searches_array['searchInformation'] ) : null;
-
-					$searches = '';
 
 					$results_url = $this->idx_api->system_results_url();
 
 					$offset = get_option( 'gmt_offset', 0 );
-
-					// prepare searches for display
-					if ( is_array( $searches_array ) && $searches_array != null ) {
-						foreach ( $searches_array as $search ) {
-
-							$search_query = http_build_query( ( $search['search'] ) );
-
-							$nice_created_date = Carbon::parse( $search['created'] )->addHours( $offset )->toDayDateTimeString();
-							$updates           = ( $search['receiveUpdates'] == 'y' ) ? 'Yes' : 'No';
-
-							$searches .= '<tr class="search-row">';
-							$searches .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $results_url . '?' . $search_query . '" target="_blank" id="view-search-' . $search['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-search-' . $search['id'] . '">View Search</div>' . $search['searchName'] . '</a><br /><a href="' . $results_url . '?' . $search_query . '&add=1" target="_blank" id="view-search-today-' . $search['id'] . '"><div class="mdl-tooltip" data-mdl-for="view-search-today-' . $search['id'] . '">View Today\'s Results</div>View Today\'s Results</a></td>';
-							$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $updates . '</td>';
-							$searches .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_created_date . '</td>';
-							$searches .= '<td class="mdl-data-table__cell--non-numeric">
-										<!--<a href="' . admin_url( 'admin.php?page=edit-search&searchID=' . $search['id'] ) . '" id="edit-search-' . $search['id'] . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-search-' . $search['id'] . '">Edit Search</div></a>-->
-
-										<a href="#" id="delete-search-' . $search['id'] . '" class="delete-search" data-id="' . $lead_id . '" data-ssid="' . $search['id'] . '" data-nonce="' . wp_create_nonce( 'idx_lead_search_delete_nonce' ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . $search['id'] . '">Delete Saved Search</div></a>
-
-										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedsearch.php?id=' . $lead_id . '&ssid=' . $search['id'] . '" id="edit-mw-' . $search['id'] . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . $search['id'] . '">Edit Search in Middleware</div></a>
-										</td>';
-							$searches .= '</tr>';
-						}
-					} else {
-						$searches .= '<tr class="search-row"><td class="mdl-data-table__cell--non-numeric">No searches found</td><td class="mdl-data-table__cell--non-numeric"></td><td class="mdl-data-table__cell--non-numeric"></td><td class="mdl-data-table__cell--non-numeric"></td></tr>';
-					}
 
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-searches">';
 					echo '
@@ -1233,7 +1240,33 @@ class Lead_Management {
 						</thead>
 						<tbody>
 						';
-					echo $searches;
+
+					// prepare searches for display.
+					if ( is_array( $searches_array ) && ! empty( $searches_array ) ) {
+						foreach ( $searches_array as $search ) {
+
+							$search_query = http_build_query( ( $search['search'] ) );
+
+							$nice_created_date = Carbon::parse( $search['created'] )->addHours( $offset )->toDayDateTimeString();
+							$updates           = ( 'y' == $search['receiveUpdates'] ) ? 'Yes' : 'No';
+
+							echo '<tr class="search-row">';
+							echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $results_url . '?' . $search_query ) . '" target="_blank" id="view-search-' . esc_attr( $search['id'] ) . '"><div class="mdl-tooltip" data-mdl-for="view-search-' . esc_attr( $search['id'] ) . '">View Search</div>' . esc_html( $search['searchName'] ) . '</a><br /><a href="' . esc_url( $results_url . '?' . $search_query ) . '&add=1" target="_blank" id="view-search-today-' . esc_attr( $search['id'] ) . '"><div class="mdl-tooltip" data-mdl-for="view-search-today-' . esc_attr( $search['id'] ) . '">View Today\'s Results</div>View Today\'s Results</a></td>';
+							echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $updates ) . '</td>';
+							echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $nice_created_date ) . '</td>';
+							echo '<td class="mdl-data-table__cell--non-numeric">
+										<!--<a href="' . esc_url( admin_url( 'admin.php?page=edit-search&searchID=' . $search['id'] ) ) . '" id="edit-search-' . esc_attr( $search['id'] ) . '"><i class="material-icons md-18">create</i><div class="mdl-tooltip" data-mdl-for="edit-search-' . esc_attr( $search['id'] ) . '">Edit Search</div></a>-->
+
+										<a href="#" id="delete-search-' . esc_attr( $search['id'] ) . '" class="delete-search" data-id="' . esc_attr( $lead_id ) . '" data-ssid="' . esc_attr( $search['id'] ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'idx_lead_search_delete_nonce' ) ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-search-' . esc_attr( $search['id'] ) . '">Delete Saved Search</div></a>
+
+										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedsearch.php?id=' . esc_attr( $lead_id ) . '&ssid=' . esc_attr( $search['id'] ) . '" id="edit-mw-' . esc_attr( $search['id'] ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $search['id'] ) . '">Edit Search in Middleware</div></a>
+										</td>';
+							echo '</tr>';
+						}
+					} else {
+						echo '<tr class="search-row"><td class="mdl-data-table__cell--non-numeric">No searches found</td><td class="mdl-data-table__cell--non-numeric"></td><td class="mdl-data-table__cell--non-numeric"></td><td class="mdl-data-table__cell--non-numeric"></td></tr>';
+					}
+
 					echo '</tbody></table>';
 					echo '<dialog id="dialog-lead-search-delete">
 							<form method="dialog">
@@ -1244,7 +1277,7 @@ class Lead_Management {
 							</form>
 						</dialog>';
 					echo '
-						<a href="' . admin_url( 'admin.php?page=edit-idx-search&leadID=' . $lead_id ) . '" id="add-lead-search-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
+						<a href="' . esc_url( admin_url( 'admin.php?page=edit-idx-search&leadID=' . $lead_id . '&nonce=' . wp_create_nonce( 'idx_lead_add_search_nonce' ) ) ) . '" id="add-lead-search-btn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--2dp">
 							<i class="material-icons">add</i>
 							<div class="mdl-tooltip" data-mdl-for="add-lead-search-btn">Add Lead Saved Search</div>
 						</a>
@@ -1252,8 +1285,8 @@ class Lead_Management {
 					?>
 				</div>
 				<div class="mdl-tabs__panel" id="lead-traffic">
-				<?php
-					// order newest first
+					<?php
+					// order newest first.
 					$traffic_array = $this->idx_api->idx_api( 'leadtraffic/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
 					$traffic_array = array_reverse( $traffic_array );
 
@@ -1261,19 +1294,19 @@ class Lead_Management {
 
 					$offset = get_option( 'gmt_offset', 0 );
 
-				if ( is_array( $traffic_array ) ) {
+					if ( is_array( $traffic_array ) ) {
 
-					// prepare traffic for display
-					foreach ( $traffic_array as $traffic_entry ) {
-						$nice_date = Carbon::parse( $traffic_entry['date'] )->addHours( $offset )->toDayDateTimeString();
+						// prepare traffic for display.
+						foreach ( $traffic_array as $traffic_entry ) {
+							$nice_date = Carbon::parse( $traffic_entry['date'] )->addHours( $offset )->toDayDateTimeString();
 
-						$traffic .= '<tr>';
-						$traffic .= '<td class="mdl-data-table__cell--non-numeric">' . $nice_date . '</td>';
-						$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['page'] . '" target="_blank">' . substr( $traffic_entry['page'], 0, 80 ) . '</td>';
-						$traffic .= '<td class="mdl-data-table__cell--non-numeric"><a href="' . $traffic_entry['referrer'] . '" target="_blank">' . substr( $traffic_entry['referrer'], 0, 80 ) . '</a></td>';
-						$traffic .= '</tr>';
+							echo '<tr>';
+							echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $nice_date ) . '</td>';
+							echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['page'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['page'], 0, 80 ) ) . '</td>';
+							echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['referrer'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['referrer'], 0, 80 ) ) . '</a></td>';
+							echo '</tr>';
+						}
 					}
-				}
 
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-traffic">';
 					echo '
@@ -1284,9 +1317,8 @@ class Lead_Management {
 						</thead>
 						<tbody>
 						';
-					echo $traffic;
 					echo '</tbody></table>';
-				?>
+					?>
 				</div>
 			</div>
 
@@ -1294,10 +1326,10 @@ class Lead_Management {
 		}
 	}
 
-	/*
-	* Actions to be taken prior to page loading. This is after headers have been set.
-	* call on load-$hook
-	*/
+	/**
+	 * Actions to be taken prior to page loading. This is after headers have been set.
+	 * Call on load-$hook.
+	 */
 	public function lead_edit_actions() {
 
 		/* Create an empty post object for dumb plugins like soliloquy */
@@ -1307,24 +1339,27 @@ class Lead_Management {
 	}
 
 	/**
-	 * Output Agents as select options
+	 * Output Agents as select options.
+	 *
+	 * @param string $agent_id - Agent ID.
+	 * @return void
 	 */
 	private function agents_select_list( $agent_id = null ) {
 		$agents_array = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
-		if ( $agent_id != null ) {
-			$agents_list = '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';
+		if ( ! empty( $agent_id ) ) {
+			echo '<option value="0" ' . selected( $agent_id, '0', 0 ) . '>None</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
+				echo '<option value="' . esc_attr( $agent['agentID'] ) . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . esc_html( $agent['agentDisplayName'] ) . '</option>';
 			}
 		} else {
-			$agents_list = '<option value="0">None</option>';
-			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
+			echo '<option value="0">None</option>';
+			if ( ! empty( $agents_array['agent'] ) && is_array( $agents_array['agent'] ) ) {
+				foreach ( $agents_array['agent'] as $agent ) {
+					echo '<option value="' . esc_attr( $agent['agentID'] ) . '">' . esc_html( $agent['agentDisplayName'] ) . '</option>';
+				}
 			}
 		}
-
-		return $agents_list;
 	}
 
 	/**
@@ -1333,16 +1368,13 @@ class Lead_Management {
 	private function approved_mls_select_list() {
 		$mls_array = $this->idx_api->approved_mls();
 
-		$mls_list = '';
-		if ( is_array( $mls_array ) && ! empty( $mls_array ) ) {
+		if ( ! empty( $mls_array ) && is_array( $mls_array ) ) {
 			foreach ( $mls_array as $mls ) {
-				$mls_list .= '<option value="' . $mls->id . '">' . $mls->name . '</option>';
+				echo '<option value="' . esc_attr( $mls->id ) . '">' . esc_html( $mls->name ) . '</option>';
 			}
 		} else {
-			$mls_list .= '<option value="a000">Demo</option>';
+			echo '<option value="a000">Demo</option>';
 		}
-
-		return $mls_list;
 	}
 
 }

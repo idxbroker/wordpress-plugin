@@ -17,6 +17,12 @@ class IDX_Leads_GF {
 		add_action( 'gform_form_settings_page_idx_broker_leads_page', array( 'IDX_Leads_GF', 'idx_broker_leads_page' ) );
 	}
 
+	/**
+	 * Idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 
 	public static function idx_leads_gform_settings_menu( $menu_items ) {
@@ -24,6 +30,7 @@ class IDX_Leads_GF {
 		$menu_items[] = array(
 			'name'  => 'idx_broker_leads_page',
 			'label' => __( 'IDX Broker' ),
+			'icon' => 'https://idx-staticassets.s3.amazonaws.com/images/idx-logo.svg'
 		);
 
 		return $menu_items;
@@ -48,48 +55,52 @@ class IDX_Leads_GF {
 		if ( isset( $_POST['submit'] ) ) {
 
 			$new_value                = array();
-			$new_value['enable_lead'] = isset( $_POST['enable_lead'] ) ? (int) stripslashes( $_POST['enable_lead'] ) : 0;
-			$new_value['category']    = isset( $_POST['category'] ) ? stripslashes( $_POST['category'] ) : 0;
-			$new_value['agent_id']    = isset( $_POST['agent_id'] ) ? (int) stripslashes( $_POST['agent_id'] ) : 0;
+			$new_value['enable_lead'] = isset( $_POST['enable_lead'] ) ? (int) sanitize_text_field( stripslashes( $_POST['enable_lead'] ) ) : 0;
+			$new_value['category']    = isset( $_POST['category'] ) ? (string) sanitize_text_field( stripslashes( $_POST['category'] ) ) : 0;
+			$new_value['agent_id']    = isset( $_POST['agent_id'] ) ? (int) sanitize_text_field( stripslashes( $_POST['agent_id'] ) ) : 0;
 
 			update_option( $option_name, $new_value, false );
+			wp_redirect($_SERVER['HTTP_REFERER']);
 		}
 		?>
-			<h3><span><i class="properticons properticons-logo-idx"></i> Settings</span></h3>
+			<h3><img src="https://idx-staticassets.s3.amazonaws.com/images/idx-logo.svg" alt="" style="max-height:25px"></h3>
 			<form action="" method="post" id="gform_form_settings">
-
-					<table class="gforms_form_settings" cellpadding="0" cellspacing="0">
-					<tbody>
-						<tr>
-							<td colspan="2">
-								<h4 class="gf_settings_subgroup_title">Lead Capture</h4>
-							</td>
-						</tr>                                       
-						<tr>
-							<th>Enable Lead Import?
-								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note in IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;'>This requires that your form use the advanced &#34;Name&#34; and &#34;Email&#34; fields and those fields be required.</strong>"><i class="far fa-question-circle"></i></a>
-							</th>
-							<td>
-								<input id="enable_lead" name="enable_lead"  value="1" type="checkbox" <?php checked( $checked, 1, true ); ?>>
-								<label for="enable_lead">Import Leads</label>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								Assign to agent (optional)
-							</th>
-							<td>
-								<select name="agent_id">
-									<?php echo $idx_api->get_agents_select_list( $form_options['agent_id'] ); ?>
+				<div class="gform-settings-panel gform-settings-panel--full gform-settings-panel--with-title" id="gform-settings-section-lead-capture">
+					<div class="gform-settings-panel__title gform-settings-panel__title--header">Lead Capture Settings</div>
+					<div class="gform-settings-panel__content">
+						<div id="gform_setting_enable_lead" class="gform-settings-field gform-settings-field__toggle">
+							<div class="gform-settings-field__header">
+								<label class="gform-settings-label" for="enable_lead">Enable Lead Import?</label>
+								<button onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" aria-label="<h6>Enable Lead Import</h6>Selecting this option will send form entry data as a lead and lead note to IDX Broker Middleware. If the lead already exists (by email address), a note will be added to the lead.<br /> <strong style='color: red;'>This requires that your form use the advanced &#34;Name&#34; and &#34;Email&#34; fields AND be marked as required.</strong>">
+									<i class="gform-icon gform-icon--question-mark" aria-hidden="true"></i>
+								</button>
+							</div>
+							<span class="gform-settings-input__container">
+								<input type="checkbox" name="enable_lead" id="enable_lead" value="1" <?php checked( $checked, 1, true ); ?>>
+								<label class="gform-field__toggle-container" for="enable_lead">
+									<span class="gform-field__toggle-switch"></span>
+								</label>
+							</span>
+						</div>
+						<div id="gform_setting_agent_id" class="gform-settings-field gform-settings-field__select">
+							<div class="gform-settings-field__header">
+								<label class="gform-settings-label" for="agent_id">Assign to agent (optional)</label>
+							</div>
+							<span class="gform-settings-input__container">
+								<select name="agent_id" id="agent_id">
+									<?php $idx_api->get_agents_select_list( $form_options['agent_id'] ); ?>
 								</select>
-							</td>
-						</tr>
-						<tr>
-							<th>Assign to category (optional)
-								<a href="#" onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" title="<h6>Assign to Category</h6>You can optionally choose a category to assign the lead to in IDX Broker Middleware."><i class="far fa-question-circle"></i></a>
-							</th>
-							<td>
-								<select name="category">
+							</span>
+						</div>
+						<div id="gform_setting_category" class="gform-settings-field gform-settings-field__select">
+							<div class="gform-settings-field__header">
+								<label class="gform-settings-label" for="category">Assign to category (optional)</label>
+								<button onclick="return false;" onkeypress="return false;" class="gf_tooltip tooltip tooltip_form_button_import_leads" aria-label="<h6>Assign to Category</h6>You can optionally assign leads to a category in IDX Broker Middleware.">
+									<i class="gform-icon gform-icon--question-mark" aria-hidden="true"></i>
+								</button>
+							</div>
+							<span class="gform-settings-input__container">
+								<select name="category" id="category">
 									<option value="" <?php selected( $form_options['category'], '', 1 ); ?>>---</option>
 									<option value="Buyer" <?php selected( $form_options['category'], 'Buyer', 1 ); ?>>Buyer</option>
 									<option value="Contact" <?php selected( $form_options['category'], 'Contact', 1 ); ?>>Contact</option>
@@ -101,12 +112,14 @@ class IDX_Leads_GF {
 									<option value="Seller" <?php selected( $form_options['category'], 'Seller', 1 ); ?>>Seller</option>
 									<option value="Unknown" <?php selected( $form_options['category'], 'Unknown', 1 ); ?>>Unknown</option>
 								</select>
-							</td>
-						</tr>
-					 </tbody>
-				   </table>
-					<button type="submit" name="submit" class="btn button-primary gfbutton">Update Settings</button>
-				</form>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="gform-settings-save-container">
+					<button type="submit" id="gform-settings-submit" name="submit" value="save" class="primary button large">Update Settings &nbsp;→</button>
+				</div>
+			</form>
 		<?php
 		GFFormSettings::page_footer();
 	}

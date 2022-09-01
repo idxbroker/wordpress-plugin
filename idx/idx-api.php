@@ -2,7 +2,7 @@
 namespace IDX;
 
 /**
- * Idx_Api class.
+ * Idx_api class.
  */
 class Idx_Api {
 
@@ -573,6 +573,22 @@ class Idx_Api {
 	}
 
 	/**
+	 * Saved_link_properties_count function.
+	 * Used to get accurate count on saved link results as the /results method currently is limited to 250 listings returned.
+	 *
+	 * @access public
+	 * @param mixed $saved_link_id - Saved link ID.
+	 * @return mixed
+	 */
+	public function saved_link_properties_count( $saved_link_id ) {
+		$saved_link_count = $this->idx_api( 'savedlinks/' . $saved_link_id . '/count', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+		if ( is_wp_error( $saved_link_count ) || empty( $saved_link_count[0] ) ) {
+			return 0;
+		}
+		return $saved_link_count[0];
+	}
+
+	/**
 	 * Client_properties function.
 	 * Expected $type posibilities: featured, soldpending, supplemental.
 	 * 
@@ -593,8 +609,10 @@ class Idx_Api {
 		// Make initial API request for listings.
 		$listing_data = $this->idx_api( "$type?disclaimers=true", IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
-		if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
+		if ( ! is_wp_error( $listing_data ) && isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 			$properties = $listing_data['data'];
+		} else {
+			return [];
 		}
 
 		// Download remaining listings if available.
@@ -607,7 +625,7 @@ class Idx_Api {
 			// Explode $listing_data['next'] on '/clients/', index 1 of the resulting array will have the fragment needed to make the next API request.
 			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1], IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 			// If $listing_data['data'] is an array, merge it with the existing listings/properties array.
-			if ( isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
+			if ( ! is_wp_error( $listing_data ) && isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 				$properties = array_merge( $properties, $listing_data['data'] );
 			}
 		}
@@ -796,11 +814,7 @@ class Idx_Api {
 		$a = $this->clean_price( $a['listingPrice'] );
 		$b = $this->clean_price( $b['listingPrice'] );
 
-		if ( $a === $b ) {
-			return 0;
-		}
-
-		return ( $a < $b ) ? -1 : 1;
+		return $a <=> $b;
 	}
 
 	/**
@@ -977,7 +991,7 @@ class Idx_Api {
 		// Initial request.
 		$listing_data = $this->idx_api( $api_method . $offset, IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 2, 'GET', true );
 
-		if ( array_key_exists( 'data', $listing_data ) && ! empty( $listing_data['data'] ) ) {
+		if ( ! is_wp_error( $listing_data ) && ! empty( $listing_data['data'] ) ) {
 			// Assign returned listings to $properties.
 			$properties = $listing_data['data'];
 
@@ -1001,23 +1015,22 @@ class Idx_Api {
 	public function get_agents_select_list( $agent_id ) {
 		$agents_array = $this->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 
-		if ( ! is_array( $agents_array ) || ! isset( $agents_array['agent'] ) ) {
+		if ( is_wp_error( $agents_array ) || empty( $agents_array['agent'] ) ) {
 			return;
 		}
 
-		if ( $agent_id != null ) {
-			$agents_list = '<option value="" ' . selected( $agent_id, '', '' ) . '>---</option>';
+		if ( ! empty( $agent_id ) ) {
+			echo '<option value="" ' . selected( $agent_id, '', '' ) . '>---</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . $agent['agentDisplayName'] . '</option>';
+				echo '<option value="' . esc_attr( $agent['agentID'] ) . '" ' . selected( $agent_id, $agent['agentID'], 0 ) . '>' . esc_html( $agent['agentDisplayName'] ) . '</option>';
 			}
 		} else {
-			$agents_list = '<option value="">---</option>';
+			echo '<option value="">---</option>';
 			foreach ( $agents_array['agent'] as $agent ) {
-				$agents_list .= '<option value="' . $agent['agentID'] . '">' . $agent['agentDisplayName'] . '</option>';
+				echo '<option value="' . esc_attr( $agent['agentID'] ) . '">' . esc_html( $agent['agentDisplayName'] ) . '</option>';
 			}
 		}
 
-		return $agents_list;
 	}
 
 	/**

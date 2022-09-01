@@ -57,18 +57,18 @@ if ( empty( $google_my_business_options['refresh_token'] ) ) {
 	<!-- Terms of Service Lightbox -->
 	<div id="terms-lightbox" class="lightbox">
 		<div class="lightbox-modal">
-			<div class="lightbox-title"><?php esc_attr_e( 'Terms of Service', 'wp-listings' ); ?></div>
+			<div class="lightbox-title">Terms of Service</div>
 			<div class="lightbox-terms-container">
-				<p><?php esc_attr_e( 'Important:', 'wp-listings' ); ?></p>
+				<p>Important:</p>
 				<strong>
-					<?php esc_attr_e( 'The IMPress Listings plugin is designed to further power and enhance the functionality of websites and applications used by real estate agents, brokers, and technology partners.', 'wp-listings' ); ?>
+					The IMPress Listings plugin is designed to further power and enhance the functionality of websites and applications used by real estate agents, brokers, and technology partners.
 					<br><br>
-					<?php esc_attr_e( ' Using this plugin to publish, or otherwise make public, information related to any listing data which violates your local MLS system agreements in any way is prohibited. URLs, landing pages, listing pages, community pages, or any “linked” resources that contains IDX data must be approved for public display by your MLS system.', 'wp-listings' ); ?>
+					Using this plugin to publish, or otherwise make public, information related to any listing data which violates your local MLS system agreements in any way is prohibited. URLs, landing pages, listing pages, community pages, or any “linked” resources that contains IDX data must be approved for public display by your MLS system.
 				</strong>
 			</div>
 			<div class="lightbox-button-container">
 				<div class="toggle-container">
-					<?php esc_attr_e( 'Agree to terms:', 'wp-listings' ); ?>
+					Agree to terms:
 					<input name="" id="terms-agreement-checkbox" type="checkbox" value="1" class="wpl-gmp-settings-checkbox" onchange="agreeToTermsChecked(this);" autocomplete="off">
 					<label for="terms-agreement-checkbox" class="checkbox-label-slider"></label>
 				</div>

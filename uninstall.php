@@ -54,10 +54,6 @@ function idx_delete_plugin_data() {
 // Run cleanup method.
 idx_delete_plugin_data();
 
-if ( ! is_plugin_active( 'impress-agents/plugin.php' ) ) {
-	include_once 'add-ons/agents/uninstall.php';
-}
-
 if ( ! is_plugin_active( 'wp-listings/plugin.php' ) ) {
 	include_once 'add-ons/listings/uninstall.php';
 }

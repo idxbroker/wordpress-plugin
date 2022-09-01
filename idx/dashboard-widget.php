@@ -18,7 +18,7 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -26,7 +26,7 @@ class Dashboard_Widget {
 	public $idx_api;
 
 	/**
-	 * api_error
+	 * Api_error
 	 *
 	 * @var mixed
 	 * @access private
@@ -34,7 +34,7 @@ class Dashboard_Widget {
 	private $api_error;
 
 	/**
-	 * api_key_validator function.
+	 * Api_key_validator function.
 	 *
 	 * @access private
 	 * @return void
@@ -47,7 +47,7 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * add_dashboard_widget function.
+	 * Add_dashboard_widget function.
 	 *
 	 * @access public
 	 * @return void
@@ -57,7 +57,7 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * compile_dashboard_widget function.
+	 * Compile_dashboard_widget function.
 	 *
 	 * @access public
 	 * @return void
@@ -67,7 +67,7 @@ class Dashboard_Widget {
 
 		// API key is present and there are no errors.
 		if ( get_option( 'idx_broker_apikey' ) && null === $this->api_error ) {
-			echo $this->dashboard_widget_html();
+			$this->dashboard_widget_html();
 			$this->load_scripts();
 		}
 
@@ -89,80 +89,86 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * dashboard_widget_html function.
+	 * Dashboard_widget_html function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function dashboard_widget_html() {
-		$output  = '<div class="widget-header">';
-		$output .= '<button class="button leads" disabled="disabled">Lead Overview</button>';
-		$output .= '<button class="button button-primary listings">Listing Overview</button>';
-		$output .= '<div class="timeframe">';
-		$output .= '<label class="week-day-label">Day</label>';
-		$output .= '<div class="onoffswitch">';
-		$output .= '<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="timeframeswitch">';
-		$output .= '<label class="onoffswitch-label" for="timeframeswitch">';
-		$output .= '<span class="onoffswitch-inner"></span>';
-		$output .= '<span class="onoffswitch-switch"></span>';
-		$output .= '</label>';
-		$output .= '</div>';
-		$output .= '<label>Month</label>';
-		$output .= '</div></div>';
-		$output .= '<div class="idx-loader"></div>';
-		$output .= '<div class="leads-overview"></div>';
-		$output .= '<div class="listings-overview"></div>';
-		$output .= '<div class="side-overview">' . $this->side_overview() . '</div>';
-		return $output;
+		echo '<div class="widget-header">';
+		echo '<button class="button leads" disabled="disabled">Lead Overview</button>';
+		echo '<button class="button button-primary listings">Listing Overview</button>';
+		echo '<div class="timeframe">';
+		echo '<label class="week-day-label">Day</label>';
+		echo '<div class="onoffswitch">';
+		echo '<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="timeframeswitch">';
+		echo '<label class="onoffswitch-label" for="timeframeswitch">';
+		echo '<span class="onoffswitch-inner"></span>';
+		echo '<span class="onoffswitch-switch"></span>';
+		echo '</label>';
+		echo '</div>';
+		echo '<label>Month</label>';
+		echo '</div></div>';
+		echo '<div class="idx-loader"></div>';
+		echo '<div class="leads-overview"></div>';
+		echo '<div class="listings-overview"></div>';
+		echo '<div class="side-overview">';
+		$this->side_overview();
+		echo '</div>';
 	}
 
 	/**
-	 * leads_overview function.
+	 * Leads_overview function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function leads_overview() {
-		$interval  = sanitize_text_field( $_POST['timeframe'] );
-		$timeframe = null;
+		if ( isset( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], 'impress-dashboard-leads-nonce' ) ) {
+			$interval  = sanitize_text_field( $_POST['timeframe'] );
+			$timeframe = null;
 
-		try {
-			$leads = json_encode( $this->leads_json( $timeframe, $interval ) );
-			echo $leads;
-			wp_die();
-		} catch ( Exception $error ) {
-			echo $error->getMessage();
-			wp_die();
+			try {
+				$leads = wp_json_encode( $this->leads_json( $timeframe, $interval ) );
+				echo wp_kses_post( $leads );
+				wp_die();
+			} catch ( Exception $error ) {
+				echo wp_kses_post( $error->getMessage() );
+				wp_die();
+			}
 		}
+		wp_die();
 	}
 
 	/**
-	 * listings_overview function.
+	 * Listings_overview function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function listings_overview() {
-		$interval = sanitize_text_field( $_POST['timeframe'] );
-
-		try {
-			$listings = json_encode( $this->listings_json( $interval ) );
-			echo $listings;
-			wp_die();
-		} catch ( Exception $error ) {
-			echo $error->getMessage();
-			wp_die();
+		if ( isset( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], 'impress-dashboard-listings-nonce' ) ) {
+			$interval = sanitize_text_field( $_POST['timeframe'] );
+			try {
+				$listings = wp_json_encode( $this->listings_json( $interval ) );
+				echo wp_kses_post( $listings );
+				wp_die();
+			} catch ( Exception $error ) {
+				echo wp_kses_post( $error->getMessage() );
+				wp_die();
+			}
 		}
+		wp_die();
 	}
 
 	/**
-	 * side_overview function.
+	 * Side_overview function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function side_overview() {
-		return '<div class="new-leads">
+		echo '<div class="new-leads">
 					<p>New Leads</p>
 					<ul>
 						<!-- Placeholder list item, will be replaced with live data via ajax -->
@@ -178,50 +184,70 @@ class Dashboard_Widget {
 				</div>';
 	}
 
+	/**
+	 * Side_overview_data function.
+	 *
+	 * @access public
+	 * @return mixed
+	 */
 	public function side_overview_data() {
-		try {
-			$leads = $this->new_leads();
-		} catch ( Exception $error ) {
-			$leads = '<li>' . $error->getMessage() . '</li>';
-		}
+		if ( isset( $_REQUEST['nonce'] ) && wp_verify_nonce( $_REQUEST['nonce'], 'impress-dashboard-overview-nonce' ) ) {
+			try {
+				$leads = $this->new_leads();
+			} catch ( Exception $error ) {
+				$leads = '<li>' . $error->getMessage() . '</li>';
+			}
 
-		try {
-			$listings = $this->popular_listings();
-		} catch ( Exception $error ) {
-			$listings = '<li>' . $error->getMessage() . '</li>';
-		}
+			try {
+				$listings = $this->popular_listings();
+			} catch ( Exception $error ) {
+				$listings = '<li>' . $error->getMessage() . '</li>';
+			}
 
-		echo wp_json_encode(
-			[
-				'data' => [
-					'leads'    => $leads,
-					'listings' => $listings,
-				],
-			]
-		);
+			echo wp_json_encode(
+				[
+					'data' => [
+						'leads'    => $leads,
+						'listings' => $listings,
+					],
+				]
+			);
+		}
 		wp_die();
 	}
 
 	/**
-	 * load_scripts function.
+	 * Load_scripts function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function load_scripts() {
-		wp_enqueue_style( 'idx-dashboard-widget', plugins_url( '/assets/css/idx-dashboard-widget.min.css', dirname( __FILE__ ) ) );
-		wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js' );
-		wp_enqueue_script( 'idx-dashboard-widget', plugins_url( '/assets/js/idx-dashboard-widget.min.js', dirname( __FILE__ ) ) );
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
+		wp_enqueue_style( 'idx-dashboard-widget', IMPRESS_IDX_URL . 'assets/css/idx-dashboard-widget.min.css', [], '1.0' );
+		wp_enqueue_script( 'google-charts', IMPRESS_IDX_URL . 'assets/js/loader.min.js', [], '1.0', false );
+		wp_enqueue_script( 'idx-dashboard-widget', IMPRESS_IDX_URL . 'assets/js/idx-dashboard-widget.min.js', [], '1.0', false );
+		wp_add_inline_script(
+			'idx-dashboard-widget',
+			'const idxDashboardNonces = ' . wp_json_encode(
+				[
+					'leadsNonce'    => wp_create_nonce( 'impress-dashboard-leads-nonce' ),
+					'listingsNonce' => wp_create_nonce( 'impress-dashboard-listings-nonce' ),
+					'overviewNonce' => wp_create_nonce( 'impress-dashboard-overview-nonce' ),
+				]
+			),
+			'before'
+		);
+		wp_enqueue_style( 'font-awesome-5.8.2' );
 	}
 
 	/**
-	 * leads_json function.
+	 * Leads_json function.
 	 *
 	 * @access public
-	 * @param mixed $timeframe
-	 * @param mixed $interval
-	 * @return void
+	 * @throws Exception - Exception.
+	 * @param mixed $timeframe - Timeframe.
+	 * @param mixed $interval - Interval.
+	 * @return mixed
 	 */
 	public function leads_json( $timeframe, $interval ) {
 		try {
@@ -232,9 +258,9 @@ class Dashboard_Widget {
 		$interval_data = $interval_array['interval_data'];
 		$min_max       = $interval_array['min_max'];
 
-		if ( $interval === 'month' ) {
+		if ( 'month' === $interval ) {
 			$data = $this->leads_month_interval( $interval_data, $min_max );
-		} elseif ( $interval === 'day' ) {
+		} elseif ( 'day' === $interval ) {
 			$data = $this->leads_day_interval( $interval_data, $min_max );
 		}
 
@@ -242,20 +268,19 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * listings_json function.
+	 * Listings_json function.
 	 *
 	 * @access public
-	 * @param mixed $interval
-	 * @return void
+	 * @param mixed $interval - Interval.
+	 * @return mixed
 	 */
 	public function listings_json( $interval ) {
-		$data = array();
-		if ( $interval === 'day' ) {
-			// return one week of data
+		if ( 'day' === $interval ) {
+			// return one week of data.
 			$timeframe = 24 * 7;
 
 		} else {
-			// return one month of data
+			// return one month of data.
 			$timeframe = 24 * 30;
 		}
 
@@ -264,38 +289,41 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * new_leads function.
+	 * New_leads function.
 	 *
 	 * @access public
-	 * @return void
+	 * @throws Exception - Exception.
+	 * @return mixed
 	 */
 	public function new_leads() {
-		// order newest first
+		// order newest first.
 		$leads_array = $this->idx_api->get_recent_leads( 'subscribeDate', 5 );
-		// handle empty leads and listing arrays
+		// handle empty leads and listing arrays.
 		if ( is_wp_error( $leads_array ) || empty( $leads_array ) ) {
 			throw new Exception( 'No Leads Returned' );
 		}
 
 		$leads = '';
 
-		// prepare leads for display
+		// prepare leads for display.
 		foreach ( $leads_array as $lead ) {
-			// edit lead in MW link
-			$leads .= '<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . $lead->id . '" target="_blank">';
+			// edit lead in MW link.
+			$leads .= '<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . esc_attr( $lead->id ) . '" target="_blank">';
 			$leads .= '<li><p class="lead-name">';
-			$leads .= $lead->firstName . ' ' . $lead->lastName . '</p>';
-			$leads .= '<p class="lead-email">' . $lead->email . '</p><i class="fas fa-user"></i></li></a>';
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$leads .= esc_html( $lead->firstName ) . ' ' . esc_html( $lead->lastName ) . '</p>';
+			$leads .= '<p class="lead-email">' . esc_html( $lead->email ) . '</p><i class="fas fa-user"></i></li></a>';
 		}
 
 		return $leads;
 	}
 
 	/**
-	 * popular_listings function.
+	 * Popular_listings function.
 	 *
 	 * @access public
-	 * @return void
+	 * @throws Exception - Exception.
+	 * @return mixed
 	 */
 	public function popular_listings() {
 		$listings_array = $this->idx_api->get_featured_listings();
@@ -304,12 +332,12 @@ class Dashboard_Widget {
 		}
 
 		$listings_array = $this->sort_listings_by_views( $listings_array );
-		// only display 5 in order of most views first
+		// only display 5 in order of most views first.
 		$listings_array = array_slice( array_reverse( $listings_array ), 0, 5 );
 
 		$listings = '';
 
-		// prepare listings for display
+		// prepare listings for display.
 		foreach ( $listings_array as $listing ) {
 			$listings .= '<a href="' . $listing['fullDetailsURL'] . '" target="_blank">';
 			$listings .= '<li><p class="listing-address">' . $listing['address'] . '</p>';
@@ -320,17 +348,17 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * leads_month_interval function.
+	 * Leads_month_interval function.
 	 *
 	 * @access public
-	 * @param mixed $interval_data
-	 * @param mixed $min_max
-	 * @return void
+	 * @param mixed $interval_data - Interval data.
+	 * @param mixed $min_max - Min/max.
+	 * @return mixed
 	 */
 	public function leads_month_interval( $interval_data, $min_max ) {
 		$data          = array();
 		$unique_months = array();
-		// headers for chart
+		// headers for chart.
 		$data[] = array(
 			'Month',
 			'Registrations',
@@ -338,11 +366,11 @@ class Dashboard_Widget {
 		$min    = $min_max['min'];
 		$max    = $min_max['max'];
 
-		// create year then iterate over
-		// note that this is not necessarily a true 12 month year
+		// create year then iterate over.
+		// note that this is not necessarily a true 12 month year.
 		$year = $this->create_year( $min, $max );
 
-		// if lead capture month matches month of year, add to array
+		// if lead capture month matches month of year, add to array.
 		foreach ( $year as $month ) {
 			foreach ( $interval_data as $data_month ) {
 				$date           = $month['date'];
@@ -356,7 +384,7 @@ class Dashboard_Widget {
 					);
 				}
 			}
-			// if no lead was captured for the month, set month to 0
+			// if no lead was captured for the month, set month to 0.
 			if ( ! isset( $unique_months[ $date ] ) ) {
 				$data[] = array(
 					$date,
@@ -368,12 +396,12 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * leads_day_interval function.
+	 * Leads_day_interval function.
 	 *
 	 * @access public
-	 * @param mixed $interval_data
-	 * @param mixed $min_max
-	 * @return void
+	 * @param mixed $interval_data - Interval data.
+	 * @param mixed $min_max - Min/max.
+	 * @return mixed
 	 */
 	public function leads_day_interval( $interval_data, $min_max ) {
 		$data   = array();
@@ -384,10 +412,10 @@ class Dashboard_Widget {
 		$min    = $min_max['min'];
 		$max    = $min_max['max'];
 
-		// create week from last 7 days to iterate over
+		// create week from last 7 days to iterate over.
 		$week        = $this->create_week( $min, $max );
 		$unique_days = array();
-		// if lead capture day matches day of week, add to array
+		// if lead capture day matches day of week, add to array.
 		foreach ( $interval_data as $data_day ) {
 			foreach ( $week as $day ) {
 				$date           = $day['date'];
@@ -408,7 +436,7 @@ class Dashboard_Widget {
 					}
 				} else {
 					if ( isset( $unique_days[ $date ] ) ) {
-						// if already set, continue to next item in array
+						// if already set, continue to next item in array.
 						continue;
 					} else {
 						$unique_days[ $date ] = array(
@@ -427,12 +455,12 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * create_year function.
+	 * Create_year function.
 	 *
 	 * @access public
-	 * @param mixed $min
-	 * @param mixed $max
-	 * @return void
+	 * @param mixed $min - Minimum.
+	 * @param mixed $max - Maximum.
+	 * @return mixed
 	 */
 	public function create_year( $min, $max ) {
 		$year_array      = array();
@@ -447,7 +475,7 @@ class Dashboard_Widget {
 				'value'     => 0,
 				'timestamp' => $month_timestamp,
 			);
-			// move to next day
+			// move to next day.
 			$month_timestamp = $next_month;
 		}
 
@@ -455,12 +483,12 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * create_week function.
+	 * Create_week function.
 	 *
 	 * @access public
-	 * @param mixed $min
-	 * @param mixed $max
-	 * @return void
+	 * @param mixed $min - Minimum.
+	 * @param mixed $max - Maximum.
+	 * @return mixed
 	 */
 	public function create_week( $min, $max ) {
 		$week_array = array();
@@ -472,38 +500,40 @@ class Dashboard_Widget {
 				'value'     => 0,
 				'timestamp' => $day,
 			);
-			// move to next day
+			// move to next day.
 			$day = $day + 60 * 60 * 24;
 		}
 		return $week_array;
 	}
 
 	/**
-	 * get_interval_data function.
+	 * Get_interval_data function.
 	 *
 	 * @access public
-	 * @param mixed $timeframe
-	 * @param mixed $interval
-	 * @return void
+	 * @throws Exception - Exception.
+	 * @param mixed $timeframe - Timeframe.
+	 * @param mixed $interval - Interval.
+	 * @return mixed
 	 */
 	public function get_interval_data( $timeframe, $interval ) {
 		$leads_array = array();
 		$min_max     = $this->min_max_intervals( $interval );
 
 		$api_data = $this->idx_api->get_leads();
-		// if no leads in API data, throw exception
+		// if no leads in API data, throw exception.
 		if ( is_wp_error( $api_data ) || empty( $api_data ) ) {
 			throw new Exception( 'No Leads Returned' );
 		}
 
 		foreach ( $api_data as $api_data_lead ) {
-			// convert date to Carbon instance for easy parsing
+			// convert date to Carbon instance for easy parsing.
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			$subscribe_date = Carbon::parse( $api_data_lead->subscribeDate )->timestamp;
-			// if the subscribe date is before the min date, skip
+			// if the subscribe date is before the min date, skip.
 			if ( $subscribe_date < $min_max['min'] ) {
 				continue;
 			}
-			// add entry with timestamp to leads_array
+			// add entry with timestamp to leads_array.
 			$leads_array[] = array(
 				'timestamp' => $subscribe_date,
 			);
@@ -511,7 +541,7 @@ class Dashboard_Widget {
 
 		$interval_data = $this->interval_data( $leads_array, $interval );
 
-		// if no leads are within the timeframe, throw exception
+		// if no leads are within the timeframe, throw exception.
 		if ( empty( $interval_data ) ) {
 			throw new Exception( 'No Leads Returned' );
 		}
@@ -521,17 +551,17 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * min_max_intervals function.
+	 * Min_max_intervals function.
 	 *
 	 * @access public
-	 * @param mixed $interval
-	 * @return void
+	 * @param mixed $interval - Interval.
+	 * @return mixed
 	 */
 	public function min_max_intervals( $interval ) {
-		if ( $interval === 'month' ) {
+		if ( 'month' === $interval ) {
 			$min = Carbon::parse( '5 months ago' )->timestamp;
 			$max = Carbon::now()->timestamp;
-		} elseif ( $interval === 'day' ) {
+		} elseif ( 'day' === $interval ) {
 			$min = Carbon::parse( '6 days ago' )->timestamp;
 			$max = Carbon::now()->timestamp;
 		}
@@ -539,7 +569,12 @@ class Dashboard_Widget {
 		return compact( 'min', 'max' );
 	}
 
-	// feed in week or month. Example: $data, 'month'
+	/**
+	 * Feed in week or month. Example: $data, 'month'.
+	 *
+	 * @param mixed $data - Data.
+	 * @param mixed $interval - Interval.
+	 */
 	public function interval_data( $data, $interval ) {
 		$interval_data = array();
 		foreach ( $data as $datum ) {
@@ -557,21 +592,21 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * all_listings_numbers function.
+	 * All_listings_numbers function.
 	 *
 	 * @access public
-	 * @param mixed $timeframe
-	 * @return void
+	 * @param mixed $timeframe - Timeframe.
+	 * @return mixed
 	 */
 	public function all_listings_numbers( $timeframe ) {
 
 		$featured = $this->idx_api->get_featured_listings( 'featured', $timeframe );
 		$archived = $this->idx_api->get_featured_listings( 'soldpending', $timeframe );
-		// only idxStatus has sold/pending status, so copy that to propStatus
+		// only idxStatus has sold/pending status, so copy that to propStatus.
 		$archived     = $this->clone_idx_status_to_prop_status( $archived );
 		$all_listings = array_merge( $featured, $archived );
 
-		// find the number of listings per status for all account's listings
+		// find the number of listings per status for all account's listings.
 		$listings_json = $this->get_listings_number( $all_listings, 'propStatus' );
 
 		return $listings_json;
@@ -579,20 +614,21 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * get_listings_number function.
+	 * Get_listings_number function.
 	 *
 	 * @access public
-	 * @param mixed $listings
-	 * @param mixed $status_type
-	 * @return void
+	 * @throws Exception - Exception.
+	 * @param mixed $listings - Listings.
+	 * @param mixed $status_type - Status type.
+	 * @return mixed
 	 */
 	public function get_listings_number( $listings, $status_type ) {
-		// if no listings, throw exception
+		// if no listings, throw exception.
 		if ( empty( $listings ) ) {
 			throw new Exception( 'No Listings Returned' );
 		}
 
-		// chart headers
+		// chart headers.
 		$json_data = array(
 			array( 'Listing Status', 'Count' ),
 		);
@@ -602,16 +638,16 @@ class Dashboard_Widget {
 		foreach ( $listings as $listing ) {
 			$listing_status = $listing[ "$status_type" ];
 
-			// if status entry is not yet set, add it
+			// if status entry is not yet set, add it.
 			if ( ! isset( $listings_record[ $listing_status ] ) ) {
 				$listings_record[ $listing_status ] = array( $listing_status, 1 );
 			} else {
-				// increase count of status
+				// increase count of status.
 				$listings_record[ $listing_status ][1] += 1;
 			}
 		}
 
-		// prepare data for use with front end charts
+		// prepare data for use with front end charts.
 		foreach ( $listings_record as $status ) {
 			$json_data[] = $status;
 		}
@@ -619,7 +655,11 @@ class Dashboard_Widget {
 		return $json_data;
 	}
 
-	// prepare sold/pending listings status
+	/**
+	 * Prepare sold/pending listings status.
+	 *
+	 * @param array $listings - Array of listings.
+	 */
 	public function clone_idx_status_to_prop_status( $listings ) {
 		foreach ( $listings as $listing ) {
 			$listing['propStatus'] = $listing['idxStatus'];
@@ -629,11 +669,11 @@ class Dashboard_Widget {
 	}
 
 	/**
-	 * sort_listings_by_views function.
+	 * Sort_listings_by_views function.
 	 *
 	 * @access public
-	 * @param mixed $listings
-	 * @return void
+	 * @param mixed $listings - Listings.
+	 * @return mixed
 	 */
 	public function sort_listings_by_views( $listings ) {
 		usort(
