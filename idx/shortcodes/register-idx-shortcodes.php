@@ -23,7 +23,7 @@ class Register_Idx_Shortcodes {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -54,14 +54,6 @@ class Register_Idx_Shortcodes {
 		if ( ! is_null( $id ) ) {
 			$url    = $this->get_widget_url( $id );
 			$widget = '';
-			// This is dumb. Don't ever do this. But we have weird conflicts and issues if we don't do this.
-			if ( strpos( $url, 'mapwidgetjs.php' ) ) {
-				$widget .= '<script type="text/javascript" data-name="custom-scriptLeaf" src="https://d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js"></script>';
-				$widget .= '<script type="text/javascript" data-name="custom-scriptLeafDraw" src="https://d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js"></script>';
-				$widget .= '<script type="text/javascript" data-name="custom-scriptMQ" src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh"></script>';
-				wp_enqueue_style( 'cssLeaf', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
-				wp_enqueue_style( 'cssLeafLabel', 'https://d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
-			}
 			$widget_id = explode( '-', $id );
 			$widget   .= '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : $widget_id[1] ) . '" src="' . $url . '"></script>';
 			return $widget;
@@ -205,7 +197,7 @@ class Register_Idx_Shortcodes {
 	public function get_widget_url( $widget_uid ) {
 		$idx_widgets = $this->idx_api->idx_api_get_widgetsrc();
 		foreach ( $idx_widgets as $widget ) {
-			if ( $widget_uid === $widget->uid ) {
+			if ( ! empty( $widget->uid ) && $widget_uid === $widget->uid ) {
 				return $widget->url;
 			}
 		}

@@ -1,0 +1,1 @@
+jQuery(document).ready(function(){jQuery(".navigation a").smoothScroll(),jQuery(".iframe-wrap").fitVids()}),jQuery(function(o){o(window).scroll(function(){o(document).scrollTop()>100?o(".scroll").addClass("scroll-hide"):o(".scroll").removeClass("scroll-hide")})});

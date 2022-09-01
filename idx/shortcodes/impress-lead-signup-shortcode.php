@@ -3,6 +3,12 @@ namespace IDX\Shortcodes;
 
 class Impress_Lead_Signup_Shortcode {
 
+	/**
+	 * Idx_api
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $idx_api;
 	public $error_message;
 
@@ -34,7 +40,7 @@ class Impress_Lead_Signup_Shortcode {
 		);
 
 		if ( ! empty( $styles ) ) {
-			wp_enqueue_style( 'impress-lead-signup', plugins_url( '../assets/css/widgets/impress-lead-signup.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-lead-signup', IMPRESS_IDX_URL . 'assets/css/widgets/impress-lead-signup.min.css', [], '1.0.0' );
 		}
 
 		if ( ! isset( $new_window ) ) {
@@ -45,14 +51,13 @@ class Impress_Lead_Signup_Shortcode {
 
 		$wpl_options = get_option( 'plugin_wp_listings_settings' );
 
-		// Validate fields
-		wp_register_script( 'impress-lead-signup', plugins_url( '../assets/js/idx-lead-signup.min.js', dirname( __FILE__ ) ) );
+		// Validate fields.
 		wp_localize_script( 'impress-lead-signup', 'idxLeadLoginUrl', [ $this->lead_login_page() ] );
 		wp_enqueue_script( 'impress-lead-signup' );
 
 		if ( ! empty( get_option( 'idx_recaptcha_enabled' ) ) || ! empty( get_option( 'idx_recaptcha_site_key' ) ) ) {
-			wp_enqueue_script( 'idx-recaptcha', IMPRESS_IDX_URL . 'assets/js/idx-recaptcha.min.js' );
-			wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=6LcUhOYUAAAAAF694SR5_qDv-ZdRHv77I6ZmSiij', [], null, false );
+			wp_enqueue_script( 'idx-recaptcha' );
+			wp_enqueue_script( 'idx-google-recaptcha' );
 			wp_enqueue_script( 'jquery' );
 		}
 
@@ -150,7 +155,7 @@ class Impress_Lead_Signup_Shortcode {
 
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
-			// if enabled, open links in new tab/window
+			// if enabled, open links in new tab/window.
 			return '_blank';
 		} else {
 			return '_self';

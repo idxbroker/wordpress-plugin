@@ -55,7 +55,15 @@ class Register_Blocks {
 	public $idx_shortcodes;
 
 	/**
-	 * __construct function.
+	 * Block_dependencies
+	 *
+	 * @var array
+	 * @access public
+	 */
+	public $block_dependencies;
+
+	/**
+	 * __construct
 	 *
 	 * @access public
 	 * @return void
@@ -66,8 +74,16 @@ class Register_Blocks {
 		$this->idx_shortcodes     = new \IDX\Shortcodes\Register_Idx_Shortcodes();
 		$this->omnibar_shortcode  = new \IDX\Widgets\Omnibar\IDX_Omnibar_Widget();
 
-		// Set category icon.
-		add_filter( 'block_categories', [ $this, 'register_idx_category' ], 10, 2 );
+		// Register block category.
+		global $wp_version;
+		if ( version_compare( $wp_version, '5.8', '>=' ) ) {
+			add_filter( 'block_categories_all', [ $this, 'register_idx_category' ], 10, 2 );
+		} else {
+			add_filter( 'block_categories', [ $this, 'register_idx_category' ], 10, 2 );
+		}
+
+		// Set dependencies used by blocks.
+		add_action( 'enqueue_block_editor_assets', [ $this, 'set_block_dependencies' ] );
 
 		// Editor CSS file shared across blocks.
 		add_action( 'enqueue_block_editor_assets', [ $this, 'register_block_shared_css' ] );
@@ -110,9 +126,26 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Register_Idx_Category function.
+	 * Set_Block_Dependencies
 	 *
 	 * @access public
+	 * @return mixed
+	 */
+	public function set_block_dependencies() {
+		global $wp_version;
+		$current_screen = get_current_screen();
+		if ( version_compare( $wp_version, '5.8', '>=' ) && ( 'widgets' === $current_screen->id || 'customize' === $current_screen->id ) ) {
+			$this->block_dependencies = [ 'wp-blocks', 'wp-element', 'wp-components', 'wp-server-side-render', 'wp-edit-widgets' ];
+		} else {
+			$this->block_dependencies = [ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ];
+		}
+	}
+
+	/**
+	 * Register_Idx_Category
+	 *
+	 * @access public
+	 * @param array $categories - Array of existing categories.
 	 * @return mixed
 	 */
 	public function register_idx_category( $categories ) {
@@ -128,13 +161,14 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Register_Idx_Category function.
+	 * Register_Idx_Category
 	 *
 	 * @access public
 	 * @return mixed
 	 */
 	public function register_block_shared_css() {
 		wp_enqueue_style( 'idx-shared-block-editor-css', plugins_url( '../assets/css/idx-block-edit.min.css', __FILE__ ), false, '1.0', 'all' );
+		wp_enqueue_style( 'font-awesome-5.8.2' );
 	}
 
 	// Block Registration/Setup Functions.
@@ -142,7 +176,7 @@ class Register_Blocks {
 	// IDX Widgets Block Setup.
 
 	/**
-	 * Idx_widgets_block_register_script function.
+	 * Idx_widgets_block_register_script
 	 *
 	 * @access public
 	 * @return void
@@ -152,12 +186,12 @@ class Register_Blocks {
 		wp_register_script(
 			'idx-widgets-block',
 			plugins_url( '../assets/js/idx-widgets-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			$this->block_dependencies,
 			'1.0',
 			false
 		);
 
-		$placeholder_image_url = plugins_url( '../assets/images/block-placeholder-images/idx-widgets-placeholder.png', __FILE__ );
+		$placeholder_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/idx-widgets-placeholder.png';
 		wp_localize_script( 'idx-widgets-block', 'idx_widget_block_image_url', [ $placeholder_image_url ] );
 
 		$available_widgets = $this->get_widget_list_options();
@@ -167,7 +201,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Impress_lead_signup_block_init function.
+	 * Impress_lead_signup_block_init
 	 *
 	 * @access public
 	 * @return void
@@ -189,7 +223,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Idx_widgets_block_render function.
+	 * Idx_widgets_block_render
 	 *
 	 * @access public
 	 * @param mixed $attributes - Widget attributes.
@@ -203,28 +237,34 @@ class Register_Blocks {
 	// IDX Wrapper Block Setup.
 
 	/**
-	 * Idx_wrapper_tags_block_register_script function.
+	 * Idx_wrapper_tags_block_register_script
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function idx_wrapper_tags_block_register_script() {
+		// Hide from Customizer and Appearance > Widgets pages as this should only be used on a page/post.
+		$current_screen = get_current_screen();
+		if ( 'widgets' === $current_screen->id || 'customize' === $current_screen->id ) {
+			return;
+		}
+
 		// Register block script.
 		wp_register_script(
 			'idx-wrapper-tags-block',
 			plugins_url( '../assets/js/idx-wrapper-tags-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			$this->block_dependencies,
 			'1.0',
 			false
 		);
 
-		$idx_wrapper_tags_image_url = plugins_url( '../assets/images/block-placeholder-images/wrapper-tag-placeholder.png', __FILE__ );
+		$idx_wrapper_tags_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/wrapper-tag-placeholder.png';
 		wp_localize_script( 'idx-wrapper-tags-block', 'idx_wrapper_tags_image_url', [ $idx_wrapper_tags_image_url ] );
 		wp_enqueue_script( 'idx-wrapper-tags-block' );
 	}
 
 	/**
-	 * Idx_wrapper_tags_block_init function.
+	 * Idx_wrapper_tags_block_init
 	 *
 	 * @access public
 	 * @return void
@@ -253,7 +293,7 @@ class Register_Blocks {
 		wp_register_script(
 			'impress-lead-signup-block',
 			plugins_url( '../assets/js/impress-lead-signup-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			$this->block_dependencies,
 			'1.0',
 			false
 		);
@@ -261,14 +301,14 @@ class Register_Blocks {
 		$available_agents = $this->get_agents_select_list();
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_agent_list', $available_agents );
 
-		$lead_signup_image_url = plugins_url( '../assets/images/block-placeholder-images/lead-signup-placeholder.png', __FILE__ );
+		$lead_signup_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/lead-signup-placeholder.png';
 		wp_localize_script( 'impress-lead-signup-block', 'lead_signup_image_url', [ $lead_signup_image_url ] );
 
 		wp_enqueue_script( 'impress-lead-signup-block' );
 	}
 
 	/**
-	 * Impress_lead_signup_block_init function.
+	 * Impress_lead_signup_block_init
 	 *
 	 * @access public
 	 * @return void
@@ -305,7 +345,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Impress_lead_signup_block_render function.
+	 * Impress_lead_signup_block_render
 	 *
 	 * @access public
 	 * @param mixed $attributes - Widget attributes.
@@ -319,7 +359,7 @@ class Register_Blocks {
 	// IMPress Lead Login Block Setup.
 
 	/**
-	 * Impress_lead_login_block_register_script function.
+	 * Impress_lead_login_block_register_script
 	 *
 	 * @access public
 	 * @return void
@@ -329,18 +369,18 @@ class Register_Blocks {
 		wp_register_script(
 			'impress-lead-login-block',
 			plugins_url( '../assets/js/impress-lead-login-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			$this->block_dependencies,
 			'1.0',
 			false
 		);
 
-		$lead_login_image_url = plugins_url( '../assets/images/block-placeholder-images/lead-login-placeholder.png', __FILE__ );
+		$lead_login_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/lead-login-placeholder.png';
 		wp_localize_script( 'impress-lead-login-block', 'lead_login_image_url', [ $lead_login_image_url ] );
 		wp_enqueue_script( 'impress-lead-login-block' );
 	}
 
 	/**
-	 * Impress_lead_login_block_init function.
+	 * Impress_lead_login_block_init
 	 *
 	 * @access public
 	 * @return void
@@ -368,7 +408,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Impress_lead_login_block_render function.
+	 * Impress_lead_login_block_render
 	 *
 	 * @access public
 	 * @param mixed $attributes - Widget attributes.
@@ -382,7 +422,7 @@ class Register_Blocks {
 	// IMPress Omnibar Block Setup.
 
 	/**
-	 * Impress_omnibar_block_register_script function.
+	 * Impress_omnibar_block_register_script
 	 *
 	 * @access public
 	 * @return void
@@ -392,18 +432,18 @@ class Register_Blocks {
 		wp_register_script(
 			'impress-omnibar-block',
 			plugins_url( '../assets/js/impress-omnibar-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			$this->block_dependencies,
 			'1.0',
 			false
 		);
 
-		$impress_omnibar_image_url = plugins_url( '../assets/images/block-placeholder-images/omnibar-placeholder.png', __FILE__ );
+		$impress_omnibar_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/omnibar-placeholder.png';
 		wp_localize_script( 'impress-omnibar-block', 'impress_omnibar_image_url', [ $impress_omnibar_image_url ] );
 		wp_enqueue_script( 'impress-omnibar-block' );
 	}
 
 	/**
-	 * Impress_omnibar_block_init function.
+	 * Impress_omnibar_block_init
 	 *
 	 * @access public
 	 * @return void
@@ -431,7 +471,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Impress_omnibar_block_render function.
+	 * Impress_omnibar_block_render
 	 *
 	 * @access public
 	 * @param mixed $attributes - Widget attributes.
@@ -445,7 +485,7 @@ class Register_Blocks {
 	// Impress Carousel Block Setup.
 
 	/**
-	 * Impress_carousel_block_register_script function.
+	 * Impress_carousel_block_register_script
 	 *
 	 * @access public
 	 * @return void
@@ -455,7 +495,7 @@ class Register_Blocks {
 		wp_register_script(
 			'impress-carousel-block',
 			plugins_url( '../assets/js/impress-carousel-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			$this->block_dependencies,
 			'1.0',
 			false
 		);
@@ -466,14 +506,14 @@ class Register_Blocks {
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_saved_links', $saved_links_list );
 
-		$impress_carousel_image_url = plugins_url( '../assets/images/block-placeholder-images/carousel-placeholder.png', __FILE__ );
+		$impress_carousel_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/carousel-placeholder.png';
 		wp_localize_script( 'impress-carousel-block', 'impress_carousel_image_url', [ $impress_carousel_image_url ] );
 
 		wp_enqueue_script( 'impress-carousel-block' );
 	}
 
 	/**
-	 * Impress_carousel_block_init function.
+	 * Impress_carousel_block_init
 	 *
 	 * @access public
 	 * @return void
@@ -522,7 +562,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Impress_carousel_block_render function.
+	 * Impress_carousel_block_render
 	 *
 	 * @access public
 	 * @param mixed $attributes - Widget attributes.
@@ -536,7 +576,7 @@ class Register_Blocks {
 	// IMPress Showcase Block Setup.
 
 	/**
-	 * Impress_showcase_block_register_script function.
+	 * Impress_showcase_block_register_script
 	 *
 	 * @access public
 	 * @return void
@@ -546,7 +586,7 @@ class Register_Blocks {
 		wp_register_script(
 			'impress-showcase-block',
 			plugins_url( '../assets/js/impress-showcase-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			$this->block_dependencies,
 			'1.0',
 			false
 		);
@@ -557,14 +597,14 @@ class Register_Blocks {
 		$saved_links_list = $this->get_saved_links_list();
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_saved_links', $saved_links_list );
 
-		$impress_showcase_image_url = plugins_url( '../assets/images/block-placeholder-images/showcase-placeholder.png', __FILE__ );
+		$impress_showcase_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/showcase-placeholder.png';
 		wp_localize_script( 'impress-showcase-block', 'impress_showcase_image_url', [ $impress_showcase_image_url ] );
 
 		wp_enqueue_script( 'impress-showcase-block' );
 	}
 
 	/**
-	 * Impress_showcase_block_init function.
+	 * Impress_showcase_block_init
 	 *
 	 * @access public
 	 * @return void
@@ -616,7 +656,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Impress_showcase_block_render function.
+	 * Impress_showcase_block_render
 	 *
 	 * @access public
 	 * @param mixed $attributes - Widget attributes.
@@ -630,7 +670,7 @@ class Register_Blocks {
 	// IMPress City Links Block Setup.
 
 	/**
-	 * Impress_city_links_block_register_script function.
+	 * Impress_city_links_block_register_script
 	 *
 	 * @access public
 	 * @return void
@@ -640,12 +680,12 @@ class Register_Blocks {
 		wp_register_script(
 			'impress-city-links-block',
 			plugins_url( '../assets/js/impress-city-links-block.min.js', __FILE__ ),
-			[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-editor' ],
+			$this->block_dependencies,
 			'1.0',
 			false
 		);
 
-		$placeholder_image_url = plugins_url( '../assets/images/block-placeholder-images/impress-city-links.png', __FILE__ );
+		$placeholder_image_url = IMPRESS_IDX_URL . 'assets/images/block-placeholder-images/impress-city-links.png';
 		wp_localize_script( 'impress-city-links-block', 'impress_city_links_block_image_url', [ $placeholder_image_url ] );
 
 		$mls_options = $this->get_mls_options();
@@ -658,7 +698,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Impress_city_links_block_init function.
+	 * Impress_city_links_block_init
 	 *
 	 * @access public
 	 * @return void
@@ -698,7 +738,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Impress_city_link_block_render function.
+	 * Impress_city_link_block_render
 	 *
 	 * @access public
 	 * @param mixed $attributes - Widget attributes.
@@ -712,7 +752,7 @@ class Register_Blocks {
 	// Block Setup Helper Functions.
 
 	/**
-	 * Get_saved_links_list function.
+	 * Get_saved_links_list
 	 *
 	 * @access public
 	 * @return array
@@ -745,7 +785,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Get_agents_select_list function.
+	 * Get_agents_select_list
 	 *
 	 * @access public
 	 * @return array
@@ -760,7 +800,7 @@ class Register_Blocks {
 
 		if ( get_option( 'idx_broker_apikey' ) ) {
 			$agent_api_data = $this->idx_api->idx_api( 'agents', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
-			if ( $agent_api_data['agent'] ) {
+			if ( ! is_wp_error( $agent_api_data ) && ! empty( $agent_api_data['agent'] ) ) {
 				foreach ( $agent_api_data['agent'] as $current_agent ) {
 					array_push( $agents_list, [ 'label' => $current_agent['agentDisplayName'], 'value' => $current_agent['agentID'] ] );
 				}
@@ -780,7 +820,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Get_city_list_options function.
+	 * Get_city_list_options
 	 *
 	 * @access public
 	 * @return array
@@ -807,7 +847,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Get_mls_options function.
+	 * Get_mls_options
 	 *
 	 * @access public
 	 * @return array
@@ -831,7 +871,7 @@ class Register_Blocks {
 	}
 
 	/**
-	 * Get_widget_list_options function.
+	 * Get_widget_list_options
 	 *
 	 * @access public
 	 * @return array

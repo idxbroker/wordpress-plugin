@@ -55,7 +55,7 @@ function wp_listings_post_nav() {
 
 	?>
 	<nav class="navigation listing-navigation" role="navigation">
-		<h1 class="screen-reader-text"><?php _e( 'Listing navigation', 'wp-listings' ); ?></h1>
+		<h1 class="screen-reader-text"><?php esc_html_e( 'Listing navigation', 'wp-listings' ); ?></h1>
 		<div class="nav-links">
 			<?php
 			if ( is_attachment() ) :
@@ -113,7 +113,7 @@ function wp_listings_paging_nav() {
 
 	?>
 	<nav class="navigation archive-listing-navigation" role="navigation">
-		<h1 class="screen-reader-text"><?php _e( 'Listings navigation', 'wp-listings' ); ?></h1>
+		<h1 class="screen-reader-text"><?php esc_html_e( 'Listings navigation', 'wp-listings' ); ?></h1>
 		<div class="pagination loop-pagination">
 			<?php echo $links; ?>
 		</div><!-- .pagination -->

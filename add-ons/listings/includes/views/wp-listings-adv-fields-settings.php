@@ -1,16 +1,16 @@
 <?php
 
-$options = get_option( 'plugin_wp_listings_settings' );
+$options                = get_option( 'plugin_wp_listings_settings' );
 $advanced_field_options = get_option( 'wp_listings_advanced_field_display_options', [] );
 
 // If no advanced fields are imported but the option to import is enabled, show message on what to do next.
-if ( count( $advanced_field_options ) < 1 && isset( $options['wp_listings_import_advanced_fields'] ) && $options['wp_listings_import_advanced_fields'] === "1" ) {
+if ( is_array( $advanced_field_options ) && count( $advanced_field_options ) < 1 && isset( $options['wp_listings_import_advanced_fields'] ) && '1' == $options['wp_listings_import_advanced_fields'] ) {
 	echo '<div style="font-size:10px;line-height:21px;">
-					<span class="dashicons dashicons-warning"></span>
-					<span>
-						Once new listings are imported or existing listings update after enabling the "Import advanced field data" option, advanced field display setting options will appear here.
-					</span>
-				</div>';
+			<span class="dashicons dashicons-warning"></span>
+			<span>
+				Advanced field data will be gathered during the next listing auto-import, please check back later.
+			</span>
+		 </div>';
 }
 
 echo '
@@ -38,60 +38,50 @@ echo '
 
 
 <form id="wp-listings-adv-fields-form" onsubmit="return updateAdvFields(event)">
-<input type="hidden" id="adv-fields-nonce" value="<?php  echo wp_create_nonce( 'impress_adv_fields_settings_nonce' ); ?>" />
+<input type="hidden" id="adv-fields-nonce" value="<?php echo esc_attr( wp_create_nonce( 'impress_adv_fields_settings_nonce' ) ); ?>" />
 <?php
 // If any advanced fields are imported, display the adv field customization table.
-if ( count( $advanced_field_options ) > 0 ) {
-	_e( '<div id="adv-field-cusomization-container" class="' . ($options['wp_listings_import_advanced_fields'] === 0 ? 'disabled-adv-field-option' : '' ) . '">', 'wp-listings' );
+if ( is_array( $advanced_field_options ) && count( $advanced_field_options ) > 0 ) {
+	echo '<div id="adv-field-cusomization-container" class="' . ( 0 == $options['wp_listings_import_advanced_fields'] ? 'disabled-adv-field-option' : '' ) . '">';
 
-	_e(
-		'<h1 id="wpl-customize-adv-fields-label">IMPress Listings - Advanced Fields</h1>
+	echo '<h1 id="wpl-customize-adv-fields-label">IMPress Listings - Advanced Fields</h1>
 			<div id="wpl-adv-field-button-container">
 			<button id="wpl-hide-all-adv-field-button" class="button-primary" type="button" onclick="hideAllAdvFields()" title="Set all advanced fields to hide on listing pages">Hide All Fields</button>
 			<button id="wpl-show-all-adv-field-button" class="button-primary" type="button" onclick="showAllAdvFields()" title="Set all advanced fields to display on listing pages" >Show All Fields</button>
 			<button id="wpl-populate-custom-names-button" class="button-primary" type="button" onclick="populateEmptyAdvCustomNameFields()" title="Generate a best guess name for all fields currently missing a custom name" >Generate Custom Names</button>
 			<button id="wpl-clear-custom-names-button" class="button-primary" type="button" onclick="clearAdvCustomNameFields()" title="Remove custom names from all fields" >Clear Custom Names</button>
 		</div>
-	',
-		'wp-listings'
-	);
+	';
 
-	_e( "<table id='idx-wp-listings-adv-fields-table'>", 'wp-listings' );
-	_e( "<tr><th>Field Name</th><th>Custom Name</th><th>Display</th></tr>", 'wp-listings' );
+	echo '<table id="idx-wp-listings-adv-fields-table">';
+	echo '<tr><th>Field Name</th><th>Custom Name</th><th>Display</th></tr>';
 	foreach ( $advanced_field_options as $key => $value ) {
-		_e(
-			"<tr>
-				<td class='wpl-adv-name-field'>$key</td>
-				<td class='wpl-adv-custom-name-field'>
-					<input name='wp_listings_advanced_field_display_options[$key][custom_name]' id='$key' class='custom-adv-field-name-input' type='text' value='" . esc_attr( $value['custom_name'] ) . "' />
+		echo '<tr>
+				<td class="wpl-adv-name-field">' . esc_html( $key ) . '</td>
+				<td class="wpl-adv-custom-name-field">
+					<input name="wp_listings_advanced_field_display_options[' . esc_attr( $key ) . '][custom_name]" id="' . esc_attr( $key ) . '" class="custom-adv-field-name-input" type="text" value="' . esc_attr( $value['custom_name'] ) . '" />
 				</td>
-				<td class='wpl-adv-show-hide'>
-					<div class=''>
-						Show <input name='wp_listings_advanced_field_display_options[$key][display_field]' id='$key-show-checkbox' class='show-radio-button' type='radio' value='show' " . checked( 'show', $value['display_field'], false ) . " />
-						Hide <input name='wp_listings_advanced_field_display_options[$key][display_field]' id='$key-hide-checkbox' class='hide-radio-button' type='radio' value='hide' " . checked( 'hide', $value['display_field'], false ) . " />
+				<td class="wpl-adv-show-hide">
+					<div class="">
+						Show <input name="wp_listings_advanced_field_display_options[' . esc_attr( $key ) . '][display_field]" id="' . esc_attr( $key ) . '-show-checkbox" class="show-radio-button" type="radio" value="show" ' . checked( 'show', $value['display_field'], false ) . ' />
+						Hide <input name="wp_listings_advanced_field_display_options[' . esc_attr( $key ) . '][display_field]" id="' . esc_attr( $key ) . '-hide-checkbox" class="hide-radio-button" type="radio" value="hide" ' . checked( 'hide', $value['display_field'], false ) . ' />
 					</div>
 				</td>
-			</tr>",
-			'wp-listings'
-		);
+			</tr>';
 	}
 
-	_e( '</table>', 'wp-listings' );
-	_e(
-		'<div id="wpl-adv-field-button-container">
+	echo '</table>';
+	echo '<div id="wpl-adv-field-button-container">
 			<button id="wpl-hide-all-adv-field-button" class="button-primary" type="button" onclick="hideAllAdvFields()" title="Set all advanced fields to hide on single listing pages.">Hide All Fields</button>
 			<button id="wpl-show-all-adv-field-button" class="button-primary" type="button" onclick="showAllAdvFields()" title="Set all advanced fields to show on single listing pages" >Show All Fields</button>
 			<button id="wpl-populate-custom-names-button" class="button-primary" type="button" onclick="populateEmptyAdvCustomNameFields()" title="Generates a best guess title for any field missing a custom name." >Generate Custom Names</button>
 			<button id="wpl-clear-custom-names-button" class="button-primary" type="button" onclick="clearAdvCustomNameFields()" title="Remove custom names from all fields. Press the Save Settings button to commit any changes." >Clear Custom Names</button>
 		</div>
-	',
-		'wp-listings'
-	);
-	echo '</div>';
+	</div>';
+	echo '<hr>';
+	echo '<input id="adv-field-settings-submit-button" name="submit" class="button-primary" type="submit" value="Save Settings" aria-label="Submit Advanced Field Display Changes" style="min-width:200px;"/>';
 }
-echo '<hr>';
 ?>
-<input id="adv-field-settings-submit-button" name="submit" class="button-primary" type="submit" value="Save Settings" aria-label="Submit Advanced Field Display Changes" style="min-width:200px;"/>
 </form>
 
 <script>

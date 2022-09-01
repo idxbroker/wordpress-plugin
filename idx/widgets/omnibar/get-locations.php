@@ -48,7 +48,7 @@ class Get_Locations {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -56,7 +56,7 @@ class Get_Locations {
 	public $idx_api;
 
 	/**
-	 * address_mls
+	 * Address_mls
 	 *
 	 * @var mixed
 	 * @access private
@@ -64,7 +64,7 @@ class Get_Locations {
 	private $address_mls;
 
 	/**
-	 * mls_list
+	 * Mls_list
 	 *
 	 * @var mixed
 	 * @access private
@@ -72,7 +72,7 @@ class Get_Locations {
 	private $mls_list;
 
 	/**
-	 * property_types
+	 * Property_types
 	 *
 	 * @var mixed
 	 * @access private
@@ -84,7 +84,7 @@ class Get_Locations {
 	 */
 
 	/**
-	 * get_idxIDs function.
+	 * Get_idxIDs function.
 	 *
 	 * @access public
 	 * @param mixed $array

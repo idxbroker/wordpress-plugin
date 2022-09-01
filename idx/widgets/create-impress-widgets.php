@@ -20,7 +20,7 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -28,7 +28,7 @@ class Create_Impress_Widgets {
 	public $idx_api;
 
 	/**
-	 * register_impress_widgets function.
+	 * Register_impress_widgets function.
 	 *
 	 * @access public
 	 * @return void
@@ -45,26 +45,22 @@ class Create_Impress_Widgets {
 	}
 
 	/**
-	 * lead_login_shortcode function.
+	 * Lead_login_shortcode function.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function lead_login_shortcode() {
-		$widget = sprintf(
-			'
-            <form action="%sajax/userlogin.php" method="post" target="" name="leadLoginForm">
-                <input type="hidden" name="action" value="login">
-                <input type="hidden" name="loginWidget" value="true">
-                <label for="bb-IDX-widgetEmail">Email Address:</label>
-                <input id="bb-IDX-widgetEmail" type="text" name="email" placeholder="Enter your email address">
-                <input id="bb-IDX-widgetPassword" type="hidden" name="password" value="">
-                <input id="bb-IDX-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
-            </form>',
-			$idx_api->subdomain_url()
-		);
-
-		return $widget;
+		echo '
+			<form action="' . esc_attr( $idx_api->subdomain_url() ) . 'ajax/userlogin.php" method="post" target="" name="leadLoginForm">
+				<input type="hidden" name="action" value="login">
+				<input type="hidden" name="loginWidget" value="true">
+				<label for="bb-IDX-widgetEmail">Email Address:</label>
+				<input id="bb-IDX-widgetEmail" type="text" name="email" placeholder="Enter your email address">
+				<input id="bb-IDX-widgetPassword" type="hidden" name="password" value="">
+				<input id="bb-IDX-widgetLeadLoginSubmit" type="submit" name="login" value="Log In">
+			</form>
+		';
 	}
 
 	/**
@@ -198,11 +194,7 @@ class Create_Impress_Widgets {
 				return $output;
 			}
 
-			if ( ( $property_type ) == 'savedlink' ) {
-				$prop_image_url = ( isset( $prop['image']['1']['url'] ) ) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-			} else {
-				$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-			}
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			if ( 1 == $use_rows && $count == 0 && $max != '1' ) {
 				$output .= '<div class="shortcode property-showcase row">';
@@ -285,7 +277,7 @@ class Create_Impress_Widgets {
 				);
 			}
 
-			if ( 1 == $use_rows && $count != 1 ) {
+			if ( 1 == $use_rows && ( 1 !== $count || 1 === $total ) ) {
 
 				// close a row if..
 				// num_per_row is a factor of count OR
@@ -408,11 +400,7 @@ class Create_Impress_Widgets {
 				return $output;
 			}
 
-			if ( ( $property_type ) == 'savedlink' ) {
-				$prop_image_url = ( isset( $prop['image']['1']['url'] ) ) ? $prop['image']['1']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-			} else {
-				$prop_image_url = ( isset( $prop['image']['0']['url'] ) ) ? $prop['image']['0']['url'] : '//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png';
-			}
+			$prop_image_url = $prop['image']['0']['url'] ?? $prop['image']['1']['url'] ?? plugins_url( '/idx-broker-platinum/assets/images/noPhotoFull.png' );
 
 			$count++;
 

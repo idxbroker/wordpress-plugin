@@ -67,7 +67,7 @@ class WP_Listings_Taxonomies {
 		}
 
 		/** This section handles the data if a new taxonomy is created */
-		if ( isset( $_REQUEST['action'] ) && 'create' == $_REQUEST['action'] && wp_verify_nonce( $_REQUEST['_wpnonce'], 'wp_listings-action_create-taxonomy' )) {
+		if ( isset( $_REQUEST['action'] ) && 'create' == $_REQUEST['action'] && wp_verify_nonce( $_REQUEST['_wpnonce'], 'wp_listings-action_create-taxonomy' ) ) {
 			$this->create_taxonomy( $_POST['wp_listings_taxonomy'] );
 		}
 
@@ -77,14 +77,14 @@ class WP_Listings_Taxonomies {
 		}
 
 		/** This section handles the data if a taxonomy is being edited */
-		if ( isset( $_REQUEST['action'] ) && 'edit' == $_REQUEST['action'] && wp_verify_nonce( $_REQUEST['_wpnonce'], 'wp_listings-action_edit-taxonomy' )) {
+		if ( isset( $_REQUEST['action'] ) && 'edit' == $_REQUEST['action'] && wp_verify_nonce( $_REQUEST['_wpnonce'], 'wp_listings-action_edit-taxonomy' ) ) {
 			$this->edit_taxonomy( $_POST['wp_listings_taxonomy'] );
 		}
 
 	}
 
 	public function tax_reorder_enqueue() {
-		wp_enqueue_script('jquery-ui-sortable');
+		wp_enqueue_script( 'jquery-ui-sortable' );
 	}
 
 	public function admin() {
@@ -121,9 +121,9 @@ class WP_Listings_Taxonomies {
 		extract( $args );
 
 		$labels = [
-			'name'                  => strip_tags( $name ),
-			'singular_name'         => strip_tags( $singular_name ),
-			'menu_name'             => strip_tags( $name ),
+			'name'                  => wp_strip_all_tags( $name ),
+			'singular_name'         => wp_strip_all_tags( $singular_name ),
+			'menu_name'             => wp_strip_all_tags( $name ),
 			'search_items'          => sprintf( __( 'Search %s', 'wp-listings' ), strip_tags( $name ) ),
 			'popular_items'         => sprintf( __( 'Popular %s', 'wp-listings' ), strip_tags( $name ) ),
 			'all_items'             => sprintf( __( 'All %s', 'wp-listings' ), strip_tags( $name ) ),
@@ -166,7 +166,7 @@ class WP_Listings_Taxonomies {
 		}
 		/** No empty ID */
 		if ( ! isset( $id ) || empty( $id ) ) {
-			wp_die( __( "Nice try, partner. But that taxonomy doesn't exist. Click back and try again.", 'wp-listings' ) );
+			wp_die( esc_html__( "Nice try, partner. But that taxonomy doesn't exist. Click back and try again.", 'wp-listings' ) );
 		}
 
 		$options = get_option( $this->settings_field );
@@ -175,7 +175,7 @@ class WP_Listings_Taxonomies {
 		if ( array_key_exists( $id, (array) $options ) ) {
 			unset( $options[ $id ] );
 		} else {
-			wp_die( __( "Nice try, partner. But that taxonomy doesn't exist. Click back and try again.", 'wp-listings' ) );
+			wp_die( esc_html__( "Nice try, partner. But that taxonomy doesn't exist. Click back and try again.", 'wp-listings' ) );
 		}
 
 		/** Update the DB */
@@ -191,13 +191,13 @@ class WP_Listings_Taxonomies {
 		}
 		/** No empty fields */
 		if ( ! isset( $args['id'] ) || empty( $args['id'] ) ) {
-			wp_die( __( 'Please complete all required fields.', 'wp-listings' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'wp-listings' ) );
 		}
 		if ( ! isset( $args['name'] ) || empty( $args['name'] ) ) {
-			wp_die( __( 'Please complete all required fields.', 'wp-listings' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'wp-listings' ) );
 		}
 		if ( ! isset( $args['singular_name'] ) || empty( $args['singular_name'] ) ) {
-			wp_die( __( 'Please complete all required fields.', 'wp-listings' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'wp-listings' ) );
 		}
 
 		extract( $args );
@@ -221,9 +221,9 @@ class WP_Listings_Taxonomies {
 			'labels'       => $labels,
 			'hierarchical' => true,
 			'rewrite'      => [
-				'slug' => $id,
+				'slug'       => $id,
 				'with_front' => false,
-		],
+			],
 			'editable'     => 1,
 		];
 
@@ -241,24 +241,17 @@ class WP_Listings_Taxonomies {
 			return;
 		}
 
-		$format = '<div id="message" class="updated"><p><strong>%s</strong></p></div>';
-
 		if ( isset( $_REQUEST['created'] ) && 'true' == $_REQUEST['created'] ) {
-			printf( $format, __('New taxonomy successfully created!', 'wp-listings') );
-			return;
+			echo '<div id="message" class="updated"><p><strong>' . esc_html__( 'New taxonomy successfully created!', 'wp-listings' ) . '</strong></p></div>';
 		}
 
 		if ( isset( $_REQUEST['edited'] ) && 'true' == $_REQUEST['edited'] ) {
-			printf( $format, __('Taxonomy successfully edited!', 'wp-listings') );
-			return;
+			echo '<div id="message" class="updated"><p><strong>' . esc_html__( 'Taxonomy successfully edited!', 'wp-listings' ) . '</strong></p></div>';
 		}
 
 		if ( isset( $_REQUEST['deleted'] ) && 'true' == $_REQUEST['deleted'] ) {
-			printf( $format, __('Taxonomy successfully deleted.', 'wp-listings') );
-			return;
+			echo '<div id="message" class="updated"><p><strong>' . esc_html__( 'Taxonomy successfully deleted.', 'wp-listings' ) . '</strong></p></div>';
 		}
-
-		return;
 
 	}
 
@@ -387,9 +380,9 @@ class WP_Listings_Taxonomies {
 		return [
 			'features' => [
 				'labels' => [
-					'name'					=> strip_tags( $name ),
-					'singular_name' 		=> strip_tags( $singular_name ),
-					'menu_name'				=> strip_tags( $name ),
+					'name'                  => wp_strip_all_tags( $name ),
+					'singular_name'         => wp_strip_all_tags( $singular_name ),
+					'menu_name'             => wp_strip_all_tags( $name ),
 					'search_items'          => sprintf( __( 'Search %s', 'wp-listings' ), strip_tags( $name ) ),
 					'popular_items'         => sprintf( __( 'Popular %s', 'wp-listings' ), strip_tags( $name ) ),
 					'all_items'             => sprintf( __( 'All %s', 'wp-listings' ), strip_tags( $name ) ),
@@ -401,7 +394,10 @@ class WP_Listings_Taxonomies {
 					'choose_from_most_used' => sprintf( __( 'Choose from the most used %s', 'wp-listings' ), strip_tags( $name ) ),
 				],
 				'hierarchical'          => 0,
-				'rewrite'               => [ __( 'features', 'wp-listings' ),  'with_front' => false ],
+				'rewrite'               => [
+					__( 'features', 'wp-listings' ),
+					'with_front' => false,
+				],
 				'editable'              => 0,
 				'show_in_rest'          => true,
 				'rest_base'             => 'features',
@@ -585,39 +581,42 @@ class WP_Listings_Taxonomies {
 		wp_nonce_field( basename( __FILE__ ), 'wpl_term_image_nonce' ); ?>
 
 		<div class="form-field wpl-term-image-wrap">
-			<label for="wpl-term-image"><?php _e( 'Image', 'wp-listings' ); ?></label>
+			<label for="wpl-term-image"><?php esc_html_e( 'Image', 'wp-listings' ); ?></label>
 			<!-- Begin term image -->
 			<p>
 				<input type="hidden" name="wpl-term-image" id="wpl-term-image" value="<?php echo esc_attr( $image_id ); ?>" />
 				<a href="#" class="wpl-add-media wpl-add-media-img"><img class="wpl-term-image-url" src="" style="max-width: 100%; max-height: 200px; height: auto; display: block;" /></a>
-				<a href="#" class="wpl-add-media wpl-add-media-text"><?php _e( 'Set term image', 'wp-listings' ); ?></a>
-				<a href="#" class="wpl-remove-media"><?php _e( 'Remove term image', 'wp-listings' ); ?></a>
+				<a href="#" class="wpl-add-media wpl-add-media-text"><?php esc_html_e( 'Set term image', 'wp-listings' ); ?></a>
+				<a href="#" class="wpl-remove-media"><?php esc_html_e( 'Remove term image', 'wp-listings' ); ?></a>
 			</p>
 			<!-- End term image -->
 		</div>
-	<?php }
+		<?php
+	}
 
 	/**
-	 * Field for editing an image on a term
+	 * Field for editing an image on a term.
 	 */
 	public function wp_listings_edit_term_image_field( $term ) {
 
 		$image_id = $this->wp_listings_get_term_image( $term->term_id, false );
 		$image_url = wp_get_attachment_url( $image_id );
 
-		if ( ! $image_url )
-			$image_url = ''; ?>
+		if ( ! $image_url ) {
+			$image_url = '';
+		}
+		?>
 
 		<tr class="form-field wpl-term-image-wrap">
-			<th scope="row"><label for="wpl-term-image"><?php _e( 'Image', 'wp-listings' ); ?></label></th>
+			<th scope="row"><label for="wpl-term-image"><?php esc_html_e( 'Image', 'wp-listings' ); ?></label></th>
 			<td>
 				<?php wp_nonce_field( basename( __FILE__ ), 'wpl_term_image_nonce' ); ?>
 				<!-- Begin term image -->
 				<p>
 					<input type="hidden" name="wpl-term-image" id="wpl-term-image" value="<?php echo esc_attr( $image_id ); ?>" />
 					<a href="#" class="wpl-add-media wpl-add-media-img"><img class="wpl-term-image-url" src="<?php echo esc_url( $image_url ); ?>" style="max-width: 100%; max-height: 200px; height: auto; display: block;" /></a>
-					<a href="#" class="wpl-add-media wpl-add-media-text"><?php _e( 'Set term image', 'wp-listings' ); ?></a>
-					<a href="#" class="wpl-remove-media"><?php _e( 'Remove term image', 'wp-listings' ); ?></a>
+					<a href="#" class="wpl-add-media wpl-add-media-text"><?php esc_html_e( 'Set term image', 'wp-listings' ); ?></a>
+					<a href="#" class="wpl-remove-media"><?php esc_html_e( 'Remove term image', 'wp-listings' ); ?></a>
 				</p>
 				<!-- End term image -->
 			</td>
@@ -631,7 +630,7 @@ class WP_Listings_Taxonomies {
 		$wp_listings_taxes = get_option( 'wp_listings_taxonomies' );
 
 		if ( $_POST ) {
-			$new_order                   = $_POST['wp_listings_taxonomy'];
+			$new_order                   = sanitize_text_field( wp_unslash( $_POST['wp_listings_taxonomy'] ) );
 			$wp_listings_taxes_reordered = [];
 			foreach ( $new_order as $tax ) {
 				if ( $wp_listings_taxes[ $tax ] ) {
@@ -642,9 +641,9 @@ class WP_Listings_Taxonomies {
 			update_option( 'wp_listings_taxonomies', $wp_listings_taxes_reordered );
 
 		}?>
-	<h2><?php _e( 'Reorder Taxonomies', 'wp-listings' ); ?></h2>
+	<h2><?php esc_html_e( 'Reorder Taxonomies', 'wp-listings' ); ?></h2>
 	<div id="col-container">
-		<div class="updated"><?php _e('Note: This will only allow you to reorder user-created taxonomies. Default taxonomies cannot be reordered (Status, Locations, Property Types, Features).', 'wp-listings' ); ?> </div>
+		<div class="updated"><?php esc_html_e( 'Note: This will only allow you to reorder user-created taxonomies. Default taxonomies cannot be reordered (Status, Locations, Property Types, Features).', 'wp-listings' ); ?> </div>
 		<style>
 #sortable{list-style-type:none;margin:10px 0;padding:0}#sortable li .item{-moz-border-radius:6px 6px 6px 6px;border:1px solid #e6e6e6;font-weight:bold;height:auto;line-height:35px;overflow:hidden;padding-left:10px;position:relative;text-shadow:0 1px 0 white;width:auto;word-wrap:break-word;cursor:move;background:none repeat-x scroll left top #dfdfdf;-moz-box-shadow:2px 2px 3px #888;-webkit-box-shadow:2px 2px 3px #888;box-shadow:2px 2px 3px #888}#sortable li span{position:absolute;margin-left:-1.3em}.ui-state-highlight{background:#e6e6e6;border:1px #666 dashed}.wplistings-submit{padding:5px 10px}.wplistings-submit:hover{background:#eaf2fa;font-weight:bold}
 		</style>
@@ -656,13 +655,15 @@ class WP_Listings_Taxonomies {
 		</script>
 		<div id="col-left">
 		<div class="col-wrap">
-		<p><?php _e('Drag and Drop to reorder', 'wp-listings'); ?></p>
+		<p><?php esc_html_e( 'Drag and Drop to reorder', 'wp-listings' ); ?></p>
 		<form method="post">
 		<ul id="sortable">
-			<?php foreach($wp_listings_taxes as $wp_listings_tax_key => $wp_listings_tax_value) { ?>
+			<?php
+			foreach ( $wp_listings_taxes as $wp_listings_tax_key => $wp_listings_tax_value ) {
+				?>
 				<li class="ui-state-default">
 					<div class="item">
-						<?php echo $wp_listings_tax_value['labels']['name']; ?><input type="hidden" id="wp_listings_taxonomy[]" name="wp_listings_taxonomy[]" value="<?php echo $wp_listings_tax_key; ?>" />
+						<?php echo esc_html( $wp_listings_tax_value['labels']['name'] ); ?><input type="hidden" id="wp_listings_taxonomy[]" name="wp_listings_taxonomy[]" value="<?php echo esc_attr( $wp_listings_tax_key ); ?>" />
 					</div>
 				</li>
 			<?php } ?>
@@ -673,7 +674,7 @@ class WP_Listings_Taxonomies {
 		</div><!-- /col-left -->
 
 	</div><!-- /col-container -->
-	<?php
+		<?php
 	}
 
 }

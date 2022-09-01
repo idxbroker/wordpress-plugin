@@ -47,6 +47,37 @@ gulp.task('js', function () {
   })
 })
 
+gulp.task('listing-template-js', function () {
+  glob('./src/js/listing-templates/*.js', function (err, files) {
+    if (err) {
+      done(err)
+    }
+
+    var tasks = files.map(function (entry) {
+      return gulp.src(entry)
+        .pipe(plumber())
+        .pipe(
+          babel({
+            presets: [
+              [
+                "@babel/env",
+                {
+                  modules: false
+                }
+              ]
+            ]
+          })
+        )
+        .pipe(uglify().on('error', gutil.log))
+        .pipe(rename(function (path) {
+          path.extname = '.min.js'
+        }))
+        .pipe(gulp.dest('./assets/js/listing-templates/'))
+        .pipe(notify({ message: 'Finished minifying ' + entry }))
+    })
+  })
+})
+
 gulp.task('sass', function () {
   glob('./src/scss/*.scss', function (err, files) {
     if (err) {
@@ -102,6 +133,24 @@ gulp.task('widget-css', function () {
   })
 })
 
+gulp.task('listing-template-css', function () {
+  glob('./src/css/listing-templates/*.css', function (err, files) {
+    if (err) {
+      done(err)
+    }
+
+    var tasks = files.map(function (entry) {
+      return gulp.src(entry)
+        .pipe(cleanCss())
+        .pipe(rename(function (path) {
+          path.extname = '.min.css'
+        }))
+        .pipe(gulp.dest('./assets/css/listing-templates/'))
+        .pipe(notify({ message: 'Finished processing ' + entry }))
+    })
+  })
+})
+
 gulp.task('readme', function () {
   // convert readme.txt to readme.md
   console.log('readme conversion not yet implemented')
@@ -109,9 +158,11 @@ gulp.task('readme', function () {
 
 gulp.task('watch', function () {
   gulp.watch('./src/js/*.js', ['js'])
+  gulp.watch('./src/js/listing-templates/*.js', ['listing-template-js'])
   gulp.watch('./src/scss/*.scss', ['sass'])
   gulp.watch('./src/css/*.css', ['css'])
   gulp.watch('./src/css/widgets/*.css', ['widget-css'])
+  gulp.watch('./src/css/listing-templates/*.css', ['listing-template-css'])
 })
 
 gulp.task('default', ['js'], function () {})

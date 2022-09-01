@@ -1,5 +1,24 @@
+.idx-block-placeholder-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	max-width: 600px;
+	margin: auto;
+}
+
 .idx-block-placeholder-container img {
-	width: 100%;
+	flex-shrink: 0;
+	min-height: 100%;
+	min-width: 100%;
+}
+
+.city-links-city-select-label {
+	display: flex;
+}
+
+.city-links-city-select-label .dashicons-info-outline {
+	font-size: 12px;
 }
 
 /* Used to change the size of the size of the dashicon used for the IMPress Carousel, it is the only block not using a Font Awesome icon */

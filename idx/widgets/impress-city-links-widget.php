@@ -14,8 +14,8 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		parent::__construct(
-			'impress_city_links', // Base ID
-			'IMPress City Links', // Name
+			'impress_city_links', // Base ID.
+			'IMPress City Links', // Name.
 			array(
 				'description'                 => __( 'Outputs a list of city links', 'idxbroker' ),
 				'classname'                   => 'impress-city-links-widget',
@@ -25,7 +25,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * idx_api
+	 * Idx_api
 	 *
 	 * @var mixed
 	 * @access public
@@ -33,7 +33,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	public $idx_api;
 
 	/**
-	 * defaults
+	 * Defaults
 	 *
 	 * @var mixed
 	 * @access public
@@ -50,7 +50,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	);
 
 	/**
-	 * Front-end display of widget.
+	 * Front-end display of widget
 	 *
 	 * @see WP_Widget::widget()
 	 *
@@ -68,7 +68,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		}
 
 		if ( $instance['styles'] ) {
-			wp_enqueue_style( 'impress-city-links', plugins_url( '../assets/css/widgets/impress-city-links.min.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'impress-city-links' );
 		}
 
 		if ( ! isset( $instance['new_window'] ) ) {
@@ -87,7 +87,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 
 		$idx_api = $this->idx_api;
 
-		// For testing with demo data
+		// For testing with demo data.
 		if ( empty( $instance['mls'] ) && defined( 'IDX_TESTING' ) ) {
 			$instance['mls'] = 'a000';
 		}
@@ -104,7 +104,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Sanitize widget form values as they are saved.
+	 * Sanitize widget form values as they are saved
 	 *
 	 * @see WP_Widget::update()
 	 *
@@ -113,6 +113,8 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
+		// Merge defaults and new_instance to avoid any missing index warnings when used with the legacy block widget.
+		$new_instance               = array_merge( $this->defaults, $new_instance );
 		$instance                   = array();
 		$instance['title']          = strip_tags( $new_instance['title'] );
 		$instance['city_list']      = strip_tags( $new_instance['city_list'] );
@@ -127,7 +129,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Back-end widget form.
+	 * Back-end widget form
 	 *
 	 * @see WP_Widget::form()
 	 * @uses IMPress_City_Links_Widget::city_list_options()
@@ -143,20 +145,20 @@ class Impress_City_Links_Widget extends \WP_Widget {
 
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr_e( $instance['title'] ); ?>" />
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'mls' ); ?>">MLS to use for the city links: *required*</label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'mls' ); ?>" name="<?php echo $this->get_field_name( 'mls' ); ?>">
-				<?php echo $this->mls_options( $instance, $this->idx_api ); ?>
+				<?php $this->mls_options( $instance, $this->idx_api ); ?>
 			</select>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'city_list' ); ?>">Select a city list:</label>
 			<select class="city-list-options widefat" id="<?php echo $this->get_field_id( 'city_list' ); ?>" name="<?php echo $this->get_field_name( 'city_list' ); ?>">
-				<?php echo $this->city_list_options( $instance, $this->idx_api ); ?>
+				<?php $this->city_list_options( $instance, $this->idx_api ); ?>
 			</select>
 		</p>
 		<p class="show-count">
@@ -176,12 +178,12 @@ class Impress_City_Links_Widget extends \WP_Widget {
 			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php _e( 'Default Styling?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'styles' ); ?>"><?php esc_html_e( 'Default Styling?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'styles' ); ?>" name="<?php echo $this->get_field_name( 'styles' ); ?>" value="1" <?php checked( $instance['styles'], true ); ?>>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php _e( 'Open Links in a New Window?', 'idxbroker' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'new_window' ); ?>"><?php esc_html_e( 'Open Links in a New Window?', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo $this->get_field_id( 'new_window' ); ?>" name="<?php echo $this->get_field_name( 'new_window' ); ?>" value="1" <?php checked( $instance['new_window'], true ); ?>>
 		</p>
 		<p>Don't have any city lists? Go create some in your <a href="http://middleware.idxbroker.com/mgmt/citycountyziplists.php" target="_blank">IDX dashboard.</a></p>
@@ -193,23 +195,21 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 *
 	 * This is just a helper to keep the html clean
 	 *
-	 * @param var $instance
+	 * @param array $instance - Widget instance.
+	 * @param mixed $idx_api - IDX API object.
 	 */
 	public static function city_list_options( $instance, $idx_api ) {
 		$lists  = $idx_api->city_list_names();
-		$output = '';
 
 		if ( ! is_array( $lists ) ) {
 			return;
 		}
 
 		foreach ( $lists as $list ) {
-			// display the list id if no list name has been assigned
-			$list_text = empty( $list->name ) ? $list->id : $list->name;
-
-			$output .= '<option class="city-list-option" ' . selected( $instance['city_list'], $list->id, 0 ) . ' value="' . $list->id . '">' . $list_text . '</option>';
+			// Display the list id if no list name has been assigned.
+			$list_text = $list->name ?? $list->id;
+			echo '<option class="city-list-option" ' . selected( $instance['city_list'], $list->id, 0 ) . ' value="' . esc_attr( $list->id ) . '">' . esc_html( $list_text ) . '</option>';
 		}
-		return $output;
 	}
 
 	/**
@@ -217,31 +217,31 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 *
 	 * This is just a helper to keep the html clean
 	 *
-	 * @param var $instance
+	 * @param array $instance - Widget instance.
+	 * @param mixed $idx_api - IDX API object.
 	 */
 	public static function mls_options( $instance, $idx_api ) {
 		$approved_mls = $idx_api->approved_mls();
-		$output       = '';
 
 		if ( ! is_array( $approved_mls ) ) {
 			return;
 		}
 		foreach ( $approved_mls as $mls ) {
-			$output .= '<option ' . selected( $instance['mls'], $mls->id . 0 ) . ' value="' . $mls->id . '">' . $mls->name . '</option>';
+			echo '<option ' . selected( $instance['mls'], $mls->id . 0 ) . ' value="' . esc_attr( $mls->id ) . '">' . esc_html( $mls->name ) . '</option>';
 		}
-		return $output;
+
 	}
 
 	/**
-	 * target function.
+	 * Target
 	 *
 	 * @access public
-	 * @param mixed $new_window
-	 * @return void
+	 * @param mixed $new_window - Open in new window settings value.
+	 * @return string
 	 */
 	public function target( $new_window ) {
 		if ( ! empty( $new_window ) ) {
-			// if enabled, open links in new tab/window
+			// If enabled, open links in new tab/window.
 			return '_blank';
 		} else {
 			return '_self';
@@ -251,14 +251,14 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	/**
 	 * Returns an unordered list of city links
 	 *
-	 * @param int|string the id of the city list to pull cities from
-	 * @param bool                                                   $columns if true adds column classes to the ul tags
-	 * @param int                                                    $number_of_columns optional total number of columns to split the links into
+	 * @param int|string $list_id - the id of the city list to pull cities from.
+	 * @param bool       $columns - if true adds column classes to the ul tags.
+	 * @param int        $number_of_columns - optional total number of columns to split the links into.
 	 */
 	public static function city_list_links( $list_id, $idx_id, $columns = 0, $number_columns = 4, $target, $show_count = false, $idx_api ) {
 		$cities = $idx_api->city_list( $list_id );
 
-		if ( ! $cities ) {
+		if ( is_wp_error( $cities) || empty( $cities ) ) {
 			return false;
 		}
 
@@ -266,22 +266,22 @@ class Impress_City_Links_Widget extends \WP_Widget {
 
 		if ( true == $columns ) {
 
-			// Max of four columns
+			// Max of four columns.
 			$number_columns = ( $number_columns > 4 ) ? 4 : (int) $number_columns;
 
 			$number_links = count( $cities );
 
 			$column_size = $number_links / $number_columns;
 
-			// if more columns than links make one column for every link
+			// If more columns than links make one column for every link.
 			if ( $column_size < 1 ) {
 				$number_columns = $number_links;
 			}
 
-			// round the column size up to a whole number
+			// Round the column size up to a whole number.
 			$column_size = ceil( $column_size );
 
-			// column class
+			// Column class.
 			switch ( $number_columns ) {
 				case 0:
 					$column_class = 'columns small-12 large-12';
@@ -320,9 +320,9 @@ class Impress_City_Links_Widget extends \WP_Widget {
 				$href = apply_filters( 'impress_city_links_url_suffix', $href, $link = null );
 			}
 
-			// do not add empty city names, ids, duplicates, or 'Other' cities
+			// Do not add empty city names, ids, duplicates, or 'Other' cities.
 			if ( ! empty( $city->name ) && ! empty( $city->id ) && ! in_array( $city->id, $cities_list ) && $city->name !== 'Other' && $city->name !== 'Out of State' && $city->name !== 'Out of Area' ) {
-				// avoid duplicates by keeping track of cities already used
+				// Avoid duplicates by keeping track of cities already used.
 				array_push( $cities_list, $city->id );
 
 				if ( $show_count ) {
@@ -370,15 +370,15 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Get cumulative number of occurances (properties) for a given city ID.
+	 * Get cumulative number of occurances (properties) for a given city ID
 	 *
 	 * @param  string   $city_id The city ID.
-	 * @param  string   $idx_id  The IDX (MLS) ID
+	 * @param  string   $idx_id  The IDX (MLS) ID.
 	 * @param  callable $idx_api The IDX API class.
 	 * @return int               The total number of occurances.
 	 */
 	public static function get_cumulative_property_count_from_mls( $city_id, $idx_id, $idx_api ) {
-		 $mls_cities = $idx_api->idx_api( 'cities/' . $idx_id, IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24, 'GET', true );
+		$mls_cities = $idx_api->idx_api( 'cities/' . $idx_id, IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 24, 'GET', true );
 
 		// Loop through cities and add number to $occurances if $city_id matches.
 		$occurances = 0;

@@ -20,7 +20,7 @@ class Shortcode_Ui {
 	}
 
 	/**
-	 * shortcodes_for_ui
+	 * Shortcodes_for_ui.
 	 *
 	 * @var mixed
 	 * @access public
@@ -28,48 +28,47 @@ class Shortcode_Ui {
 	public $shortcodes_for_ui;
 
 	/**
-	 * add_idx_media_button function.
+	 * Add_idx_media_button function.
 	 *
 	 * @access public
-	 * @param mixed $editor_id
+	 * @param mixed $editor_id - Editor ID.
 	 * @return void
 	 */
 	public function add_idx_media_button( $editor_id ) {
-		if ( $editor_id !== 'content' ) {
+		if ( 'content' !== $editor_id ) {
 			return;
 		}
 
-		echo $this->modal();
+		$this->modal();
 		printf( '<button id="idx-shortcode" class="button thickbox" data-editor="%s">Add IDX Shortcode</button>', esc_attr( $editor_id ) );
 	}
 
 	/**
-	 * enqueue_shortcode_js function.
+	 * Enqueue_shortcode_js function.
 	 *
 	 * @access public
-	 * @param mixed $hook
+	 * @param mixed $hook - Hook.
 	 * @return void
 	 */
 	public function enqueue_shortcode_js( $hook ) {
-		if ( 'post.php' != $hook && 'post-new.php' != $hook ) {
+		if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
 			return;
 		}
 
-		wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css', array(), '4.0.5', 'all'  );
-		wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js', array( 'jquery' ), '4.0.5', true );
-		wp_enqueue_script( 'idx-shortcode', plugins_url( '../assets/js/idx-shortcode.min.js', dirname( __FILE__ ) ), array( 'jquery' ) );
-		wp_enqueue_style( 'idx-shortcode', plugins_url( '../assets/css/idx-shortcode.min.css', dirname( __FILE__ ) ) );
-		wp_enqueue_style( 'font-awesome-5.8.2', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', array(), '5.8.2' );
-		// scripts and styles for map search widget preview
-		wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', array() );
-		wp_enqueue_script( 'custom-scriptLeafDraw', '//d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', array( 'custom-scriptLeaf' ) );
-		wp_enqueue_script( 'custom-scriptMQ', '//www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=Gmjtd%7Cluub2h0rn0%2Crx%3Do5-lz1nh', array( 'custom-scriptLeaf', 'custom-scriptLeafDraw' ) );
-		wp_enqueue_style( 'cssLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css' );
-		wp_enqueue_style( 'cssLeafLabel', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css' );
+		wp_enqueue_style( 'select2' );
+		wp_enqueue_script( 'select2' );
+		wp_enqueue_script( 'idx-shortcode', plugins_url( '../assets/js/idx-shortcode.min.js', dirname( __FILE__ ) ), array( 'jquery' ), '1.0', false );
+		wp_enqueue_style( 'idx-shortcode', plugins_url( '../assets/css/idx-shortcode.min.css', dirname( __FILE__ ) ), [], '1.0' );
+		wp_enqueue_style( 'font-awesome-5.8.2' );
+		// scripts and styles for map search widget preview.
+		wp_enqueue_script( 'custom-scriptLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/javascript/leaflet.js', array(), '1.0', false );
+		wp_enqueue_script( 'custom-scriptLeafDraw', '//d1qfrurkpai25r.cloudfront.net/graphical/frontend/javascript/maps/plugins/leaflet.draw.js', array( 'custom-scriptLeaf' ), '1.0', false );
+		wp_enqueue_style( 'cssLeaf', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet-1.000.css', [], '1.0' );
+		wp_enqueue_style( 'cssLeafLabel', '//d1qfrurkpai25r.cloudfront.net/graphical/css/leaflet.label.css', [], '1.0' );
 	}
 
 	/**
-	 * modal function.
+	 * Modal function.
 	 *
 	 * @access public
 	 * @return void
@@ -84,7 +83,7 @@ class Shortcode_Ui {
 	}
 
 	/**
-	 * modal_overview function.
+	 * Modal_overview function.
 	 *
 	 * @access public
 	 * @return void
@@ -98,9 +97,9 @@ class Shortcode_Ui {
 
 		$shortcodes = $this->shortcodes_for_ui->get_shortcodes_for_ui();
 		foreach ( $shortcodes as $shortcode ) {
-			echo '<div class="idx-shortcode-type" data-short-name="' . $shortcode['short_name'] . '">';
-			echo '<div class="idx-shortcode-type-icon"><i class="' . $shortcode['icon'] . '"></i></div>';
-			echo '<div class="idx-shortcode-name">' . $shortcode['name'] . '</div>';
+			echo '<div class="idx-shortcode-type" data-short-name="' . esc_attr( $shortcode['short_name'] ) . '">';
+			echo '<div class="idx-shortcode-type-icon"><i class="' . esc_attr( $shortcode['icon'] ) . '"></i></div>';
+			echo '<div class="idx-shortcode-name">' . esc_html( $shortcode['name'] ) . '</div>';
 			echo '</div>';
 		}
 		echo '</div><div class="idx-modal-shortcode-edit"></div><div class="idx-modal-shortcode-preview"></div>';
@@ -109,10 +108,10 @@ class Shortcode_Ui {
 	}
 
 	/**
-	 * get_shortcodes_for_ui function.
+	 * Get_shortcodes_for_ui function.
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_shortcodes_for_ui() {
 		$other_shortcodes = do_action( 'idx-register-shortcode-ui' );

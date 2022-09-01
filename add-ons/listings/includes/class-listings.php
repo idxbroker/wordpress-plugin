@@ -224,7 +224,7 @@ class WP_Listings {
 	public function register_meta_boxes() {
 		add_meta_box( 'listing_details_metabox', __( 'Property Details', 'wp-listings' ), array( &$this, 'listing_details_metabox' ), 'listing', 'normal', 'high' );
 		add_meta_box( 'listing_features_metabox', __( 'Additional Details', 'wp-listings' ), array( &$this, 'listing_features_metabox' ), 'listing', 'normal', 'high' );
-		if ( !class_exists( 'Idx_Broker_Plugin' ) ) {
+		if ( ! class_exists( 'Idx_Broker_Plugin' ) ) {
 			add_meta_box( 'idx_metabox', __( 'IDX Broker', 'wp-listings' ), array( &$this, 'idx_metabox' ), 'wp-listings-options', 'side', 'core' );
 		}
 
@@ -310,31 +310,31 @@ class WP_Listings {
 
 		global $post, $wp_taxonomies;
 
-		$image_size = 'style="max-width: 115px;"';
+		$image_size = 'max-width: 115px;';
 
 		apply_filters( 'wp_listings_admin_listing_details', $admin_details = $this->property_details['col1'] );
 
 		if ( isset( $_GET["mode"] ) && trim( $_GET["mode"] ) == 'excerpt' ) {
 			apply_filters( 'wp_listings_admin_extended_details', $admin_details = $this->property_details['col1'] + $this->property_details['col2'] );
-			$image_size = 'style="max-width: 150px;"';
+			$image_size = 'max-width: 150px;';
 		}
 
 		$image = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thumbnail' );
 
 		switch ( $column ) {
 			case 'listing_thumbnail':
-				echo '<p><img src="' . $image[0] . '" alt="listing-thumbnail" ' . $image_size . '/></p>';
+				echo '<p><img src="' . esc_url( $image[0] ) . '" alt="listing-thumbnail" style="' . esc_attr( $image_size ) . '" /></p>';
 				break;
 			case 'listing_details':
 				foreach ( (array) $admin_details as $label => $key ) {
-					printf( '<b>%s</b> %s<br />', esc_html( $label ), esc_html( get_post_meta($post->ID, $key, true) ) );
+					printf( '<b>%s</b> %s<br />', esc_html( $label ), esc_html( get_post_meta( $post->ID, $key, true ) ) );
 				}
 				break;
 			case 'listing_tags':
-				_e('<b>Status</b>: ' . get_the_term_list( $post->ID, 'status', '', ', ', '' ) . '<br />', 'wp-listings');
-				_e('<b>Property Type:</b> ' . get_the_term_list( $post->ID, 'property-types', '', ', ', '' ) . '<br />', 'wp-listings');
-				_e('<b>Location:</b> ' . get_the_term_list( $post->ID, 'locations', '', ', ', '' ) . '<br />', 'wp-listings');
-				_e('<b>Features:</b> ' . get_the_term_list( $post->ID, 'features', '', ', ', '' ), 'wp-listings');
+				echo '<b>Status</b>: ' . get_the_term_list( $post->ID, 'status', '', ', ', '' ) . '<br />';
+				echo '<b>Property Type:</b> ' . get_the_term_list( $post->ID, 'property-types', '', ', ', '' ) . '<br />';
+				echo '<b>Location:</b> ' . get_the_term_list( $post->ID, 'locations', '', ', ', '' ) . '<br />';
+				echo '<b>Features:</b> ' . get_the_term_list( $post->ID, 'features', '', ', ', '' );
 				break;
 		}
 
@@ -371,11 +371,11 @@ class WP_Listings {
 		$screen = get_current_screen();
 
 		if ( isset( $_GET['wp-listings'] ) || $screen->id == 'edit-listing' ) {
-			if ( !class_exists( 'Idx_Broker_Plugin' ) ) {
-				echo wp_listings_admin_notice( __( '<strong>Integrate your MLS Listings into WordPress with IDX Broker!</strong> <a href="http://www.idxbroker.com/features/idx-wordpress-plugin">Find out how</a>', 'wp-listings' ), false, 'activate_plugins', (isset( $_GET['wp-listings'])) ? 'wpl_listing_notice_idx' : 'wpl_notice_idx' );
+			if ( ! class_exists( 'Idx_Broker_Plugin' ) ) {
+				echo wp_kses_post( wp_listings_admin_notice( __( '<strong>Integrate your MLS Listings into WordPress with IDX Broker!</strong> <a href="http://www.idxbroker.com/features/idx-wordpress-plugin">Find out how</a>', 'wp-listings' ), false, 'activate_plugins', ( isset( $_GET['wp-listings'] ) ) ? 'wpl_listing_notice_idx' : 'wpl_notice_idx' ) );
 			}
 			if( get_option( 'wp_listings_import_progress' ) == true ) {
-				echo wp_listings_admin_notice( __( '<strong>Your listings are being imported in the background. This notice will dismiss when all selected listings have been imported.</strong>', 'wp-listings' ), false, 'activate_plugins', 'wpl_notice_import_progress' );
+				echo wp_kses_post( wp_listings_admin_notice( __( '<strong>Your listings are being imported in the background. This notice will dismiss when all selected listings have been imported.</strong>', 'wp-listings' ), false, 'activate_plugins', 'wpl_notice_import_progress' ) );
 			}
 		}
 
@@ -383,7 +383,7 @@ class WP_Listings {
 	}
 
 	public function hide_empty_thumbnails() {
-		echo __( '<style>.listing_thumbnail>p>img[src=""]{content:url("//mlsphotos.idxbroker.com/defaultNoPhoto/noPhotoFull.png")}</style>' );
+		echo '<style>.listing_thumbnail>p>img[src=""]{content:url("' . esc_url( IMPRESS_IDX_URL ) . 'assets/images/noPhotoFull.png")}</style>';
 	}
 
 }
