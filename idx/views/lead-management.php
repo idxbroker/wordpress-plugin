@@ -238,7 +238,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => $_POST['fields'],
+				'body'      => $_POST['note'],
 			);
 			$response = wp_remote_request( $api_url, $args );
 
@@ -279,7 +279,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => $_POST['fields'],
+				'body'      => $_POST['note'],
 			);
 			$response = wp_remote_request( $api_url, $args );
 
