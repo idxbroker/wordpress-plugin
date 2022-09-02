@@ -204,6 +204,8 @@ class Idx_Pages {
 	 * @return mixed
 	 */
 	public function create_idx_pages() {
+		global $wpdb;
+		
 		// Only schedule update once IDX pages have UID.
 		$uid_added = get_option( 'idx_added_uid_to_idx_pages' );
 		
