@@ -139,6 +139,8 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 == Changelog ==
 
+= 3.1.0 =
+
 = 3.0.10 =
 * Fix: CF7 Captcha Conflict
 * Update: Readme file updates
