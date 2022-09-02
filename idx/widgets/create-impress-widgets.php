@@ -292,7 +292,7 @@ class Create_Impress_Widgets {
 				// count is not equal to max AND
 				// count is not equal to total
 				if ( $count % $num_per_row == 0 && $count != $max && $count != $total ) {
-					$output .= '<div class="row shortcode property-showcase">';
+					$output .= '<div class="row impress-row shortcode property-showcase">';
 				}
 			}
 		}

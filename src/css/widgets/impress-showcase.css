@@ -40,6 +40,7 @@
     padding-left: 0.8333333333rem;
     padding-right: 0.8333333333rem;
     float: left;
+    box-sizing: border-box;
 }
 .impress-property-showcase .small-1 {
     width: 8.3333333333%;
