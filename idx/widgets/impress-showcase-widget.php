@@ -305,7 +305,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 				// count is not equal to max AND
 				// count is not equal to total.
 				if ( $count % $num_per_row == 0 && $count != $max && $count != $total ) {
-					$output .= '<div class="row">';
+					$output .= '<div class="impress-row">';
 				}
 			}
 		}
