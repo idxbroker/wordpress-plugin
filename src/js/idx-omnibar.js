@@ -561,7 +561,7 @@ var idxOmnibar = function(jsonData){
 
 		// Quick fix for if using the address autocomplete
 		if(AddressFieldType === 'address') {
-			goToResultsPage(input, idxUrl, '?idxID=' + AddressMLS + '&pt=' + mlsPtId + '&aw_address=' + input.value);
+			goToResultsPage(input, idxUrl, '?idxID=' + AddressMLS + '&pt=' + mlsPtId + '&aw_address=' + input.value  + '&idxStatus[]=active&idxStatus[]=sold');
 			return;
 		}
 		
@@ -573,7 +573,7 @@ var idxOmnibar = function(jsonData){
 			//MLS Number/ListingID
 			var listingID = true;
 			var agentHeaderID = false;
-			goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value, listingID);
+			goToResultsPage(input, idxUrl, '?csv_listingID=' + input.value + '&idxStatus[]=active&idxStatus[]=sold', listingID);
 		} else {
 			//address (split into number and street)
 			var addressSplit = input.value.split(' ');
@@ -586,13 +586,13 @@ var idxOmnibar = function(jsonData){
 						addressName += '+' + addressSplit[i];
 					}
 				}
-				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&a_streetNumber=' + addressSplit[0] + '&aw_address=' + addressName + '&srt=' + sortOrder);
+				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&a_streetNumber=' + addressSplit[0] + '&aw_address=' + addressName + '&srt=' + sortOrder  + '&idxStatus[]=active&idxStatus[]=sold');
 			} else if(input.value === idxOmnibarPlaceholder){
 				//prevent placeholder from interfering with results URL
-				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&srt=' + sortOrder);
+				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&srt=' + sortOrder + '&idxStatus[]=active&idxStatus[]=sold');
 			} else {
 				//search by just street name (without state or city if comma is used)
-				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&aw_address=' + input.value.split(', ')[0] + '&srt=' + sortOrder);
+				goToResultsPage(input, idxUrl, '?pt=' + mlsPtId + '&aw_address=' + input.value.split(', ')[0] + '&srt=' + sortOrder + '&idxStatus[]=active&idxStatus[]=sold');
 			}
 		}
 	};

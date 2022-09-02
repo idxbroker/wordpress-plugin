@@ -154,7 +154,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => sanitize_text_field( wp_unslash( $_POST['fields'] ) ),
+				'body'      => $_POST['fields'],
 			);
 			$response = wp_remote_request( $api_url, $args );
 
@@ -164,7 +164,7 @@ class Lead_Management {
 				echo 'Lead already exists.';
 			} elseif ( wp_remote_retrieve_response_code( $response ) == '200' ) {
 				// Delete lead cache so new lead will show in list views immediately.
-				delete_option( 'idx_leads_lead_cache' );
+				$this->idx_api->idx_clean_transients('leads_lead');
 				// return new lead ID to script.
 				echo esc_html( $decoded_response['newID'] );
 			} else {
@@ -199,7 +199,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => sanitize_text_field( wp_unslash( $_POST['fields'] ) ),
+				'body'      => $_POST['fields'],
 			);
 			$response = wp_remote_request( $api_url, $args );
 
@@ -238,7 +238,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => sanitize_text_field( wp_unslash( $_POST['note'] ) ),
+				'body'      => $_POST['note'],
 			);
 			$response = wp_remote_request( $api_url, $args );
 
@@ -279,7 +279,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => sanitize_text_field( wp_unslash( $_POST['note'] ) ),
+				'body'      => $_POST['note'],
 			);
 			$response = wp_remote_request( $api_url, $args );
 
@@ -362,7 +362,7 @@ class Lead_Management {
 			$spid    = sanitize_text_field( wp_unslash( $_POST['spid'] ) );
 
 			$property_array = array(
-				'propertyName'   => sanitize_text_field( wp_unslash( $_POST['property_name'] ) ),
+				'propertyName'   => sanitize_text_field( wp_unslash( $_POST['name'] ) ),
 				'receiveUpdates' => sanitize_text_field( wp_unslash( $_POST['updates'] ) ),
 				'property'       => array(
 					'idxID'     => sanitize_text_field( wp_unslash( $_POST['idxid'] ) ),
@@ -425,8 +425,7 @@ class Lead_Management {
 			$response = wp_remote_request( $api_url, $args );
 
 			if ( wp_remote_retrieve_response_code( $response ) == '204' ) {
-				delete_option( 'idx_leads_lead_cache' );
-				delete_option( 'idx_leads_lead/' . $post_id . '_cache' );
+				$this->idx_api->idx_clean_transients('leads_lead');
 				echo 'success';
 			} else {
 				echo 'error';
@@ -525,9 +524,9 @@ class Lead_Management {
 			echo 'error';
 		} else {
 			$post_id = sanitize_text_field( wp_unslash( $_POST['id'] ) );
-			$spid    = sanitize_text_field( wp_unslash( $_POST['spid'] ) );
+			$ssid    = sanitize_text_field( wp_unslash( $_POST['ssid'] ) );
 			// Delete lead saved search via API.
-			$api_url  = IDX_API_URL . '/leads/search/' . $post_id . '/' . $spid;
+			$api_url  = IDX_API_URL . '/leads/search/' . $post_id . '/' . $ssid;
 			$args     = array(
 				'method'    => 'DELETE',
 				'headers'   => array(
@@ -644,7 +643,7 @@ class Lead_Management {
 			// Column 6 = Actions (edit, delete, MW link).
 
 			$current_lead = [
-				0 => '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id ) ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . esc_html( $lead->firstName ) . ' ' . esc_html( $lead->lastName ) . '</a></td>',
+				0 => '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( admin_url( 'admin.php?page=edit-lead&leadID=' . $lead->id . '&nonce=' . $edit_lead_nonce ) ) . '">' . get_avatar( $lead->email, 32, '', 'Lead photo', $avatar_args ) . ' ' . esc_html( $lead->firstName ) . ' ' . esc_html( $lead->lastName ) . '</a></td>',
 				1 => '<td class="mdl-data-table__cell--non-numeric"><a id="mail-lead-' . esc_attr( $lead->id ) . '" href="mailto:' . $lead->email . '" target="_blank">' . $lead->email . '</a><div class="mdl-tooltip" data-mdl-for="mail-lead-' . $lead->id . '">Email Lead</div></td>',
 				2 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $lead->phone ) . '</td>',
 				3 => '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $subscribed_on ) . '</td>',
@@ -1133,7 +1132,7 @@ class Lead_Management {
 
 										<a href="#" id="delete-property-' . esc_attr( $property['id'] ) . '" class="delete-property" data-id="' . esc_attr( $lead_id ) . '" data-spid="' . esc_attr( $property['id'] ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'idx_lead_property_delete_nonce' ) ) . '"><i class="material-icons md-18">delete</i><div class="mdl-tooltip" data-mdl-for="delete-property-' . esc_attr( $property['id'] ) . '">Delete Saved Property</div></a>
 
-										<a href="https://middleware.idxbroker.com/mgmt/addeditsavedprop.php?id=' . esc_attr( $lead_id ) . '&spid=' . esc_attr( $property['id'] ) . '" id="edit-mw-' . esc_attr( $property['id'] ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $property['id'] ) . '">Edit Property in Middleware</div></a>
+										<a href="https://middleware.idxbroker.com/mgmt/leads/' . esc_attr( $lead_id ) . '/properties/' . esc_attr( $property['id'] ) . '/edit" id="edit-mw-' . esc_attr( $property['id'] ) . '" target="_blank"><i class="material-icons md-18">exit_to_app</i><div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $property['id'] ) . '">Edit Property in Middleware</div></a>
 										</td>';
 							echo '</tr>';
 						}
@@ -1286,28 +1285,6 @@ class Lead_Management {
 				</div>
 				<div class="mdl-tabs__panel" id="lead-traffic">
 					<?php
-					// order newest first.
-					$traffic_array = $this->idx_api->idx_api( 'leadtraffic/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
-					$traffic_array = array_reverse( $traffic_array );
-
-					$traffic = '';
-
-					$offset = get_option( 'gmt_offset', 0 );
-
-					if ( is_array( $traffic_array ) ) {
-
-						// prepare traffic for display.
-						foreach ( $traffic_array as $traffic_entry ) {
-							$nice_date = Carbon::parse( $traffic_entry['date'] )->addHours( $offset )->toDayDateTimeString();
-
-							echo '<tr>';
-							echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $nice_date ) . '</td>';
-							echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['page'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['page'], 0, 80 ) ) . '</td>';
-							echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['referrer'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['referrer'], 0, 80 ) ) . '</a></td>';
-							echo '</tr>';
-						}
-					}
-
 					echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp lead-traffic">';
 					echo '
 						<thead>
@@ -1317,6 +1294,27 @@ class Lead_Management {
 						</thead>
 						<tbody>
 						';
+						// order newest first.
+						$traffic_array = $this->idx_api->idx_api( 'leadtraffic/' . $lead_id, IDX_API_DEFAULT_VERSION, 'leads', array(), 60 * 2, 'GET', true );
+						$traffic_array = array_reverse( $traffic_array );
+	
+						$traffic = '';
+	
+						$offset = get_option( 'gmt_offset', 0 );
+	
+						if ( is_array( $traffic_array ) ) {
+	
+							// prepare traffic for display.
+							foreach ( $traffic_array as $traffic_entry ) {
+								$nice_date = Carbon::parse( $traffic_entry['date'] )->addHours( $offset )->toDayDateTimeString();
+	
+								echo '<tr>';
+								echo '<td class="mdl-data-table__cell--non-numeric">' . esc_html( $nice_date ) . '</td>';
+								echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['page'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['page'], 0, 80 ) ) . '</td>';
+								echo '<td class="mdl-data-table__cell--non-numeric"><a href="' . esc_url( $traffic_entry['referrer'] ) . '" target="_blank">' . esc_html( substr( $traffic_entry['referrer'], 0, 80 ) ) . '</a></td>';
+								echo '</tr>';
+							}
+						}	
 					echo '</tbody></table>';
 					?>
 				</div>

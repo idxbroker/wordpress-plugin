@@ -18,7 +18,8 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			'IMPress Property Showcase', // Name.
 			array(
 				'description'                 => 'Displays a showcase of properties',
-				'classname'                   => 'impress-showcase-widget',
+				// The class name used by the rest of the plugin to refer to styling the showcase widget is impress-property-showcase, but it was initially set to impress-showcase-widget. impress-showcase-widget has been left here for now to avoid possibly breaking functionality on client sites that may have been styling this widget using this class name.
+				'classname'                   => 'impress-showcase-widget impress-property-showcase',
 				'customize_selective_refresh' => true,
 			)
 		);
@@ -541,7 +542,9 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'properties' ) ); ?>">
 				<option <?php selected( $instance['properties'], 'featured' ); ?> value="featured"><?php echo 'Featured'; ?></option>
 				<option <?php selected( $instance['properties'], 'soldpending' ); ?> value="soldpending"><?php echo 'Sold/Pending'; ?></option>
-				<option <?php selected( $instance['properties'], 'supplemental' ); ?> value="supplemental"><?php echo 'Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalactive' ); ?> value="supplementalactive"><?php echo 'Active Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalsoldpending' ); ?> value="supplementalsoldpending"><?php echo 'Sold/Pending Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalall' ); ?> value="supplementalall"><?php echo 'All Supplemental'; ?></option>
 				<option <?php selected( $instance['properties'], 'savedlinks' ); ?> value="savedlinks"><?php echo 'Use Saved Link'; ?></option>
 			</select>
 		</p>

@@ -66,6 +66,7 @@ class Idx_Api {
 					$err_message = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.<br />Please contact your developer and/or hosting provider.';
 					$rest_error  = 'API call generated from WordPress is not using SSL (HTTPS) to communicate.';
 					break;
+				case 400:
 				case 405:
 				case 409:
 					$err_message = 'Invalid request sent to IDX Broker API, please re-install the IMPress for IDX Broker plugin.';
@@ -247,28 +248,44 @@ class Idx_Api {
 	}
 
 	/**
-	 * Clean IDX cached data
-	 *
-	 * @param void
+	 * Clean IDX cached data for all idx_ options containing $name, or all of these options in general, the wrapper cache and idx pages if nothing is provided
+	 * 
+	 * @param String $name, what name should be matched when clearing cached options. Defaults to an empty string.
 	 * @return void
 	 */
-	public function idx_clean_transients() {
+	public function idx_clean_transients($name = '') {
 		global $wpdb;
-		$wpdb->query(
-			$wpdb->prepare(
-				"
-                DELETE FROM $wpdb->options
-         WHERE option_name LIKE %s
-        ",
-				'%idx_%_cache'
-			)
-		);
 
-		$this->clear_wrapper_cache();
-
-		// Update IDX Pages Immediately.
-		wp_schedule_single_event( time(), 'idx_create_idx_pages' );
-		wp_schedule_single_event( time(), 'idx_delete_idx_pages' );
+		// If nothing was provided for the name of options to clear, clear everything.
+		if ($name === '') {
+			$wpdb->query(
+				$wpdb->prepare(
+					"
+					DELETE FROM $wpdb->options
+			 WHERE option_name LIKE %s
+			",
+					'%idx_%_cache'
+				)
+			);
+	
+			$this->clear_wrapper_cache();
+	
+			// Update IDX Pages Immediately.
+			wp_schedule_single_event( time(), 'idx_create_idx_pages' );
+			wp_schedule_single_event( time(), 'idx_delete_idx_pages' );
+		} else {
+			// If $name was set, only clear idx_*_cache options that contain that name		
+			$wpdb->query(
+				$wpdb->prepare(
+					"
+					DELETE FROM $wpdb->options
+			 WHERE option_name LIKE %s
+			",
+					'%idx_' . $name . '%_cache'
+				)
+			);
+	
+		}
 	}
 
 	/**
@@ -598,9 +615,19 @@ class Idx_Api {
 	 */
 	public function client_properties( $type ) {
 		// Handle supplemental listings.
-		if ( 'supplemental' === $type ) {
+		// supplemental and supplementalactive both just return active supplemental listings---leaving old supplemental type functionality to avoid making unexpected changes to client sites
+		if ( 'supplemental' === $type 
+		|| 'supplementalactive' === $type) {
 			// Pass 'featured' to get just the active supplemental listings.
 			return $this->get_client_supplementals( 'featured' );
+		}
+
+		if ( 'supplementalsoldpending' === $type ) {
+			return $this->get_client_supplementals( 'soldpending' );
+		}
+
+		if ( 'supplementalall' === $type ) {
+			return $this->get_client_supplementals( '' );
 		}
 
 		$properties        = [];

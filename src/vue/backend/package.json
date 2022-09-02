@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@idxbrokerllc/idxstrap": "^4.0.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "core-js": "^3.6.5",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",

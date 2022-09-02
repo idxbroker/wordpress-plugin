@@ -68,8 +68,8 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			$instance = $this->defaults;
 		}
 
-		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fas fa-caret-left\"></i><span>Prev</span>', 'idxbroker' ) );
-		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
+		$prev_link = apply_filters( 'idx_listing_carousel_prev_link', $idx_listing_carousel_prev_link_text = __( '<i class=\"fas fa-caret-left\" aria-label=\"Previous Listing\"></i><span>Prev</span>', 'idxbroker' ) );
+		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\" aria-label=\"Next Listing\"></i><span>Next</span>', 'idxbroker' ) );
 
 		if ( $instance['styles'] ) {
 			wp_enqueue_style( 'impress-carousel' );
@@ -472,7 +472,9 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'properties' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'properties' ) ); ?>">
 				<option <?php selected( $instance['properties'], 'featured' ); ?> value="featured"><?php esc_html_e( 'Featured', 'idxbroker' ); ?></option>
 				<option <?php selected( $instance['properties'], 'soldpending' ); ?> value="soldpending"><?php esc_html_e( 'Sold/Pending', 'idxbroker' ); ?></option>
-				<option <?php selected( $instance['properties'], 'supplemental' ); ?> value="supplemental"><?php esc_html_e( 'Supplemental', 'idxbroker' ); ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalactive' ); ?> value="supplementalactive"><?php echo 'Active Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalsoldpending' ); ?> value="supplementalsoldpending"><?php echo 'Sold/Pending Supplemental'; ?></option>
+				<option <?php selected( $instance['properties'], 'supplementalall' ); ?> value="supplementalall"><?php echo 'All Supplemental'; ?></option>
 				<option <?php selected( $instance['properties'], 'savedlinks' ); ?> value="savedlinks"><?php esc_html_e( 'Use Saved Link', 'idxbroker' ); ?></option>
 			</select>
 		</p>

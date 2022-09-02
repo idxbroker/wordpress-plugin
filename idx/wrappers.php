@@ -363,18 +363,17 @@ class Wrappers {
 
 		// Validate and process request.
 		if ( isset( $_POST['idx-wrapper-page-nonce'], $_POST['idx-wrapper-page'] ) || wp_verify_nonce( sanitize_key( $_POST['idx-wrapper-page-nonce'] ), 'idx-wrapper-page' ) ) {
+			// meta_value is the IDX Broker page ID (or 'none' or 'global') that should have its wrapper updated
 			$meta_value = sanitize_text_field( wp_unslash( $_POST['idx-wrapper-page'] ) );
-			// Find the IDX Page ID by matching URLs.
-			$idx_page_id = $this->find_idx_url( $post_id );
-			// do not update wrapper if wrapper is none.
+			// If 'none' was selected on the post, don't update anything
 			if ( 'none' === $meta_value ) {
 				return;
 			} elseif ( 'global' === $meta_value ) {
 				$this->idx_api->set_wrapper( $idx_page_id, '' );
 			}
+			// Get the edited wrapper's URL to set the wrapper with
 			$wrapper_page_url = get_permalink();
-			// logic for what type of idx page is in Idx_Api class.
-			$this->idx_api->set_wrapper( $idx_page_id, $wrapper_page_url );
+			$this->idx_api->set_wrapper( $meta_value, $wrapper_page_url );
 			update_post_meta( $post_id, 'idx-wrapper-page', $meta_value );
 		}
 	}
