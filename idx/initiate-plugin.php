@@ -88,6 +88,9 @@ class Initiate_Plugin {
 	 * @return void
 	 */
 	public function instantiate_classes() {
+		// Custom cron schedules need to be registered before classses are instantiated, otherwise some cron tasks won't be scheduled if a custom cron schedule is selected.
+		$this->register_cron_schedules();
+		
 		new Wrappers();
 		new Idx_Pages();
 		new Shortcodes\Register_Idx_Shortcodes();
@@ -108,8 +111,6 @@ class Initiate_Plugin {
 		}
 		// Check if reCAPTCHA option has been set. If it does not exist, a default of 1 will be set.
 		get_option( 'idx_recaptcha_enabled', 1 );
-
-		$this->register_cron_schedules();
 	}
 
 	/**
