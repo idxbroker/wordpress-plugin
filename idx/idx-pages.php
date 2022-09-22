@@ -249,6 +249,17 @@ class Idx_Pages {
 	 * @return mixed
 	 */
 	public function create_pages_from_chunk( $idx_page_chunk, $existing_page_ids ) {
+		
+		// Prefetch an array of posts that might have to be updated or removed
+		$posts = get_posts(
+			array(
+				'post_type'   => 'idx_page',
+				'numberposts' => -1,
+				'orderby' => 'date',
+				'order' => 'ASC'
+			)
+		);
+
 		foreach ( $idx_page_chunk as $link ) {
 			if ( ! empty( $link->name ) ) {
 				$name = $link->name;
@@ -276,10 +287,11 @@ class Idx_Pages {
 
 				update_post_meta( $wp_id, 'idx_uid', $link->uid );
 			} else {
-				$this->find_and_update_post( $link, $name );
+				$this->find_and_update_post( $link, $name, $posts );
 			}
 		}
 	}
+
 
 	/**
 	 * Find_and_update_post function.
@@ -287,20 +299,62 @@ class Idx_Pages {
 	 * @access public
 	 * @param mixed $link - Link.
 	 * @param mixed $name - Name.
+	 * @param WP_POST[] $post - an array of posts to search through from WP get_posts()
 	 * @return void
 	 */
-	public function find_and_update_post( $link, $name ) {
-		$posts = get_posts(
-			array(
-				'post_type'   => 'idx_page',
-				'numberposts' => -1,
-			)
-		);
+	public function find_and_update_post( $link, $name, $posts ) {
+
+		// It's possible to have duplicated pages in the database but only one will have the correct page name (slug) due to WordPress constraints.
+		// Find all matching posts for this link and delete any useless duplicates
+		$matchingPosts = array();
+
 		foreach ( $posts as $post ) {
 			if ( get_post_meta( $post->ID, 'idx_uid', true ) === $link->uid ) {
-
-				$this->update_post( $post->ID, $link, $name );
+				array_push($matchingPosts, $post);
 			}
+		}
+
+		$haveMatchingPost = false;
+		// If we only found one matching post, try to update it
+		if (count($matchingPosts) == 1)  {
+			$haveMatchingPost = $this->update_post( $matchingPosts[0]->ID, $link, $name );
+		}
+
+		// If we found multiple matching posts, get rid of any duplicates before making an update
+		if (count($matchingPosts) > 1) {
+			$matchingPostWithName = null;
+			foreach ( $matchingPosts as $matchingPost ) {
+				// It's possible for a post to already have the expected post name (slug), if we find one with this characteristic it should be kept over others
+				$nameMatches = $matchingPost->name == $link->url;
+				if ($nameMatches) {
+					error_log("impress find_and_update_post found a matching post for $link, $name: " . $matchingPost->ID);
+					$matchingPostWithName = $matchingPost;
+				}
+			}
+
+			// If we found an already post-name matching post, delete the rest
+			if ($matchingPostWithName != null) {
+				foreach ($matchingPosts as $matchingPost) {
+					if ($matchingPost->ID != $matchingPostWithName->ID) {
+						if (wp_delete_post($matchingPost->ID, true) == false) {
+							error_log("impress find_and_update_post could not delete post " . $matchingPost->ID);
+						};
+					}
+				}
+
+				// Now update the matching post if necessary
+				return $this->update_post( $matchingPost->ID, $link, $name );
+			} else {
+				// If we found duplicate matching posts but none with a matching slug, keep and update the first one and delete the rest.
+				$chosenPost = array_shift($matchingPosts);
+				foreach ($matchingPosts as $matchingPost) {
+					if (wp_delete_post($matchingPost->ID, true) == false) {
+						error_log("impress find_and_update_post could not delete post " . $matchingPost->ID);
+					}
+				}
+				return $this->update_post( $chosenPost->ID, $link, $name );
+			}
+
 		}
 	}
 
@@ -312,12 +366,21 @@ class Idx_Pages {
 	 * @param mixed $id - ID.
 	 * @param mixed $link - Link.
 	 * @param mixed $name - Name.
-	 * @return void
+	 * @return false if no matching post was found, true if a post exists that matches the $link and $name or if a post was updated to match the saved link.
 	 */
 	public function update_post( $id, $link, $name ) {
 		$post = get_post( $id );
+
+		if ($post == null) {
+			error_log( "impress update_post: Couldn't find a matching post for " . $link . " " . $name );
+			return false;
+		}
+
 		// If name or URL are different, update them.
-		if ( ( $post->post_name !== $link->url ) || ( $post->post_title !== $name ) ) {
+		// WordPress encodes some special characters in the post title, so decode the title to check
+		$titleMatches = wp_specialchars_decode($post->post_title) == $name;
+
+		if ( ( $post->post_name !== $link->url ) ||  !$titleMatches ) {
 			// Keep old url from resurrecting.
 			remove_action( 'save_post', array( $this, 'save_idx_page' ), 1 );
 
@@ -333,8 +396,16 @@ class Idx_Pages {
 			// Prevent WP URL from appearing in IDX page URL.
 			add_filter( 'sanitize_title', array( $this, 'sanitize_title_filter' ), 10, 2 );
 
-			wp_update_post( $post_info );
+			if (wp_update_post( $post_info ) == 0) { 
+				error_log( 'WP error when updating idx_page post ' . $post->post_name . ' url: ' . $link->url . ' ' . ' post_title: ' . $post->post_title . ' name: ' . $name );
+				return false;
+			} else {
+				// Alternatively, could just let the program flow continue to the ending return statement but I feel this is more clear...
+				return true;
+			}
 		}
+
+		return true;
 	}
 
 	/**
