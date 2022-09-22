@@ -130,7 +130,7 @@ class Search_Management {
 				'lp'    => sanitize_text_field( wp_unslash( $_POST['lp'] ) ),
 				'hp'    => sanitize_text_field( wp_unslash( $_POST['hp'] ) ),
 				'bd'    => sanitize_text_field( wp_unslash( $_POST['bd'] ) ),
-				'tb'    => sanitize_text_field( wp_unslash( $_POST['tb'] ) ),
+				'ba'    => sanitize_text_field( wp_unslash( $_POST['ba'] ) ),
 				'sqft'  => sanitize_text_field( wp_unslash( $_POST['sqft'] ) ),
 				'acres' => sanitize_text_field( wp_unslash( $_POST['acres'] ) ),
 				'add'   => sanitize_text_field( wp_unslash( $_POST['add'] ) ),
@@ -211,7 +211,7 @@ class Search_Management {
 				'lp'    => sanitize_text_field( wp_unslash( $_POST['lp'] ) ),
 				'hp'    => sanitize_text_field( wp_unslash( $_POST['hp'] ) ),
 				'bd'    => sanitize_text_field( wp_unslash( $_POST['bd'] ) ),
-				'tb'    => sanitize_text_field( wp_unslash( $_POST['tb'] ) ),
+				'ba'    => sanitize_text_field( wp_unslash( $_POST['ba'] ) ),
 				'sqft'  => sanitize_text_field( wp_unslash( $_POST['sqft'] ) ),
 				'acres' => sanitize_text_field( wp_unslash( $_POST['acres'] ) ),
 				'add'   => sanitize_text_field( wp_unslash( $_POST['add'] ) ),
@@ -432,8 +432,8 @@ class Search_Management {
 					<label class="mdl-textfield__label" for="bd">Beds</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label one-third">
-					<input class="mdl-textfield__input" type="text" id="tb" name="tb">
-					<label class="mdl-textfield__label" for="tb">Baths</label>
+					<input class="mdl-textfield__input" type="text" id="ba" name="ba">
+					<label class="mdl-textfield__label" for="ba">Baths</label>
 				</div><br />
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label one-third">
 					<input class="mdl-textfield__input" type="text" id="sqft" name="sqft">
@@ -563,8 +563,8 @@ class Search_Management {
 					<label class="mdl-textfield__label" for="bd">Beds</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-					<input class="mdl-textfield__input" type="text" id="tb" name="tb">
-					<label class="mdl-textfield__label" for="tb">Baths</label>
+					<input class="mdl-textfield__input" type="text" id="ba" name="ba">
+					<label class="mdl-textfield__label" for="ba">Baths</label>
 				</div><br />
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 					<input class="mdl-textfield__input" type="text" id="sqft" name="sqft">
