@@ -45,7 +45,7 @@ jQuery(document).ready(function($) {
 		var lp = $('#lp').val();
 		var hp = $('#hp').val();
 		var bd = $('#bd').val();
-		var ba = $('#ba').val();
+		var tb = $('#tb').val();
 		var sqft = $('#sqft').val();
 		var acres = $('#acres').val();
 		var add = $('#add').val();
@@ -107,7 +107,7 @@ jQuery(document).ready(function($) {
 				lp: lp,
 				hp: hp,
 				bd: bd,
-				ba: ba,
+				tb: tb,
 				sqft: sqft,
 				acres: acres,
 				add: add,
@@ -145,7 +145,7 @@ jQuery(document).ready(function($) {
 		var lp = $('#lp').val();
 		var hp = $('#hp').val();
 		var bd = $('#bd').val();
-		var ba = $('#ba').val();
+		var tb = $('#tb').val();
 		var sqft = $('#sqft').val();
 		var acres = $('#acres').val();
 		var add = $('#add').val();
@@ -179,7 +179,7 @@ jQuery(document).ready(function($) {
 				lp: lp,
 				hp: hp,
 				bd: bd,
-				ba: ba,
+				tb: tb,
 				sqft: sqft,
 				acres: acres,
 				add: add,
