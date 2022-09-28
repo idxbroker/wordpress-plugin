@@ -77,6 +77,8 @@ class Initiate_Plugin {
 				// Graphs & Charts plugin.
 				wp_dequeue_script( 'Graphs & Charts' );
 				wp_deregister_script( 'Graphs & Charts' );
+				// Feeds for YouTube Pro Personal
+				wp_dequeue_script('feed-builder-vue');
 			}
 		}
 	}
