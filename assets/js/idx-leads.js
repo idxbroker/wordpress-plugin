@@ -1,6 +1,24 @@
 jQuery(document).ready(function($) {
 
 	// Initialize datatables
+
+	// Simple timestamp regex checker to determine if something is a timestamp 
+	let timestampRegex = /">(\w+, \w+ \d+, \d+ \d+:\d+ [A|P]M)<\/td>/
+
+	// Add ordering detection and functions for timestamps provided by PHP
+	$.fn.dataTable.ext.type.detect.unshift((d) => {
+		let timestampMatch = d?.match(timestampRegex);
+		if (timestampMatch
+		&& !isNaN(new Date(timestampMatch[1]))) {
+			return 'timestamp';
+		}
+		return null;
+	});
+
+	$.fn.dataTable.ext.type.order[ 'timestamp-pre' ] = function ( d ) {
+		let timestampMatch = d?.match(timestampRegex);
+		return (new Date(timestampMatch[1])).getTime();
+	};
 	
 	$('.mdl-data-table.leads').DataTable( {
 		"ajax": {
@@ -24,6 +42,9 @@ jQuery(document).ready(function($) {
 				"orderable": false
 			}
 		],
+		"createdRow": function (row, data, index) {
+			$(row).addClass('lead-row');
+		},
 		"dom": '<"table-filter"f>rt<"lead-table-controls mdl-shadow--2dp"lip>',
 		"oLanguage": {
 			"sSearch": ""

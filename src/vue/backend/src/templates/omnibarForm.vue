@@ -299,6 +299,14 @@ export default {
             // Adds a label with the user friendly name
             // Save original label used on the backend
             const cleanLabel = item.label
+            // When an MLS becomes unapproved on an account that previously set custom fields, MLSName can sometimes be undefined... we handle it here:
+            if (!MLSName) {
+                return {
+                    ...item,
+                    label: `${item.label} - missing MLS ${item.idxID}`,
+                    cleanLabel
+                }
+            }
             // Finds the property type the item is in
             const propType = MLSName.propertyTypes.find(x => {
                 return x.value === item.mlsPtID

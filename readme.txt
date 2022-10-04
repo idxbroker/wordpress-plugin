@@ -4,8 +4,8 @@ Contributors: idxco
 Author URL: https://idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm, ixact
 Requires at least: 5.3
-Tested up to: 5.9.2
-Stable tag: 3.0.10
+Tested up to: 6.0.2
+Stable tag: 3.1.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -138,6 +138,24 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 18. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+
+= 3.1.0 =
+* New: Supplemental Listings can now be targeted by Active, Sold, or Both within all IMPress Property widgets under the Properties to Feature dropdown
+* Update: IMPress plugin now compatible with WordPress subdirectory installs
+* Update: Accessibility adjustments for IMPress Widgets
+* Fix: Update Frequency changes removing some cron events
+* Fix: Omnibar not always searching for closed status listings
+* Fix: Apply Wrapper To IDX Pages dropdown for Wrappers not accurately updating the IDX Account wrapper settings
+* Fix: CF7 and IMPress PHP 8 Errors on form submission
+* Fix: Unable to create, edit, delete leads in some cases
+* Fix: Unable to delete lead saved search
+* Fix: Editing a lead saved property will empty the Name field
+* Fix: Traffic history table display issue viewing individual leads
+* Fix: IMPress GMB page not accessible after saving a post
+* Fix: Accurate sort order by timestamp when viewing Leads
+* Fix: Re-ordering Custom Taxonomies deletes all custom taxonomies in WP 6.0+
+* Fix: Creating saved link from plugin using incorrect bath field
+* Fix: Various bug fixes and middleware link updates
 
 = 3.0.10 =
 * Fix: CF7 Captcha Conflict
