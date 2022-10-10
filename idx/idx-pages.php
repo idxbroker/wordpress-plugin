@@ -325,9 +325,9 @@ class Idx_Pages {
 			$matchingPostWithName = null;
 			foreach ( $matchingPosts as $matchingPost ) {
 				// It's possible for a post to already have the expected post name (slug), if we find one with this characteristic it should be kept over others
-				$nameMatches = $matchingPost->name == $link->url;
+				$nameMatches = $matchingPost->post_name == $link->url;
 				if ($nameMatches) {
-					error_log("impress find_and_update_post found a matching post for $link, $name: " . $matchingPost->ID);
+					error_log("impress find_and_update_post found a matching post for $link->url, $name: " . $matchingPost->ID);
 					$matchingPostWithName = $matchingPost;
 				}
 			}
