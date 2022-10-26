@@ -608,7 +608,7 @@ class Idx_Api {
 	/**
 	 * Client_properties function.
 	 * Expected $type posibilities: featured, soldpending, supplemental.
-	 * 
+	 * Note that ?disclaimers=true will be added to the end of the request, so there's no need to include it in $type
 	 * @access public
 	 * @param string $type
 	 * @return array
