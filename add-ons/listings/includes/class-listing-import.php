@@ -68,7 +68,7 @@ class WPL_Idx_Listing {
 
 		// Load IDX Broker API Class and retrieve featured properties.
 		$_idx_api   = new \IDX\Idx_Api();
-		$properties = $_idx_api->client_properties( 'featured?disclaimers=true' );
+		$properties = $_idx_api->client_properties( 'featured' );
 
 		// Load WP options.
 		$wpl_import_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
@@ -179,7 +179,7 @@ class WPL_Idx_Listing {
 
 		// Load IDX Broker API Class and retrieve featured properties.
 		$_idx_api = new \IDX\Idx_Api();
-		$properties = $_idx_api->client_properties( 'featured?disclaimers=true' );
+		$properties = $_idx_api->client_properties( 'featured' );
 
 		// Load WP options
 		$idx_featured_listing_wp_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
