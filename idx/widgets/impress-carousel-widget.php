@@ -81,7 +81,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );
 			$output    .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
 		} else {
-			$properties = $this->idx_api->client_properties( $instance['properties'] );
+			$properties = $this->idx_api->client_properties( $instance['properties'], $instance['max'], $instance['agentID'], $instance['order'] );
 			$output    .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
 		}
 

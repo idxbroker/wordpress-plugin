@@ -611,9 +611,12 @@ class Idx_Api {
 	 * 
 	 * @access public
 	 * @param string $type
+	 * @param int $max, the maximum number of listings to return, defaults to null for no limit
+	 * @param string $user_agent_id, the user agent ID to filter listings by , defaults to null
+	 * @param string $max_sort, the order the listings should be ordered in, defaults to null for no sorting, high-low and low-high are acceptable , this is only used when $max is also set.
 	 * @return array
 	 */
-	public function client_properties( $type ) {
+	public function client_properties( $type, $max = null, $user_agent_id = null, $max_sort = null) {
 		// Handle supplemental listings.
 		// supplemental and supplementalactive both just return active supplemental listings---leaving old supplemental type functionality to avoid making unexpected changes to client sites
 		if ( 'supplemental' === $type 
@@ -632,6 +635,8 @@ class Idx_Api {
 
 		$properties        = [];
 		$download_complete = false;
+		$properties_array_modified = false;
+		$reached_max = false;
 
 		// Make initial API request for listings.
 		$listing_data = $this->idx_api( "$type?disclaimers=true", IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
@@ -643,9 +648,40 @@ class Idx_Api {
 		}
 
 		// Download remaining listings if available.
-		while ( ! $download_complete ) {
-			// Check if there is a next URL to request more listings.
-			if ( empty( $listing_data['next'] ) ) {
+		do {
+			// Trim down the properties array where possible to avoid OOM errors.
+			if ( isset( $user_agent_id ) && strlen( $user_agent_id ) > 0 ) {
+				$properties = array_filter($properties, fn( $prop ) => array_key_exists('userAgentID', $prop) && strval($prop['userAgentID']) == $user_agent_id);
+				$properties_array_modified = true;
+			}
+			if (isset($max)
+			&& count($properties) > $max) {
+				// If $max_sort is null, we don't care about the sort order, stop retrieving listings as soon as we reach our limit
+				if ( !isset( $max_sort ) 
+				|| $max_sort == 'none' ) {
+					error_log('array spliced for max...');
+					array_splice( $properties, $max );
+					$properties_array_modified = true;
+					$reached_max = true;
+				} else { 
+					// If $max_sort is set, we need to sort before trimming the array
+					if ( isset( $max_sort ) && $max_sort != 'default' ) {
+						if ( $max_sort == 'low-high' ) {
+							usort( $properties, array( $this, 'price_cmp' ) );
+						}
+						if ( $max_sort == 'high-low' ) {
+							usort( $properties, array( $this, 'price_cmp' ) );
+							// then also flip it if high-low is set
+							$properties = array_reverse( $properties );
+						}
+						array_splice( $properties, $max );
+						$properties_array_modified = true;
+					}
+				}
+			}
+			// Check if there is a next URL to request more listings or if we've reached the max number of properties we're looking for
+			if ( empty( $listing_data['next'] ) 
+			|| $reached_max) {
 				$download_complete = true;
 				continue;
 			}
@@ -655,6 +691,11 @@ class Idx_Api {
 			if ( ! is_wp_error( $listing_data ) && isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 				$properties = array_merge( $properties, $listing_data['data'] );
 			}
+		} while ( ! $download_complete );
+
+		if ($properties_array_modified) {
+			// if we trimmed the array, we need to reindex 
+			$properties = array_values($properties);
 		}
 
 		// Add supplemental listings to featured and soldpending types.
