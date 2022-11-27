@@ -133,7 +133,7 @@ class Register_Impress_Shortcodes {
 			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
 			$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
 		} else {
-			$properties = $this->idx_api->client_properties( $property_type );
+			$properties = $this->idx_api->client_properties( $property_type, $max, $agent_id, $order );
 			$output    .= '<!-- Property Type: ' . $property_type . ' -->';
 		}
 
@@ -546,7 +546,7 @@ class Register_Impress_Shortcodes {
 			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
 			$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
 		} else {
-			$properties = $this->idx_api->client_properties( $property_type );
+			$properties = $this->idx_api->client_properties( $property_type, $max, $agent_id, $order );
 			$output    .= '<!-- Property Type: ' . $property_type . ' -->';
 		}
 

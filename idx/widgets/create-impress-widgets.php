@@ -142,7 +142,7 @@ class Create_Impress_Widgets {
 		if ( ( $property_type ) == 'savedlink' ) {
 			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
 		} else {
-			$properties = $this->idx_api->client_properties( $property_type );
+			$properties = $this->idx_api->client_properties( $property_type, $max, $agent_id, $order );
 		}
 
 		if ( empty( $properties ) ) {
@@ -333,7 +333,7 @@ class Create_Impress_Widgets {
 		if ( ( $property_type ) == 'savedlink' ) {
 			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
 		} else {
-			$properties = $this->idx_api->client_properties( $property_type );
+			$properties = $this->idx_api->client_properties( $property_type, $max, $agent_id, $order );
 		}
 
 		if ( empty( $properties ) ) {
