@@ -45,8 +45,20 @@ var idxOmnibar = function(jsonData){
 		}
 		return displayName;
 	};
+
+	let includedStateAbreviations = new Set();
+
 	//helper function for grabbing the name of each item in JSON creating new array
 	var createArrays = function(array, newArray, type, fieldName){
+		
+		// Add state abbreviations to the set for later reference
+		array.forEach((item) => {
+			if (item.stateAbrv) {
+				console.log(item.stateAbrv);
+				includedStateAbreviations.add(item.stateAbrv);
+			}
+		});
+
 		//if zip, do not append state abbreviations
 		if(type === 'zip'){
 			array.forEach(function(item){
@@ -54,6 +66,8 @@ var idxOmnibar = function(jsonData){
 				if(item.name !== '' && item.name !== 'Other' && item.name !== 'Other State'){
 					newArray.push(item.name);
 				}
+
+
 			});
 			//if county, append County and State
 		} else if(type ==='county') {
@@ -479,7 +493,11 @@ var idxOmnibar = function(jsonData){
 		}
 		for(var i=0; i < list.length; i++){
 			//filter out blank and county from input and check for appended state
-			if (inputFiltered.split(' county')[0] === list[i].name.toLowerCase() && whatState(input.value.split(', ')[1], list[i].stateAbrv, stateException) && isCounty(inputFiltered.split(' county')[1], listType) && input.value) {
+			if (inputFiltered.split(' county')[0] === list[i].name.toLowerCase() 
+			&& (
+				whatState(input.value.split(', ')[1], list[i].stateAbrv, stateException)
+				|| includedStateAbreviations.has(input.value.split(', ')[1].toUpperCase())) 
+			&& isCounty(inputFiltered.split(' county')[1], listType) && input.value) {
 				switch(listType){
 					case 'cities':
 						foundResult = true;
