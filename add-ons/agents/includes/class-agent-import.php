@@ -116,7 +116,7 @@ class IMPress_Agents_Import {
 			foreach ( $agent_posts->posts as $post ) {
 				$post_meta = get_post_meta( $post->ID );
 				if ( ! empty( $post_meta['_employee_agentid'][0] ) ) {
-					array_push( $imported_agents, [ $post_meta['_employee_agentid'][0] => $post->ID ] );
+					$imported_agents[$post_meta['_employee_agentid'][0]] = $post->ID;
 				}
 			}
 		}
@@ -147,51 +147,51 @@ class IMPress_Agents_Import {
 
 		// Add post meta for existing fields.
 		// Title.
-		if ( get_post_meta( $id, '_employee_title' ) == false ) {
+		if ( get_post_meta( $id, '_employee_title', true ) == false ) {
 			update_post_meta( $id, '_employee_title', $idx_agent_data['agentTitle'] );
 		}
 		// First Name.
-		if ( get_post_meta( $id, '_employee_first_name' ) == false ) {
+		if ( get_post_meta( $id, '_employee_first_name', true ) == false ) {
 			update_post_meta( $id, '_employee_first_name', $idx_agent_data['agentFirstName'] );
 		}
 		// Last Name.
-		if ( get_post_meta( $id, '_employee_last_name' ) == false ) {
+		if ( get_post_meta( $id, '_employee_last_name', true ) == false ) {
 			update_post_meta( $id, '_employee_last_name', $idx_agent_data['agentLastName'] );
 		}
 		// Agent ID.
-		if ( get_post_meta( $id, '_employee_agent_id' ) == false ) {
+		if ( get_post_meta( $id, '_employee_agent_id', true ) == false ) {
 			update_post_meta( $id, '_employee_agent_id', $idx_agent_data['agentID'] );
 		}
 		// Main Phone.
-		if ( get_post_meta( $id, '_employee_phone' ) == false ) {
+		if ( get_post_meta( $id, '_employee_phone', true ) == false ) {
 			update_post_meta( $id, '_employee_phone', $idx_agent_data['agentContactPhone'] );
 		}
 		// Cell Phone.
-		if ( get_post_meta( $id, '_employee_mobile' ) == false ) {
+		if ( get_post_meta( $id, '_employee_mobile', true ) == false ) {
 			update_post_meta( $id, '_employee_mobile', $idx_agent_data['agentCellPhone'] );
 		}
 		// Email.
-		if ( get_post_meta( $id, '_employee_email' ) == false ) {
+		if ( get_post_meta( $id, '_employee_email', true ) == false ) {
 			update_post_meta( $id, '_employee_email', $idx_agent_data['agentEmail'] );
 		}
 		// Website URL.
-		if ( get_post_meta( $id, '_employee_website' ) == false ) {
+		if ( get_post_meta( $id, '_employee_website', true ) == false ) {
 			update_post_meta( $id, '_employee_website', $idx_agent_data['agentURL'] );
 		}
 		// Street Address.
-		if ( get_post_meta( $id, '_employee_address' ) == false ) {
+		if ( get_post_meta( $id, '_employee_address', true ) == false ) {
 			update_post_meta( $id, '_employee_address', $idx_agent_data['address'] );
 		}
 		// City.
-		if ( get_post_meta( $id, '_employee_city' ) == false ) {
+		if ( get_post_meta( $id, '_employee_city', true ) == false ) {
 			update_post_meta( $id, '_employee_city', $idx_agent_data['city'] );
 		}
 		// State.
-		if ( get_post_meta( $id, '_employee_state' ) == false ) {
+		if ( get_post_meta( $id, '_employee_state', true ) == false ) {
 			update_post_meta( $id, '_employee_state', $idx_agent_data['stateProvince'] );
 		}
 		// Zip Code.
-		if ( get_post_meta( $id, '_employee_zip' ) == false ) {
+		if ( get_post_meta( $id, '_employee_zip', true ) == false ) {
 			update_post_meta( $id, '_employee_zip', $idx_agent_data['zipCode'] );
 		}
 
