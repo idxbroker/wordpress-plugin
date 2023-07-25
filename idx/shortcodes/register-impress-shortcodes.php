@@ -129,21 +129,26 @@ class Register_Impress_Shortcodes {
 		}
 
 		$output = '';
-		if ( ( $property_type ) === 'savedlinks' ) {
-			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
-			$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
-		} else {
-			$properties = $this->idx_api->client_properties( $property_type );
-			$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+		$properties = [];
+		$comingSoon = !coming_soon_listing_restriction();
+		if ( ! $comingSoon ) {
+			if ( ( $property_type ) === 'savedlinks' ) {
+				$properties = $this->idx_api->saved_link_properties( $saved_link_id );
+				$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
+			} else {
+				$properties = $this->idx_api->client_properties( $property_type );
+				$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+			}
+			// Force type as Array.
+			$properties = json_encode( $properties );
+			$properties = json_decode( $properties, true );
 		}
-
-		// Force type as Array.
-		$properties = json_encode( $properties );
-		$properties = json_decode( $properties, true );
 
 		// If no properties or an error, load message
 		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
-			if ( isset( $properties['errors']['idx_api_error'] ) ) {
+			if ( $comingSoon ) {
+				return $output .= '<p>Coming Soon</p>';
+			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
@@ -542,21 +547,26 @@ class Register_Impress_Shortcodes {
 		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
 
 		$output = '';
-		if ( ( $property_type ) === 'savedlinks' ) {
-			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
-			$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
-		} else {
-			$properties = $this->idx_api->client_properties( $property_type );
-			$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+		$properties = [];
+		$comingSoon = !coming_soon_listing_restriction();
+		if ( ! $comingSoon ) {
+			if ( ( $property_type ) === 'savedlinks' ) {
+				$properties = $this->idx_api->saved_link_properties( $saved_link_id );
+				$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
+			} else {
+				$properties = $this->idx_api->client_properties( $property_type );
+				$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+			}
+			// Force type as Array.
+			$properties = json_encode( $properties );
+			$properties = json_decode( $properties, true );
 		}
-
-		// Force type as array.
-		$properties = json_encode( $properties );
-		$properties = json_decode( $properties, true );
 
 		// If no properties or an error, load message
 		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
-			if ( isset( $properties['errors']['idx_api_error'] ) ) {
+			if ( $comingSoon ) {
+				return $output .= '<p>Coming Soon</p>';
+			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
