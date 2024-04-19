@@ -525,7 +525,7 @@ var idxOmnibar = function(jsonData){
 				forEach(fieldValues, function(index, value){
 					if(input.value !== '' && (input.value.toLowerCase() === value.toLowerCase() || input.value.toLowerCase() === (value + ' ' + checkFieldName(fieldName)).toLowerCase())){
 						foundResult = true;
-						return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&aw_' + fieldName + '=' + value + '&srt=' + sortOrder);
+						return goToResultsPage(input, idxUrl, '?pt=' + mlsPtID + '&idxID=' + idxID + '&a_' + fieldName + '=' + value + '&srt=' + sortOrder);
 					}
 				})
 				if(foundResult){

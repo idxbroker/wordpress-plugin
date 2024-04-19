@@ -1,14 +1,14 @@
 # IMPress for IDX Broker #
 Author: IDX, LLC
-**Contributors:** idxco  
+**Contributors:** idxco
 Author URL: https://idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm, ixact
 **Requires at least:** 5.3
-**Tested up to:** 6.2.2
+**Tested up to:** 6.5.2
 **Stable tag:** 3.2.0
 **Minimum PHP:** 7.0
-**License:** GPLv2 or later  
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
+**License:** GPLv2 or later
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
 ## Description ##
 IMPress for IDX Broker is now the IMPress family of plugins all-in-one. <a href="https://wordpress.org/plugins/wp-listings/" target="_blank">IMPress Listings</a> and <a href="https://wordpress.org/plugins/impress-agents/" target="_blank">IMPress Agents</a> have been consolidated with this already powerful plugin.
@@ -119,6 +119,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 ## Changelog ##
 ### 3.2.0 ###
 * Update: IMPress Showcase and Carousel widgets display 'Coming Soon' prior to MLS approval, but only when required by MLS rules.
+* Update: Omnibar Advanced Fields searching optimized to use exact search parameters instead of wild text.
 
 ### 3.1.0 ###
 * New: Supplemental Listings can now be targeted by Active, Sold, or Both within all IMPress Property widgets under the Properties to Feature dropdown

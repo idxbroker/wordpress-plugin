@@ -4,7 +4,7 @@ Contributors: idxco
 Author URL: https://idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm, ixact
 Requires at least: 5.3
-Tested up to: 6.2.2
+Tested up to: 6.5.2
 Stable tag: 3.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
@@ -141,6 +141,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 = 3.2.0 =
 * Update: IMPress Showcase and Carousel widgets display 'Coming Soon' prior to MLS approval, but only when required by MLS rules.
+* Update: Omnibar Advanced Fields searching optimized to use exact search parameters instead of wild text.
 
 = 3.1.0 =
 * New: Supplemental Listings can now be targeted by Active, Sold, or Both within all IMPress Property widgets under the Properties to Feature dropdown
