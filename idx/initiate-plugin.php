@@ -38,6 +38,7 @@ class Initiate_Plugin {
 
 		add_action( 'wp_loaded', array( $this, 'schedule_omnibar_update' ) );
 		add_action( 'idx_omnibar_get_locations', array( $this, 'idx_omnibar_get_locations' ) );
+		add_action( 'idx_update_location_data', array( $this, 'idx_update_location_data' ) );
 		add_action( 'idx_migrate_old_table', array( $this, 'migrate_old_table' ) );
 		add_action( 'wp_loaded', array( $this, 'legacy_functions' ) );
 
@@ -224,6 +225,17 @@ class Initiate_Plugin {
 	 */
 	public function idx_omnibar_get_locations() {
 		new \IDX\Widgets\Omnibar\Get_Locations();
+	}
+
+	/**
+	 * Update the location data from the type of update.
+	 *
+	 * @param  string $type Type of update. ('all', 'address', 'custom')
+	 * @access public
+	 * @return void
+	 */
+	public function idx_update_location_data($type) {
+		new \IDX\Widgets\Omnibar\Get_Locations($type);
 	}
 
 	/**
