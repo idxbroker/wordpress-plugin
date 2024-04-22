@@ -465,7 +465,7 @@ class Create_Impress_Widgets {
 			)
 		);
 
-		$city_links = \IDX\Widgets\Impress_City_Links_Widget::city_list_links( $city_list, $mls, $use_columns, $number_columns );
+		$city_links = \IDX\Widgets\Impress_City_Links_Widget::city_list_links( $city_list, $mls, '_self', $this->idx_api, $use_columns, $number_columns );
 
 		if ( false == $city_links ) {
 			return 'City list ID or MLS ID not found';

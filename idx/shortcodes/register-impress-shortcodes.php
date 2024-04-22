@@ -771,7 +771,7 @@ class Register_Impress_Shortcodes {
 		$target = $this->target( $new_window );
 
 		$city_links  = '<div class="impress-city-links">';
-		$city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links( $city_list, $mls, $use_columns, $number_columns, $target, $show_count, $this->idx_api );
+		$city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links( $city_list, $mls, $target, $this->idx_api, $use_columns, $number_columns, $show_count );
 		$city_links .= '</div>';
 
 		if ( false == $city_links ) {
