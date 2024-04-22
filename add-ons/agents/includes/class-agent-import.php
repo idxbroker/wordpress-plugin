@@ -23,7 +23,7 @@ class IMPress_Agents_Import {
 		$idx    = new \IDX\Idx_Api();
 		$agents = $idx->idx_api(
 			'agents',
-			'1.7.0',
+			IDX_API_DEFAULT_VERSION,
 			'clients',
 			[],
 			7200,
@@ -92,7 +92,7 @@ class IMPress_Agents_Import {
 		$idx    = new \IDX\Idx_Api();
 		$agents = $idx->idx_api(
 			'agents',
-			'1.7.0',
+			IDX_API_DEFAULT_VERSION,
 			'clients',
 			[],
 			7200,

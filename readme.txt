@@ -142,6 +142,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 = 3.2.0 =
 * Update: IMPress Showcase and Carousel widgets display 'Coming Soon' prior to MLS approval, but only when required by MLS rules
 * Update: Omnibar Advanced Fields searching optimized to use exact search parameters instead of wild text
+* Update: Default to use IDX Broker API v1.8.0
 * Fix: Changes to the Omnibar settings trigger the location data refresh cron properly
 * Fix: Resolve PHP 8 deprecated features regarding required parameters followed by optional parameters in functions
 
