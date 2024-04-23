@@ -146,6 +146,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 * Fix: Changes to the Omnibar settings trigger the location data refresh cron properly
 * Fix: Resolve PHP 8 deprecated features regarding required parameters followed by optional parameters in functions
 * Fix: Resolve PHP 8.3 deprecated features and update Carbon dependency
+* Fix: Resolve PHP 8 Errors with Gravity Forms
 
 = 3.1.0 =
 * New: Supplemental Listings can now be targeted by Active, Sold, or Both within all IMPress Property widgets under the Properties to Feature dropdown

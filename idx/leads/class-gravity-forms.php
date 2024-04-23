@@ -44,6 +44,12 @@ class IDX_Leads_GF {
 		$form_id      = rgget( 'id' );
 		$option_name  = 'idx_lead_form_' . $form_id;
 		$form_options = get_option( $option_name );
+
+		if (!$form_options) {
+			$form_options = [];
+			$form_options['enable_lead'] = false;
+		}
+
 		$checked      = $form_options['enable_lead'];
 		if ( ! isset( $form_options['category'] ) ) {
 			$form_options['category'] = '';
