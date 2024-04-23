@@ -14,6 +14,10 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
  * Set up the class
  */
 class Search_Management {
+
+	/** @var object The saved links management page */
+	private $page;
+
 	private static $instance;
 
 	public static function instance() {

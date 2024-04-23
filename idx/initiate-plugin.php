@@ -6,6 +6,12 @@ namespace IDX;
  */
 class Initiate_Plugin {
 
+	/** @var Idx_Api $idx_api */
+	private $idx_api;
+
+	/** @var array Admin notices for the admin page dashboard. */
+	private $notices;
+
 	/**
 	 * __construct function.
 	 *
@@ -25,7 +31,7 @@ class Initiate_Plugin {
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 9 );
 		add_action( 'admin_menu', array( $this, 'idx_broker_platinum_options_init' ) );
 		add_action( 'admin_bar_init', array( $this, 'load_admin_menu_styles' ) );
-		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 999.125 );
+		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 999 );
 		add_action( 'admin_init', array( $this, 'disable_original_plugin' ) );
 		add_action( 'admin_init', [ $this, 'get_install_info' ] );
 		add_action( 'admin_enqueue_scripts', array( $this, 'idx_inject_script_and_style' ) );
