@@ -146,7 +146,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 * Fix: Changes to the Omnibar settings trigger the location data refresh cron properly
 * Fix: Resolve PHP 8 deprecated features regarding required parameters followed by optional parameters in functions
 * Fix: Resolve PHP 8.3 deprecated features and update Carbon dependency
-* Fix: Resolve PHP 8 Errors with Gravity Forms
+* Fix: Resolve PHP 8 Errors with Gravity Forms and Contact Form 7
 * Fix: Social Pro articles may not be syndicated properly
 
 = 3.1.0 =
