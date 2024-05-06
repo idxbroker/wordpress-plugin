@@ -321,7 +321,7 @@ class Idx_Api {
 		if ( empty( $this->api_key ) ) {
 			return array();
 		}
-		return $this->idx_api( 'widgetsrc' );
+		return $this->idx_api( 'widgetsrc' )['data'];
 	}
 
 	/**
