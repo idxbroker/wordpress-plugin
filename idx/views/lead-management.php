@@ -144,6 +144,8 @@ class Lead_Management {
 		if ( ! $permission || ! isset( $_POST['fields'] ) ) {
 			echo 'error';
 		} else {
+			// Ensure we aren't escaping the '@' in the email.
+			$fields = str_replace('%40', '@', $_POST['fields']);
 			// Add lead via API.
 			$api_url  = IDX_API_URL . '/leads/lead';
 			$args     = array(
@@ -154,7 +156,7 @@ class Lead_Management {
 					'outputtype'   => 'json',
 				),
 				'sslverify' => false,
-				'body'      => $_POST['fields'],
+				'body'      => $fields,
 			);
 			$response = wp_remote_request( $api_url, $args );
 
