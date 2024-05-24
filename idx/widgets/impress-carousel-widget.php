@@ -78,7 +78,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		$output = '';
 		$properties = [];
-		$comingSoon = !coming_soon_listing_restriction();
+		$comingSoon = coming_soon_listing_restriction();
 		if ( ! $comingSoon ) {
 			if ( ( $instance['properties'] ) === 'savedlinks' ) {
 				$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );

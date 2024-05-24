@@ -130,7 +130,7 @@ class Register_Impress_Shortcodes {
 
 		$output = '';
 		$properties = [];
-		$comingSoon = !coming_soon_listing_restriction();
+		$comingSoon = coming_soon_listing_restriction();
 		if ( ! $comingSoon ) {
 			if ( ( $property_type ) === 'savedlinks' ) {
 				$properties = $this->idx_api->saved_link_properties( $saved_link_id );
@@ -548,7 +548,7 @@ class Register_Impress_Shortcodes {
 
 		$output = '';
 		$properties = [];
-		$comingSoon = !coming_soon_listing_restriction();
+		$comingSoon = coming_soon_listing_restriction();
 		if ( ! $comingSoon ) {
 			if ( ( $property_type ) === 'savedlinks' ) {
 				$properties = $this->idx_api->saved_link_properties( $saved_link_id );
