@@ -5,7 +5,7 @@
     "homepage": "https://wordpress.org/plugins/idx-broker-platinum/",
     "type": "wordpress-plugin",
     "require": {
-        "php": ">=5.3.2",
+        "php": ">=7.1.8",
         "composer/installers": "~1.0",
         "nesbot/carbon": "2.72.3"
     },
@@ -29,5 +29,11 @@
     },
     "require-dev": {
         "stevegrunwell/wp-enforcer": "^0.5.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

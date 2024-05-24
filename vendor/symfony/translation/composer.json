@@ -1,7 +1,7 @@
 {
     "name": "symfony/translation",
     "type": "library",
-    "description": "Symfony Translation Component",
+    "description": "Provides tools to internationalize your application",
     "keywords": [],
     "homepage": "https://symfony.com",
     "license": "MIT",
@@ -16,33 +16,45 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "symfony/polyfill-mbstring": "~1.0"
+        "php": ">=8.1",
+        "symfony/deprecation-contracts": "^2.5|^3",
+        "symfony/polyfill-mbstring": "~1.0",
+        "symfony/translation-contracts": "^2.5|^3.0"
     },
     "require-dev": {
-        "symfony/config": "~2.8|~3.0",
-        "symfony/intl": "~2.8|~3.0",
-        "symfony/yaml": "~2.8|~3.0",
-        "psr/log": "~1.0"
+        "nikic/php-parser": "^4.18|^5.0",
+        "symfony/config": "^5.4|^6.0|^7.0",
+        "symfony/console": "^5.4|^6.0|^7.0",
+        "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+        "symfony/http-client-contracts": "^2.5|^3.0",
+        "symfony/http-kernel": "^5.4|^6.0|^7.0",
+        "symfony/intl": "^5.4|^6.0|^7.0",
+        "symfony/polyfill-intl-icu": "^1.21",
+        "symfony/routing": "^5.4|^6.0|^7.0",
+        "symfony/service-contracts": "^2.5|^3",
+        "symfony/yaml": "^5.4|^6.0|^7.0",
+        "symfony/finder": "^5.4|^6.0|^7.0",
+        "psr/log": "^1|^2|^3"
     },
     "conflict": {
-        "symfony/config": "<2.8"
+        "symfony/config": "<5.4",
+        "symfony/dependency-injection": "<5.4",
+        "symfony/http-client-contracts": "<2.5",
+        "symfony/http-kernel": "<5.4",
+        "symfony/service-contracts": "<2.5",
+        "symfony/twig-bundle": "<5.4",
+        "symfony/yaml": "<5.4",
+        "symfony/console": "<5.4"
     },
-    "suggest": {
-        "symfony/config": "",
-        "symfony/yaml": "",
-        "psr/log": "To use logging capability in translator"
+    "provide": {
+        "symfony/translation-implementation": "2.3|3.0"
     },
     "autoload": {
+        "files": [ "Resources/functions.php" ],
         "psr-4": { "Symfony\\Component\\Translation\\": "" },
         "exclude-from-classmap": [
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.0-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

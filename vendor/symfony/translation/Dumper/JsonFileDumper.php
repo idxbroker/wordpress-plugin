@@ -20,24 +20,14 @@ use Symfony\Component\Translation\MessageCatalogue;
  */
 class JsonFileDumper extends FileDumper
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
-        if (isset($options['json_encoding'])) {
-            $flags = $options['json_encoding'];
-        } else {
-            $flags = defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0;
-        }
+        $flags = $options['json_encoding'] ?? \JSON_PRETTY_PRINT;
 
         return json_encode($messages->all($domain), $flags);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getExtension()
+    protected function getExtension(): string
     {
         return 'json';
     }
