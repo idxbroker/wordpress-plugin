@@ -90,6 +90,7 @@ class IMPress_Agents_Import {
 
 		// Load IDX Broker API Class and retrieve agents.
 		$idx    = new \IDX\Idx_Api();
+		$idx->idx_clean_transients('clients_agents');
 		$agents = $idx->idx_api(
 			'agents',
 			'1.7.0',
@@ -116,7 +117,7 @@ class IMPress_Agents_Import {
 			foreach ( $agent_posts->posts as $post ) {
 				$post_meta = get_post_meta( $post->ID );
 				if ( ! empty( $post_meta['_employee_agentid'][0] ) ) {
-					array_push( $imported_agents, [ $post_meta['_employee_agentid'][0] => $post->ID ] );
+					$imported_agents[$post_meta['_employee_agentid'][0]] = $post->ID;
 				}
 			}
 		}
@@ -145,71 +146,35 @@ class IMPress_Agents_Import {
 		// Add or reset taxonomies terms for job-types = agentTitle.
 		wp_set_object_terms( $id, $idx_agent_data['agentTitle'], 'job-types' );
 
-		// Add post meta for existing fields.
-		// Title.
-		if ( get_post_meta( $id, '_employee_title' ) == false ) {
-			update_post_meta( $id, '_employee_title', $idx_agent_data['agentTitle'] );
-		}
-		// First Name.
-		if ( get_post_meta( $id, '_employee_first_name' ) == false ) {
-			update_post_meta( $id, '_employee_first_name', $idx_agent_data['agentFirstName'] );
-		}
-		// Last Name.
-		if ( get_post_meta( $id, '_employee_last_name' ) == false ) {
-			update_post_meta( $id, '_employee_last_name', $idx_agent_data['agentLastName'] );
-		}
-		// Agent ID.
-		if ( get_post_meta( $id, '_employee_agent_id' ) == false ) {
-			update_post_meta( $id, '_employee_agent_id', $idx_agent_data['agentID'] );
-		}
-		// Main Phone.
-		if ( get_post_meta( $id, '_employee_phone' ) == false ) {
-			update_post_meta( $id, '_employee_phone', $idx_agent_data['agentContactPhone'] );
-		}
-		// Cell Phone.
-		if ( get_post_meta( $id, '_employee_mobile' ) == false ) {
-			update_post_meta( $id, '_employee_mobile', $idx_agent_data['agentCellPhone'] );
-		}
-		// Email.
-		if ( get_post_meta( $id, '_employee_email' ) == false ) {
-			update_post_meta( $id, '_employee_email', $idx_agent_data['agentEmail'] );
-		}
-		// Website URL.
-		if ( get_post_meta( $id, '_employee_website' ) == false ) {
-			update_post_meta( $id, '_employee_website', $idx_agent_data['agentURL'] );
-		}
-		// Street Address.
-		if ( get_post_meta( $id, '_employee_address' ) == false ) {
-			update_post_meta( $id, '_employee_address', $idx_agent_data['address'] );
-		}
-		// City.
-		if ( get_post_meta( $id, '_employee_city' ) == false ) {
-			update_post_meta( $id, '_employee_city', $idx_agent_data['city'] );
-		}
-		// State.
-		if ( get_post_meta( $id, '_employee_state' ) == false ) {
-			update_post_meta( $id, '_employee_state', $idx_agent_data['stateProvince'] );
-		}
-		// Zip Code.
-		if ( get_post_meta( $id, '_employee_zip' ) == false ) {
-			update_post_meta( $id, '_employee_zip', $idx_agent_data['zipCode'] );
-		}
-
+		// Core field post meta data fields.
+		$coreMetaTranslations = [
+			'agentTitle'     	=> '_employee_title',
+			'agentFirstName' 	=> '_employee_first_name',
+			'agentLastName'  	=> '_employee_last_name',
+			'agentID' 		 	=> '_employee_agent_id',
+			'agentContactPhone' => '_employee_phone',
+			'agentCellPhone' 	=> '_employee_mobile',
+			'agentEmail' 		=> '_employee_email',
+			'agentURL' 			=> '_employee_website',
+			'address' 			=> '_employee_address',
+			'city' 				=> '_employee_city',
+			'stateProvince' 	=> '_employee_state',
+			'zipCode' 			=> '_employee_zip',
+		];
+		
+		// Add/update post meta for fields that do not match.
 		foreach ( $idx_agent_data as $metakey => $metavalue ) {
-			if ( isset( $metavalue ) && ! is_array( $metavalue ) && $metavalue != '' ) {
-				if ( get_post_meta( $id, '_employee_' . strtolower( $metakey ) ) == false ) {
-					update_post_meta( $id, '_employee_' . strtolower( $metakey ), $metavalue );
+			// Update the core meta data for the post type.
+			if (isset($coreMetaTranslations[$metakey])) {
+				if ($metavalue != get_post_meta( $id, $coreMetaTranslations[$metakey], true)) {
+					update_post_meta( $id, $coreMetaTranslations[$metakey], $metavalue );
 				}
-			} elseif ( isset( $metavalue ) && is_array( $metavalue ) ) {
-				foreach ( $metavalue as $key => $value ) {
-					if ( get_post_meta( $id, '_employee_' . strtolower( $metakey ) ) ) {
-						$oldvalue = get_post_meta( $id, '_employee_' . strtolower( $metakey ), true );
-						$newvalue = $value . ', ' . $oldvalue;
-						update_post_meta( $id, '_employee_' . strtolower( $metakey ), $newvalue );
-					} else {
-						update_post_meta( $id, '_employee_' . strtolower( $metakey ), $value );
-					}
-				}
+			}
+
+			// Add all fields into the post meta.
+			$key = strtolower( $metakey );
+			if (get_post_meta( $id, "_employee_$key", true ) != $metavalue) {
+				update_post_meta( $id, "_employee_$key", $metavalue );
 			}
 		}
 
