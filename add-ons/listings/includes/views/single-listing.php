@@ -123,7 +123,7 @@ function single_listing_post_content() {
 				echo ( get_post_meta( $post->ID, '_listing_featured_on', true ) ) ? '<p class="wp_listings_featured_on">' . esc_html( get_post_meta( $post->ID, '_listing_featured_on', true ) ) . '</p>' : '';
 
 				if ( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) {
-					echo '<p class="wp-listings-disclaimer">' . esc_html( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) . '</p>';
+					echo '<p class="wp-listings-disclaimer">' . get_post_meta( $post->ID, '_listing_disclaimer', true ) . '</p>';
 				} elseif ( ! empty( $options['wp_listings_global_disclaimer'] ) ) {
 					echo '<p class="wp-listings-disclaimer">' . esc_html( $options['wp_listings_global_disclaimer'] ) . '</p>';
 				}
