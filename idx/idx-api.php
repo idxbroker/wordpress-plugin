@@ -650,7 +650,7 @@ class Idx_Api {
 				continue;
 			}
 			// Explode $listing_data['next'] on '/clients/', index 1 of the resulting array will have the fragment needed to make the next API request.
-			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1], IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
+			$listing_data = $this->idx_api( explode( '/clients/', $listing_data['next'] )[1] . '&disclaimers=true', IDX_API_DEFAULT_VERSION, 'clients', array(), 7200, 'GET', true );
 			// If $listing_data['data'] is an array, merge it with the existing listings/properties array.
 			if ( ! is_wp_error( $listing_data ) && isset( $listing_data['data'] ) && is_array( $listing_data['data'] ) ) {
 				$properties = array_merge( $properties, $listing_data['data'] );

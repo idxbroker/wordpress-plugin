@@ -397,7 +397,7 @@ function single_listing_post_content() {
 			<div id="listing-disclaimer" class="wrap">
 			<?php
 			if ( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) {
-				echo '<p class="wp_listings_disclaimer">' . esc_html( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) . '</p>';
+				echo '<p class="wp_listings_disclaimer">' . get_post_meta( $post->ID, '_listing_disclaimer', true ) . '</p>';
 			} elseif ( ! empty( $options['wp_listings_global_disclaimer'] ) ) {
 				echo '<p class="wp_listings_disclaimer">' . esc_html( $options['wp_listings_global_disclaimer'] ) . '</p>';
 			}

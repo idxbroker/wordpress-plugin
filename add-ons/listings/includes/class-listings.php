@@ -320,6 +320,11 @@ class WP_Listings {
 		}
 
 		$image = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thumbnail' );
+		if (!$image) {
+			$image = [
+				IMPRESS_IDX_URL . 'assets/images/noPhotoFull.png',
+			];
+		}
 
 		switch ( $column ) {
 			case 'listing_thumbnail':
