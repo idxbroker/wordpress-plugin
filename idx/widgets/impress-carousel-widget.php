@@ -464,7 +464,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
@@ -500,12 +500,12 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'display' ) ); ?>"><?php esc_html_e( 'Listings to show without scrolling:', 'idxbroker' ); ?></label>
-			<input class="widefat" type="number" id="<?php echo esc_attr( $this->get_field_id( 'display' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'display' ) ); ?>" value="<?php esc_attr( $instance['display'] ); ?>" size="3">
+			<input class="widefat" type="number" id="<?php echo esc_attr( $this->get_field_id( 'display' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'display' ) ); ?>" value="<?php echo esc_attr( $instance['display'] ); ?>" size="3">
 		</p>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>"><?php esc_html_e( 'Max number of listings to show:' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php esc_attr( $instance['max'] ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php echo esc_attr( $instance['max'] ); ?>" />
 		</p>
 
 		<p>
