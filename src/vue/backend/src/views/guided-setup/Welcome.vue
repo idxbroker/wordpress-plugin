@@ -26,7 +26,7 @@
                     <idx-list-item>Configure Omnibar Search for Your Site</idx-list-item>
                     <idx-list-item>Enable and Configure IMPress Listings</idx-list-item>
                     <idx-list-item>Enable and Configure IMPress Agents</idx-list-item>
-                    <idx-list-item v-if="(this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta">Connect to Social Pro</idx-list-item>
+                    <!-- <idx-list-item v-if="(this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta">Connect to Social Pro</idx-list-item> -->
                 </idx-list>
                 <idx-button @click="startSetup" size="lg">Let's Get Started</idx-button>
             </idx-block>
