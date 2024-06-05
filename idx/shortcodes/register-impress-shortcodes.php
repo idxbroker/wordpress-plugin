@@ -698,7 +698,7 @@ class Register_Impress_Shortcodes {
 		$output = '
         	<script>
 				window.addEventListener("DOMContentLoaded", function(event) {
-					jQuery(#' . $carousel_id . ').owlCarousel({
+					jQuery("#' . $carousel_id . '").owlCarousel({
 						items: ' . $display . ',
 						' . $autoplay_param . '
 						nav: true,
