@@ -124,6 +124,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 * Update: Off Market listings will now be updated to the proper status of 'unknown' to not misrepresent non-active listings and respect the sold listings update settings
 * Fix: Imported listings not always imported with MLS disclaimers
 * Fix: Changes to the Omnibar settings trigger the location data refresh cron properly
+* Fix: Omnibar accurately searches city and county data for non-US states
 * Fix: Resolve PHP 8 deprecated features regarding required parameters followed by optional parameters in functions
 * Fix: Resolve PHP 8.3 deprecated features and update Carbon dependency
 * Fix: Resolve PHP 8 Errors with Gravity Forms and Contact Form 7

@@ -45,8 +45,19 @@ var idxOmnibar = function(jsonData){
 		}
 		return displayName;
 	};
+
+	// State abbreviations from our CCZ data.
+	let cczStateAbbreviations = new Set();
+	
 	//helper function for grabbing the name of each item in JSON creating new array
 	var createArrays = function(array, newArray, type, fieldName){
+		// Add state abbreviations to the set for later reference in case they are not in our static list.
+		array.forEach((item) => {
+			if (item.stateAbrv) {
+				cczStateAbbreviations.add(item.stateAbrv.toUpperCase());
+			}
+		});
+
 		//if zip, do not append state abbreviations
 		if(type === 'zip'){
 			array.forEach(function(item){
@@ -455,6 +466,8 @@ var idxOmnibar = function(jsonData){
 			}
 		}
 
+		// If no state from our static list is matched, check the additional states list from our CCZ data. This allows for accurate searches outside of the US.
+		return cczStateAbbreviations.has(inputState.toUpperCase());
 	}
 	var isCounty = function(inputCounty, listType){
 		if(inputCounty === undefined){
@@ -478,8 +491,19 @@ var idxOmnibar = function(jsonData){
 			var stateException = true;
 		}
 		for(var i=0; i < list.length; i++){
-			//filter out blank and county from input and check for appended state
-			if (inputFiltered.split(' county')[0] === list[i].name.toLowerCase() && whatState(input.value.split(', ')[1], list[i].stateAbrv, stateException) && isCounty(inputFiltered.split(' county')[1], listType) && input.value) {
+			/**
+			 * Filter out blank and county from input and check for appended state.
+			 * 
+			 * 1. Does the input value match our CCZ list option we're checking against?
+			 * 2. Check the state from our static list or our CCZ data?
+			 * 3. If the value has 'county' in the name, and the list type were checking against is counties. If 'county' is not in the value, method always returns true.
+			 * 4. Does the value exist?
+			 */
+			if (inputFiltered.split(' county')[0] === list[i].name.toLowerCase()
+				&& whatState(input.value.split(', ')[1], list[i].stateAbrv, stateException)
+				&& isCounty(inputFiltered.split(' county')[1], listType)
+				&& input.value
+			) {
 				switch(listType){
 					case 'cities':
 						foundResult = true;
