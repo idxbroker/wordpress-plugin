@@ -83,7 +83,7 @@ class Idx_Broker_Plugin {
 	 * Check for versions less than PHP7.0 and display error.
 	 */
 	public function php_version_check() {
-		if ( version_compare( PHP_VERSION, '7.0', '<' ) ) {
+		if ( version_compare( PHP_VERSION, '7.1.8', '<' ) ) {
 			add_action( 'admin_init', array( $this, 'idx_deactivate_plugin' ) );
 			add_action( 'admin_notices', array( $this, 'incompatible_message' ) );
 			return false;
