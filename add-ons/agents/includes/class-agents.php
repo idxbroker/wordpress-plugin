@@ -223,6 +223,11 @@ class IMPress_Agents {
 		}
 
 		$image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail');
+		if (!$image) {
+			$image = [
+				IMPRESS_IDX_URL . 'assets/images/impress-agents-nophoto.png',
+			];
+		}
 
 		switch( $column ) {
 			case "employee_thumbnail":
