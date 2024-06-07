@@ -1083,4 +1083,13 @@ class Idx_Api {
 
 		return false;
 	}
+
+	/**
+	 * Some MLS' require that no listing data is displayed prior to IDX approval. Check the account's MLS' for this restriction rule
+	 * and determine if this needs to be applied.
+	 */
+	public function idx_api_get_coming_soon_widget_restriction() {
+		$response = $this->idx_api('widgetDataRestriction');
+		update_option( 'idx_broker_widget_data_restriction', $response['restrictWidgetDataBeforeApproval'] );
+	}
 }

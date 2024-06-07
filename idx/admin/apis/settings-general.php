@@ -212,6 +212,9 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 			return $this->convert_idx_api_error( $error );
 		}
 
+		// Update/store the MLS widget data restriction setting.
+		$idx_api->idx_api_get_coming_soon_widget_restriction();
+
 		// Fire an omnibar location update and schedule a daily cron.
 		if ( ! wp_get_schedule( 'idx_omnibar_get_locations' ) ) {
 			wp_schedule_event( time(), 'daily', 'idx_omnibar_get_locations' );
