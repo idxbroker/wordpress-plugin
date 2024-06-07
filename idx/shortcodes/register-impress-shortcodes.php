@@ -581,7 +581,9 @@ class Register_Impress_Shortcodes {
 
 		$count = 0;
 
-		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $display );
+		// The id set on the container and used by the output script to insert the listings into the page for this particular carousel
+		$carousel_id = uniqid('impress-carousel-');
+		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $carousel_id, $display);
 
 		// Used to hold agent data when matching for colistings.
 		$agent_data;
@@ -686,7 +688,7 @@ class Register_Impress_Shortcodes {
 		$output = '
         	<script>
 				window.addEventListener("DOMContentLoaded", function(event) {
-					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+					jQuery("#' . $carousel_id . '").owlCarousel({
 						items: ' . $display . ',
 						' . $autoplay_param . '
 						nav: true,
