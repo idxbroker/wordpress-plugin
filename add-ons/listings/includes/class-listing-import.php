@@ -68,7 +68,7 @@ class WPL_Idx_Listing {
 
 		// Load IDX Broker API Class and retrieve featured properties.
 		$_idx_api   = new \IDX\Idx_Api();
-		$properties = $_idx_api->client_properties( 'featured?disclaimers=true' );
+		$properties = $_idx_api->client_properties( 'featured' );
 
 		// Load WP options.
 		$wpl_import_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
@@ -179,53 +179,101 @@ class WPL_Idx_Listing {
 
 		// Load IDX Broker API Class and retrieve featured properties.
 		$_idx_api = new \IDX\Idx_Api();
-		$properties = $_idx_api->client_properties( 'featured?disclaimers=true' );
 
-		// Load WP options
+		// Clear the cache for the featured/sold/supplemental/offmarket listings to ensure we have the most recent listing data for updates.
+		foreach (['featured', 'soldpending', 'supplemental', 'offmarket'] as $type ) {
+			$_idx_api->idx_clean_transients("clients_$type");
+		}
+		
+		// All current IMPress Listings posts.
 		$idx_featured_listing_wp_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
+		// IMPress import/update listings settings.
 		$wpl_options = get_option( 'plugin_wp_listings_settings' );
-
+		
+		// Gather and loop through all active properties.
+		$properties = $_idx_api->client_properties( 'featured' );
 		foreach ( $properties as $prop ) {
-			$key = self::get_key( $properties, 'listingID', $prop['listingID'] );
-
-			if ( isset( $idx_featured_listing_wp_options[ $prop['listingID'] ]['post_id'] ) ) {
-				// Update property data.
-				if ( ! isset( $wpl_options['wp_listings_idx_update'] )
-						|| isset( $wpl_options['wp_listings_idx_update'] )
-						&& 'update-none' !== $wpl_options['wp_listings_idx_update'] ) {
-						self::wp_listings_idx_insert_post_meta( $idx_featured_listing_wp_options[ $prop['listingID'] ]['post_id'], $properties[ $key ], true, ( ! empty( $wpl_options['wp_listings_idx_update'] ) && 'update-excluding-images' === $wpl_options['wp_listings_idx_update'] ) ? false : true, false );
+			$postID = $idx_featured_listing_wp_options[ $prop['listingID'] ]['post_id'];
+			
+			// Update active property data and the timestamp if a post exists for the listingID.
+			if ( isset( $postID ) ) {
+				if ( ! isset( $wpl_options['wp_listings_idx_update'] ) || isset( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] !== 'update-none' ) {
+					self::wp_listings_idx_insert_post_meta(
+						$postID,
+						$prop,
+						true,
+						( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
+					);
+					$idx_featured_listing_wp_options[ $prop['listingID'] ]['updated'] = date( 'm/d/Y h:i:sa' );
 				}
-
-				$idx_featured_listing_wp_options[ $prop['listingID'] ]['updated'] = date( 'm/d/Y h:i:sa' );
 			}
 		}
 
-		// Load and loop through Sold properties.
+		// Gather and loop through sold properties.
 		$sold_properties = $_idx_api->client_properties( 'soldpending' );
 		foreach ( $sold_properties as $sold_prop ) {
+			$postID = $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'];
+			
+			// Update sold property data and the timestamp if a post exists for the listingID.
+			if ( isset( $postID ) ) {
+				self::wp_listings_idx_insert_post_meta(
+					$postID,
+					$sold_prop,
+					true,
+					( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true,
+				);
+				$idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['updated'] = date( 'm/d/Y h:i:sa' );
 
-			$key = self::get_key( $sold_properties, 'listingID', $sold_prop['listingID'] );
-
-			if ( isset( $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'] ) ) {
-
-				// Update property data.
-				self::wp_listings_idx_insert_post_meta( $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'], $sold_properties[ $key ], true, ( ! empty( $wpl_options['wp_listings_idx_update'] ) && 'update-excluding-images' === $wpl_options['wp_listings_idx_update'] ) ? false : true, true );
-
-				if ( isset( $wpl_options['wp_listings_idx_sold'] ) && 'sold-draft' === $wpl_options['wp_listings_idx_sold'] ) {
-
-					// Change to draft.
-					self::wp_listings_idx_change_post_status( $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'], 'draft' );
-				} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && 'sold-delete' === $wpl_options['wp_listings_idx_sold'] ) {
+				// Now check if we need to update the post status to draft or delete it entirely.
+				if ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-draft' ) {
+					// Change post status to draft.
+					self::wp_listings_idx_change_post_status( $postID, 'draft' );
+					$idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['status'] = 'draft';
+				} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-delete' ) {
 
 					// Delete featured image.
-					$post_featured_image_id = get_post_thumbnail_id( $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'] );
+					$post_featured_image_id = get_post_thumbnail_id( $postID );
 					wp_delete_attachment( $post_featured_image_id );
 
 					// Delete post.
-					wp_delete_post( $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'] );
+					wp_delete_post( $postID );
 				}
 			}
 		}
+
+		// Update any listings that are in the off-market bucket since we are not sure what their current status should be to not misrepresent any non-active listings.
+		$unknown_properties = $_idx_api->client_properties( 'offmarket' );
+		foreach ( $unknown_properties as $unknown_prop ) {
+			$postID = $idx_featured_listing_wp_options[ $unknown_prop['listingID'] ]['post_id'];
+
+			// Update sold property data and the timestamp if a post exists for the listingID.
+			if ( isset( $postID ) ) {
+				self::wp_listings_idx_insert_post_meta(
+					$postID,
+					$unknown_prop,
+					true,
+					( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true,
+				);
+				$idx_featured_listing_wp_options[$unknown_prop['listingID']]['updated'] = date( 'm/d/Y h:i:sa' );
+
+				// Now check if we need to update the post status to draft or delete it entirely based on our offmarket/sold listing settings.
+				if ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-draft' ) {
+					// Change post status to draft.
+					self::wp_listings_idx_change_post_status( $postID, 'draft' );
+					$idx_featured_listing_wp_options[ $unknown_prop['listingID'] ]['status'] = 'draft';
+				} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-delete' ) {
+
+					// Delete featured image.
+					$post_featured_image_id = get_post_thumbnail_id( $postID );
+					wp_delete_attachment( $post_featured_image_id );
+
+					// Delete post.
+					wp_delete_post( $postID );
+				}
+			}
+		}
+
+		// Update our options after all of the updates.
 		update_option( 'wp_listings_idx_featured_listing_wp_options', $idx_featured_listing_wp_options );
 	}
 
@@ -250,7 +298,7 @@ class WPL_Idx_Listing {
 	 * @param  [type] $key [description]
 	 * @return [type]      [description]
 	 */
-	public static function wp_listings_idx_insert_post_meta( $id, $idx_featured_listing_data, $update = false, $update_image = true, $sold = false ) {
+	public static function wp_listings_idx_insert_post_meta( $id, $idx_featured_listing_data, $update = false, $update_image = true) {
 
 		$wpl_options = get_option( 'plugin_wp_listings_settings' );
 
@@ -455,47 +503,58 @@ function sync_listing_options() {
 		]
 	);
 
+	// All of the featured listings that are imported.
 	$wpl_import_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
+	// Store the listingID's of all the existing posts we have in the site, so we know which to delete from the options array after we update the data.
+	$currentPostListingIDs = [];
 
 	if ( is_array( $listing_posts ) && is_array( $wpl_import_options ) ) {
 
 		foreach ( $listing_posts as $key => $value ) {
 			$listing_post_meta = get_post_meta( $value->ID );
 
-			// Check if '_listing_mls' key exist in $listing_post_meta and has a value assigned.
+			// Check if '_listing_mls' key exist in $listing_post_meta and has a value assigned. listingID is saved as '_listing_mls' for legacy reasons.
 			if ( array_key_exists( '_listing_mls', $listing_post_meta ) && ! empty( $listing_post_meta['_listing_mls'] ) ) {
-				// If key does not exist in $wpl_import_options -> create it and add all values.
-				if ( ! array_key_exists( $listing_post_meta['_listing_mls'][0], $wpl_import_options ) ) {
-					$wpl_import_options[ $listing_post_meta['_listing_mls'][0] ] = [
-						'listingID' => $listing_post_meta['_listing_mls'][0],
+				$listingID = $listing_post_meta['_listing_mls'][0];
+				// Add the listingID to the $currentPostListingIDs array.
+				$currentPostListingIDs[] = $listingID;
+
+				// If key does not exist in $wpl_import_options, create it and add all values, otherwise just set the values that are missing.
+				if ( ! array_key_exists( $listingID, $wpl_import_options ) ) {
+					$wpl_import_options[ $listingID ] = [
+						'listingID' => $listingID,
 						'updated'   => date( "m/d/Y h:i:sa" ),
 						'status'    => $value->post_status,
 						'post_id'   => $value->ID,
 					];
 				} else {
-					// If key does exist in $wpl_import_options -> just add missing values.
-					$listing_options = $wpl_import_options[ $listing_post_meta['_listing_mls'][0] ];
-					// set values if missing.
-					// listingID, saved as '_listing_mls' for legacy reasons.
+					$listing_options = $wpl_import_options[ $listingID ];
 					if ( ! isset( $listing_options['listingID'] ) || empty( $listing_options['listingID'] ) ) {
-						$wpl_import_options[ $listing_post_meta['_listing_mls'][0] ]['listingID'] = $listing_post_meta['_listing_mls'][0];
+						$wpl_import_options[ $listingID ]['listingID'] = $listingID;
 					}
 					// updated.
 					if ( ! isset( $listing_options['updated'] ) || empty( $listing_options['updated'] ) ) {
-						$wpl_import_options[ $listing_post_meta['_listing_mls'][0] ]['updated'] = date("m/d/Y h:i:sa");
+						$wpl_import_options[ $listingID ]['updated'] = date("m/d/Y h:i:sa");
 					}
 					// status.
 					if ( ! isset( $listing_options['status'] ) || empty( $listing_options['status'] ) ) {
-						$wpl_import_options[ $listing_post_meta['_listing_mls'][0] ]['status'] = $value->post_status;
+						$wpl_import_options[ $listingID ]['status'] = $value->post_status;
 					}
 					// post_id.
 					if ( ! isset( $listing_options['post_id'] ) || empty( $listing_options['post_id'] ) ) {
-						$wpl_import_options[ $listing_post_meta['_listing_mls'][0] ]['post_id'] = $value->ID;
+						$wpl_import_options[ $listingID ]['post_id'] = $value->ID;
 					}
 				}
-				update_option( 'wp_listings_idx_featured_listing_wp_options', $wpl_import_options );
 			}
 		}
+
+		// Delete any listings that are not in the $currentPostListingIDs array because they no longer exist as an active post in the site.
+		foreach ( $wpl_import_options as $key => $value ) {
+			if (! in_array($key, $currentPostListingIDs)) {
+				unset($wpl_import_options[$key]);
+			}
+		}
+		update_option( 'wp_listings_idx_featured_listing_wp_options', $wpl_import_options );
 	}
 }
 
