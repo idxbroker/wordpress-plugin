@@ -321,7 +321,8 @@ class Idx_Api {
 		if ( empty( $this->api_key ) ) {
 			return array();
 		}
-		return $this->idx_api( 'widgetsrc' );
+		$response = $this->idx_api( 'widgetsrc' );
+		return $response['errors'] ? $response : $response['data'];
 	}
 
 	/**
@@ -742,12 +743,13 @@ class Idx_Api {
 	/**
 	 * Returns a property count integer for an id (city, county, or zip)
 	 *
-	 * @param  string $type The count type (city, county or zip)
 	 * @param  string $idx_id The idxID (mlsID)
 	 * @param  string $id The identifier. City id, county id or zip code
+	 * @param  string $type The count type (city, county or zip)
+	 *
 	 * @return array $city_list
 	 */
-	public function property_count_by_id( $type = 'city', $idx_id, $id ) {
+	public function property_count_by_id( $idx_id, $id, $type = 'city' ) {
 
 		$city_count = $this->idx_api( 'propertycount/' . $idx_id . '?countType=' . $type . '&countSpecifier=' . $id, IDX_API_DEFAULT_VERSION, 'mls', array(), 60 * 60 * 12 );
 
@@ -1080,5 +1082,14 @@ class Idx_Api {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Some MLS' require that no listing data is displayed prior to IDX approval. Check the account's MLS' for this restriction rule
+	 * and determine if this needs to be applied.
+	 */
+	public function idx_api_get_coming_soon_widget_restriction() {
+		$response = $this->idx_api('widgetDataRestriction');
+		update_option( 'idx_broker_widget_data_restriction', $response['restrictWidgetDataBeforeApproval'] );
 	}
 }

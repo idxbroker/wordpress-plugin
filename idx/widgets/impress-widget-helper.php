@@ -57,3 +57,13 @@ function price_selector( $property ) {
 
 	return $listing_price;
 }
+
+/**
+ * Determines if the account is allowed to display listing widget data prior to approval.
+ *
+ * @return boolean
+ */
+function coming_soon_listing_restriction()
+{
+    return boolval( get_option( 'idx_broker_widget_data_restriction' ) );
+}
