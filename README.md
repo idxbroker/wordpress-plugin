@@ -1,14 +1,14 @@
 # IMPress for IDX Broker #
 Author: IDX, LLC
-**Contributors:** idxco  
+**Contributors:** idxco
 Author URL: https://idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm, ixact
 **Requires at least:** 5.3
-**Tested up to:** 6.0.2
-**Stable tag:** 3.1.0
-**Minimum PHP:** 7.0
-**License:** GPLv2 or later  
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
+**Tested up to:** 6.5.4
+**Stable tag:** 3.2.0
+**Minimum PHP:** 7.1.8
+**License:** GPLv2 or later
+**License URI:** http://www.gnu.org/licenses/gpl-2.0.html
 
 ## Description ##
 IMPress for IDX Broker is now the IMPress family of plugins all-in-one. <a href="https://wordpress.org/plugins/wp-listings/" target="_blank">IMPress Listings</a> and <a href="https://wordpress.org/plugins/impress-agents/" target="_blank">IMPress Agents</a> have been consolidated with this already powerful plugin.
@@ -117,6 +117,21 @@ This plugin requires PHP 7.0 or higher. For security reasons, we recommend updat
 For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or IMPress Agents already installed, the plugins will continue to work as-is. However, if the user selects ‘Enable Listings’ or ‘Enable Agents’ in the new IMPress for IDX dashboard, the legacy IMPress Listings/Agents will be deactivated and the new consolidated version of the plugin will be used. Any existing data for Listings/Agents will be unaffected.
 
 ## Changelog ##
+### 3.2.0 ###
+* Update: IMPress Showcase and Carousel widgets display 'Coming Soon' prior to MLS approval, but only when required by MLS rules
+* Update: Omnibar Advanced Fields searching optimized to use exact search parameters instead of wild text
+* Update: Default to use IDX Broker API v1.8.0
+* Update: Off Market listings will now be updated to the proper status of 'unknown' to not misrepresent non-active listings and respect the sold listings update settings
+* Fix: Imported listings not always imported with MLS disclaimers
+* Fix: Changes to the Omnibar settings trigger the location data refresh cron properly
+* Fix: Omnibar accurately searches city and county data for non-US states
+* Fix: Resolve PHP 8 deprecated features regarding required parameters followed by optional parameters in functions
+* Fix: Resolve PHP 8.3 deprecated features and update Carbon dependency
+* Fix: Resolve PHP 8 Errors with Gravity Forms and Contact Form 7
+* Fix: Social Pro articles may not be syndicated properly
+* Fix: Resolve PHP errors when enabling Listings and Agents addons for the first time
+* Fix: Listings import not respecting update-excluding-images setting
+* Fix: IMPress Carousel widget possibly duplicating a single listing if multiple carousels exist on the page.
 
 ### 3.1.0 ###
 * New: Supplemental Listings can now be targeted by Active, Sold, or Both within all IMPress Property widgets under the Properties to Feature dropdown
