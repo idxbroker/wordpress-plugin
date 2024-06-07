@@ -9,6 +9,9 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
  */
 class Lead_Management {
 
+	/** @var object The leads management page */
+	private $page;
+
 	private static $instance;
 
 	public static function instance() {
