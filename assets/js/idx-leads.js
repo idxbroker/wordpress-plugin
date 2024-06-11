@@ -199,7 +199,6 @@ jQuery(document).ready(function($) {
 			},
 			success: function( result ) {
 				if( $.isNumeric( result ) ) {
-					alert('Lead Successfully Added');
 					window.location.reload(true);
 				} else if (result === 'Lead already exists.') {
 					$('#add-lead .error-existing').show();
