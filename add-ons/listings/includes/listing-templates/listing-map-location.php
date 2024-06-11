@@ -6,9 +6,14 @@
  * @return mixed
  */
 function load_listing_on_map ( $post, $options ) {
-    $map_info_content = sprintf( '<p style="font-size: 14px; margin-bottom: 0;">%s<br />%s %s, %s</p>', get_post_meta( $post->ID, '_listing_address', true ), get_post_meta( $post->ID, '_listing_city', true ), get_post_meta( $post->ID, '_listing_state', true ), get_post_meta( $post->ID, '_listing_zip', true ) );
-
     ( $options['wp_listings_gmaps_api_key'] ) ? $map_key = $options['wp_listings_gmaps_api_key'] : $map_key = '';
+    
+    if ($map_key == '' || $map_key == null) {
+        return;
+    }
+    
+    $map_info_content = sprintf( '<p style="font-size: 14px; margin-bottom: 0;">%s<br />%s %s, %s</p>', get_post_meta( $post->ID, '_listing_address', true ), get_post_meta( $post->ID, '_listing_city', true ), get_post_meta( $post->ID, '_listing_state', true ), get_post_meta( $post->ID, '_listing_zip', true ) );
+    
     wp_enqueue_script( 'idxb-google-maps', 'https://maps.googleapis.com/maps/api/js?key=' . $map_key . '&loading=async&callback=initialize&libraries=marker', [], '1.0', 'async' );
     echo '
     <script>
