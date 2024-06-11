@@ -20,9 +20,6 @@ Your IDX Broker-enabled account provides this plugin with access to your MLS dat
 <h4>New! IDX Broker + IXACT CRM Product Upgrade</h4>
 The new IXACT CRM product upgrade features lead capture and nurture, a done-for-you monthly e-newsletter, single sign on and more. Easily manage your buyers, listings, and closings, set up targeted drip emails and nurture campaigns, and build brand awareness and engagement through relevant social media postings.
 
-<h4>Social Pro for IDX Broker</h4>
-Social Pro enhances your opportunity to reach your sphere of influence through automated social media posts including posts about new listings and listing updates. Add even more activity to your social media platforms and WordPress website with weekly automated, relevant, content-rich blog posts.
-
 <h4>Manage Your Leads</h4>
 No more going between browser windows with the Lead Management interface. Now you can see and manage your leads right within the WordPress dashboard. Plus, you can use powerful lead capture tools to generate new leads. Go beyond and customize your lead capture settings with IDX Broker Platinum.
 
