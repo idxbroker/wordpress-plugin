@@ -2,7 +2,7 @@
 Author: IDX, LLC
 **Contributors:** idxco
 Author URL: https://idxbroker.com
-**Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm, ixact
+**Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm
 **Requires at least:** 5.3
 **Tested up to:** 6.5.4
 **Stable tag:** 3.2.0
@@ -16,9 +16,6 @@ IMPress for IDX Broker is now the IMPress family of plugins all-in-one. <a href=
 Your IDX Broker-enabled account provides this plugin with access to your MLS data feed. The IMPress for IDX Broker plugin allows you to display that data on your WordPress site using widgets and shortcodes while seamlessly matching your brand.
 
 <h3>IMPress for IDX Broker</h3>
-
-<h4>New! IDX Broker + IXACT CRM Product Upgrade</h4>
-The new IXACT CRM product upgrade features lead capture and nurture, a done-for-you monthly e-newsletter, single sign on and more. Easily manage your buyers, listings, and closings, set up targeted drip emails and nurture campaigns, and build brand awareness and engagement through relevant social media postings.
 
 <h4>Manage Your Leads</h4>
 No more going between browser windows with the Lead Management interface. Now you can see and manage your leads right within the WordPress dashboard. Plus, you can use powerful lead capture tools to generate new leads. Go beyond and customize your lead capture settings with IDX Broker Platinum.
