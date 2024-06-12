@@ -85,8 +85,6 @@ class Impress_City_Links_Widget extends \WP_Widget {
 			echo $before_title . $title . $after_title;
 		}
 
-		$idx_api = $this->idx_api;
-
 		// For testing with demo data.
 		if ( empty( $instance['mls'] ) && defined( 'IDX_TESTING' ) ) {
 			$instance['mls'] = 'a000';
@@ -96,7 +94,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 			echo 'Invalid MLS IDX ID. Email help@idxbroker.com to get your MLS IDX ID';
 		} else {
 			echo '<div class="impress-city-links">';
-			echo $this->city_list_links( $instance['city_list'], $instance['mls'], $instance['use_columns'], $instance['number_columns'], $target, $instance['show_count'], $this->idx_api );
+			echo $this->city_list_links( $instance['city_list'], $instance['mls'], $target, $this->idx_api, $instance['use_columns'], $instance['number_columns'], $instance['show_count'] );
 			echo '</div>';
 		}
 
@@ -252,10 +250,16 @@ class Impress_City_Links_Widget extends \WP_Widget {
 	 * Returns an unordered list of city links
 	 *
 	 * @param int|string $list_id - the id of the city list to pull cities from.
+	 * @param int|string $idx_id - the id of the mls to pull cities from.
+	 * @param string     $target - the target of the links.
+	 * @param mixed      $idx_api - IDX API object.
 	 * @param bool       $columns - if true adds column classes to the ul tags.
 	 * @param int        $number_of_columns - optional total number of columns to split the links into.
+	 * @param bool       $show_count - if true, shows the number of properties for each city.
+	 * 
+	 * @return mixed
 	 */
-	public static function city_list_links( $list_id, $idx_id, $columns = 0, $number_columns = 4, $target, $show_count = false, $idx_api ) {
+	public static function city_list_links( $list_id, $idx_id, $target, $idx_api, $columns = 0, $number_columns = 4, $show_count = false ) {
 		$cities = $idx_api->city_list( $list_id );
 
 		if ( is_wp_error( $cities) || empty( $cities ) ) {

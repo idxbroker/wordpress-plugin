@@ -274,7 +274,7 @@ function listing_inquiry_request() {
 
 	$idx_api = new \IDX\Idx_Api();
 	// Using 'interval=168' to grab any leads that recently signed up.
-	$leads = $idx_api->idx_api( 'lead?interval=168', '1.7.0', 'leads', [], 20 );
+	$leads = $idx_api->idx_api( 'lead?interval=168', IDX_API_DEFAULT_VERSION, 'leads', [], 20 );
 	$leads = empty( $leads['data'] ) ? [] : $leads['data'];
 
 	$lead_id;

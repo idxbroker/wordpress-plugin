@@ -131,7 +131,7 @@ class IMPress_Agents {
 				'menu_icon'		=> 'dashicons-groups',
 				'has_archive'	=> true,
 				'supports'		=> array( 'title', 'editor', 'author', 'comments', 'excerpt', 'thumbnail', 'revisions', 'equity-layouts', 'equity-cpt-archives-settings', 'genesis-seo', 'genesis-layouts', 'genesis-simple-sidebars', 'genesis-cpt-archives-settings', 'publicize', 'wpcom-markdown'),
-				'rewrite'		=> array( 'slug' => $this->options['impress_agents_slug'], 'feeds' => true, 'with_front' => false ),
+				'rewrite'		=> array( 'slug' => $this->options['impress_agents_slug'] ?? 'employees', 'feeds' => true, 'with_front' => false ),
 			)
 		);
 
@@ -223,6 +223,11 @@ class IMPress_Agents {
 		}
 
 		$image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail');
+		if (!$image) {
+			$image = [
+				IMPRESS_IDX_URL . 'assets/images/impress-agents-nophoto.png',
+			];
+		}
 
 		switch( $column ) {
 			case "employee_thumbnail":

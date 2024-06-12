@@ -129,21 +129,26 @@ class Register_Impress_Shortcodes {
 		}
 
 		$output = '';
-		if ( ( $property_type ) === 'savedlinks' ) {
-			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
-			$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
-		} else {
-			$properties = $this->idx_api->client_properties( $property_type );
-			$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+		$properties = [];
+		$comingSoon = coming_soon_listing_restriction();
+		if ( ! $comingSoon ) {
+			if ( ( $property_type ) === 'savedlinks' ) {
+				$properties = $this->idx_api->saved_link_properties( $saved_link_id );
+				$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
+			} else {
+				$properties = $this->idx_api->client_properties( $property_type );
+				$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+			}
+			// Force type as Array.
+			$properties = json_encode( $properties );
+			$properties = json_decode( $properties, true );
 		}
-
-		// Force type as Array.
-		$properties = json_encode( $properties );
-		$properties = json_decode( $properties, true );
 
 		// If no properties or an error, load message
 		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
-			if ( isset( $properties['errors']['idx_api_error'] ) ) {
+			if ( $comingSoon ) {
+				return $output .= '<p>Coming Soon</p>';
+			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
@@ -542,21 +547,26 @@ class Register_Impress_Shortcodes {
 		$next_link = apply_filters( 'idx_listing_carousel_next_link', $idx_listing_carousel_next_link_text = __( '<i class=\"fas fa-caret-right\"></i><span>Next</span>', 'idxbroker' ) );
 
 		$output = '';
-		if ( ( $property_type ) === 'savedlinks' ) {
-			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
-			$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
-		} else {
-			$properties = $this->idx_api->client_properties( $property_type );
-			$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+		$properties = [];
+		$comingSoon = coming_soon_listing_restriction();
+		if ( ! $comingSoon ) {
+			if ( ( $property_type ) === 'savedlinks' ) {
+				$properties = $this->idx_api->saved_link_properties( $saved_link_id );
+				$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
+			} else {
+				$properties = $this->idx_api->client_properties( $property_type );
+				$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+			}
+			// Force type as Array.
+			$properties = json_encode( $properties );
+			$properties = json_decode( $properties, true );
 		}
-
-		// Force type as array.
-		$properties = json_encode( $properties );
-		$properties = json_decode( $properties, true );
 
 		// If no properties or an error, load message
 		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
-			if ( isset( $properties['errors']['idx_api_error'] ) ) {
+			if ( $comingSoon ) {
+				return $output .= '<p>Coming Soon</p>';
+			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
@@ -581,7 +591,9 @@ class Register_Impress_Shortcodes {
 
 		$count = 0;
 
-		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $display );
+		// The id set on the container and used by the output script to insert the listings into the page for this particular carousel
+		$carousel_id = uniqid('impress-carousel-');
+		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $carousel_id, $display);
 
 		// Used to hold agent data when matching for colistings.
 		$agent_data;
@@ -686,7 +698,7 @@ class Register_Impress_Shortcodes {
 		$output = '
         	<script>
 				window.addEventListener("DOMContentLoaded", function(event) {
-					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+					jQuery("#' . $carousel_id . '").owlCarousel({
 						items: ' . $display . ',
 						' . $autoplay_param . '
 						nav: true,
@@ -761,7 +773,7 @@ class Register_Impress_Shortcodes {
 		$target = $this->target( $new_window );
 
 		$city_links  = '<div class="impress-city-links">';
-		$city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links( $city_list, $mls, $use_columns, $number_columns, $target, $show_count, $this->idx_api );
+		$city_links .= \IDX\Widgets\Impress_City_Links_Widget::city_list_links( $city_list, $mls, $target, $this->idx_api, $use_columns, $number_columns, $show_count );
 		$city_links .= '</div>';
 
 		if ( false == $city_links ) {

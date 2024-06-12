@@ -23,6 +23,11 @@ class WP_Listings {
 	public $property_details;
 
 	/**
+	 * Additional property details array.
+	 */
+	public $extended_property_details;
+
+	/**
 	 * Construct Method.
 	 */
 	public function __construct() {
@@ -213,7 +218,7 @@ class WP_Listings {
 				'menu_icon'             => 'dashicons-admin-home',
 				'has_archive'           => true,
 				'supports'              => [ 'title', 'editor', 'author', 'comments', 'excerpt', 'thumbnail', 'revisions', 'equity-layouts', 'equity-cpt-archives-settings', 'genesis-seo', 'genesis-layouts', 'genesis-simple-sidebars', 'genesis-cpt-archives-settings', 'publicize', 'wpcom-markdown' ],
-				'rewrite'               => [ 'slug' => $this->options['wp_listings_slug'], 'feeds' => true, 'with_front' => false ],
+				'rewrite'               => [ 'slug' => $this->options['wp_listings_slug'] ?? 'listings', 'feeds' => true, 'with_front' => false ],
 			]
 		);
 
@@ -320,6 +325,11 @@ class WP_Listings {
 		}
 
 		$image = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thumbnail' );
+		if (!$image) {
+			$image = [
+				IMPRESS_IDX_URL . 'assets/images/noPhotoFull.png',
+			];
+		}
 
 		switch ( $column ) {
 			case 'listing_thumbnail':

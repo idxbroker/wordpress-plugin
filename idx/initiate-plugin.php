@@ -6,6 +6,12 @@ namespace IDX;
  */
 class Initiate_Plugin {
 
+	/** @var Idx_Api $idx_api */
+	private $idx_api;
+
+	/** @var array Admin notices for the admin page dashboard. */
+	private $notices;
+
 	/**
 	 * __construct function.
 	 *
@@ -25,7 +31,7 @@ class Initiate_Plugin {
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 9 );
 		add_action( 'admin_menu', array( $this, 'idx_broker_platinum_options_init' ) );
 		add_action( 'admin_bar_init', array( $this, 'load_admin_menu_styles' ) );
-		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 999.125 );
+		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 999 );
 		add_action( 'admin_init', array( $this, 'disable_original_plugin' ) );
 		add_action( 'admin_init', [ $this, 'get_install_info' ] );
 		add_action( 'admin_enqueue_scripts', array( $this, 'idx_inject_script_and_style' ) );
@@ -38,6 +44,7 @@ class Initiate_Plugin {
 
 		add_action( 'wp_loaded', array( $this, 'schedule_omnibar_update' ) );
 		add_action( 'idx_omnibar_get_locations', array( $this, 'idx_omnibar_get_locations' ) );
+		add_action( 'idx_update_location_data', array( $this, 'idx_update_location_data' ) );
 		add_action( 'idx_migrate_old_table', array( $this, 'migrate_old_table' ) );
 		add_action( 'wp_loaded', array( $this, 'legacy_functions' ) );
 
@@ -224,6 +231,17 @@ class Initiate_Plugin {
 	 */
 	public function idx_omnibar_get_locations() {
 		new \IDX\Widgets\Omnibar\Get_Locations();
+	}
+
+	/**
+	 * Update the location data from the type of update.
+	 *
+	 * @param  string $type Type of update. ('all', 'address', 'custom')
+	 * @access public
+	 * @return void
+	 */
+	public function idx_update_location_data($type) {
+		new \IDX\Widgets\Omnibar\Get_Locations($type);
 	}
 
 	/**
