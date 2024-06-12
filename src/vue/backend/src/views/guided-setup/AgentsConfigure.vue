@@ -46,14 +46,16 @@ export default {
         }),
         skipPath () {
             if ((this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta) {
-                return '/guided-setup/social-pro'
+                // Old Path: /guided-setup/social-pro
+                return '/guided-setup/confirmation'
             } else {
                 return '/guided-setup/confirmation'
             }
         },
         continuePath () {
             if ((this.restrictedByBeta && this.optedInBeta) || !this.restrictedByBeta) {
-                return '/guided-setup/social-pro'
+                // Old Path: /guided-setup/social-pro
+                return '/guided-setup/confirmation'
             } else {
                 return '/guided-setup/confirmation'
             }
