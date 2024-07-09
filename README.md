@@ -121,7 +121,8 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 * Fix: Omnibar accurately searches city and county data for non-US states
 * Fix: Resolve PHP 8 deprecated features regarding required parameters followed by optional parameters in functions
 * Fix: Resolve PHP 8.3 deprecated features and update Carbon dependency
-* Fix: Resolve PHP 8 Errors with Gravity Forms and Contact Form 7
+* Fix: Resolve PHP 8 Errors with Gravity Forms and Contact Form 7 and compatibility updates
+* Fix: Submission errors from Gravity Forms, CF7, Ninja Forms with lead import enabled attempting to creating a note on an existing leads account
 * Fix: Social Pro articles may not be syndicated properly
 * Fix: Resolve PHP errors when enabling Listings and Agents addons for the first time
 * Fix: Listings import not respecting update-excluding-images setting

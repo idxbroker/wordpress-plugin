@@ -322,7 +322,7 @@ class Idx_Api {
 			return array();
 		}
 		$response = $this->idx_api( 'widgetsrc' );
-		return $response['errors'] ? $response : $response['data'];
+		return is_wp_error( $response ) ? $response : $response['data'];
 	}
 
 	/**

@@ -147,47 +147,47 @@ class IDX_Leads_GF {
 				$fields = self::get_all_form_fields( $form_id );
 
 				$code_firstname = (string) self::find_field( $fields, 'First', 'name' );
-				$firstname      = filter_var( $entry[ $code_firstname ], FILTER_SANITIZE_STRING );
+				$firstname      = htmlspecialchars( $entry[ $code_firstname ] );
 
 				$code_lastname = (string) self::find_field( $fields, 'Last', 'name' );
-				$lastname      = filter_var( $entry[ $code_lastname ], FILTER_SANITIZE_STRING );
+				$lastname      = htmlspecialchars( $entry[ $code_lastname ] );
 
 				$code_email = (string) self::find_field( $fields, 'Email', 'email' );
-				$email      = filter_var( $entry[ $code_email ], FILTER_SANITIZE_STRING );
+				$email      = htmlspecialchars( $entry[ $code_email ] );
 
 				$code_phone = (string) self::find_field( $fields, 'Phone', 'phone' );
 				if ( $code_phone ) {
-					$phone = filter_var( $entry[ $code_phone ], FILTER_SANITIZE_STRING );}
+					$phone = htmlspecialchars( $entry[ $code_phone ] );}
 
 				$code_streetAddress = (string) self::find_field( $fields, 'Address (Street Address)' );
 				if ( $code_streetAddress ) {
-					$streetAddress = filter_var( $entry[ $code_streetAddress ], FILTER_SANITIZE_STRING );}
+					$streetAddress = htmlspecialchars( $entry[ $code_streetAddress ] );}
 
 				$code_addressLine = (string) self::find_field( $fields, 'Address (Address Line 2)' );
 				if ( $code_addressLine ) {
-					$addressLine = filter_var( $entry[ $code_addressLine ], FILTER_SANITIZE_STRING );}
+					$addressLine = htmlspecialchars( $entry[ $code_addressLine ] );}
 
 				$code_city = (string) self::find_field( $fields, 'Address (City)' );
 				if ( $code_city ) {
-					$city = filter_var( $entry[ $code_city ], FILTER_SANITIZE_STRING );}
+					$city = htmlspecialchars( $entry[ $code_city ] );}
 
 				$code_state = (string) self::find_field( $fields, 'Address (State / Province)' );
 				if ( $code_state ) {
-					$state = filter_var( $entry[ $code_state ], FILTER_SANITIZE_STRING );}
+					$state = htmlspecialchars( $entry[ $code_state ] );}
 
 				$code_zip = (string) self::find_field( $fields, 'Address (ZIP / Postal Code)' );
 				if ( $code_zip ) {
-					$zip = filter_var( $entry[ $code_zip ], FILTER_SANITIZE_STRING );}
+					$zip = htmlspecialchars( $entry[ $code_zip ] );}
 
 				$code_country = (string) self::find_field( $fields, 'Address (Country)' );
 				if ( $code_country ) {
-					$country = filter_var( $entry[ $code_country ], FILTER_SANITIZE_STRING );}
+					$country = htmlspecialchars( $entry[ $code_country ] );}
 
 				// Get agent ID from form field if it exists
 				// otherwise get from form settings
 				$code_agent_id = (string) self::find_field( $fields, 'Agent ID' );
 				if ( $code_agent_id ) {
-					$agent_owner = filter_var( $entry[ $code_agent_id ], FILTER_SANITIZE_STRING );
+					$agent_owner = htmlspecialchars( $entry[ $code_agent_id ] );
 				} else {
 					$agent_owner = ( isset( $form_options['agent_id'] ) ) ? $form_options['agent_id'] : '';
 				}
@@ -230,7 +230,7 @@ class IDX_Leads_GF {
 					);
 
 					// Add note if lead already exists
-					if ( 'Lead already exists.' === $decoded_response ) {
+					if ( is_string( $decoded_response ) && str_contains($decoded_response, 'Lead already exists') ) {
 						$args = array_replace(
 							$args,
 							array(
@@ -240,9 +240,12 @@ class IDX_Leads_GF {
 						);
 
 						// Get leads
-						if ( false === ( $all_leads = get_transient( 'idx_leads' ) ) ) {
+						if ( false === ( $all_leads = get_transient( 'idx_leads_cache' ) ) ) {
 							$response  = wp_remote_request( $api_url, $args );
-							$all_leads = json_decode( $response['body'], 1 );
+							if ( is_wp_error( $response ) ) {
+								return;
+							}
+							$all_leads = json_decode( $response['body'], 1 )['data'];
 							set_transient( 'idx_leads', $all_leads, 60 * 60 * 1 );
 						}
 
@@ -257,10 +260,8 @@ class IDX_Leads_GF {
 										'body'   => http_build_query( $note ),
 									)
 								);
-								$response = wp_remote_request( $api_url, $args );
-								if ( is_wp_error( $response ) ) {
-									return;
-								}
+								wp_remote_request( $api_url, $args );
+								break;
 							}
 						}
 					} else {
@@ -268,10 +269,7 @@ class IDX_Leads_GF {
 						$lead_id  = $decoded_response->newID;
 						$api_url  = IDX_API_URL . '/leads/note/' . $lead_id;
 						$args     = array_replace( $args, array( 'body' => http_build_query( $note ) ) );
-						$response = wp_remote_request( $api_url, $args );
-						if ( is_wp_error( $response ) ) {
-							return;
-						}
+						wp_remote_request( $api_url, $args );
 					}
 				}
 			}
@@ -335,7 +333,10 @@ class IDX_Leads_GF {
 		$output = '';
 		foreach ( $fields as $field ) {
 			$field_id    = $field['id'];
-			$field_entry = filter_var( $entry[ $field_id ], FILTER_SANITIZE_STRING );
+			if ( ! isset( $entry[ $field_id ] ) ) {
+				continue;
+			}
+			$field_entry = htmlspecialchars( $entry[ $field_id ] );
 
 			if ( $field_entry ) {
 				$output .= $field['name'] . ":\r\n" . $field_entry . "\r\n\r\n";
