@@ -137,7 +137,7 @@ class IDX_Leads_GF {
 
 		$form_options = get_option( $option_name );
 
-		$checked = $form_options['enable_lead'];
+		$checked = $form_options['enable_lead'] ?? false;
 
 		$apikey = get_option( 'idx_broker_apikey' );
 
