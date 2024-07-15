@@ -168,7 +168,7 @@ class Lead_Management {
 
 			$decoded_response = json_decode( $response['body'], 1 );
 
-			if ( str_contains($decoded_response, 'Lead already exists') ) {
+			if ( str_contains("$decoded_response", 'Lead already exists') ) {
 				echo 'Lead already exists.';
 			} elseif ( wp_remote_retrieve_response_code( $response ) == '200' ) {
 				// Delete lead cache so new lead will show in list views immediately.
