@@ -719,19 +719,19 @@ class Initiate_Plugin {
 		}
 		if ( ! isset( $schedules['weekly'] ) ) {
 			$schedules['weekly'] = [
-				'interval' => 60 * 60 * 7,
+				'interval' => 60 * 60 * 24 * 7,
 				'display'  => __( 'Once every week' ),
 			];
 		}
 		if ( ! isset( $schedules['two_weeks'] ) ) {
 			$schedules['two_weeks'] = [
-				'interval' => 60 * 60 * 7 * 2,
+				'interval' => 60 * 60 * 24 * 7 * 2,
 				'display'  => __( 'Once every two weeks' ),
 			];
 		}
 		if ( ! isset( $schedules['monthly'] ) ) {
 			$schedules['monthly'] = [
-				'interval' => 60 * 60 * 30,
+				'interval' => 60 * 60 * 24 * 30,
 				'display'  => __( 'Once every thirty days' ),
 			];
 		}

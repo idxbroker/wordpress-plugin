@@ -112,6 +112,9 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 ## Changelog ##
 ### 3.2.0 ###
+* Fix: Custom cron schedule calculations.
+
+### 3.2.0 ###
 * Update: IMPress Showcase and Carousel widgets display 'Coming Soon' prior to MLS approval, but only when required by MLS rules
 * Update: Omnibar Advanced Fields searching optimized to use exact search parameters instead of wild text
 * Update: Default to use IDX Broker API v1.8.0
