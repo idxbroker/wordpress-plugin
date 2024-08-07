@@ -7,6 +7,7 @@
  * @package WordPress
  *
  * Changelog:
+ * 1.3.4 - Fix Google map not displaying
  * 1.3.3 - Fix display issues in First Impression theme
  * 1.3.2 - Fix issue with Google map not displaying
  * 1.3.1 - Fix issue with contact form not displaying
@@ -333,51 +334,15 @@ function single_listing_post_content() {
 			echo do_shortcode( get_post_meta( $post->ID, '_listing_map', true ) );
 			echo '</div><!-- .listing-map -->';
 		} elseif ( ! empty( $options['wp_listings_gmaps_api_key'] ) && get_post_meta( $post->ID, '_listing_latitude', true ) && get_post_meta( $post->ID, '_listing_longitude', true ) && get_post_meta( $post->ID, '_listing_automap', true ) === 'y' ) {
-
-			$map_info_content = sprintf( '<p style="font-size: 14px; margin-bottom: 0;">%s<br />%s %s, %s</p>', get_post_meta( $post->ID, '_listing_address', true ), get_post_meta( $post->ID, '_listing_city', true ), get_post_meta( $post->ID, '_listing_state', true ), get_post_meta( $post->ID, '_listing_zip', true ) );
-
-			( $options['wp_listings_gmaps_api_key'] ) ? $map_key = $options['wp_listings_gmaps_api_key'] : $map_key = '';
-
-			wp_enqueue_script( 'idxb-google-maps', 'https://maps.googleapis.com/maps/api/js?key=' . $map_key, [], '1.0', false );
-			echo '
-			<script>
-				function initialize() {
-					var mapCanvas = document.getElementById(\'map-canvas\' );
-					var myLatLng = new google.maps.LatLng(' . esc_js( get_post_meta( $post->ID, '_listing_latitude', true ) ) . ', ' . esc_js( get_post_meta( $post->ID, '_listing_longitude', true ) ) . ')
-					var mapOptions = {
-						center: myLatLng,
-						zoom: 14,
-						mapTypeId: google.maps.MapTypeId.ROADMAP
-					}
-
-					var marker = new google.maps.Marker({
-						position: myLatLng,
-						icon: \'//s3.amazonaws.com/ae-plugins/wp-listings/images/active.png\'
-					});
-					
-					var infoContent = \' ' . esc_js( $map_info_content ) . ' \';
-
-					var infowindow = new google.maps.InfoWindow({
-						content: infoContent
-					});
-
-					var map = new google.maps.Map(mapCanvas, mapOptions);
-
-					marker.setMap(map);
-
-					infowindow.open(map, marker);
-				}
-				google.maps.event.addDomListener(window, \'load\', initialize);
-			</script>
-			';
-			echo '<div id="listing-map"><h3>Location Map</h3><div id="map-canvas" style="width: 100%; height: 350px;"></div></div><!-- .listing-map -->';
+			include_once IMPRESS_IDX_DIR . 'add-ons/listings/includes/listing-templates/listing-map-location.php';
+			load_listing_on_map( $post, $options );
 		}
 		?>
 
 		<div id="listing-disclaimer">
 		<?php
 		if ( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) {
-			echo '<p class="wp_listings_disclaimer">' . esc_html( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) . '</p>';
+			echo '<p class="wp_listings_disclaimer">' . get_post_meta( $post->ID, '_listing_disclaimer', true ) . '</p>';
 		} elseif ( ! empty( $options['wp_listings_global_disclaimer'] ) ) {
 			echo '<p class="wp_listings_disclaimer">' . esc_html( $options['wp_listings_global_disclaimer'] ) . '</p>';
 		}

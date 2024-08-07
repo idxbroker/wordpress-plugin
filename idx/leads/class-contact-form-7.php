@@ -84,12 +84,12 @@ class IDX_Leads_CF7 {
 		$option_name  = 'idx_lead_form_' . $form_id;
 		$form_options = get_option( $option_name );
 
-		$checked = false;
-		// $form_options could be false if this is a new form (since get_option returns false when it can't find anything)
-		if ($form_options != false && array_key_exists('enable_lead', $form_options)) {
-			$checked = $form_options['enable_lead'];
+		if (!$form_options) {
+			$form_options = [];
+			$form_options['enable_lead'] = false;
 		}
 
+		$checked = $form_options['enable_lead'];
 		if ( ! isset( $form_options['category'] ) ) {
 			$form_options['category'] = '';
 		}
@@ -257,7 +257,7 @@ class IDX_Leads_CF7 {
 
 		$form_options = get_option( $option_name );
 
-		$checked = $form_options['enable_lead'];
+		$checked = $form_options['enable_lead'] ?? false;
 
 		$apikey = get_option( 'idx_broker_apikey' );
 
@@ -314,7 +314,7 @@ class IDX_Leads_CF7 {
 					);
 
 					// Add note if lead already exists.
-					if ( 'Lead already exists.' === $decoded_response ) {
+					if ( is_string( $decoded_response ) && str_contains($decoded_response, 'Lead already exists') ) {
 						$args = array_replace(
 							$args,
 							array(
@@ -324,10 +324,13 @@ class IDX_Leads_CF7 {
 						);
 
 						// Get leads.
-						$all_leads = get_transient( 'idx_leads' );
+						$all_leads = get_transient( 'idx_leads_cache' );
 						if ( false === $all_leads ) {
 							$response  = wp_remote_request( $api_url, $args );
-							$all_leads = json_decode( $response['body'], 1 );
+							if ( is_wp_error( $response ) ) {
+								return;
+							}
+							$all_leads = json_decode( $response['body'], 1 )['data'];
 							set_transient( 'idx_leads', $all_leads, 60 * 60 * 1 );
 						}
 
@@ -342,10 +345,8 @@ class IDX_Leads_CF7 {
 										'body'   => http_build_query( $note ),
 									)
 								);
-								$response = wp_remote_request( $api_url, $args );
-								if ( is_wp_error( $response ) ) {
-									return;
-								}
+								wp_remote_request( $api_url, $args );
+								break;
 							}
 						}
 					} else {
@@ -353,10 +354,7 @@ class IDX_Leads_CF7 {
 						$lead_id  = $decoded_response->newID;
 						$api_url  = IDX_API_URL . '/leads/note/' . $lead_id;
 						$args     = array_replace( $args, array( 'body' => http_build_query( $note ) ) );
-						$response = wp_remote_request( $api_url, $args );
-						if ( is_wp_error( $response ) ) {
-							return;
-						}
+						wp_remote_request( $api_url, $args );
 					}
 				}
 			}

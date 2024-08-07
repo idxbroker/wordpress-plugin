@@ -199,7 +199,7 @@ jQuery(document).ready(function($) {
 			},
 			success: function( result ) {
 				if( $.isNumeric( result ) ) {
-					window.location.href = leadurl + result;
+					window.location.reload(true);
 				} else if (result === 'Lead already exists.') {
 					$('#add-lead .error-existing').show();
 					$('button.add-lead').show();

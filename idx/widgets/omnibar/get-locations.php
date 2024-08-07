@@ -251,7 +251,6 @@ class Get_Locations {
 
 		dbDelta( $sql );
 
-		// TODO: Remove this option on uninstall
 		add_option( 'idx_broker_autocomplete_values_version', '1.0' );
 
 		$this->populate_table();

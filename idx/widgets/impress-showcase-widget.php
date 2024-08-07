@@ -72,21 +72,26 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		}
 
 		$output = '';
-		if ( ( $instance['properties'] ) == 'savedlinks' ) {
-			$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );
-			$output    .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
-		} else {
-			$properties = $this->idx_api->client_properties( $instance['properties'] );
-			$output    .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
+		$properties = [];
+		$comingSoon = coming_soon_listing_restriction();
+		if ( ! $comingSoon ) {
+			if ( ( $instance['properties'] ) === 'savedlinks' ) {
+				$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );
+				$output    .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
+			} else {
+				$properties = $this->idx_api->client_properties( $instance['properties'] );
+				$output    .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
+			}
+			// Force type as array.
+			$properties = json_encode( $properties );
+			$properties = json_decode( $properties, true );
 		}
-
-		// Force type as array.
-		$properties = json_encode( $properties );
-		$properties = json_decode( $properties, true );
 
 		// If no properties or an error, load message.
 		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
-			if ( isset( $properties['errors']['idx_api_error'] ) ) {
+			if ( $comingSoon ) {
+				return $output .= '<p>Coming Soon</p>';
+			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
@@ -534,7 +539,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php echo 'Title:'; ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
@@ -589,7 +594,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>"><?php echo 'Max number of listings to show:'; ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php esc_attr( $instance['max'] ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php echo esc_attr( $instance['max'] ); ?>" />
 		</p>
 
 		<p>

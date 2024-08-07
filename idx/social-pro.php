@@ -181,7 +181,7 @@ class Social_Pro {
 	}
 
 	/**
-	 * Updates exlucded ids array.
+	 * Updates excluded ids array.
 	 *
 	 * @param int $post_id Post ID.
 	 * @return WP_Error|array|void
@@ -208,7 +208,7 @@ class Social_Pro {
 		];
 
 		$data = $this->idx_api->idx_api(
-			'socialProSyndicate',
+			'socialPostSyndicate',
 			$this->idx_api->idx_api_get_apiversion(),
 			'clients',
 			$params,

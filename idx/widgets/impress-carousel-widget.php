@@ -77,21 +77,26 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		}
 
 		$output = '';
-		if ( ( $instance['properties'] ) == 'savedlinks' ) {
-			$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );
-			$output    .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
-		} else {
-			$properties = $this->idx_api->client_properties( $instance['properties'] );
-			$output    .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
+		$properties = [];
+		$comingSoon = coming_soon_listing_restriction();
+		if ( ! $comingSoon ) {
+			if ( ( $instance['properties'] ) === 'savedlinks' ) {
+				$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );
+				$output    .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
+			} else {
+				$properties = $this->idx_api->client_properties( $instance['properties'] );
+				$output    .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
+			}
+			// Force type of array.
+			$properties = json_encode( $properties );
+			$properties = json_decode( $properties, true );
 		}
-
-		// Force type of array.
-		$properties = json_encode( $properties );
-		$properties = json_decode( $properties, true );
 
 		// If no properties or an error, load message.
 		if ( empty( $properties ) || ( isset( $properties[0] ) && $properties[0] === 'No results returned' ) || isset( $properties['errors']['idx_api_error'] ) ) {
-			if ( isset( $properties['errors']['idx_api_error'] ) ) {
+			if ( $comingSoon ) {
+				return $output .= '<p>Coming Soon</p>';
+			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
 				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
@@ -127,7 +132,9 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$total = count( $properties );
 		$count = 0;
 
-		$output .= sprintf( '<div class="impress-carousel impress-listing-carousel-%s owl-carousel owl-theme">', $instance['display'] );
+		// The id set on the container and used by the output script to insert the listings into the page for this particular carousel
+		$carousel_id = uniqid('impress-carousel-');
+		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s owl-carousel owl-theme">', $carousel_id, $instance['display'] );
 
 		// Used to hold agent data when matching for co-listings.
 		$agent_data;
@@ -230,7 +237,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$output = '
 			<script>
 				window.addEventListener("DOMContentLoaded", function(event) {
-					jQuery(".impress-listing-carousel-' . $display . '").owlCarousel({
+					jQuery("#' . $carousel_id . '").owlCarousel({
 						items: ' . $display . ',
 						' . $autoplay . '
 						nav: true,
@@ -464,7 +471,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p>
@@ -500,12 +507,12 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'display' ) ); ?>"><?php esc_html_e( 'Listings to show without scrolling:', 'idxbroker' ); ?></label>
-			<input class="widefat" type="number" id="<?php echo esc_attr( $this->get_field_id( 'display' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'display' ) ); ?>" value="<?php esc_attr( $instance['display'] ); ?>" size="3">
+			<input class="widefat" type="number" id="<?php echo esc_attr( $this->get_field_id( 'display' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'display' ) ); ?>" value="<?php echo esc_attr( $instance['display'] ); ?>" size="3">
 		</p>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>"><?php esc_html_e( 'Max number of listings to show:' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php esc_attr( $instance['max'] ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'max' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'max' ) ); ?>" type="number" value="<?php echo esc_attr( $instance['max'] ); ?>" />
 		</p>
 
 		<p>

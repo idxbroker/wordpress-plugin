@@ -204,7 +204,7 @@ class Import_Agents extends \IDX\Admin\Rest_Controller {
 		$idx_api   = new \IDX\Idx_Api();
 		$idxb_data = $idx_api->idx_api(
 			'agents',
-			'1.7.0',
+			IDX_API_DEFAULT_VERSION,
 			'clients',
 			[],
 			7200,

@@ -3,7 +3,7 @@
 Plugin Name: IMPress for IDX Broker
 Plugin URI: https://idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 3.1.0
+Version: 3.2.0
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: https://idxbroker.com
@@ -18,7 +18,7 @@ new Idx_Broker_Plugin();
 class Idx_Broker_Plugin {
 
 	// Placed here for convenient updating.
-	const IDX_WP_PLUGIN_VERSION = '3.1.0';
+	const IDX_WP_PLUGIN_VERSION = '3.2.0';
 	const VUE_DEV_MODE          = false;
 
 	/**
@@ -30,7 +30,7 @@ class Idx_Broker_Plugin {
 	public function __construct() {
 		define( 'IMPRESS_IDX_URL', plugin_dir_url( __FILE__ ) );
 		define( 'IMPRESS_IDX_DIR', plugin_dir_path( __FILE__ ) );
-		define( 'IDX_API_DEFAULT_VERSION', '1.7.0' );
+		define( 'IDX_API_DEFAULT_VERSION', '1.8.0' );
 		define( 'IDX_API_URL', 'https://api.idxbroker.com' );
 
 		if ( $this->php_version_check() ) {
@@ -83,7 +83,7 @@ class Idx_Broker_Plugin {
 	 * Check for versions less than PHP7.0 and display error.
 	 */
 	public function php_version_check() {
-		if ( version_compare( PHP_VERSION, '7.0', '<' ) ) {
+		if ( version_compare( PHP_VERSION, '7.1.8', '<' ) ) {
 			add_action( 'admin_init', array( $this, 'idx_deactivate_plugin' ) );
 			add_action( 'admin_notices', array( $this, 'incompatible_message' ) );
 			return false;

@@ -67,8 +67,6 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 				],
 			]
 		);
-
-		add_action( 'idx_get_new_location_data', array( $this, 'get_locations' ) );
 	}
 
 	/**
@@ -212,16 +210,6 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 		}
 		$this->update_location_data( $address_changed );
 		return new \WP_REST_Response( null, 204 );
-	}
-
-	/**
-	 * Updates Omnibar location data. Called via cron.
-	 *
-	 * @param string $update Tells omnibar to update address locations or not. Accepts 'all' or 'custom'.
-	 * @return void
-	 */
-	public function get_locations( $update ) {
-		new \IDX\Widgets\Omnibar\Get_Locations( $update );
 	}
 
 	/**
@@ -381,7 +369,7 @@ class Omnibar_Settings extends \IDX\Admin\Rest_Controller {
 	 */
 	private function update_location_data( $addresses_changed ) {
 		$update = $addresses_changed ? 'all' : 'custom';
-		wp_schedule_single_event( time(), 'idx_get_new_location_data', [ $update ] );
+		wp_schedule_single_event( time(), 'idx_update_location_data', [ $update ] );
 	}
 
 	/**
