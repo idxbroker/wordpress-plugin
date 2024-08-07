@@ -112,6 +112,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 ## Changelog ##
 ### 3.2.0 ###
+* Update: Added a button to log out of Google My Business.
 * Fix: Custom cron schedule calculations.
 
 ### 3.2.0 ###
