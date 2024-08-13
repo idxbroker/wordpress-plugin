@@ -321,8 +321,18 @@ class Idx_Api {
 		if ( empty( $this->api_key ) ) {
 			return array();
 		}
-		$response = $this->idx_api( 'widgetsrc' );
-		return is_wp_error( $response ) ? $response : $response['data'];
+
+		$legacyWidgets = $this->idx_api( 'widgetsrc?rf[]=name&rf[]=uid&rf[]=url' );
+		if (is_wp_error( $legacyWidgets )) {
+			return $legacyWidgets;
+		}
+
+		$newWidgets = $this->idx_api( 'widgets?rf[]=name&rf[]=uid&rf[]=url' );
+		if (is_wp_error( $newWidgets )) {
+			return $newWidgets;
+		}
+
+		return array_merge( $legacyWidgets['data'], $newWidgets['data'] );
 	}
 
 	/**
