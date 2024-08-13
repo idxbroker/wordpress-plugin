@@ -134,7 +134,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 == Changelog ==
 
 = 3.2.1 =
-
+* Fix: "New" Widgets not displaying when using API v1.8.0
 
 = 3.2.0 =
 * Update: IMPress Showcase and Carousel widgets display 'Coming Soon' prior to MLS approval, but only when required by MLS rules
