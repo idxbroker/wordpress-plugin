@@ -43,6 +43,34 @@ const SettingsRow = styled.div`
   }
 `
 
+const LogoutButtonContainer = styled.div`
+  display:flex;
+  justify-content: end;
+  width: 100%;
+  margin-top: 43px;
+`
+const LogoutButton = styled.button`
+  background-color: #FF474D;
+  border: 1px solid #E23F44;
+  border-radius: 6px;
+  color: white;
+  font-size: 17px;
+  font-weight: 100;
+  height: 53px;
+  margin: 1px 28px 1px 0px;
+  width: 164px;
+  &:focus {
+    outline: none;
+  }
+  &:active {
+    color: #ff474d;
+    background-color: white;
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+`
+
 function GoogleMyBusinessSettings (props) {
   const getInitialSliderValue = (currentSetting) => {
     switch (currentSetting) {
@@ -481,6 +509,19 @@ function GoogleMyBusinessSettings (props) {
     window.scroll({ top: 70, left: 0, behavior: 'smooth' })
   }
 
+  const logoutGMB = (event) => {
+    const requestFormData = new FormData()
+    requestFormData.append('action', 'impress_gmb_logout')
+    requestFormData.append('nonce', impressGmbAdmin['nonce-gmb-logout'])
+    axios.post(ajaxurl, requestFormData)
+    .then((response) => {
+      setSavingToServer(true)
+      location.reload()
+    }, (error) => {
+      console.log(error)
+    })
+  }
+
   return (
     <div>
       <SettingsPageWrapper title='IMPress Listings - Google My Business Settings'>
@@ -527,6 +568,9 @@ function GoogleMyBusinessSettings (props) {
         </SettingsContainer>
       </SettingsPageWrapper>
       <GrowlerNotification text={growlerText} showGrowler={savingToServer} />
+      <LogoutButtonContainer>
+        <LogoutButton onClick={logoutGMB} type='submit'>Disconnect From Google My Business</LogoutButton>
+      </LogoutButtonContainer>
     </div>
   )
 
