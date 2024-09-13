@@ -124,6 +124,7 @@ function wp_listings_init() {
 					'nonce-gmb-delete-custom-post'     => wp_create_nonce( 'impress_gmb_delete_custom_post_nonce' ),
 					'nonce-gmb-get-posts-data'         => wp_create_nonce( 'impress_gmb_get_posts_data_nonce' ),
 					'nonce-gmb-update-scheduled-posts' => wp_create_nonce( 'impress_gmb_update_scheduled_posts_nonce' ),
+					'nonce-gmb-logout'                 => wp_create_nonce( 'impress_gmb_logout_nonce' ),
 					// Initial values for frontend.
 					'next-scheduled-post-date'         => wp_next_scheduled( 'wp_listings_gmb_auto_post' ),
 					'auto-post-frequency'              => $gmb_options['posting_frequency'],
@@ -154,7 +155,6 @@ function wp_listings_init() {
 				'nonce'                              => wp_create_nonce( $nonce_action ),
 				'wp_version'                         => $wp_version,
 				'dismiss'                            => __( 'Dismiss this notice', 'wp-listings' ),
-				'nonce-gmb-logout'                   => wp_create_nonce( 'impress_gmb_logout_nonce' ),
 				'nonce-gmb-update-location-settings' => wp_create_nonce( 'impress_gmb_update_location_settings_nonce' ),
 				'nonce-gmb-reset-post-time'          => wp_create_nonce( 'wpl_reset_next_post_time_request_nonce' ),
 				'nonce-gmb-clear-last-post-status'   => wp_create_nonce( 'wpl_clear_last_post_status_nonce' ),
