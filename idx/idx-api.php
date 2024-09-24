@@ -332,7 +332,7 @@ class Idx_Api {
 			return $newWidgets;
 		}
 
-		return array_merge( $legacyWidgets['data'], $newWidgets['data'] );
+		return array_merge( $legacyWidgets['data'], $newWidgets['data'] ?? []);
 	}
 
 	/**
