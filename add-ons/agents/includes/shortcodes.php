@@ -22,6 +22,7 @@ function impa_profile_shortcode($atts, $content = null) {
 
 		);
 	} else {
+		$id = sanitize_text_field($id);
 		$query_args = array(
 			'post_type'       => 'employee',
 			'post__in'        => explode( ',', $id),

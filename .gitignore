@@ -12,3 +12,4 @@ composer.lock
 /vendor/wpreadme2markdown/*
 /vendor/symfony/console/*
 /vendor/symfony/translation/Tests/*
+.vscode/

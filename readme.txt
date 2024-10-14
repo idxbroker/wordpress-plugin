@@ -133,6 +133,9 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 == Changelog ==
 
+= 3.2.3 = 
+* Fix: Sanitized shortcode input
+
 = 3.2.2 =
 * Hotfix: Page errors when account has 0 non-legacy widgets when using API v1.8.0
 

@@ -195,6 +195,9 @@ EOD;
 			)
 		);
 
+		$min_price = (int) sanitize_text_field( $min_price );
+		$styles = (int) sanitize_text_field( $styles );
+
 		$idx_url    = get_option( 'idx_results_url' );
 		$plugin_dir = plugins_url();
 
@@ -222,6 +225,9 @@ EOD;
 				$atts
 			)
 		);
+
+		$min_price = (int) sanitize_text_field( $min_price );
+		$styles = (int) sanitize_text_field( $styles );
 
 		$idx_url    = get_option( 'idx_results_url' );
 		$plugin_dir = plugins_url();
