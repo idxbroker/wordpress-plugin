@@ -39,6 +39,14 @@ class Impress_Lead_Signup_Shortcode {
 			)
 		);
 
+		if ($agent_id) {
+			$agent_id = sanitize_text_field($agent_id);
+		}
+
+		if ($button_text) {
+			$button_text = sanitize_text_field($button_text);
+		}
+
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'impress-lead-signup', IMPRESS_IDX_URL . 'assets/css/widgets/impress-lead-signup.min.css', [], '1.0.0' );
 		}

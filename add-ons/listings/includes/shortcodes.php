@@ -15,6 +15,22 @@ function wp_listings_shortcode($atts, $content = null) {
 		'columns'  => ''
 	), $atts ) );
 
+	if ($limit) {
+		$limit = sanitize_text_field($limit);
+	}
+
+	if ($taxonomy) {
+		$taxonomy = sanitize_text_field($taxonomy);
+	}
+
+	if ($term) {
+		$term = sanitize_text_field($term);
+	}
+
+	if ($columns) {
+		$columns = sanitize_text_field($columns);
+	}
+
 	/**
 	 * if limit is empty set to all
 	 */
@@ -38,6 +54,7 @@ function wp_listings_shortcode($atts, $content = null) {
 	);
 
 	if($id) {
+		$id = $sanitize_text_field($id);
 		$query_args = array(
 			'post_type'       => 'listing',
 			'post__in'        => explode(',', $id)
@@ -129,7 +146,8 @@ function wp_listings_meta_shortcode($atts) {
 	extract(shortcode_atts(array(
 		'key' => ''
 	), $atts ) );
+	$key = sanitize_text_field($key);
 	$postid = get_the_id();
 
-	return '<span class=' . $key . '>' . get_post_meta($postid, '_listing_' . $key, true) . '</span>';
+	return '<span class=' . esc_attr($key) . '>' . get_post_meta($postid, '_listing_' . $key, true) . '</span>';
 }
