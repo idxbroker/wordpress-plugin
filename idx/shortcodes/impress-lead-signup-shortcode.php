@@ -40,11 +40,11 @@ class Impress_Lead_Signup_Shortcode {
 		);
 
 		if ($agent_id) {
-			$agent_id = sanitize_text_field($agent_id);
+			$agent_id = esc_attr($agent_id);
 		}
 
 		if ($button_text) {
-			$button_text = sanitize_text_field($button_text);
+			$button_text = esc_attr($button_text);
 		}
 
 		if ( ! empty( $styles ) ) {
