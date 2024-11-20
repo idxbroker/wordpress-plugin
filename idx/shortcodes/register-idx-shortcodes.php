@@ -52,7 +52,7 @@ class Register_Idx_Shortcodes {
 		);
 
 		if ( ! is_null( $id ) ) {
-			$id = sanitize_text_field($id);
+			$id = esc_attr($id);
 			$url    = $this->get_widget_url( $id );
 			$widget = '';
 			$widget_id = explode( '-', $id );
@@ -82,11 +82,11 @@ class Register_Idx_Shortcodes {
 		);
 
 		if ( ! is_null( $id ) ) {
-			$id = sanitize_text_field($id);
+			$id = esc_attr($id);
 			$link = $this->idx_get_link_by_uid( $id, 0 );
 			if ( is_object( $link ) ) {
 				if ( ! is_null( $title ) ) {
-					$title = sanitize_text_field($title);
+					$title = esc_attr($title);
 					$link->name = $title;
 				}
 				return '<a href="' . $link->url . '">' . $link->name . '</a>';
@@ -114,7 +114,7 @@ class Register_Idx_Shortcodes {
 		);
 
 		if ( ! is_null( $title ) ) {
-			$title = sanitize_text_field($title);
+			$title = esc_attr($title);
 			$page      = get_page_by_title( $title );
 			return '<a href="' . get_permalink( $page->ID ) . '">' . $page->post_title . '</a>';
 		} else {
@@ -141,11 +141,11 @@ class Register_Idx_Shortcodes {
 		);
 
 		if ( ! is_null( $id ) ) {
-			$id = sanitize_text_field($id);
+			$id = esc_attr($id);
 			$link = $this->idx_get_link_by_uid( $id, 1 );
 			if ( is_object( $link ) ) {
 				if ( ! is_null( $title ) ) {
-					$title = sanitize_text_field($title);
+					$title = esc_attr($title);
 					$link->name = $title;
 				}
 				return '<a href="' . $link->url . '">' . $link->name . '</a>';

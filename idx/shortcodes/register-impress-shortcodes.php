@@ -52,17 +52,17 @@ class Register_Impress_Shortcodes {
 			)
 		);
 
-		$password_field = (bool) sanitize_text_field( $password_field );
+		$password_field = (bool) esc_attr( $password_field );
 
 		if ( ! empty( $styles ) ) {
-			$styles = sanitize_text_field($styles);
+			$styles = esc_attr($styles);
 			wp_enqueue_style( 'impress-lead-login' );
 		}
 
 		if ( ! isset( $new_window ) ) {
 			$new_window = 0;
 		} else {
-			$new_window = (int) sanitize_text_field($new_window);
+			$new_window = (int) esc_attr($new_window);
 		}
 
 		$target = $this->target( $new_window );
@@ -166,7 +166,7 @@ class Register_Impress_Shortcodes {
 		$column_class = '';
 
 		if ( 1 == $use_rows ) {
-			$num_per_row = (int) sanitize_text_field($num_per_row);
+			$num_per_row = (int) esc_attr($num_per_row);
 			// Max of four columns
 			$number_columns = ( $num_per_row > 4 ) ? 4 : $num_per_row;
 
@@ -193,7 +193,7 @@ class Register_Impress_Shortcodes {
 		if ( ! isset( $new_window ) ) {
 			$new_window = 0;
 		} else {
-			$new_window = sanitize_text_field($new_window);
+			$new_window = esc_attr($new_window);
 		}
 
 		$target = $this->target( $new_window );
@@ -214,7 +214,7 @@ class Register_Impress_Shortcodes {
 		foreach ( $properties as $prop ) {
 
 			if ( ! empty( $agent_id ) ) {
-				$agent_id = sanitize_text_field($agent_id);
+				$agent_id = esc_attr($agent_id);
 				// Check if listing agent ID matches agent's IDX ID.
 				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
 					// If colistings is enabled, check for match.
@@ -601,7 +601,7 @@ class Register_Impress_Shortcodes {
 		$count = 0;
 
 		// The id set on the container and used by the output script to insert the listings into the page for this particular carousel
-		$display = (int) sanitize_text_field($display);
+		$display = (int) esc_attr($display);
 		$carousel_id = uniqid('impress-carousel-');
 		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $carousel_id, $display);
 
@@ -610,12 +610,12 @@ class Register_Impress_Shortcodes {
 
 		foreach ( $properties as $prop ) {
 			if ( ! empty( $agent_id ) ) {
-				$agent_id = (int) sanitize_text_field($agent_id);
+				$agent_id = (int) esc_attr($agent_id);
 				// Check if listing agent ID matches agent's IDX ID.
 				if ( empty( $prop['userAgentID'] ) || $agent_id !== (int) $prop['userAgentID'] ) {
 					// If colistings is enabled, check for match.
 					if ( $colistings ) {
-						$colistings = sanitize_text_field($colistings);
+						$colistings = esc_attr($colistings);
 						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
 							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
 							if ( empty( $agent_data ) ) {
@@ -777,12 +777,12 @@ class Register_Impress_Shortcodes {
 		if ( ! isset( $new_window ) ) {
 			$new_window = 0;
 		} else {
-			$new_window = (int) sanitize_text_field( $new_window );
+			$new_window = (int) esc_attr( $new_window );
 		}
 
 		if ( ! isset( $mls ) ) {
 			$mls = 'a000';
-			$mls = sanitize_text_field( $mls );
+			$mls = esc_attr( $mls );
 		}
 
 		$target = $this->target( $new_window );

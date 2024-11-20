@@ -100,7 +100,7 @@ class Create_Impress_Widgets {
 		);
 
 		if ( $phone ) {
-			$phone = sanitize_text_field( $phone );
+			$phone = esc_attr( $phone );
 			$widget .= sprintf(
 				'
             <label id="bb-IDX-widgetphone-label" class="ie-only" for="IDX-widgetphone">Phone:</label>
@@ -140,8 +140,8 @@ class Create_Impress_Widgets {
 			)
 		);
 
-		$saved_link_id = sanitize_text_field( $saved_link_id );
-		$property_type = sanitize_text_field( $property_type );
+		$saved_link_id = esc_attr( $saved_link_id );
+		$property_type = esc_attr( $property_type );
 
 		if ( ( $property_type ) == 'savedlink' ) {
 			$properties = $this->idx_api->saved_link_properties( $saved_link_id );
@@ -328,7 +328,7 @@ class Create_Impress_Widgets {
 			)
 		);
 
-		$display = (int) sanitize_text_field( $display );
+		$display = (int) esc_attr( $display );
 
 		wp_enqueue_style( 'owl-css' );
 		wp_enqueue_script( 'owl' );
@@ -471,10 +471,10 @@ class Create_Impress_Widgets {
 			)
 		);
 
-		$city_list = sanitize_text_field( $city_list );
-		$mls = sanitize_text_field( $mls );
-		$use_columns = (int) sanitize_text_field( $use_columns );
-		$number_columns = (int) sanitize_text_field( $number_columns );
+		$city_list = esc_attr( $city_list );
+		$mls = esc_attr( $mls );
+		$use_columns = (int) esc_attr( $use_columns );
+		$number_columns = (int) esc_attr( $number_columns );
 
 		$city_links = \IDX\Widgets\Impress_City_Links_Widget::city_list_links( $city_list, $mls, '_self', $this->idx_api, $use_columns, $number_columns );
 

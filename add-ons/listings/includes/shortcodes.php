@@ -16,19 +16,19 @@ function wp_listings_shortcode($atts, $content = null) {
 	), $atts ) );
 
 	if ($limit) {
-		$limit = sanitize_text_field($limit);
+		$limit = esc_attr($limit);
 	}
 
 	if ($taxonomy) {
-		$taxonomy = sanitize_text_field($taxonomy);
+		$taxonomy = esc_attr($taxonomy);
 	}
 
 	if ($term) {
-		$term = sanitize_text_field($term);
+		$term = esc_attr($term);
 	}
 
 	if ($columns) {
-		$columns = sanitize_text_field($columns);
+		$columns = esc_attr($columns);
 	}
 
 	/**
@@ -54,7 +54,7 @@ function wp_listings_shortcode($atts, $content = null) {
 	);
 
 	if($id) {
-		$id = $sanitize_text_field($id);
+		$id = esc_attr($id);
 		$query_args = array(
 			'post_type'       => 'listing',
 			'post__in'        => explode(',', $id)
