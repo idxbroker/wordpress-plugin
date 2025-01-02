@@ -134,6 +134,8 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 == Changelog ==
 = 3.2.4 =
 * Fix: Changed Sanitization method
+* Fix: Paginate widgets API method
+
 
 = 3.2.3 = 
 * Fix: Sanitized shortcode input
