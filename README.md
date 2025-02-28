@@ -114,6 +114,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 ### 3.2.4 ###
 * Fix: Changed Sanitization method
 * Fix: Paginate widgets API method
+* Update: Handle for 3 character postal codes
 
 ### 3.2.3 ###
 * Fix: Sanitized shortcode input
