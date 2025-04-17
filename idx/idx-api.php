@@ -359,6 +359,9 @@ class Idx_Api {
 			if (is_wp_error( $newWidgets )) {
 				return $newWidgets;
 			}
+			if (!$newWidgets['data']) {
+				break;
+			}
 			$newWidgetCollection = array_merge($newWidgetCollection, $newWidgets['data']);
 			$addedNewWidgets = true;
 			// Assumes the newWidgets['next'] value looks like this: "https://api.idxbroker.com/clients/widgets?offset=500"

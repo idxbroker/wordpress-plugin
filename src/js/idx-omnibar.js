@@ -516,6 +516,7 @@ var idxOmnibar = function(jsonData){
 					case 'zipcodes':
 						foundResult = true;
 						var zipString = `${list[i].id}`
+						// This is for cases where the client has a custom postal code list for Canadian feeds where the first 3 characters are used for searching areas.
 						var zipSearch = zipString.length == 3 ? '&ccz=zipcode&k_zipcode[]=' :  '&ccz=zipcode&zipcode[]='
 						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + zipSearch + zipString + '&srt=' + sortOrder);
 						break;

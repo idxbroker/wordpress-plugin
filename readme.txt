@@ -138,7 +138,6 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 * Update: Handle for 3 character postal codes
 
 
-
 = 3.2.3 = 
 * Fix: Sanitized shortcode input
 
