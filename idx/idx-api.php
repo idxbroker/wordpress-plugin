@@ -318,21 +318,70 @@ class Idx_Api {
 	 * clean and prepare them, and return them in a new array for use.
 	 */
 	public function idx_api_get_widgetsrc() {
+		// If a client has more than 3k widgets then this will error out because of memory limits.
+		$addedLegacyWidgets = false;
+		$addedNewWidgets = false;
+		$legacyWidgetCollection = [];
+		$newWidgetCollection = [];
+
 		if ( empty( $this->api_key ) ) {
 			return array();
 		}
 
 		$legacyWidgets = $this->idx_api( 'widgetsrc?rf[]=name&rf[]=uid&rf[]=url' );
-		if (is_wp_error( $legacyWidgets )) {
-			return $legacyWidgets;
+		// Need to enter the loop at least once with addedLegacyWidgets = false
+		while(!$addedLegacyWidgets || $legacyWidgets['next'] !== null) {
+			if (is_wp_error( $legacyWidgets )) {
+				return $legacyWidgets;
+			}
+			$legacyWidgetCollection = array_merge($legacyWidgetCollection, $legacyWidgets['data']);
+			$addedLegacyWidgets = true;
+			// Assumes the legacyWidgets['next'] value looks like this: "https://api.idxbroker.com/clients/widgets-legacy?offset=500"
+			// This gets offset query from the url
+			$urlQuery = (string) parse_url($legacyWidgets['next'], PHP_URL_QUERY);
+			// There wasn't an offset query in the url so exit the loop.
+			if ($urlQuery == '') {
+				continue;
+			}
+			// Get the offset number
+			$newOffset = explode('=',$urlQuery)[1];
+			$newSearchMethod = "widgetsrc?rf[]=name&rf[]=uid&rf[]=url&limit=500&offset={$newOffset}";
+			$legacyWidgets = $this->idx_api($newSearchMethod);
+			// Get the last batch of the widgets on the last run
+			if (count($legacyWidgetCollection) < $legacyWidgets['total'] && $legacyWidgets['next'] == null) {
+				$legacyWidgetCollection = array_merge($legacyWidgetCollection, $legacyWidgets['data']);
+			}
 		}
 
 		$newWidgets = $this->idx_api( 'widgets?rf[]=name&rf[]=uid&rf[]=url' );
-		if (is_wp_error( $newWidgets )) {
-			return $newWidgets;
+		// Need to enter the loop at least once with addedNewWidgets = false
+		while(!$addedNewWidgets || $newWidgets['next'] !== null) {
+			if (is_wp_error( $newWidgets )) {
+				return $newWidgets;
+			}
+			if (!$newWidgets['data']) {
+				break;
+			}
+			$newWidgetCollection = array_merge($newWidgetCollection, $newWidgets['data']);
+			$addedNewWidgets = true;
+			// Assumes the newWidgets['next'] value looks like this: "https://api.idxbroker.com/clients/widgets?offset=500"
+			// This gets offset query from the url
+			$urlQuery = (string) parse_url($newWidgets['next'], PHP_URL_QUERY);
+			// There wasn't an offset query in the url so exit the loop.
+			if ($urlQuery == '') {
+				continue;
+			}
+			// Get the offset number
+			$newOffset = explode('=',$urlQuery)[1];
+			$newSearchMethod = "widgetsrc?rf[]=name&rf[]=uid&rf[]=url&limit=500&offset={$newOffset}";
+			$newWidgets = $this->idx_api($newSearchMethod);
+			// Get the last batch of the widgets on the last run
+			if (count($newWidgetCollection) < $newWidgets['total'] && $newWidgets['next'] == null) {
+				$newWidgetCollection = array_merge($newWidgetCollection, $newWidgets['data']);
+			}
 		}
 
-		return array_merge( $legacyWidgets['data'], $newWidgets['data'] ?? []);
+		return array_merge( $legacyWidgetCollection, $newWidgetCollection ?? []);
 	}
 
 	/**

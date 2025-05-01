@@ -515,7 +515,10 @@ var idxOmnibar = function(jsonData){
 						break;
 					case 'zipcodes':
 						foundResult = true;
-						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + '&ccz=zipcode&zipcode[]=' + list[i].id + '&srt=' + sortOrder);
+						var zipString = `${list[i].id}`
+						// This is for cases where the client has a custom postal code list for Canadian feeds where the first 3 characters are used for searching areas.
+						var zipSearch = zipString.length == 3 ? '&ccz=zipcode&k_zipcode[]=' :  '&ccz=zipcode&zipcode[]='
+						goToResultsPage(input, idxUrl, '?pt=' + basicPtID + zipSearch + zipString + '&srt=' + sortOrder);
 						break;
 				}
 			} else if (foundResult === false && i == list.length - 1) {
