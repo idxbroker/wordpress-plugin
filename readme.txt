@@ -132,6 +132,9 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 18. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+= 3.2.5 =
+* Update: Handle for sold price being displayed for sold listings instead of the listing price.
+
 = 3.2.4 =
 * Fix: Changed Sanitization method
 * Fix: Paginate widgets API method
