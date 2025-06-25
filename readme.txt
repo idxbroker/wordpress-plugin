@@ -134,6 +134,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 == Changelog ==
 = 3.2.5 =
 * Update: Handle for sold price being displayed for sold listings instead of the listing price.
+* Fix : Handle for 0 legacy or 0 new widgets.
 
 = 3.2.4 =
 * Fix: Changed Sanitization method

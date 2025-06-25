@@ -334,7 +334,7 @@ class Idx_Api {
 			if (is_wp_error( $legacyWidgets )) {
 				return $legacyWidgets;
 			}
-			$legacyWidgetCollection = array_merge($legacyWidgetCollection, $legacyWidgets['data']);
+			$legacyWidgetCollection = array_merge($legacyWidgetCollection, $legacyWidgets['data'] ?? []);
 			$addedLegacyWidgets = true;
 			// Assumes the legacyWidgets['next'] value looks like this: "https://api.idxbroker.com/clients/widgets-legacy?offset=500"
 			// This gets offset query from the url
