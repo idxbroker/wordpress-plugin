@@ -637,7 +637,7 @@ class Idx_Pages {
 	public function display_wrapper_dropdown() {
 		// only show dropdown if Platinum account or not saved link
 		// (Lite does not support saved link wrappers).
-		if ( $this->idx_api->platinum_account_type() ||
+		if ( $this->idx_api->engage_account_type() ||
 			! $this->is_saved_link( get_the_ID() ) ) {
 			return true;
 		}

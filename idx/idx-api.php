@@ -924,14 +924,14 @@ class Idx_Api {
 	}
 
 	/**
-	 * Platinum_account_type function.
+	 * engage_account_type function.
 	 *
 	 * @access public
 	 * @return bool
 	 */
-	public function platinum_account_type() {
+	public function engage_account_type() {
 		$account_type = $this->idx_api( 'accounttype', IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
-		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'plat' ) || stripos( $account_type[0], 'home' ) ) ) {
+		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'engage' ) || stripos( $account_type[0], 'home' ) ) ) {
 			return true;
 		}
 		return false;

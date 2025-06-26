@@ -23,7 +23,7 @@ class Register_Impress_Shortcodes {
 	public function __construct() {
 		$this->idx_api = new \IDX\Idx_Api();
 		add_shortcode( 'impress_lead_login', array( $this, 'lead_login_shortcode' ) );
-		if ( $this->idx_api->platinum_account_type() ) {
+		if ( $this->idx_api->engage_account_type() ) {
 			add_action( 'wp_loaded', array( $this, 'lead_signup_shortcode' ) );
 		}
 		add_shortcode( 'impress_property_showcase', array( $this, 'property_showcase_shortcode' ) );
@@ -816,7 +816,7 @@ class Register_Impress_Shortcodes {
 			);
 
 			// * Lead Signup
-			if ( $this->idx_api->platinum_account_type() ) {
+			if ( $this->idx_api->engage_account_type() ) {
 				shortcode_ui_register_for_shortcode(
 					'lead_signup',
 					array(

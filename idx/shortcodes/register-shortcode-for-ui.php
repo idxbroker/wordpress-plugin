@@ -95,7 +95,7 @@ class Register_Shortcode_For_Ui {
 			),
 		);
 		// Only add lead signup shortcode if the account type is Platinum.
-		if ( $this->idx_api->platinum_account_type() ) {
+		if ( $this->idx_api->engage_account_type() ) {
 			$shortcode_types['impress_lead_signup'] = array(
 				'name'       => 'IMPress Lead Signup Widget',
 				'short_name' => 'impress_lead_signup',

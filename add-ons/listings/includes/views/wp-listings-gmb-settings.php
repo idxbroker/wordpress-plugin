@@ -6,7 +6,7 @@ if ( class_exists( 'Idx_Broker_Plugin' ) ) {
 	$idx_api     = new \IDX\Idx_Api();
 	$gmb_options = get_option( 'wp_listings_google_my_business_options' );
 
-	if ( $idx_api->platinum_account_type() && ! empty( $gmb_options['refresh_token'] ) ) {
+	if ( $idx_api->engage_account_type() && ! empty( $gmb_options['refresh_token'] ) ) {
 		wp_enqueue_script( 'impress-gmb-settings', IMPRESS_IDX_URL . 'assets/js/google-my-business-settings.min.js', [], '1.0.0', true );
 		echo '<div id="gmb-settings-app"></div>';
 	}

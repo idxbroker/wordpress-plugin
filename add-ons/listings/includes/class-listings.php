@@ -146,7 +146,7 @@ class WP_Listings {
 		// Add Google My Business (gmb) settings page settings page for Platinum accounts.
 		if ( class_exists( 'Idx_Broker_Plugin' ) ) {
 			$idx_api = new \IDX\Idx_Api();
-			if ( $idx_api->platinum_account_type() ) {
+			if ( $idx_api->engage_account_type() ) {
 				add_submenu_page( 'edit.php?post_type=listing', __( 'IMPress Listings - Google My Business', 'wp-listings' ), __( 'Google My Business', 'wp-listings' ), 'manage_options', $this->gmb_settings_page, array( &$this, 'gmb_settings_page' ) );
 			}
 		}
