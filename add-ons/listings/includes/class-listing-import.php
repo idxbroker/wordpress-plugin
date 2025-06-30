@@ -374,7 +374,10 @@ class WPL_Idx_Listing {
 		// Change the listing price to the sold price for sold properties to only show the sold price on the listing like we do on results pages
 		if ($propstatus === 'Sold' && isset($idx_featured_listing_data['soldPrice'])) {
 			$idx_featured_listing_data['listingPrice'] = $idx_featured_listing_data['soldPrice'];
-		} 
+		}
+
+		// Remove the currency symbol '$'
+		$idx_featured_listing_data['listingPrice'] = str_replace("$", "", $idx_featured_listing_data['listingPrice']);
 
 		// Acres is used if lotSqFt is not provided.
 		$lot_sqft_value = '';
