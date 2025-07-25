@@ -334,7 +334,7 @@ class Idx_Api {
 			if (is_wp_error( $legacyWidgets )) {
 				return $legacyWidgets;
 			}
-			$legacyWidgetCollection = array_merge($legacyWidgetCollection, $legacyWidgets['data']);
+			$legacyWidgetCollection = array_merge($legacyWidgetCollection, $legacyWidgets['data'] ?? []);
 			$addedLegacyWidgets = true;
 			// Assumes the legacyWidgets['next'] value looks like this: "https://api.idxbroker.com/clients/widgets-legacy?offset=500"
 			// This gets offset query from the url
@@ -924,14 +924,14 @@ class Idx_Api {
 	}
 
 	/**
-	 * Platinum_account_type function.
+	 * engage_account_type function.
 	 *
 	 * @access public
 	 * @return bool
 	 */
-	public function platinum_account_type() {
+	public function engage_account_type() {
 		$account_type = $this->idx_api( 'accounttype', IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
-		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'plat' ) || stripos( $account_type[0], 'home' ) ) ) {
+		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'engage' ) || stripos( $account_type[0], 'home' ) ) ) {
 			return true;
 		}
 		return false;

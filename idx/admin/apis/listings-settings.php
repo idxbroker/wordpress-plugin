@@ -71,8 +71,8 @@ class Listings_Settings extends \IDX\Admin\Rest_Controller {
 	public function get() {
 		$defaults = [
 			'wp_listings_default_state'         => '',
-			'wp_listings_currency_symbol'       => '',
-			'wp_listings_currency_code'         => '',
+			'wp_listings_currency_symbol'       => '$',
+			'wp_listings_currency_code'         => 'USD',
 			'wp_listings_display_currency_code' => 0,
 			'wp_listings_archive_posts_num'     => 9,
 			'wp_listings_global_disclaimer'     => '',

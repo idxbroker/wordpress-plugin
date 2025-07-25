@@ -97,7 +97,7 @@ class Register_Blocks {
 		add_action( 'init', [ $this, 'idx_wrapper_tags_block_init' ] );
 
 		// IMPress Lead Signup Block.
-		if ( $this->idx_api->platinum_account_type() ) {
+		if ( $this->idx_api->engage_account_type() ) {
 			$this->lead_signup_shortcode = new \IDX\Shortcodes\Impress_Lead_Signup_Shortcode();
 			add_action( 'enqueue_block_editor_assets', [ $this, 'impress_lead_signup_block_register_script' ] );
 			add_action( 'init', [ $this, 'impress_lead_signup_block_init' ] );

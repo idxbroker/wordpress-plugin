@@ -234,7 +234,7 @@ function gmb_dashboard_notice() {
 	}
 	global $pagenow;
 	$idx_api = new \IDX\Idx_Api();
-	if ( 'index.php' === $pagenow && $idx_api->platinum_account_type() ) {
+	if ( 'index.php' === $pagenow && $idx_api->engage_account_type() ) {
 		echo wp_kses_post( wp_listings_admin_notice( '<strong><span style="color:green;">New!</span> Connect IMPress Listings to your verified Google My Business profile to generate and schedule timely posts and photos of your listings. <a href="https://wordpress.org/plugins/wp-listings/" target="_blank">Learn more!</a></strong>', false, 'manage_categories', 'wpl_gmb_feature_notice' ) );
 	}
 }

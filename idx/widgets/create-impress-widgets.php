@@ -39,7 +39,7 @@ class Create_Impress_Widgets {
 		register_widget( '\IDX\Widgets\Impress_City_Links_Widget' );
 		register_widget( '\IDX\Widgets\Impress_Lead_Login_Widget' );
 		register_widget( '\IDX\Widgets\Idx_Middleware_Widget' );
-		if ( $this->idx_api->platinum_account_type() ) {
+		if ( $this->idx_api->engage_account_type() ) {
 			register_widget( '\IDX\Widgets\Impress_Lead_Signup_Widget' );
 		}
 	}

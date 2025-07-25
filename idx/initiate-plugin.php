@@ -491,7 +491,7 @@ class Initiate_Plugin {
 				'target' => '_blank',
 			),
 		);
-		if ( ! $this->idx_api->platinum_account_type() ) {
+		if ( ! $this->idx_api->engage_account_type() ) {
 			$wp_admin_bar->add_node( $args );
 		}
 	}
@@ -599,7 +599,7 @@ class Initiate_Plugin {
 	 */
 	public function add_upgrade_center_link() {
 		// Only load if account is not Platinum level.
-		if ( ! $this->idx_api->platinum_account_type() ) {
+		if ( ! $this->idx_api->engage_account_type() ) {
 			wp_enqueue_script( 'idxb-pt-upgrade-options', IMPRESS_IDX_URL . 'assets/js/upgrade-option.min.js', [], '1.0.0', false );
 		}
 	}

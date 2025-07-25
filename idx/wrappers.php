@@ -292,7 +292,7 @@ class Wrappers {
 			$id   = $this->convert_uid_to_id( $uid );
 			echo '<option value="' . esc_attr( $id ) . '" ' . esc_attr( $this->is_selected( $id ) ) . '>' . esc_html( $name ) . '</option>';
 		}
-		if ( $this->idx_api->platinum_account_type() ) {
+		if ( $this->idx_api->engage_account_type() ) {
 			foreach ( $saved_links as $saved_link ) {
 				$id   = $saved_link->id;
 				$name = $saved_link->linkTitle;
