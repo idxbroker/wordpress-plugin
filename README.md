@@ -111,6 +111,10 @@ This plugin requires PHP 7.0 or higher. For security reasons, we recommend updat
 For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or IMPress Agents already installed, the plugins will continue to work as-is. However, if the user selects ‘Enable Listings’ or ‘Enable Agents’ in the new IMPress for IDX dashboard, the legacy IMPress Listings/Agents will be deactivated and the new consolidated version of the plugin will be used. Any existing data for Listings/Agents will be unaffected.
 
 ## Changelog ##
+
+### 3.2.6 ###
+* New: Added optional parameter for price min to omnibar
+
 ### 3.2.5 ###
 * Update: Handle for sold price being displayed for sold listings instead of the listing price.
 * Fix : Handle for 0 legacy or 0 new widgets.
