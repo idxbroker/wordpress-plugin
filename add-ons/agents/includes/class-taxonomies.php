@@ -111,17 +111,17 @@ class IMPress_Agents_Taxonomies {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html_e( 'Manage options capabilities required to create a taxonomy.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Manage options capabilities required to create a taxonomy.', 'impress_agents' ) );
 		}
 		/** No empty fields */
 		if ( ! isset( $args['id'] ) || empty( $args['id'] ) ) {
-			wp_die( esc_html_e( 'Please complete all required fields.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'impress_agents' ) );
 		}
 		if ( ! isset( $args['name'] ) || empty( $args['name'] ) ) {
-			wp_die( esc_html_e( 'Please complete all required fields.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'impress_agents' ) );
 		}
 		if ( ! isset( $args['singular_name'] ) || empty( $args['singular_name'] ) ) {
-			wp_die( esc_html_e( 'Please complete all required fields.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'impress_agents' ) );
 		}
 
 		extract( $args );
@@ -168,11 +168,11 @@ class IMPress_Agents_Taxonomies {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html_e( 'Manage options capabilities required to delete a taxonomy.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Manage options capabilities required to delete a taxonomy.', 'impress_agents' ) );
 		}
 		/** No empty ID */
 		if ( ! isset( $id ) || empty( $id ) ) {
-			wp_die( esc_html_e( "Nice try, partner. But that taxonomy doesn't exist. Click back and try again.", 'impress_agents' ) );
+			wp_die( esc_html__( "Nice try, partner. But that taxonomy doesn't exist. Click back and try again.", 'impress_agents' ) );
 		}
 
 		$options = get_option( $this->settings_field );
@@ -181,7 +181,7 @@ class IMPress_Agents_Taxonomies {
 		if ( array_key_exists( $id, (array) $options ) ) {
 			unset( $options[$id] );
 		} else {
-			wp_die( esc_html_e( "Nice try, partner. But that taxonomy doesn't exist. Click back and try again.", 'impress_agents' ) );
+			wp_die( esc_html__( "Nice try, partner. But that taxonomy doesn't exist. Click back and try again.", 'impress_agents' ) );
 		}
 
 		/** Update the DB */
@@ -193,17 +193,17 @@ class IMPress_Agents_Taxonomies {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html_e( 'Manage options capabilities required to edit a taxonomy.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Manage options capabilities required to edit a taxonomy.', 'impress_agents' ) );
 		}
 		/** No empty fields */
 		if ( ! isset( $args['id'] ) || empty( $args['id'] ) ) {
-			wp_die( esc_html_e( 'Please complete all required fields.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'impress_agents' ) );
 		}
 		if ( ! isset( $args['name'] ) || empty( $args['name'] ) ) {
-			wp_die( esc_html_e( 'Please complete all required fields.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'impress_agents' ) );
 		}
 		if ( ! isset( $args['singular_name'] ) || empty( $args['singular_name'] ) ) {
-			wp_die( esc_html_e( 'Please complete all required fields.', 'impress_agents' ) );
+			wp_die( esc_html__( 'Please complete all required fields.', 'impress_agents' ) );
 		}
 
 		extract( $args );
