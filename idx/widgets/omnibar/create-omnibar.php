@@ -87,9 +87,10 @@ EOD;
 	 * @param mixed $idx_url
 	 * @param int $styles (default: 1)
 	 * @param int $min_price (default: 0)
+	 * @param int $remove_price_validation (default: 0)
 	 * @return void
 	 */
-	public function idx_omnibar_extra( $plugin_dir, $idx_url, $styles = 1, $min_price = 0 ) {
+	public function idx_omnibar_extra( $plugin_dir, $idx_url, $styles = 1, $min_price = 0, $remove_price_validation = 0 ) {
 		$mlsPtIDs    = $this->idx_omnibar_default_property_types();
 		$placeholder = get_option( 'idx_omnibar_placeholder' );
 		if ( empty( $placeholder ) ) {
@@ -127,7 +128,7 @@ EOD;
 		wp_enqueue_script( 'idx-omnibar-js' );
 		wp_enqueue_script( 'idx-location-list', $idx_dir_url . '/locationlist.js', array( 'idx-omnibar-js' ), '1.0.0', true );
 
-		$price_field = $this->price_field( $min_price );
+		$price_field = $this->price_field( $min_price, $remove_price_validation );
 
 		return <<<EOD
     <form class="idx-omnibar-form idx-omnibar-extra-form">
@@ -144,13 +145,18 @@ EOD;
 	 *
 	 * @access public
 	 * @param mixed $min_price
+	 * @param int $remove_price_validation (default: 0)
 	 * @return void
 	 */
-	public function price_field( $min_price ) {
+	public function price_field( $min_price, $remove_price_validation = 0 ) {
+		// Build min and step attributes conditionally
+		$min_attr  = $remove_price_validation == 1 ? ' min="0"' : '';
+		$step_attr = $remove_price_validation == 1 ? ' step="10000"' : '';
+
 		if ( empty( $min_price ) ) {
-			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container"><label for="idx-omnibar-extra-price">Price Max</label><input id="idx-omnibar-extra-price" class="idx-omnibar-price" type="number" min="0" step="10000"></div>';
+			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container"><label for="idx-omnibar-extra-price">Price Max</label><input id="idx-omnibar-extra-price" class="idx-omnibar-price" type="number"' . $min_attr . $step_attr . '></div>';
 		} else {
-			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-min-price-container"><label for="idx-omnibar-extra-min-price">Price Min</label><input id="idx-omnibar-extra-min-price" class="idx-omnibar-min-price" type="number" min="0" step="10000"></div><div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-max-price-container"><label for="idx-omnibar-extra-max-price">Price Max</label><input id="idx-omnibar-extra-max-price" class="idx-omnibar-price" type="number" min="0" step="10000"></div>';
+			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-min-price-container"><label for="idx-omnibar-extra-min-price">Price Min</label><input id="idx-omnibar-extra-min-price" class="idx-omnibar-min-price" type="number"' . $min_attr . $step_attr . '></div><div class="idx-omnibar-extra idx-omnibar-price-container idx-omnibar-max-price-container"><label for="idx-omnibar-extra-max-price">Price Max</label><input id="idx-omnibar-extra-max-price" class="idx-omnibar-price" type="number"' . $min_attr . $step_attr . '></div>';
 		}
 
 		return $price_field;
@@ -187,22 +193,24 @@ EOD;
 		extract(
 			shortcode_atts(
 				array(
-					'min_price' => 0,
-					'styles'    => 1,
-					'extra'     => 0,
+					'min_price'              => 0,
+					'styles'                 => 1,
+					'extra'                  => 0,
+					'remove_price_validation' => 0,
 				),
 				$atts
 			)
 		);
 
-		$min_price = (int) esc_attr( $min_price );
-		$styles = (int) esc_attr( $styles );
+		$min_price              = (int) esc_attr( $min_price );
+		$styles                  = (int) esc_attr( $styles );
+		$remove_price_validation = (int) esc_attr( $remove_price_validation );
 
 		$idx_url    = get_option( 'idx_results_url' );
 		$plugin_dir = plugins_url();
 
 		if ( ! empty( $extra ) ) {
-			return $this->idx_omnibar_extra( $plugin_dir, $idx_url, $styles, $min_price );
+			return $this->idx_omnibar_extra( $plugin_dir, $idx_url, $styles, $min_price, $remove_price_validation );
 		} else {
 			return $this->idx_omnibar_basic( $plugin_dir, $idx_url, $styles );
 		}
@@ -219,20 +227,22 @@ EOD;
 		extract(
 			shortcode_atts(
 				array(
-					'min_price' => 0,
-					'styles'    => 1,
+					'min_price'              => 0,
+					'styles'                 => 1,
+					'remove_price_validation' => 0,
 				),
 				$atts
 			)
 		);
 
-		$min_price = (int) esc_attr( $min_price );
-		$styles = (int) esc_attr( $styles );
+		$min_price              = (int) esc_attr( $min_price );
+		$styles                 = (int) esc_attr( $styles );
+		$remove_price_validation = (int) esc_attr( $remove_price_validation );
 
 		$idx_url    = get_option( 'idx_results_url' );
 		$plugin_dir = plugins_url();
 
-		return $this->idx_omnibar_extra( $plugin_dir, $idx_url, $styles, $min_price );
+		return $this->idx_omnibar_extra( $plugin_dir, $idx_url, $styles, $min_price, $remove_price_validation );
 	}
 
 	/**

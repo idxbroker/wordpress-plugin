@@ -453,17 +453,20 @@ class Register_Blocks {
 		register_block_type(
 			'idx-broker-platinum/impress-omnibar-block',
 			[
-				'attributes' => [
-					'styles' => [
-						'type' => 'integer',
-					],
-					'extra' => [
-						'type' => 'integer',
-					],
-					'min_price' => [
-						'type' => 'integer',
-					],
+			'attributes' => [
+				'styles' => [
+					'type' => 'integer',
 				],
+				'extra' => [
+					'type' => 'integer',
+				],
+				'min_price' => [
+					'type' => 'integer',
+				],
+				'remove_price_validation' => [
+					'type' => 'integer',
+				],
+			],
 				'editor_script'   => 'impress-omnibar-block',
 				'render_callback' => [ $this, 'impress_omnibar_block_render' ],
 			]

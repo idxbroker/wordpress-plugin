@@ -37,10 +37,11 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	 * @access public
 	 */
 	public $defaults = array(
-		'title'     => '',
-		'min_price' => 0,
-		'styles'    => 1,
-		'extra'     => 0,
+		'title'                  => '',
+		'min_price'              => 0,
+		'styles'                 => 1,
+		'extra'                  => 0,
+		'remove_price_validation' => 0,
 	);
 
 	/**
@@ -68,6 +69,10 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 			<label for="<?php echo esc_attr( $this->get_field_id( 'min_price' ) ); ?>"><?php esc_html_e( 'Include Min Price? (If Extra Fields is enabled)', 'idxbroker' ); ?></label>
 			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'min_price' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'min_price' ) ); ?>" value="1" <?php checked( $instance['min_price'], true ); ?>>
 		</p>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'remove_price_validation' ) ); ?>"><?php esc_html_e( 'Remove Price Validation (min/step attributes)?', 'idxbroker' ); ?></label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'remove_price_validation' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'remove_price_validation' ) ); ?>" value="1" <?php checked( $instance['remove_price_validation'], true ); ?>>
+		</p>
 		<?php
 	}
 
@@ -81,12 +86,13 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		// Merge defaults and new_instance to avoid any missing index warnings when used with the legacy block widget.
-		$new_instance          = array_merge( $this->defaults, $new_instance );
-		$instance              = $old_instance;
-		$instance['title']     = $new_instance['title'];
-		$instance['styles']    = (int) $new_instance['styles'];
-		$instance['extra']     = (int) $new_instance['extra'];
-		$instance['min_price'] = (int) $new_instance['min_price'];
+		$new_instance                        = array_merge( $this->defaults, $new_instance );
+		$instance                            = $old_instance;
+		$instance['title']                   = $new_instance['title'];
+		$instance['styles']                  = (int) $new_instance['styles'];
+		$instance['extra']                   = (int) $new_instance['extra'];
+		$instance['min_price']               = (int) $new_instance['min_price'];
+		$instance['remove_price_validation'] = (int) $new_instance['remove_price_validation'];
 		return $instance;
 	}
 
@@ -126,7 +132,7 @@ class IDX_Omnibar_Widget extends \WP_Widget {
 
 		// Widget HTML:
 		if ( ! empty( $instance['extra'] ) ) {
-			echo $this->create_omnibar->idx_omnibar_extra( $plugin_dir, $idx_url, $instance['styles'], $instance['min_price'] );
+			echo $this->create_omnibar->idx_omnibar_extra( $plugin_dir, $idx_url, $instance['styles'], $instance['min_price'], $instance['remove_price_validation'] );
 		} else {
 			echo $this->create_omnibar->idx_omnibar_basic( $plugin_dir, $idx_url, $instance['styles'] );
 		}

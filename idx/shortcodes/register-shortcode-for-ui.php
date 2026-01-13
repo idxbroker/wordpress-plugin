@@ -327,6 +327,10 @@ class Register_Shortcode_For_Ui {
 		echo '<input type="checkbox" id="min_price" data-short-name="min_price">';
 		echo '<label for="min_price">Include Min Price? (If Extra Fields is enabled)</label>';
 		echo '</div>';
+		echo '<div class="idx-modal-shortcode-field checkbox" data-shortcode="' . esc_attr( $shortcode ) . '">';
+		echo '<input type="checkbox" id="remove_price_validation" data-short-name="remove_price_validation">';
+		echo '<label for="remove_price_validation">Remove Price Validation (min/step attributes)?</label>';
+		echo '</div>';
 		echo '<div class="idx-modal-shortcode-field" data-shortcode="idx-omnibar"></div>';
 		// Styles and Scripts for Preview.
 		echo '<script>';

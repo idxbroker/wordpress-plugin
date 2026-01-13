@@ -21,6 +21,10 @@ registerBlockType(
       min_price: {
         type: 'int',
         default: 0
+      },
+      remove_price_validation: {
+        type: 'int',
+        default: 0
       }
     },
     edit: ({ attributes, setAttributes }) => {
@@ -50,6 +54,12 @@ registerBlockType(
                   value={attributes.min_price}
                   checked={(attributes.min_price > 0)}
                   onChange={(value) => { setAttributes({ min_price: (value > 0 ? 1 : 0) }) }}
+                />
+                <CheckboxControl
+                  label={__('Remove Price Validation (min/step attributes)?', 'idx-broker-platinum')}
+                  value={attributes.remove_price_validation}
+                  checked={(attributes.remove_price_validation > 0)}
+                  onChange={(value) => { setAttributes({ remove_price_validation: (value > 0 ? 1 : 0) }) }}
                 />
               </PanelBody>
             </Panel>
