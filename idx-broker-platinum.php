@@ -3,7 +3,7 @@
 Plugin Name: IMPress for IDX Broker
 Plugin URI: https://idxbroker.com
 Description: Over 600 IDX/MLS feeds serviced. The #1 IDX/MLS solution just got even better!
-Version: 3.2.6
+Version: 3.2.7
 Author: IDX Broker
 Contributors: IDX, LLC
 Author URI: https://idxbroker.com
@@ -18,7 +18,7 @@ new Idx_Broker_Plugin();
 class Idx_Broker_Plugin {
 
 	// Placed here for convenient updating.
-	const IDX_WP_PLUGIN_VERSION = '3.2.6';
+	const IDX_WP_PLUGIN_VERSION = '3.2.7';
 	const VUE_DEV_MODE          = false;
 
 	/**
