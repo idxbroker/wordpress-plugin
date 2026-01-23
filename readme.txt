@@ -133,6 +133,9 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 == Changelog ==
 
+= 3.2.7 =
+* Fix : Removed the manual transient caching
+
 = 3.2.6 =
 * New: Added optional parameter for price min to omnibar
 
