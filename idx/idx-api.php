@@ -118,9 +118,32 @@ class Idx_Api {
 
 		$cache_key = 'idx_' . $level . '_' . $method . '_cache';
 
-		if ( $this->get_transient( $cache_key ) !== false ) {
-			$data = $this->get_transient( $cache_key );
-			return $data;
+		// Check cache
+		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+			$cached = get_blog_option( get_main_site_id(), $cache_key );
+		} else {
+			$cached = get_option( $cache_key );
+		}
+
+		if ( ! empty( $cached ) ) {
+			// Handle backward compatibility: old format was manually serialized string
+			if ( is_string( $cached ) ) {
+				$cached = unserialize( $cached );
+			}
+
+			if ( is_array( $cached ) && isset( $cached['data'] ) && isset( $cached['expiration'] ) ) {
+				$expiration         = $cached['expiration'];
+				$api_maybe_exceeded = get_option( 'idx_api_limit_exceeded' );
+
+				// If the data is past expiration, but we've currently exceeded the API limit,
+				// let's return the cached data so we don't continue to call the API until
+				// after one hour since the first 412 error.
+				if ( $api_maybe_exceeded && time() <= $api_maybe_exceeded + ( 60 * 60 ) && $expiration < time() ) {
+					return $cached['data'];
+				} elseif ( $expiration >= time() ) {
+					return $cached['data'];
+				}
+			}
 		}
 
 		$headers = array(
@@ -158,7 +181,12 @@ class Idx_Api {
 		extract( $this->apiResponse( $response ) ); // get code and error message if any, assigned to vars $code and $error
 		if ( isset( $error ) && $error !== false ) {
 			if ( $code == 401 ) {
-				$this->delete_transient( $cache_key );
+				// Delete cache on 401 error
+				if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+					delete_blog_option( get_main_site_id(), $cache_key );
+				} else {
+					delete_option( $cache_key );
+				}
 			}
 			return new \WP_Error(
 				'idx_api_error',
@@ -171,79 +199,20 @@ class Idx_Api {
 		} else {
 			$data = (array) json_decode( (string) $response['body'], $json_decode_type );
 			if ( 'POST' !== $request_type && 'PUT' !== $request_type ) {
-				$this->set_transient( $cache_key, $data, $expiration );
+				// Store in cache
+				$cache_data = array(
+					'data'       => $data,
+					'expiration' => time() + $expiration,
+				);
+				if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+					update_blog_option( get_main_site_id(), $cache_key, $cache_data );
+				} else {
+					update_option( $cache_key, $cache_data, false );
+				}
 			}
 			// API call was successful, delete this option if it exists.
 			delete_option( 'idx_api_limit_exceeded' );
 			return $data;
-		}
-	}
-
-	/*
-	 * If option does not exist or timestamp is old, return false.
-	 * Otherwise return data
-	 * We create our own transient functions to avoid bugs with the object cache
-	 * for caching plugins.
-	 */
-	public function get_transient( $name ) {
-		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
-			$data = get_blog_option( get_main_site_id(), $name );
-		} else {
-			$data = get_option( $name );
-		}
-		if ( empty( $data ) ) {
-			return false;
-		}
-		$data               = unserialize( $data );
-		$expiration         = $data['expiration'];
-		$api_maybe_exceeded = get_option( 'idx_api_limit_exceeded' );
-
-		// If the data is past expiration, but we've currently exceeded the API limit,
-		// let's return the cached data so we don't continue to call the API until
-		// after one hour since the first 412 error.
-		if ( $api_maybe_exceeded && time() <= $api_maybe_exceeded + ( 60 * 60 ) && $expiration < time() ) {
-			return $data['data'];
-		} elseif ( $expiration < time() ) {
-			return false;
-		}
-		return $data['data'];
-	}
-
-	/**
-	 * set_transient function.
-	 *
-	 * @access public
-	 * @param mixed $name
-	 * @param mixed $data
-	 * @param mixed $expiration
-	 * @return void
-	 */
-	public function set_transient( $name, $data, $expiration ) {
-		$expiration = time() + $expiration;
-		$data       = array(
-			'data'       => $data,
-			'expiration' => $expiration,
-		);
-		$data       = serialize( $data );
-		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
-			update_blog_option( get_main_site_id(), $name, $data );
-		} else {
-			update_option( $name, $data, false );
-		}
-	}
-
-	/**
-	 * delete_transient function.
-	 *
-	 * @access public
-	 * @param mixed $name
-	 * @return void
-	 */
-	public function delete_transient( $name ) {
-		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
-			delete_blog_option( get_main_site_id(), $name );
-		} else {
-			delete_option( $name );
 		}
 	}
 
