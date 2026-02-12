@@ -116,10 +116,14 @@ class Idx_Api {
 			return [];
 		}
 
-		$cache_key = 'idx_' . $level . '_' . $method . '_cache';
+		$cache_key            = 'idx_' . $level . '_' . $method . '_cache';
+		$api_maybe_exceeded   = get_option( 'idx_api_limit_exceeded' );
+		$limit_window_active  = $api_maybe_exceeded && time() <= ( (int) $api_maybe_exceeded + ( 60 * 60 ) );
+		$is_cacheable_request = 'POST' !== $request_type && 'PUT' !== $request_type;
+		$main_site_cache      = is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' );
 
 		// Check cache
-		if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+		if ( $main_site_cache ) {
 			$cached = get_blog_option( get_main_site_id(), $cache_key );
 		} else {
 			$cached = get_option( $cache_key );
@@ -133,17 +137,22 @@ class Idx_Api {
 
 			if ( is_array( $cached ) && isset( $cached['data'] ) && isset( $cached['expiration'] ) ) {
 				$expiration         = $cached['expiration'];
-				$api_maybe_exceeded = get_option( 'idx_api_limit_exceeded' );
 
 				// If the data is past expiration, but we've currently exceeded the API limit,
 				// let's return the cached data so we don't continue to call the API until
 				// after one hour since the first 412 error.
-				if ( $api_maybe_exceeded && time() <= $api_maybe_exceeded + ( 60 * 60 ) && $expiration < time() ) {
+				if ( $limit_window_active && $expiration < time() ) {
 					return $cached['data'];
 				} elseif ( $expiration >= time() ) {
 					return $cached['data'];
 				}
 			}
+		}
+
+		// If we are currently in the 412 cooldown window and there was no usable cache,
+		// avoid making another API request and return a safe default response.
+		if ( $is_cacheable_request && $limit_window_active ) {
+			return array();
 		}
 
 		$headers = array(
@@ -182,10 +191,23 @@ class Idx_Api {
 		if ( isset( $error ) && $error !== false ) {
 			if ( $code == 401 ) {
 				// Delete cache on 401 error
-				if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+				if ( $main_site_cache ) {
 					delete_blog_option( get_main_site_id(), $cache_key );
 				} else {
 					delete_option( $cache_key );
+				}
+			}
+			if ( $code == 412 && $is_cacheable_request ) {
+				$limit_exceeded_at   = (int) get_option( 'idx_api_limit_exceeded' );
+				$fallback_expiration = ( $limit_exceeded_at > 0 ? $limit_exceeded_at : time() ) + ( 60 * 60 );
+				$fallback_cache_data = array(
+					'data'       => array(),
+					'expiration' => $fallback_expiration,
+				);
+				if ( $main_site_cache ) {
+					update_blog_option( get_main_site_id(), $cache_key, $fallback_cache_data );
+				} else {
+					update_option( $cache_key, $fallback_cache_data, false );
 				}
 			}
 			return new \WP_Error(
@@ -198,13 +220,13 @@ class Idx_Api {
 			);
 		} else {
 			$data = (array) json_decode( (string) $response['body'], $json_decode_type );
-			if ( 'POST' !== $request_type && 'PUT' !== $request_type ) {
+			if ( $is_cacheable_request ) {
 				// Store in cache
 				$cache_data = array(
 					'data'       => $data,
 					'expiration' => time() + $expiration,
 				);
-				if ( is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' ) ) {
+				if ( $main_site_cache ) {
 					update_blog_option( get_main_site_id(), $cache_key, $cache_data );
 				} else {
 					update_option( $cache_key, $cache_data, false );
