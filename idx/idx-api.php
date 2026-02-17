@@ -921,6 +921,34 @@ class Idx_Api {
 	 * @return bool
 	 */
 	public function engage_account_type() {
+		$cache_key          = 'idx_clients_accounttype_cache';
+		$main_site_cache    = is_multisite() && $this->api_key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' );
+		$api_maybe_exceeded = get_option( 'idx_api_limit_exceeded' );
+		$limit_window_active = $api_maybe_exceeded && time() <= ( (int) $api_maybe_exceeded + ( 60 * 60 ) );
+
+		if ( $main_site_cache ) {
+			$cached = get_blog_option( get_main_site_id(), $cache_key );
+		} else {
+			$cached = get_option( $cache_key );
+		}
+
+		if ( ! empty( $cached ) ) {
+			if ( is_string( $cached ) ) {
+				$cached = unserialize( $cached );
+			}
+			if ( is_array( $cached ) && isset( $cached['data'] ) && isset( $cached['expiration'] ) ) {
+				$expiration = $cached['expiration'];
+				$use_cache  = ( $limit_window_active && $expiration < time() ) || ( $expiration >= time() );
+				if ( $use_cache ) {
+					$account_type = $cached['data'];
+					if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'engage' ) || stripos( $account_type[0], 'home' ) ) ) {
+						return true;
+					}
+					return false;
+				}
+			}
+		}
+
 		$account_type = $this->idx_api( 'accounttype', IDX_API_DEFAULT_VERSION, 'clients', array(), 60 * 60 * 24 );
 		if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'engage' ) || stripos( $account_type[0], 'home' ) ) ) {
 			return true;

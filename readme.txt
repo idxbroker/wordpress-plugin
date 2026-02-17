@@ -135,6 +135,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 = 3.2.8 =
 * Fix : Handle for 412 response for the accountType request
+* Fix : Add Cache check to check account type method to reduce API calls
 
 = 3.2.7 =
 * Fix : Removed the manual transient caching
