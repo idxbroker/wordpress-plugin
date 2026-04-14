@@ -104,7 +104,7 @@ class WP_Listings_Taxonomies {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html_e( 'Manage options capabilities required to create a taxonomy.', 'wp_listings' ) );
+			wp_die( esc_html__( 'Manage options capabilities required to create a taxonomy.', 'wp_listings' ) );
 		}
 		/** No empty fields */
 		if ( ! isset( $args['id'] ) || empty( $args['id'] ) ) {
@@ -161,7 +161,7 @@ class WP_Listings_Taxonomies {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html_e( 'Manage options capabilities required to delete a taxonomy.', 'wp_listings' ) );
+			wp_die( esc_html__( 'Manage options capabilities required to delete a taxonomy.', 'wp_listings' ) );
 		}
 		/** No empty ID */
 		if ( ! isset( $id ) || empty( $id ) ) {
@@ -186,7 +186,7 @@ class WP_Listings_Taxonomies {
 
 		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html_e( 'Manage options capabilities required to edit a taxonomy.', 'wp_listings' ) );
+			wp_die( esc_html__( 'Manage options capabilities required to edit a taxonomy.', 'wp_listings' ) );
 		}
 		/** No empty fields */
 		if ( ! isset( $args['id'] ) || empty( $args['id'] ) ) {
