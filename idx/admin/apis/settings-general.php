@@ -204,6 +204,11 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 
 		update_option( 'idx_broker_apikey', $sanitized_key, false );
 
+		if ( $old_key !== $sanitized_key ) {
+			\IDX\Idx_Api::clear_auth_storage_for_key( $old_key );
+		}
+		\IDX\Idx_Api::clear_auth_storage_for_key( $sanitized_key );
+
 		$idx_api = new \Idx\Idx_Api();
 		$idx_api->clear_wrapper_cache();
 		$idx_api->idx_clean_transients();
