@@ -28,6 +28,18 @@ class Notice_Handler {
 			);
 		}
 
+		$name = self::idx_api_auth_failure();
+		if ( $name ) {
+			$notices[] = new Notice(
+				$name,
+				__( 'Your IDX Broker API key is failing or integration is paused. Update your key in IMPress for IDX Broker settings.', 'idxbroker' ),
+				'error',
+				\admin_url( 'admin.php?page=idx-broker#/settings/general' ),
+				__( 'Open settings', 'idxbroker' ),
+				true
+			);
+		}
+
 		if ( count( $notices ) > 0 ) {
 			add_action( 'admin_enqueue_scripts', [ '\IDX\Notice\Notice_Handler', 'notice_script_styles' ] );
 		}
@@ -74,6 +86,28 @@ class Notice_Handler {
 		}
 		self::delete_dismissed_option( $name );
 		return false;
+	}
+
+	/**
+	 * Admin notice when IDX API auth is in backoff or halted (reads same blog as Idx_Api auth options).
+	 *
+	 * @return string|false Notice handle or false.
+	 */
+	private static function idx_api_auth_failure() {
+		$name = 'idx_api_auth';
+		$key   = (string) get_option( 'idx_broker_apikey', '' );
+		if ( '' === trim( $key ) ) {
+			self::delete_dismissed_option( $name );
+			return false;
+		}
+		if ( ! \IDX\Idx_Api::auth_integration_needs_attention() ) {
+			self::delete_dismissed_option( $name );
+			return false;
+		}
+		if ( self::is_dismissed( $name ) ) {
+			return false;
+		}
+		return $name;
 	}
 
 	// $name should only be passed in from the returned notice functions
