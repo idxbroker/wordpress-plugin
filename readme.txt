@@ -136,21 +136,22 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 = 3.2.9 =
 * Fix: Omnibar "Remove Price Validation" option now correctly removes min/step attributes on price fields instead of adding them
 * Fix: Corrected the lead edit link.
+* Fix: Handle for 401 response more thoroughly.
 
 = 3.2.8 =
-* Fix : Handle for 412 response for the accountType request
-* Fix : Add Cache check to check account type method to reduce API calls
+* Fix: Handle for 412 response for the accountType request
+* Fix: Add Cache check to check account type method to reduce API calls
 
 = 3.2.7 =
-* Fix : Removed the manual transient caching
+* Fix: Removed the manual transient caching
 
 = 3.2.6 =
 * New: Added optional parameter for price min to omnibar
 
 = 3.2.5 =
 * Update: Handle for sold price being displayed for sold listings instead of the listing price.
-* Fix : Handle for 0 legacy or 0 new widgets.
-* Fix : Handle subscription type name change Platinum -> Enagage.
+* Fix: Handle for 0 legacy or 0 new widgets.
+* Fix: Handle subscription type name change Platinum -> Enagage.
 
 = 3.2.4 =
 * Fix: Changed Sanitization method
