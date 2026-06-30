@@ -5,7 +5,7 @@ Author URL: https://idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm
 Requires at least: 5.3
 Tested up to: 6.9.1
-Stable tag: 3.2.9
+Stable tag: 3.2.8
 Requires PHP: 7.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -132,6 +132,9 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 18. View Saved Properties created by or for your lead. One-click access to your IDX Broker Dashboard in order to create new saved properties, toggle emails on (for changes to property status, price, or other details), or remove an existing saved property.
 
 == Changelog ==
+
+= 3.2.9 =
+* Fix: Omnibar "Remove Price Validation" option now correctly removes min/step attributes on price fields instead of adding them
 
 = 3.2.8 =
 * Fix : Handle for 412 response for the accountType request
