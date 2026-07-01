@@ -308,7 +308,7 @@ class Dashboard_Widget {
 		// prepare leads for display.
 		foreach ( $leads_array as $lead ) {
 			// edit lead in MW link.
-			$leads .= '<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . esc_attr( $lead->id ) . '" target="_blank">';
+			$leads .= '<a href="https://middleware.idxbroker.com/mgmt/leads/' . esc_attr( $lead->id ) . '/edit#accountInfo" target="_blank">';
 			$leads .= '<li><p class="lead-name">';
 			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			$leads .= esc_html( $lead->firstName ) . ' ' . esc_html( $lead->lastName ) . '</p>';

@@ -114,6 +114,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 ### 3.2.9 ###
 * Fix: Omnibar "Remove Price Validation" option now correctly removes min/step attributes on price fields instead of adding them
+* Fix: Corrected the lead edit link.
 
 ### 3.2.8 ###
 * Fix : Handle for 412 response for the accountType request
