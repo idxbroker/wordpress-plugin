@@ -4,8 +4,8 @@ Author: IDX, LLC
 Author URL: https://idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm
 **Requires at least:** 5.3
-**Tested up to:** 6.9.1
-**Stable tag:** 3.2.8
+**Tested up to:** 7.0.1
+**Stable tag:** 3.2.9
 **Minimum PHP:** 7.1.8
 **License:** GPLv2 or later
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html
@@ -111,6 +111,11 @@ This plugin requires PHP 7.0 or higher. For security reasons, we recommend updat
 For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or IMPress Agents already installed, the plugins will continue to work as-is. However, if the user selects ‘Enable Listings’ or ‘Enable Agents’ in the new IMPress for IDX dashboard, the legacy IMPress Listings/Agents will be deactivated and the new consolidated version of the plugin will be used. Any existing data for Listings/Agents will be unaffected.
 
 ## Changelog ##
+
+### 3.2.9 ###
+* Fix: Omnibar "Remove Price Validation" option now correctly removes min/step attributes on price fields instead of adding them
+* Fix: Corrected the lead edit link.
+* Fix: Handle for 401 response more thoroughly.
 
 ### 3.2.8 ###
 * Fix : Handle for 412 response for the accountType request

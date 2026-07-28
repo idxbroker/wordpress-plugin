@@ -4,8 +4,8 @@ Contributors: idxco
 Author URL: https://idxbroker.com
 Tags: IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm
 Requires at least: 5.3
-Tested up to: 6.9.1
-Stable tag: 3.2.8
+Tested up to: 7.0.1
+Stable tag: 3.2.9
 Requires PHP: 7.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -133,20 +133,25 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 == Changelog ==
 
+= 3.2.9 =
+* Fix: Omnibar "Remove Price Validation" option now correctly removes min/step attributes on price fields instead of adding them
+* Fix: Corrected the lead edit link.
+* Fix: Handle for 401 response more thoroughly.
+
 = 3.2.8 =
-* Fix : Handle for 412 response for the accountType request
-* Fix : Add Cache check to check account type method to reduce API calls
+* Fix: Handle for 412 response for the accountType request
+* Fix: Add Cache check to check account type method to reduce API calls
 
 = 3.2.7 =
-* Fix : Removed the manual transient caching
+* Fix: Removed the manual transient caching
 
 = 3.2.6 =
 * New: Added optional parameter for price min to omnibar
 
 = 3.2.5 =
 * Update: Handle for sold price being displayed for sold listings instead of the listing price.
-* Fix : Handle for 0 legacy or 0 new widgets.
-* Fix : Handle subscription type name change Platinum -> Enagage.
+* Fix: Handle for 0 legacy or 0 new widgets.
+* Fix: Handle subscription type name change Platinum -> Enagage.
 
 = 3.2.4 =
 * Fix: Changed Sanitization method

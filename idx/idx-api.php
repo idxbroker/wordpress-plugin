@@ -33,6 +33,25 @@ class Idx_Api {
 	 */
 	public $dev_partner_key;
 
+	/** Option names: 401 backoff / circuit (stored per auth-state blog; see auth_state_storage_blog_id). */
+	private const AUTH_OPT_BACKOFF_UNTIL     = 'idx_api_auth_backoff_until';
+	private const AUTH_OPT_CONSECUTIVE_401   = 'idx_api_auth_consecutive_401';
+	private const AUTH_OPT_FIRST_FAILURE_AT  = 'idx_api_auth_first_failure_at';
+	private const AUTH_OPT_HALTED            = 'idx_api_auth_halted';
+
+	/** Backoff seconds after successive 401 responses (ladder index capped at last step). */
+	private const AUTH_401_BACKOFF_LADDER = array( 60, 120, 300, 900, 3600 );
+
+	/** Halt outbound cacheable IDX calls after this many seconds from first 401 in a streak. */
+	private const AUTH_401_HALT_AFTER_SECONDS = 86400;
+
+	/** Default Retry-After when header missing on 429. */
+	private const RATE_LIMIT_DEFAULT_SECONDS = 60;
+
+	/** Server error negative cache: min/max seconds until retry (jitter applied). */
+	private const SERVER_ERROR_CACHE_MIN_SECONDS = 30;
+	private const SERVER_ERROR_CACHE_MAX_SECONDS = 120;
+
 	/**
 	 * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
 	 *
@@ -89,6 +108,22 @@ class Idx_Api {
 					$err_message = 'IDX Broker API is currently undergoing maintenance. Please try again in a few moments or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 503">help@idxbroker.com</a> if the problem persists.';
 					$rest_error  = 'IDX Broker API is currently undergoing maintenance.';
 					break;
+				case 429:
+					$err_message = 'IDX Broker API rate limit reached. Please try again shortly or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error 429">help@idxbroker.com</a> if the problem persists.';
+					$rest_error  = 'IDX Broker API rate limit reached.';
+					break;
+				case 502:
+				case 504:
+					$err_message = 'IDX Broker API returned a temporary server error. Please try again in a few moments or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error ' . (int) $response_code . '">help@idxbroker.com</a> if the problem persists.';
+					$rest_error  = 'IDX Broker API temporary server error.';
+					break;
+			}
+			if ( false === $err_message && is_numeric( $response_code ) ) {
+				$code_int = (int) $response_code;
+				if ( $code_int >= 500 && $code_int < 600 ) {
+					$err_message = 'IDX Broker API returned a server error. Please try again in a few moments or contact <a href="mailto:help@idxbroker.com?subject=IMPress for IDX Broker - Error ' . $code_int . '">help@idxbroker.com</a> if the problem persists.';
+					$rest_error  = 'IDX Broker API server error.';
+				}
 			}
 		}
 		return array(
@@ -155,17 +190,12 @@ class Idx_Api {
 			return array();
 		}
 
-		$headers = array(
-			'Content-Type'  => 'application/x-www-form-urlencoded',
-			'accesskey'     => $this->api_key,
-			'outputtype'    => 'json',
-			'apiversion'    => $apiversion,
-			'pluginversion' => \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION,
-		);
-
-		if ( ! empty( $this->dev_partner_key ) && is_string( $this->dev_partner_key ) ) {
-			$headers['ancillarykey'] = $this->dev_partner_key;
+		// Skip HTTP during 401 backoff / halt so bad API keys do not hammer IDX endpoints.
+		if ( $is_cacheable_request && $this->should_block_http_for_global_auth_state( $is_cacheable_request, $main_site_cache ) ) {
+			return $this->make_auth_blocked_wp_error( $main_site_cache );
 		}
+
+		$headers = $this->build_idx_request_headers( $apiversion );
 
 		$params = array_merge(
 			array(
@@ -189,15 +219,17 @@ class Idx_Api {
 
 		extract( $this->apiResponse( $response ) ); // get code and error message if any, assigned to vars $code and $error
 		if ( isset( $error ) && $error !== false ) {
-			if ( $code == 401 ) {
-				// Delete cache on 401 error
-				if ( $main_site_cache ) {
-					delete_blog_option( get_main_site_id(), $cache_key );
-				} else {
-					delete_option( $cache_key );
+			if ( 401 === (int) $code ) {
+				$this->apply_401_throttle( $cache_key, $main_site_cache, $is_cacheable_request );
+			} elseif ( 429 === (int) $code && $is_cacheable_request ) {
+				$this->apply_rate_limit_negative_cache( $response, $cache_key, $main_site_cache );
+			} elseif ( $is_cacheable_request && is_numeric( $code ) ) {
+				$code_int = (int) $code;
+				if ( $code_int >= 500 && $code_int < 600 ) {
+					$this->apply_server_error_throttle( $cache_key, $main_site_cache );
 				}
 			}
-			if ( $code == 412 && $is_cacheable_request ) {
+			if ( 412 === (int) $code && $is_cacheable_request ) {
 				$limit_exceeded_at   = (int) get_option( 'idx_api_limit_exceeded' );
 				$fallback_expiration = ( $limit_exceeded_at > 0 ? $limit_exceeded_at : time() ) + ( 60 * 60 );
 				$fallback_cache_data = array(
@@ -234,8 +266,332 @@ class Idx_Api {
 			}
 			// API call was successful, delete this option if it exists.
 			delete_option( 'idx_api_limit_exceeded' );
+			$this->clear_global_auth_failure_state( $main_site_cache );
 			return $data;
 		}
+	}
+
+	/**
+	 * Blog ID where idx_api_auth_* options are stored (matches $main_site_cache branching in idx_api).
+	 *
+	 * @return int Blog ID.
+	 */
+	public static function auth_state_storage_blog_id() {
+		if ( ! is_multisite() ) {
+			return (int) get_current_blog_id();
+		}
+		$key = (string) get_option( 'idx_broker_apikey', '' );
+		if ( '' === $key ) {
+			return (int) get_current_blog_id();
+		}
+		$main_key = (string) get_blog_option( get_main_site_id(), 'idx_broker_apikey', '' );
+		if ( '' !== $main_key && $key === $main_key ) {
+			return (int) get_main_site_id();
+		}
+		return (int) get_current_blog_id();
+	}
+
+	/**
+	 * Clears 401 backoff / halt state (e.g. after API key change or full cache clear).
+	 *
+	 * @return void
+	 */
+	public function reset_api_auth_throttle_state() {
+		self::clear_auth_storage_for_key( $this->api_key );
+	}
+
+	/**
+	 * Whether cacheable IDX HTTP calls should be skipped due to 401 backoff or halt.
+	 *
+	 * @param bool $is_cacheable_request Whether this idx_api invocation is cacheable.
+	 * @param bool $main_site_cache      Same flag as idx_api uses for option/cache blog context.
+	 * @return bool
+	 */
+	private function should_block_http_for_global_auth_state( $is_cacheable_request, $main_site_cache ) {
+		if ( ! $is_cacheable_request ) {
+			return false;
+		}
+		if ( (int) $this->auth_get_option( self::AUTH_OPT_HALTED, $main_site_cache ) ) {
+			return true;
+		}
+		$until = (int) $this->auth_get_option( self::AUTH_OPT_BACKOFF_UNTIL, $main_site_cache );
+		return $until > time();
+	}
+
+	/**
+	 * WP_Error when HTTP is skipped due to auth backoff or halt (no outbound request).
+	 *
+	 * @param bool $main_site_cache Same as idx_api.
+	 * @return \WP_Error
+	 */
+	private function make_auth_blocked_wp_error( $main_site_cache ) {
+		if ( (int) $this->auth_get_option( self::AUTH_OPT_HALTED, $main_site_cache ) ) {
+			$msg = __( 'IDX Broker integration is paused after repeated authentication failures. Update your API key in IMPress for IDX Broker settings, then save.', 'idxbroker' );
+			return new \WP_Error(
+				'idx_api_auth_halted',
+				$msg,
+				array(
+					'status'     => 401,
+					'rest_error' => $msg,
+				)
+			);
+		}
+		$msg = __( 'IDX Broker API request skipped during authentication backoff. Please verify your API key in settings.', 'idxbroker' );
+		return new \WP_Error(
+			'idx_api_auth_backoff',
+			$msg,
+			array(
+				'status'     => 401,
+				'rest_error' => $msg,
+			)
+		);
+	}
+
+	/**
+	 * Records 401, updates global backoff / optional halt, and negative-caches this endpoint (same shape as 412 fallback).
+	 *
+	 * @param string $cache_key            Option key for this endpoint cache.
+	 * @param bool   $main_site_cache      Multisite main-site cache flag.
+	 * @param bool   $is_cacheable_request Whether this request is cacheable.
+	 * @return void
+	 */
+	private function apply_401_throttle( $cache_key, $main_site_cache, $is_cacheable_request ) {
+		$now = time();
+
+		$consecutive = (int) $this->auth_get_option( self::AUTH_OPT_CONSECUTIVE_401, $main_site_cache ) + 1;
+		$this->auth_update_option( self::AUTH_OPT_CONSECUTIVE_401, $consecutive, $main_site_cache );
+
+		$first_at = (int) $this->auth_get_option( self::AUTH_OPT_FIRST_FAILURE_AT, $main_site_cache );
+		if ( $first_at < 1 ) {
+			$this->auth_update_option( self::AUTH_OPT_FIRST_FAILURE_AT, $now, $main_site_cache );
+			$first_at = $now;
+		}
+
+		if ( ( $now - $first_at ) >= self::AUTH_401_HALT_AFTER_SECONDS ) {
+			$this->auth_update_option( self::AUTH_OPT_HALTED, 1, $main_site_cache );
+		}
+
+		$ladder = self::AUTH_401_BACKOFF_LADDER;
+		$idx    = min( max( 0, $consecutive - 1 ), count( $ladder ) - 1 );
+		$delay  = (int) $ladder[ $idx ];
+		$backoff_until = $now + $delay;
+		$this->auth_update_option( self::AUTH_OPT_BACKOFF_UNTIL, $backoff_until, $main_site_cache );
+
+		if ( $is_cacheable_request ) {
+			$this->persist_negative_cache( $cache_key, $main_site_cache, array(), $backoff_until );
+		}
+	}
+
+	/**
+	 * Negative cache for 429 using Retry-After when present.
+	 *
+	 * @param array  $response        wp_remote_* response array.
+	 * @param string $cache_key       Endpoint cache option name.
+	 * @param bool   $main_site_cache Multisite cache flag.
+	 * @return void
+	 */
+	private function apply_rate_limit_negative_cache( $response, $cache_key, $main_site_cache ) {
+		$header = wp_remote_retrieve_header( $response, 'retry-after' );
+		$until  = $this->parse_retry_after_expiration( $header );
+		$this->persist_negative_cache( $cache_key, $main_site_cache, array(), $until );
+	}
+
+	/**
+	 * Short negative cache for 5xx responses (does not alter 401 auth state).
+	 *
+	 * @param string $cache_key       Endpoint cache option name.
+	 * @param bool   $main_site_cache Multisite cache flag.
+	 * @return void
+	 */
+	private function apply_server_error_throttle( $cache_key, $main_site_cache ) {
+		$span = wp_rand( self::SERVER_ERROR_CACHE_MIN_SECONDS, self::SERVER_ERROR_CACHE_MAX_SECONDS );
+		$this->persist_negative_cache( $cache_key, $main_site_cache, array(), time() + (int) $span );
+	}
+
+	/**
+	 * Writes empty cached payload until $expiration_ts (Unix time), matching successful cache structure.
+	 *
+	 * @param string $cache_key       Option name.
+	 * @param bool   $main_site_cache Multisite flag.
+	 * @param array  $data            Cached payload (empty array for errors).
+	 * @param int    $expiration_ts   Absolute Unix time when cache expires.
+	 * @return void
+	 */
+	private function persist_negative_cache( $cache_key, $main_site_cache, $data, $expiration_ts ) {
+		$payload = array(
+			'data'       => $data,
+			'expiration' => (int) $expiration_ts,
+		);
+		if ( $main_site_cache ) {
+			update_blog_option( get_main_site_id(), $cache_key, $payload );
+		} else {
+			update_option( $cache_key, $payload, false );
+		}
+	}
+
+	/**
+	 * Converts Retry-After header to absolute expiration timestamp (capped).
+	 *
+	 * @param string|false $header Raw Retry-After value.
+	 * @return int Unix timestamp.
+	 */
+	private function parse_retry_after_expiration( $header ) {
+		$now = time();
+		if ( empty( $header ) ) {
+			return $now + self::RATE_LIMIT_DEFAULT_SECONDS;
+		}
+		if ( is_numeric( $header ) ) {
+			$seconds = min( max( 1, (int) $header ), 7 * DAY_IN_SECONDS );
+			return $now + $seconds;
+		}
+		$parsed = strtotime( (string) $header );
+		if ( $parsed ) {
+			return min( max( $now + 1, $parsed ), $now + 7 * DAY_IN_SECONDS );
+		}
+		return $now + self::RATE_LIMIT_DEFAULT_SECONDS;
+	}
+
+	/**
+	 * Removes auth throttle options and notice dismissal for this storage context.
+	 *
+	 * @param bool $main_site_cache Multisite flag from idx_api.
+	 * @return void
+	 */
+	private function clear_global_auth_failure_state( $main_site_cache ) {
+		self::purge_auth_state_options_static( $main_site_cache );
+		self::purge_auth_notice_dismissal_static( $main_site_cache );
+	}
+
+	/**
+	 * Clears idx_api_auth_* for the blog context implied by this API key (multisite-aware).
+	 *
+	 * @param string $api_key Raw API key (spaces allowed; trimmed for empty check).
+	 * @return void
+	 */
+	public static function clear_auth_storage_for_key( $api_key ) {
+		$key = (string) $api_key;
+		if ( '' === $key || '' === str_replace( ' ', '', $key ) ) {
+			return;
+		}
+		$main_site_cache = is_multisite() && $key === get_blog_option( get_main_site_id(), 'idx_broker_apikey' );
+		self::purge_auth_state_options_static( $main_site_cache );
+		self::purge_auth_notice_dismissal_static( $main_site_cache );
+	}
+
+	/**
+	 * Deletes all auth throttle options for the storage blog matching $main_site_cache.
+	 *
+	 * @param bool $main_site_cache Same as idx_api.
+	 * @return void
+	 */
+	private static function purge_auth_state_options_static( $main_site_cache ) {
+		$names = array(
+			self::AUTH_OPT_BACKOFF_UNTIL,
+			self::AUTH_OPT_CONSECUTIVE_401,
+			self::AUTH_OPT_FIRST_FAILURE_AT,
+			self::AUTH_OPT_HALTED,
+		);
+		foreach ( $names as $name ) {
+			if ( $main_site_cache ) {
+				delete_blog_option( get_main_site_id(), $name );
+			} else {
+				delete_option( $name );
+			}
+		}
+	}
+
+	/**
+	 * @param bool $main_site_cache Same as idx_api.
+	 * @return void
+	 */
+	private static function purge_auth_notice_dismissal_static( $main_site_cache ) {
+		$dismiss = 'idx-notice-dismissed-idx_api_auth';
+		if ( $main_site_cache ) {
+			delete_blog_option( get_main_site_id(), $dismiss );
+		} else {
+			delete_option( $dismiss );
+		}
+	}
+
+	/**
+	 * Request headers for IDX HTTP calls including correlatable User-Agent.
+	 *
+	 * @param string $apiversion IDX apiversion header value.
+	 * @return array<string,string>
+	 */
+	private function build_idx_request_headers( $apiversion ) {
+		$version   = \Idx_Broker_Plugin::IDX_WP_PLUGIN_VERSION;
+		$wp_ver    = get_bloginfo( 'version' );
+		$site      = home_url( '/' );
+		$user_agent = 'IDX-Broker-WP/' . $version . ' WordPress/' . $wp_ver . '; ' . $site;
+
+		$headers = array(
+			'Content-Type'  => 'application/x-www-form-urlencoded',
+			'accesskey'     => $this->api_key,
+			'outputtype'    => 'json',
+			'apiversion'    => $apiversion,
+			'pluginversion' => $version,
+			'user-agent'    => $user_agent,
+		);
+
+		if ( ! empty( $this->dev_partner_key ) && is_string( $this->dev_partner_key ) ) {
+			$headers['ancillarykey'] = $this->dev_partner_key;
+		}
+
+		return $headers;
+	}
+
+	/**
+	 * @param string $name              Option name.
+	 * @param bool   $main_site_cache   Multisite main-site cache flag.
+	 * @return mixed
+	 */
+	private function auth_get_option( $name, $main_site_cache ) {
+		if ( $main_site_cache ) {
+			return get_blog_option( get_main_site_id(), $name );
+		}
+		return get_option( $name );
+	}
+
+	/**
+	 * @param string $name              Option name.
+	 * @param mixed  $value             Scalar to store.
+	 * @param bool   $main_site_cache   Multisite main-site cache flag.
+	 * @return void
+	 */
+	private function auth_update_option( $name, $value, $main_site_cache ) {
+		if ( $main_site_cache ) {
+			update_blog_option( get_main_site_id(), $name, $value );
+		} else {
+			update_option( $name, $value, false );
+		}
+	}
+
+	/**
+	 * Read auth-related option from the blog that owns idx_api_auth_* keys.
+	 *
+	 * @param int    $blog_id Blog ID from auth_state_storage_blog_id().
+	 * @param string $name    Option name.
+	 * @return mixed
+	 */
+	private static function auth_get_scalar_for_blog( $blog_id, $name ) {
+		if ( is_multisite() ) {
+			return get_blog_option( (int) $blog_id, $name );
+		}
+		return get_option( $name );
+	}
+
+	/**
+	 * Whether the site has a failing/halted IDX API key streak (for admin notices).
+	 *
+	 * @return bool
+	 */
+	public static function auth_integration_needs_attention() {
+		$blog_id = self::auth_state_storage_blog_id();
+		if ( (int) self::auth_get_scalar_for_blog( $blog_id, self::AUTH_OPT_HALTED ) ) {
+			return true;
+		}
+		return (int) self::auth_get_scalar_for_blog( $blog_id, self::AUTH_OPT_CONSECUTIVE_401 ) > 0;
 	}
 
 	/**
@@ -249,6 +605,7 @@ class Idx_Api {
 
 		// If nothing was provided for the name of options to clear, clear everything.
 		if ($name === '') {
+			$this->reset_api_auth_throttle_state();
 			$wpdb->query(
 				$wpdb->prepare(
 					"
