@@ -150,8 +150,8 @@ EOD;
 	 */
 	public function price_field( $min_price, $remove_price_validation = 0 ) {
 		// Build min and step attributes conditionally
-		$min_attr  = $remove_price_validation == 1 ? ' min="0"' : '';
-		$step_attr = $remove_price_validation == 1 ? ' step="10000"' : '';
+		$min_attr  = $remove_price_validation == 1 ? '' : ' min="0"';
+		$step_attr = $remove_price_validation == 1 ? '' : ' step="10000"';
 
 		if ( empty( $min_price ) ) {
 			$price_field = '<div class="idx-omnibar-extra idx-omnibar-price-container"><label for="idx-omnibar-extra-price">Price Max</label><input id="idx-omnibar-extra-price" class="idx-omnibar-price" type="number"' . $min_attr . $step_attr . '></div>';

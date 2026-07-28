@@ -666,7 +666,7 @@ class Lead_Management {
 							<i class="material-icons md-18">delete</i>
 							<div class="mdl-tooltip" data-mdl-for="delete-lead-' . esc_attr( $lead->id ) . '">Delete Lead</div>
 						</a>
-						<a href="https://middleware.idxbroker.com/mgmt/editlead.php?id=' . esc_attr( $lead->id ) . '" id="edit-mw-' . esc_attr( $lead->id ) . '" target="_blank">
+						<a href="https://middleware.idxbroker.com/mgmt/leads/' . esc_attr( $lead->id ) . '/edit#accountInfo" id="edit-mw-' . esc_attr( $lead->id ) . '" target="_blank">
 							<i class="material-icons md-18">exit_to_app</i>
 							<div class="mdl-tooltip" data-mdl-for="edit-mw-' . esc_attr( $lead->id ) . '">Edit Lead in Middleware</div>
 						</a>
