@@ -53,6 +53,19 @@ class Idx_Api {
 	private const SERVER_ERROR_CACHE_MAX_SECONDS = 120;
 
 	/**
+	 * Longest plausible cache lifetime. Anything stamped further out was written by a defective
+	 * build and must not be trusted. Sits above the 7 day Retry-After cap applied in
+	 * parse_retry_after_expiration().
+	 */
+	private const MAX_CACHE_LIFETIME_SECONDS = 691200; // 8 days.
+
+	/** Oldest a cache entry may be and still be served as 412 fallback data. */
+	private const MAX_FALLBACK_AGE_SECONDS = 604800; // 7 days.
+
+	/** Support breadcrumb: first time a defective expiration stamp was repaired on this site. */
+	private const OPT_CACHE_REPAIRED_AT = 'idx_api_cache_repaired_at';
+
+	/**
 	 * apiResponse handles the various replies we get from the IDX Broker API and returns appropriate error messages.
 	 *
 	 * @param  [array] $response [response header from API call]
@@ -171,14 +184,16 @@ class Idx_Api {
 			}
 
 			if ( is_array( $cached ) && isset( $cached['data'] ) && isset( $cached['expiration'] ) ) {
-				$expiration         = $cached['expiration'];
+				$cached_expiration = $this->normalize_cache_expiration( $cached['expiration'], $main_site_cache );
 
 				// If the data is past expiration, but we've currently exceeded the API limit,
 				// let's return the cached data so we don't continue to call the API until
 				// after one hour since the first 412 error.
-				if ( $limit_window_active && $expiration < time() ) {
-					return $cached['data'];
-				} elseif ( $expiration >= time() ) {
+				if ( $limit_window_active && $cached_expiration < time() ) {
+					if ( $this->cache_entry_within_max_age( $cached ) ) {
+						return $cached['data'];
+					}
+				} elseif ( $cached_expiration >= time() ) {
 					return $cached['data'];
 				}
 			}
@@ -234,6 +249,7 @@ class Idx_Api {
 				$fallback_expiration = ( $limit_exceeded_at > 0 ? $limit_exceeded_at : time() ) + ( 60 * 60 );
 				$fallback_cache_data = array(
 					'data'       => array(),
+					'created'    => time(),
 					'expiration' => $fallback_expiration,
 				);
 				if ( $main_site_cache ) {
@@ -254,9 +270,11 @@ class Idx_Api {
 			$data = (array) json_decode( (string) $response['body'], $json_decode_type );
 			if ( $is_cacheable_request ) {
 				// Store in cache
+				$ttl        = min( max( 0, (int) $expiration ), self::MAX_CACHE_LIFETIME_SECONDS );
 				$cache_data = array(
 					'data'       => $data,
-					'expiration' => time() + $expiration,
+					'created'    => time(),
+					'expiration' => time() + $ttl,
 				);
 				if ( $main_site_cache ) {
 					update_blog_option( get_main_site_id(), $cache_key, $cache_data );
@@ -409,6 +427,71 @@ class Idx_Api {
 	}
 
 	/**
+	 * Whether a stored cache expiration is a plausible timestamp.
+	 *
+	 * @param mixed $expiration Stored expiration value.
+	 * @return bool
+	 */
+	private function cache_expiration_is_sane( $expiration ) {
+		return is_numeric( $expiration ) && (int) $expiration <= time() + self::MAX_CACHE_LIFETIME_SECONDS;
+	}
+
+	/**
+	 * Effective expiration for a cache envelope. A stamp beyond the plausible ceiling came from a
+	 * defective build; the payload is real API data of unknown age, so it is treated as just
+	 * expired rather than discarded. This can never make an entry look fresh.
+	 *
+	 * @param mixed $expiration      Stored expiration value.
+	 * @param bool  $main_site_cache Multisite cache flag.
+	 * @return int
+	 */
+	private function normalize_cache_expiration( $expiration, $main_site_cache ) {
+		if ( $this->cache_expiration_is_sane( $expiration ) ) {
+			return (int) $expiration;
+		}
+		$this->record_cache_repair( $main_site_cache );
+		return time() - 1;
+	}
+
+	/**
+	 * Whether an entry is young enough to serve as last-resort fallback data. Entries written
+	 * before 'created' existed, or with an unusable value, report an unknown age and are allowed,
+	 * since refusing them would leave pages blank during an API cooldown.
+	 *
+	 * @param array $cached Cache envelope.
+	 * @return bool
+	 */
+	private function cache_entry_within_max_age( $cached ) {
+		if ( ! is_array( $cached ) || ! isset( $cached['created'] ) || ! is_numeric( $cached['created'] ) ) {
+			return true;
+		}
+		$created = (int) $cached['created'];
+		if ( $created > time() ) {
+			return true;
+		}
+		return ( time() - $created ) <= self::MAX_FALLBACK_AGE_SECONDS;
+	}
+
+	/**
+	 * Records that this site held a defective expiration stamp. Written once so support can
+	 * confirm an install was affected; survives cache purges.
+	 *
+	 * @param bool $main_site_cache Multisite cache flag.
+	 * @return void
+	 */
+	private function record_cache_repair( $main_site_cache ) {
+		if ( $main_site_cache ) {
+			if ( ! get_blog_option( get_main_site_id(), self::OPT_CACHE_REPAIRED_AT ) ) {
+				update_blog_option( get_main_site_id(), self::OPT_CACHE_REPAIRED_AT, time() );
+			}
+			return;
+		}
+		if ( ! get_option( self::OPT_CACHE_REPAIRED_AT ) ) {
+			update_option( self::OPT_CACHE_REPAIRED_AT, time(), false );
+		}
+	}
+
+	/**
 	 * Writes empty cached payload until $expiration_ts (Unix time), matching successful cache structure.
 	 *
 	 * @param string $cache_key       Option name.
@@ -420,6 +503,7 @@ class Idx_Api {
 	private function persist_negative_cache( $cache_key, $main_site_cache, $data, $expiration_ts ) {
 		$payload = array(
 			'data'       => $data,
+			'created'    => time(),
 			'expiration' => (int) $expiration_ts,
 		);
 		if ( $main_site_cache ) {
@@ -1294,8 +1378,9 @@ class Idx_Api {
 				$cached = unserialize( $cached );
 			}
 			if ( is_array( $cached ) && isset( $cached['data'] ) && isset( $cached['expiration'] ) ) {
-				$expiration = $cached['expiration'];
-				$use_cache  = ( $limit_window_active && $expiration < time() ) || ( $expiration >= time() );
+				$cached_expiration = $this->normalize_cache_expiration( $cached['expiration'], $main_site_cache );
+				$use_cache         = ( $limit_window_active && $cached_expiration < time() && $this->cache_entry_within_max_age( $cached ) )
+					|| ( $cached_expiration >= time() );
 				if ( $use_cache ) {
 					$account_type = $cached['data'];
 					if ( ! empty( $account_type ) && 'object' !== gettype( $account_type ) && ( stripos( $account_type[0], 'engage' ) || stripos( $account_type[0], 'home' ) ) ) {
