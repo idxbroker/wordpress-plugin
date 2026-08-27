@@ -112,6 +112,11 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 
 ## Changelog ##
 
+### 3.3.0 ###
+* Fix: Cached API data was saved with an invalid expiration date, which could stop featured listings and other IDX data from updating on the site.
+* Fix: Existing caches with an invalid expiration are now detected and refreshed automatically.
+* Fix: Cached data is no longer used as a fallback during API rate limiting once it becomes too old.
+
 ### 3.2.9 ###
 * Fix: Omnibar "Remove Price Validation" option now correctly removes min/step attributes on price fields instead of adding them
 * Fix: Corrected the lead edit link.
