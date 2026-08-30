@@ -32,13 +32,13 @@
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.2.1",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^4.1.0",
+    "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.7",
     "jshint": "^2.8.0",
     "jshint-stylish": "^2.1.0",
-    "node-sass": "^5.0.0"
+    "node-sass": "^7.0.3"
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions"
