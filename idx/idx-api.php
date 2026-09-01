@@ -687,6 +687,23 @@ class Idx_Api {
 	public function idx_clean_transients($name = '') {
 		global $wpdb;
 
+		$like = ( $name === '' ) ? '%idx_%_cache' : '%idx_' . $name . '%_cache';
+
+		/*
+		 * Collect the matching option names BEFORE deleting them. The DELETE below bypasses
+		 * delete_option(), so on installs backed by a persistent object cache (Memcached,
+		 * Redis) the cached copies survive. get_option() then keeps returning a value while
+		 * the row is gone, and update_option() can never repair it: it only falls back to
+		 * add_option() when get_option() returns false, otherwise it runs an UPDATE that
+		 * matches zero rows and bails out. The entry is stuck permanently.
+		 */
+		$cache_option_names = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s",
+				$like
+			)
+		);
+
 		// If nothing was provided for the name of options to clear, clear everything.
 		if ($name === '') {
 			$this->reset_api_auth_throttle_state();
@@ -699,7 +716,9 @@ class Idx_Api {
 					'%idx_%_cache'
 				)
 			);
-	
+
+			$this->invalidate_option_cache( $cache_option_names );
+
 			$this->clear_wrapper_cache();
 	
 			// Update IDX Pages Immediately.
@@ -716,8 +735,27 @@ class Idx_Api {
 					'%idx_' . $name . '%_cache'
 				)
 			);
-	
+
+			$this->invalidate_option_cache( $cache_option_names );
 		}
+	}
+
+	/**
+	 * Drops object-cache copies of options that were deleted with raw SQL.
+	 *
+	 * @param array $option_names Option names removed from the options table.
+	 * @return void
+	 */
+	private function invalidate_option_cache( $option_names ) {
+		if ( ! empty( $option_names ) ) {
+			foreach ( $option_names as $option_name ) {
+				wp_cache_delete( $option_name, 'options' );
+			}
+		}
+
+		// Both buckets can still hold the deleted names.
+		wp_cache_delete( 'notoptions', 'options' );
+		wp_cache_delete( 'alloptions', 'options' );
 	}
 
 	/**
