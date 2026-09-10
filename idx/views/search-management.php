@@ -80,6 +80,17 @@ class Search_Management {
 		add_action( 'wp_ajax_idx_search_delete', array( $this, 'idx_search_delete' ) );
 	}
 
+	/**
+	 * Reject AJAX requests from users who cannot manage plugin settings.
+	 *
+	 * @return void
+	 */
+	private function require_manage_options_ajax() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1, '', array( 'response' => 403 ) );
+		}
+	}
+
 	public function idx_search_scripts() {
 
 		// Only load on searches pages.
@@ -119,6 +130,7 @@ class Search_Management {
 	 * @return void
 	 */
 	public function idx_search_add() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_search_add_nonce', 'nonce', false );
 		if ( $permission == false || ! isset( $_POST['pageTitle'] ) || ! isset( $_POST['linkTitle'] ) ) {
@@ -200,6 +212,7 @@ class Search_Management {
 	 * @return void
 	 */
 	public function idx_lead_search_add() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_search_add_nonce', 'nonce', false );
 		if ( false == $permission || empty( $_POST['leadID'] ) ) {
@@ -270,6 +283,7 @@ class Search_Management {
 	 * @return void
 	 */
 	public function idx_search_delete() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_search_delete_nonce', 'nonce', false );
 		if ( $permission == false || ! isset( $_POST['ssid'] ) ) {

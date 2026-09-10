@@ -49,6 +49,9 @@ class Notice_Handler {
 
 	// Function called via ajax to dismiss the notice
 	public static function dismissed() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1, '', array( 'response' => 403 ) );
+		}
 		check_ajax_referer( 'idx-notice-nonce' );
 		$post = filter_input_array( INPUT_POST );
 		if ( isset( $post['name'] ) && '' !== $post['name'] ) {

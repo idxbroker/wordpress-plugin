@@ -53,6 +53,9 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function add_dashboard_widget() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 		add_meta_box( 'idx_dashboard_widget', 'IMPress for IDX Broker', array( $this, 'compile_dashboard_widget' ), 'dashboard', 'normal', 'high' );
 	}
 
@@ -124,6 +127,9 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function leads_overview() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1, '', array( 'response' => 403 ) );
+		}
 		if ( isset( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], 'impress-dashboard-leads-nonce' ) ) {
 			$interval  = sanitize_text_field( $_POST['timeframe'] );
 			$timeframe = null;
@@ -147,6 +153,9 @@ class Dashboard_Widget {
 	 * @return void
 	 */
 	public function listings_overview() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1, '', array( 'response' => 403 ) );
+		}
 		if ( isset( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], 'impress-dashboard-listings-nonce' ) ) {
 			$interval = sanitize_text_field( $_POST['timeframe'] );
 			try {
@@ -191,6 +200,9 @@ class Dashboard_Widget {
 	 * @return mixed
 	 */
 	public function side_overview_data() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1, '', array( 'response' => 403 ) );
+		}
 		if ( isset( $_REQUEST['nonce'] ) && wp_verify_nonce( $_REQUEST['nonce'], 'impress-dashboard-overview-nonce' ) ) {
 			try {
 				$leads = $this->new_leads();

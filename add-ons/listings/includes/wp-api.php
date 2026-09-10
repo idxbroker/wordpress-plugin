@@ -191,7 +191,7 @@ add_action(
 			array(
 				'methods'             => 'GET',
 				'callback'            => 'wpl_rest_import_listings',
-				'permission_callback' => '__return_true',
+				'permission_callback' => 'wpl_rest_permission_check',
 			)
 		);
 	}
@@ -202,5 +202,5 @@ function wpl_rest_import_listings( $data ) {
 }
 
 function wpl_rest_permission_check() {
-	return current_user_can( 'edit_posts' );
+	return current_user_can( 'manage_options' );
 }

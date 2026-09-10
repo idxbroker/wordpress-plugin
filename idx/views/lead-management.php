@@ -106,13 +106,24 @@ class Lead_Management {
 		add_action( 'wp_ajax_get_idx_leads_data', [ $this, 'get_idx_leads_data' ] );
 	}
 
+	/**
+	 * Reject AJAX requests from users who cannot manage plugin settings.
+	 *
+	 * @return void
+	 */
+	private function require_manage_options_ajax() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1, '', array( 'response' => 403 ) );
+		}
+	}
+
 	public function idx_lead_scripts() {
 
 		// Only load on leads pages.
 		$screen_id = get_current_screen();
 		if ( 'leads_page_edit-lead' === $screen_id->id || 'toplevel_page_leads' === $screen_id->id ) {
 
-			wp_enqueue_script( 'idx_lead_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-leads.js', [ 'jquery' ], '1.0.0', false );
+			wp_enqueue_script( 'idx_lead_ajax_script', IMPRESS_IDX_URL . 'assets/js/idx-leads.js', [ 'jquery' ], '3.3.1', false );
 			wp_localize_script(
 				'idx_lead_ajax_script',
 				'IDXLeadAjax',
@@ -120,6 +131,7 @@ class Lead_Management {
 					'ajaxurl'    => admin_url( 'admin-ajax.php' ),
 					'leadurl'    => admin_url( 'admin.php?page=edit-lead&leadID=' ),
 					'detailsurl' => $this->idx_api->details_url(),
+					'leadsNonce' => wp_create_nonce( 'idx_leads_data_nonce' ),
 				)
 			);
 			wp_enqueue_script( 'dialog-polyfill' );
@@ -142,6 +154,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_add() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_add_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['fields'] ) ) {
@@ -189,6 +202,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_edit() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_edit_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['fields'] ) || ! isset( $_POST['leadID'] ) ) {
@@ -228,6 +242,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_note_add() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_note_add_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['note'] ) || ! isset( $_POST['id'] ) ) {
@@ -269,6 +284,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_note_edit() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_note_edit_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['note'], $_POST['id'], $_POST['noteid'] ) ) {
@@ -310,6 +326,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_property_add() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_property_add_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['id'] ) ) {
@@ -360,6 +377,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_property_edit() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_property_edit_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['id'], $_POST['spid'] ) ) {
@@ -411,6 +429,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_delete() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_delete_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['id'] ) ) {
@@ -449,6 +468,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_note_delete() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_note_delete_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['id'], $_POST['noteid'] ) ) {
@@ -488,6 +508,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_property_delete() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_property_delete_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['id'] ) || ! isset( $_POST['spid'] ) ) {
@@ -526,6 +547,7 @@ class Lead_Management {
 	 * @return void
 	 */
 	public function idx_lead_search_delete() {
+		$this->require_manage_options_ajax();
 
 		$permission = check_ajax_referer( 'idx_lead_search_delete_nonce', 'nonce', false );
 		if ( ! $permission || ! isset( $_POST['id'], $_POST['ssid'] ) ) {
@@ -601,6 +623,8 @@ class Lead_Management {
 	}
 
 	public function get_idx_leads_data() {
+		$this->require_manage_options_ajax();
+		check_ajax_referer( 'idx_leads_data_nonce', 'nonce' );
 
 		$leads_array = $this->idx_api->get_leads();
 

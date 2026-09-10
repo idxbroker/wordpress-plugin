@@ -133,6 +133,9 @@ class WP_Listings_Admin_Notice {
 	 * @return bool
 	 */
 	public static function ajax_cb() {
+		if ( ! current_user_can( 'manage_categories' ) ) {
+			wp_die( -1, '', array( 'response' => 403 ) );
+		}
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], self::$nonce_action ) ) {
 			return false;
 		}
