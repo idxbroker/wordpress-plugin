@@ -209,7 +209,7 @@ class WPL_Google_My_Business {
 	 */
 	public function impress_gmb_get_listing_posts() {
 		// User capability check.
-		if ( ! current_user_can( 'read' ) ) {
+		if ( ! current_user_can( 'publish_posts' ) || ! current_user_can( 'edit_posts' ) ) {
 			echo 'check permissions';
 			wp_die();
 		}

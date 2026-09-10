@@ -23,8 +23,10 @@ jQuery(document).ready(function($) {
 	$('.mdl-data-table.leads').DataTable( {
 		"ajax": {
       			"url": datatablesajax.url,
+      			"type": "POST",
       			"data": {
-				action: 'get_idx_leads_data'
+				action: 'get_idx_leads_data',
+				nonce: ( typeof IDXLeadAjax !== 'undefined' ? IDXLeadAjax.leadsNonce : '' )
 			}
     		},
 		"pagingType": "full_numbers",
