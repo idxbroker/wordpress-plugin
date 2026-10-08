@@ -4,7 +4,7 @@ Author: IDX, LLC
 Author URL: https://idxbroker.com
 **Tags:** IDX, MLS, multiple listing service, impress, idx impress, impress for idx broker, IDX plugin, idx broker, idxbroker, idx broker platinum, idx wordpress, idx wordpress plugin, integrated idx, real estate, real estate wordpress, RETS, wordpress idx, wordpress mls, WordPress Plugin, platinum, realtor, idx broker lite, idx lite, idxbroker lite, crm
 **Requires at least:** 5.3
-**Tested up to:** 7.0.1
+**Tested up to:** 7.1.3.
 **Stable tag:** 3.3.2
 **Minimum PHP:** 7.1.8
 **License:** GPLv2 or later
@@ -111,6 +111,10 @@ This plugin requires PHP 7.0 or higher. For security reasons, we recommend updat
 For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or IMPress Agents already installed, the plugins will continue to work as-is. However, if the user selects ‘Enable Listings’ or ‘Enable Agents’ in the new IMPress for IDX dashboard, the legacy IMPress Listings/Agents will be deactivated and the new consolidated version of the plugin will be used. Any existing data for Listings/Agents will be unaffected.
 
 ## Changelog ##
+
+### 3.3.2 ###
+* Fix: Clean transient cache invalidation.
+* Update: Update verbiage to indicate imported listings are updated twice daily, independent of the update frequency settings.
 
 ### 3.3.1 ###
 * Fix: Missing authorization on lead management, saved search, and dashboard AJAX actions allowed Subscriber-level users to access and modify leads (CVE-2026-81788).
