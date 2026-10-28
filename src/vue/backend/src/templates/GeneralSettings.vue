@@ -49,7 +49,7 @@
         <idx-form-group>
             <idx-block className="form-content__label">
                 <idx-block tag="h2" className="form-content__title">Update Frequency</idx-block>
-                <p>Choose how often IMPress gets updates from your IDX Broker account.</p>
+                <p>Choose how often IMPress syncs your IDX Broker pages. This does not control imported listings, which update on their own twice daily schedule.</p>
             </idx-block>
             <idx-custom-select
                 ariaLabel="Update Frequency"

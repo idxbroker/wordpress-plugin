@@ -15,34 +15,16 @@ function wp_listings_shortcode($atts, $content = null) {
 		'columns'  => ''
 	), $atts ) );
 
-	if ($limit) {
-		$limit = esc_attr($limit);
-	}
-
-	if ($taxonomy) {
-		$taxonomy = esc_attr($taxonomy);
-	}
-
-	if ($term) {
-		$term = esc_attr($term);
-	}
-
-	if ($columns) {
-		$columns = esc_attr($columns);
-	}
+	$limit    = (int) $limit;
+	$columns  = (int) $columns;
+	$taxonomy = sanitize_key($taxonomy);
+	$term     = sanitize_text_field($term);
 
 	/**
 	 * if limit is empty set to all
 	 */
 	if(!$limit) {
 		$limit = -1;
-	}
-
-	/**
-	 * if columns is empty set to 0
-	 */
-	if(!$columns) {
-		$columns = 0;
 	}
 
 	/*
@@ -54,10 +36,9 @@ function wp_listings_shortcode($atts, $content = null) {
 	);
 
 	if($id) {
-		$id = esc_attr($id);
 		$query_args = array(
 			'post_type'       => 'listing',
-			'post__in'        => explode(',', $id)
+			'post__in'        => array_map('intval', explode(',', $id))
 		);
 	}
 
@@ -92,36 +73,36 @@ function wp_listings_shortcode($atts, $content = null) {
 
 		$first_class = ( 1 == $count ) ? 'first' : '';
 
-		$output .= '<div class="listing-wrap ' . get_column_class($columns) . ' ' . $first_class . '"><div class="listing-widget-thumb"><a href="' . get_permalink() . '" class="listing-image-link">' . get_the_post_thumbnail( $post->ID, 'listings' ) . '</a>';
+		$output .= '<div class="listing-wrap ' . esc_attr( get_column_class($columns) ) . ' ' . esc_attr( $first_class ) . '"><div class="listing-widget-thumb"><a href="' . esc_url( get_permalink() ) . '" class="listing-image-link">' . get_the_post_thumbnail( $post->ID, 'listings' ) . '</a>';
 
 		if ( '' != wp_listings_get_status() ) {
-			$output .= '<span class="listing-status ' . strtolower(str_replace(' ', '-', wp_listings_get_status())) . '">' . wp_listings_get_status() . '</span>';
+			$output .= '<span class="listing-status ' . esc_attr( strtolower(str_replace(' ', '-', wp_listings_get_status())) ) . '">' . esc_html( wp_listings_get_status() ) . '</span>';
 		}
 
 		$output .= '<div class="listing-thumb-meta">';
 
 		if ( '' != get_post_meta( $post->ID, '_listing_text', true ) ) {
-			$output .= '<span class="listing-text">' . get_post_meta( $post->ID, '_listing_text', true ) . '</span>';
+			$output .= '<span class="listing-text">' . esc_html( get_post_meta( $post->ID, '_listing_text', true ) ) . '</span>';
 		} elseif ( '' != wp_listings_get_property_types() ) {
-			$output .= '<span class="listing-property-type">' . wp_listings_get_property_types() . '</span>';
+			$output .= '<span class="listing-property-type">' . esc_html( wp_listings_get_property_types() ) . '</span>';
 		}
 
 		if ( '' != get_post_meta( $post->ID, '_listing_price', true ) ) {
-			$output .= '<span class="listing-price">' . get_post_meta( $post->ID, '_listing_price', true ) . '</span>';
+			$output .= '<span class="listing-price">' . esc_html( get_post_meta( $post->ID, '_listing_price', true ) ) . '</span>';
 		}
 
 		$output .= '</div><!-- .listing-thumb-meta --></div><!-- .listing-widget-thumb -->';
 
 		if ( '' != get_post_meta( $post->ID, '_listing_open_house', true ) ) {
-			$output .= '<span class="listing-open-house">' . __( "Open House", 'wp-listings' ) . ': ' . get_post_meta( $post->ID, '_listing_open_house', true ) . '</span>';
+			$output .= '<span class="listing-open-house">' . __( "Open House", 'wp-listings' ) . ': ' . esc_html( get_post_meta( $post->ID, '_listing_open_house', true ) ) . '</span>';
 		}
 
-		$output .= '<div class="listing-widget-details"><h3 class="listing-title"><a href="' . get_permalink() . '">' . get_the_title() . '</a></h3>';
-		$output .= '<p class="listing-address"><span class="listing-address">' . wp_listings_get_address() . '</span><br />';
-		$output .= '<span class="listing-city-state-zip">' . wp_listings_get_city() . ', ' . wp_listings_get_state() . ' ' . get_post_meta( $post->ID, '_listing_zip', true ) . '</span></p>';
+		$output .= '<div class="listing-widget-details"><h3 class="listing-title"><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
+		$output .= '<p class="listing-address"><span class="listing-address">' . esc_html( wp_listings_get_address() ) . '</span><br />';
+		$output .= '<span class="listing-city-state-zip">' . esc_html( wp_listings_get_city() ) . ', ' . esc_html( wp_listings_get_state() ) . ' ' . esc_html( get_post_meta( $post->ID, '_listing_zip', true ) ) . '</span></p>';
 
 		if ( '' != get_post_meta( $post->ID, '_listing_bedrooms', true ) || '' != get_post_meta( $post->ID, '_listing_bathrooms', true ) || '' != get_post_meta( $post->ID, '_listing_sqft', true )) {
-			$output .= '<ul class="listing-beds-baths-sqft"><li class="beds">' . get_post_meta( $post->ID, '_listing_bedrooms', true ) . '<span>' . __( "Beds", 'wp-listings' ) . '</span></li> <li class="baths">' . get_post_meta( $post->ID, '_listing_bathrooms', true ) . '<span>' . __( "Baths", 'wp-listings' ) . '</span></li> <li class="sqft">' . get_post_meta( $post->ID, '_listing_sqft', true ) . '<span>' . __( "Square Feet", 'wp-listings' ) . '</span></li></ul>';
+			$output .= '<ul class="listing-beds-baths-sqft"><li class="beds">' . esc_html( get_post_meta( $post->ID, '_listing_bedrooms', true ) ) . '<span>' . __( "Beds", 'wp-listings' ) . '</span></li> <li class="baths">' . esc_html( get_post_meta( $post->ID, '_listing_bathrooms', true ) ) . '<span>' . __( "Baths", 'wp-listings' ) . '</span></li> <li class="sqft">' . esc_html( get_post_meta( $post->ID, '_listing_sqft', true ) ) . '<span>' . __( "Square Feet", 'wp-listings' ) . '</span></li></ul>';
 		}
 
 		$output .= '</div><!-- .listing-widget-details --></div><!-- .listing-wrap -->';
@@ -146,8 +127,8 @@ function wp_listings_meta_shortcode($atts) {
 	extract(shortcode_atts(array(
 		'key' => ''
 	), $atts ) );
-	$key = sanitize_text_field($key);
+	$key = sanitize_key($key);
 	$postid = get_the_id();
 
-	return '<span class=' . esc_attr($key) . '>' . get_post_meta($postid, '_listing_' . $key, true) . '</span>';
+	return '<span class="' . esc_attr( $key ) . '">' . wp_kses_post( get_post_meta( $postid, '_listing_' . $key, true ) ) . '</span>';
 }

@@ -129,6 +129,18 @@ class Register_Impress_Shortcodes {
 			)
 		);
 
+		$max           = (int) $max;
+		$use_rows      = (int) $use_rows;
+		$num_per_row   = (int) $num_per_row;
+		$show_image    = (int) $show_image;
+		$styles        = (int) $styles;
+		$new_window    = (int) $new_window;
+		$colistings    = (int) $colistings;
+		$order         = esc_attr( $order );
+		$property_type = esc_attr( $property_type );
+		$saved_link_id = esc_attr( $saved_link_id );
+		$agent_id      = esc_attr( $agent_id );
+
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'impress-showcase' );
 		}
@@ -139,10 +151,10 @@ class Register_Impress_Shortcodes {
 		if ( ! $comingSoon ) {
 			if ( ( $property_type ) === 'savedlinks' ) {
 				$properties = $this->idx_api->saved_link_properties( $saved_link_id );
-				$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
+				$output    .= '<!-- Saved Link ID: ' . $this->comment_safe( $saved_link_id ) . ' -->';
 			} else {
 				$properties = $this->idx_api->client_properties( $property_type );
-				$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+				$output    .= '<!-- Property Type: ' . $this->comment_safe( $property_type ) . ' -->';
 			}
 			// Force type as Array.
 			$properties = json_encode( $properties );
@@ -154,7 +166,7 @@ class Register_Impress_Shortcodes {
 			if ( $comingSoon ) {
 				return $output .= '<p>Coming Soon</p>';
 			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
-				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
+				return $output .= '<p>' . esc_html( $properties['errors']['idx_api_error'][0] ) . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
 			}
@@ -166,7 +178,6 @@ class Register_Impress_Shortcodes {
 		$column_class = '';
 
 		if ( 1 == $use_rows ) {
-			$num_per_row = (int) esc_attr($num_per_row);
 			// Max of four columns
 			$number_columns = ( $num_per_row > 4 ) ? 4 : $num_per_row;
 
@@ -190,12 +201,6 @@ class Register_Impress_Shortcodes {
 			}
 		}
 
-		if ( ! isset( $new_window ) ) {
-			$new_window = 0;
-		} else {
-			$new_window = esc_attr($new_window);
-		}
-
 		$target = $this->target( $new_window );
 
 		if ( 'low-high' == $order ) {
@@ -214,7 +219,6 @@ class Register_Impress_Shortcodes {
 		foreach ( $properties as $prop ) {
 
 			if ( ! empty( $agent_id ) ) {
-				$agent_id = esc_attr($agent_id);
 				// Check if listing agent ID matches agent's IDX ID.
 				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
 					// If colistings is enabled, check for match.
@@ -309,24 +313,24 @@ class Register_Impress_Shortcodes {
                         </p>
                         %16$s
                         </div>',
-						price_selector( $prop ),
-						$prop['propStatus'],
-						$url,
-						$prop_image_url,
-						htmlspecialchars( $prop['remarksConcat'] ),
-						$prop['streetNumber'],
-						$prop['streetDirection'],
-						$prop['streetName'],
-						$prop['unitNumber'],
-						$prop['cityName'],
-						$prop['state'],
+						esc_html( price_selector( $prop ) ),
+						esc_html( $prop['propStatus'] ),
+						esc_url( $url ),
+						esc_url( $prop_image_url ),
+						esc_attr( $prop['remarksConcat'] ),
+						esc_html( $prop['streetNumber'] ),
+						esc_html( $prop['streetDirection'] ),
+						esc_html( $prop['streetName'] ),
+						esc_html( $prop['unitNumber'] ),
+						esc_html( $prop['cityName'] ),
+						esc_html( $prop['state'] ),
 						$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
 						$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
 						$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
 						$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 						$this->maybe_add_disclaimer_and_courtesy( $prop ),
-						$column_class,
-						$target
+						esc_attr( $column_class ),
+						esc_attr( $target )
 					),
 					$prop,
 					( isset( $instance ) ? $instance : [] ),
@@ -358,20 +362,20 @@ class Register_Impress_Shortcodes {
                             </p>
                         </a>
                     </li>',
-						price_selector( $prop ),
-						$url,
-						$prop['streetNumber'],
-						$prop['streetDirection'],
-						$prop['streetName'],
-						$prop['unitNumber'],
-						$prop['cityName'],
-						$prop['state'],
+						esc_html( price_selector( $prop ) ),
+						esc_url( $url ),
+						esc_html( $prop['streetNumber'] ),
+						esc_html( $prop['streetDirection'] ),
+						esc_html( $prop['streetName'] ),
+						esc_html( $prop['unitNumber'] ),
+						esc_html( $prop['cityName'] ),
+						esc_html( $prop['state'] ),
 						$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
 						$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
 						$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
 						$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
-						$column_class,
-						$target
+						esc_attr( $column_class ),
+						esc_attr( $target )
 					),
 					$prop,
 					( isset( $instance ) ? $instance : [] ),
@@ -410,8 +414,28 @@ class Register_Impress_Shortcodes {
 		if ( $value <= 0 ) {
 			return '';
 		} else {
-			return "<span class=\"impress-$field\">$value $display_name</span> ";
+			return sprintf(
+				'<span class="impress-%1$s">%2$s %3$s</span> ',
+				esc_attr( $field ),
+				esc_html( $value ),
+				esc_html( $display_name )
+			);
 		}
+	}
+
+	/**
+	 * Escape a value for safe interpolation inside an HTML comment.
+	 *
+	 * Entities are not decoded inside comments, so escaping the angle brackets
+	 * prevents a `-->` sequence from closing the comment early. The remaining
+	 * hyphens are dropped because a double hyphen is not valid comment content.
+	 *
+	 * @access public
+	 * @param mixed $value Value supplied via shortcode or widget attributes.
+	 * @return string
+	 */
+	public function comment_safe( $value ) {
+		return esc_html( str_replace( '-', '', (string) $value ) );
 	}
 
 	/**
@@ -497,13 +521,13 @@ class Register_Impress_Shortcodes {
 		$output = '';
 
 		if ( isset( $disclaimer_text ) ) {
-			$output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>';
+			$output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . wp_kses_post( $disclaimer_text ) . '</p>';
 		}
 		if ( isset( $disclaimer_logo ) ) {
-			$output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />';
+			$output .= '<img class="logo" src="' . esc_url( $disclaimer_logo ) . '" style="opacity: 1 !important; position: static !important;" />';
 		}
 		if ( isset( $courtesy_text ) ) {
-			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
+			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . wp_kses_post( $courtesy_text ) . '</p>';
 		}
 
 		if ( $output !== '' ) {
@@ -539,15 +563,22 @@ class Register_Impress_Shortcodes {
 			)
 		);
 
+		$max           = (int) $max;
+		$display       = (int) $display;
+		$autoplay      = (int) $autoplay;
+		$colistings    = (int) $colistings;
+		$styles        = (int) $styles;
+		$new_window    = (int) $new_window;
+		$order         = esc_attr( $order );
+		$property_type = esc_attr( $property_type );
+		$saved_link_id = esc_attr( $saved_link_id );
+		$agent_id      = esc_attr( $agent_id );
+
 		wp_enqueue_style( 'owl2-css' );
 		wp_enqueue_script( 'owl2' );
 
 		if ( $styles ) {
 			wp_enqueue_style( 'impress-carousel' );
-		}
-
-		if ( ! isset( $new_window ) ) {
-			$new_window = 0;
 		}
 
 		$target = $this->target( $new_window );
@@ -561,10 +592,10 @@ class Register_Impress_Shortcodes {
 		if ( ! $comingSoon ) {
 			if ( ( $property_type ) === 'savedlinks' ) {
 				$properties = $this->idx_api->saved_link_properties( $saved_link_id );
-				$output    .= '<!-- Saved Link ID: ' . $saved_link_id . ' -->';
+				$output    .= '<!-- Saved Link ID: ' . $this->comment_safe( $saved_link_id ) . ' -->';
 			} else {
 				$properties = $this->idx_api->client_properties( $property_type );
-				$output    .= '<!-- Property Type: ' . $property_type . ' -->';
+				$output    .= '<!-- Property Type: ' . $this->comment_safe( $property_type ) . ' -->';
 			}
 			// Force type as Array.
 			$properties = json_encode( $properties );
@@ -576,7 +607,7 @@ class Register_Impress_Shortcodes {
 			if ( $comingSoon ) {
 				return $output .= '<p>Coming Soon</p>';
 			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
-				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
+				return $output .= '<p>' . esc_html( $properties['errors']['idx_api_error'][0] ) . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
 			}
@@ -601,21 +632,18 @@ class Register_Impress_Shortcodes {
 		$count = 0;
 
 		// The id set on the container and used by the output script to insert the listings into the page for this particular carousel
-		$display = (int) esc_attr($display);
 		$carousel_id = uniqid('impress-carousel-');
-		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', $carousel_id, $display);
+		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s impress-carousel-shortcode owl-carousel owl-theme">', esc_attr( $carousel_id ), $display);
 
 		// Used to hold agent data when matching for colistings.
 		$agent_data;
 
 		foreach ( $properties as $prop ) {
 			if ( ! empty( $agent_id ) ) {
-				$agent_id = (int) esc_attr($agent_id);
 				// Check if listing agent ID matches agent's IDX ID.
-				if ( empty( $prop['userAgentID'] ) || $agent_id !== (int) $prop['userAgentID'] ) {
+				if ( empty( $prop['userAgentID'] ) || (int) $agent_id !== (int) $prop['userAgentID'] ) {
 					// If colistings is enabled, check for match.
 					if ( $colistings ) {
-						$colistings = esc_attr($colistings);
 						if ( array_key_exists( 'coListingAgentID', $prop ) ) {
 							// Check if $agent_data is already set, if not grab a new copy to get MLS-provided agent ID.
 							if ( empty( $agent_data ) ) {
@@ -682,22 +710,22 @@ class Register_Impress_Shortcodes {
                     </p>
                     %15$s
                     </div><!-- end .impress-carousel-property -->',
-					price_selector( $prop ),
-					$url,
-					$prop_image_url,
-					$image_alt_tag,
-					$prop['streetNumber'],
-					$prop['streetDirection'],
-					$prop['streetName'],
-					$prop['unitNumber'],
-					$prop['cityName'],
-					$prop['state'],
+					esc_html( price_selector( $prop ) ),
+					esc_url( $url ),
+					esc_url( $prop_image_url ),
+					esc_attr( $image_alt_tag ),
+					esc_html( $prop['streetNumber'] ),
+					esc_html( $prop['streetDirection'] ),
+					esc_html( $prop['streetName'] ),
+					esc_html( $prop['unitNumber'] ),
+					esc_html( $prop['cityName'] ),
+					esc_html( $prop['state'] ),
 					$this->hide_empty_fields( 'beds', 'Beds', ( empty( $prop['bedrooms'] ) ? '' : $prop['bedrooms'] ) ),
 					$this->hide_empty_fields( 'baths', 'Baths', ( empty( $prop['totalBaths'] ) ? '' : $prop['totalBaths'] ) ),
 					$this->hide_empty_fields( 'sqft', 'SqFt', ( empty( $prop['sqFt'] ) ? '' : $prop['sqFt'] ) ),
 					$this->hide_empty_fields( 'acres', 'Acres', ( empty( $prop['acres'] ) ? '' : $prop['acres'] ) ),
 					$disclaimer,
-					$target
+					esc_attr( $target )
 				),
 				$prop,
 				$atts,
@@ -710,7 +738,7 @@ class Register_Impress_Shortcodes {
 		$output = '
         	<script>
 				window.addEventListener("DOMContentLoaded", function(event) {
-					jQuery("#' . $carousel_id . '").owlCarousel({
+					jQuery("#' . esc_js( $carousel_id ) . '").owlCarousel({
 						items: ' . $display . ',
 						' . $autoplay_param . '
 						nav: true,
@@ -770,19 +798,17 @@ class Register_Impress_Shortcodes {
 			)
 		);
 
+		$use_columns    = (int) $use_columns;
+		$number_columns = (int) $number_columns;
+		$styles         = (int) $styles;
+		$show_count     = (int) $show_count;
+		$new_window     = (int) $new_window;
+		$city_list      = esc_attr( $city_list );
+		$agent_id       = esc_attr( $agent_id );
+		$mls            = empty( $mls ) ? 'a000' : esc_attr( $mls );
+
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'impress-city-links' );
-		}
-
-		if ( ! isset( $new_window ) ) {
-			$new_window = 0;
-		} else {
-			$new_window = (int) esc_attr( $new_window );
-		}
-
-		if ( ! isset( $mls ) ) {
-			$mls = 'a000';
-			$mls = esc_attr( $mls );
 		}
 
 		$target = $this->target( $new_window );

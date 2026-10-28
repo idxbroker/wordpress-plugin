@@ -82,7 +82,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		echo $before_widget;
 
 		if ( ! empty( $title ) ) {
-			echo $before_title . $title . $after_title;
+			echo $before_title . esc_html( $title ) . $after_title;
 		}
 
 		// For testing with demo data.
@@ -306,9 +306,9 @@ class Impress_City_Links_Widget extends \WP_Widget {
 		}
 
 		$output =
-		'<div class="impress-city-list-links impress-city-list-links-' . $list_id . ' impress-row">' . "\n\t";
+		'<div class="impress-city-list-links impress-city-list-links-' . esc_attr( $list_id ) . ' impress-row">' . "\n\t";
 
-		$output .= ( true == $columns ) ? '<ul class="impress-' . $column_class . '">' : '<ul>';
+		$output .= ( true == $columns ) ? '<ul class="impress-' . esc_attr( $column_class ) . '">' : '<ul>';
 
 		$count = 0;
 
@@ -336,13 +336,13 @@ class Impress_City_Links_Widget extends \WP_Widget {
 					'<li>' .
 					"\n\t\t\t" .
 					'<a href="' .
-					$href .
+					esc_url( $href ) .
 					'" target="' .
-					$target .
+					esc_attr( $target ) .
 					'">' .
-					$city->name .
+					esc_html( $city->name ) .
 					' <span class="count">' .
-					$number .
+					esc_html( $number ) .
 					' <span class="screen-reader-text">Listings</span></span>' .
 					'</a>' .
 					"\n\t\t" .
@@ -352,11 +352,11 @@ class Impress_City_Links_Widget extends \WP_Widget {
 					'<li>' .
 					"\n\t\t\t" .
 					'<a href="' .
-					$href .
+					esc_url( $href ) .
 					'" target="' .
-					$target .
+					esc_attr( $target ) .
 					'">' .
-					$city->name .
+					esc_html( $city->name ) .
 					'</a>' .
 					"\n\t\t" .
 					'</li>';
@@ -364,7 +364,7 @@ class Impress_City_Links_Widget extends \WP_Widget {
 			}
 
 			if ( true == $columns && $count % $column_size == 0 && $count != 1 && $count != $number_links ) {
-				$output .= "\n\t" . '</ul>' . "\n\t" . '<ul class="impress-' . $column_class . '">';
+				$output .= "\n\t" . '</ul>' . "\n\t" . '<ul class="impress-' . esc_attr( $column_class ) . '">';
 			}
 		}
 
