@@ -13,6 +13,9 @@ function impa_profile_shortcode($atts, $content = null) {
 		'order' => 'ASC'
 	), $atts ) );
 
+	$orderby = in_array( $orderby, array( 'date', 'title', 'menu_order', 'ID', 'rand' ), true ) ? $orderby : 'menu_order';
+	$order   = ( 'DESC' === strtoupper( (string) $order ) ) ? 'DESC' : 'ASC';
+
 	if ($id == '' ) {
 		$query_args = array(
 			'post_type'       => 'employee',
@@ -22,10 +25,9 @@ function impa_profile_shortcode($atts, $content = null) {
 
 		);
 	} else {
-		$id = esc_attr($id);
 		$query_args = array(
 			'post_type'       => 'employee',
-			'post__in'        => explode( ',', $id),
+			'post__in'        => array_map( 'intval', explode( ',', $id ) ),
 			'posts_per_page'  => -1,
 			'orderby' 		  => $orderby,
 			'order' 		  => $order
@@ -41,8 +43,8 @@ function impa_profile_shortcode($atts, $content = null) {
 	foreach ( $profiles_array as $post ) : setup_postdata( $post );
 
 		$output .= '<div class="shortcode-agent-wrap">';
-		$output .= '<a href="' . get_permalink() . '">' . get_the_post_thumbnail( $post->ID, 'employee-thumbnail' ) . '</a>';
-		$output .= '<div class="shortcode-agent-details"><a class="fn" href="' . get_permalink() . '">' . get_the_title() . '</a>';
+		$output .= '<a href="' . esc_url( get_permalink() ) . '">' . get_the_post_thumbnail( $post->ID, 'employee-thumbnail' ) . '</a>';
+		$output .= '<div class="shortcode-agent-details"><a class="fn" href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a>';
 		$output .= impa_employee_details();
 		if ( function_exists( '_p2p_init' ) && function_exists( 'agentpress_listings_init' ) || function_exists( '_p2p_init' ) && function_exists( 'wp_listings_init' ) ) {
 			$has_listings = impa_has_listings( $post->ID );

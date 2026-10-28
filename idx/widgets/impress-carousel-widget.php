@@ -82,10 +82,10 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		if ( ! $comingSoon ) {
 			if ( ( $instance['properties'] ) === 'savedlinks' ) {
 				$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );
-				$output    .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
+				$output    .= '<!-- Saved Link ID: ' . $this->comment_safe( $instance['saved_link_id'] ) . ' -->';
 			} else {
 				$properties = $this->idx_api->client_properties( $instance['properties'] );
-				$output    .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
+				$output    .= '<!-- Property Type: ' . $this->comment_safe( $instance['properties'] ) . ' -->';
 			}
 			// Force type of array.
 			$properties = json_encode( $properties );
@@ -97,7 +97,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			if ( $comingSoon ) {
 				return $output .= '<p>Coming Soon</p>';
 			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
-				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
+				return $output .= '<p>' . esc_html( $properties['errors']['idx_api_error'][0] ) . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
 			}
@@ -109,7 +109,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 			$autoplay = '';
 		}
 
-		$display = $instance['display'];
+		$display = (int) $instance['display'];
 
 		if ( ! isset( $instance['new_window'] ) ) {
 			$instance['new_window'] = 0;
@@ -134,7 +134,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 
 		// The id set on the container and used by the output script to insert the listings into the page for this particular carousel
 		$carousel_id = uniqid('impress-carousel-');
-		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s owl-carousel owl-theme">', $carousel_id, $instance['display'] );
+		$output .= sprintf( '<div id="%s" class="impress-carousel impress-listing-carousel-%s owl-carousel owl-theme">', esc_attr( $carousel_id ), $display );
 
 		// Used to hold agent data when matching for co-listings.
 		$agent_data;
@@ -237,7 +237,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$output = '
 			<script>
 				window.addEventListener("DOMContentLoaded", function(event) {
-					jQuery("#' . $carousel_id . '").owlCarousel({
+					jQuery("#' . esc_js( $carousel_id ) . '").owlCarousel({
 						items: ' . $display . ',
 						' . $autoplay . '
 						nav: true,
@@ -280,6 +280,21 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		} else {
 			return '<span class="impress-' . esc_attr( $field ) . '">' . esc_html( $value ) . ' ' . esc_html( $display_name ) . '</span> ';
 		}
+	}
+
+	/**
+	 * Escape a value for safe interpolation inside an HTML comment.
+	 *
+	 * Entities are not decoded inside comments, so escaping the angle brackets
+	 * prevents a `-->` sequence from closing the comment early. The remaining
+	 * hyphens are dropped because a double hyphen is not valid comment content.
+	 *
+	 * @access public
+	 * @param mixed $value Value supplied via widget or block attributes.
+	 * @return string
+	 */
+	public function comment_safe( $value ) {
+		return esc_html( str_replace( '-', '', (string) $value ) );
 	}
 
 	/**
@@ -418,7 +433,7 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		echo $before_widget;
 
 		if ( ! empty( $title ) ) {
-			echo $before_title . $title . $after_title;
+			echo $before_title . esc_html( $title ) . $after_title;
 		}
 
 		echo $this->body( $instance );
@@ -570,13 +585,13 @@ class Impress_Carousel_Widget extends \WP_Widget {
 		$output = '';
 
 		if ( isset( $disclaimer_text ) ) {
-			$output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>';
+			$output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . wp_kses_post( $disclaimer_text ) . '</p>';
 		}
 		if ( isset( $disclaimer_logo ) ) {
-			$output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />';
+			$output .= '<img class="logo" src="' . esc_url( $disclaimer_logo ) . '" style="opacity: 1 !important; position: static !important;" />';
 		}
 		if ( isset( $courtesy_text ) ) {
-			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
+			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . wp_kses_post( $courtesy_text ) . '</p>';
 		}
 
 		if ( empty( $output ) ) {

@@ -56,7 +56,7 @@ class Register_Idx_Shortcodes {
 			$url    = $this->get_widget_url( $id );
 			$widget = '';
 			$widget_id = explode( '-', $id );
-			$widget   .= '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : $widget_id[1] ) . '" src="' . $url . '"></script>';
+			$widget   .= '<script type="text/javascript" id="idxwidgetsrc-' . ( empty( $widget_id[1] ) ? '' : esc_attr( $widget_id[1] ) ) . '" src="' . esc_url( $url ) . '"></script>';
 			return $widget;
 		} else {
 			return false;
@@ -89,7 +89,7 @@ class Register_Idx_Shortcodes {
 					$title = esc_attr($title);
 					$link->name = $title;
 				}
-				return '<a href="' . $link->url . '">' . $link->name . '</a>';
+				return '<a href="' . esc_url( $link->url ) . '">' . esc_html( $link->name ) . '</a>';
 			}
 		} else {
 			return false;
@@ -116,7 +116,10 @@ class Register_Idx_Shortcodes {
 		if ( ! is_null( $title ) ) {
 			$title = esc_attr($title);
 			$page      = get_page_by_title( $title );
-			return '<a href="' . get_permalink( $page->ID ) . '">' . $page->post_title . '</a>';
+			if ( ! $page ) {
+				return false;
+			}
+			return '<a href="' . esc_url( get_permalink( $page->ID ) ) . '">' . esc_html( $page->post_title ) . '</a>';
 		} else {
 			return false;
 		}
@@ -148,7 +151,7 @@ class Register_Idx_Shortcodes {
 					$title = esc_attr($title);
 					$link->name = $title;
 				}
-				return '<a href="' . $link->url . '">' . $link->name . '</a>';
+				return '<a href="' . esc_url( $link->url ) . '">' . esc_html( $link->name ) . '</a>';
 			}
 		} else {
 			return false;

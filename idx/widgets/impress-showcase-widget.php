@@ -77,10 +77,10 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		if ( ! $comingSoon ) {
 			if ( ( $instance['properties'] ) === 'savedlinks' ) {
 				$properties = $this->idx_api->saved_link_properties( $instance['saved_link_id'] );
-				$output    .= '<!-- Saved Link ID: ' . $instance['saved_link_id'] . ' -->';
+				$output    .= '<!-- Saved Link ID: ' . $this->comment_safe( $instance['saved_link_id'] ) . ' -->';
 			} else {
 				$properties = $this->idx_api->client_properties( $instance['properties'] );
-				$output    .= '<!-- Property Type: ' . $instance['properties'] . ' -->';
+				$output    .= '<!-- Property Type: ' . $this->comment_safe( $instance['properties'] ) . ' -->';
 			}
 			// Force type as array.
 			$properties = json_encode( $properties );
@@ -92,7 +92,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			if ( $comingSoon ) {
 				return $output .= '<p>Coming Soon</p>';
 			} elseif ( isset( $properties['errors']['idx_api_error'] ) ) {
-				return $output .= '<p>' . $properties['errors']['idx_api_error'][0] . '</p>';
+				return $output .= '<p>' . esc_html( $properties['errors']['idx_api_error'][0] ) . '</p>';
 			} else {
 				return $output .= '<p>No properties found</p>';
 			}
@@ -222,24 +222,24 @@ class Impress_Showcase_Widget extends \WP_Widget {
                         </p>
                         %16$s
                         </div>',
-						price_selector( $prop ),
-						$prop['propStatus'] ?? $prop['status'] ?? '',
-						$url,
-						$prop_image_url,
-						htmlspecialchars( $prop['remarksConcat'] ),
-						$prop['streetNumber'],
-						$prop['streetDirection'],
-						$prop['streetName'],
-						$prop['unitNumber'],
-						$prop['cityName'],
-						$prop['state'],
+						esc_html( price_selector( $prop ) ),
+						esc_html( $prop['propStatus'] ?? $prop['status'] ?? '' ),
+						esc_url( $url ),
+						esc_url( $prop_image_url ),
+						esc_attr( $prop['remarksConcat'] ),
+						esc_html( $prop['streetNumber'] ),
+						esc_html( $prop['streetDirection'] ),
+						esc_html( $prop['streetName'] ),
+						esc_html( $prop['unitNumber'] ),
+						esc_html( $prop['cityName'] ),
+						esc_html( $prop['state'] ),
 						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ?? '' ),
 						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ?? '' ),
 						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ?? '' ),
 						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ?? '' ),
 						$this->maybe_add_disclaimer_and_courtesy( $prop ),
-						$column_class,
-						$target
+						esc_attr( $column_class ),
+						esc_attr( $target )
 					),
 					$prop,
 					$instance,
@@ -271,20 +271,20 @@ class Impress_Showcase_Widget extends \WP_Widget {
                             </p>
                         </a>
                     </li>',
-						price_selector( $prop ),
-						$url,
-						$prop['streetNumber'],
-						$prop['streetDirection'],
-						$prop['streetName'],
-						$prop['unitNumber'],
-						$prop['cityName'],
-						$prop['state'],
+						esc_html( price_selector( $prop ) ),
+						esc_url( $url ),
+						esc_html( $prop['streetNumber'] ),
+						esc_html( $prop['streetDirection'] ),
+						esc_html( $prop['streetName'] ),
+						esc_html( $prop['unitNumber'] ),
+						esc_html( $prop['cityName'] ),
+						esc_html( $prop['state'] ),
 						$this->hide_empty_fields( 'beds', 'Beds', $prop['bedrooms'] ?? '' ),
 						$this->hide_empty_fields( 'baths', 'Baths', $prop['totalBaths'] ?? '' ),
 						$this->hide_empty_fields( 'sqft', 'SqFt', $prop['sqFt'] ?? '' ),
 						$this->hide_empty_fields( 'acres', 'Acres', $prop['acres'] ?? '' ),
-						$column_class,
-						$target
+						esc_attr( $column_class ),
+						esc_attr( $target )
 					),
 					$prop,
 					$instance,
@@ -341,8 +341,28 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		if ( $value <= 0 ) {
 			return '';
 		} else {
-			return "<span class=\"$field\">$value $display_name</span> ";
+			return sprintf(
+				'<span class="%1$s">%2$s %3$s</span> ',
+				esc_attr( $field ),
+				esc_html( $value ),
+				esc_html( $display_name )
+			);
 		}
+	}
+
+	/**
+	 * Escape a value for safe interpolation inside an HTML comment.
+	 *
+	 * Entities are not decoded inside comments, so escaping the angle brackets
+	 * prevents a `-->` sequence from closing the comment early. The remaining
+	 * hyphens are dropped because a double hyphen is not valid comment content.
+	 *
+	 * @access public
+	 * @param mixed $value Value supplied via widget or block attributes.
+	 * @return string
+	 */
+	public function comment_safe( $value ) {
+		return esc_html( str_replace( '-', '', (string) $value ) );
 	}
 
 	/**
@@ -457,7 +477,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 			// Display the link name if no link title has been assigned.
 			$link_text = $saved_link->linkTitle ?? $saved_link->linkName;
 
-			echo '<option ', selected( $instance['saved_link_id'], $saved_link->id, 0 ), ' value="', $saved_link->id, '">', $link_text, '</option>';
+			echo '<option ', selected( $instance['saved_link_id'], $saved_link->id, 0 ), ' value="', esc_attr( $saved_link->id ), '">', esc_html( $link_text ), '</option>';
 
 		}
 	}
@@ -484,7 +504,7 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		echo $before_widget;
 
 		if ( ! empty( $title ) ) {
-			echo $before_title . $title . $after_title;
+			echo $before_title . esc_html( $title ) . $after_title;
 		}
 
 		echo $this->body( $instance );
@@ -647,13 +667,13 @@ class Impress_Showcase_Widget extends \WP_Widget {
 		$output = '';
 
 		if ( isset( $disclaimer_text ) ) {
-			$output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . $disclaimer_text . '</p>';
+			$output .= '<p style="display: block !important; visibility: visible !important; opacity: 1 !important; position: static !important;">' . wp_kses_post( $disclaimer_text ) . '</p>';
 		}
 		if ( isset( $disclaimer_logo ) ) {
-			$output .= '<img class="logo" src="' . $disclaimer_logo . '" style="opacity: 1 !important; position: static !important;" />';
+			$output .= '<img class="logo" src="' . esc_url( $disclaimer_logo ) . '" style="opacity: 1 !important; position: static !important;" />';
 		}
 		if ( isset( $courtesy_text ) ) {
-			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . $courtesy_text . '</p>';
+			$output .= '<p class="courtesy" style="display: block !important; visibility: visible !important;">' . wp_kses_post( $courtesy_text ) . '</p>';
 		}
 
 		if ( '' == $output ) {

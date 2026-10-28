@@ -134,6 +134,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 == Changelog ==
 
 = 3.3.2 =
+* Fix: Sanitize and escape shortcode attributes and post meta to prevent stored XSS (CVE-2026-54869).
 * Fix: Clean transient cache invalidation.
 * Update: Update verbiage to indicate imported listings are updated twice daily, independent of the update frequency settings.
 

@@ -165,7 +165,10 @@ class IMPress_Agents {
 	    if ( ! current_user_can( 'edit_post', $post_id ) )
 	        return;
 
-	    $employee_details = $_POST['impress_agents'];
+	    $employee_details = wp_unslash( $_POST['impress_agents'] );
+
+	    /** Meta keys that hold a URL and must not accept a javascript: scheme */
+	    $url_fields = array_merge( array( '_employee_website' ), array_values( (array) $this->employee_social ) );
 
 	    /** Store the employee details custom fields */
 	    foreach ( (array) $employee_details as $key => $value ) {
@@ -174,13 +177,15 @@ class IMPress_Agents {
 
 	    	if($key == '_employee_email') {
 	    		$value = sanitize_email($value);
+	    	} elseif ( in_array( $key, $url_fields, true ) ) {
+	    		$value = esc_url_raw($value);
 	    	} else {
 	    		$value = sanitize_text_field($value);
 	    	}
 
 	        /** Save/Update/Delete */
 	        if ( $value ) {
-	            update_post_meta($post->ID, $key, $value);
+	            update_post_meta($post->ID, $key, wp_slash($value));
 	        } else {
 	            delete_post_meta($post->ID, $key);
 	        }
@@ -213,13 +218,13 @@ class IMPress_Agents {
 
 		global $post, $wp_taxonomies;
 
-		$image_size = 'style="max-width: 115px;"';
+		$image_size = 'max-width: 115px;';
 
 		apply_filters( 'impress_agents_admin_employee_details', $admin_details = $this->employee_details['col1']);
 
 		if (isset($_GET["mode"]) && trim($_GET["mode"]) == 'excerpt' ) {
 			apply_filters( 'impress_agents_admin_extended_details', $admin_details = $this->employee_details['col1'] + $this->employee_details['col2']);
-			$image_size = 'style="max-width: 150px;"';
+			$image_size = 'max-width: 150px;';
 		}
 
 		$image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail');
@@ -231,7 +236,7 @@ class IMPress_Agents {
 
 		switch( $column ) {
 			case "employee_thumbnail":
-				echo '<p><img src="' . $image[0] . '" alt="employee-thumbnail" ' . $image_size . '/></p>';
+				echo '<p><img src="' . esc_url( $image[0] ) . '" alt="employee-thumbnail" style="' . esc_attr( $image_size ) . '" /></p>';
 				break;
 			case "employee_details":
 				foreach ( (array) $admin_details as $label => $key ) {
@@ -239,8 +244,9 @@ class IMPress_Agents {
 				}
 				break;
 			case "employee_tags":
-				_e('<b>Job Type:</b> ' . get_the_term_list( $post->ID, 'job-types', '', ', ', '' ) . '<br />', 'impress_agents');
-				_e('<b>Office:</b> ' . get_the_term_list( $post->ID, 'offices', '', ', ', '' ) . '<br />', 'impress_agents');				break;
+				echo '<b>' . esc_html__( 'Job Type:', 'impress_agents' ) . '</b> ' . wp_kses_post( get_the_term_list( $post->ID, 'job-types', '', ', ', '' ) ) . '<br />';
+				echo '<b>' . esc_html__( 'Office:', 'impress_agents' ) . '</b> ' . wp_kses_post( get_the_term_list( $post->ID, 'offices', '', ', ', '' ) ) . '<br />';
+				break;
 		}
 
 	}
