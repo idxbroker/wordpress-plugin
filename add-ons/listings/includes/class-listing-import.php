@@ -399,6 +399,18 @@ class WPL_Idx_Listing {
 			$lot_sqft_value = $idx_featured_listing_data['acres'] . ' acres';
 		}
 
+		// Next upcoming open house. The API has already dropped disabled and expired entries and
+		// sorted what remains by start time, so the first entry is the one to show.
+		$open_house_value = '';
+		if ( 'Sold' !== $propstatus && 'Unknown' !== $propstatus && ! empty( $idx_featured_listing_data['mediaData']['oh'] ) && is_array( $idx_featured_listing_data['mediaData']['oh'] ) ) {
+			$next_open_house = reset( $idx_featured_listing_data['mediaData']['oh'] );
+			if ( is_array( $next_open_house ) ) {
+				$oh_date          = isset( $next_open_house['freeFormDate'] ) ? trim( (string) $next_open_house['freeFormDate'] ) : '';
+				$oh_time          = isset( $next_open_house['freeFormTime'] ) ? trim( (string) $next_open_house['freeFormTime'] ) : '';
+				$open_house_value = trim( $oh_date . ' ' . $oh_time );
+			}
+		}
+
 		// Add post meta for existing WPL fields.
 		update_post_meta( $id, '_listing_lot_sqft', $lot_sqft_value );
 		update_post_meta( $id, '_listing_acres', isset( $idx_featured_listing_data['acres'] ) ? $idx_featured_listing_data['acres'] : '' );
@@ -417,6 +429,7 @@ class WPL_Idx_Listing {
 		update_post_meta( $id, '_listing_half_bath', isset( $idx_featured_listing_data['partialBaths'] ) ? $idx_featured_listing_data['partialBaths'] : '' );
 		update_post_meta( $id, '_listing_latitude', isset( $idx_featured_listing_data['latitude'] ) ? $idx_featured_listing_data['latitude'] : '' );
 		update_post_meta( $id, '_listing_longitude', isset( $idx_featured_listing_data['longitude'] ) ? $idx_featured_listing_data['longitude'] : '' );
+		update_post_meta( $id, '_listing_open_house', $open_house_value );
 
 		// Include advanced fields if setting is enabled.
 		if ( ! empty( $wpl_options['wp_listings_import_advanced_fields'] ) && ! empty( $idx_featured_listing_data['advanced'] ) ) {

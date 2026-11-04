@@ -117,6 +117,7 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 * Fix: Clean transient cache invalidation.
 * Fix: Imported listings could stop updating entirely when an account had featured listings that were not imported into WordPress, leaving prices and other fields stale.
 * Fix: Imported listing updates no longer fail on listings that have a disclaimer but no courtesy.
+* Fix: Open house date and time were always blank on imported listings, and now populate from the scheduled open houses in IDX Broker.
 * Update: Refresh Plugin Options now also triggers an immediate update of imported listings.
 * Update: Update verbiage to indicate imported listings are updated twice daily, independent of the update frequency settings.
 
