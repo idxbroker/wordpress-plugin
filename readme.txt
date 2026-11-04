@@ -136,6 +136,9 @@ For users with IMPress 3.0+ who have legacy versions of IMPress Listings and/or 
 = 3.3.2 =
 * Fix: Sanitize and escape shortcode attributes and post meta to prevent stored XSS (CVE-2026-54869).
 * Fix: Clean transient cache invalidation.
+* Fix: Imported listings could stop updating entirely when an account had featured listings that were not imported into WordPress, leaving prices and other fields stale.
+* Fix: Imported listing updates no longer fail on listings that have a disclaimer but no courtesy.
+* Update: Refresh Plugin Options now also triggers an immediate update of imported listings.
 * Update: Update verbiage to indicate imported listings are updated twice daily, independent of the update frequency settings.
 
 = 3.3.1 =

@@ -225,6 +225,12 @@ class Settings_General extends \IDX\Admin\Rest_Controller {
 			wp_schedule_event( time(), 'daily', 'idx_omnibar_get_locations' );
 		}
 		new \IDX\Widgets\Omnibar\Get_Locations();
+
+		// Imported listing data lives in post meta, which the API cache clear above does not
+		// touch. Queue the update task so a refresh also pulls current listing data.
+		if ( boolval( get_option( 'idx_broker_listings_enabled', 0 ) ) ) {
+			wp_schedule_single_event( time(), 'wp_listings_idx_update' );
+		}
 	}
 
 	/**

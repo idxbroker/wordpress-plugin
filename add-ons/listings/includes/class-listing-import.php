@@ -187,121 +187,133 @@ class WPL_Idx_Listing {
 		
 		// All current IMPress Listings posts.
 		$idx_featured_listing_wp_options = get_option( 'wp_listings_idx_featured_listing_wp_options' );
+		if ( ! is_array( $idx_featured_listing_wp_options ) ) {
+			$idx_featured_listing_wp_options = [];
+		}
 		// IMPress import/update listings settings.
 		$wpl_options = get_option( 'plugin_wp_listings_settings' );
 		
 		// Gather and loop through all active properties.
 		$properties = $_idx_api->client_properties( 'featured' );
 		foreach ( $properties as $prop ) {
-			$postID = $idx_featured_listing_wp_options[ $prop['listingID'] ]['post_id'];
-			
-			// Update active property data and the timestamp if a post exists for the listingID.
-			if ( isset( $postID ) ) {
-				if ( ! isset( $wpl_options['wp_listings_idx_update'] ) || isset( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] !== 'update-none' ) {
-					self::wp_listings_idx_insert_post_meta(
-						$postID,
-						$prop,
-						true,
-						( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
-					);
-					$idx_featured_listing_wp_options[ $prop['listingID'] ]['updated'] = date( 'm/d/Y h:i:sa' );
-				}
+			// Skip any listing that has not been imported into WordPress, otherwise the
+			// lookup below reads an undefined key and can abort the whole update run.
+			$listing_id = isset( $prop['listingID'] ) ? $prop['listingID'] : '';
+			if ( '' === $listing_id || empty( $idx_featured_listing_wp_options[ $listing_id ]['post_id'] ) ) {
+				continue;
+			}
+			$postID = $idx_featured_listing_wp_options[ $listing_id ]['post_id'];
+
+			if ( ! isset( $wpl_options['wp_listings_idx_update'] ) || isset( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] !== 'update-none' ) {
+				self::wp_listings_idx_insert_post_meta(
+					$postID,
+					$prop,
+					true,
+					( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
+				);
+				$idx_featured_listing_wp_options[ $listing_id ]['updated'] = date( 'm/d/Y h:i:sa' );
 			}
 		}
 
 		// Gather and loop through sold properties.
 		$sold_properties = $_idx_api->client_properties( 'soldpending' );
 		foreach ( $sold_properties as $sold_prop ) {
-			$postID = $idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['post_id'];
-			
-			// Update sold property data and the timestamp if a post exists for the listingID.
-			if ( isset( $postID ) ) {
-				self::wp_listings_idx_insert_post_meta(
-					$postID,
-					$sold_prop,
-					true,
-					( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
-				);
-				$idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['updated'] = date( 'm/d/Y h:i:sa' );
+			// Skip any listing that has not been imported into WordPress.
+			$listing_id = isset( $sold_prop['listingID'] ) ? $sold_prop['listingID'] : '';
+			if ( '' === $listing_id || empty( $idx_featured_listing_wp_options[ $listing_id ]['post_id'] ) ) {
+				continue;
+			}
+			$postID = $idx_featured_listing_wp_options[ $listing_id ]['post_id'];
 
-				// Now check if we need to update the post status to draft or delete it entirely.
-				if ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-draft' ) {
-					// Change post status to draft.
-					self::wp_listings_idx_change_post_status( $postID, 'draft' );
-					$idx_featured_listing_wp_options[ $sold_prop['listingID'] ]['status'] = 'draft';
-				} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-delete' ) {
+			self::wp_listings_idx_insert_post_meta(
+				$postID,
+				$sold_prop,
+				true,
+				( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
+			);
+			$idx_featured_listing_wp_options[ $listing_id ]['updated'] = date( 'm/d/Y h:i:sa' );
 
-					// Delete featured image.
-					$post_featured_image_id = get_post_thumbnail_id( $postID );
-					wp_delete_attachment( $post_featured_image_id );
+			// Now check if we need to update the post status to draft or delete it entirely.
+			if ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-draft' ) {
+				// Change post status to draft.
+				self::wp_listings_idx_change_post_status( $postID, 'draft' );
+				$idx_featured_listing_wp_options[ $listing_id ]['status'] = 'draft';
+			} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-delete' ) {
 
-					// Delete post.
-					wp_delete_post( $postID );
-				}
+				// Delete featured image.
+				$post_featured_image_id = get_post_thumbnail_id( $postID );
+				wp_delete_attachment( $post_featured_image_id );
+
+				// Delete post.
+				wp_delete_post( $postID );
 			}
 		}
 
 		// Update any listings that are in the off-market bucket since we are not sure what their current status should be to not misrepresent any non-active listings.
 		$unknown_properties = $_idx_api->client_properties( 'offmarket' );
 		foreach ( $unknown_properties as $unknown_prop ) {
-			$postID = $idx_featured_listing_wp_options[ $unknown_prop['listingID'] ]['post_id'];
+			// Skip any listing that has not been imported into WordPress.
+			$listing_id = isset( $unknown_prop['listingID'] ) ? $unknown_prop['listingID'] : '';
+			if ( '' === $listing_id || empty( $idx_featured_listing_wp_options[ $listing_id ]['post_id'] ) ) {
+				continue;
+			}
+			$postID = $idx_featured_listing_wp_options[ $listing_id ]['post_id'];
 
-			// Update sold property data and the timestamp if a post exists for the listingID.
-			if ( isset( $postID ) ) {
-				self::wp_listings_idx_insert_post_meta(
-					$postID,
-					$unknown_prop,
-					true,
-					( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
-				);
-				$idx_featured_listing_wp_options[$unknown_prop['listingID']]['updated'] = date( 'm/d/Y h:i:sa' );
+			self::wp_listings_idx_insert_post_meta(
+				$postID,
+				$unknown_prop,
+				true,
+				( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
+			);
+			$idx_featured_listing_wp_options[ $listing_id ]['updated'] = date( 'm/d/Y h:i:sa' );
 
-				// Now check if we need to update the post status to draft or delete it entirely based on our offmarket/sold listing settings.
-				if ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-draft' ) {
-					// Change post status to draft.
-					self::wp_listings_idx_change_post_status( $postID, 'draft' );
-					$idx_featured_listing_wp_options[ $unknown_prop['listingID'] ]['status'] = 'draft';
-				} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-delete' ) {
+			// Now check if we need to update the post status to draft or delete it entirely based on our offmarket/sold listing settings.
+			if ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-draft' ) {
+				// Change post status to draft.
+				self::wp_listings_idx_change_post_status( $postID, 'draft' );
+				$idx_featured_listing_wp_options[ $listing_id ]['status'] = 'draft';
+			} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-delete' ) {
 
-					// Delete featured image.
-					$post_featured_image_id = get_post_thumbnail_id( $postID );
-					wp_delete_attachment( $post_featured_image_id );
+				// Delete featured image.
+				$post_featured_image_id = get_post_thumbnail_id( $postID );
+				wp_delete_attachment( $post_featured_image_id );
 
-					// Delete post.
-					wp_delete_post( $postID );
-				}
+				// Delete post.
+				wp_delete_post( $postID );
 			}
 		}
 
 		// Update any listings that are in the supplemental bucket since we are not sure what their current status should be to not misrepresent any non-active listings.
 		$supplemental_properties = $_idx_api->client_properties( 'supplemental' );
 		foreach ( $supplemental_properties as $supp_prop ) {
-			$postID = $idx_featured_listing_wp_options[ $supp_prop['listingID'] ]['post_id'];
+			// Skip any listing that has not been imported into WordPress.
+			$listing_id = isset( $supp_prop['listingID'] ) ? $supp_prop['listingID'] : '';
+			if ( '' === $listing_id || empty( $idx_featured_listing_wp_options[ $listing_id ]['post_id'] ) ) {
+				continue;
+			}
+			$postID = $idx_featured_listing_wp_options[ $listing_id ]['post_id'];
 
-			// Update sold property data and the timestamp if a post exists for the listingID.
-			if ( isset( $postID ) ) {
-				self::wp_listings_idx_insert_post_meta(
-					$postID,
-					$supp_prop,
-					true,
-					( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
-				);
-				$idx_featured_listing_wp_options[$supp_prop['listingID']]['updated'] = date( 'm/d/Y h:i:sa' );
+			self::wp_listings_idx_insert_post_meta(
+				$postID,
+				$supp_prop,
+				true,
+				( ! empty( $wpl_options['wp_listings_idx_update'] ) && $wpl_options['wp_listings_idx_update'] === 'update-excluding-images' ) ? false : true
+			);
+			$idx_featured_listing_wp_options[ $listing_id ]['updated'] = date( 'm/d/Y h:i:sa' );
 
-				// Now check if we need to update the post status to draft or delete it entirely based on our offmarket/sold listing settings.
-				if ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-draft' ) {
-					// Change post status to draft.
-					self::wp_listings_idx_change_post_status( $postID, 'draft' );
-					$idx_featured_listing_wp_options[ $supp_prop['listingID'] ]['status'] = 'draft';
-				} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-delete' ) {
+			// Now check if we need to update the post status to draft or delete it entirely based on our offmarket/sold listing settings.
+			if ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-draft' ) {
+				// Change post status to draft.
+				self::wp_listings_idx_change_post_status( $postID, 'draft' );
+				$idx_featured_listing_wp_options[ $listing_id ]['status'] = 'draft';
+			} elseif ( isset( $wpl_options['wp_listings_idx_sold'] ) && $wpl_options['wp_listings_idx_sold'] === 'sold-delete' ) {
 
-					// Delete featured image.
-					$post_featured_image_id = get_post_thumbnail_id( $postID );
-					wp_delete_attachment( $post_featured_image_id );
+				// Delete featured image.
+				$post_featured_image_id = get_post_thumbnail_id( $postID );
+				wp_delete_attachment( $post_featured_image_id );
 
-					// Delete post.
-					wp_delete_post( $postID );
-				}
+				// Delete post.
+				wp_delete_post( $postID );
 			}
 		}
 
@@ -433,7 +445,7 @@ class WPL_Idx_Listing {
 			}
 		}
 
-		if ( isset( $idx_featured_listing_data['disclaimer'] ) && ! empty( $idx_featured_listing_data['disclaimer'] ) ) {
+		if ( ! empty( $idx_featured_listing_data['courtesy'] ) && is_array( $idx_featured_listing_data['courtesy'] ) ) {
 			foreach ( $idx_featured_listing_data['courtesy'] as $courtesy ) {
 				if ( in_array( 'details', $courtesy, false ) ) {
 					update_post_meta( $id, '_listing_courtesy', $courtesy['text'] );
