@@ -271,7 +271,7 @@ function single_listing_post_content() {
 
 				if ( get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' ) != null ) {
 					echo '<h5>' . esc_html__( 'Tagged Features:', 'wp-listings' ) . '</h5><ul class="tagged-features">';
-					echo get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' );
+					echo wp_kses_post( get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' ) );
 					echo '</ul><!-- .tagged-features -->';
 				}
 
@@ -363,7 +363,7 @@ function single_listing_post_content() {
 			<div id="listing-disclaimer" class="wrap">
 			<?php
 			if ( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) {
-				echo '<p class="wp_listings_disclaimer">' . get_post_meta( $post->ID, '_listing_disclaimer', true ) . '</p>';
+				echo '<p class="wp_listings_disclaimer">' . wp_kses_post( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) . '</p>';
 			} elseif ( ! empty( $options['wp_listings_global_disclaimer'] ) ) {
 				echo '<p class="wp_listings_disclaimer">' . esc_html( $options['wp_listings_global_disclaimer'] ) . '</p>';
 			}

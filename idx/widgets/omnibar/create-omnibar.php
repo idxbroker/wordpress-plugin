@@ -34,6 +34,7 @@ class Create_Omnibar {
 		if ( empty( $placeholder ) ) {
 			$placeholder = 'City, Postal Code, Address, or Listing ID';
 		}
+		$placeholder = esc_attr( $placeholder );
 		$sort_order = get_option( 'idx_omnibar_sort', 'newest' );
 
 		$upload_dir  = wp_upload_dir();
@@ -96,6 +97,7 @@ EOD;
 		if ( empty( $placeholder ) ) {
 			$placeholder = 'City, Postal Code, Address, or Listing ID';
 		}
+		$placeholder = esc_attr( $placeholder );
 		$sort_order = get_option( 'idx_omnibar_sort', 'newest' );
 
 		$upload_dir  = wp_upload_dir();
@@ -202,9 +204,10 @@ EOD;
 			)
 		);
 
-		$min_price              = (int) esc_attr( $min_price );
-		$styles                  = (int) esc_attr( $styles );
-		$remove_price_validation = (int) esc_attr( $remove_price_validation );
+		$min_price               = (int) $min_price;
+		$styles                  = (int) $styles;
+		$extra                   = (int) $extra;
+		$remove_price_validation = (int) $remove_price_validation;
 
 		$idx_url    = get_option( 'idx_results_url' );
 		$plugin_dir = plugins_url();
@@ -235,9 +238,9 @@ EOD;
 			)
 		);
 
-		$min_price              = (int) esc_attr( $min_price );
-		$styles                 = (int) esc_attr( $styles );
-		$remove_price_validation = (int) esc_attr( $remove_price_validation );
+		$min_price               = (int) $min_price;
+		$styles                  = (int) $styles;
+		$remove_price_validation = (int) $remove_price_validation;
 
 		$idx_url    = get_option( 'idx_results_url' );
 		$plugin_dir = plugins_url();
@@ -255,10 +258,11 @@ EOD;
 	 * @return void
 	 */
 	public static function show_omnibar_shortcodes( $type, $name ) {
+		$type                  = esc_attr( $type );
 		$widget_shortcode      = '[' . $type . ']';
 		$available_shortcodes  = '<div class="each_shortcode_row">';
-		$available_shortcodes .= '<input type="hidden" id=\'' . $type . '\' value=\'' . $widget_shortcode . '\'>';
-		$available_shortcodes .= '<span>' . $name . ' &nbsp;<a name="' . $type . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . $type . '\')">insert</a></span>';
+		$available_shortcodes .= '<input type="hidden" id=\'' . $type . '\' value=\'' . esc_attr( $widget_shortcode ) . '\'>';
+		$available_shortcodes .= '<span>' . esc_html( $name ) . ' &nbsp;<a name="' . $type . '" href="javascript:ButtonDialog.insert(ButtonDialog.local_ed,\'' . esc_js( $type ) . '\')">insert</a></span>';
 		$available_shortcodes .= '</div>';
 
 		echo $available_shortcodes;

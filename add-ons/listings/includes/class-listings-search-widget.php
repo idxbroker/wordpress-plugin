@@ -15,15 +15,31 @@ class WP_Listings_Search_Widget extends WP_Widget {
 	}
 
 	public function search_button_shortcode( $atts ) {
-		extract(
-			shortcode_atts(
-				[
-					'title'       => '',
-					'button_text' => __( 'Search Listings', 'wp-listings' ),
-				],
-				$atts
-			)
+		$atts = (array) $atts;
+
+		$defaults = shortcode_atts(
+			[
+				'title'       => '',
+				'button_text' => __( 'Search Listings', 'wp-listings' ),
+			],
+			$atts
 		);
+
+		$instance = [
+			'title'       => sanitize_text_field( $defaults['title'] ),
+			'button_text' => sanitize_text_field( $defaults['button_text'] ),
+		];
+
+		// Taxonomy attributes opt individual search dropdowns into the form.
+		global $_wp_listings_taxonomies;
+
+		if ( $_wp_listings_taxonomies ) {
+			foreach ( array_keys( (array) $_wp_listings_taxonomies->get_taxonomies() ) as $tax ) {
+				if ( isset( $atts[ $tax ] ) ) {
+					$instance[ sanitize_key( $tax ) ] = (bool) $atts[ $tax ];
+				}
+			}
+		}
 
 		$args = [
 			'before_widget' => '<div class="box widget">',
@@ -33,7 +49,7 @@ class WP_Listings_Search_Widget extends WP_Widget {
 		];
 
 		ob_start();
-		$this->widget( array_merge( $atts, $args ), [] );
+		$this->widget( $args, $instance );
 		$output = ob_get_clean();
 		return $output;
 	}
@@ -53,7 +69,7 @@ class WP_Listings_Search_Widget extends WP_Widget {
 
 		echo $before_widget;
 
-		if ( $instance['title'] ) echo $before_title . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $after_title;
+		if ( $instance['title'] ) echo $before_title . esc_html( apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) ) . $after_title;
 
 		echo '<form role="search" method="get" id="searchform" action="' . esc_url( home_url( '/' ) ) . '" ><input type="hidden" value="" name="s" /><input type="hidden" value="listing" name="post_type" />';
 
@@ -71,12 +87,12 @@ class WP_Listings_Search_Widget extends WP_Widget {
 			echo '<select name="' . esc_attr( $tax ) . '" id="' . esc_attr( $tax ) . '" class="wp-listings-taxonomy">';
 			echo '<option value="" ' . selected( '' === $current, true, false ) . '>' . esc_html( $data['labels']['name'] ) . '</option>';
 			foreach ( (array) $terms as $term ) {
-				echo '<option value=' . esc_attr( $term->slug ) . ' ' . selected( $current, $term->slug, false ) . '>' . esc_html( $term->name ) . '</option>';
+				echo '<option value="' . esc_attr( $term->slug ) . '" ' . selected( $current, $term->slug, false ) . '>' . esc_html( $term->name ) . '</option>';
 			}
 			echo '</select>';
 		}
 
-		echo '<div class="btn-search"><button type="submit" class="searchsubmit"><i class="fas fa-search"></i><span class="button-text">' . esc_attr( $instance['button_text'] ) . '</span></button></div>';
+		echo '<div class="btn-search"><button type="submit" class="searchsubmit"><i class="fas fa-search"></i><span class="button-text">' . esc_html( $instance['button_text'] ) . '</span></button></div>';
 		echo '<div class="clear"></div>
 		</form>';
 

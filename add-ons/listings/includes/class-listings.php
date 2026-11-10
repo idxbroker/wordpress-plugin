@@ -28,6 +28,23 @@ class WP_Listings {
 	public $extended_property_details;
 
 	/**
+	 * Listing meta fields that are allowed to hold markup and shortcodes.
+	 */
+	public $rich_text_details = array(
+		'_listing_gallery',
+		'_listing_video',
+		'_listing_map',
+		'_listing_contact_form',
+		'_listing_featured_on',
+		'_listing_home_sum',
+		'_listing_kitchen_sum',
+		'_listing_living_room',
+		'_listing_master_suite',
+		'_listing_school_neighborhood',
+		'_listing_disclaimer',
+	);
+
+	/**
 	 * Construct Method.
 	 */
 	public function __construct() {
@@ -274,7 +291,7 @@ class WP_Listings {
 			return;
 		}
 
-		$property_details = $_POST['wp_listings'];
+		$property_details = $this->sanitize_property_details( $_POST['wp_listings'] );
 
 		if ( ! isset( $property_details['_listing_hide_price'] ) ) {
 				$property_details['_listing_hide_price'] = 0;
@@ -284,11 +301,50 @@ class WP_Listings {
 		foreach ( (array) $property_details as $key => $value ) {
 			/** Save/Update/Delete */
 			if ( $value ) {
-				update_post_meta( $post->ID, $key, $value );
+				update_post_meta( $post->ID, $key, wp_slash( $value ) );
 			} else {
 				delete_post_meta( $post->ID, $key );
 			}
 		}
+	}
+
+	/**
+	 * Sanitize the submitted listing meta before it is stored.
+	 *
+	 * Rich-text fields keep their markup for users who may post unfiltered HTML
+	 * and are run through wp_kses_post() for everyone else, so a Contributor
+	 * cannot store a script payload. Every other field is single-line text.
+	 *
+	 * @param array $property_details Raw, slashed `wp_listings` request data.
+	 * @return array Unslashed, sanitized meta keyed by meta key.
+	 */
+	public function sanitize_property_details( $property_details ) {
+
+		$allow_unfiltered = current_user_can( 'unfiltered_html' );
+		$sanitized        = array();
+
+		foreach ( (array) wp_unslash( $property_details ) as $key => $value ) {
+
+			$key = sanitize_key( $key );
+
+			if ( '_advanced_fields' === $key ) {
+				$advanced_fields = array();
+				foreach ( (array) $value as $field_key => $field_value ) {
+					$advanced_fields[ sanitize_key( $field_key ) ] = sanitize_text_field( $field_value );
+				}
+				$sanitized[ $key ] = $advanced_fields;
+				continue;
+			}
+
+			if ( in_array( $key, $this->rich_text_details, true ) ) {
+				$sanitized[ $key ] = $allow_unfiltered ? $value : wp_kses_post( $value );
+				continue;
+			}
+
+			$sanitized[ $key ] = sanitize_text_field( $value );
+		}
+
+		return $sanitized;
 	}
 
 	/**
@@ -341,10 +397,10 @@ class WP_Listings {
 				}
 				break;
 			case 'listing_tags':
-				echo '<b>Status</b>: ' . get_the_term_list( $post->ID, 'status', '', ', ', '' ) . '<br />';
-				echo '<b>Property Type:</b> ' . get_the_term_list( $post->ID, 'property-types', '', ', ', '' ) . '<br />';
-				echo '<b>Location:</b> ' . get_the_term_list( $post->ID, 'locations', '', ', ', '' ) . '<br />';
-				echo '<b>Features:</b> ' . get_the_term_list( $post->ID, 'features', '', ', ', '' );
+				echo '<b>Status</b>: ' . wp_kses_post( get_the_term_list( $post->ID, 'status', '', ', ', '' ) ) . '<br />';
+				echo '<b>Property Type:</b> ' . wp_kses_post( get_the_term_list( $post->ID, 'property-types', '', ', ', '' ) ) . '<br />';
+				echo '<b>Location:</b> ' . wp_kses_post( get_the_term_list( $post->ID, 'locations', '', ', ', '' ) ) . '<br />';
+				echo '<b>Features:</b> ' . wp_kses_post( get_the_term_list( $post->ID, 'features', '', ', ', '' ) );
 				break;
 		}
 

@@ -16,19 +16,26 @@ class IMPress_Agents_Widget extends WP_Widget {
 	}
 
 	public function impress_agent_shortcode( $atts ) {
-		extract(
-			shortcode_atts(
-				[
-					'post_id'     => '',
-					'title'       => '',
-					'show_agent'  => 0,
-					'show_number' => 1,
-					'orderby'     => '',
-					'order'       => '',
-				],
-				$atts
-			)
+		$atts = shortcode_atts(
+			[
+				'post_id'     => '',
+				'title'       => '',
+				'show_agent'  => 0,
+				'show_number' => 1,
+				'orderby'     => '',
+				'order'       => '',
+			],
+			$atts
 		);
+
+		$instance = [
+			'post_id'     => esc_attr( $atts['post_id'] ),
+			'title'       => esc_attr( $atts['title'] ),
+			'show_agent'  => esc_attr( $atts['show_agent'] ),
+			'show_number' => absint( $atts['show_number'] ),
+			'orderby'     => esc_attr( $atts['orderby'] ),
+			'order'       => esc_attr( $atts['order'] ),
+		];
 
 		$args = [
 			'before_widget' => '<div class="box widget">',
@@ -38,7 +45,7 @@ class IMPress_Agents_Widget extends WP_Widget {
 		];
 
 		ob_start();
-		$this->widget( array_merge( $atts, $args ), [] );
+		$this->widget( $args, $instance );
 		$output = ob_get_clean();
 		return $output;
 	}
@@ -61,25 +68,26 @@ class IMPress_Agents_Widget extends WP_Widget {
 
 		$post_id     = $instance['post_id'];
 		$title       = $instance['title'];
-		$orderby     = $instance['orderby'];
-		$order       = $instance['order'];
+		$orderby     = in_array( $instance['orderby'], array( 'date', 'title', 'menu_order', 'ID', 'rand' ), true ) ? $instance['orderby'] : '';
+		$order       = ( 'DESC' === strtoupper( (string) $instance['order'] ) ) ? 'DESC' : 'ASC';
 		$show_agent  = $instance['show_agent'];
 		$show_number = ( ! empty( $instance['show_number'] ) ) ? absint( $instance['show_number'] ) : 1;
+		$title_html  = esc_html( apply_filters( 'widget_title', $title, $instance, $this->id_base ) );
 
 		echo $before_widget;
 
 		if ( $show_agent == 'show_all' ) {
-			echo $before_title . apply_filters( 'widget_title', $title, $instance, $this->id_base) . $after_title;
+			echo $before_title . $title_html . $after_title;
 			$query_args = array( 'post_type' => 'employee', 'posts_per_page' => - 1, 'orderby' => $orderby, 'order' => $order);
 
 		} elseif ( $show_agent == 'show_random' ) {
-			echo $before_title . apply_filters( 'widget_title', $title, $instance, $this->id_base ) . $after_title;
+			echo $before_title . $title_html . $after_title;
 			$query_args = array( 'post_type' => 'employee', 'posts_per_page' => $show_number, 'orderby' => 'rand', 'order' => $order);
 
 		} elseif ( ! empty( $instance['post_id'] ) ) {
 			$post_id = explode( ',', $instance['post_id'] );
-			echo $before_title . apply_filters( 'widget_title', $title, $instance, $this->id_base) . $after_title;
-			$query_args = array( 'post_type' => 'employee', 'p' => $post_id[0], 'posts_per_page' => 1, 'orderby' => $orderby, 'order' => $order);
+			echo $before_title . $title_html . $after_title;
+			$query_args = array( 'post_type' => 'employee', 'p' => (int) $post_id[0], 'posts_per_page' => 1, 'orderby' => $orderby, 'order' => $order);
 
 		}
 
@@ -133,18 +141,18 @@ class IMPress_Agents_Widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php esc_attr( $instance['title'] ); ?>" />
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<?php
 		echo '<p>';
 		echo '<label for="' . esc_attr( $this->get_field_id( 'post_id' ) ) . '">Select an Employee:</label>';
-		echo '<select id="' . esc_attr( $this->get_field_id( 'post_id' ) ) . '" name="' . $this->get_field_name( 'post_id' ) . '" class="widefat" style="width:100%;">';
+		echo '<select id="' . esc_attr( $this->get_field_id( 'post_id' ) ) . '" name="' . esc_attr( $this->get_field_name( 'post_id' ) ) . '" class="widefat" style="width:100%;">';
 			global $post;
 			$args = array( 'post_type' => 'employee', 'posts_per_page'	=> -1);
 			$agents = get_posts( $args);
 			foreach( $agents as $post ) : setup_postdata( $post);
-				echo '<option style="margin-left: 8px; padding-right:10px;" value="' . $post->ID . ',' . $post->post_title . '" ' . selected( $post->ID . ',' . $post->post_title, $instance['post_id'], false ) . '>' . $post->post_title . '</option>';
+				echo '<option style="margin-left: 8px; padding-right:10px;" value="' . esc_attr( $post->ID . ',' . $post->post_title ) . '" ' . selected( $post->ID . ',' . $post->post_title, $instance['post_id'], false ) . '>' . esc_html( $post->post_title ) . '</option>';
 			endforeach;
 		echo '</select>';
 		echo '</p>';
@@ -152,8 +160,8 @@ class IMPress_Agents_Widget extends WP_Widget {
 		?>
 
 		<p>
-				<label for="<?php echo $this->get_field_id( 'show_agent' ); ?>"><?php esc_html_e( 'Show Agent', 'impress_agents' ); ?>:</label>
-				<select id="<?php echo $this->get_field_id( 'show_agent' ); ?>" name="<?php echo $this->get_field_name( 'show_agent' ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'show_agent' ) ); ?>"><?php esc_html_e( 'Show Agent', 'impress_agents' ); ?>:</label>
+				<select id="<?php echo esc_attr( $this->get_field_id( 'show_agent' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'show_agent' ) ); ?>">
 					<option value="show_selected" <?php selected( 'show_selected', $instance['show_agent'] ); ?>><?php esc_html_e( 'Show Agent selected above', 'impress_agents' ); ?></option>
 					<option value="show_random" <?php selected( 'show_random', $instance['show_agent'] ); ?>><?php esc_html_e( 'Show Random', 'impress_agents' ); ?></option>
 					<option value="show_all" <?php selected( 'show_all', $instance['show_agent'] ); ?>><?php esc_html_e( 'Show All', 'impress_agents' ); ?></option>
@@ -164,15 +172,15 @@ class IMPress_Agents_Widget extends WP_Widget {
 		<p><?php esc_html_e( 'If Show Random selected: ', 'impress_agents' ); ?></p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'show_number' ); ?>"><?php esc_html_e( 'Max number of agents to show:' ); ?></label>
-				<input id="<?php echo $this->get_field_id( 'show_number' ); ?>" name="<?php echo $this->get_field_name( 'show_number' ); ?>" type="text" value="<?php echo $instance['show_number']; ?>" size="3" maxlength="2" />
+				<label for="<?php echo esc_attr( $this->get_field_id( 'show_number' ) ); ?>"><?php esc_html_e( 'Max number of agents to show:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'show_number' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'show_number' ) ); ?>" type="text" value="<?php echo esc_attr( $instance['show_number'] ); ?>" size="3" maxlength="2" />
 			</p>
 
 		<hr>
 		<p><?php esc_html_e( 'If Show All selected: ', 'impress_agents' );?></p>
 			<p>
-				<label for="<?php echo $this->get_field_id( 'orderby' ); ?>"><?php esc_html_e( 'Order By', 'impress_agents' ); ?>:</label>
-				<select id="<?php echo $this->get_field_id( 'orderby' ); ?>" name="<?php echo $this->get_field_name( 'orderby' ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'orderby' ) ); ?>"><?php esc_html_e( 'Order By', 'impress_agents' ); ?>:</label>
+				<select id="<?php echo esc_attr( $this->get_field_id( 'orderby' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'orderby' ) ); ?>">
 					<option value="date" <?php selected( 'date', $instance['orderby'] ); ?>><?php esc_html_e( 'Date', 'impress_agents' ); ?></option>
 					<option value="title" <?php selected( 'title', $instance['orderby'] ); ?>><?php esc_html_e( 'Title', 'impress_agents' ); ?></option>
 					<option value="menu_order" <?php selected( 'menu_order', $instance['orderby'] ); ?>><?php esc_html_e( 'Menu Order', 'impress_agents' ); ?></option>
@@ -182,8 +190,8 @@ class IMPress_Agents_Widget extends WP_Widget {
 			</p>
 
 			<p>
-				<label for="<?php echo $this->get_field_id( 'order' ); ?>"><?php esc_html_e( 'Sort Order', 'impress_agents' ); ?>:</label>
-				<select id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>"><?php esc_html_e( 'Sort Order', 'impress_agents' ); ?>:</label>
+				<select id="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'order' ) ); ?>">
 					<option value="DESC" <?php selected( 'DESC', $instance['order'] ); ?>><?php esc_html_e( 'Descending (3, 2, 1)', 'impress_agents' ); ?></option>
 					<option value="ASC" <?php selected( 'ASC', $instance['order'] ); ?>><?php esc_html_e( 'Ascending (1, 2, 3)', 'impress_agents' ); ?></option>
 				</select>

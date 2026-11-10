@@ -7,7 +7,7 @@
         }">
         <idx-block className="form-content__header">
             <idx-block tag="h2" className="form-content__title">Imported Listings</idx-block>
-            <p>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily.</p>
+            <p>These settings apply to any imported IDX listings. Imported listings are updated via the latest API response twice daily, regardless of the Update Frequency selected in General Settings.</p>
         </idx-block>
         <idx-form-group>
             <idx-block tag="h3" className="form-content__label">Update Listings</idx-block>
@@ -197,8 +197,8 @@ export default {
     },
     created () {
         this.updateOptions = [
-            { label: 'Update All', value: 'update-all', description: 'Update all imported fields, including gallery and featured image. Excludes Post Title and Post Content.' },
-            { label: 'Update Excluding Images', value: 'update-excluding-images', description: 'Update all imported fields, but excluding the gallery and featured image. Excludes Post Title and Post Content.' },
+            { label: 'Update All', value: 'update-all', description: 'Each twice daily update refreshes all imported fields, including the gallery and featured image. Excludes Post Title and Post Content.' },
+            { label: 'Update Excluding Images', value: 'update-excluding-images', description: 'Each twice daily update refreshes all imported fields, but excludes the gallery and featured image. Also excludes Post Title and Post Content.' },
             { label: 'Do Not Update (Not Recommended)', value: 'no-update', description: 'Do not update any fields. Listing will be changed to sold status if it exists in the sold data feed. Displaying inaccurate MLS data may violate your IDX agreement.' }
         ]
         this.soldListingsOptions = [

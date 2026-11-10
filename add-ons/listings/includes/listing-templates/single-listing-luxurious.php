@@ -106,11 +106,11 @@ function single_listing_post_content() {
 			printf( '<span class="listing-city-state-zip">%s, %s %s</span></li>', esc_html( wp_listings_get_city() ), esc_html( wp_listings_get_state() ), esc_html( get_post_meta( $post->ID, '_listing_zip', true ) ) );
 
 			if ( ! empty( wp_listings_get_property_types() ) ) {
-				printf( '<li class="listing-property-type"><span class="label">Property Type: </span>%s</li>', get_the_term_list( get_the_ID(), 'property-types', '', ', ', '' ) );
+				printf( '<li class="listing-property-type"><span class="label">Property Type: </span>%s</li>', wp_kses_post( get_the_term_list( get_the_ID(), 'property-types', '', ', ', '' ) ) );
 			}
 
 			if ( ! empty( wp_listings_get_locations() ) ) {
-				printf( '<li class="listing-location"><span class="label">Location: </span>%s</li>', get_the_term_list( get_the_ID(), 'locations', '', ', ', '' ) );
+				printf( '<li class="listing-location"><span class="label">Location: </span>%s</li>', wp_kses_post( get_the_term_list( get_the_ID(), 'locations', '', ', ', '' ) ) );
 			}
 
 			echo '</ul><ul>';
@@ -252,7 +252,7 @@ function single_listing_post_content() {
 
 				if ( get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' ) != null ) {
 					echo '<h5>' . esc_html__( 'Tagged Features:', 'wp-listings' ) . '</h5><ul class="tagged-features">';
-					echo get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' );
+					echo wp_kses_post( get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' ) );
 					echo '</ul><!-- .tagged-features -->';
 				}
 
@@ -342,7 +342,7 @@ function single_listing_post_content() {
 		<div id="listing-disclaimer">
 			<?php
 			if ( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) {
-				echo '<p class="wp_listings_disclaimer">' . get_post_meta( $post->ID, '_listing_disclaimer', true ) . '</p>';
+				echo '<p class="wp_listings_disclaimer">' . wp_kses_post( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) . '</p>';
 			} elseif ( ! empty( $options['wp_listings_global_disclaimer'] ) ) {
 				echo '<p class="wp_listings_disclaimer">' . esc_html( $options['wp_listings_global_disclaimer'] ) . '</p>';
 			}

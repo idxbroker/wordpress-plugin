@@ -62,11 +62,11 @@ function single_listing_post_content() {
 		}
 
 		if ( ! empty( wp_listings_get_property_types() ) ) {
-			printf( '<li class="listing-property-type"><span class="label">Property Type: </span>%s</li>', get_the_term_list( get_the_ID(), 'property-types', '', ', ', '' ) );
+			printf( '<li class="listing-property-type"><span class="label">Property Type: </span>%s</li>', wp_kses_post( get_the_term_list( get_the_ID(), 'property-types', '', ', ', '' ) ) );
 		}
 
 		if ( ! empty( wp_listings_get_locations() ) ) {
-			printf( '<li class="listing-location"><span class="label">Location: </span>%s</li>', get_the_term_list( get_the_ID(), 'locations', '', ', ', '' ) );
+			printf( '<li class="listing-location"><span class="label">Location: </span>%s</li>', wp_kses_post( get_the_term_list( get_the_ID(), 'locations', '', ', ', '' ) ) );
 		}
 
 		if ( ! empty( get_post_meta( $post->ID, '_listing_bedrooms', true ) ) ) {
@@ -123,13 +123,13 @@ function single_listing_post_content() {
 				echo ( get_post_meta( $post->ID, '_listing_featured_on', true ) ) ? '<p class="wp_listings_featured_on">' . esc_html( get_post_meta( $post->ID, '_listing_featured_on', true ) ) . '</p>' : '';
 
 				if ( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) {
-					echo '<p class="wp-listings-disclaimer">' . get_post_meta( $post->ID, '_listing_disclaimer', true ) . '</p>';
+					echo '<p class="wp-listings-disclaimer">' . wp_kses_post( get_post_meta( $post->ID, '_listing_disclaimer', true ) ) . '</p>';
 				} elseif ( ! empty( $options['wp_listings_global_disclaimer'] ) ) {
 					echo '<p class="wp-listings-disclaimer">' . esc_html( $options['wp_listings_global_disclaimer'] ) . '</p>';
 				}
 
 				if ( class_exists( 'Idx_Broker_Plugin' ) && ! empty( $options['wp_listings_display_idx_link'] ) && get_post_meta( $post->ID, '_listing_details_url', true ) ) {
-					echo '<a href="' . esc_attr( get_post_meta( $post->ID, '_listing_details_url', true ) ) . '" title="' . esc_attr( get_post_meta( $post->ID, '_listing_mls', true ) ) . '" class="listing-full-details-link">View full listing details</a>';
+					echo '<a href="' . esc_url( get_post_meta( $post->ID, '_listing_details_url', true ) ) . '" title="' . esc_attr( get_post_meta( $post->ID, '_listing_mls', true ) ) . '" class="listing-full-details-link">View full listing details</a>';
 				}
 				?>
 			</div><!-- #listing-description -->
@@ -217,7 +217,7 @@ function single_listing_post_content() {
 
 				if ( get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' ) != null ) {
 					echo '<h5>' . esc_html__( 'Tagged Features:', 'wp-listings' ) . '</h5><ul class="tagged-features">';
-					echo get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' );
+					echo wp_kses_post( get_the_term_list( get_the_ID(), 'features', '<li>', '</li><li>', '</li>' ) );
 					echo '</ul><!-- .tagged-features -->';
 				}
 
@@ -271,7 +271,7 @@ function single_listing_post_content() {
 			echo '</div><!-- .listing-map -->';
 		} elseif ( ! empty( $options['wp_listings_gmaps_api_key'] ) && get_post_meta( $post->ID, '_listing_latitude', true ) && get_post_meta( $post->ID, '_listing_longitude', true ) && get_post_meta( $post->ID, '_listing_automap', true ) === 'y' ) {
 
-			$map_info_content = sprintf( '<p style="font-size: 14px; margin-bottom: 0;">%s<br />%s %s, %s</p>', get_post_meta( $post->ID, '_listing_address', true ), get_post_meta( $post->ID, '_listing_city', true ), get_post_meta( $post->ID, '_listing_state', true ), get_post_meta( $post->ID, '_listing_zip', true ) );
+			$map_info_content = sprintf( '<p style="font-size: 14px; margin-bottom: 0;">%s<br />%s %s, %s</p>', esc_html( get_post_meta( $post->ID, '_listing_address', true ) ), esc_html( get_post_meta( $post->ID, '_listing_city', true ) ), esc_html( get_post_meta( $post->ID, '_listing_state', true ) ), esc_html( get_post_meta( $post->ID, '_listing_zip', true ) ) );
 
 			( $options['wp_listings_gmaps_api_key'] ) ? $map_key = $options['wp_listings_gmaps_api_key'] : $map_key = '';
 			wp_enqueue_script( 'idxb-google-maps', 'https://maps.googleapis.com/maps/api/js?key=' . $map_key, [], '1.0', false );

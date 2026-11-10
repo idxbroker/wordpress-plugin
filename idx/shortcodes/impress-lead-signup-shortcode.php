@@ -16,7 +16,7 @@ class Impress_Lead_Signup_Shortcode {
 		$this->idx_api = new \IDX\Idx_Api();
 
 		if ( isset( $_GET['error'] ) ) {
-			$this->error_message = $this->handle_errors( $_GET['error'] );
+			$this->error_message = $this->handle_errors( sanitize_text_field( wp_unslash( $_GET['error'] ) ) );
 		} else {
 			$this->error_message = '';
 		}
@@ -39,20 +39,15 @@ class Impress_Lead_Signup_Shortcode {
 			)
 		);
 
-		if ($agent_id) {
-			$agent_id = esc_attr($agent_id);
-		}
-
-		if ($button_text) {
-			$button_text = esc_attr($button_text);
-		}
+		$phone          = (int) $phone;
+		$styles         = (int) $styles;
+		$new_window     = (int) $new_window;
+		$password_field = filter_var( $password_field, FILTER_VALIDATE_BOOLEAN );
+		$agent_id       = esc_attr( $agent_id );
+		$button_text    = esc_attr( $button_text );
 
 		if ( ! empty( $styles ) ) {
 			wp_enqueue_style( 'impress-lead-signup', IMPRESS_IDX_URL . 'assets/css/widgets/impress-lead-signup.min.css', [], '1.0.0' );
-		}
-
-		if ( ! isset( $new_window ) ) {
-			$new_window = 0;
 		}
 
 		$target = $this->target( $new_window );
@@ -69,7 +64,7 @@ class Impress_Lead_Signup_Shortcode {
 			wp_enqueue_script( 'jquery' );
 		}
 
-		$hidden_fields = ( $agent_id || has_filter( 'impress_lead_signup_agent_id_field' ) ) ? apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="agentOwner" value="' . $agent_id . '">' ) : '';
+		$hidden_fields = ( $agent_id || has_filter( 'impress_lead_signup_agent_id_field' ) ) ? apply_filters( 'impress_lead_signup_agent_id_field', '<input type="hidden" name="agentOwner" value="' . esc_attr( $agent_id ) . '">' ) : '';
 
 		$widget = sprintf(
 			'<form action="%1$sajax/usersignup.php" class="impress-lead-signup" method="post" target="%2$s" name="LeadSignup" id="LeadSignup">
@@ -87,13 +82,13 @@ class Impress_Lead_Signup_Shortcode {
 
 				<label id="impress-widgetemail-label" class="ie-only" for="IDX-widgetemail">Email:</label>
 				<input id="impress-widgetemail" type="email" name="email" placeholder="Email" required>',
-			$this->idx_api->subdomain_url(),
-			$target,
+			esc_url( $this->idx_api->subdomain_url() ),
+			esc_attr( $target ),
 			$this->error_message,
 			$hidden_fields
 		);
 
-		if ( filter_var( $password_field, FILTER_VALIDATE_BOOLEAN ) ) {
+		if ( $password_field ) {
 			$widget .= sprintf(
 				'
 				<label for="impress-widgetPassword">Password:</label>
